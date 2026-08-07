@@ -232,14 +232,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="05/08/2026 18:34">
+<body data-print-date="07/08/2026 07:28">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 05/08/2026 18:34</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 07/08/2026 07:28</div>
       </div>
     </div>
     <div class="header-actions">
@@ -34394,10 +34394,60 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
       </table>
     </div>
   </div>
+  
+  <div class="table-section">
+    <h3>🚧 Outras Atividades — equipes fora do e-Visita</h3>
+    <p class="table-hint">Equipes com produção lançada manualmente em <code>data/outras_atividades.json</code> (não passam pelo e-Visita). "Vezes abaixo da meta" compara a produção por pessoa/dia com a meta de 20 visitas/dia usada pra todo o resto do dashboard — é a prova objetiva de quão baixa está a produção, sem depender de opinião.</p>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableOutrasAtividades">
+        <thead><tr>
+          <th class="sticky-col">Equipe</th><th>Membros</th><th>Mês</th><th>Produção (visitas)</th>
+          <th>Visitas/Dia/Pessoa</th><th>Custo da Equipe (mês)</th><th>Custo por Visita</th><th>Vezes Abaixo da Meta</th>
+        </tr></thead>
+        <tbody>
+          
+          <tr class="row-critico">
+            <td class="sticky-col agent-name">Terreno Baldio</td>
+            <td>Edilson, Junior, Ortega (3 pessoas)</td>
+            <td>Abril/2026</td>
+            <td class="num">78</td>
+            <td class="num">1,18</td>
+            <td class="num">R$ 14.589,00</td>
+            <td class="num">R$ 187,04</td>
+            <td class="num">16,9x</td>
+          </tr>
+          
+          <tr class="row-critico">
+            <td class="sticky-col agent-name">Terreno Baldio</td>
+            <td>Edilson, Junior, Ortega (3 pessoas)</td>
+            <td>Maio/2026</td>
+            <td class="num">87</td>
+            <td class="num">1,32</td>
+            <td class="num">R$ 14.589,00</td>
+            <td class="num">R$ 167,69</td>
+            <td class="num">15,2x</td>
+          </tr>
+          
+          <tr class="row-critico">
+            <td class="sticky-col agent-name">Terreno Baldio</td>
+            <td>Edilson, Junior, Ortega (3 pessoas)</td>
+            <td>Junho/2026</td>
+            <td class="num">108</td>
+            <td class="num">1,64</td>
+            <td class="num">R$ 14.589,00</td>
+            <td class="num">R$ 135,08</td>
+            <td class="num">12,2x</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 05/08/2026 18:34</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 07/08/2026 07:28</footer>
 
 <script>
 function goToSection(id) {
@@ -34451,6 +34501,18 @@ if (filterAreaNameEl) filterAreaNameEl.addEventListener('input', applyAreaFilter
 function parseCellValue(text) {
   const t = text.trim();
   if (t === '' || t === '—') return { num: null, text: '' };
+  // Data(s) no padrão dd/mm/aaaa, com ou sem hora (ex.: "17/07/2026" ou
+  // "17/07/2026 14:30"), inclusive períodos "dd/mm/aaaa a dd/mm/aaaa" (usa a
+  // primeira data do período pra ordenar). Convertida pra AAAAMMDDHHMM —
+  // um número que ordena CRONOLOGICAMENTE (ano, depois mês, depois dia),
+  // ao contrário do texto puro "dd/mm/aaaa", que ordenaria pelo DIA primeiro
+  // (é o que aparece mais à esquerda na string) e ignoraria mês/ano.
+  const dataMatch = t.match(/^(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{2}):(\d{2}))?/);
+  if (dataMatch) {
+    const [, dd, mm, yyyy, hh, min] = dataMatch;
+    const num = parseInt(yyyy + mm + dd + (hh || '00') + (min || '00'), 10);
+    if (!isNaN(num)) return { num, text: t.toLowerCase() };
+  }
   // tenta número no padrão pt-BR: "1.234,56" | "12,3%" | "R$ 93,80" | "225"
   let clean = t.replace(/^R\$\s?/, '').replace(/%$/, '').trim();
   if (/^-?[\d.,]+$/.test(clean)) {

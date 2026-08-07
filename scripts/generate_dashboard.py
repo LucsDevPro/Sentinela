@@ -462,6 +462,9 @@ def build_kpi_geral(resumo):
                 n_normal=n_normal, n_atencao=n_atencao, n_critico=n_critico)
 
 def build_kpi_custos(resumo):
+    if resumo.empty or "CustoNum" not in resumo.columns:
+        return dict(custo_medio=0, custo_min=0, custo_min_agente="—", custo_max=0, custo_max_agente="—",
+                    horas_dia_media=0, horas_semana_media=0, horas_uteis_media=0)
     idx_min, idx_max = resumo["CustoNum"].idxmin(), resumo["CustoNum"].idxmax()
     return dict(
         custo_medio=resumo["CustoNum"].mean(),
@@ -474,6 +477,12 @@ def build_kpi_custos(resumo):
 
 def build_ausencias_agg(aus):
     heat = {d: {"Manhã": 0, "Tarde": 0} for d in DIA_ORDER}
+    if aus is None or aus.empty or "Agente" not in aus.columns:
+        # Aba "Ausências" vazia (0 registros) — cada vez mais comum agora que
+        # o cronograma cobre mais dias e a coleta pode ser de 1 semana só.
+        # Não é erro, é uma boa notícia (ninguém com ausência a investigar).
+        return dict(heat=heat, top15=[], dia_critico="—", dia_critico_n=0,
+                    turno_critico="—", turno_critico_n=0)
     for _, r in aus.iterrows():
         if r["Dia da Semana"] in heat and r["Turno"] in heat[r["Dia da Semana"]]:
             heat[r["Dia da Semana"]][r["Turno"]] += 1

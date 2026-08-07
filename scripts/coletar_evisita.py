@@ -96,6 +96,12 @@ nome_periodo         = sem.nome_periodo         # rótulo amigável (nome do mê
 # ID em qualquer ano, não pra decidir de onde a coleta começa).
 PRIMEIRA_SEMANA_COLETA = 305
 
+# A partir daqui, cada semana ganha sua PRÓPRIA página no histórico (em vez
+# de ser agrupada com o resto do mês) — HTML 318 = Semana 31/2026
+# (02/08/2026), início de Agosto. Semanas ANTES disso continuam agrupadas
+# por mês civil, como sempre foram. Ver atualizar_historico_do_cache().
+PRIMEIRA_SEMANA_DETALHE_SEMANAL = 318
+
 # --- Coleta semana a semana --------------------------------------------------
 # A partir de agora a coleta NÃO busca mais um intervalo de semanas de uma vez
 # só. Cada semana (HTML ID) é buscada e cacheada SEPARADAMENTE em
@@ -2813,12 +2819,17 @@ def consolidar_semanas(htmls, pasta_saida):
 def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="data/historico",
                                   pasta_saida_tmp="output/_tmp_historico"):
     """Reconstrói as entradas AUTOMÁTICAS de data/historico/ a partir do cache
-    de semanas: agrupa as semanas já coletadas por mês civil e gera (ou
-    regera) uma planilha por mês. Cada entrada do manifest.json tem um campo
-    "origem": "cache" (escrita por esta função, pode ser sobrescrita à
-    vontade) ou "manual" (adicionada por fora — ex.: uma planilha antiga de
-    Jan-Maio/2026 coletada com outros parâmetros — e NUNCA tocada aqui,
-    mesmo que não tenha nenhuma semana correspondente no cache).
+    de semanas. Até PRIMEIRA_SEMANA_DETALHE_SEMANAL (exclusive), agrupa por
+    mês civil (uma planilha por mês, como sempre foi) — a partir dela, CADA
+    SEMANA vira sua própria página, pra dar mais detalhe e permitir revisar a
+    última semana fechada isoladamente (Ausências, Alertas, Cronograma etc.
+    só daquela semana, sem misturar com o resto do mês).
+
+    Cada entrada do manifest.json tem um campo "origem": "cache" (escrita por
+    esta função, pode ser sobrescrita à vontade) ou "manual" (adicionada por
+    fora — ex.: uma planilha antiga de Jan-Maio/2026 coletada com outros
+    parâmetros — e NUNCA tocada aqui, mesmo que não tenha nenhuma semana
+    correspondente no cache).
 
     Pra adicionar uma entrada manual: coloque o arquivo .xlsx em
     data/historico/, e acrescente uma entrada em data/historico/manifest.json
@@ -2843,20 +2854,27 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
             json.dump(entradas_manuais, f, ensure_ascii=False, indent=2)
         return
 
-    por_mes = {}
+    grupos = {}  # chave -> lista de html_ids do grupo
     for h in htmls:
-        por_mes.setdefault(sem.mes_da_semana_html(h), []).append(h)
+        if h >= PRIMEIRA_SEMANA_DETALHE_SEMANAL:
+            grupos[("semana", h)] = [h]  # cada semana é o grupo dela mesma, sozinha
+        else:
+            grupos.setdefault(("mes",) + sem.mes_da_semana_html(h), []).append(h)
 
     os.makedirs(pasta_historico, exist_ok=True)
     os.makedirs(pasta_saida_tmp, exist_ok=True)
     entradas_cache = []
-    for (ano, mes) in sorted(por_mes):
-        semanas_mes = sorted(por_mes[(ano, mes)])
-        ini, fim = semanas_mes[0], semanas_mes[-1]
-        nome_arquivo = f"semanas_{ini}-{fim}.xlsx" if ini != fim else f"semana_{ini}.xlsx"
-        label = nome_periodo(ini, fim)
+    for chave in sorted(grupos, key=lambda k: min(grupos[k])):
+        semanas_grupo = sorted(grupos[chave])
+        ini, fim = semanas_grupo[0], semanas_grupo[-1]
+        if chave[0] == "semana":
+            nome_arquivo = f"semana_{ini}.xlsx"
+            label = sem.rotulo_semana_html(ini)
+        else:
+            nome_arquivo = f"semanas_{ini}-{fim}.xlsx" if ini != fim else f"semana_{ini}.xlsx"
+            label = nome_periodo(ini, fim)
 
-        caminho_tmp = consolidar_semanas(semanas_mes, pasta_saida_tmp)
+        caminho_tmp = consolidar_semanas(semanas_grupo, pasta_saida_tmp)
         if not caminho_tmp:
             continue
         destino = os.path.join(pasta_historico, nome_arquivo)

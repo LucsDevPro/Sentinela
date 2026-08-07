@@ -39,7 +39,11 @@ execução (agora domingo/segunda/terça às 3h):
   1. Recoleta a última semana já salva (os dados do e-Visita ainda podem mudar).
   2. Busca a(s) semana(s) nova(s), se já estiver(em) disponível(is) no site.
   3. Consolida TODO o cache disponível num único `data/Analise_Consolidada.xlsx`.
-  4. Reconstrói `data/historico/` inteiro a partir do cache, agrupado por mês.
+  4. Reconstrói `data/historico/` a partir do cache — agrupado por mês até
+     Julho/2026; a partir de Agosto/2026, cada semana fechada vira sua
+     própria página (mais detalhe, e dá pra revisar a última semana isolada,
+     sem misturar com o resto do mês). Ver `PRIMEIRA_SEMANA_DETALHE_SEMANAL`
+     em `scripts/coletar_evisita.py` se quiser mudar esse ponto de corte.
 
 Na primeira execução (`data/semanas/` vazio), o script coleta da semana
 18/2026 (HTML 305, início de Maio) até a semana atual, uma planilha por
