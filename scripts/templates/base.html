@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title }}</title>
+<script>{{ chartjs | safe }}</script>
+<style>{{ css | safe }}</style>
+</head>
+<body data-print-date="{{ now_str }}">
+<header>
+  <div class="container">
+    <div class="header-brand">
+      <img src="{{ logo_href }}" alt="Prefeitura Municipal de Ponta Porã">
+      <div>
+        <h1>S E N T I N E L A <span>- HUB</span></h1>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · {{ now_str }}</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      {% if periodos and periodos|length > 1 %}
+      <select class="period-select" onchange="if(this.value) window.location.href=this.value">
+        {% for p in periodos %}<option value="{{ p.href }}" {% if p.atual %}selected{% endif %}>{{ p.label }}</option>{% endfor %}
+      </select>
+      {% endif %}
+      <label class="presentation-toggle">
+        <input type="checkbox" id="togglePresentationMode">
+        Modo apresentação (ocultar nomes)
+      </label>
+      <button type="button" class="print-btn print-full-btn" onclick="printFullReport()">🖨️ Imprimir relatório completo do mês</button>
+      <div class="header-meta">{{ kpi.total_agentes }} agentes · {{ teams | length }} equipes · {{ kpi.total_geral | br }} imóveis</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-section="visao-geral">Visão Geral</button>
+    <button class="nav-tab" data-section="agentes">Agentes</button>
+    <button class="nav-tab" data-section="equipes">Equipes</button>
+    <button class="nav-tab" data-section="areas">Por Área</button>
+    <button class="nav-tab" data-section="alertas">Alertas & Irregularidades</button>
+    <button class="nav-tab" data-section="ausencias">Ausências</button>
+    <button class="nav-tab" data-section="pendencias">Pendências</button>
+    <button class="nav-tab" data-section="ranking">Ranking</button>
+    <button class="nav-tab" data-section="ponto-estrategico">Ponto Estratégico</button>
+    <button class="nav-tab" data-section="custos">Custos & Produtividade</button>
+  </div>
+
+  {% include "sections/visao_geral.html" %}
+  {% include "sections/agentes.html" %}
+  {% include "sections/equipes.html" %}
+  {% include "sections/areas.html" %}
+  {% include "sections/alertas.html" %}
+  {% include "sections/ausencias.html" %}
+  {% include "sections/pendencias.html" %}
+  {% include "sections/ranking.html" %}
+  {% include "sections/ponto_estrategico.html" %}
+  {% include "sections/custos.html" %}
+</div>
+
+<footer>Dashboard gerado automaticamente · GitHub Actions · {{ now_str }}</footer>
+
+<script>
+{{ bootstrap_js | safe }}
+{% include "charts.js" %}
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{% from "macros.html" import kpi as kpi_card, chart_card %}
+<div class="section" id="ausencias">
+  <div class="kpi-grid">
+    {{ kpi_card("blue", "Possíveis Ausências", n_ausencias|br, "turnos sem visita registrada") }}
+    {{ kpi_card("cyan", "Agentes Envolvidos", ausencias|map(attribute="agente")|unique|list|length, "de " ~ kpi.total_agentes ~ " monitorados") }}
+    {{ kpi_card("yellow", "Dia Mais Crítico", ausencias_agg.dia_critico, ausencias_agg.dia_critico_n ~ " ausências") }}
+    {{ kpi_card("orange", "Turno Mais Crítico", ausencias_agg.turno_critico, ausencias_agg.turno_critico_n|string ~ " de " ~ n_ausencias|br ~ " (" ~ ((ausencias_agg.turno_critico_n / n_ausencias * 100) if n_ausencias else 0)|br(0) ~ "%)") }}
+  </div>
+  <div class="legend-box"><strong>Como ler:</strong> cada registro é um turno (manhã ou tarde) de um dia útil em que o agente não teve nenhuma visita lançada no sistema. Pode ser folga, atestado, falta ou apenas ausência de registro — confirme sempre com a escala antes de qualquer tratativa. Turnos do Cronograma abaixo (equipe inteira parada) já entram nessa lista, mas podem ser ocultados com o checkbox.</div>
+
+  {% if cronograma_rows %}
+  <div class="table-section">
+    <h3>📅 Ocorrências no Cronograma (por equipe)</h3>
+    <p class="table-hint">Turnos em que uma equipe inteira ficou sem nenhuma visita registrada — reunião, chuva localizada, deslocamento, etc. Detectado <strong>por equipe</strong>: se só a Equipe 2 parou, as outras continuam contando normalmente. Linhas marcadas "🤖 Auto-detectado" foram identificadas automaticamente e ainda não constam em <code>data/cronograma_ausencias.json</code>; o resto veio de lá.</p>
+    <div class="table-wrap"><table class="data-table compact sortable" id="tableCronograma">
+      <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th><th>Origem</th></tr></thead>
+      <tbody>
+        {% for c in cronograma_rows %}
+        <tr{% if c.auto %} class="row-atencao"{% endif %}>
+          <td>{{ c.periodo }}</td><td>{{ c.motivo }}</td><td>{{ c.quem }}</td>
+          <td>{% if c.auto %}<span class="badge badge-atencao">🤖 Auto-detectado</span>{% else %}<span class="small-muted">Cronograma</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table></div>
+  </div>
+  {% endif %}
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Mapa de Calor — Dia da Semana × Turno</h3>
+      <div class="heat-grid" id="heatmapAus" data-heat='{{ ausencias_agg.heat | tojson }}' style="margin-top:6px;"></div>
+      <p class="chart-note"><strong>Metodologia:</strong> conta, para cada combinação de dia da semana e turno, quantos turnos ficaram sem nenhuma visita registrada, somando todos os agentes. Cor mais escura = mais ausências naquele cruzamento.</p>
+    </div>
+    {{ chart_card("chartAusTop", "Agentes com Mais Ausências (top 15)", tall=True,
+       note="soma total de turnos sem visita registrada por agente (manhã + tarde, todos os dias), do maior para o menor, mostrando os 15 agentes com mais ocorrências.") }}
+  </div>
+  <div class="table-section">
+    <h3>📅 Todos os Registros de Ausência ({{ n_ausencias|br }})</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
+    <label class="checkbox-label">
+      <input type="checkbox" id="filterAusHideAllAbsent"> Ocultar turnos em que <strong>toda a equipe</strong> ficou ausente ({{ n_allabsent_rows }} registros — prováveis paralisações pontuais da equipe, listadas na tabela de Cronograma acima)
+    </label>
+    <div class="filters">
+      <select id="filterAusEquipe"><option value="">Todas as equipes</option>{% for t in teams %}<option>{{ t }}</option>{% endfor %}</select>
+      <select id="filterAusTurno"><option value="">Todos os turnos</option><option>Manhã</option><option>Tarde</option></select>
+      <select id="filterAusDia"><option value="">Todos os dias</option><option>Segunda</option><option>Terça</option><option>Quarta</option><option>Quinta</option><option>Sexta</option></select>
+      <input type="text" id="filterAusName" placeholder="Buscar agente...">
+    </div>
+    <div class="table-wrap">
+      <table class="data-table compact sortable" id="tableAusencias">
+        <thead><tr><th class="sticky-col">Agente</th><th>Equipe</th><th>Dia</th><th>Dia da Semana</th><th>Turno</th><th>Observação</th></tr></thead>
+        <tbody>
+          {% for r in ausencias %}
+          <tr{% if r.allabsent %} data-allabsent="1"{% endif %}>
+            <td class="sticky-col agent-name">{{ r.agente }}</td><td>{{ r.equipe }}</td><td>{{ r.dia }}</td>
+            <td>{{ r.dia_semana }}</td><td>{{ r.turno }}</td>
+            <td class="small-muted">{{ r.observacao }}{% if r.allabsent %} <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

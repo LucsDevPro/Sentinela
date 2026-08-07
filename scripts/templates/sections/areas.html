@@ -1,0 +1,30 @@
+<div class="section" id="areas">
+  <div class="table-section">
+    <h3>📍 Análise por Área ({{ area|length|br }} áreas)</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por % Rápidas por padrão. Passe o mouse sobre "Quarteirões" para ver a lista completa.</p>
+    <div class="filters">
+      <select id="filterAreaArea"><option value="">Todas as áreas</option>{% for a in areas_unicas %}<option>{{ a }}</option>{% endfor %}</select>
+      <input type="text" id="filterAreaName" placeholder="Buscar agente...">
+    </div>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableAreas">
+        <thead><tr>
+          <th>Agente</th><th>Equipe</th><th>Área</th><th>Imóveis Abertos</th><th>Tempo Médio</th><th>Mediana</th>
+          <th>Quarteirões</th><th>Rápidas</th><th>% Rápidas</th><th>Fechados</th><th>Recusados</th><th>% Pendência</th><th>Alerta</th>
+        </tr></thead>
+        <tbody>
+          {% for r in area %}
+          <tr class="{{ r.alerta|row_class }}" data-area="{{ r.area }}">
+            <td class="agent-name">{{ r.agente }}</td><td>{{ r.equipe }}</td><td>{{ r.area }}</td>
+            <td class="num">{{ r.abertos|br }}</td><td class="num">{{ r.tempo_medio|br(1) }}</td><td class="num">{{ r.mediana|br }}</td>
+            <td class="num" title="{{ r.quarteiroes_lista or '' }}">{{ r.qtd_quarteiroes|br }}</td>
+            <td class="num">{{ r.rapidas|br }}</td><td class="num pct">{{ r.pct_rapidas|br(1) }}%</td>
+            <td class="num">{{ r.fechados|br }}</td><td class="num">{{ r.recusados|br }}</td><td class="num pct">{{ r.pct_pendencia|br(1) }}%</td>
+            <td>{{ r.alerta|badge }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

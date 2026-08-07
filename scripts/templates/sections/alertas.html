@@ -1,0 +1,30 @@
+{% from "macros.html" import alert_table %}
+{% set base_cols = [("agente","Agente","str"), ("equipe","Equipe","str"), ("id_visita","ID Visita","id"), ("regiao","Região","str"),
+                     ("area","Área","str"), ("quarteirao","Quarteirão","str"), ("logradouro","Logradouro","str"),
+                     ("imovel","Imóvel","str"), ("chegada","Chegada","str"), ("saida","Saída","str")] %}
+<div class="section" id="alertas">
+  <div class="alert-grid">
+    <div class="alert-card" onclick="showAlert('dup')"><div class="ac-icon">📑</div><div class="ac-val" style="color:var(--orange)">{{ dup|length }}</div><div class="ac-label">Visitas Duplicadas</div></div>
+    <div class="alert-card" onclick="showAlert('sus')"><div class="ac-icon">⚠️</div><div class="ac-val" style="color:var(--red)">{{ susp|length }}</div><div class="ac-label">Sequências Suspeitas</div></div>
+    <div class="alert-card" onclick="showAlert('neg')"><div class="ac-icon">🔻</div><div class="ac-val" style="color:var(--purple)">{{ neg|length }}</div><div class="ac-label">Duração Negativa</div></div>
+    <div class="alert-card" onclick="showAlert('fora')"><div class="ac-icon">🕐</div><div class="ac-val" style="color:var(--yellow)">{{ fora|length }}</div><div class="ac-label">Fora do Expediente</div></div>
+    <div class="alert-card" onclick="showAlert('alm')"><div class="ac-icon">🍽️</div><div class="ac-val" style="color:var(--cyan)">{{ almoco|length }}</div><div class="ac-label">No Horário de Almoço</div></div>
+    <div class="alert-card" onclick="showAlert('teto')"><div class="ac-icon">🖥️</div><div class="ac-val" style="color:var(--navy)">{{ teto_media|length }}</div><div class="ac-label">Acima de 15min (auditoria)</div></div>
+    <div class="alert-card" onclick="goToSection('pendencias')"><div class="ac-icon">🚫</div><div class="ac-val" style="color:var(--red)">{{ n_recusados }}</div><div class="ac-label">Imóveis Recusados</div></div>
+    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">{{ n_ausencias|br }}</div><div class="ac-label">Possíveis Ausências</div></div>
+  </div>
+
+  {{ alert_table(dup, "Visitas Duplicadas", "📑", "dup", base_cols + [("motivo","Motivo","str")]) }}
+  {{ alert_table(susp, "Sequências Suspeitas", "⚠️",  "sus",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("cadeia","Cadeia","str"), ("id_visita","ID Visita","id"), ("regiao","Região","str"),
+      ("area","Área","str"), ("quarteirao","Quarteirão","str"), ("logradouro","Logradouro","str"), ("imovel","Imóvel","str"),
+      ("chegada","Chegada","str"), ("saida","Saída","str"), ("diferenca_s","Diferença p/ Anterior (s)*","str")]) }}
+  {{ alert_table(neg, "Duração Negativa", "🔻", "neg", base_cols + [("duracao_min","Duração (min)","num"), ("observacao","Observação","str")]) }}
+  {{ alert_table(fora, "Fora do Expediente", "🕐", "fora",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("id_visita","ID Visita","id"), ("dia_semana","Dia da Semana","str"), ("regiao","Região","str"),
+      ("area","Área","str"), ("quarteirao","Quarteirão","str"), ("logradouro","Logradouro","str"), ("imovel","Imóvel","str"),
+      ("chegada","Chegada","str"), ("saida","Saída","str"), ("motivo","Motivo","str")]) }}
+  {{ alert_table(almoco, "No Almoço", "🍽️", "alm", base_cols) }}
+  {{ alert_table(teto_media, "Acima de 15min (auditoria de manipulação de horário)", "🖥️", "teto",
+     base_cols + [("duracao_min","Duração (min)","num")]) }}
+</div>

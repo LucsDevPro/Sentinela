@@ -1,0 +1,12 @@
+[
+  {
+    "equipe": "Terreno Baldio",
+    "membros": ["Edilson", "Junior", "Ortega"],
+    "salario_por_membro": 4863.00,
+    "producao_mensal": [
+      { "mes": "Abril/2026", "visitas": 78 },
+      { "mes": "Maio/2026", "visitas": 87 },
+      { "mes": "Junho/2026", "visitas": 108 }
+    ]
+  }
+]

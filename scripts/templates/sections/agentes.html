@@ -1,0 +1,67 @@
+{% from "macros.html" import chart_card %}
+{% set cols = [
+  ("agente","Agente","str"), ("equipe","Equipe","str"), ("classificacao","Classificação","badge"),
+  ("abertos","Imóveis Abertos","num"), ("dias_trabalhados","Dias Trab.","num"), ("visitas_dia","Visitas/Dia","num1"),
+  ("media_min","Média (min)","num1"), ("mediana_min","Mediana","num"), ("rapidas","Rápidas","num"), ("pct_rapidas","% Rápidas","pct1"),
+  ("longas","Longas","num"), ("negativas","Negativas","num"), ("dias_meta","Dias c/ Meta","num"),
+  ("duplicadas","Duplicadas","num"), ("seq_suspeita","Seq. Suspeita","num"), ("no_almoco","No Almoço","num"), ("fora_expediente","Fora Exped.","num"),
+  ("fechados","Fechados","num"), ("recusados","Recusados","num"), ("total_geral","Total Geral","num"), ("pct_pendencia","% Pendência","pct1"),
+  ("horas_trab_dia","Horas Trab/Dia","num1"), ("horas_trab_semana","Horas Trab/Sem","num1"), ("horas_uteis_dia","Horas Úteis/Dia","num1"),
+  ("custo_hora","Custo Hora Útil","str"),
+  ("inicio_manha","Início Manhã","str"), ("fim_manha","Fim Manhã","str"), ("inicio_tarde","Início Tarde","str"), ("fim_tarde","Fim Tarde","str"),
+] %}
+<div class="section" id="agentes">
+  {{ chart_card("chartPct", "% de Visitas Rápidas por Agente", tall=True, wide=False,
+     note="% Rápidas = (visitas rápidas ÷ Imóveis Abertos do agente) × 100, ordenado do maior para o menor. A cor da barra segue a mesma faixa de classificação (verde/amarelo/vermelho).") }}
+  <div class="table-section" style="margin-top:20px;">
+    <h3>📋 Resumo Completo por Agente</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).
+      {% if semanas_disponiveis and semanas_disponiveis|length > 1 %}Use o filtro de semana pra ver os números de uma semana específica em vez do período inteiro.{% endif %}</p>
+    <div class="filters">
+      <select id="filterEquipe"><option value="">Todas as equipes</option>{% for t in teams %}<option>{{ t }}</option>{% endfor %}</select>
+      <select id="filterClass"><option value="">Todas as classificações</option><option value="NORMAL">🟢 Normal</option><option value="ATENÇÃO">🟡 Atenção</option><option value="CRÍTICO">🔴 Crítico</option></select>
+      <input type="text" id="filterName" placeholder="Buscar agente...">
+      {% if semanas_disponiveis and semanas_disponiveis|length > 1 %}
+      <select id="filterSemana" title="Filtrar por semana específica (em vez do período inteiro)">
+        <option value="todas">Todo o período</option>
+        {% for s in semanas_disponiveis %}<option value="{{ s.semana }}">{{ s.label }}</option>{% endfor %}
+      </select>
+      {% endif %}
+    </div>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableAgentes">
+        <thead><tr>
+          {% for key, label, kind in cols %}<th{% if loop.first %} class="sticky-col"{% endif %}>{{ label }}</th>{% endfor %}
+        </tr></thead>
+        <tbody>
+          {% for r in resumo %}
+          <tr class="{{ r.classificacao|row_class }}" data-equipe="{{ r.equipe }}" data-class="{{ r.classificacao }}" data-semana="todas">
+            {% for key, label, kind in cols %}
+              {% if kind == "badge" %}<td>{{ r[key]|badge }}</td>
+              {% elif kind == "num" %}<td class="num">{{ r[key]|br }}</td>
+              {% elif kind == "num1" %}<td class="num">{{ r[key]|br(1) }}</td>
+              {% elif kind == "pct1" %}<td class="num pct">{{ r[key]|br(1) }}%</td>
+              {% elif key == "agente" %}<td class="sticky-col agent-name">{{ r[key] }}</td>
+              {% else %}<td>{{ r[key] }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+          {% for r in resumo_semanal %}
+          <tr class="{{ r.classificacao|row_class }}" data-equipe="{{ r.equipe }}" data-class="{{ r.classificacao }}" data-semana="{{ r.semana }}" style="display:none;">
+            {% for key, label, kind in cols %}
+              {% if kind == "badge" %}<td>{{ r[key]|badge }}</td>
+              {% elif kind == "num" %}<td class="num">{{ r[key]|br }}</td>
+              {% elif kind == "num1" %}<td class="num">{{ r[key]|br(1) }}</td>
+              {% elif kind == "pct1" %}<td class="num pct">{{ r[key]|br(1) }}%</td>
+              {% elif key == "agente" %}<td class="sticky-col agent-name">{{ r[key] }}</td>
+              {% else %}<td>{{ r[key] }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

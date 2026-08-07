@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinela — Editor da Página Inicial</title>
+<style>
+  :root {
+    --navy: #0B3D75; --navy2: #0F4C8F; --navy-deep: #062246;
+    --bg: #FAFBFD; --card: #FFFFFF; --bg-soft: #F3F6FA;
+    --border: #E7ECF3; --border-soft: #F0F3F8;
+    --text: #1A2B42; --text2: #6B7A8F; --text3: #97A3B3;
+    --green: #12B76A; --blue: #1080D6;
+    --radius: 16px; --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(11,61,117,0.04), 0 4px 16px -6px rgba(11,61,117,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(120deg, var(--navy-deep) 0%, var(--navy) 55%, var(--navy2) 100%);
+    padding: 22px 0; margin-bottom: 28px; box-shadow: 0 2px 20px -4px rgba(6,34,70,0.35);
+  }
+  header .wrap { max-width: 820px; margin: 0 auto; padding: 0 20px; }
+  header h1 { color: #fff; font-size: 1.3rem; margin: 0 0 4px; letter-spacing: 0.01em; }
+  header h1 span { color: #7FC4FF; font-weight: 400; }
+  header p { color: #AFC9EA; margin: 0; font-size: 0.85rem; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 24px; margin-bottom: 24px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 1.05rem; }
+  .card .hint { color: var(--text2); font-size: 0.82rem; margin: 0 0 18px; }
+  label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+  select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 9px;
+    font-size: 0.9rem; background: var(--bg-soft); color: var(--text); font-family: inherit;
+  }
+  select:focus { outline: 2px solid var(--blue); outline-offset: 1px; background: #fff; }
+  button {
+    cursor: pointer; border: none; border-radius: 9px; font-weight: 700; font-size: 0.82rem;
+    padding: 10px 16px; font-family: inherit; transition: filter .15s, transform .1s;
+  }
+  button:active { transform: scale(0.98); }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.15); }
+  .btn-ghost { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--border-soft); }
+  .actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  textarea {
+    width: 100%; min-height: 120px; font-family: "SF Mono", Consolas, monospace; font-size: 0.78rem;
+    padding: 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg-soft); color: var(--text);
+  }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--navy-deep); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 0.85rem; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s, bottom .2s;
+  }
+  .toast.show { opacity: 1; bottom: 34px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+    background: var(--navy); color: #fff; border-radius: 50%; font-size: 0.72rem; font-weight: 700; margin-right: 8px;
+  }
+  .preview {
+    margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: rgba(18,183,106,0.08);
+    border: 1px solid rgba(18,183,106,0.25); font-size: 0.88rem;
+  }
+  .preview b { color: #0A8F52; }
+  code { background: var(--bg-soft); padding: 2px 6px; border-radius: 5px; font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>S E N T I N E L A <span>— Editor da Página Inicial</span></h1>
+    <p>Escolha qual período aparece em <code>index.html</code> sem mexer em código — depois é só colar o resultado no GitHub.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2><span class="step-num">1</span>Carregar os períodos disponíveis</h2>
+    <p class="hint">Abra <code>data/historico/manifest.json</code> no repositório, copie o conteúdo e cole aqui. Se ainda não existir nenhum mês arquivado, só vai aparecer a opção "Acumulado".</p>
+    <textarea id="importBox" placeholder='Cole aqui o conteúdo de data/historico/manifest.json (ou deixe em branco se ainda não existir)'></textarea>
+    <div class="actions-row">
+      <button class="btn-ghost" onclick="carregarManifest()">Carregar opções</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">2</span>Escolher o período da home</h2>
+    <p class="hint">"Acumulado" soma TODAS as semanas já coletadas até agora. Os outros são meses específicos, já arquivados em <code>historico/</code>.</p>
+    <label for="selPeriodo">Período</label>
+    <select id="selPeriodo" onchange="atualizarSaida()">
+      <option value="acumulado">📊 Acumulado (todas as semanas)</option>
+    </select>
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">3</span>Copiar pro GitHub</h2>
+    <p class="hint">
+      Copie o texto abaixo e cole no arquivo <code>data/config_home.json</code> do repositório
+      (GitHub → abrir o arquivo → ✏️ Edit → apagar tudo → colar → Commit changes).
+      Na próxima vez que o dashboard for gerado (automático ou manual), a home passa a mostrar esse período.
+    </p>
+    <textarea id="outputBox" readonly></textarea>
+    <div class="actions-row">
+      <button class="btn-primary" onclick="copiarJson()">📋 Copiar JSON</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let opcoes = [{ arquivo: "data/Analise_Consolidada.xlsx", label: "Acumulado (todas as semanas)", valor: "acumulado" }];
+
+function carregarManifest() {
+  const txt = document.getElementById('importBox').value.trim();
+  opcoes = [{ arquivo: "data/Analise_Consolidada.xlsx", label: "Acumulado (todas as semanas)", valor: "acumulado" }];
+  if (txt) {
+    try {
+      const entries = JSON.parse(txt);
+      if (!Array.isArray(entries)) throw new Error('não é uma lista');
+      entries.forEach(e => {
+        if (e && e.arquivo && e.label) {
+          opcoes.push({ arquivo: `data/historico/${e.arquivo}`, label: e.label, valor: e.arquivo });
+        }
+      });
+      mostrarToast(`${entries.length} período(s) carregado(s) do histórico.`);
+    } catch (e) {
+      mostrarToast('JSON inválido — confira se copiou o manifest.json certo.');
+      return;
+    }
+  }
+  const sel = document.getElementById('selPeriodo');
+  sel.innerHTML = opcoes.map(o =>
+    `<option value="${o.valor}">${o.valor === 'acumulado' ? '📊 ' : '📅 '}${o.label}</option>`
+  ).join('');
+  atualizarSaida();
+}
+
+function atualizarSaida() {
+  const valor = document.getElementById('selPeriodo').value;
+  const escolhida = opcoes.find(o => o.valor === valor) || opcoes[0];
+  const config = { arquivo: escolhida.arquivo, label: escolhida.label };
+  document.getElementById('outputBox').value = JSON.stringify(config, null, 2);
+  document.getElementById('preview').innerHTML =
+    `A home vai mostrar: <b>${escolhida.label}</b><br>Arquivo: <code>${escolhida.arquivo}</code>`;
+}
+
+function copiarJson() {
+  const box = document.getElementById('outputBox');
+  box.select();
+  navigator.clipboard.writeText(box.value).then(() => {
+    mostrarToast('JSON copiado! Agora é só colar em data/config_home.json no GitHub.');
+  }).catch(() => {
+    document.execCommand('copy');
+    mostrarToast('JSON copiado! Agora é só colar em data/config_home.json no GitHub.');
+  });
+}
+
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+atualizarSaida();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinela — Editor de Cronograma</title>
+<style>
+  :root {
+    --navy: #0B3D75; --navy2: #0F4C8F; --navy-deep: #062246;
+    --bg: #FAFBFD; --card: #FFFFFF; --bg-soft: #F3F6FA;
+    --border: #E7ECF3; --border-soft: #F0F3F8;
+    --text: #1A2B42; --text2: #6B7A8F; --text3: #97A3B3;
+    --green: #12B76A; --yellow: #F2B01E; --red: #E4572E;
+    --blue: #1080D6; --orange: #F2994A; --purple: #7C4DFF;
+    --radius: 16px; --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(11,61,117,0.04), 0 4px 16px -6px rgba(11,61,117,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(120deg, var(--navy-deep) 0%, var(--navy) 55%, var(--navy2) 100%);
+    padding: 22px 0; margin-bottom: 28px; box-shadow: 0 2px 20px -4px rgba(6,34,70,0.35);
+  }
+  header .wrap { max-width: 1020px; margin: 0 auto; padding: 0 20px; }
+  header h1 { color: #fff; font-size: 1.3rem; margin: 0 0 4px; letter-spacing: 0.01em; }
+  header h1 span { color: #7FC4FF; font-weight: 400; }
+  header p { color: #AFC9EA; margin: 0; font-size: 0.85rem; }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 0 20px 60px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 24px; margin-bottom: 24px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 1.05rem; }
+  .card .hint { color: var(--text2); font-size: 0.82rem; margin: 0 0 18px; }
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 1.3fr 1fr 1fr auto; gap: 12px; align-items: end;
+  }
+  @media (max-width: 860px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+  label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+  select, input {
+    width: 100%; padding: 9px 10px; border: 1px solid var(--border); border-radius: 9px;
+    font-size: 0.85rem; background: var(--bg-soft); color: var(--text); font-family: inherit;
+  }
+  select:focus, input:focus { outline: 2px solid var(--blue); outline-offset: 1px; background: #fff; }
+  button {
+    cursor: pointer; border: none; border-radius: 9px; font-weight: 700; font-size: 0.82rem;
+    padding: 10px 16px; font-family: inherit; transition: filter .15s, transform .1s;
+  }
+  button:active { transform: scale(0.98); }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.15); }
+  .btn-ghost { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--border-soft); }
+  .btn-danger-mini { background: none; color: var(--red); padding: 4px 8px; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 0.85rem; }
+  th { text-align: left; padding: 8px 10px; color: var(--text2); font-size: 0.7rem; text-transform: uppercase;
+       letter-spacing: 0.03em; border-bottom: 1px solid var(--border); }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--border-soft); }
+  tr:hover td { background: var(--bg-soft); }
+  .badge { display: inline-flex; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+  .badge-ferias { background: rgba(18,183,106,0.12); color: #0A8F52; }
+  .badge-folga { background: rgba(16,128,214,0.12); color: #0A5FA0; }
+  .badge-atestado { background: rgba(242,153,74,0.16); color: #B1590B; }
+  .badge-chuva { background: rgba(16,128,214,0.12); color: #0A5FA0; }
+  .badge-reuniao { background: rgba(124,77,255,0.14); color: #5B2FCB; }
+  .badge-atividade { background: rgba(18,183,106,0.10); color: #0A8F52; }
+  .empty-row td { text-align: center; color: var(--text3); padding: 28px; font-style: italic; }
+  .actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  textarea {
+    width: 100%; min-height: 140px; font-family: "SF Mono", Consolas, monospace; font-size: 0.78rem;
+    padding: 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg-soft); color: var(--text);
+  }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--navy-deep); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 0.85rem; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s, bottom .2s;
+  }
+  .toast.show { opacity: 1; bottom: 34px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+    background: var(--navy); color: #fff; border-radius: 50%; font-size: 0.72rem; font-weight: 700; margin-right: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>S E N T I N E L A <span>— Editor de Cronograma</span></h1>
+    <p>Registre chuva, folga, atestado, reunião/treinamento e férias sem mexer em código — depois é só colar o resultado no GitHub.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2><span class="step-num">1</span>Carregar nomes dos agentes (opcional, mas recomendado)</h2>
+    <p class="hint">O coletor salva automaticamente <code>data/agentes_nomes.json</code> toda vez que roda de verdade (é a única fonte confiável dos nomes — eles só existem no e-Visita). Abra esse arquivo no GitHub, copie o conteúdo e cole aqui: o menu do passo 3 passa a mostrar nomes de verdade em vez de só o ID. Se ainda não existir (primeira coleta ainda não rodou), pule esse passo — o menu mostra os IDs normalmente.</p>
+    <textarea id="nomesBox" placeholder='Cole aqui o conteúdo de data/agentes_nomes.json (opcional)'></textarea>
+    <div class="actions-row">
+      <button class="btn-ghost" onclick="carregarNomes()">Carregar nomes</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">2</span>Carregar o que já existe (opcional)</h2>
+    <p class="hint">Se já existe um <code>data/cronograma_ausencias.json</code> no repositório, abra ele no GitHub, copie o conteúdo e cole aqui pra editar — senão, pule pro passo 3 e comece do zero.</p>
+    <textarea id="importBox" placeholder='Cole aqui o conteúdo atual de data/cronograma_ausencias.json (ou deixe em branco pra começar do zero)'></textarea>
+    <div class="actions-row">
+      <button class="btn-ghost" onclick="importarJson()">Carregar na tabela</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">3</span>Adicionar um registro</h2>
+    <p class="hint">Escolha quem é afetado (um agente, uma equipe inteira, ou todos), o motivo e o período — só o dia de entrada e o de saída. Pra um dia só, use a mesma data nos dois campos. Clique em "Adicionar" pra incluir na lista abaixo.</p>
+    <div class="form-grid">
+      <div>
+        <label for="selAlvo">Quem</label>
+        <select id="selAlvo" onchange="onAlvoChange()">
+          <option value="agente">Um agente</option>
+          <option value="equipe">Uma equipe inteira</option>
+          <option value="todos">Todos os agentes</option>
+        </select>
+      </div>
+      <div id="alvoDetalheWrap">
+        <label for="selAgente">Agente</label>
+        <select id="selAgente"></select>
+      </div>
+      <div>
+        <label for="selMotivo">Motivo</label>
+        <select id="selMotivo">
+          <option value="Chuva">Chuva</option>
+          <option value="Folga">Folga</option>
+          <option value="Atestado">Atestado</option>
+          <option value="Reunião/Treinamento">Reunião/Treinamento</option>
+          <option value="Férias">Férias</option>
+          <option value="Levantamento de Índice">Levantamento de Índice</option>
+          <option value="Instalação de Ovitrampa">Instalação de Ovitrampa</option>
+          <option value="Recolha de Ovitrampa">Recolha de Ovitrampa</option>
+          <option value="Recuperação de Casas">Recuperação de Casas</option>
+        </select>
+      </div>
+      <div>
+        <label for="dataInicio">Dia de entrada</label>
+        <input type="date" id="dataInicio">
+      </div>
+      <div>
+        <label for="dataFim">Dia de saída</label>
+        <input type="date" id="dataFim">
+      </div>
+    </div>
+    <div class="actions-row">
+      <button class="btn-primary" onclick="adicionar()">+ Adicionar</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">4</span>Lista atual</h2>
+    <p class="hint">Confira os registros antes de copiar. Clique no 🗑️ pra remover um.</p>
+    <table>
+      <thead><tr><th>Quem</th><th>Motivo</th><th>Entrada</th><th>Saída</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">5</span>Copiar pro GitHub</h2>
+    <p class="hint">
+      Copie o texto abaixo e cole no arquivo <code>data/cronograma_ausencias.json</code> do repositório
+      (GitHub → abrir o arquivo → ✏️ Edit → apagar tudo → colar → Commit changes). Na próxima coleta automática,
+      esses dias já saem da aba "Ausências" (não contam na pontuação do agente) e aparecem no "Cronograma".
+    </p>
+    <textarea id="outputBox" readonly placeholder="[]"></textarea>
+    <div class="actions-row">
+      <button class="btn-primary" onclick="copiarJson()">📋 Copiar JSON</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Lista de agentes (ID + equipe) — mesma configuração do coletor.
+const AGENTES_POR_EQUIPE = {
+  "Equipe 1":        [116, 73, 1935, 470, 672, 3037, 79, 85, 30, 3101],
+  "Equipe 2":        [115, 125, 3035, 3127, 2030, 134, 99, 142, 465, 81, 151, 2917],
+  "Equipe 3":        [113, 2951, 120, 1938, 2721, 3128, 3038, 2918, 1936],
+  "Equipe 4":        [80, 124, 161, 1943, 2789, 1996, 157, 110, 149, 86, 1942],
+  "Equipe Bloqueio": [162, 1088, 1934, 109, 155, 126, 476, 122, 2101],
+};
+
+let registros = []; // {alvo, id_agente?, equipe?, motivo, inicio: "dd/mm/aaaa", fim: "dd/mm/aaaa"}
+let NOMES_AGENTES = {}; // id_agente (string) -> {nome, equipe}, vem de data/agentes_nomes.json (opcional)
+
+function rotuloAgente(id, equipeFallback) {
+  const info = NOMES_AGENTES[String(id)];
+  return info ? `${info.nome} — ${info.equipe}` : `ID ${id} — ${equipeFallback}`;
+}
+
+function carregarNomes() {
+  const txt = document.getElementById('nomesBox').value.trim();
+  if (!txt) { NOMES_AGENTES = {}; mostrarToast('Nenhum nome carregado — o menu vai mostrar os IDs.'); }
+  else {
+    try {
+      const dados = JSON.parse(txt);
+      NOMES_AGENTES = dados;
+      mostrarToast(`${Object.keys(dados).length} nome(s) carregado(s).`);
+    } catch (e) {
+      mostrarToast('JSON inválido — confira se copiou o arquivo certo.');
+      return;
+    }
+  }
+  popularSelectAgentes();
+  renderizar();
+}
+
+function popularSelectAgentes() {
+  const sel = document.getElementById('selAgente');
+  if (!sel) return;
+  sel.innerHTML = '';
+  for (const [equipe, ids] of Object.entries(AGENTES_POR_EQUIPE)) {
+    const og = document.createElement('optgroup');
+    og.label = equipe;
+    ids.forEach(id => {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = rotuloAgente(id, equipe);
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  }
+}
+
+function popularSelectEquipes() {
+  return Object.keys(AGENTES_POR_EQUIPE).map(eq => `<option value="${eq}">${eq}</option>`).join('');
+}
+
+function onAlvoChange() {
+  const alvo = document.getElementById('selAlvo').value;
+  const wrap = document.getElementById('alvoDetalheWrap');
+  if (alvo === 'agente') {
+    wrap.innerHTML = `<label for="selAgente">Agente</label><select id="selAgente"></select>`;
+    popularSelectAgentes();
+  } else if (alvo === 'equipe') {
+    wrap.innerHTML = `<label for="selEquipe">Equipe</label><select id="selEquipe">${popularSelectEquipes()}</select>`;
+  } else {
+    wrap.innerHTML = `<label>&nbsp;</label><input type="text" value="Todos os agentes" disabled>`;
+  }
+}
+
+function isoParaBr(iso) {
+  if (!iso) return '';
+  const [a, m, d] = iso.split('-');
+  return `${d}/${m}/${a}`;
+}
+function brParaIso(br) {
+  const [d, m, a] = br.split('/');
+  return `${a}-${m}-${d}`;
+}
+
+function adicionar() {
+  const alvo = document.getElementById('selAlvo').value;
+  const motivo = document.getElementById('selMotivo').value;
+  const inicioIso = document.getElementById('dataInicio').value;
+  const fimIso = document.getElementById('dataFim').value;
+  if (!inicioIso || !fimIso) { mostrarToast('Preencha os dois dias (entrada e saída).'); return; }
+  if (fimIso < inicioIso) { mostrarToast('O dia de saída não pode ser antes do dia de entrada.'); return; }
+
+  const registro = { alvo, motivo, inicio: isoParaBr(inicioIso), fim: isoParaBr(fimIso) };
+  if (alvo === 'agente') {
+    const sel = document.getElementById('selAgente');
+    if (!sel || !sel.value) { mostrarToast('Escolha um agente.'); return; }
+    registro.id_agente = parseInt(sel.value, 10);
+  } else if (alvo === 'equipe') {
+    const sel = document.getElementById('selEquipe');
+    if (!sel || !sel.value) { mostrarToast('Escolha uma equipe.'); return; }
+    registro.equipe = sel.value;
+  }
+
+  registros.push(registro);
+  renderizar();
+  document.getElementById('dataInicio').value = '';
+  document.getElementById('dataFim').value = '';
+  mostrarToast('Adicionado à lista — não esqueça de copiar o JSON no passo 4.');
+}
+
+function remover(i) {
+  registros.splice(i, 1);
+  renderizar();
+}
+
+function badgeClass(motivo) {
+  const m = motivo.toLowerCase();
+  if (m.includes('féria') || m.includes('feria')) return 'badge-ferias';
+  if (m.includes('folga')) return 'badge-folga';
+  if (m.includes('atestado')) return 'badge-atestado';
+  if (m.includes('chuva')) return 'badge-chuva';
+  if (m.includes('reunião') || m.includes('reuniao') || m.includes('treinamento')) return 'badge-reuniao';
+  if (m.includes('índice') || m.includes('indice') || m.includes('ovitrampa') || m.includes('recuperação') || m.includes('recuperacao')) return 'badge-atividade';
+  return 'badge-folga';
+}
+
+function quemFmt(r) {
+  if (r.alvo === 'todos') return 'Todos os agentes';
+  if (r.alvo === 'equipe') return r.equipe;
+  const info = NOMES_AGENTES[String(r.id_agente)];
+  return info ? info.nome : `Agente ID ${r.id_agente}`;
+}
+
+function renderizar() {
+  const tbody = document.getElementById('tbody');
+  if (registros.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Nenhum registro adicionado ainda.</td></tr>';
+  } else {
+    tbody.innerHTML = registros.map((r, i) => `
+      <tr>
+        <td>${quemFmt(r)}</td>
+        <td><span class="badge ${badgeClass(r.motivo)}">${r.motivo}</span></td>
+        <td>${r.inicio}</td>
+        <td>${r.fim}</td>
+        <td><button class="btn-danger-mini" onclick="remover(${i})" title="Remover">🗑️</button></td>
+      </tr>`).join('');
+  }
+  document.getElementById('outputBox').value = JSON.stringify(registros, null, 2);
+}
+
+function importarJson() {
+  const txt = document.getElementById('importBox').value.trim();
+  if (!txt) { registros = []; renderizar(); return; }
+  try {
+    const dados = JSON.parse(txt);
+    if (!Array.isArray(dados)) throw new Error('não é uma lista');
+    registros = dados.filter(r => r && r.alvo && r.motivo && r.inicio && r.fim);
+    renderizar();
+    mostrarToast(`${registros.length} registro(s) carregado(s).`);
+  } catch (e) {
+    mostrarToast('JSON inválido — confira se copiou o arquivo certo.');
+  }
+}
+
+function copiarJson() {
+  const box = document.getElementById('outputBox');
+  box.select();
+  navigator.clipboard.writeText(box.value).then(() => {
+    mostrarToast('JSON copiado! Agora é só colar no GitHub.');
+  }).catch(() => {
+    document.execCommand('copy');
+    mostrarToast('JSON copiado! Agora é só colar no GitHub.');
+  });
+}
+
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+popularSelectAgentes();
+renderizar();
+</script>
+
+</body>
+</html>
