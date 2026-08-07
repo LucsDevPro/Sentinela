@@ -1,0 +1,122 @@
+name: Coletar e Atualizar Dashboard
+
+# Três formas de disparar:
+# 1) schedule  -> roda sozinho domingo, segunda e terça às 3h (Ponta Porã).
+#                 A cada execução: recoleta a última semana salva (pode ter
+#                 mudado) + busca a semana nova, se já tiver disponível no
+#                 e-Visita (ver decidir_semanas_a_coletar() no coletor).
+# 2) push      -> se você subir uma planilha manualmente (fallback antigo)
+#                 ou mexer nos templates, o dashboard é regerado, SEM coletar
+#                 de novo no e-Visita
+# 3) workflow_dispatch -> rodar na mão pelo botão "Run workflow", com opção
+#                          de pular a coleta (só regenerar o HTML) e opção de
+#                          forçar a recoleta de UMA semana específica
+on:
+  schedule:
+    - cron: "0 7 * * 0,1,2"   # 07:00 UTC = 03:00 em Ponta Porã (UTC-4), dom/seg/ter
+  push: {}
+  workflow_dispatch:
+    inputs:
+      rodar_coleta:
+        description: "Coletar dados novos no e-Visita antes de gerar o dashboard?"
+        type: boolean
+        default: true
+      semana_html_id:
+        description: "(Opcional) HTML ID de UMA semana específica para recoletar manualmente. Deixe em branco para o script decidir sozinho."
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      # Só coleta dados novos quando disparado por agendamento ou manualmente
+      # (com a opção marcada). Em push (planilha subida à mão, ou mudança nos
+      # templates) pula essa etapa e só regenera o HTML. O cache de semanas
+      # (data/semanas/) é lido e regravado no repositório a cada execução —
+      # é ele que carrega o estado "última semana coletada" de uma execução
+      # pra outra (o runner do GitHub Actions começa do zero a cada vez).
+      - name: Coletar dados no e-Visita (semana a semana)
+        if: >-
+          github.event_name == 'schedule' ||
+          (github.event_name == 'workflow_dispatch' && inputs.rodar_coleta)
+        env:
+          EVISITA_CPF: ${{ secrets.EVISITA_CPF }}
+          EVISITA_SENHA: ${{ secrets.EVISITA_SENHA }}
+        run: |
+          if [ -n "${{ inputs.semana_html_id }}" ]; then
+            python scripts/coletar_evisita.py --saida data --semana "${{ inputs.semana_html_id }}"
+          else
+            python scripts/coletar_evisita.py --saida data
+          fi
+
+      # index.html (homepage) sempre mostra o acumulado de TUDO que já foi
+      # coletado (todas as semanas somadas) — é só o Analise_Consolidada.xlsx
+      # de sempre. Pra ver um mês antigo isolado, use o seletor de período
+      # (gera as páginas de historico/ no passo seguinte); pra ver uma
+      # semana isolada dentro do período carregado, use o filtro de semana
+      # dentro da página (Resumo Geral / Ponto Estratégico).
+      # index.html (home) mostra o período configurado em data/config_home.json
+      # (editável pelo home_editor.html, sem precisar mexer em código).
+      - name: Gerar index.html (home configurável)
+        run: python scripts/generate_dashboard.py
+
+      # acumulado.html sempre mostra a SOMA de tudo que já foi coletado, sem
+      # depender de nenhuma configuração — é o Analise_Consolidada.xlsx puro.
+      - name: Gerar acumulado.html (soma de todas as semanas)
+        run: python scripts/generate_dashboard.py data/Analise_Consolidada.xlsx acumulado.html
+
+      - name: Gerar páginas do histórico (uma por mês arquivado)
+        run: |
+          mkdir -p historico
+          if [ -f data/historico/manifest.json ]; then
+            for arq in data/historico/*.xlsx; do
+              [ -e "$arq" ] || continue
+              nome=$(basename "$arq" .xlsx)
+              python scripts/generate_dashboard.py "$arq" "historico/$nome.html"
+            done
+          fi
+
+      - name: Salvar cache de semanas, planilhas, histórico e HTML no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html acumulado.html data/Analise_Consolidada.xlsx data/semanas data/historico data/config_home.json data/agentes_nomes.json historico
+          git diff --staged --quiet || git commit -m "Atualiza coleta e dashboard automaticamente [skip ci]"
+          git push
+
+      - name: Preparar publicação (GitHub Pages)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
