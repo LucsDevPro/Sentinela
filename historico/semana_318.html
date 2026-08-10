@@ -232,14 +232,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="10/08/2026 10:00">
+<body data-print-date="10/08/2026 13:38">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 10/08/2026 10:00</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 10/08/2026 13:38</div>
       </div>
     </div>
     <div class="header-actions">
@@ -253,7 +253,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         Modo apresentação (ocultar nomes)
       </label>
       <button type="button" class="print-btn print-full-btn" onclick="printFullReport()">🖨️ Imprimir relatório completo do mês</button>
-      <div class="header-meta">38 agentes · 4 equipes · 2.133 imóveis</div>
+      <div class="header-meta">38 agentes · 4 equipes · 2.160 imóveis</div>
     </div>
   </div>
 </header>
@@ -276,9 +276,9 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 <div class="section active" id="visao-geral">
   <div class="kpi-grid">
     <div class="kpi blue"><div class="kpi-label">Total Agentes</div><div class="kpi-value">38</div><div class="kpi-sub">4 equipes</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Total Geral de Imóveis</div><div class="kpi-value">2.133</div><div class="kpi-sub">1.403 abertos · 728 fechados · 2 recusados</div></div>
-    <div class="kpi yellow"><div class="kpi-label">% Pendência Geral</div><div class="kpi-value">34,2%</div><div class="kpi-sub">(fechados+recusados) ÷ total</div></div>
-    <div class="kpi red"><div class="kpi-label">Agentes Críticos</div><div class="kpi-value">8</div><div class="kpi-sub">28 normal · 2 atenção</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Total Geral de Imóveis</div><div class="kpi-value">2.160</div><div class="kpi-sub">1.419 abertos · 739 fechados · 2 recusados</div></div>
+    <div class="kpi yellow"><div class="kpi-label">% Pendência Geral</div><div class="kpi-value">34,3%</div><div class="kpi-sub">(fechados+recusados) ÷ total</div></div>
+    <div class="kpi red"><div class="kpi-label">Agentes Críticos</div><div class="kpi-value">7</div><div class="kpi-sub">28 normal · 3 atenção</div></div>
     <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">1</div><div class="kpi-sub">1 alertas · 0 ausências</div></div>
   </div>
 
@@ -293,7 +293,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   <span class="legend-tip">% Pendência = (Imóveis Fechados + Recusados) ÷ Total Geral</span></span>
   </div>
 
-  <h3 style="margin-bottom:14px;font-size:1.05rem;">Agentes em Situação Crítica (8)</h3>
+  <h3 style="margin-bottom:14px;font-size:1.05rem;">Agentes em Situação Crítica (7)</h3>
   <div class="criticos-list">
     
     <div class="critico-item">
@@ -303,20 +303,20 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     </div>
     
     <div class="critico-item">
-      <span class="ci-pct">61,8%</span>
-      <div class="ci-name">Ramona dos Santos Oliveira</div>
-      <div class="ci-meta">Equipe 4 · 34 imóveis abertos · 21 rápidas · média 2,6 min</div>
-    </div>
-    
-    <div class="critico-item">
       <span class="ci-pct">61,1%</span>
       <div class="ci-name">Juliana Patricia Goncalves</div>
       <div class="ci-meta">Equipe 4 · 18 imóveis abertos · 11 rápidas · média 3,1 min</div>
     </div>
     
     <div class="critico-item">
+      <span class="ci-pct">51,2%</span>
+      <div class="ci-name">Ramona dos Santos Oliveira</div>
+      <div class="ci-meta">Equipe 4 · 43 imóveis abertos · 22 rápidas · média 3,1 min</div>
+    </div>
+    
+    <div class="critico-item">
       <span class="ci-pct">41,5%</span>
-      <div class="ci-name">Tânia Raquel Ortiz dos Santos</div>
+      <div class="ci-name">Raquel Ortiz dos Santos</div>
       <div class="ci-meta">Equipe 1 · 41 imóveis abertos · 17 rápidas · média 3,3 min</div>
     </div>
     
@@ -328,7 +328,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     
   </div>
   
-  <p class="table-hint">Mostrando os 5 piores. <a href="#" onclick="goToSection('agentes');return false;">Ver todos os 8 agentes críticos na aba Agentes →</a></p>
+  <p class="table-hint">Mostrando os 5 piores. <a href="#" onclick="goToSection('agentes');return false;">Ver todos os 7 agentes críticos na aba Agentes →</a></p>
   
 
   <div class="charts-grid">
@@ -380,13 +380,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td><span class="badge badge-normal">🟢 NORMAL</span></td>
               
             
-              <td class="num">67</td>
+              <td class="num">66</td>
               
             
               <td class="num">3</td>
               
             
-              <td class="num">22,3</td>
+              <td class="num">22,0</td>
               
             
               <td class="num">5,0</td>
@@ -428,10 +428,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">1</td>
               
             
-              <td class="num">88</td>
+              <td class="num">87</td>
               
             
-              <td class="num pct">23,9%</td>
+              <td class="num pct">24,1%</td>
               
             
               <td class="num">3,1</td>
@@ -440,10 +440,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">9,4</td>
               
             
-              <td class="num">1,9</td>
+              <td class="num">1,8</td>
               
             
-              <td>R$ 118,42</td>
+              <td>R$ 119,84</td>
               
             
               <td>08:23</td>
@@ -1006,6 +1006,97 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           </tr>
           
+          <tr class="row-critico" data-equipe="Equipe 1" data-class="🔴 CRÍTICO" data-semana="todas">
+            
+              <td class="sticky-col agent-name">Raquel Ortiz dos Santos</td>
+              
+            
+              <td>Equipe 1</td>
+              
+            
+              <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+              
+            
+              <td class="num">41</td>
+              
+            
+              <td class="num">3</td>
+              
+            
+              <td class="num">13,7</td>
+              
+            
+              <td class="num">3,3</td>
+              
+            
+              <td class="num">3</td>
+              
+            
+              <td class="num">17</td>
+              
+            
+              <td class="num pct">41,5%</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">1</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">10</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">51</td>
+              
+            
+              <td class="num pct">19,6%</td>
+              
+            
+              <td class="num">2,7</td>
+              
+            
+              <td class="num">8,1</td>
+              
+            
+              <td class="num">0,8</td>
+              
+            
+              <td>R$ 292,56</td>
+              
+            
+              <td>08:56</td>
+              
+            
+              <td>10:47</td>
+              
+            
+              <td>14:44</td>
+              
+            
+              <td>16:10</td>
+              
+            
+          </tr>
+          
           <tr class="" data-equipe="Equipe 1" data-class="🟢 NORMAL" data-semana="todas">
             
               <td class="sticky-col agent-name">Rozentina Matos de Oliveira</td>
@@ -1097,98 +1188,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           </tr>
           
-          <tr class="row-critico" data-equipe="Equipe 1" data-class="🔴 CRÍTICO" data-semana="todas">
-            
-              <td class="sticky-col agent-name">Tânia Raquel Ortiz dos Santos</td>
-              
-            
-              <td>Equipe 1</td>
-              
-            
-              <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
-              
-            
-              <td class="num">41</td>
-              
-            
-              <td class="num">3</td>
-              
-            
-              <td class="num">13,7</td>
-              
-            
-              <td class="num">3,3</td>
-              
-            
-              <td class="num">3</td>
-              
-            
-              <td class="num">17</td>
-              
-            
-              <td class="num pct">41,5%</td>
-              
-            
-              <td class="num">0</td>
-              
-            
-              <td class="num">0</td>
-              
-            
-              <td class="num">1</td>
-              
-            
-              <td class="num">0</td>
-              
-            
-              <td class="num">0</td>
-              
-            
-              <td class="num">0</td>
-              
-            
-              <td class="num">0</td>
-              
-            
-              <td class="num">10</td>
-              
-            
-              <td class="num">0</td>
-              
-            
-              <td class="num">51</td>
-              
-            
-              <td class="num pct">19,6%</td>
-              
-            
-              <td class="num">2,7</td>
-              
-            
-              <td class="num">8,1</td>
-              
-            
-              <td class="num">0,8</td>
-              
-            
-              <td>R$ 292,56</td>
-              
-            
-              <td>08:56</td>
-              
-            
-              <td>10:47</td>
-              
-            
-              <td>14:44</td>
-              
-            
-              <td>16:10</td>
-              
-            
-          </tr>
-          
-          <tr class="row-critico" data-equipe="Equipe 1" data-class="🔴 CRÍTICO" data-semana="todas">
+          <tr class="row-atencao" data-equipe="Equipe 1" data-class="🟡 ATENÇÃO" data-semana="todas">
             
               <td class="sticky-col agent-name">Wagner Tarlei Gomes</td>
               
@@ -1196,19 +1196,19 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td>Equipe 1</td>
               
             
-              <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+              <td><span class="badge badge-atencao">🟡 ATENÇÃO</span></td>
               
             
-              <td class="num">34</td>
+              <td class="num">42</td>
               
             
-              <td class="num">1</td>
+              <td class="num">2</td>
               
             
-              <td class="num">34,0</td>
+              <td class="num">21,0</td>
               
             
-              <td class="num">4,4</td>
+              <td class="num">4,9</td>
               
             
               <td class="num">4</td>
@@ -1217,7 +1217,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">8</td>
               
             
-              <td class="num pct">23,5%</td>
+              <td class="num pct">19,1%</td>
               
             
               <td class="num">0</td>
@@ -1247,22 +1247,22 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">0</td>
               
             
-              <td class="num">41</td>
+              <td class="num">49</td>
               
             
-              <td class="num pct">17,1%</td>
+              <td class="num pct">14,3%</td>
               
             
-              <td class="num">5,2</td>
+              <td class="num">3,1</td>
               
             
-              <td class="num">5,2</td>
+              <td class="num">6,2</td>
               
             
-              <td class="num">2,5</td>
+              <td class="num">1,7</td>
               
             
-              <td>R$ 89,01</td>
+              <td>R$ 130,03</td>
               
             
               <td>08:41</td>
@@ -1271,10 +1271,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td>10:27</td>
               
             
-              <td>13:22</td>
+              <td>14:09</td>
               
             
-              <td>15:21</td>
+              <td>15:41</td>
               
             
           </tr>
@@ -3474,25 +3474,25 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
               
             
-              <td class="num">34</td>
+              <td class="num">43</td>
+              
+            
+              <td class="num">3</td>
+              
+            
+              <td class="num">14,3</td>
+              
+            
+              <td class="num">3,1</td>
               
             
               <td class="num">2</td>
               
             
-              <td class="num">17,0</td>
+              <td class="num">22</td>
               
             
-              <td class="num">2,6</td>
-              
-            
-              <td class="num">2</td>
-              
-            
-              <td class="num">21</td>
-              
-            
-              <td class="num pct">61,8%</td>
+              <td class="num pct">51,2%</td>
               
             
               <td class="num">0</td>
@@ -3516,22 +3516,22 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">0</td>
               
             
-              <td class="num">0</td>
+              <td class="num">11</td>
               
             
               <td class="num">0</td>
               
             
-              <td class="num">34</td>
+              <td class="num">54</td>
               
             
-              <td class="num pct">0,0%</td>
+              <td class="num pct">20,4%</td>
               
             
-              <td class="num">2,8</td>
+              <td class="num">2,3</td>
               
             
-              <td class="num">5,5</td>
+              <td class="num">6,8</td>
               
             
               <td class="num">0,7</td>
@@ -3549,7 +3549,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td>15:01</td>
               
             
-              <td>15:54</td>
+              <td>16:03</td>
               
             
           </tr>
@@ -3841,13 +3841,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
       <div class="team-name">Equipe 1</div>
       <div class="team-stats">
         <div><span class="ts-val">10</span><span class="ts-label">Agentes</span></div>
-        <div><span class="ts-val">627</span><span class="ts-label">Total Geral</span></div>
-        <div><span class="ts-val">2</span><span class="ts-label">Críticos</span></div>
+        <div><span class="ts-val">634</span><span class="ts-label">Total Geral</span></div>
+        <div><span class="ts-val">1</span><span class="ts-label">Críticos</span></div>
         <div><span class="ts-val">8</span><span class="ts-label">Normais</span></div>
       </div>
       <div class="team-bar">
-        <div class="tb-critico" style="width:20%"></div>
-        <div class="tb-atencao" style="width:0%"></div>
+        <div class="tb-critico" style="width:10%"></div>
+        <div class="tb-atencao" style="width:10%"></div>
         <div class="tb-normal" style="width:80%"></div>
       </div>
     </div>
@@ -3886,7 +3886,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
       <div class="team-name">Equipe 4</div>
       <div class="team-stats">
         <div><span class="ts-val">10</span><span class="ts-label">Agentes</span></div>
-        <div><span class="ts-val">496</span><span class="ts-label">Total Geral</span></div>
+        <div><span class="ts-val">516</span><span class="ts-label">Total Geral</span></div>
         <div><span class="ts-val">5</span><span class="ts-label">Críticos</span></div>
         <div><span class="ts-val">4</span><span class="ts-label">Normais</span></div>
       </div>
@@ -3936,15 +3936,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
           
-          <tr class="row-critico" data-area="436 - ALEGRETE">
-            <td class="agent-name">Ramona dos Santos Oliveira</td><td>Equipe 4</td><td>436 - ALEGRETE</td>
-            <td class="num">34</td><td class="num">2,6</td><td class="num">2</td>
-            <td class="num" title="Q004, Q018, Q019, Q020">4</td>
-            <td class="num">21</td><td class="num pct">61,8%</td>
-            <td class="num">0</td><td class="num">0</td><td class="num pct">0,0%</td>
-            <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
-          </tr>
-          
           <tr class="row-critico" data-area="445 - JARDIM IVONE">
             <td class="agent-name">Juliana Patricia Goncalves</td><td>Equipe 4</td><td>445 - JARDIM IVONE</td>
             <td class="num">18</td><td class="num">3,1</td><td class="num">2</td>
@@ -3954,8 +3945,17 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
           
+          <tr class="row-critico" data-area="436 - ALEGRETE">
+            <td class="agent-name">Ramona dos Santos Oliveira</td><td>Equipe 4</td><td>436 - ALEGRETE</td>
+            <td class="num">43</td><td class="num">3,1</td><td class="num">2</td>
+            <td class="num" title="Q004, Q011, Q014, Q018, Q019, Q020">6</td>
+            <td class="num">22</td><td class="num pct">51,2%</td>
+            <td class="num">11</td><td class="num">0</td><td class="num pct">20,4%</td>
+            <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+          </tr>
+          
           <tr class="row-critico" data-area="406 - JARDIM PRIMAVERA">
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td><td>Equipe 1</td><td>406 - JARDIM PRIMAVERA</td>
+            <td class="agent-name">Raquel Ortiz dos Santos</td><td>Equipe 1</td><td>406 - JARDIM PRIMAVERA</td>
             <td class="num">41</td><td class="num">3,3</td><td class="num">3</td>
             <td class="num" title="Q001, Q003, Q005, Q011, Q034, Q035, Q037, Q039, Q040, Q041">10</td>
             <td class="num">17</td><td class="num pct">41,5%</td>
@@ -3981,15 +3981,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
           
-          <tr class="row-critico" data-area="400 - JULIA CARDINAL">
-            <td class="agent-name">Wagner Tarlei Gomes</td><td>Equipe 1</td><td>400 - JULIA CARDINAL</td>
-            <td class="num">34</td><td class="num">4,4</td><td class="num">4</td>
-            <td class="num" title="Q004, Q025, Q030">3</td>
-            <td class="num">8</td><td class="num pct">23,5%</td>
-            <td class="num">7</td><td class="num">0</td><td class="num pct">17,1%</td>
-            <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
-          </tr>
-          
           <tr class="row-critico" data-area="439 - BOSQUE CARANDÁ">
             <td class="agent-name">Kariele Jackeline Rodrigues Silva</td><td>Equipe 4</td><td>439 - BOSQUE CARANDÁ</td>
             <td class="num">40</td><td class="num">4,3</td><td class="num">4</td>
@@ -3997,6 +3988,15 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">9</td><td class="num pct">22,5%</td>
             <td class="num">23</td><td class="num">0</td><td class="num pct">36,5%</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+          </tr>
+          
+          <tr class="row-atencao" data-area="400 - JULIA CARDINAL">
+            <td class="agent-name">Wagner Tarlei Gomes</td><td>Equipe 1</td><td>400 - JULIA CARDINAL</td>
+            <td class="num">42</td><td class="num">4,9</td><td class="num">4</td>
+            <td class="num" title="Q004, Q005, Q025, Q030">4</td>
+            <td class="num">8</td><td class="num pct">19,1%</td>
+            <td class="num">7</td><td class="num">0</td><td class="num pct">14,3%</td>
+            <td><span class="badge badge-atencao">🟡 ATENÇÃO</span></td>
           </tr>
           
           <tr class="row-atencao" data-area="421 - JARDIM IPANEMA">
@@ -4091,10 +4091,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="404 - JARDIM DOS ESTADOS">
             <td class="agent-name">Adriana de Jesus Saraiva</td><td>Equipe 1</td><td>404 - JARDIM DOS ESTADOS</td>
-            <td class="num">67</td><td class="num">5,0</td><td class="num">5</td>
+            <td class="num">66</td><td class="num">5,0</td><td class="num">5</td>
             <td class="num" title="Q011, Q012, Q013, Q014, Q015, Q017, Q028">7</td>
             <td class="num">0</td><td class="num pct">0,0%</td>
-            <td class="num">20</td><td class="num">1</td><td class="num pct">23,9%</td>
+            <td class="num">20</td><td class="num">1</td><td class="num pct">24,1%</td>
             <td><span class="badge badge-normal">🟢 NORMAL</span></td>
           </tr>
           
@@ -4576,40 +4576,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Gisele Olimpia Torres</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/16759717/detalhes" target="_blank" rel="noopener">16759717</a></td>
-            
-          
-            <td>421 - JARDIM IPANEMA</td>
-            
-          
-            <td>Q035</td>
-            
-          
-            <td>Rua BALTAZAR SALDANHA</td>
-            
-          
-            <td>779 - OU</td>
-            
-          
-            <td>05/08/2026 09:03</td>
-            
-          
-            <td>05/08/2026 09:22</td>
-            
-          
-            <td class="num">19</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
             <td class="agent-name">Rozentina Matos de Oliveira</td>
             
           
@@ -4635,6 +4601,40 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td>05/08/2026 08:00</td>
+            
+          
+            <td class="num">19</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Gisele Olimpia Torres</td>
+            
+          
+            <td>Equipe 2</td>
+            
+          
+            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/16759717/detalhes" target="_blank" rel="noopener">16759717</a></td>
+            
+          
+            <td>421 - JARDIM IPANEMA</td>
+            
+          
+            <td>Q035</td>
+            
+          
+            <td>Rua BALTAZAR SALDANHA</td>
+            
+          
+            <td>779 - OU</td>
+            
+          
+            <td>05/08/2026 09:03</td>
+            
+          
+            <td>05/08/2026 09:22</td>
             
           
             <td class="num">19</td>
@@ -4712,40 +4712,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Silvina Regina de Souza Valiente</td>
-            
-          
-            <td>Equipe 4</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/16757326/detalhes" target="_blank" rel="noopener">16757326</a></td>
-            
-          
-            <td>434 - VILA AUREA</td>
-            
-          
-            <td>Q027</td>
-            
-          
-            <td>Rua RECIFE</td>
-            
-          
-            <td>168 - R</td>
-            
-          
-            <td>05/08/2026 14:36</td>
-            
-          
-            <td>05/08/2026 14:53</td>
-            
-          
-            <td class="num">17</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
             <td class="agent-name">Evelyn Santana Santos Oliveira</td>
             
           
@@ -4805,6 +4771,40 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td>05/08/2026 14:09</td>
+            
+          
+            <td class="num">17</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Silvina Regina de Souza Valiente</td>
+            
+          
+            <td>Equipe 4</td>
+            
+          
+            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/16757326/detalhes" target="_blank" rel="noopener">16757326</a></td>
+            
+          
+            <td>434 - VILA AUREA</td>
+            
+          
+            <td>Q027</td>
+            
+          
+            <td>Rua RECIFE</td>
+            
+          
+            <td>168 - R</td>
+            
+          
+            <td>05/08/2026 14:36</td>
+            
+          
+            <td>05/08/2026 14:53</td>
             
           
             <td class="num">17</td>
@@ -5157,8 +5157,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Adriana de Jesus Saraiva</td><td>Equipe 1</td>
-            <td class="num">67</td><td class="num">20</td><td class="num">1</td>
-            <td class="num">88</td><td class="num pct">23,9%</td>
+            <td class="num">66</td><td class="num">20</td><td class="num">1</td>
+            <td class="num">87</td><td class="num pct">24,1%</td>
           </tr>
           
           <tr>
@@ -5180,7 +5180,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr>
-            <td class="sticky-col agent-name">Tânia Raquel Ortiz dos Santos</td><td>Equipe 1</td>
+            <td class="sticky-col agent-name">Ramona dos Santos Oliveira</td><td>Equipe 4</td>
+            <td class="num">43</td><td class="num">11</td><td class="num">0</td>
+            <td class="num">54</td><td class="num pct">20,4%</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Raquel Ortiz dos Santos</td><td>Equipe 1</td>
             <td class="num">41</td><td class="num">10</td><td class="num">0</td>
             <td class="num">51</td><td class="num pct">19,6%</td>
           </tr>
@@ -5199,8 +5205,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Wagner Tarlei Gomes</td><td>Equipe 1</td>
-            <td class="num">34</td><td class="num">7</td><td class="num">0</td>
-            <td class="num">41</td><td class="num pct">17,1%</td>
+            <td class="num">42</td><td class="num">7</td><td class="num">0</td>
+            <td class="num">49</td><td class="num pct">14,3%</td>
           </tr>
           
           <tr>
@@ -5246,21 +5252,15 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr>
-            <td class="sticky-col agent-name">Bianca Afonso Narbaez</td><td>Equipe 2</td>
-            <td class="num">13</td><td class="num">0</td><td class="num">0</td>
-            <td class="num">13</td><td class="num pct">0,0%</td>
-          </tr>
-          
-          <tr>
             <td class="sticky-col agent-name">Gilmar Bitencourt Luiz</td><td>Equipe 2</td>
             <td class="num">15</td><td class="num">0</td><td class="num">0</td>
             <td class="num">15</td><td class="num pct">0,0%</td>
           </tr>
           
           <tr>
-            <td class="sticky-col agent-name">Ramona dos Santos Oliveira</td><td>Equipe 4</td>
-            <td class="num">34</td><td class="num">0</td><td class="num">0</td>
-            <td class="num">34</td><td class="num pct">0,0%</td>
+            <td class="sticky-col agent-name">Bianca Afonso Narbaez</td><td>Equipe 2</td>
+            <td class="num">13</td><td class="num">0</td><td class="num">0</td>
+            <td class="num">13</td><td class="num pct">0,0%</td>
           </tr>
           
         </tbody>
@@ -5357,8 +5357,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 
   <div class="kpi-grid">
     <div class="kpi blue"><div class="kpi-label">Líder do Ranking</div><div class="kpi-value">Fabiana de Figueredo Vieira</div><div class="kpi-sub">114,0 pontos</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">103,7</div><div class="kpi-sub">de todos os agentes</div></div>
-    <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">36 / 2</div><div class="kpi-sub">agentes em cada faixa</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">103,6</div><div class="kpi-sub">de todos os agentes</div></div>
+    <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">35 / 3</div><div class="kpi-sub">agentes em cada faixa</div></div>
     <div class="kpi red"><div class="kpi-label">🟠 Atenção / 🔴 Crítico</div><div class="kpi-value">0 / 0</div><div class="kpi-sub">agentes em cada faixa</div></div>
   </div>
 
@@ -5588,14 +5588,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="">
             <td class="num">27º</td>
-            <td class="sticky-col agent-name">Wagner Tarlei Gomes</td>
-            <td>Equipe 1</td>
-            <td class="num">100,0</td>
-            <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
-          </tr>
-          
-          <tr class="">
-            <td class="num">28º</td>
             <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td>
             <td>Equipe 3</td>
             <td class="num">99,8</td>
@@ -5603,7 +5595,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">29º</td>
+            <td class="num">28º</td>
             <td class="sticky-col agent-name">Marco Antonio Ayala de Matos Freitas</td>
             <td>Equipe 3</td>
             <td class="num">99,4</td>
@@ -5611,7 +5603,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">30º</td>
+            <td class="num">29º</td>
             <td class="sticky-col agent-name">Kariele Jackeline Rodrigues Silva</td>
             <td>Equipe 4</td>
             <td class="num">99,0</td>
@@ -5619,10 +5611,18 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">31º</td>
+            <td class="num">30º</td>
             <td class="sticky-col agent-name">Rafael Ramos Recalde</td>
             <td>Equipe 4</td>
             <td class="num">98,6</td>
+            <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
+          </tr>
+          
+          <tr class="">
+            <td class="num">31º</td>
+            <td class="sticky-col agent-name">Wagner Tarlei Gomes</td>
+            <td>Equipe 1</td>
+            <td class="num">98,4</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
           
@@ -5644,7 +5644,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="">
             <td class="num">34º</td>
-            <td class="sticky-col agent-name">Tânia Raquel Ortiz dos Santos</td>
+            <td class="sticky-col agent-name">Raquel Ortiz dos Santos</td>
             <td>Equipe 1</td>
             <td class="num">92,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -5660,17 +5660,17 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="">
             <td class="num">36º</td>
-            <td class="sticky-col agent-name">Ramona dos Santos Oliveira</td>
-            <td>Equipe 4</td>
-            <td class="num">90,0</td>
-            <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
+            <td class="sticky-col agent-name">Mateus Falcao de Souza</td>
+            <td>Equipe 2</td>
+            <td class="num">89,4</td>
+            <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
           
           <tr class="">
             <td class="num">37º</td>
-            <td class="sticky-col agent-name">Mateus Falcao de Souza</td>
-            <td>Equipe 2</td>
-            <td class="num">89,4</td>
+            <td class="sticky-col agent-name">Ramona dos Santos Oliveira</td>
+            <td>Equipe 4</td>
+            <td class="num">87,8</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
           
@@ -5690,7 +5690,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
   
 <div class="table-section" id="alert-ranking-detalhe">
-  <h3>📋 Detalhamento — Critérios Aplicados por Agente (211)</h3>
+  <h3>📋 Detalhamento — Critérios Aplicados por Agente (213)</h3>
   <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
   <div class="table-wrap">
     <table class="data-table compact sortable" id="table-ranking-detalhe">
@@ -8854,13 +8854,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Dia sem bater a meta diária</td>
             
           
-            <td class="num">1</td>
+            <td class="num">2</td>
             
           
             <td class="num">0,50</td>
             
           
-            <td class="num">-1,0</td>
+            <td class="num">-2,0</td>
             
           
         </tr>
@@ -8920,13 +8920,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Início tarde após 14h30</td>
             
           
-            <td class="num">2</td>
+            <td class="num">3</td>
             
           
             <td class="num">0,30</td>
             
           
-            <td class="num">-1,2</td>
+            <td class="num">-1,8</td>
             
           
         </tr>
@@ -8942,13 +8942,167 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Visita rápida</td>
             
           
-            <td class="num">21</td>
+            <td class="num">22</td>
             
           
             <td class="num">0,30</td>
             
           
-            <td class="num">-12,6</td>
+            <td class="num">-13,2</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Raquel Ortiz dos Santos</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Bônus: nenhum turno sem lançamento no período</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">5,00</td>
+            
+          
+            <td class="num">5,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Raquel Ortiz dos Santos</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Dia com meta diária batida</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,50</td>
+            
+          
+            <td class="num">1,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Raquel Ortiz dos Santos</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Dia sem bater a meta diária</td>
+            
+          
+            <td class="num">2</td>
+            
+          
+            <td class="num">0,50</td>
+            
+          
+            <td class="num">-2,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Raquel Ortiz dos Santos</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Fim tarde antes de 16h00</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-0,6</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Raquel Ortiz dos Santos</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Início manhã após 08h30</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-0,6</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Raquel Ortiz dos Santos</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Início tarde após 14h30</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-0,6</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Raquel Ortiz dos Santos</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Visita rápida</td>
+            
+          
+            <td class="num">17</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-10,2</td>
             
           
         </tr>
@@ -9857,7 +10011,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td>
+            <td class="agent-name">Wagner Tarlei Gomes</td>
             
           
             <td>Equipe 1</td>
@@ -9879,7 +10033,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td>
+            <td class="agent-name">Wagner Tarlei Gomes</td>
             
           
             <td>Equipe 1</td>
@@ -9901,7 +10055,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td>
+            <td class="agent-name">Wagner Tarlei Gomes</td>
             
           
             <td>Equipe 1</td>
@@ -9910,20 +10064,20 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Dia sem bater a meta diária</td>
             
           
-            <td class="num">2</td>
+            <td class="num">1</td>
             
           
             <td class="num">0,50</td>
             
           
-            <td class="num">-2,0</td>
+            <td class="num">-1,0</td>
             
           
         </tr>
         
         <tr>
           
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td>
+            <td class="agent-name">Wagner Tarlei Gomes</td>
             
           
             <td>Equipe 1</td>
@@ -9945,7 +10099,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td>
+            <td class="agent-name">Wagner Tarlei Gomes</td>
             
           
             <td>Equipe 1</td>
@@ -9967,123 +10121,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td>
+            <td class="agent-name">Wagner Tarlei Gomes</td>
             
           
             <td>Equipe 1</td>
             
           
             <td>Início tarde após 14h30</td>
-            
-          
-            <td class="num">1</td>
-            
-          
-            <td class="num">0,30</td>
-            
-          
-            <td class="num">-0,6</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Tânia Raquel Ortiz dos Santos</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td>Visita rápida</td>
-            
-          
-            <td class="num">17</td>
-            
-          
-            <td class="num">0,30</td>
-            
-          
-            <td class="num">-10,2</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Wagner Tarlei Gomes</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td>Bônus: nenhum turno sem lançamento no período</td>
-            
-          
-            <td class="num">1</td>
-            
-          
-            <td class="num">5,00</td>
-            
-          
-            <td class="num">5,0</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Wagner Tarlei Gomes</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td>Dia com meta diária batida</td>
-            
-          
-            <td class="num">1</td>
-            
-          
-            <td class="num">0,50</td>
-            
-          
-            <td class="num">1,0</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Wagner Tarlei Gomes</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td>Fim tarde antes de 16h00</td>
-            
-          
-            <td class="num">1</td>
-            
-          
-            <td class="num">0,30</td>
-            
-          
-            <td class="num">-0,6</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Wagner Tarlei Gomes</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td>Início manhã após 08h30</td>
             
           
             <td class="num">1</td>
@@ -10391,11 +10435,11 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="custos">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Custo Médio Hora Útil</div><div class="kpi-value">R$ 223,83</div><div class="kpi-sub">média entre os 38 agentes</div></div>
+    <div class="kpi blue"><div class="kpi-label">Custo Médio Hora Útil</div><div class="kpi-value">R$ 224,94</div><div class="kpi-sub">média entre os 38 agentes</div></div>
     <div class="kpi green"><div class="kpi-label">Custo Mínimo</div><div class="kpi-value">R$ 46,70</div><div class="kpi-sub">Suely Aguiar Alves Luiz</div></div>
     <div class="kpi red"><div class="kpi-label">Custo Máximo</div><div class="kpi-value">R$ 947,34</div><div class="kpi-sub">Carlos Alberto Albiero</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Média Horas Trab./Dia</div><div class="kpi-value">3,1h</div><div class="kpi-sub">jornada total no dia</div></div>
-    <div class="kpi orange"><div class="kpi-label">Média Horas Trab./Semana</div><div class="kpi-value">7,1h</div><div class="kpi-sub">soma da semana</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Média Horas Trab./Dia</div><div class="kpi-value">3,0h</div><div class="kpi-sub">jornada total no dia</div></div>
+    <div class="kpi orange"><div class="kpi-label">Média Horas Trab./Semana</div><div class="kpi-value">7,2h</div><div class="kpi-sub">soma da semana</div></div>
     <div class="kpi yellow"><div class="kpi-label">Média Horas Úteis/Dia</div><div class="kpi-value">1,5h</div><div class="kpi-sub">tempo real em visitas</div></div>
   </div>
   <div class="legend-box">
@@ -10487,13 +10531,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Ramona dos Santos Oliveira</td><td>Equipe 4</td>
-            <td class="num">34</td><td class="num">34</td><td class="num">17,0</td>
-            <td class="num">2,8h</td><td class="num">5,5h</td>
+            <td class="num">54</td><td class="num">43</td><td class="num">14,3</td>
+            <td class="num">2,3h</td><td class="num">6,8h</td>
             <td class="num">0,7h</td><td class="num">R$ 301,43</td>
           </tr>
           
           <tr>
-            <td class="sticky-col agent-name">Tânia Raquel Ortiz dos Santos</td><td>Equipe 1</td>
+            <td class="sticky-col agent-name">Raquel Ortiz dos Santos</td><td>Equipe 1</td>
             <td class="num">51</td><td class="num">41</td><td class="num">13,7</td>
             <td class="num">2,7h</td><td class="num">8,1h</td>
             <td class="num">0,8h</td><td class="num">R$ 292,56</td>
@@ -10619,6 +10663,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr>
+            <td class="sticky-col agent-name">Wagner Tarlei Gomes</td><td>Equipe 1</td>
+            <td class="num">49</td><td class="num">42</td><td class="num">21,0</td>
+            <td class="num">3,1h</td><td class="num">6,2h</td>
+            <td class="num">1,7h</td><td class="num">R$ 130,03</td>
+          </tr>
+          
+          <tr>
             <td class="sticky-col agent-name">Bianca Afonso Narbaez</td><td>Equipe 2</td>
             <td class="num">13</td><td class="num">13</td><td class="num">13,0</td>
             <td class="num">1,8h</td><td class="num">1,8h</td>
@@ -10627,9 +10678,9 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Adriana de Jesus Saraiva</td><td>Equipe 1</td>
-            <td class="num">88</td><td class="num">67</td><td class="num">22,3</td>
+            <td class="num">87</td><td class="num">66</td><td class="num">22,0</td>
             <td class="num">3,1h</td><td class="num">9,4h</td>
-            <td class="num">1,9h</td><td class="num">R$ 118,42</td>
+            <td class="num">1,8h</td><td class="num">R$ 119,84</td>
           </tr>
           
           <tr>
@@ -10665,13 +10716,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">55</td><td class="num">37</td><td class="num">18,5</td>
             <td class="num">2,9h</td><td class="num">5,7h</td>
             <td class="num">2,4h</td><td class="num">R$ 90,53</td>
-          </tr>
-          
-          <tr>
-            <td class="sticky-col agent-name">Wagner Tarlei Gomes</td><td>Equipe 1</td>
-            <td class="num">41</td><td class="num">34</td><td class="num">34,0</td>
-            <td class="num">5,2h</td><td class="num">5,2h</td>
-            <td class="num">2,5h</td><td class="num">R$ 89,01</td>
           </tr>
           
           <tr>
@@ -10759,7 +10803,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 10/08/2026 10:00</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 10/08/2026 13:38</footer>
 
 <script>
 function goToSection(id) {
@@ -11005,7 +11049,7 @@ function sizeForAgents(canvasId, count) {
 new Chart(document.getElementById('chartClass'), {
   type: 'doughnut',
   data: { labels: ['🟢 Normal', '🟡 Atenção', '🔴 Crítico'],
-    datasets: [{ data: [28, 2, 8], backgroundColor: ['#12B76A', '#F2B01E', '#E4572E'], borderWidth: 0 }] },
+    datasets: [{ data: [28, 3, 7], backgroundColor: ['#12B76A', '#F2B01E', '#E4572E'], borderWidth: 0 }] },
   options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
 });
 
@@ -11013,14 +11057,14 @@ new Chart(document.getElementById('chartTeam'), {
   type: 'bar',
   data: { labels: ["Equipe 1", "Equipe 2", "Equipe 3", "Equipe 4"],
     datasets: [
-      { label: 'Imóveis Abertos', data: [443, 303, 323, 334], backgroundColor: '#1080D6', borderRadius: 6 },
-      { label: 'Visitas Rápidas', data: [29, 31, 8, 82], backgroundColor: '#E4572E', borderRadius: 6 }
+      { label: 'Imóveis Abertos', data: [450, 303, 323, 343], backgroundColor: '#1080D6', borderRadius: 6 },
+      { label: 'Visitas Rápidas', data: [29, 31, 8, 83], backgroundColor: '#E4572E', borderRadius: 6 }
     ] },
   options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }, plugins: { legend: { position: 'bottom' } } }
 });
 
 (function(){
-  const d = [{"label": "Rafael Ramos Recalde", "v": 63.64, "cls": "🔴 CRÍTICO"}, {"label": "Ramona dos Santos Oliveira", "v": 61.76, "cls": "🔴 CRÍTICO"}, {"label": "Juliana Patricia Goncalves", "v": 61.11, "cls": "🔴 CRÍTICO"}, {"label": "Tânia Raquel Ortiz dos Santos", "v": 41.46, "cls": "🔴 CRÍTICO"}, {"label": "Anderson Jose de Santana", "v": 39.71, "cls": "🔴 CRÍTICO"}, {"label": "Mateus Falcao de Souza", "v": 37.7, "cls": "🔴 CRÍTICO"}, {"label": "Wagner Tarlei Gomes", "v": 23.53, "cls": "🔴 CRÍTICO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 22.5, "cls": "🔴 CRÍTICO"}, {"label": "Gisele Olimpia Torres", "v": 18.6, "cls": "🟡 ATENÇÃO"}, {"label": "Kátia Cilene Silveira Machado", "v": 13.16, "cls": "🟡 ATENÇÃO"}, {"label": "Miglidiane Maciel Ajala", "v": 9.8, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 7.14, "cls": "🟢 NORMAL"}, {"label": "Rozana Reis da Silva", "v": 5.41, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 4.92, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 3.03, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Carlos Alberto Albiero", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Silvina Regina de Souza Valiente", "v": 0.0, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
+  const d = [{"label": "Rafael Ramos Recalde", "v": 63.64, "cls": "🔴 CRÍTICO"}, {"label": "Juliana Patricia Goncalves", "v": 61.11, "cls": "🔴 CRÍTICO"}, {"label": "Ramona dos Santos Oliveira", "v": 51.16, "cls": "🔴 CRÍTICO"}, {"label": "Raquel Ortiz dos Santos", "v": 41.46, "cls": "🔴 CRÍTICO"}, {"label": "Anderson Jose de Santana", "v": 39.71, "cls": "🔴 CRÍTICO"}, {"label": "Mateus Falcao de Souza", "v": 37.7, "cls": "🔴 CRÍTICO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 22.5, "cls": "🔴 CRÍTICO"}, {"label": "Wagner Tarlei Gomes", "v": 19.05, "cls": "🟡 ATENÇÃO"}, {"label": "Gisele Olimpia Torres", "v": 18.6, "cls": "🟡 ATENÇÃO"}, {"label": "Kátia Cilene Silveira Machado", "v": 13.16, "cls": "🟡 ATENÇÃO"}, {"label": "Miglidiane Maciel Ajala", "v": 9.8, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 7.14, "cls": "🟢 NORMAL"}, {"label": "Rozana Reis da Silva", "v": 5.41, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 4.92, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 3.03, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Carlos Alberto Albiero", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Silvina Regina de Souza Valiente", "v": 0.0, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
   sizeForAgents('chartPct', d.length);
   new Chart(document.getElementById('chartPct'), {
     type: 'bar',
@@ -11037,8 +11081,8 @@ new Chart(document.getElementById('chartTeamStack'), {
   data: { labels: ["Equipe 1", "Equipe 2", "Equipe 3", "Equipe 4"],
     datasets: [
       { label: 'Normal', data: [8, 8, 8, 4], backgroundColor: '#12B76A', borderRadius: 4 },
-      { label: 'Atenção', data: [0, 1, 0, 1], backgroundColor: '#F2B01E', borderRadius: 4 },
-      { label: 'Crítico', data: [2, 1, 0, 5], backgroundColor: '#E4572E', borderRadius: 4 }
+      { label: 'Atenção', data: [1, 1, 0, 1], backgroundColor: '#F2B01E', borderRadius: 4 },
+      { label: 'Crítico', data: [1, 1, 0, 5], backgroundColor: '#E4572E', borderRadius: 4 }
     ] },
   options: { responsive: true, maintainAspectRatio: false,
     scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 2 } } },
@@ -11049,8 +11093,8 @@ new Chart(document.getElementById('chartTeamStatus'), {
   type: 'bar',
   data: { labels: ["Equipe 1", "Equipe 2", "Equipe 3", "Equipe 4"],
     datasets: [
-      { label: 'Abertos', data: [443, 303, 323, 334], backgroundColor: '#1080D6', borderRadius: 4 },
-      { label: 'Fechados', data: [183, 124, 259, 162], backgroundColor: '#F2994A', borderRadius: 4 },
+      { label: 'Abertos', data: [450, 303, 323, 343], backgroundColor: '#1080D6', borderRadius: 4 },
+      { label: 'Fechados', data: [183, 124, 259, 173], backgroundColor: '#F2994A', borderRadius: 4 },
       { label: 'Recusados', data: [1, 1, 0, 0], backgroundColor: '#E4572E', borderRadius: 4 }
     ] },
   options: { responsive: true, maintainAspectRatio: false,
@@ -11059,7 +11103,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 });
 
 (function(){
-  const d = [{"label": "Carlos Alberto Albiero", "v": 947.34, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 947.34, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 602.85, "cls": "🔴 CRÍTICO"}, {"label": "Cicero Isrrael Sanabria", "v": 491.21, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 319.58, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 315.78, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 308.44, "cls": "🟢 NORMAL"}, {"label": "Ramona dos Santos Oliveira", "v": 301.43, "cls": "🔴 CRÍTICO"}, {"label": "Tânia Raquel Ortiz dos Santos", "v": 292.56, "cls": "🔴 CRÍTICO"}, {"label": "Anderson Jose de Santana", "v": 265.25, "cls": "🔴 CRÍTICO"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 217.42, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 191.29, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 182.93, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 177.63, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 177.63, "cls": "🟡 ATENÇÃO"}, {"label": "Wesley de Souza Leal", "v": 174.51, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 170.58, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 158.84, "cls": "🟢 NORMAL"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 153.33, "cls": "🔴 CRÍTICO"}, {"label": "Rozana Reis da Silva", "v": 153.33, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 149.02, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 142.61, "cls": "🟡 ATENÇÃO"}, {"label": "Ana Gabriela Silva Garcete", "v": 137.44, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 135.33, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 135.33, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 132.63, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 125.12, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 118.42, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 112.87, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 111.92, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 107.83, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 99.72, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 90.53, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 89.01, "cls": "🔴 CRÍTICO"}, {"label": "Gilmar Bitencourt Luiz", "v": 78.48, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 74.51, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 68.72, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 46.7, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 947.34, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 947.34, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 602.85, "cls": "🔴 CRÍTICO"}, {"label": "Cicero Isrrael Sanabria", "v": 491.21, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 319.58, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 315.78, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 308.44, "cls": "🟢 NORMAL"}, {"label": "Ramona dos Santos Oliveira", "v": 301.43, "cls": "🔴 CRÍTICO"}, {"label": "Raquel Ortiz dos Santos", "v": 292.56, "cls": "🔴 CRÍTICO"}, {"label": "Anderson Jose de Santana", "v": 265.25, "cls": "🔴 CRÍTICO"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 217.42, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 191.29, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 182.93, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 177.63, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 177.63, "cls": "🟡 ATENÇÃO"}, {"label": "Wesley de Souza Leal", "v": 174.51, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 170.58, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 158.84, "cls": "🟢 NORMAL"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 153.33, "cls": "🔴 CRÍTICO"}, {"label": "Rozana Reis da Silva", "v": 153.33, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 149.02, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 142.61, "cls": "🟡 ATENÇÃO"}, {"label": "Ana Gabriela Silva Garcete", "v": 137.44, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 135.33, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 135.33, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 132.63, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 130.03, "cls": "🟡 ATENÇÃO"}, {"label": "Bianca Afonso Narbaez", "v": 125.12, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 119.84, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 112.87, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 111.92, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 107.83, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 99.72, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 90.53, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 78.48, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 74.51, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 68.72, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 46.7, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
   sizeForAgents('chartCusto', d.length);
   new Chart(document.getElementById('chartCusto'), {
     type: 'bar',
@@ -11073,7 +11117,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 })();
 
 (function(){
-  const d = [{"label": "Carlos Alberto Albiero", "v": 0.23, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 0.23, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 0.37, "cls": "🔴 CRÍTICO"}, {"label": "Cicero Isrrael Sanabria", "v": 0.45, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 0.69, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 0.7, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.72, "cls": "🟢 NORMAL"}, {"label": "Ramona dos Santos Oliveira", "v": 0.73, "cls": "🔴 CRÍTICO"}, {"label": "Tânia Raquel Ortiz dos Santos", "v": 0.76, "cls": "🔴 CRÍTICO"}, {"label": "Anderson Jose de Santana", "v": 0.83, "cls": "🔴 CRÍTICO"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 1.02, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 1.16, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 1.21, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 1.24, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 1.24, "cls": "🟡 ATENÇÃO"}, {"label": "Wesley de Souza Leal", "v": 1.27, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 1.3, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 1.39, "cls": "🟢 NORMAL"}, {"label": "Rozana Reis da Silva", "v": 1.44, "cls": "🟢 NORMAL"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 1.44, "cls": "🔴 CRÍTICO"}, {"label": "Cris Milene Cardenas da Silva", "v": 1.48, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 1.55, "cls": "🟡 ATENÇÃO"}, {"label": "Ana Gabriela Silva Garcete", "v": 1.61, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 1.63, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 1.63, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 1.67, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 1.77, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 1.87, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 1.96, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 1.98, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 2.05, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 2.22, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 2.44, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 2.48, "cls": "🔴 CRÍTICO"}, {"label": "Gilmar Bitencourt Luiz", "v": 2.82, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 2.97, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 3.22, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 4.73, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 0.23, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 0.23, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 0.37, "cls": "🔴 CRÍTICO"}, {"label": "Cicero Isrrael Sanabria", "v": 0.45, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 0.69, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 0.7, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.72, "cls": "🟢 NORMAL"}, {"label": "Ramona dos Santos Oliveira", "v": 0.73, "cls": "🔴 CRÍTICO"}, {"label": "Raquel Ortiz dos Santos", "v": 0.76, "cls": "🔴 CRÍTICO"}, {"label": "Anderson Jose de Santana", "v": 0.83, "cls": "🔴 CRÍTICO"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 1.02, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 1.16, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 1.21, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 1.24, "cls": "🟡 ATENÇÃO"}, {"label": "Adriano Ricardo Thiel", "v": 1.24, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 1.27, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 1.3, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 1.39, "cls": "🟢 NORMAL"}, {"label": "Rozana Reis da Silva", "v": 1.44, "cls": "🟢 NORMAL"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 1.44, "cls": "🔴 CRÍTICO"}, {"label": "Cris Milene Cardenas da Silva", "v": 1.48, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 1.55, "cls": "🟡 ATENÇÃO"}, {"label": "Ana Gabriela Silva Garcete", "v": 1.61, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 1.63, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 1.63, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 1.67, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 1.7, "cls": "🟡 ATENÇÃO"}, {"label": "Bianca Afonso Narbaez", "v": 1.77, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 1.84, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 1.96, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 1.98, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 2.05, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 2.22, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 2.44, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 2.82, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 2.97, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 3.22, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 4.73, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
   sizeForAgents('chartHoras', d.length);
   new Chart(document.getElementById('chartHoras'), {
     type: 'bar',
@@ -11087,7 +11131,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 })();
 
 (function(){
-  const d = [{"label": "Carlos Alberto Albiero", "v": 0.32, "cls": "🟢 NORMAL"}, {"label": "Rafael Ramos Recalde", "v": 0.4, "cls": "🔴 CRÍTICO"}, {"label": "Cicero Isrrael Sanabria", "v": 0.79, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 0.81, "cls": "🔴 CRÍTICO"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 1.25, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 1.47, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 1.54, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 1.62, "cls": "🟢 NORMAL"}, {"label": "Anderson Jose de Santana", "v": 1.8, "cls": "🔴 CRÍTICO"}, {"label": "Bianca Afonso Narbaez", "v": 1.83, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 2.38, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 2.42, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 2.48, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 2.55, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 2.58, "cls": "🟢 NORMAL"}, {"label": "Tânia Raquel Ortiz dos Santos", "v": 2.68, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 2.69, "cls": "🟢 NORMAL"}, {"label": "Ramona dos Santos Oliveira", "v": 2.75, "cls": "🔴 CRÍTICO"}, {"label": "Ana Gabriela Silva Garcete", "v": 2.84, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 2.87, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 2.95, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 3.12, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 3.14, "cls": "🟢 NORMAL"}, {"label": "Rozana Reis da Silva", "v": 3.18, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 3.32, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 3.36, "cls": "🟡 ATENÇÃO"}, {"label": "Gilmar Bitencourt Luiz", "v": 3.4, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 3.74, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 3.79, "cls": "🟡 ATENÇÃO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 4.22, "cls": "🔴 CRÍTICO"}, {"label": "Rosalina Beniel Vargas", "v": 4.79, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 4.8, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 5.17, "cls": "🔴 CRÍTICO"}, {"label": "William Anderson Chamorro Tavares", "v": 5.81, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 6.08, "cls": "🔴 CRÍTICO"}, {"label": "Fabiana de Figueredo Vieira", "v": 6.15, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 6.53, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 6.54, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 0.32, "cls": "🟢 NORMAL"}, {"label": "Rafael Ramos Recalde", "v": 0.4, "cls": "🔴 CRÍTICO"}, {"label": "Cicero Isrrael Sanabria", "v": 0.79, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 0.81, "cls": "🔴 CRÍTICO"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 1.25, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 1.47, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 1.54, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 1.62, "cls": "🟢 NORMAL"}, {"label": "Anderson Jose de Santana", "v": 1.8, "cls": "🔴 CRÍTICO"}, {"label": "Bianca Afonso Narbaez", "v": 1.83, "cls": "🟢 NORMAL"}, {"label": "Ramona dos Santos Oliveira", "v": 2.27, "cls": "🔴 CRÍTICO"}, {"label": "Gisele Lopes Justiniano", "v": 2.38, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 2.42, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 2.48, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 2.55, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 2.58, "cls": "🟢 NORMAL"}, {"label": "Raquel Ortiz dos Santos", "v": 2.68, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 2.69, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 2.84, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 2.87, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 2.95, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 3.12, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 3.12, "cls": "🟡 ATENÇÃO"}, {"label": "Adriana de Jesus Saraiva", "v": 3.14, "cls": "🟢 NORMAL"}, {"label": "Rozana Reis da Silva", "v": 3.18, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 3.32, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 3.36, "cls": "🟡 ATENÇÃO"}, {"label": "Gilmar Bitencourt Luiz", "v": 3.4, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 3.74, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 3.79, "cls": "🟡 ATENÇÃO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 4.22, "cls": "🔴 CRÍTICO"}, {"label": "Rosalina Beniel Vargas", "v": 4.79, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 4.8, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 5.81, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 6.08, "cls": "🔴 CRÍTICO"}, {"label": "Fabiana de Figueredo Vieira", "v": 6.15, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 6.53, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 6.54, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
   sizeForAgents('chartHorasTrabDia', d.length);
   new Chart(document.getElementById('chartHorasTrabDia'), {
     type: 'bar',
@@ -11099,7 +11143,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 })();
 
 (function(){
-  const d = [{"label": "Rafael Ramos Recalde", "v": 0.4, "cls": "🔴 CRÍTICO"}, {"label": "Carlos Alberto Albiero", "v": 0.65, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 1.25, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 1.47, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 1.58, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 1.62, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 1.83, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 3.23, "cls": "🔴 CRÍTICO"}, {"label": "Gilmar Bitencourt Luiz", "v": 3.4, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 4.95, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 5.1, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 5.17, "cls": "🔴 CRÍTICO"}, {"label": "Ramona dos Santos Oliveira", "v": 5.5, "cls": "🔴 CRÍTICO"}, {"label": "Ana Gabriela Silva Garcete", "v": 5.68, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 5.73, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 6.15, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 6.15, "cls": "🟢 NORMAL"}, {"label": "Rozana Reis da Silva", "v": 6.35, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 6.53, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 6.63, "cls": "🟢 NORMAL"}, {"label": "Gisele Lopes Justiniano", "v": 7.13, "cls": "🟢 NORMAL"}, {"label": "Anderson Jose de Santana", "v": 7.2, "cls": "🔴 CRÍTICO"}, {"label": "Adriano Ricardo Thiel", "v": 7.27, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 7.58, "cls": "🟡 ATENÇÃO"}, {"label": "Tânia Raquel Ortiz dos Santos", "v": 8.05, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 8.08, "cls": "🟢 NORMAL"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 8.43, "cls": "🔴 CRÍTICO"}, {"label": "Miglidiane Maciel Ajala", "v": 8.85, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 9.42, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 9.58, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 10.07, "cls": "🟡 ATENÇÃO"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 10.32, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 11.62, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 12.17, "cls": "🔴 CRÍTICO"}, {"label": "Evelyn Santana Santos Oliveira", "v": 12.47, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 13.08, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 14.95, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 23.98, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
+  const d = [{"label": "Rafael Ramos Recalde", "v": 0.4, "cls": "🔴 CRÍTICO"}, {"label": "Carlos Alberto Albiero", "v": 0.65, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 1.25, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 1.47, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 1.58, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 1.62, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 1.83, "cls": "🟢 NORMAL"}, {"label": "Juliana Patricia Goncalves", "v": 3.23, "cls": "🔴 CRÍTICO"}, {"label": "Gilmar Bitencourt Luiz", "v": 3.4, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 4.95, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 5.1, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 5.68, "cls": "🟢 NORMAL"}, {"label": "Selba Ramona Afonso", "v": 5.73, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 6.15, "cls": "🟢 NORMAL"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 6.15, "cls": "🟢 NORMAL"}, {"label": "Wagner Tarlei Gomes", "v": 6.23, "cls": "🟡 ATENÇÃO"}, {"label": "Rozana Reis da Silva", "v": 6.35, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 6.53, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 6.63, "cls": "🟢 NORMAL"}, {"label": "Ramona dos Santos Oliveira", "v": 6.82, "cls": "🔴 CRÍTICO"}, {"label": "Gisele Lopes Justiniano", "v": 7.13, "cls": "🟢 NORMAL"}, {"label": "Anderson Jose de Santana", "v": 7.2, "cls": "🔴 CRÍTICO"}, {"label": "Adriano Ricardo Thiel", "v": 7.27, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 7.58, "cls": "🟡 ATENÇÃO"}, {"label": "Raquel Ortiz dos Santos", "v": 8.05, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 8.08, "cls": "🟢 NORMAL"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 8.43, "cls": "🔴 CRÍTICO"}, {"label": "Miglidiane Maciel Ajala", "v": 8.85, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 9.42, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 9.58, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 10.07, "cls": "🟡 ATENÇÃO"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 10.32, "cls": "🟢 NORMAL"}, {"label": "William Anderson Chamorro Tavares", "v": 11.62, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 12.17, "cls": "🔴 CRÍTICO"}, {"label": "Evelyn Santana Santos Oliveira", "v": 12.47, "cls": "🟢 NORMAL"}, {"label": "Tania Maria Montania", "v": 13.08, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 14.95, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 23.98, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
   sizeForAgents('chartHorasTrabSemana', d.length);
   new Chart(document.getElementById('chartHorasTrabSemana'), {
     type: 'bar',
@@ -11125,7 +11169,7 @@ new Chart(document.getElementById('chartPendTop'), {
 
 
 (function(){
-  const d = [{"label": "Fabiana de Figueredo Vieira", "v": 114.0, "color": "#12B76A"}, {"label": "Rosalina Beniel Vargas", "v": 113.0, "color": "#12B76A"}, {"label": "Bianca Afonso Narbaez", "v": 112.0, "color": "#12B76A"}, {"label": "Gilmar Bitencourt Luiz", "v": 112.0, "color": "#12B76A"}, {"label": "Tania Maria Montania", "v": 111.4, "color": "#12B76A"}, {"label": "Naime Cristina Freitas", "v": 111.0, "color": "#12B76A"}, {"label": "Suely Aguiar Alves Luiz", "v": 110.4, "color": "#12B76A"}, {"label": "Adriana de Jesus Saraiva", "v": 109.8, "color": "#12B76A"}, {"label": "Cris Milene Cardenas da Silva", "v": 109.4, "color": "#12B76A"}, {"label": "Selba Ramona Afonso", "v": 109.4, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 109.2, "color": "#12B76A"}, {"label": "Ana Gabriela Silva Garcete", "v": 108.8, "color": "#12B76A"}, {"label": "Wesley de Souza Leal", "v": 108.4, "color": "#12B76A"}, {"label": "Emidio Rainer Vilhalba", "v": 108.4, "color": "#12B76A"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 108.4, "color": "#12B76A"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 107.4, "color": "#12B76A"}, {"label": "Silvina Regina de Souza Valiente", "v": 107.2, "color": "#12B76A"}, {"label": "Carlos Alberto Albiero", "v": 106.8, "color": "#12B76A"}, {"label": "Geancarlos Ferreira Barrios", "v": 106.6, "color": "#12B76A"}, {"label": "Cicero Isrrael Sanabria", "v": 106.2, "color": "#12B76A"}, {"label": "Gisele Lopes Justiniano", "v": 106.0, "color": "#12B76A"}, {"label": "William Anderson Chamorro Tavares", "v": 105.6, "color": "#12B76A"}, {"label": "Rozana Reis da Silva", "v": 102.0, "color": "#12B76A"}, {"label": "Evelyn Santana Santos Oliveira", "v": 101.2, "color": "#12B76A"}, {"label": "Adriano Ricardo Thiel", "v": 100.4, "color": "#12B76A"}, {"label": "Kátia Cilene Silveira Machado", "v": 100.2, "color": "#12B76A"}, {"label": "Wagner Tarlei Gomes", "v": 100.0, "color": "#12B76A"}, {"label": "Miglidiane Maciel Ajala", "v": 99.8, "color": "#12B76A"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 99.4, "color": "#12B76A"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 99.0, "color": "#12B76A"}, {"label": "Rafael Ramos Recalde", "v": 98.6, "color": "#12B76A"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 96.8, "color": "#12B76A"}, {"label": "Gisele Olimpia Torres", "v": 95.4, "color": "#12B76A"}, {"label": "Tânia Raquel Ortiz dos Santos", "v": 92.0, "color": "#12B76A"}, {"label": "Juliana Patricia Goncalves", "v": 90.8, "color": "#12B76A"}, {"label": "Ramona dos Santos Oliveira", "v": 90.0, "color": "#12B76A"}, {"label": "Mateus Falcao de Souza", "v": 89.4, "color": "#F2D93B"}, {"label": "Anderson Jose de Santana", "v": 83.8, "color": "#F2D93B"}];
+  const d = [{"label": "Fabiana de Figueredo Vieira", "v": 114.0, "color": "#12B76A"}, {"label": "Rosalina Beniel Vargas", "v": 113.0, "color": "#12B76A"}, {"label": "Bianca Afonso Narbaez", "v": 112.0, "color": "#12B76A"}, {"label": "Gilmar Bitencourt Luiz", "v": 112.0, "color": "#12B76A"}, {"label": "Tania Maria Montania", "v": 111.4, "color": "#12B76A"}, {"label": "Naime Cristina Freitas", "v": 111.0, "color": "#12B76A"}, {"label": "Suely Aguiar Alves Luiz", "v": 110.4, "color": "#12B76A"}, {"label": "Adriana de Jesus Saraiva", "v": 109.8, "color": "#12B76A"}, {"label": "Cris Milene Cardenas da Silva", "v": 109.4, "color": "#12B76A"}, {"label": "Selba Ramona Afonso", "v": 109.4, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 109.2, "color": "#12B76A"}, {"label": "Ana Gabriela Silva Garcete", "v": 108.8, "color": "#12B76A"}, {"label": "Wesley de Souza Leal", "v": 108.4, "color": "#12B76A"}, {"label": "Emidio Rainer Vilhalba", "v": 108.4, "color": "#12B76A"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 108.4, "color": "#12B76A"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 107.4, "color": "#12B76A"}, {"label": "Silvina Regina de Souza Valiente", "v": 107.2, "color": "#12B76A"}, {"label": "Carlos Alberto Albiero", "v": 106.8, "color": "#12B76A"}, {"label": "Geancarlos Ferreira Barrios", "v": 106.6, "color": "#12B76A"}, {"label": "Cicero Isrrael Sanabria", "v": 106.2, "color": "#12B76A"}, {"label": "Gisele Lopes Justiniano", "v": 106.0, "color": "#12B76A"}, {"label": "William Anderson Chamorro Tavares", "v": 105.6, "color": "#12B76A"}, {"label": "Rozana Reis da Silva", "v": 102.0, "color": "#12B76A"}, {"label": "Evelyn Santana Santos Oliveira", "v": 101.2, "color": "#12B76A"}, {"label": "Adriano Ricardo Thiel", "v": 100.4, "color": "#12B76A"}, {"label": "Kátia Cilene Silveira Machado", "v": 100.2, "color": "#12B76A"}, {"label": "Miglidiane Maciel Ajala", "v": 99.8, "color": "#12B76A"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 99.4, "color": "#12B76A"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 99.0, "color": "#12B76A"}, {"label": "Rafael Ramos Recalde", "v": 98.6, "color": "#12B76A"}, {"label": "Wagner Tarlei Gomes", "v": 98.4, "color": "#12B76A"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 96.8, "color": "#12B76A"}, {"label": "Gisele Olimpia Torres", "v": 95.4, "color": "#12B76A"}, {"label": "Raquel Ortiz dos Santos", "v": 92.0, "color": "#12B76A"}, {"label": "Juliana Patricia Goncalves", "v": 90.8, "color": "#12B76A"}, {"label": "Mateus Falcao de Souza", "v": 89.4, "color": "#F2D93B"}, {"label": "Ramona dos Santos Oliveira", "v": 87.8, "color": "#F2D93B"}, {"label": "Anderson Jose de Santana", "v": 83.8, "color": "#F2D93B"}];
   sizeForAgents('chartRanking', d.length);
   new Chart(document.getElementById('chartRanking'), {
     type: 'bar',
