@@ -15,7 +15,7 @@
     "duracao": 21,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "10/08/2026 10:56"
+    "detectado_em": "10/08/2026 13:27"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -35,7 +35,7 @@
     "duracao": 20,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "10/08/2026 10:56"
+    "detectado_em": "10/08/2026 13:27"
   },
   {
     "tipo": "possiveis_ferias",
@@ -67,7 +67,7 @@
     "duracao": 15,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "10/08/2026 10:56"
+    "detectado_em": "10/08/2026 13:27"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -89,7 +89,7 @@
     "duracao": 28,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "10/08/2026 10:56"
+    "detectado_em": "10/08/2026 13:27"
   },
   {
     "tipo": "possiveis_ferias",
@@ -127,7 +127,7 @@
     "duracao": 48,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "10/08/2026 10:56"
+    "detectado_em": "10/08/2026 13:27"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -159,7 +159,7 @@
     "duracao": 70,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "10/08/2026 10:56"
+    "detectado_em": "10/08/2026 13:27"
   },
   {
     "tipo": "possiveis_ferias",

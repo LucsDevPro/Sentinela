@@ -1,16 +1,4 @@
 {
-  "116": {
-    "nome_agente": "Wagner Tarlei Gomes",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 7,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "400 - JULIA CARDINAL": 7
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "73": {
     "nome_agente": "Ana Gabriela Silva Garcete",
     "equipe": "Equipe 1",
@@ -18,6 +6,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "401 - EMÍLIO DIAS BRANDÃO": 5
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "116": {
+    "nome_agente": "Wagner Tarlei Gomes",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 7,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "400 - JULIA CARDINAL": 7
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -42,6 +42,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "405 - ALTOS DA GLÓRIA": 1
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "470": {
+    "nome_agente": "Cris Milene Cardenas da Silva",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 21,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "403 - JARDIM UNIVERSITARIO": 21
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -74,18 +86,6 @@
         "equipe": "Equipe 1"
       }
     ],
-    "paginas_falhas": []
-  },
-  "79": {
-    "nome_agente": "Tânia Raquel Ortiz dos Santos",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 10,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "406 - JARDIM PRIMAVERA": 10
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
   "85": {
@@ -209,18 +209,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "81": {
-    "nome_agente": "Wesley de Souza Leal",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 3,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "417 - CENTRO 3": 3
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "465": {
     "nome_agente": "Suely Aguiar Alves Luiz",
     "equipe": "Equipe 2",
@@ -233,12 +221,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2917": {
-    "nome_agente": "Bianca Afonso Narbaez",
+  "81": {
+    "nome_agente": "Wesley de Souza Leal",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 0,
+    "imoveis_fechados": 3,
     "imoveis_recusados": 0,
-    "fechados_por_area": {},
+    "fechados_por_area": {
+      "417 - CENTRO 3": 3
+    },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
     "paginas_falhas": []
@@ -253,25 +243,35 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "470": {
-    "nome_agente": "Cris Milene Cardenas da Silva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 21,
+  "2917": {
+    "nome_agente": "Bianca Afonso Narbaez",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 0,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {},
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "120": {
+    "nome_agente": "Emidio Rainer Vilhalba",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 8,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "403 - JARDIM UNIVERSITARIO": 21
+      "430 - VILA RENÔ": 8
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "113": {
-    "nome_agente": "Selba Ramona Afonso",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 18,
+  "79": {
+    "nome_agente": "Tânia Raquel Ortiz dos Santos",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 10,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "431 - PANAMBI": 18
+      "406 - JARDIM PRIMAVERA": 10
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -371,18 +371,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "161": {
-    "nome_agente": "Rozana Reis da Silva",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 44,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "444 - KAMEL SAAD 2": 44
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "1943": {
     "nome_agente": "Juliana Patricia Goncalves",
     "equipe": "Equipe 4",
@@ -390,6 +378,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "445 - JARDIM IVONE": 11
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "161": {
+    "nome_agente": "Rozana Reis da Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 44,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "444 - KAMEL SAAD 2": 44
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -407,25 +407,37 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "120": {
-    "nome_agente": "Emidio Rainer Vilhalba",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 8,
+  "1996": {
+    "nome_agente": "Sara Eliane Talaveira de Oliveira",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 12,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "430 - VILA RENÔ": 8
+      "438 - JARDIM PLANALTO": 12
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "110": {
-    "nome_agente": "Anderson Jose de Santana",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 20,
+  "113": {
+    "nome_agente": "Selba Ramona Afonso",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 18,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "442 - JARDIM INDEPENDÊNCIA": 20
+      "431 - PANAMBI": 18
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "149": {
+    "nome_agente": "Kátia Cilene Silveira Machado",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 11,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "443 - KAMEL SAAD 1": 11
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -443,6 +455,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "110": {
+    "nome_agente": "Anderson Jose de Santana",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 20,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "442 - JARDIM INDEPENDÊNCIA": 20
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "86": {
     "nome_agente": "Silvina Regina de Souza Valiente",
     "equipe": "Equipe 4",
@@ -450,18 +474,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "434 - VILA AUREA": 16
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "149": {
-    "nome_agente": "Kátia Cilene Silveira Machado",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 11,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "443 - KAMEL SAAD 1": 11
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
