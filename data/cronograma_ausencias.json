@@ -22,47 +22,5 @@
     "motivo": "Recuperação de Casas",
     "inicio": "28/07/2026",
     "fim": "31/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 113,
-    "motivo": "Férias",
-    "inicio": "17/07/2026",
-    "fim": "31/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 116,
-    "motivo": "Férias",
-    "inicio": "06/07/2026",
-    "fim": "20/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 1936,
-    "motivo": "Férias",
-    "inicio": "01/07/2026",
-    "fim": "30/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 86,
-    "motivo": "Férias",
-    "inicio": "01/07/2026",
-    "fim": "30/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 2721,
-    "motivo": "Férias",
-    "inicio": "01/07/2026",
-    "fim": "30/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 149,
-    "motivo": "Férias",
-    "inicio": "01/07/2026",
-    "fim": "30/07/2026"
   }
 ]
