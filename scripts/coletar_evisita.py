@@ -447,8 +447,9 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                 candidatos.append({"id_agente": id_ag, "nome_agente": nome, "equipe": equipe,
                                     "inicio": ini, "fim": fim, "duracao": dur})
 
-    # Agrupa candidatos da MESMA equipe cujo período se sobrepõe — 2+
-    # agentes = paralisação coletiva, não férias individual.
+    # Agrupa candidatos da MESMA equipe cujo período REALMENTE COINCIDE (a
+    # interseção de todo o grupo, não uma corrente de sobreposições soltas)
+    # — 2+ agentes = paralisação coletiva, não férias individual.
     eventos, usados = [], set()
     por_equipe = {}
     for i, c in enumerate(candidatos):
@@ -462,6 +463,15 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                 continue
             grupo = [i]
             usados.add(i)
+            # Janela comum do grupo (interseção) — só pode ENCOLHER a cada
+            # novo membro que entra, nunca crescer. Isso garante que todo
+            # mundo no grupo esteve ausente ao MESMO TEMPO. Sem isso, uma
+            # corrente de ausências individuais em sequência (A termina
+            # quando B começa, B termina quando C começa...) virava um
+            # único "evento coletivo" de meses de duração, mesmo que A e C
+            # nunca tenham ficado ausentes ao mesmo tempo.
+            ini_comum = candidatos[i]["inicio"]
+            fim_comum = candidatos[i]["fim"]
             mudou = True
             while mudou:
                 mudou = False
@@ -469,24 +479,23 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                     if j in usados:
                         continue
                     c_j = candidatos[j]
-                    # sobrepõe com QUALQUER membro já no grupo?
-                    if any(c_j["inicio"] <= candidatos[k]["fim"] and c_j["fim"] >= candidatos[k]["inicio"]
-                           for k in grupo):
+                    novo_ini = max(ini_comum, c_j["inicio"])
+                    novo_fim = min(fim_comum, c_j["fim"])
+                    if novo_ini <= novo_fim:  # ainda sobra pelo menos 1 dia útil em comum pra TODOS do grupo
                         grupo.append(j)
                         usados.add(j)
                         idxs_restantes.remove(j)
+                        ini_comum, fim_comum = novo_ini, novo_fim
                         mudou = True
 
             membros = [candidatos[k] for k in grupo]
             if len(membros) >= 2:
-                ini = min(m["inicio"] for m in membros)
-                fim = max(m["fim"] for m in membros)
                 eventos.append({
                     "tipo": "paralisacao_coletiva", "equipe": equipe,
                     "agentes_envolvidos": sorted({m["id_agente"] for m in membros}),
                     "nomes_envolvidos": sorted({m["nome_agente"] for m in membros}),
-                    "inicio": ini.strftime("%d/%m/%Y"), "fim": fim.strftime("%d/%m/%Y"),
-                    "duracao": len(_dias_uteis_no_intervalo(ini, fim)),
+                    "inicio": ini_comum.strftime("%d/%m/%Y"), "fim": fim_comum.strftime("%d/%m/%Y"),
+                    "duracao": len(_dias_uteis_no_intervalo(ini_comum, fim_comum)),
                 })
             else:
                 m = membros[0]
