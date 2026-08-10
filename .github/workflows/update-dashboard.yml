@@ -1,0 +1,188 @@
+name: Coletar e Atualizar Dashboard
+
+# Três formas de disparar:
+# 1) schedule  -> roda sozinho domingo, segunda e terça às 3h (Ponta Porã).
+#                 A cada execução: recoleta a última semana salva (pode ter
+#                 mudado) + busca a semana nova, se já tiver disponível no
+#                 e-Visita (ver decidir_semanas_a_coletar() no coletor).
+# 2) push      -> se você subir uma planilha manualmente (fallback antigo)
+#                 ou mexer nos templates, o dashboard é regerado, SEM coletar
+#                 de novo no e-Visita
+# 3) workflow_dispatch -> rodar na mão pelo botão "Run workflow", com opção
+#                          de pular a coleta (só regenerar o HTML) e opção de
+#                          forçar a recoleta de UMA semana específica
+on:
+  schedule:
+    - cron: "0 7 * * 0,1,2"   # 07:00 UTC = 03:00 em Ponta Porã (UTC-4), dom/seg/ter
+  push: {}
+  workflow_dispatch:
+    inputs:
+      rodar_coleta:
+        description: "Coletar dados novos no e-Visita antes de gerar o dashboard?"
+        type: boolean
+        default: true
+      semana_html_id:
+        description: "(Opcional) HTML ID de UMA semana específica para recoletar manualmente. Deixe em branco para o script decidir sozinho."
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Trava execuções sobrepostas do job de coleta/geração especificamente
+    # (o "concurrency: pages" acima só protege o deploy do Pages, não isso).
+    # Sem isso, disparar uma execução manual enquanto outra ainda está
+    # rodando (a coleta leva ~1h) faz a nova começar com um checkout de
+    # ANTES do commit da anterior — vê data/semanas/ vazio e refaz o
+    # backfill inteiro do zero, duplicando o trabalho. "queue" (não cancela,
+    # só espera) pra nunca perder uma coleta que já estava em andamento.
+    concurrency:
+      group: coleta-${{ github.ref }}
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      # Garante que estamos exatamente no commit mais recente de verdade —
+      # não só o que existia no momento em que ESTA execução foi disparada.
+      # Necessário mesmo com o "concurrency" acima: se esta execução ficou
+      # na fila esperando uma anterior terminar (~1h de coleta), o commit
+      # dela só existe DEPOIS que esta execução foi disparada, então o
+      # checkout sozinho (que usa o SHA do momento do disparo) não pegaria
+      # esse commit novo sem isso. Usa fetch + reset --hard em vez de "git
+      # pull" porque o checkout deixa o repositório em "detached HEAD" (sem
+      # branch ativa) — "git pull" pode se comportar de forma inconsistente
+      # nesse estado; fetch+reset é determinístico independente disso.
+      - name: Garantir commit mais recente (evita recoleta duplicada)
+        run: |
+          git fetch origin "${{ github.ref_name }}"
+          git reset --hard "origin/${{ github.ref_name }}"
+
+      # Diagnóstico: confirma o que o script realmente vai enxergar. Se
+      # aparecer "pasta vazia" aqui mas os arquivos existem no GitHub, o
+      # problema é neste ponto do workflow (checkout/fetch), não no script
+      # Python — compare o "HEAD está em" abaixo com o commit mais recente
+      # da aba Actions/Commits do repositório.
+      - name: Diagnóstico — cache de semanas visto neste momento
+        run: |
+          echo "HEAD está em: $(git rev-parse HEAD) ($(git log -1 --format=%cI))"
+          echo "--- data/semanas/ ---"
+          ls -la data/semanas/ 2>/dev/null | head -20 || echo "pasta não existe"
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      # Só coleta dados novos quando disparado por agendamento ou manualmente
+      # (com a opção marcada). Em push (planilha subida à mão, ou mudança nos
+      # templates) pula essa etapa e só regenera o HTML. O cache de semanas
+      # (data/semanas/) é lido e regravado no repositório a cada execução —
+      # é ele que carrega o estado "última semana coletada" de uma execução
+      # pra outra (o runner do GitHub Actions começa do zero a cada vez).
+      - name: Coletar dados no e-Visita (semana a semana)
+        if: >-
+          github.event_name == 'schedule' ||
+          (github.event_name == 'workflow_dispatch' && inputs.rodar_coleta)
+        env:
+          EVISITA_CPF: ${{ secrets.EVISITA_CPF }}
+          EVISITA_SENHA: ${{ secrets.EVISITA_SENHA }}
+        run: |
+          if [ -n "${{ inputs.semana_html_id }}" ]; then
+            python scripts/coletar_evisita.py --saida data --semana "${{ inputs.semana_html_id }}"
+          else
+            python scripts/coletar_evisita.py --saida data
+          fi
+
+      # index.html (homepage) sempre mostra o acumulado de TUDO que já foi
+      # coletado (todas as semanas somadas) — é só o Analise_Consolidada.xlsx
+      # de sempre. Pra ver um mês antigo isolado, use o seletor de período
+      # (gera as páginas de historico/ no passo seguinte); pra ver uma
+      # semana isolada dentro do período carregado, use o filtro de semana
+      # dentro da página (Resumo Geral / Ponto Estratégico).
+      # index.html (home) mostra o período configurado em data/config_home.json
+      # (editável pelo home_editor.html, sem precisar mexer em código).
+      - name: Gerar index.html (home configurável)
+        run: python scripts/generate_dashboard.py
+
+      # acumulado.html sempre mostra a SOMA de tudo que já foi coletado, sem
+      # depender de nenhuma configuração — é o Analise_Consolidada.xlsx puro.
+      - name: Gerar acumulado.html (soma de todas as semanas)
+        run: python scripts/generate_dashboard.py data/Analise_Consolidada.xlsx acumulado.html
+
+      - name: Gerar páginas do histórico (uma por mês arquivado)
+        run: |
+          mkdir -p historico
+          # Limpa páginas órfãs primeiro — .html de um .xlsx que não existe
+          # mais em data/historico/ (ex.: nome mudou porque um limite de mês
+          # foi corrigido). Sem isso, a página velha continuaria acessível
+          # (e desatualizada) mesmo sem aparecer mais no seletor de período.
+          for f in historico/*.html; do
+            [ -e "$f" ] || continue
+            nome=$(basename "$f" .html)
+            [ -e "data/historico/$nome.xlsx" ] || rm -f "$f"
+          done
+          if [ -f data/historico/manifest.json ]; then
+            for arq in data/historico/*.xlsx; do
+              [ -e "$arq" ] || continue
+              nome=$(basename "$arq" .xlsx)
+              python scripts/generate_dashboard.py "$arq" "historico/$nome.html"
+            done
+          fi
+
+      # A coleta demora ~1h, então é comum outro commit (ex.: uma edição sua
+      # direto no GitHub, tipo cronograma_ausencias.json ou
+      # deteccoes_pendentes.json) cair na branch ENQUANTO esta execução
+      # estava rodando — nesse caso um "git push" simples é rejeitado
+      # (non-fast-forward). Esse passo tenta buscar+rebasear e reenviar
+      # algumas vezes antes de desistir, em vez de perder 1h de coleta.
+      - name: Salvar cache de semanas, planilhas, histórico e HTML no repositório
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html acumulado.html data/Analise_Consolidada.xlsx data/semanas data/historico data/config_home.json data/agentes_nomes.json data/deteccoes_pendentes.json historico
+          git diff --staged --quiet || git commit -m "Atualiza coleta e dashboard automaticamente [skip ci]"
+
+          tentativas=5
+          for i in $(seq 1 $tentativas); do
+            if git push origin "HEAD:${{ github.ref_name }}"; then
+              echo "Push OK na tentativa $i."
+              break
+            fi
+            if [ "$i" -eq "$tentativas" ]; then
+              echo "::error::Push falhou após $tentativas tentativas — verifique conflitos manualmente."
+              exit 1
+            fi
+            echo "Push rejeitado (outro commit chegou primeiro) — buscando e rebaseando, tentativa $i..."
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}"
+            sleep 5
+          done
+
+      - name: Preparar publicação (GitHub Pages)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
