@@ -29,6 +29,7 @@
             {% if kind == "id" %}<td>{{ r[key]|id_link }}</td>
             {% elif kind == "num" %}<td class="num">{{ r[key]|br }}</td>
             {% elif kind == "num1" %}<td class="num">{{ r[key]|br(1) }}</td>
+            {% elif kind == "num2" %}<td class="num">{{ r[key]|br(2) }}</td>
             {% elif key == "agente" %}<td class="agent-name">{{ r[key] if r[key] is not none else "" }}</td>
             {% else %}<td>{{ r[key] if r[key] is not none else "" }}</td>
             {% endif %}

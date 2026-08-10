@@ -235,6 +235,15 @@ ocorrências por dia trabalhado importa. Reproduzi o cenário com dados
 sintéticos e confirmei: mesmo padrão de desempenho dá a mesma pontuação
 tanto em 1 mês quanto em 4 meses seguidos.
 
+**Teto de segurança (`TETO_FATOR_NORMALIZACAO`, padrão 2x):** sem um
+limite, o efeito inverso acontecia com quem trabalhou POUCOS dias no
+período — por exemplo, alguém de férias quase o mês inteiro, com só 2 dias
+realmente trabalhados. Sem teto, o fator seria 22/2 = 11x, e um punhado de
+visitas rápidas nesses 2 dias virava um mês inteiro péssimo (comprovado:
+6 visitas rápidas — 1,8 ponto normal — viravam quase 20 pontos perdidos).
+Com o teto em 2x, o mesmo caso vira só 3,6 pontos — ainda descontado, mas
+proporcional à amostra pequena, sem extrapolar demais.
+
 ## Como funciona dali pra frente
 
 **Automático:** o workflow roda sozinho segunda, terça e quinta às 3h (horário de
@@ -316,9 +325,14 @@ Na aba **Ausências**, uma tabela "🌴 Quem está de Férias, Atestado ou
 Afins" mostra de forma rápida quem tem um período confirmado agora, sem
 precisar abrir o Cronograma inteiro pra procurar.
 
-## Editar cronograma — chuva, folga, atestado, reunião/treinamento, férias (sem mexer em código)
+## Editar cronograma — chuva, reunião, índice, ovitrampa, recuperação de casas (sem mexer em código)
 
-Tudo isso fica num único arquivo, `data/cronograma_ausencias.json`. Durante
+**Não cadastre férias/atestado individual aqui** — o sistema já detecta e
+confirma isso sozinho (ver seção acima). Use `data/cronograma_ausencias.json`
+só pra coisas que o sistema NÃO tem como adivinhar sozinho: chuva, reunião,
+levantamento de índice, instalação/recolha de ovitrampa, recuperação de
+casas — atividades coletivas ou específicas que não são "ausência", mas
+também não têm como ser inferidas automaticamente. Durante
 esses períodos, o(s) agente(s) afetado(s) não contam como possível ausência
 a investigar (não pesa na pontuação) e o registro aparece listado na aba
 "Cronograma" do dashboard — em cima dos dias que o próprio programa já

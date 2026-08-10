@@ -447,9 +447,8 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                 candidatos.append({"id_agente": id_ag, "nome_agente": nome, "equipe": equipe,
                                     "inicio": ini, "fim": fim, "duracao": dur})
 
-    # Agrupa candidatos da MESMA equipe cujo período REALMENTE COINCIDE (a
-    # interseção de todo o grupo, não uma corrente de sobreposições soltas)
-    # — 2+ agentes = paralisação coletiva, não férias individual.
+    # Agrupa candidatos da MESMA equipe cujo período se sobrepõe — 2+
+    # agentes = paralisação coletiva, não férias individual.
     eventos, usados = [], set()
     por_equipe = {}
     for i, c in enumerate(candidatos):
@@ -463,15 +462,6 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                 continue
             grupo = [i]
             usados.add(i)
-            # Janela comum do grupo (interseção) — só pode ENCOLHER a cada
-            # novo membro que entra, nunca crescer. Isso garante que todo
-            # mundo no grupo esteve ausente ao MESMO TEMPO. Sem isso, uma
-            # corrente de ausências individuais em sequência (A termina
-            # quando B começa, B termina quando C começa...) virava um
-            # único "evento coletivo" de meses de duração, mesmo que A e C
-            # nunca tenham ficado ausentes ao mesmo tempo.
-            ini_comum = candidatos[i]["inicio"]
-            fim_comum = candidatos[i]["fim"]
             mudou = True
             while mudou:
                 mudou = False
@@ -479,23 +469,24 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                     if j in usados:
                         continue
                     c_j = candidatos[j]
-                    novo_ini = max(ini_comum, c_j["inicio"])
-                    novo_fim = min(fim_comum, c_j["fim"])
-                    if novo_ini <= novo_fim:  # ainda sobra pelo menos 1 dia útil em comum pra TODOS do grupo
+                    # sobrepõe com QUALQUER membro já no grupo?
+                    if any(c_j["inicio"] <= candidatos[k]["fim"] and c_j["fim"] >= candidatos[k]["inicio"]
+                           for k in grupo):
                         grupo.append(j)
                         usados.add(j)
                         idxs_restantes.remove(j)
-                        ini_comum, fim_comum = novo_ini, novo_fim
                         mudou = True
 
             membros = [candidatos[k] for k in grupo]
             if len(membros) >= 2:
+                ini = min(m["inicio"] for m in membros)
+                fim = max(m["fim"] for m in membros)
                 eventos.append({
                     "tipo": "paralisacao_coletiva", "equipe": equipe,
                     "agentes_envolvidos": sorted({m["id_agente"] for m in membros}),
                     "nomes_envolvidos": sorted({m["nome_agente"] for m in membros}),
-                    "inicio": ini_comum.strftime("%d/%m/%Y"), "fim": fim_comum.strftime("%d/%m/%Y"),
-                    "duracao": len(_dias_uteis_no_intervalo(ini_comum, fim_comum)),
+                    "inicio": ini.strftime("%d/%m/%Y"), "fim": fim.strftime("%d/%m/%Y"),
+                    "duracao": len(_dias_uteis_no_intervalo(ini, fim)),
                 })
             else:
                 m = membros[0]
@@ -620,6 +611,10 @@ COLETAR_FECHADOS_RECUSADOS = True
 PONTOS_INICIAIS = 100
 NOTA_MINIMA = 0      # pontuação não cai abaixo disso (None = sem piso)
 NOTA_MAXIMA = 120    # pontuação não passa disso (None = sem teto; >100 permite bônus se destacar)
+# Teto do fator de normalização "por mês" (ver calcular_pontuacao) — evita
+# que quem trabalhou poucos dias no período (ex.: maioria de férias) tenha
+# qualquer deslize nesses poucos dias amplificado de forma extrema.
+TETO_FATOR_NORMALIZACAO = 2.0
 
 # Horários de referência para os critérios de pontualidade por turno
 # (avaliados DIA A DIA, não pela média do período).
@@ -1243,23 +1238,28 @@ def calcular_pontuacao(res, qtd_ausencias):
 
     IMPORTANTE — normalização "por mês": PONTOS_INICIAIS (100) foi
     calibrado assumindo um período de ~DIAS_UTEIS_MES (22) dias úteis
-    trabalhados (1 mês). Sem normalizar, um agente avaliado num período
-    maior (ex.: o Acumulado, somando vários meses) acumula 3-4x mais
-    OCORRÊNCIAS BRUTAS de cada critério (mais dias sem meta, mais visitas
-    rápidas, etc.) do que em 1 mês — mesmo com o desempenho EXATAMENTE
-    IGUAL, dia a dia — e a pontuação despenca pro chão (comprovado: mesmo
-    padrão de desempenho dá 102 pontos em 1 mês e 0 pontos em 4 meses sem
-    essa correção). A normalização projeta cada contagem pra uma "taxa
-    equivalente por mês" antes de aplicar o peso, então o período avaliado
-    (1 semana, 1 mês, ou o histórico inteiro acumulado) deixa de importar
-    pro resultado — só a TAXA de ocorrências por dia trabalhado importa,
-    igual seria de se esperar de uma nota de desempenho.
+    trabalhados. Sem normalizar, um agente avaliado num período maior
+    (ex.: o Acumulado, somando vários meses) acumula 3-4x mais OCORRÊNCIAS
+    BRUTAS de cada critério do que em 1 mês — mesmo com o desempenho
+    EXATAMENTE IGUAL, dia a dia — e a pontuação despencava pro chão
+    (comprovado: mesmo padrão de desempenho dava 102 pontos em 1 mês e 0
+    pontos em 4 meses seguidos, sem essa correção).
+
+    O fator é LIMITADO a TETO_FATOR_NORMALIZACAO (2x, por padrão) — sem
+    esse teto, o efeito inverso acontece pra quem trabalhou POUCOS dias no
+    período (ex.: alguém que ficou de férias quase o mês inteiro): com só
+    2 dias trabalhados, o fator sem teto seria 22/2 = 11x, transformando
+    6 visitas rápidas (peso 0,3 = 1,8 ponto normal) em quase 20 pontos
+    perdidos — um punhado de dias ruins vira um mês inteiro ruim, o que
+    não é justo nem realista (a amostra é pequena demais pra extrapolar
+    com confiança). Com o teto em 2x, o mesmo caso vira só 3,6 pontos.
     """
     r = res["resumo"]
     df = res["df"]
     pontos = float(PONTOS_INICIAIS)
     detalhes = []
-    fator_normalizacao = DIAS_UTEIS_MES / r["dias_trabalhados"] if r["dias_trabalhados"] > 0 else 1.0
+    fator_normalizacao = min(DIAS_UTEIS_MES / r["dias_trabalhados"], TETO_FATOR_NORMALIZACAO) \
+        if r["dias_trabalhados"] > 0 else 1.0
 
     def aplicar(motivo, qtd, peso, sinal, normalizar=True):
         nonlocal pontos
