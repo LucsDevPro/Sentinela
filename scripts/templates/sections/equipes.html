@@ -1,0 +1,27 @@
+{% from "macros.html" import chart_card %}
+<div class="section" id="equipes">
+  <div class="team-grid">
+    {% for t in team_cards %}
+    <div class="team-card" style="border-top: 4px solid {{ t.color }}">
+      <div class="team-name">{{ t.nome }}</div>
+      <div class="team-stats">
+        <div><span class="ts-val">{{ t.agentes }}</span><span class="ts-label">Agentes</span></div>
+        <div><span class="ts-val">{{ t.total_geral|br }}</span><span class="ts-label">Total Geral</span></div>
+        <div><span class="ts-val">{{ t.n_critico }}</span><span class="ts-label">Críticos</span></div>
+        <div><span class="ts-val">{{ t.n_normal }}</span><span class="ts-label">Normais</span></div>
+      </div>
+      <div class="team-bar">
+        <div class="tb-critico" style="width:{{ t.pct_critico|round|int }}%"></div>
+        <div class="tb-atencao" style="width:{{ t.pct_atencao|round|int }}%"></div>
+        <div class="tb-normal" style="width:{{ t.pct_normal|round|int }}%"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="charts-grid">
+    {{ chart_card("chartTeamStack", "Agentes por Classificação em cada Equipe",
+       note="conta quantos agentes de cada equipe caem em cada faixa de classificação (Normal/Atenção/Crítico), empilhados — mostra a composição da equipe, não o volume de visitas.") }}
+    {{ chart_card("chartTeamStatus", "Status dos Imóveis por Equipe",
+       note="soma de Imóveis Abertos, Fechados e Recusados de cada equipe, empilhados — mostra a composição do trabalho de cada equipe (quanto já foi concluído vs. ainda em aberto).") }}
+  </div>
+</div>

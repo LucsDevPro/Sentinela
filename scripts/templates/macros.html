@@ -1,0 +1,42 @@
+{% macro kpi(cls, label, value, sub) -%}
+<div class="kpi {{ cls }}"><div class="kpi-label">{{ label }}</div><div class="kpi-value">{{ value }}</div><div class="kpi-sub">{{ sub }}</div></div>
+{%- endmacro %}
+
+{% macro chart_card(canvas_id, title, tall=False, note=None, wide=False) -%}
+<div class="chart-card"{% if wide %} style="grid-column: 1 / -1;"{% endif %}>
+  <h3>{{ title }}</h3>
+  <div class="chart-wrap{% if tall %} tall{% endif %}"><canvas id="{{ canvas_id }}"></canvas></div>
+  {% if note %}<p class="chart-note"><strong>Metodologia:</strong> {{ note }}</p>{% endif %}
+</div>
+{%- endmacro %}
+
+{% macro legend_chip(color, label, tip) -%}
+<span class="legend-chip"><span class="legend-square" style="background:{{ color }}"></span>{{ label }}
+  <span class="legend-tip">{{ tip }}</span></span>
+{%- endmacro %}
+
+{% macro alert_table(rows, title, icon, section_id, cols) %}
+<div class="table-section" id="alert-{{ section_id }}">
+  <h3>{{ icon }} {{ title }} ({{ rows|length }})</h3>
+  <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
+  <div class="table-wrap">
+    <table class="data-table compact sortable" id="table-{{ section_id }}">
+      <thead><tr>{% for key, label, kind in cols %}<th>{{ label }}</th>{% endfor %}</tr></thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          {% for key, label, kind in cols %}
+            {% if kind == "id" %}<td>{{ r[key]|id_link }}</td>
+            {% elif kind == "num" %}<td class="num">{{ r[key]|br }}</td>
+            {% elif key == "agente" %}<td class="agent-name">{{ r[key] if r[key] is not none else "" }}</td>
+            {% else %}<td>{{ r[key] if r[key] is not none else "" }}</td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endmacro %}
+

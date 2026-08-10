@@ -1,0 +1,48 @@
+{% from "macros.html" import kpi, chart_card, alert_table %}
+<div class="section" id="ranking">
+  <div class="legend-box">
+    Todo agente começa o período com <strong>100 pontos</strong>. Critérios como pontualidade, visitas
+    rápidas/duplicadas/em sequência suspeita, ausências e meta diária somam ou descontam pontos.
+    Faixas: <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
+    <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).
+  </div>
+
+  <div class="kpi-grid">
+    {{ kpi("blue", "Líder do Ranking", kpi_ranking.lider_nome, kpi_ranking.lider_pontos|br(1) ~ " pontos") }}
+    {{ kpi("cyan", "Pontuação Média", kpi_ranking.media|br(1), "de todos os agentes") }}
+    {{ kpi("green", "🟢 Excelente / 🟡 Bom", (kpi_ranking.n_excelente|string) ~ " / " ~ (kpi_ranking.n_bom|string), "agentes em cada faixa") }}
+    {{ kpi("red", "🟠 Atenção / 🔴 Crítico", (kpi_ranking.n_atencao|string) ~ " / " ~ (kpi_ranking.n_critico|string), "agentes em cada faixa") }}
+  </div>
+
+  <div class="charts-grid">
+    {{ chart_card("chartRanking", "Pontuação Final por Agente", tall=True, wide=True,
+       note="Pontuação final de cada agente no período, do maior para o menor. Cor segue a faixa de classificação.") }}
+  </div>
+
+  <div class="table-section">
+    <h3>🏆 Ranking Geral ({{ ranking|length }})</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão.</p>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableRanking">
+        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
+        <tbody>
+          {% for r in ranking %}
+          <tr class="{{ r.classificacao|row_class }}">
+            <td class="num">{{ r.posicao|br }}º</td>
+            <td class="sticky-col agent-name">{{ r.agente }}</td>
+            <td>{{ r.equipe }}</td>
+            <td class="num">{{ r.pontos|br(1) }}</td>
+            <td>{{ r.classificacao|rank_badge }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if ranking_detalhe %}
+  {{ alert_table(ranking_detalhe, "Detalhamento — Critérios Aplicados por Agente", "📋", "ranking-detalhe",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("criterio","Critério","str"),
+      ("qtd","Quantidade","num"), ("peso","Peso (pts/ocorrência)","num"), ("pontos","Pontos Aplicados","num")]) }}
+  {% endif %}
+</div>

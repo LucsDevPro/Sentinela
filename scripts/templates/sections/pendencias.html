@@ -1,0 +1,35 @@
+{% from "macros.html" import chart_card, alert_table %}
+<div class="section" id="pendencias">
+  <div class="legend-box">
+    <strong>% Pendência</strong> = (Imóveis Fechados + Imóveis Recusados) ÷ Total Geral (Abertos+Fechados+Recusados), por agente.
+    Quanto maior, maior a proporção de imóveis que não seguiram como "aberto" simples.
+  </div>
+  <div class="charts-grid">
+    {{ chart_card("chartPendTop", "Top 15 — % Pendência por Agente", tall=True, wide=True,
+       note="% Pendência de cada agente, do maior para o menor — os 15 primeiros.") }}
+  </div>
+  <div class="table-section">
+    <h3>📊 Resumo de Pendência por Agente ({{ pendencias|length }})</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por % Pendência por padrão.</p>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tablePendencias">
+        <thead><tr><th class="sticky-col">Agente</th><th>Equipe</th><th>Imóveis Abertos</th><th>Imóveis Fechados</th><th>Imóveis Recusados</th><th>Total Geral</th><th>% Pendência</th></tr></thead>
+        <tbody>
+          {% for r in pendencias %}
+          <tr>
+            <td class="sticky-col agent-name">{{ r.agente }}</td><td>{{ r.equipe }}</td>
+            <td class="num">{{ r.abertos|br }}</td><td class="num">{{ r.fechados|br }}</td><td class="num">{{ r.recusados|br }}</td>
+            <td class="num">{{ r.total_geral|br }}</td><td class="num pct">{{ r.pct_pendencia|br(1) }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% if recusados_detalhe %}
+  {{ alert_table(recusados_detalhe, "Imóveis com Visita Recusada pelo Morador", "🚫", "recusados",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("id_visita","ID Visita","id"),
+      ("area","Área","str"), ("quarteirao","Quarteirão","str"), ("logradouro","Logradouro","str"), ("imovel","Imóvel","str"),
+      ("chegada","Chegada","str"), ("saida","Saída","str")]) }}
+  {% endif %}
+</div>

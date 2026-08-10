@@ -1,0 +1,76 @@
+{% from "macros.html" import kpi as kpi_card, chart_card %}
+<div class="section" id="custos">
+  <div class="kpi-grid">
+    {{ kpi_card("blue", "Custo Médio Hora Útil", "R$ " ~ kc.custo_medio|br(2), "média entre os " ~ kpi.total_agentes ~ " agentes") }}
+    {{ kpi_card("green", "Custo Mínimo", "R$ " ~ kc.custo_min|br(2), kc.custo_min_agente) }}
+    {{ kpi_card("red", "Custo Máximo", "R$ " ~ kc.custo_max|br(2), kc.custo_max_agente) }}
+    {{ kpi_card("cyan", "Média Horas Trab./Dia", kc.horas_dia_media|br(1) ~ "h", "jornada total no dia") }}
+    {{ kpi_card("orange", "Média Horas Trab./Semana", kc.horas_semana_media|br(1) ~ "h", "soma da semana") }}
+    {{ kpi_card("yellow", "Média Horas Úteis/Dia", kc.horas_uteis_media|br(1) ~ "h", "tempo real em visitas") }}
+  </div>
+  <div class="legend-box">
+    <strong>Horas Trabalhadas</strong> = jornada total do dia (primeira chegada até a última saída), descontando sobreposição com o almoço.
+    <strong>Horas Úteis</strong> = soma das durações de visita no dia (tempo realmente dentro de imóveis), sem contar deslocamento.
+    <strong>Custo Hora Útil</strong> = salário mensal (R$ {{ salario_mensal|br(2) }}, equivalente a 3 salários mínimos federais) ÷ (Média Horas Úteis/Dia × 22 dias úteis).
+  </div>
+  <div class="charts-grid">
+    {{ chart_card("chartCusto", "Custo da Hora Útil por Agente (R$)", tall=True, wide=True,
+       note="Custo Hora Útil = salário mensal ÷ (Média de Horas Úteis por Dia × 22 dias úteis). Agentes com poucas horas úteis/dia aparecem com custo por hora mais alto.") }}
+    {{ chart_card("chartHoras", "Horas Úteis/Dia por Agente",
+       note="média de horas por dia trabalhado em que o agente esteve efetivamente em visita, do menor para o maior.") }}
+    {{ chart_card("chartHorasTrabDia", "Horas Trabalhadas por Dia (jornada total)",
+       note="jornada total do dia (chegada até saída, descontando almoço) — inclui deslocamento, diferente de \"Horas Úteis\" que só conta tempo dentro de imóveis.") }}
+    {{ chart_card("chartHorasTrabSemana", "Horas Trabalhadas por Semana",
+       note="soma da jornada diária ao longo da semana de cada agente, do menor para o maior.") }}
+  </div>
+  <div class="table-section">
+    <h3>💰 Custos, Horas e Produção — Visão Consolidada</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar. Liga horas trabalhadas, horas úteis, custo por hora e volume de trabalho num só lugar.</p>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableCustos">
+        <thead><tr>
+          <th class="sticky-col">Agente</th><th>Equipe</th><th>Total Geral</th><th>Imóveis Abertos</th><th>Visitas/Dia</th>
+          <th>Horas Trab./Dia</th><th>Horas Trab./Semana</th><th>Horas Úteis/Dia</th><th>Custo Hora Útil</th>
+        </tr></thead>
+        <tbody>
+          {% for r in custos %}
+          <tr>
+            <td class="sticky-col agent-name">{{ r.agente }}</td><td>{{ r.equipe }}</td>
+            <td class="num">{{ r.total_geral|br }}</td><td class="num">{{ r.abertos|br }}</td><td class="num">{{ r.visitas_dia|br(1) }}</td>
+            <td class="num">{{ r.horas_trab_dia|br(1) }}h</td><td class="num">{{ r.horas_trab_semana|br(1) }}h</td>
+            <td class="num">{{ r.horas_uteis_dia|br(1) }}h</td><td class="num">{{ r.custo_hora }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% if outras_atividades %}
+  <div class="table-section">
+    <h3>🚧 Outras Atividades — equipes fora do e-Visita</h3>
+    <p class="table-hint">Equipes com produção lançada manualmente em <code>data/outras_atividades.json</code> (não passam pelo e-Visita). "Vezes abaixo da meta" compara a produção por pessoa/dia com a meta de {{ 20 }} visitas/dia usada pra todo o resto do dashboard — é a prova objetiva de quão baixa está a produção, sem depender de opinião.</p>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableOutrasAtividades">
+        <thead><tr>
+          <th class="sticky-col">Equipe</th><th>Membros</th><th>Mês</th><th>Produção (visitas)</th>
+          <th>Visitas/Dia/Pessoa</th><th>Custo da Equipe (mês)</th><th>Custo por Visita</th><th>Vezes Abaixo da Meta</th>
+        </tr></thead>
+        <tbody>
+          {% for r in outras_atividades %}
+          <tr class="{{ 'row-critico' if r.vezes_abaixo_meta and r.vezes_abaixo_meta >= 3 else 'row-atencao' }}">
+            <td class="sticky-col agent-name">{{ r.equipe }}</td>
+            <td>{{ r.membros }} ({{ r.n_membros }} pessoas)</td>
+            <td>{{ r.mes }}</td>
+            <td class="num">{{ r.visitas|br }}</td>
+            <td class="num">{{ r.visitas_dia_pessoa|br(2) }}</td>
+            <td class="num">R$ {{ r.custo_equipe_mensal|br(2) }}</td>
+            <td class="num">{% if r.custo_por_visita %}R$ {{ r.custo_por_visita|br(2) }}{% else %}—{% endif %}</td>
+            <td class="num">{% if r.vezes_abaixo_meta %}{{ r.vezes_abaixo_meta|br(1) }}x{% else %}—{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</div>

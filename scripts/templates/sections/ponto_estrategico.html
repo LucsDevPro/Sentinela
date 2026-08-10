@@ -1,0 +1,101 @@
+{% from "macros.html" import chart_card %}
+<div class="section" id="ponto-estrategico">
+  <div class="legend-box">
+    <strong>Ponto Estratégico</strong> é um imóvel/local sob monitoramento semanal dedicado, fora da rotina normal das 4 equipes + Equipe Bloqueio.
+    Dados atuais: agente <strong class="pe-agente-nome">{{ pe_agente }}</strong>, {{ pe_semanas }} semanas monitoradas.
+  </div>
+  <div class="charts-grid">
+    {{ chart_card("chartPeTrend", "Visitas/Dia e Imóveis Abertos por Semana", wide=True,
+       note="evolução semana a semana de Visitas/Dia (linha) e Imóveis Abertos totais (barra) para o Ponto Estratégico.") }}
+  </div>
+  <div class="table-section">
+    <h3>🎯 Detalhamento por Semana ({{ ponto_estrategico|length }})</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar.</p>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tablePontoEstrategico">
+        <thead><tr>
+          <th>Semana</th><th>Período</th><th>Agente</th><th>Equipe</th><th>Classificação</th><th>Imóveis Abertos</th>
+          <th>Dias Trab.</th><th>Visitas/Dia</th><th>Média (min)</th><th>Rápidas</th><th>% Rápidas</th><th>Horas Úteis/Dia</th><th>Custo Hora Útil</th>
+        </tr></thead>
+        <tbody>
+          {% for r in ponto_estrategico %}
+          <tr>
+            <td class="num">{{ r.semana|br }}</td><td>{{ r.periodo }}</td><td class="agent-name">{{ r.agente }}</td><td>{{ r.equipe }}</td>
+            <td>{{ r.classificacao|badge }}</td><td class="num">{{ r.abertos|br }}</td><td class="num">{{ r.dias_trabalhados|br }}</td>
+            <td class="num">{{ r.visitas_dia|br(1) }}</td><td class="num">{{ r.media_min|br(1) }}</td><td class="num">{{ r.rapidas|br }}</td>
+            <td class="num pct">{{ r.pct_rapidas|br(1) }}%</td><td class="num">{{ r.horas_uteis_dia|br(1) }}</td><td class="num">{{ r.custo_hora }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if resumo_bloqueio or pendencias_bloqueio %}
+  <div class="legend-box">
+    <strong>🚧 Equipe Bloqueio</strong> — resultados separados dos agentes do tratamento, porque a
+    equipe trabalha de forma diferente (majoritariamente sem o aplicativo na maioria dos dias). Por
+    isso não entram nos gráficos, no ranking nem na contagem de ausências das outras abas.
+  </div>
+  {% endif %}
+
+  {% if resumo_bloqueio %}
+  {% set cols_bloqueio = [
+    ("agente","Agente","str"), ("equipe","Equipe","str"), ("classificacao","Classificação","badge"),
+    ("abertos","Imóveis Abertos","num"), ("dias_trabalhados","Dias Trab.","num"), ("visitas_dia","Visitas/Dia","num1"),
+    ("media_min","Média (min)","num1"), ("mediana_min","Mediana","num"), ("rapidas","Rápidas","num"), ("pct_rapidas","% Rápidas","pct1"),
+    ("longas","Longas","num"), ("negativas","Negativas","num"), ("dias_meta","Dias c/ Meta","num"),
+    ("duplicadas","Duplicadas","num"), ("seq_suspeita","Seq. Suspeita","num"), ("no_almoco","No Almoço","num"), ("fora_expediente","Fora Exped.","num"),
+    ("fechados","Fechados","num"), ("recusados","Recusados","num"), ("total_geral","Total Geral","num"), ("pct_pendencia","% Pendência","pct1"),
+    ("horas_trab_dia","Horas Trab/Dia","num1"), ("horas_trab_semana","Horas Trab/Sem","num1"), ("horas_uteis_dia","Horas Úteis/Dia","num1"),
+    ("custo_hora","Custo Hora Útil","str"),
+    ("inicio_manha","Início Manhã","str"), ("fim_manha","Fim Manhã","str"), ("inicio_tarde","Início Tarde","str"), ("fim_tarde","Fim Tarde","str"),
+  ] %}
+  <div class="table-section">
+    <h3>🚧 Resumo — Equipe Bloqueio ({{ resumo_bloqueio|length }})</h3>
+    <p class="table-hint">Mesmas colunas do Resumo Completo por Agente (aba Agentes). Clique no cabeçalho pra ordenar.</p>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableResumoBloqueio">
+        <thead><tr>
+          {% for key, label, kind in cols_bloqueio %}<th{% if loop.first %} class="sticky-col"{% endif %}>{{ label }}</th>{% endfor %}
+        </tr></thead>
+        <tbody>
+          {% for r in resumo_bloqueio %}
+          <tr class="{{ r.classificacao|row_class }}">
+            {% for key, label, kind in cols_bloqueio %}
+              {% if kind == "badge" %}<td>{{ r[key]|badge }}</td>
+              {% elif kind == "num" %}<td class="num">{{ r[key]|br }}</td>
+              {% elif kind == "num1" %}<td class="num">{{ r[key]|br(1) }}</td>
+              {% elif kind == "pct1" %}<td class="num pct">{{ r[key]|br(1) }}%</td>
+              {% elif key == "agente" %}<td class="sticky-col agent-name">{{ r[key] }}</td>
+              {% else %}<td>{{ r[key] }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if pendencias_bloqueio %}
+  <div class="table-section">
+    <h3>🚧 Pendência — Equipe Bloqueio ({{ pendencias_bloqueio|length }})</h3>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tablePendenciaBloqueio">
+        <thead><tr><th class="sticky-col">Agente</th><th>Imóveis Abertos</th><th>Imóveis Fechados</th><th>Imóveis Recusados</th><th>Total Geral</th><th>% Pendência</th></tr></thead>
+        <tbody>
+          {% for r in pendencias_bloqueio %}
+          <tr>
+            <td class="sticky-col agent-name">{{ r.agente }}</td>
+            <td class="num">{{ r.abertos|br }}</td><td class="num">{{ r.fechados|br }}</td><td class="num">{{ r.recusados|br }}</td>
+            <td class="num">{{ r.total_geral|br }}</td><td class="num pct">{{ r.pct_pendencia|br(1) }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</div>
