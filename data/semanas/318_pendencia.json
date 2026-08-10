@@ -1,16 +1,4 @@
 {
-  "73": {
-    "nome_agente": "Ana Gabriela Silva Garcete",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 5,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "401 - EMÍLIO DIAS BRANDÃO": 5
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "116": {
     "nome_agente": "Wagner Tarlei Gomes",
     "equipe": "Equipe 1",
@@ -18,6 +6,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "400 - JULIA CARDINAL": 7
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "73": {
+    "nome_agente": "Ana Gabriela Silva Garcete",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 5,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "401 - EMÍLIO DIAS BRANDÃO": 5
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -47,16 +47,33 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "470": {
-    "nome_agente": "Cris Milene Cardenas da Silva",
+  "672": {
+    "nome_agente": "Adriana de Jesus Saraiva",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 21,
-    "imoveis_recusados": 0,
+    "imoveis_fechados": 20,
+    "imoveis_recusados": 1,
     "fechados_por_area": {
-      "403 - JARDIM UNIVERSITARIO": 21
+      "404 - JARDIM DOS ESTADOS": 20
     },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
+    "recusados_por_area": {
+      "404 - JARDIM DOS ESTADOS": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 16731309,
+        "regiao": "URBANA",
+        "area": "404 - JARDIM DOS ESTADOS",
+        "quarteirao": "Q011",
+        "logradouro": "Rua JOÃO BREMBATI CALVOSO",
+        "imovel": "838 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Normal",
+        "data_chegada": "04/08/2026 14:43",
+        "data_saida": "04/08/2026 14:43",
+        "nome_agente": "Adriana de Jesus Saraiva",
+        "equipe": "Equipe 1"
+      }
+    ],
     "paginas_falhas": []
   },
   "79": {
@@ -103,6 +120,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 79,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 79
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "3127": {
     "nome_agente": "Gisele Olimpia Torres",
     "equipe": "Equipe 2",
@@ -132,18 +161,6 @@
     ],
     "paginas_falhas": []
   },
-  "2030": {
-    "nome_agente": "Mateus Falcao de Souza",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 51,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "415 - CENTRO 1": 51
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "134": {
     "nome_agente": "Tania Maria Montania",
     "equipe": "Equipe 2",
@@ -151,6 +168,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "416 - CENTRO 2": 7
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "2030": {
+    "nome_agente": "Mateus Falcao de Souza",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 51,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "415 - CENTRO 1": 51
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -180,47 +209,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "465": {
-    "nome_agente": "Suely Aguiar Alves Luiz",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 5,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "414 - PARQUE DOS ERVAIS": 5
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "672": {
-    "nome_agente": "Adriana de Jesus Saraiva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 20,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "404 - JARDIM DOS ESTADOS": 20
-    },
-    "recusados_por_area": {
-      "404 - JARDIM DOS ESTADOS": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 16731309,
-        "regiao": "URBANA",
-        "area": "404 - JARDIM DOS ESTADOS",
-        "quarteirao": "Q011",
-        "logradouro": "Rua JOÃO BREMBATI CALVOSO",
-        "imovel": "838 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Normal",
-        "data_chegada": "04/08/2026 14:43",
-        "data_saida": "04/08/2026 14:43",
-        "nome_agente": "Adriana de Jesus Saraiva",
-        "equipe": "Equipe 1"
-      }
-    ],
-    "paginas_falhas": []
-  },
   "81": {
     "nome_agente": "Wesley de Souza Leal",
     "equipe": "Equipe 2",
@@ -233,12 +221,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "151": {
-    "nome_agente": "Gilmar Bitencourt Luiz",
+  "465": {
+    "nome_agente": "Suely Aguiar Alves Luiz",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 0,
+    "imoveis_fechados": 5,
     "imoveis_recusados": 0,
-    "fechados_por_area": {},
+    "fechados_por_area": {
+      "414 - PARQUE DOS ERVAIS": 5
+    },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
     "paginas_falhas": []
@@ -253,13 +243,23 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "120": {
-    "nome_agente": "Emidio Rainer Vilhalba",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 8,
+  "151": {
+    "nome_agente": "Gilmar Bitencourt Luiz",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 0,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {},
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "470": {
+    "nome_agente": "Cris Milene Cardenas da Silva",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 21,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "430 - VILA RENÔ": 8
+      "403 - JARDIM UNIVERSITARIO": 21
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -277,18 +277,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2721": {
-    "nome_agente": "Miglidiane Maciel Ajala",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 12,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "425 - JARDIM ESTORIL": 12
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "1938": {
     "nome_agente": "Marco Antonio Ayala de Matos Freitas",
     "equipe": "Equipe 3",
@@ -301,13 +289,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 79,
+  "2721": {
+    "nome_agente": "Miglidiane Maciel Ajala",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 12,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 79
+      "425 - JARDIM ESTORIL": 12
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -349,6 +337,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "1936": {
+    "nome_agente": "Geancarlos Ferreira Barrios",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 17,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "427 - JAMIL SALDANHA DERZI": 17
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "80": {
     "nome_agente": "Gisele Lopes Justiniano",
     "equipe": "Equipe 4",
@@ -371,13 +371,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1936": {
-    "nome_agente": "Geancarlos Ferreira Barrios",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 17,
+  "161": {
+    "nome_agente": "Rozana Reis da Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 44,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "427 - JAMIL SALDANHA DERZI": 17
+      "444 - KAMEL SAAD 2": 44
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -395,25 +395,25 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "161": {
-    "nome_agente": "Rozana Reis da Silva",
+  "2789": {
+    "nome_agente": "Kariele Jackeline Rodrigues Silva",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 44,
+    "imoveis_fechados": 23,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "444 - KAMEL SAAD 2": 44
+      "439 - BOSQUE CARANDÁ": 23
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "149": {
-    "nome_agente": "Kátia Cilene Silveira Machado",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 11,
+  "120": {
+    "nome_agente": "Emidio Rainer Vilhalba",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 8,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "443 - KAMEL SAAD 1": 11
+      "430 - VILA RENÔ": 8
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -455,13 +455,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2789": {
-    "nome_agente": "Kariele Jackeline Rodrigues Silva",
+  "149": {
+    "nome_agente": "Kátia Cilene Silveira Machado",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 23,
+    "imoveis_fechados": 11,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "439 - BOSQUE CARANDÁ": 23
+      "443 - KAMEL SAAD 1": 11
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
