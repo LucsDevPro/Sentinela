@@ -1,16 +1,4 @@
 {
-  "116": {
-    "nome_agente": "Wagner Tarlei Gomes",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 7,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "400 - JULIA CARDINAL": 7
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "73": {
     "nome_agente": "Ana Gabriela Silva Garcete",
     "equipe": "Equipe 1",
@@ -18,6 +6,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "401 - EMÍLIO DIAS BRANDÃO": 5
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "116": {
+    "nome_agente": "Wagner Tarlei Gomes",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 7,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "400 - JULIA CARDINAL": 7
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -59,35 +59,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "672": {
-    "nome_agente": "Adriana de Jesus Saraiva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 20,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "404 - JARDIM DOS ESTADOS": 20
-    },
-    "recusados_por_area": {
-      "404 - JARDIM DOS ESTADOS": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 16731309,
-        "regiao": "URBANA",
-        "area": "404 - JARDIM DOS ESTADOS",
-        "quarteirao": "Q011",
-        "logradouro": "Rua JOÃO BREMBATI CALVOSO",
-        "imovel": "838 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Normal",
-        "data_chegada": "04/08/2026 14:43",
-        "data_saida": "04/08/2026 14:43",
-        "nome_agente": "Adriana de Jesus Saraiva",
-        "equipe": "Equipe 1"
-      }
-    ],
-    "paginas_falhas": []
-  },
   "79": {
     "nome_agente": "Tânia Raquel Ortiz dos Santos",
     "equipe": "Equipe 1",
@@ -96,16 +67,6 @@
     "fechados_por_area": {
       "406 - JARDIM PRIMAVERA": 10
     },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3101": {
-    "nome_agente": "Carlos Alberto Albiero",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 0,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {},
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
     "paginas_falhas": []
@@ -122,6 +83,16 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "3101": {
+    "nome_agente": "Carlos Alberto Albiero",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 0,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {},
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "115": {
     "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
@@ -130,6 +101,35 @@
     "fechados_por_area": {},
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3127": {
+    "nome_agente": "Gisele Olimpia Torres",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 39,
+    "imoveis_recusados": 1,
+    "fechados_por_area": {
+      "421 - JARDIM IPANEMA": 39
+    },
+    "recusados_por_area": {
+      "421 - JARDIM IPANEMA": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 16759761,
+        "regiao": "URBANA",
+        "area": "421 - JARDIM IPANEMA",
+        "quarteirao": "Q020",
+        "logradouro": "Rua HUMAITA",
+        "imovel": "359 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Normal",
+        "data_chegada": "05/08/2026 15:52",
+        "data_saida": "05/08/2026 15:52",
+        "nome_agente": "Gisele Olimpia Torres",
+        "equipe": "Equipe 2"
+      }
+    ],
     "paginas_falhas": []
   },
   "2030": {
@@ -144,13 +144,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 79,
+  "134": {
+    "nome_agente": "Tania Maria Montania",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 7,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 79
+      "416 - CENTRO 2": 7
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -163,18 +163,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "411 - JARDIM AEROPORTO": 16
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "134": {
-    "nome_agente": "Tania Maria Montania",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 7,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "416 - CENTRO 2": 7
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -202,6 +190,35 @@
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "672": {
+    "nome_agente": "Adriana de Jesus Saraiva",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 20,
+    "imoveis_recusados": 1,
+    "fechados_por_area": {
+      "404 - JARDIM DOS ESTADOS": 20
+    },
+    "recusados_por_area": {
+      "404 - JARDIM DOS ESTADOS": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 16731309,
+        "regiao": "URBANA",
+        "area": "404 - JARDIM DOS ESTADOS",
+        "quarteirao": "Q011",
+        "logradouro": "Rua JOÃO BREMBATI CALVOSO",
+        "imovel": "838 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Normal",
+        "data_chegada": "04/08/2026 14:43",
+        "data_saida": "04/08/2026 14:43",
+        "nome_agente": "Adriana de Jesus Saraiva",
+        "equipe": "Equipe 1"
+      }
+    ],
     "paginas_falhas": []
   },
   "81": {
@@ -284,6 +301,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 79,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 79
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "3038": {
     "nome_agente": "Naime Cristina Freitas",
     "equipe": "Equipe 3",
@@ -296,6 +325,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "3128": {
+    "nome_agente": "Rosalina Beniel Vargas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 75,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "424 - SÃO JOÃO": 75
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "2918": {
     "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
@@ -303,47 +344,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "428 - JARDIM COIMBRA": 57
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3127": {
-    "nome_agente": "Gisele Olimpia Torres",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 39,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "421 - JARDIM IPANEMA": 39
-    },
-    "recusados_por_area": {
-      "421 - JARDIM IPANEMA": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 16759761,
-        "regiao": "URBANA",
-        "area": "421 - JARDIM IPANEMA",
-        "quarteirao": "Q020",
-        "logradouro": "Rua HUMAITA",
-        "imovel": "359 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Normal",
-        "data_chegada": "05/08/2026 15:52",
-        "data_saida": "05/08/2026 15:52",
-        "nome_agente": "Gisele Olimpia Torres",
-        "equipe": "Equipe 2"
-      }
-    ],
-    "paginas_falhas": []
-  },
-  "1936": {
-    "nome_agente": "Geancarlos Ferreira Barrios",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 17,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "427 - JAMIL SALDANHA DERZI": 17
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -371,6 +371,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "1936": {
+    "nome_agente": "Geancarlos Ferreira Barrios",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 17,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "427 - JAMIL SALDANHA DERZI": 17
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "1943": {
     "nome_agente": "Juliana Patricia Goncalves",
     "equipe": "Equipe 4",
@@ -390,18 +402,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "444 - KAMEL SAAD 2": 44
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "2789": {
-    "nome_agente": "Kariele Jackeline Rodrigues Silva",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 23,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "439 - BOSQUE CARANDÁ": 23
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -455,13 +455,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3128": {
-    "nome_agente": "Rosalina Beniel Vargas",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 75,
+  "2789": {
+    "nome_agente": "Kariele Jackeline Rodrigues Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 23,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "424 - SÃO JOÃO": 75
+      "439 - BOSQUE CARANDÁ": 23
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
