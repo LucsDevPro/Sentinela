@@ -188,10 +188,10 @@
   "134": {
     "nome_agente": "Tania Maria Montania",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 7,
+    "imoveis_fechados": 8,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "416 - CENTRO 2": 7
+      "416 - CENTRO 2": 8
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -239,18 +239,6 @@
     "imoveis_fechados": 0,
     "imoveis_recusados": 0,
     "fechados_por_area": {},
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "465": {
-    "nome_agente": "Suely Aguiar Alves Luiz",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 5,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "414 - PARQUE DOS ERVAIS": 5
-    },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
     "paginas_falhas": []
@@ -313,18 +301,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3128": {
-    "nome_agente": "Rosalina Beniel Vargas",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 75,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "424 - SÃO JOÃO": 75
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3038": {
     "nome_agente": "Naime Cristina Freitas",
     "equipe": "Equipe 3",
@@ -332,6 +308,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "423 - SANTA IZABEL": 29
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3128": {
+    "nome_agente": "Rosalina Beniel Vargas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 75,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "424 - SÃO JOÃO": 75
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -349,18 +337,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "80": {
-    "nome_agente": "Gisele Lopes Justiniano",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 21,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "441 - PARQUE DOS IPES": 21
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "1936": {
     "nome_agente": "Geancarlos Ferreira Barrios",
     "equipe": "Equipe 3",
@@ -373,6 +349,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "80": {
+    "nome_agente": "Gisele Lopes Justiniano",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 21,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "441 - PARQUE DOS IPES": 21
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "124": {
     "nome_agente": "Ramona dos Santos Oliveira",
     "equipe": "Equipe 4",
@@ -380,30 +368,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "436 - ALEGRETE": 11
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "1943": {
-    "nome_agente": "Juliana Patricia Goncalves",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 11,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "445 - JARDIM IVONE": 11
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "1996": {
-    "nome_agente": "Sara Eliane Talaveira de Oliveira",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 12,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "438 - JARDIM PLANALTO": 12
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -433,6 +397,30 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "465": {
+    "nome_agente": "Suely Aguiar Alves Luiz",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 5,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "414 - PARQUE DOS ERVAIS": 5
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "1996": {
+    "nome_agente": "Sara Eliane Talaveira de Oliveira",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 12,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "438 - JARDIM PLANALTO": 12
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "149": {
     "nome_agente": "Kátia Cilene Silveira Machado",
     "equipe": "Equipe 4",
@@ -440,18 +428,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "443 - KAMEL SAAD 1": 11
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "86": {
-    "nome_agente": "Silvina Regina de Souza Valiente",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 16,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "434 - VILA AUREA": 16
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -476,6 +452,30 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "446 - GUY VILELA": 4
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "86": {
+    "nome_agente": "Silvina Regina de Souza Valiente",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 16,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "434 - VILA AUREA": 16
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "1943": {
+    "nome_agente": "Juliana Patricia Goncalves",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 11,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "445 - JARDIM IVONE": 11
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
