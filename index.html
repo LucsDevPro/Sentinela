@@ -232,14 +232,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="11/08/2026 18:12">
+<body data-print-date="11/08/2026 18:21">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 11/08/2026 18:12</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 11/08/2026 18:21</div>
       </div>
     </div>
     <div class="header-actions">
@@ -279,7 +279,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="kpi cyan"><div class="kpi-label">Total Geral de Imóveis</div><div class="kpi-value">25.260</div><div class="kpi-sub">17.511 abertos · 7.710 fechados · 39 recusados</div></div>
     <div class="kpi yellow"><div class="kpi-label">% Pendência Geral</div><div class="kpi-value">30,7%</div><div class="kpi-sub">(fechados+recusados) ÷ total</div></div>
     <div class="kpi red"><div class="kpi-label">Agentes Críticos</div><div class="kpi-value">12</div><div class="kpi-sub">26 normal · 3 atenção</div></div>
-    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">748</div><div class="kpi-sub">168 alertas · 580 ausências</div></div>
+    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">754</div><div class="kpi-sub">168 alertas · 586 ausências</div></div>
   </div>
 
   <div class="hover-legend">
@@ -21704,7 +21704,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="alert-card" onclick="showAlert('alm')"><div class="ac-icon">🍽️</div><div class="ac-val" style="color:var(--cyan)">20</div><div class="ac-label">No Horário de Almoço</div></div>
     <div class="alert-card" onclick="showAlert('teto')"><div class="ac-icon">🖥️</div><div class="ac-val" style="color:var(--navy)">212</div><div class="ac-label">Acima de 15min (auditoria)</div></div>
     <div class="alert-card" onclick="goToSection('pendencias')"><div class="ac-icon">🚫</div><div class="ac-val" style="color:var(--red)">39</div><div class="ac-label">Imóveis Recusados</div></div>
-    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">580</div><div class="ac-label">Possíveis Ausências</div></div>
+    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">586</div><div class="ac-label">Possíveis Ausências</div></div>
   </div>
 
   
@@ -35084,24 +35084,22 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="ausencias">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">580</div><div class="kpi-sub">turnos sem visita registrada</div></div>
+    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">586</div><div class="kpi-sub">turnos sem visita registrada</div></div>
     <div class="kpi cyan"><div class="kpi-label">Agentes Envolvidos</div><div class="kpi-value">40</div><div class="kpi-sub">de 41 monitorados</div></div>
-    <div class="kpi yellow"><div class="kpi-label">Dia Mais Crítico</div><div class="kpi-value">Quinta</div><div class="kpi-sub">168 ausências</div></div>
-    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">310 de 580 (53%)</div></div>
+    <div class="kpi yellow"><div class="kpi-label">Dia Mais Crítico</div><div class="kpi-value">Quinta</div><div class="kpi-sub">170 ausências</div></div>
+    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">313 de 586 (53%)</div></div>
   </div>
   <div class="legend-box"><strong>Como ler:</strong> cada registro é um turno (manhã ou tarde) de um dia útil em que o agente não teve nenhuma visita lançada no sistema. Pode ser folga, atestado, falta ou apenas ausência de registro — confirme sempre com a escala antes de qualquer tratativa. Turnos do Cronograma abaixo (equipe inteira parada) já entram nessa lista, mas podem ser ocultados com o checkbox.</div>
 
   
   <div class="table-section">
-    <h3>🌴 Quem está de Férias, Atestado ou Afins (2)</h3>
+    <h3>🌴 Quem está de Férias, Atestado ou Afins (1)</h3>
     <p class="table-hint">Relatório rápido de quem tem um período de férias/atestado confirmado agora, sem precisar abrir o Cronograma completo. Férias detectadas automaticamente (mais de 5 dias úteis seguidos sem lançamento) já aparecem aqui sozinhas — confira em <code>deteccao_editor.html</code> se alguma precisar ser corrigida pra "falta".</p>
     <div class="table-wrap"><table class="data-table compact sortable" id="tableFeriasAtestado">
       <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th></tr></thead>
       <tbody>
         
         <tr><td>20/07/2026 a 05/08/2026</td><td>Férias/Atestado (automático)</td><td>Rafael Ramos Recalde</td></tr>
-        
-        <tr><td>23/07/2026 a 07/08/2026</td><td>Férias/Atestado (automático)</td><td>Teonilda Florentino Vieira</td></tr>
         
       </tbody>
     </table></div>
@@ -35118,11 +35116,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           <td>20/07/2026 a 05/08/2026</td><td>Férias/Atestado (automático)</td><td>Rafael Ramos Recalde</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>23/07/2026 a 07/08/2026</td><td>Férias/Atestado (automático)</td><td>Teonilda Florentino Vieira</td>
           <td><span class="small-muted">Cronograma</span></td>
         </tr>
         
@@ -35157,6 +35150,11 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         </tr>
         
         <tr class="row-atencao">
+          <td>23/07/2026</td><td>Nenhum agente da equipe registrou visita neste turno</td><td>Todos da Equipe 2 (12/12)</td>
+          <td><span class="badge badge-atencao">🤖 Auto-detectado</span></td>
+        </tr>
+        
+        <tr class="row-atencao">
           <td>23/07/2026</td><td>Nenhum agente da equipe registrou visita neste turno</td><td>Todos da Equipe 3 (9/9)</td>
           <td><span class="badge badge-atencao">🤖 Auto-detectado</span></td>
         </tr>
@@ -35179,7 +35177,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   <div class="charts-grid">
     <div class="chart-card">
       <h3>Mapa de Calor — Dia da Semana × Turno</h3>
-      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 45, "Tarde": 43}, "Terça": {"Manhã": 62, "Tarde": 25}, "Quarta": {"Manhã": 53, "Tarde": 49}, "Quinta": {"Manhã": 83, "Tarde": 85}, "Sexta": {"Manhã": 67, "Tarde": 68}}' style="margin-top:6px;"></div>
+      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 46, "Tarde": 44}, "Terça": {"Manhã": 62, "Tarde": 25}, "Quarta": {"Manhã": 53, "Tarde": 49}, "Quinta": {"Manhã": 84, "Tarde": 86}, "Sexta": {"Manhã": 68, "Tarde": 69}}' style="margin-top:6px;"></div>
       <p class="chart-note"><strong>Metodologia:</strong> conta, para cada combinação de dia da semana e turno, quantos turnos ficaram sem nenhuma visita registrada, somando todos os agentes. Cor mais escura = mais ausências naquele cruzamento.</p>
     </div>
     <div class="chart-card">
@@ -35189,10 +35187,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
   </div>
   <div class="table-section">
-    <h3>📅 Todos os Registros de Ausência (580)</h3>
+    <h3>📅 Todos os Registros de Ausência (586)</h3>
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
     <label class="checkbox-label">
-      <input type="checkbox" id="filterAusHideAllAbsent"> Ocultar turnos em que <strong>toda a equipe</strong> ficou ausente (78 registros — prováveis paralisações pontuais da equipe, listadas na tabela de Cronograma acima)
+      <input type="checkbox" id="filterAusHideAllAbsent"> Ocultar turnos em que <strong>toda a equipe</strong> ficou ausente (90 registros — prováveis paralisações pontuais da equipe, listadas na tabela de Cronograma acima)
     </label>
     <div class="filters">
       <select id="filterAusEquipe"><option value="">Todas as equipes</option><option>Equipe 1</option><option>Equipe 2</option><option>Equipe 3</option><option>Equipe 4</option></select>
@@ -36549,70 +36547,76 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Bianca Afonso Narbaez</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Brauher Luiz Alvarenga Gonzalez</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Cicero Isrrael Sanabria</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Fabiana de Figueredo Vieira</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Gilmar Bitencourt Luiz</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Gisele Olimpia Torres</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Mateus Falcao de Souza</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Suely Aguiar Alves Luiz</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Tania Maria Montania</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
+            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td><td>Equipe 2</td><td>23/07/2026</td>
+            <td>Quinta</td><td>Manhã</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
+          </tr>
+          
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">Wesley de Souza Leal</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
-          <tr>
+          <tr data-allabsent="1">
             <td class="sticky-col agent-name">William Anderson Chamorro Tavares</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+            <td class="small-muted">TODA A EQUIPE (12 agentes) ausente nesse turno — possível reunião de equipe, chuva/intempérie ou evento — verificar <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
           <tr>
@@ -36659,6 +36663,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Tania Maria Montania</td><td>Equipe 2</td><td>23/07/2026</td>
+            <td>Quinta</td><td>Tarde</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td><td>Equipe 2</td><td>23/07/2026</td>
             <td>Quinta</td><td>Tarde</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
@@ -36683,6 +36693,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Tania Maria Montania</td><td>Equipe 2</td><td>24/07/2026</td>
+            <td>Sexta</td><td>Manhã</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td><td>Equipe 2</td><td>24/07/2026</td>
             <td>Sexta</td><td>Manhã</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
@@ -36695,12 +36711,24 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Tania Maria Montania</td><td>Equipe 2</td><td>24/07/2026</td>
+            <td>Sexta</td><td>Tarde</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td><td>Equipe 2</td><td>24/07/2026</td>
             <td>Sexta</td><td>Tarde</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
           
           <tr>
             <td class="sticky-col agent-name">Tania Maria Montania</td><td>Equipe 2</td><td>27/07/2026</td>
+            <td>Segunda</td><td>Manhã</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td><td>Equipe 2</td><td>27/07/2026</td>
             <td>Segunda</td><td>Manhã</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
@@ -36713,6 +36741,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr>
             <td class="sticky-col agent-name">Tania Maria Montania</td><td>Equipe 2</td><td>27/07/2026</td>
+            <td>Segunda</td><td>Tarde</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td><td>Equipe 2</td><td>27/07/2026</td>
             <td>Segunda</td><td>Tarde</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
@@ -40198,7 +40232,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 
   <div class="kpi-grid">
     <div class="kpi blue"><div class="kpi-label">Líder do Ranking</div><div class="kpi-value">Suely Aguiar Alves Luiz</div><div class="kpi-sub">96,3 pontos</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">48,2</div><div class="kpi-sub">de todos os agentes</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">47,7</div><div class="kpi-sub">de todos os agentes</div></div>
     <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">1 / 10</div><div class="kpi-sub">agentes em cada faixa</div></div>
     <div class="kpi red"><div class="kpi-label">🟠 Atenção / 🔴 Crítico</div><div class="kpi-value">8 / 22</div><div class="kpi-sub">agentes em cada faixa</div></div>
   </div>
@@ -40421,14 +40455,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="row-critico">
             <td class="num">26º</td>
-            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td>
-            <td>Equipe 2</td>
-            <td class="num">41,2</td>
-            <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
-          </tr>
-          
-          <tr class="row-critico">
-            <td class="num">27º</td>
             <td class="sticky-col agent-name">Marco Antonio Ayala de Matos Freitas</td>
             <td>Equipe 3</td>
             <td class="num">34,4</td>
@@ -40436,7 +40462,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="row-critico">
-            <td class="num">28º</td>
+            <td class="num">27º</td>
             <td class="sticky-col agent-name">Rozana Reis da Silva</td>
             <td>Equipe 4</td>
             <td class="num">33,1</td>
@@ -40444,7 +40470,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="row-critico">
-            <td class="num">29º</td>
+            <td class="num">28º</td>
             <td class="sticky-col agent-name">Walquiria Araujo Flores</td>
             <td>Equipe 4</td>
             <td class="num">32,0</td>
@@ -40452,10 +40478,18 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="row-critico">
-            <td class="num">30º</td>
+            <td class="num">29º</td>
             <td class="sticky-col agent-name">Raquel Ortiz dos Santos</td>
             <td>Equipe 1</td>
             <td class="num">27,0</td>
+            <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+          </tr>
+          
+          <tr class="row-critico">
+            <td class="num">30º</td>
+            <td class="sticky-col agent-name">Teonilda Florentino Vieira</td>
+            <td>Equipe 2</td>
+            <td class="num">23,2</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
           
@@ -47283,13 +47317,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Turno sem lançamento (não é chuva/reunião/férias)</td>
             
           
-            <td class="num">14</td>
+            <td class="num">20</td>
             
           
             <td class="num">1,50</td>
             
           
-            <td class="num">-42,0</td>
+            <td class="num">-60,0</td>
             
           
         </tr>
@@ -49233,7 +49267,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 11/08/2026 18:12</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 11/08/2026 18:21</footer>
 
 <script>
 function goToSection(id) {
@@ -49599,7 +49633,7 @@ new Chart(document.getElementById('chartPendTop'), {
 
 
 (function(){
-  const d = [{"label": "Suely Aguiar Alves Luiz", "v": 96.3, "color": "#12B76A"}, {"label": "Kátia Cilene Silveira Machado", "v": 86.0, "color": "#F2D93B"}, {"label": "Gilmar Bitencourt Luiz", "v": 85.54, "color": "#F2D93B"}, {"label": "Wesley de Souza Leal", "v": 85.1, "color": "#F2D93B"}, {"label": "Evelyn Santana Santos Oliveira", "v": 84.8, "color": "#F2D93B"}, {"label": "Bianca Afonso Narbaez", "v": 84.32, "color": "#F2D93B"}, {"label": "Fabiana de Figueredo Vieira", "v": 82.29, "color": "#F2D93B"}, {"label": "William Anderson Chamorro Tavares", "v": 80.8, "color": "#F2D93B"}, {"label": "Rosalina Beniel Vargas", "v": 77.2, "color": "#F2D93B"}, {"label": "Naime Cristina Freitas", "v": 75.3, "color": "#F2D93B"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 75.08, "color": "#F2D93B"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 74.23, "color": "#F2994A"}, {"label": "Cicero Isrrael Sanabria", "v": 71.69, "color": "#F2994A"}, {"label": "Gisele Lopes Justiniano", "v": 71.5, "color": "#F2994A"}, {"label": "Adriana de Jesus Saraiva", "v": 70.94, "color": "#F2994A"}, {"label": "Ramona dos Santos Oliveira", "v": 70.56, "color": "#F2994A"}, {"label": "Rozentina Matos de Oliveira", "v": 70.41, "color": "#F2994A"}, {"label": "Cris Milene Cardenas da Silva", "v": 69.93, "color": "#F2994A"}, {"label": "Tania Maria Montania", "v": 60.74, "color": "#F2994A"}, {"label": "Ana Gabriela Silva Garcete", "v": 59.04, "color": "#E4572E"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 58.2, "color": "#E4572E"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 54.29, "color": "#E4572E"}, {"label": "Adriano Ricardo Thiel", "v": 49.24, "color": "#E4572E"}, {"label": "Emidio Rainer Vilhalba", "v": 45.67, "color": "#E4572E"}, {"label": "Selba Ramona Afonso", "v": 42.12, "color": "#E4572E"}, {"label": "Teonilda Florentino Vieira", "v": 41.2, "color": "#E4572E"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 34.44, "color": "#E4572E"}, {"label": "Rozana Reis da Silva", "v": 33.07, "color": "#E4572E"}, {"label": "Walquiria Araujo Flores", "v": 32.01, "color": "#E4572E"}, {"label": "Raquel Ortiz dos Santos", "v": 27.01, "color": "#E4572E"}, {"label": "Carlos Alberto Albiero", "v": 18.1, "color": "#E4572E"}, {"label": "Alana Amanda Fernandes Ovelar", "v": 8.0, "color": "#E4572E"}, {"label": "Wagner Tarlei Gomes", "v": 0.0, "color": "#E4572E"}, {"label": "Gisele Olimpia Torres", "v": 0.0, "color": "#E4572E"}, {"label": "Mateus Falcao de Souza", "v": 0.0, "color": "#E4572E"}, {"label": "Geancarlos Ferreira Barrios", "v": 0.0, "color": "#E4572E"}, {"label": "Miglidiane Maciel Ajala", "v": 0.0, "color": "#E4572E"}, {"label": "Anderson Jose de Santana", "v": 0.0, "color": "#E4572E"}, {"label": "Juliana Patricia Goncalves", "v": 0.0, "color": "#E4572E"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 0.0, "color": "#E4572E"}, {"label": "Rafael Ramos Recalde", "v": 0.0, "color": "#E4572E"}];
+  const d = [{"label": "Suely Aguiar Alves Luiz", "v": 96.3, "color": "#12B76A"}, {"label": "Kátia Cilene Silveira Machado", "v": 86.0, "color": "#F2D93B"}, {"label": "Gilmar Bitencourt Luiz", "v": 85.54, "color": "#F2D93B"}, {"label": "Wesley de Souza Leal", "v": 85.1, "color": "#F2D93B"}, {"label": "Evelyn Santana Santos Oliveira", "v": 84.8, "color": "#F2D93B"}, {"label": "Bianca Afonso Narbaez", "v": 84.32, "color": "#F2D93B"}, {"label": "Fabiana de Figueredo Vieira", "v": 82.29, "color": "#F2D93B"}, {"label": "William Anderson Chamorro Tavares", "v": 80.8, "color": "#F2D93B"}, {"label": "Rosalina Beniel Vargas", "v": 77.2, "color": "#F2D93B"}, {"label": "Naime Cristina Freitas", "v": 75.3, "color": "#F2D93B"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 75.08, "color": "#F2D93B"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 74.23, "color": "#F2994A"}, {"label": "Cicero Isrrael Sanabria", "v": 71.69, "color": "#F2994A"}, {"label": "Gisele Lopes Justiniano", "v": 71.5, "color": "#F2994A"}, {"label": "Adriana de Jesus Saraiva", "v": 70.94, "color": "#F2994A"}, {"label": "Ramona dos Santos Oliveira", "v": 70.56, "color": "#F2994A"}, {"label": "Rozentina Matos de Oliveira", "v": 70.41, "color": "#F2994A"}, {"label": "Cris Milene Cardenas da Silva", "v": 69.93, "color": "#F2994A"}, {"label": "Tania Maria Montania", "v": 60.74, "color": "#F2994A"}, {"label": "Ana Gabriela Silva Garcete", "v": 59.04, "color": "#E4572E"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 58.2, "color": "#E4572E"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 54.29, "color": "#E4572E"}, {"label": "Adriano Ricardo Thiel", "v": 49.24, "color": "#E4572E"}, {"label": "Emidio Rainer Vilhalba", "v": 45.67, "color": "#E4572E"}, {"label": "Selba Ramona Afonso", "v": 42.12, "color": "#E4572E"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 34.44, "color": "#E4572E"}, {"label": "Rozana Reis da Silva", "v": 33.07, "color": "#E4572E"}, {"label": "Walquiria Araujo Flores", "v": 32.01, "color": "#E4572E"}, {"label": "Raquel Ortiz dos Santos", "v": 27.01, "color": "#E4572E"}, {"label": "Teonilda Florentino Vieira", "v": 23.2, "color": "#E4572E"}, {"label": "Carlos Alberto Albiero", "v": 18.1, "color": "#E4572E"}, {"label": "Alana Amanda Fernandes Ovelar", "v": 8.0, "color": "#E4572E"}, {"label": "Wagner Tarlei Gomes", "v": 0.0, "color": "#E4572E"}, {"label": "Gisele Olimpia Torres", "v": 0.0, "color": "#E4572E"}, {"label": "Mateus Falcao de Souza", "v": 0.0, "color": "#E4572E"}, {"label": "Geancarlos Ferreira Barrios", "v": 0.0, "color": "#E4572E"}, {"label": "Miglidiane Maciel Ajala", "v": 0.0, "color": "#E4572E"}, {"label": "Anderson Jose de Santana", "v": 0.0, "color": "#E4572E"}, {"label": "Juliana Patricia Goncalves", "v": 0.0, "color": "#E4572E"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 0.0, "color": "#E4572E"}, {"label": "Rafael Ramos Recalde", "v": 0.0, "color": "#E4572E"}];
   sizeForAgents('chartRanking', d.length);
   new Chart(document.getElementById('chartRanking'), {
     type: 'bar',
@@ -49633,8 +49667,8 @@ new Chart(document.getElementById('chartPendTop'), {
 
 new Chart(document.getElementById('chartAusTop'), {
   type: 'bar',
-  data: { labels: ["Miglidiane Maciel Ajala", "Geancarlos Ferreira Barrios", "Alana Amanda Fernandes Ovelar", "Wagner Tarlei Gomes", "Marco Antonio Ayala de Matos Freitas", "Selba Ramona Afonso", "Juliana Patricia Goncalves", "Tania Maria Montania", "Gisele Olimpia Torres", "Walquiria Araujo Flores", "Teonilda Florentino Vieira", "Claine Luisa Figueiredo Torraca", "Kariele Jackeline Rodrigues Silva", "Rozana Reis da Silva", "Anderson Jose de Santana"],
-    datasets: [{ label: 'Ausências', data: [40, 40, 30, 29, 24, 23, 20, 17, 17, 15, 14, 14, 14, 14, 14], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
+  data: { labels: ["Miglidiane Maciel Ajala", "Geancarlos Ferreira Barrios", "Alana Amanda Fernandes Ovelar", "Wagner Tarlei Gomes", "Marco Antonio Ayala de Matos Freitas", "Selba Ramona Afonso", "Teonilda Florentino Vieira", "Juliana Patricia Goncalves", "Gisele Olimpia Torres", "Tania Maria Montania", "Walquiria Araujo Flores", "Claine Luisa Figueiredo Torraca", "Kariele Jackeline Rodrigues Silva", "Rozana Reis da Silva", "Anderson Jose de Santana"],
+    datasets: [{ label: 'Ausências', data: [40, 40, 30, 29, 24, 23, 20, 20, 17, 17, 15, 14, 14, 14, 14], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
   options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } },
     plugins: { legend: { display: false } } }
