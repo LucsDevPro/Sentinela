@@ -10,32 +10,12 @@
       "Adriano Ricardo Thiel",
       "Wagner Tarlei Gomes"
     ],
-    "inicio": "22/06/2026",
-    "fim": "20/07/2026",
-    "duracao": 21,
+    "inicio": "02/07/2026",
+    "fim": "06/07/2026",
+    "duracao": 3,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "11/08/2026 08:04"
-  },
-  {
-    "tipo": "paralisacao_coletiva",
-    "equipe": "Equipe 2",
-    "agentes_envolvidos": [
-      151,
-      3035,
-      3127
-    ],
-    "nomes_envolvidos": [
-      "Gilmar Bitencourt Luiz",
-      "Gisele Olimpia Torres",
-      "Teonilda Florentino Vieira"
-    ],
-    "inicio": "04/05/2026",
-    "fim": "29/05/2026",
-    "duracao": 20,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "detectado_em": "11/08/2026 08:04"
+    "detectado_em": "11/08/2026 10:55"
   },
   {
     "tipo": "possiveis_ferias",
@@ -52,22 +32,18 @@
     "detectado_em": "10/08/2026 02:07"
   },
   {
-    "tipo": "paralisacao_coletiva",
+    "tipo": "possiveis_ferias",
+    "id_agente": 2951,
+    "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
-    "agentes_envolvidos": [
-      2951,
-      3128
-    ],
-    "nomes_envolvidos": [
-      "Alana Amanda Fernandes Ovelar",
-      "Rosalina Beniel Vargas"
-    ],
-    "inicio": "04/05/2026",
+    "inicio": "15/05/2026",
     "fim": "22/05/2026",
-    "duracao": 15,
-    "status": "pendente",
+    "duracao": 6,
+    "status": "confirmada",
+    "motivo": "Férias/Atestado",
+    "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "11/08/2026 08:04"
+    "detectado_em": "11/08/2026 10:55"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -84,12 +60,12 @@
       "Miglidiane Maciel Ajala",
       "Selba Ramona Afonso"
     ],
-    "inicio": "01/07/2026",
-    "fim": "07/08/2026",
-    "duracao": 28,
+    "inicio": "31/07/2026",
+    "fim": "03/08/2026",
+    "duracao": 2,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "11/08/2026 08:04"
+    "detectado_em": "11/08/2026 10:55"
   },
   {
     "tipo": "possiveis_ferias",
@@ -110,56 +86,20 @@
     "equipe": "Equipe 4",
     "agentes_envolvidos": [
       86,
-      124,
       149,
-      1942,
       1943
     ],
     "nomes_envolvidos": [
       "Juliana Patricia Goncalves",
       "Kátia Cilene Silveira Machado",
-      "Rafael Ramos Recalde",
-      "Ramona dos Santos Oliveira",
       "Silvina Regina de Souza Valiente"
     ],
-    "inicio": "01/06/2026",
-    "fim": "05/08/2026",
-    "duracao": 48,
+    "inicio": "29/06/2026",
+    "fim": "30/06/2026",
+    "duracao": 2,
     "status": "pendente",
     "categoria_coletiva": null,
-    "detectado_em": "11/08/2026 08:04"
-  },
-  {
-    "tipo": "paralisacao_coletiva",
-    "equipe": "Equipe Bloqueio",
-    "agentes_envolvidos": [
-      109,
-      122,
-      126,
-      155,
-      162,
-      476,
-      1088,
-      1934,
-      2101
-    ],
-    "nomes_envolvidos": [
-      "Alvaro Delgado Brandao",
-      "Anderson Salabarrieto",
-      "André Luiz Benites Rocha",
-      "Emerson de Carvalho Miranda",
-      "Fabio Teodoro Alves Alexo",
-      "Josoé de Oliveira",
-      "Marcos Alcindo Insalbralde",
-      "Robson Pavão Montania",
-      "Silvio de Aquino"
-    ],
-    "inicio": "04/05/2026",
-    "fim": "07/08/2026",
-    "duracao": 70,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "detectado_em": "11/08/2026 08:04"
+    "detectado_em": "11/08/2026 10:55"
   },
   {
     "tipo": "possiveis_ferias",
