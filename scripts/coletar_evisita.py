@@ -519,8 +519,21 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                     "tipo": "paralisacao_coletiva", "equipe": equipe,
                     "agentes_envolvidos": sorted({m["id_agente"] for m in membros}),
                     "nomes_envolvidos": sorted({m["nome_agente"] for m in membros}),
+                    # "inicio"/"fim" = a INTERSEÇÃO (o período em que TODOS
+                    # estavam ausentes ao mesmo tempo) — é só pra rotular o
+                    # evento e mostrar "eles pararam juntos aqui". A
+                    # EXCLUSÃO de verdade usa "membros" abaixo, com o
+                    # período INDIVIDUAL completo de cada um — sem isso, um
+                    # agente cuja férias só toca a de outro por 2 dias teria
+                    # só esses 2 dias excluídos, e o resto da férias dele
+                    # ficaria sem excluir por engano.
                     "inicio": intersecao_ini.strftime("%d/%m/%Y"), "fim": intersecao_fim.strftime("%d/%m/%Y"),
                     "duracao": len(_dias_uteis_no_intervalo(intersecao_ini, intersecao_fim)),
+                    "membros": [
+                        {"id_agente": m["id_agente"], "nome_agente": m["nome_agente"],
+                         "inicio": m["inicio"].strftime("%d/%m/%Y"), "fim": m["fim"].strftime("%d/%m/%Y")}
+                        for m in membros
+                    ],
                 })
             else:
                 m = membros[0]
@@ -640,12 +653,25 @@ def _cronograma_efetivo(deteccoes):
             sufixo = "" if "(automático)" in motivo or "(confirmada)" in motivo else " (automático)"
             efetivo.append({"alvo": "agente", "id_agente": e["id_agente"], "motivo": f"{motivo}{sufixo}",
                              "inicio": e["inicio"], "fim": e["fim"]})
-        else:  # paralisacao_coletiva confirmada — um registro por agente envolvido (não a equipe toda,
-               # só quem realmente ficou parado, caso nem todo mundo da equipe tenha sido pego no evento)
+        else:  # paralisacao_coletiva confirmada — um registro por agente
+               # envolvido, usando o período INDIVIDUAL completo de cada um
+               # (guardado em "membros"), não a interseção do grupo — senão
+               # um agente cuja férias só toca a de outro por 2 dias teria
+               # só esses 2 dias excluídos, e o resto da férias real dele
+               # ficaria sem excluir por engano (bug real, já corrigido).
             motivo = e.get("categoria_coletiva") or "Outra atividade coletiva"
-            for id_ag in e.get("agentes_envolvidos", []):
-                efetivo.append({"alvo": "agente", "id_agente": id_ag, "motivo": f"{motivo} (confirmada)",
-                                 "inicio": e["inicio"], "fim": e["fim"]})
+            membros = e.get("membros")
+            if membros:
+                for m in membros:
+                    efetivo.append({"alvo": "agente", "id_agente": m["id_agente"], "motivo": f"{motivo} (confirmada)",
+                                     "inicio": m["inicio"], "fim": m["fim"]})
+            else:
+                # Compatibilidade com eventos antigos gerados antes dessa
+                # correção (sem "membros" salvo) — cai pra interseção mesmo,
+                # melhor que nada até serem regerados do zero na próxima coleta.
+                for id_ag in e.get("agentes_envolvidos", []):
+                    efetivo.append({"alvo": "agente", "id_agente": id_ag, "motivo": f"{motivo} (confirmada)",
+                                     "inicio": e["inicio"], "fim": e["fim"]})
     return efetivo
 
 # --- 14) COLETA DE PENDÊNCIA (fechados/recusados) ---------------------------

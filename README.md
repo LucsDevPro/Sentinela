@@ -317,6 +317,18 @@ exato desse bug (A toca B, B toca C, A nunca toca C) e confirmei: A agora
 aparece como férias individual separada, e só B+C (que realmente se
 sobrepuseram) formam um evento coletivo pequeno e preciso.
 
+**Exclusão individual completa, mesmo dentro de um grupo coletivo:** a
+correção acima trouxe um efeito colateral que também corrigi — quando 2+
+agentes formam um grupo, o período do EVENTO (pra rotular/exibir) é a
+interseção (o dia em comum), mas cada agente é excluído dos cálculos pelo
+período INDIVIDUAL completo dele, não só pela interseção. Sem isso, um
+agente cuja férias de 20 dias só tocasse a de outro por 2 dias teria só
+esses 2 dias excluídos — o resto ficaria contando como ausência normal por
+engano (era a causa da maioria das férias automáticas não aparecerem
+direito). Testei com esse cenário exato (agente com férias de 19 dias,
+outro de 11 dias, se tocando só em 5) e confirmei: cada um agora tem o
+período completo excluído.
+
 **Equipes sem detecção automática:** cadastre em
 `EQUIPES_SEM_DETECCAO_AUTOMATICA`, em `scripts/coletar_evisita.py`, o nome
 de equipes que não devem passar pela detecção — por padrão, "Equipe
