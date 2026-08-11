@@ -374,6 +374,13 @@ CRONOGRAMA_AUSENCIAS = _carregar_cronograma_ausencias()
 # ver _cronograma_efetivo() logo abaixo).
 LIMITE_DIAS_SEM_LANCAMENTO_FERIAS = 5
 
+# Equipes que NÃO passam pela detecção automática de férias/paralisação —
+# times pequenos, com dinâmica diferente do resto (ex.: atividade sazonal,
+# entra e sai da rotina normal), onde faz mais sentido cadastrar férias na
+# mão em data/cronograma_ausencias.json do que confiar na detecção
+# automática. Comparação sem diferenciar maiúsculas/minúsculas.
+EQUIPES_SEM_DETECCAO_AUTOMATICA = ["Equipe Bloqueio"]
+
 # Feriados nacionais/locais a ignorar na contagem de dias úteis consecutivos
 # — formato "dd/mm/aaaa". Vazio por padrão; cadastre aqui os feriados de
 # 2026 que afetam a equipe, senão eles entram como "dia sem lançamento" na
@@ -418,20 +425,38 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
     """Ponto de entrada da detecção — roda em cima do df_total/resultados já
     consolidados (mesma coisa usada pra gerar o Excel). Retorna uma lista de
     eventos candidatos (ainda sem status; quem decide status é
-    atualizar_deteccoes_pendentes(), que faz o merge com o que já existia)."""
+    atualizar_deteccoes_pendentes(), que faz o merge com o que já existia).
+
+    IMPORTANTE: cada agente só é avaliado a partir da PRÓPRIA primeira
+    visita, nunca da data mínima global do sistema. Sem isso, um agente
+    (ou equipe inteira) que começou a trabalhar depois do início do
+    período rastreado — ex.: uma atividade sazonal que só começa mais
+    tarde — teria todo o intervalo ANTES de existir contado como "dias sem
+    lançamento", gerando férias/paralisação falsas logo no início do
+    período de cada um (e, como vários agentes da mesma equipe têm essa
+    mesma falsa ausência se sobrepondo desde o mesmo dia, isso também
+    inflava paralisações coletivas em bolhas enormes juntando gente que
+    não tinha nada a ver uma com a outra)."""
     if df_total.empty:
         return []
-    data_min, data_max = df_total["dia"].min(), df_total["dia"].max()
-    dias_uteis = _dias_uteis_no_intervalo(data_min, data_max)
-    if not dias_uteis:
-        return []
+    data_max = df_total["dia"].max()
 
     info_agente = {res["id_agente"]: (res["nome_agente"], res["equipe"]) for res in resultados}
+    equipes_ignoradas = {e.lower() for e in EQUIPES_SEM_DETECCAO_AUTOMATICA}
     runs_por_agente = {}
     for res in resultados:
-        dias_com_visita = set(res["df"]["dia"]) if not res["df"].empty else set()
-        faltando = {d for d in dias_uteis if d not in dias_com_visita}
-        runs = _runs_consecutivos_uteis(dias_uteis, faltando)
+        if res["equipe"].lower() in equipes_ignoradas:
+            continue  # equipe cadastrada em EQUIPES_SEM_DETECCAO_AUTOMATICA — não avalia
+        df_ag = res["df"]
+        if df_ag.empty:
+            continue
+        primeiro_dia_agente = df_ag["dia"].min()  # não a data mínima global — a do PRÓPRIO agente
+        dias_uteis_agente = _dias_uteis_no_intervalo(primeiro_dia_agente, data_max)
+        if not dias_uteis_agente:
+            continue
+        dias_com_visita = set(df_ag["dia"])
+        faltando = {d for d in dias_uteis_agente if d not in dias_com_visita}
+        runs = _runs_consecutivos_uteis(dias_uteis_agente, faltando)
         if runs:
             runs_por_agente[res["id_agente"]] = runs
 
@@ -447,8 +472,16 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                 candidatos.append({"id_agente": id_ag, "nome_agente": nome, "equipe": equipe,
                                     "inicio": ini, "fim": fim, "duracao": dur})
 
-    # Agrupa candidatos da MESMA equipe cujo período se sobrepõe — 2+
-    # agentes = paralisação coletiva, não férias individual.
+    # Agrupa candidatos da MESMA equipe que estiveram ausentes AO MESMO
+    # TEMPO de verdade (interseção real do período) — 2+ agentes = possível
+    # paralisação coletiva, não férias individual.
+    #
+    # IMPORTANTE: não é "sobrepõe com QUALQUER membro já no grupo" (isso
+    # forma uma CORRENTE — A toca em B, B toca em C, e o grupo vira uma
+    # bolha de meses juntando gente que nunca ficou ausente ao mesmo tempo,
+    # como A e C aqui). É sobrepor com a INTERSEÇÃO do grupo até agora, que
+    # só pode encolher conforme mais gente entra — garante que todo mundo
+    # do grupo final tenha pelo menos um dia em comum ausente junto.
     eventos, usados = [], set()
     por_equipe = {}
     for i, c in enumerate(candidatos):
@@ -462,6 +495,8 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                 continue
             grupo = [i]
             usados.add(i)
+            intersecao_ini = candidatos[i]["inicio"]
+            intersecao_fim = candidatos[i]["fim"]
             mudou = True
             while mudou:
                 mudou = False
@@ -469,24 +504,23 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
                     if j in usados:
                         continue
                     c_j = candidatos[j]
-                    # sobrepõe com QUALQUER membro já no grupo?
-                    if any(c_j["inicio"] <= candidatos[k]["fim"] and c_j["fim"] >= candidatos[k]["inicio"]
-                           for k in grupo):
+                    novo_ini = max(intersecao_ini, c_j["inicio"])
+                    novo_fim = min(intersecao_fim, c_j["fim"])
+                    if novo_ini <= novo_fim:  # ainda sobra pelo menos 1 dia em comum pro grupo inteiro
                         grupo.append(j)
                         usados.add(j)
                         idxs_restantes.remove(j)
+                        intersecao_ini, intersecao_fim = novo_ini, novo_fim
                         mudou = True
 
             membros = [candidatos[k] for k in grupo]
             if len(membros) >= 2:
-                ini = min(m["inicio"] for m in membros)
-                fim = max(m["fim"] for m in membros)
                 eventos.append({
                     "tipo": "paralisacao_coletiva", "equipe": equipe,
                     "agentes_envolvidos": sorted({m["id_agente"] for m in membros}),
                     "nomes_envolvidos": sorted({m["nome_agente"] for m in membros}),
-                    "inicio": ini.strftime("%d/%m/%Y"), "fim": fim.strftime("%d/%m/%Y"),
-                    "duracao": len(_dias_uteis_no_intervalo(ini, fim)),
+                    "inicio": intersecao_ini.strftime("%d/%m/%Y"), "fim": intersecao_fim.strftime("%d/%m/%Y"),
+                    "duracao": len(_dias_uteis_no_intervalo(intersecao_ini, intersecao_fim)),
                 })
             else:
                 m = membros[0]
@@ -538,6 +572,8 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
         if anterior and anterior.get("status") in STATUS_PROTEGIDOS:
             anterior["fim"] = novo["fim"]
             anterior["duracao"] = novo["duracao"]
+            anterior.pop("revisao_necessaria", None)  # o padrão voltou a aparecer — não precisa mais de revisão
+            anterior.pop("nota_revisao", None)
             finais.append(anterior)
         elif novo["tipo"] == "possiveis_ferias":
             novo["status"] = "confirmada"
@@ -552,9 +588,24 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
             novo["detectado_em"] = datetime.now().strftime("%d/%m/%Y %H:%M")
             finais.append(novo)
 
+    n_revisao = 0
     for k, anterior in por_chave.items():
         if k not in vistos and anterior.get("status") in STATUS_PROTEGIDOS:
-            finais.append(anterior)  # histórico de decisões — nunca apaga
+            # Uma decisão já tomada (confirmada/falta) que a análise ATUAL não
+            # gera mais — pode ser um dado que mudou, ou (como aconteceu de
+            # verdade aqui) uma correção no cálculo que revelou que a
+            # detecção original era um falso positivo. Mantém a decisão
+            # em vigor (não desfaz sozinho — pode ser uma correção legítima
+            # de dados também), mas marca pra revisão em vez de proteger
+            # essa decisão pra sempre sem ninguém saber que precisa olhar
+            # de novo.
+            if not anterior.get("revisao_necessaria"):
+                n_revisao += 1
+            anterior["revisao_necessaria"] = True
+            anterior["nota_revisao"] = ("O padrão que gerou esta detecção não aparece mais na análise atual "
+                                         "— pode ser correção de dados, ou uma correção no sistema que revelou "
+                                         "um falso positivo. Confira se a decisão ainda faz sentido.")
+            finais.append(anterior)
 
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(finais, f, ensure_ascii=False, indent=2)
@@ -565,6 +616,9 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
     if n_pend:
         log.info("🔎 %s paralisação(ões) coletiva(s) pendente(s) de motivo em %s (abra deteccao_editor.html).",
                   n_pend, caminho)
+    if n_revisao:
+        log.warning("⚠️ %s decisão(ões) antiga(s) marcada(s) pra revisão em %s — o padrão que gerou "
+                     "não aparece mais na análise atual (abra deteccao_editor.html).", n_revisao, caminho)
     return finais
 
 
@@ -1644,6 +1698,7 @@ COLS_ALMOCO = [
 ]
 
 COLS_AUSENCIAS = [
+    ("ID Agente", "id_agente"),
     ("Agente", "nome_agente"),
     ("Equipe", "equipe"),
     ("Dia", "dia_fmt"),
@@ -2190,16 +2245,17 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None):
     uma visita registrada. Se não houve, lista como possível ausência
     (folga, atestado, falta — precisa confirmar com a escala da equipe).
 
-    O período considerado é do primeiro ao último dia com QUALQUER visita
-    coletada (de qualquer agente), já que não temos o calendário oficial de
-    escala/férias de cada um.
+    IMPORTANTE: cada agente só é avaliado a partir da PRÓPRIA primeira
+    visita, nunca da data mínima global (mesma correção aplicada em
+    detectar_ausencias_e_paralisacoes — ver o comentário lá pro porquê:
+    sem isso, um agente/equipe que começou depois do início do período
+    rastreado aparece com uma enxurrada de "possível ausência" falsa pra
+    cada dia antes de sequer ter começado a trabalhar).
     """
     if df_total.empty:
         return []
 
-    dia_min = df_total["dia"].min()
     dia_max = df_total["dia"].max()
-    dias_uteis = pd.bdate_range(start=dia_min, end=dia_max)  # só dias úteis (seg-sex)
 
     turnos_oficiais = [
         ("Manhã", HORA_EXPEDIENTE_MANHA_INICIO, HORA_EXPEDIENTE_MANHA_FIM),
@@ -2209,6 +2265,10 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None):
     registros = []
     for res in resultados:
         df_ag = df_total[df_total["id_agente"] == res["id_agente"]]
+        if df_ag.empty:
+            continue
+        dia_min_agente = df_ag["dia"].min()  # não a data mínima global — a do PRÓPRIO agente
+        dias_uteis = pd.bdate_range(start=dia_min_agente, end=dia_max)
         dias_com_visita = set(df_ag["dia"])
 
         for dia_ts in dias_uteis:
@@ -2228,6 +2288,7 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None):
                 if motivo:
                     continue  # dia/turno já explicado (cronograma, ou detecção confirmada) — não é ausência a investigar
                 registros.append({
+                    "id_agente": res["id_agente"],
                     "nome_agente": res["nome_agente"],
                     "equipe": res["equipe"],
                     "dia_fmt": dia.strftime("%d/%m/%Y"),
@@ -2373,13 +2434,18 @@ def _preparar_ranking(resultados, regs_ausencias):
       - lista principal ordenada por pontuação (posição 1 = maior pontuação)
       - lista de detalhamento (todos os critérios aplicados, por agente)
     """
-    ausencias_por_agente = {}
+    ausencias_por_agente = {}  # id_agente -> contagem — NUNCA por nome (agentes
+    # diferentes podem ter o mesmo nome; contar por nome misturaria as
+    # ausências de um com a pontuação do outro)
     for r in regs_ausencias:
-        ausencias_por_agente[r["nome_agente"]] = ausencias_por_agente.get(r["nome_agente"], 0) + 1
+        id_ag = r.get("id_agente")
+        if id_ag is None:
+            continue
+        ausencias_por_agente[id_ag] = ausencias_por_agente.get(id_ag, 0) + 1
 
     principal, todos_detalhes = [], []
     for res in resultados:
-        qtd_ausencias = ausencias_por_agente.get(res["nome_agente"], 0)
+        qtd_ausencias = ausencias_por_agente.get(res["id_agente"], 0)
         pontos, classif, fill, detalhes = calcular_pontuacao(res, qtd_ausencias)
         principal.append({
             "nome_agente": res["nome_agente"],

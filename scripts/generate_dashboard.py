@@ -237,7 +237,7 @@ ALERT_COLS = {
     "Diferença p/ Anterior (s)*": "diferenca_s",
 }
 AUSENCIA_COLS = {
-    "Agente": "agente", "Equipe": "equipe", "Dia": "dia", "Dia da Semana": "dia_semana",
+    "ID Agente": "id_agente", "Agente": "agente", "Equipe": "equipe", "Dia": "dia", "Dia da Semana": "dia_semana",
     "Turno": "turno", "Observação": "observacao",
 }
 PENDENCIA_COLS = {
@@ -486,10 +486,21 @@ def build_ausencias_agg(aus):
     for _, r in aus.iterrows():
         if r["Dia da Semana"] in heat and r["Turno"] in heat[r["Dia da Semana"]]:
             heat[r["Dia da Semana"]][r["Turno"]] += 1
-    top15 = aus.groupby("Agente").size().sort_values(ascending=False).head(15)
+    # Agrupa por ID quando disponível — NUNCA por nome sozinho, porque
+    # agentes diferentes podem ter o mesmo nome (juntaria as ausências de
+    # gente diferente na mesma linha do Top 15). Planilhas antigas (geradas
+    # antes da coluna "ID Agente" existir) caem no fallback por nome.
+    if "ID Agente" in aus.columns:
+        grp = aus.groupby("ID Agente")
+        top15_raw = grp.size().sort_values(ascending=False).head(15)
+        nome_por_id = aus.drop_duplicates("ID Agente").set_index("ID Agente")["Agente"]
+        top15 = [[nome_por_id.get(idx, str(idx)), int(v)] for idx, v in top15_raw.items()]
+    else:
+        top15_raw = aus.groupby("Agente").size().sort_values(ascending=False).head(15)
+        top15 = [[k, int(v)] for k, v in top15_raw.items()]
     by_dia, by_turno = aus["Dia da Semana"].value_counts(), aus["Turno"].value_counts()
     return dict(
-        heat=heat, top15=[[k, int(v)] for k, v in top15.items()],
+        heat=heat, top15=top15,
         dia_critico=by_dia.idxmax() if len(by_dia) else "—", dia_critico_n=int(by_dia.max() if len(by_dia) else 0),
         turno_critico=by_turno.idxmax() if len(by_turno) else "—", turno_critico_n=int(by_turno.max() if len(by_turno) else 0),
     )

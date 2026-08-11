@@ -244,6 +244,25 @@ visitas rápidas nesses 2 dias virava um mês inteiro péssimo (comprovado:
 Com o teto em 2x, o mesmo caso vira só 3,6 pontos — ainda descontado, mas
 proporcional à amostra pequena, sem extrapolar demais.
 
+**Contagem de ausências por ID, não por nome:** a pontuação contava
+ausências agrupando pelo NOME do agente — se dois agentes tivessem o
+mesmo nome (comum em equipes grandes), as ausências de um contaminavam a
+pontuação do outro. Corrigido pra agrupar por ID (que é único de verdade).
+Testei com dois agentes chamados "Maria Silva" (IDs diferentes, uma sem
+nenhuma falta e outra com falta frequente) e confirmei: pontuações
+completamente independentes agora. O mesmo bug existia na lista "Top 15
+com mais ausências" do dashboard — corrigido junto (a planilha agora tem
+uma coluna "ID Agente" na aba Ausências, só pra isso).
+
+**Decisões antigas que ficaram desatualizadas por uma correção:** se você
+já tinha CONFIRMADO uma detecção (férias ou paralisação) antes de alguma
+dessas correções, e o padrão que gerou ela não é mais detectado do jeito
+certo, o sistema não desfaz a decisão sozinho (pode ser arriscado) — em
+vez disso, marca com `"revisao_necessaria": true` e um aviso explicando o
+motivo. No `deteccao_editor.html`, esses itens aparecem destacados no topo
+da lista, com um botão "🗑️ Remover (não era válido)". A exclusão continua
+valendo até você decidir algo — só fica sinalizada pra você conferir.
+
 ## Como funciona dali pra frente
 
 **Automático:** o workflow roda sozinho segunda, terça e quinta às 3h (horário de
@@ -272,6 +291,40 @@ que falhou ou o e-Visita fora do ar; erros de geração geralmente são aba ou
 coluna da planilha renomeada).
 
 ## Detecção automática de possíveis férias e paralisação coletiva
+
+**Cada agente é avaliado a partir da PRÓPRIA primeira visita, nunca da
+data mínima do sistema inteiro.** Sem isso, um agente (ou equipe inteira)
+que começou a trabalhar depois do início do período rastreado — ex.: uma
+atividade sazonal — teria todo o tempo ANTES de existir contado como
+"dias sem lançamento", gerando férias/paralisações falsas logo no início
+do período de cada um (e, como vários agentes da mesma equipe têm essa
+mesma falsa ausência se sobrepondo desde o mesmo dia, isso também inflava
+paralisações coletivas em bolhas de meses de duração, juntando gente que
+não tinha nada a ver uma com a outra). Testei com um cenário reproduzindo
+exatamente esse padrão (equipe inteira começando 8 semanas depois do
+início do período) e confirmei: zero eventos falsos, tanto individuais
+quanto coletivos. **Essa mesma correção também estava faltando na aba
+"Ausências" em si** (não só na detecção de férias) — corrigido junto.
+
+**Agrupamento de paralisação coletiva por interseção real, não corrente:**
+o agrupamento antigo juntava um agente ao grupo se ele se sobrepusesse com
+QUALQUER outro membro já no grupo — isso forma uma CORRENTE (as férias de
+A tocam nas de B, as de B tocam nas de C, e o grupo vira uma bolha de
+meses mesmo que A e C nunca tivessem ficado ausentes ao mesmo tempo).
+Corrigido pra exigir que o grupo inteiro tenha uma interseção real (pelo
+menos um dia em comum entre TODOS os membros) — testei com o cenário
+exato desse bug (A toca B, B toca C, A nunca toca C) e confirmei: A agora
+aparece como férias individual separada, e só B+C (que realmente se
+sobrepuseram) formam um evento coletivo pequeno e preciso.
+
+**Equipes sem detecção automática:** cadastre em
+`EQUIPES_SEM_DETECCAO_AUTOMATICA`, em `scripts/coletar_evisita.py`, o nome
+de equipes que não devem passar pela detecção — por padrão, "Equipe
+Bloqueio" (time pequeno, dinâmica diferente do resto, com férias
+cadastradas na mão em `data/cronograma_ausencias.json`).
+```python
+EQUIPES_SEM_DETECCAO_AUTOMATICA = ["Equipe Bloqueio"]
+```
 
 Além do cronograma manual (acima), o sistema também **detecta sozinho**
 quando um agente fica muitos dias úteis seguidos sem lançar nenhuma visita
