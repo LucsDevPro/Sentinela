@@ -11,18 +11,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1935": {
-    "nome_agente": "Gabriel Alan de Oliveira Martins",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 21,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "402 - JARDIM MARAMBAIA": 21
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "116": {
     "nome_agente": "Wagner Tarlei Gomes",
     "equipe": "Equipe 1",
@@ -30,6 +18,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "400 - JULIA CARDINAL": 7
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "1935": {
+    "nome_agente": "Gabriel Alan de Oliveira Martins",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 21,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "402 - JARDIM MARAMBAIA": 21
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -54,18 +54,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "403 - JARDIM UNIVERSITARIO": 21
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "79": {
-    "nome_agente": "Raquel Ortiz dos Santos",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 10,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "406 - JARDIM PRIMAVERA": 10
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -98,6 +86,18 @@
         "equipe": "Equipe 1"
       }
     ],
+    "paginas_falhas": []
+  },
+  "79": {
+    "nome_agente": "Raquel Ortiz dos Santos",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 10,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "406 - JARDIM PRIMAVERA": 10
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
   "3101": {
@@ -209,18 +209,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "465": {
-    "nome_agente": "Suely Aguiar Alves Luiz",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 5,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "414 - PARQUE DOS ERVAIS": 5
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "81": {
     "nome_agente": "Wesley de Souza Leal",
     "equipe": "Equipe 2",
@@ -228,6 +216,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "417 - CENTRO 3": 3
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "465": {
+    "nome_agente": "Suely Aguiar Alves Luiz",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 5,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "414 - PARQUE DOS ERVAIS": 5
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -253,6 +253,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "120": {
+    "nome_agente": "Emidio Rainer Vilhalba",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 8,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "430 - VILA RENÔ": 8
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "113": {
     "nome_agente": "Selba Ramona Afonso",
     "equipe": "Equipe 3",
@@ -265,13 +277,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "120": {
-    "nome_agente": "Emidio Rainer Vilhalba",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 8,
+  "85": {
+    "nome_agente": "Adriano Ricardo Thiel",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 19,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "430 - VILA RENÔ": 8
+      "407 - MOOCA": 19
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -301,18 +313,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "85": {
-    "nome_agente": "Adriano Ricardo Thiel",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 19,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "407 - MOOCA": 19
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3038": {
     "nome_agente": "Naime Cristina Freitas",
     "equipe": "Equipe 3",
@@ -320,18 +320,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "423 - SANTA IZABEL": 29
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3128": {
-    "nome_agente": "Rosalina Beniel Vargas",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 75,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "424 - SÃO JOÃO": 75
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -349,13 +337,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1936": {
-    "nome_agente": "Geancarlos Ferreira Barrios",
+  "3128": {
+    "nome_agente": "Rosalina Beniel Vargas",
     "equipe": "Equipe 3",
-    "imoveis_fechados": 17,
+    "imoveis_fechados": 74,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "427 - JAMIL SALDANHA DERZI": 17
+      "424 - SÃO JOÃO": 74
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -368,6 +356,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "441 - PARQUE DOS IPES": 21
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "1936": {
+    "nome_agente": "Geancarlos Ferreira Barrios",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 17,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "427 - JAMIL SALDANHA DERZI": 17
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -428,6 +428,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "439 - BOSQUE CARANDÁ": 23
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "157": {
+    "nome_agente": "Walquiria Araujo Flores",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 4,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "440 - JARDIM IBIRAPUERA": 4
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
