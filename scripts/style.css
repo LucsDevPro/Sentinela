@@ -191,10 +191,49 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   body.print-mode .table-section.print-target .table-hint { display: none !important; }
   .sticky-col, table.data-table thead th { position: static !important; }
   .table-wrap { overflow: visible !important; }
-  table.data-table { font-size: 9px !important; }
+  table.data-table { font-size: 9px !important; width: 100% !important; }
   table.data-table td, table.data-table th { white-space: normal !important; word-break: break-word; }
   a.id-link { color: inherit !important; text-decoration: none !important; }
+
+  /* Sem isso o Chrome/Firefox apagam as cores de fundo por padrão ao
+     imprimir — some o zebrado, o header cinza da tabela e o destaque
+     vermelho/amarelo das linhas críticas/atenção, ficando tudo branco. */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+
+  /* Repete a linha de cabeçalho (nome das colunas) em TODA página em que a
+     tabela continuar — sem isso, uma tabela de 200 linhas que ocupa 4
+     páginas só mostra "Nome / Equipe / Turno..." na primeira, e nas
+     páginas seguintes é uma parede de números sem saber o que é cada
+     coluna. */
+  table.data-table thead { display: table-header-group; }
+  table.data-table tfoot { display: table-footer-group; }
+
+  /* Nunca corta uma linha ao meio entre duas páginas (ficaria com a
+     primeira metade dos dados numa página e o resto na outra) — o
+     navegador empurra a linha inteira pra próxima página se não couber
+     inteira na atual. */
+  table.data-table tr { page-break-inside: avoid; }
+
+  /* O título da seção (h3) nunca fica sozinho no fim de uma página com a
+     tabela inteira começando só na próxima — mantém título e pelo menos a
+     primeira linha grudados. */
+  .table-section h3 { page-break-after: avoid; }
+
+  /* As setinhas de ordenação (▲▼) e o cursor de "clicável" não fazem
+     sentido no papel — é interação de tela, só polui visualmente. */
+  table.sortable thead th::after { display: none !important; }
+  table.sortable thead th { cursor: default !important; }
+
+  /* Zebrado leve pra facilitar acompanhar a linha com o olho numa tabela
+     larga — no navegador o hover já ajuda nisso, no papel não tem hover. */
+  table.data-table tbody tr:nth-child(even) { background: #F3F6FA; }
+  table.data-table tbody tr:hover { background: inherit; }
+
+  /* Evita título "órfão" (sozinho no fim da página) ou "viúvo" (sozinho no
+     topo) em qualquer texto corrido que sobre no relatório. */
+  h1, h2, h3, p, li { orphans: 3; widows: 3; }
 }
+
 @media (prefers-reduced-motion: reduce) { .section { animation: none; } }
 
 /* Relatório completo (todas as abas empilhadas, uma por página) */
@@ -202,6 +241,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   body.print-mode-full .section { display: block !important; page-break-after: always; }
   body.print-mode-full .section:last-child { page-break-after: auto; }
   body.print-mode-full .table-section { display: block !important; box-shadow: none !important; border: none !important; }
+  /* Duas ou mais tabelas na MESMA aba (ex.: Ausências + Férias/Atestado)
+     — cada uma começa numa página nova também, senão a segunda tabela
+     nasce colada no meio da página onde a primeira terminou, cortando o
+     título dela ao meio visualmente. A primeira tabela da aba (que já
+     vem logo depois do título da seção/KPIs) fica sem quebra antes, pra
+     não deixar uma página em branco à toa. */
+  body.print-mode-full .table-section { page-break-before: always; }
+  body.print-mode-full .section > .table-section:first-of-type { page-break-before: avoid; }
   body.print-mode-full .kpi-grid { display: grid !important; }
   body.print-mode-full .legend-box { display: block !important; }
   body.print-mode-full::before {
