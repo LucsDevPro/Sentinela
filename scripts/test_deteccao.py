@@ -101,6 +101,20 @@ def teste_1_ferias_individual():
     checar("Teste 1 — férias individual detectada", len(ferias) == 1, f"eventos={eventos}")
     if ferias:
         checar("Teste 1 — duração > 5 dias úteis", ferias[0]["duracao"] > 5, str(ferias[0]))
+        checar("Teste 1 — inicio/fim são strings dd/mm/aaaa (serializáveis em JSON)",
+               isinstance(ferias[0]["inicio"], str) and isinstance(ferias[0]["fim"], str), str(ferias[0]))
+
+    # Round-trip real pelo JSON — é exatamente esse passo que pegou o bug de
+    # verdade (datetime.date não é serializável, ia quebrar rodar_deteccao_completa
+    # / consolidar_semanas todo run que tivesse uma férias nova pra confirmar).
+    import os
+    caminho = "/tmp/deteccoes_ferias_teste.json"
+    if os.path.exists(caminho):
+        os.remove(caminho)
+    deteccoes = ce.atualizar_deteccoes_pendentes(eventos, caminho=caminho)
+    checar("Teste 1 — grava em JSON sem quebrar (datas viraram string)", os.path.exists(caminho))
+    if os.path.exists(caminho):
+        os.remove(caminho)
 
 
 # ============================================================ Teste 2 ====

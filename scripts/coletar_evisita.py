@@ -514,7 +514,8 @@ def _detectar_ferias_individuais(df_total, resultados, data_max, equipes_ignorad
                 nome, equipe = info_agente[res["id_agente"]]
                 eventos.append({
                     "tipo": "possiveis_ferias", "id_agente": res["id_agente"], "nome_agente": nome,
-                    "equipe": equipe, "inicio": ini, "fim": fim, "duracao": dur,
+                    "equipe": equipe, "inicio": ini.strftime("%d/%m/%Y"), "fim": fim.strftime("%d/%m/%Y"),
+                    "duracao": dur,
                 })
                 ferias_por_agente.setdefault(res["id_agente"], []).append((ini, fim))
     return eventos, ferias_por_agente, janela_por_agente
@@ -758,16 +759,16 @@ PONTOS_PERDA_VISITA_ALMOCO         = 0.5   # por visita registrada no horário d
 PONTOS_PERDA_DIA_SEM_META          = 0.5   # por dia trabalhado que não bateu a meta diária de visitas
 
 # --- GANHOS (pontos ganhos por ocorrência ou bônus único no período) ---
-PONTOS_GANHO_DIA_COM_META          = 0.5   # por dia que bateu a meta diária de visitas
+PONTOS_GANHO_DIA_COM_META          = 1     # por dia que bateu a meta diária de visitas
 PONTOS_GANHO_SEM_VISITA_RAPIDA     = 5     # bônus único: ZERO visitas rápidas no período inteiro
 PONTOS_GANHO_SEM_AUSENCIA          = 5     # bônus único: ZERO turnos sem lançamento no período inteiro
 PONTOS_GANHO_PONTUALIDADE_PERFEITA = 3     # bônus único: ZERO violações de horário (início/fim) no período
 
 # Faixas de classificação da pontuação final
-NOTA_FAIXA_EXCELENTE = 90   # >= 90        -> 🟢 EXCELENTE
-NOTA_FAIXA_BOM        = 75  # 75 a 89,9    -> 🟡 BOM
-NOTA_FAIXA_ATENCAO    = 60  # 60 a 74,9    -> 🟠 ATENÇÃO
-                              # abaixo de 60 -> 🔴 CRÍTICO
+NOTA_FAIXA_EXCELENTE = 85   # >= 85        -> 🟢 EXCELENTE
+NOTA_FAIXA_BOM        = 70  # 70 a 84,9    -> 🟡 BOM
+NOTA_FAIXA_ATENCAO    = 60  # 60 a 69,9    -> 🟠 ATENÇÃO
+                              # abaixo de 60 (<= 59) -> 🔴 CRÍTICO
 
 # ============================================================
 # Fim dos parâmetros editáveis — o restante do código normalmente não
