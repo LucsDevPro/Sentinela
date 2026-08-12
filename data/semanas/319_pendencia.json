@@ -1,14 +1,4 @@
 {
-  "3037": {
-    "nome_agente": "Evelyn Santana Santos Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 0,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {},
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3101": {
     "nome_agente": "Carlos Alberto Albiero",
     "equipe": "Equipe 1",
@@ -46,6 +36,16 @@
   "2721": {
     "nome_agente": "Miglidiane Maciel Ajala",
     "equipe": "Equipe 3",
+    "imoveis_fechados": 0,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {},
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3037": {
+    "nome_agente": "Evelyn Santana Santos Oliveira",
+    "equipe": "Equipe 1",
     "imoveis_fechados": 0,
     "imoveis_recusados": 0,
     "fechados_por_area": {},
