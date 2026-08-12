@@ -341,6 +341,59 @@ MOTIVOS_CRONOGRAMA = [
 ]
 
 
+CAMINHO_CACHE_NOMES_AGENTES = "data/agentes_nomes.json"
+_cache_nomes_agentes_mem = {}  # caminho -> dict carregado (lazy) — ver _cache_nomes_agentes()
+
+
+def _cache_nomes_agentes(caminho=CAMINHO_CACHE_NOMES_AGENTES):
+    """Cache persistente ID -> {nome, equipe}, mantido em memória durante a
+    execução pra não reabrir o arquivo a cada agente/semana. É a mesma
+    lógica em dois sentidos:
+      1) LEITURA — extrair_nome_agente() consulta esse cache como
+         penúltimo recurso, ANTES de desistir e usar "Agente_{id}", pra
+         quando a resolução ao vivo falhar numa semana específica (o caso
+         mais comum: o agente não teve nenhum lançamento naquela semana, e
+         a página de "sem resultados" do e-Visita não traz nem o
+         <select>, nem o endpoint getedit responde direito).
+      2) ESCRITA — toda vez que um nome de verdade É resolvido com sucesso
+         (ao vivo, via API ou via página), ele é gravado aqui na hora — não
+         só no fim da consolidação — pra já poder ser reaproveitado pelo
+         PRÓXIMO agente/semana/pendência dentro da MESMA rodada, e por
+         qualquer rodada futura, mesmo que esse agente não apareça de novo
+         tão cedo.
+    Nunca é apagado por uma rodada que não viu aquele agente — só é
+    ATUALIZADO quando um nome de verdade (não genérico) é aprendido."""
+    if caminho not in _cache_nomes_agentes_mem:
+        cache = {}
+        if os.path.exists(caminho):
+            try:
+                with open(caminho, encoding="utf-8") as f:
+                    cache = json.load(f)
+            except (OSError, json.JSONDecodeError) as e:
+                log.warning("⚠️ Não deu pra ler %s (começando um cache de nomes vazio): %s", caminho, e)
+        _cache_nomes_agentes_mem[caminho] = cache
+    return _cache_nomes_agentes_mem[caminho]
+
+
+def _atualizar_cache_nomes_agentes(id_agente, nome, equipe=None, caminho=CAMINHO_CACHE_NOMES_AGENTES):
+    """Grava (merge, nunca sobrescreve o arquivo inteiro) um nome de
+    verdade aprendido pra um agente. Nomes genéricos ("Agente_{id}") NUNCA
+    são gravados aqui — só serviriam pra estragar um nome bom que já
+    estava salvo de uma rodada anterior."""
+    if not nome or str(nome).startswith("Agente_"):
+        return
+    cache = _cache_nomes_agentes(caminho)
+    entrada = cache.get(str(id_agente), {})
+    if entrada.get("nome") == nome and (equipe is None or entrada.get("equipe") == equipe):
+        return  # já está assim, não precisa regravar o arquivo à toa
+    cache[str(id_agente)] = {"nome": nome, "equipe": equipe if equipe is not None else entrada.get("equipe", "")}
+    try:
+        with open(caminho, "w", encoding="utf-8") as f:
+            json.dump(cache, f, ensure_ascii=False, indent=2, sort_keys=True)
+    except OSError as e:
+        log.warning("⚠️ Não deu pra salvar %s: %s", caminho, e)
+
+
 def _carregar_cronograma_ausencias(caminho="data/cronograma_ausencias.json"):
     if not os.path.exists(caminho):
         return []
@@ -692,26 +745,27 @@ def _cronograma_efetivo(deteccoes):
             sufixo = "" if "(automático)" in motivo or "(confirmada)" in motivo else " (automático)"
             efetivo.append({"alvo": "agente", "id_agente": e["id_agente"], "motivo": f"{motivo}{sufixo}",
                              "inicio": e["inicio"], "fim": e["fim"]})
-        else:  # paralisacao_coletiva confirmada (Chuva, por padrão) — um
-               # registro por agente envolvido. Diferente da versão antiga,
-               # o evento já nasce day-by-day (etapa 2 da detecção): todo
-               # agente em "agentes_envolvidos" ficou sem lançamento em TODO
-               # o intervalo inicio/fim do próprio evento (é a definição do
-               # evento), então não precisa de período individual à parte
-               # (o antigo campo "membros" só existia pela lógica anterior,
-               # baseada em interseção de férias que se tocavam — mantido
-               # aqui só por compatibilidade com eventos salvos antes desta
-               # correção).
+        else:  # paralisacao_coletiva confirmada (Chuva, por padrão)
             motivo = e.get("categoria_coletiva") or "Chuva"
             membros = e.get("membros")
             if membros:
+                # Compatibilidade com eventos salvos pela lógica ANTIGA
+                # (baseada em interseção de férias que se tocavam) — cada
+                # membro podia ter um período individual diferente dos
+                # demais, então aí sim precisa de uma linha por agente.
                 for m in membros:
                     efetivo.append({"alvo": "agente", "id_agente": m["id_agente"], "motivo": f"{motivo} (confirmada)",
                                      "inicio": m["inicio"], "fim": m["fim"]})
             else:
-                for id_ag in e.get("agentes_envolvidos", []):
-                    efetivo.append({"alvo": "agente", "id_agente": id_ag, "motivo": f"{motivo} (confirmada)",
-                                     "inicio": e["inicio"], "fim": e["fim"]})
+                # Formato novo (detecção day-by-day por equipe): todo mundo
+                # da equipe ficou parado no MESMO intervalo — uma única
+                # linha "alvo: equipe" já cobre e exclui TODOS os agentes
+                # dessa equipe nesses dias (_obter_motivo_cronograma casa
+                # por equipe, não precisa listar agente por agente), então
+                # a aba Cronograma mostra só "Equipe X — Chuva — dia a dia"
+                # em vez de uma linha repetida pra cada agente da equipe.
+                efetivo.append({"alvo": "equipe", "equipe": e["equipe"], "motivo": f"{motivo} (confirmada)",
+                                 "inicio": e["inicio"], "fim": e["fim"]})
     return efetivo
 
 # --- 14) COLETA DE PENDÊNCIA (fechados/recusados) ---------------------------
@@ -730,7 +784,7 @@ COLETAR_FECHADOS_RECUSADOS = True
 
 PONTOS_INICIAIS = 100
 NOTA_MINIMA = 0      # pontuação não cai abaixo disso (None = sem piso)
-NOTA_MAXIMA = 120    # pontuação não passa disso (None = sem teto; >100 permite bônus se destacar)
+NOTA_MAXIMA = 100    # pontuação não passa disso (None = sem teto)
 # Teto do fator de normalização "por mês" (ver calcular_pontuacao) — evita
 # que quem trabalhou poucos dias no período (ex.: maioria de férias) tenha
 # qualquer deslize nesses poucos dias amplificado de forma extrema.
@@ -1037,17 +1091,36 @@ def extrair_nome_agente(session, soup, id_agente):
     Tenta obter o nome do agente, nessa ordem:
       1) Endpoint getedit (fonte real usada pelo JS do site — mais confiável)
       2) Parsing do <select> da página de listagem (fallback, caso o site mude)
-      3) Nome genérico 'Agente_{id}' (última opção, sinaliza problema no log)
+      3) Cache persistente (data/agentes_nomes.json) — nome já resolvido de
+         verdade numa coleta anterior. É o que evita o "Agente_3035" quando
+         o agente simplesmente não teve nenhum lançamento NESSA semana — a
+         página de "sem resultados" do e-Visita costuma não trazer nem o
+         <select> nem responder certo no getedit, mas o nome dele já é
+         conhecido de outra semana, não precisa desistir.
+      4) Nome genérico 'Agente_{id}' (última opção, sinaliza problema no log)
+    Sempre que um nome de verdade é obtido (passo 1 ou 2), grava no cache
+    na hora — assim ele já fica disponível pro passo 3 de qualquer outro
+    agente/semana dentro da MESMA rodada, e de qualquer rodada futura.
     """
     nome = _obter_nome_agente_via_api(session, id_agente)
     if nome:
-        return _formatar_nome_proprio(nome)
+        nome = _formatar_nome_proprio(nome)
+        _atualizar_cache_nomes_agentes(id_agente, nome)
+        return nome
 
     nome = _extrair_nome_agente_da_pagina(soup, id_agente)
     if nome:
-        return _formatar_nome_proprio(nome)
+        nome = _formatar_nome_proprio(nome)
+        _atualizar_cache_nomes_agentes(id_agente, nome)
+        return nome
 
-    log.warning("Não foi possível obter o nome do agente %s (nem via API nem via página) — "
+    nome_cache = _cache_nomes_agentes().get(str(id_agente), {}).get("nome")
+    if nome_cache:
+        log.info("ℹ️ Agente %s sem lançamento/nome resolvível nessa semana — "
+                  "usando nome já conhecido do cache: %s", id_agente, nome_cache)
+        return nome_cache
+
+    log.warning("Não foi possível obter o nome do agente %s (nem via API, nem via página, nem via cache) — "
                  "usando nome genérico. Ative logging DEBUG para investigar.", id_agente)
     return f"Agente_{id_agente}"
 
@@ -1417,10 +1490,18 @@ def calcular_pontuacao(res, qtd_ausencias):
     aplicar("Visita fora do expediente/fim de semana", r["visitas_fora_expediente"], PONTOS_PERDA_FORA_EXPEDIENTE, -1)
     aplicar("Visita no horário de almoço", r["visitas_horario_almoco"], PONTOS_PERDA_VISITA_ALMOCO, -1)
 
+    # "Dia com/sem meta batida" é contagem LITERAL (1 dia = 1 ponto,
+    # conforme pedido) — sem o fator_normalizacao. Diferente dos outros
+    # critérios (que representam uma TAXA de erro/acerto, onde faz sentido
+    # normalizar pra período parcial não distorcer), aqui "meta batida" já É
+    # a contagem de dias — normalizar inflava esse número pra quem trabalhou
+    # poucos dias no período (ex.: 11 dias com meta batida virando 18,6
+    # pontos pra um agente que só trabalhou 13 dias no mês por causa de
+    # férias — 11 dias bem trabalhados tem que valer 11 pontos, não 18,6).
     dias_sem_meta = max(r["dias_trabalhados"] - r["dias_atingiu_meta"], 0)
-    aplicar("Dia sem bater a meta diária", dias_sem_meta, PONTOS_PERDA_DIA_SEM_META, -1)
+    aplicar("Dia sem bater a meta diária", dias_sem_meta, PONTOS_PERDA_DIA_SEM_META, -1, normalizar=False)
 
-    aplicar("Dia com meta diária batida", r["dias_atingiu_meta"], PONTOS_GANHO_DIA_COM_META, +1)
+    aplicar("Dia com meta diária batida", r["dias_atingiu_meta"], PONTOS_GANHO_DIA_COM_META, +1, normalizar=False)
 
     if r["visitas_rapidas"] == 0 and r["total_visitas"] > 0:
         aplicar("Bônus: nenhuma visita rápida no período", 1, PONTOS_GANHO_SEM_VISITA_RAPIDA, +1, normalizar=False)
@@ -3116,20 +3197,24 @@ def coletar_uma_semana(session, html_id, id_ano, id_ciclo):
     }
 
 
-def _salvar_agentes_nomes(resultados, caminho="data/agentes_nomes.json"):
-    """Salva o mapa ID -> Nome de cada agente (id_agente, nome_agente,
-    equipe) toda vez que consolida — é a única fonte confiável desse mapa,
-    já que os nomes só existem de verdade dentro do e-Visita (o
-    AGENTES_POR_EQUIPE deste script só tem os IDs). Serve pra
-    cronograma_editor.html mostrar nomes de verdade no menu em vez de só
-    "ID 116", sem precisar digitar nada — é só colar esse arquivo lá."""
-    mapa = {str(r["id_agente"]): {"nome": r["nome_agente"], "equipe": r["equipe"]} for r in resultados}
-    try:
-        with open(caminho, "w", encoding="utf-8") as f:
-            json.dump(mapa, f, ensure_ascii=False, indent=2, sort_keys=True)
-        log.info("💾 Nomes dos agentes salvos em %s (%s agentes).", caminho, len(mapa))
-    except OSError as e:
-        log.warning("⚠️ Não deu pra salvar %s: %s", caminho, e)
+def _salvar_agentes_nomes(resultados, caminho=CAMINHO_CACHE_NOMES_AGENTES):
+    """Atualiza (MERGE — nunca apaga o que já tinha) o mapa ID -> Nome de
+    cada agente, toda vez que consolida. É a mesma função por trás do
+    cache usado por extrair_nome_agente() (ver _cache_nomes_agentes()) —
+    aqui é só o ponto em que os nomes vindos da CONSOLIDAÇÃO (que pode
+    rodar sobre um recorte pequeno, tipo um mês só, dentro de
+    atualizar_historico_do_cache) entram nesse mesmo cache. Sem o merge,
+    consolidar um mês em que um agente não teve nenhum lançamento
+    SOBRESCREVIA o arquivo inteiro e apagava o nome dele — que só ficava
+    conhecido de novo na próxima vez que ele aparecesse com dados.
+
+    Também serve pra cronograma_editor.html mostrar nomes de verdade no
+    menu em vez de só "ID 116", sem precisar digitar nada — é só colar
+    esse arquivo lá."""
+    for r in resultados:
+        _atualizar_cache_nomes_agentes(r["id_agente"], r["nome_agente"], r["equipe"], caminho)
+    log.info("💾 Nomes dos agentes atualizados em %s (%s agentes no cache).",
+              caminho, len(_cache_nomes_agentes(caminho)))
 
 
 def _montar_df_total_e_resultados(htmls):
