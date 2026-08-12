@@ -357,29 +357,54 @@ def _carregar_cronograma_ausencias(caminho="data/cronograma_ausencias.json"):
 
 CRONOGRAMA_AUSENCIAS = _carregar_cronograma_ausencias()
 
-# --- 13b) DETECÇÃO AUTOMÁTICA DE POSSÍVEIS FÉRIAS / PARALISAÇÃO COLETIVA ----
-# Analisa, por agente, sequências de dias ÚTEIS CONSECUTIVOS sem nenhum
-# lançamento de visita (ignora sábado, domingo e feriados em FERIADOS_NACIONAIS):
-#   1 a 4 dias -> possível ausência pontual (só informativo, nada muda)
-#   5 dias     -> "continuar monitorando" (ainda só informativo)
-#   > 5 dias   -> "possíveis férias", fica PENDENTE até o supervisor confirmar
-# Antes de sugerir férias individuais, verifica se 2+ agentes da MESMA
-# equipe pararam no mesmo período — nesse caso vira "possível paralisação
-# coletiva" (chuva/capacitação/reunião/outra), nunca férias automática.
+# --- 13b) DETECÇÃO AUTOMÁTICA DE FÉRIAS/ATESTADO E CHUVA -------------------
+# A detecção roda em DUAS ETAPAS SEPARADAS, nessa ordem obrigatória — é o que
+# evita que férias de agentes diferentes que por acaso se sobrepõem no
+# calendário sejam confundidas com uma paralisação coletiva de equipe:
 #
-# NADA disso muda cálculo nenhum sozinho — só gera sugestões pendentes em
-# data/deteccoes_pendentes.json. O supervisor confirma ou rejeita pelo
-# deteccao_editor.html; só QUANDO CONFIRMADO o período entra no mesmo
-# mecanismo do cronograma (e aí sim some da aba Ausências e da pontuação —
-# ver _cronograma_efetivo() logo abaixo).
+#   1) FÉRIAS/ATESTADO — puramente INDIVIDUAL, nunca depende de equipe.
+#      Analisa, por agente (sozinho, sem olhar pra ninguém mais da equipe),
+#      sequências de dias ÚTEIS CONSECUTIVOS sem nenhum lançamento de visita
+#      (ignora sábado, domingo e feriados em FERIADOS_NACIONAIS):
+#        1 a 4 dias -> possível ausência pontual (só informativo, nada muda)
+#        5 dias     -> "continuar monitorando" (ainda só informativo)
+#        > 5 dias   -> Férias/Atestado, CONFIRMADO AUTOMATICAMENTE, sem
+#                      precisar de nenhuma ação do supervisor.
+#      Dois (ou mais) agentes da mesma equipe de férias em períodos que se
+#      cruzam NÃO formam evento nenhum entre si — cada um é confirmado
+#      individualmente, isolado dos demais.
+#
+#   2) CHUVA — por EQUIPE, dia a dia, só entre os agentes ATIVOS daquele dia
+#      (isto é, depois de EXCLUIR quem já está em Férias/Atestado confirmado
+#      nesse dia, etapa 1). Se todos os agentes ativos de uma equipe
+#      ficaram sem lançamento no mesmo dia útil, esse dia é CHUVA para
+#      aquela equipe — CONFIRMADO AUTOMATICAMENTE como Chuva (é o padrão;
+#      não fica pendente esperando ninguém escolher motivo). Dias
+#      consecutivos com o mesmo padrão viram um único evento. Se depois
+#      descobrir que não foi chuva de verdade (foi capacitação, reunião
+#      etc.), corrija manualmente o "categoria_coletiva" do evento em
+#      data/deteccoes_pendentes.json (ou via deteccao_editor.html, se
+#      existir) — a correção fica protegida e não é sobrescrita nas
+#      próximas coletas.
+#
+# NADA disso muda cálculo nenhum sozinho até ser gravado em
+# data/deteccoes_pendentes.json — só QUANDO CONFIRMADO o período entra no
+# mesmo mecanismo do cronograma (e aí sim some da aba Ausências e da
+# pontuação — ver _cronograma_efetivo() logo abaixo).
 LIMITE_DIAS_SEM_LANCAMENTO_FERIAS = 5
 
-# Equipes que NÃO passam pela detecção automática de férias/paralisação —
-# times pequenos, com dinâmica diferente do resto (ex.: atividade sazonal,
-# entra e sai da rotina normal), onde faz mais sentido cadastrar férias na
-# mão em data/cronograma_ausencias.json do que confiar na detecção
-# automática. Comparação sem diferenciar maiúsculas/minúsculas.
-EQUIPES_SEM_DETECCAO_AUTOMATICA = ["Equipe Bloqueio"]
+# Equipes que NÃO passam pela detecção automática de férias/chuva — times
+# com dinâmica diferente do resto, onde faz mais sentido cadastrar
+# férias/ausências na mão em data/cronograma_ausencias.json do que confiar
+# na detecção automática:
+#   - "Equipe Bloqueio": time pequeno, atividade sazonal, entra e sai da
+#     rotina normal.
+#   - "Ponto Estratégico": ciclo/semana próprios, bem diferentes do
+#     tratamento normal (ver AGENTES_PONTO_ESTRATEGICO) — férias/atestado
+#     desse grupo são sempre informadas manualmente, nunca por ausência de
+#     lançamento.
+# Comparação sem diferenciar maiúsculas/minúsculas.
+EQUIPES_SEM_DETECCAO_AUTOMATICA = ["Equipe Bloqueio", "Ponto Estratégico"]
 
 # Feriados nacionais/locais a ignorar na contagem de dias úteis consecutivos
 # — formato "dd/mm/aaaa". Vazio por padrão; cadastre aqui os feriados de
@@ -427,23 +452,48 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
     eventos candidatos (ainda sem status; quem decide status é
     atualizar_deteccoes_pendentes(), que faz o merge com o que já existia).
 
+    Roda em DUAS ETAPAS, nessa ordem (ver comentário da seção 13b acima):
+      1) _detectar_ferias_individuais() — por agente, isolado dos demais.
+      2) _detectar_chuva_coletiva() — por equipe/dia, só entre os agentes
+         que a etapa 1 NÃO classificou como Férias/Atestado naquele dia.
+
     IMPORTANTE: cada agente só é avaliado a partir da PRÓPRIA primeira
     visita, nunca da data mínima global do sistema. Sem isso, um agente
     (ou equipe inteira) que começou a trabalhar depois do início do
     período rastreado — ex.: uma atividade sazonal que só começa mais
     tarde — teria todo o intervalo ANTES de existir contado como "dias sem
-    lançamento", gerando férias/paralisação falsas logo no início do
-    período de cada um (e, como vários agentes da mesma equipe têm essa
-    mesma falsa ausência se sobrepondo desde o mesmo dia, isso também
-    inflava paralisações coletivas em bolhas enormes juntando gente que
-    não tinha nada a ver uma com a outra)."""
+    lançamento", gerando férias/chuva falsas logo no início do período de
+    cada um."""
     if df_total.empty:
         return []
     data_max = df_total["dia"].max()
-
-    info_agente = {res["id_agente"]: (res["nome_agente"], res["equipe"]) for res in resultados}
     equipes_ignoradas = {e.lower() for e in EQUIPES_SEM_DETECCAO_AUTOMATICA}
-    runs_por_agente = {}
+
+    eventos_ferias, ferias_por_agente, janela_por_agente = _detectar_ferias_individuais(
+        df_total, resultados, data_max, equipes_ignoradas)
+    eventos_chuva = _detectar_chuva_coletiva(
+        df_total, resultados, data_max, equipes_ignoradas, ferias_por_agente, janela_por_agente)
+    return eventos_ferias + eventos_chuva
+
+
+def _detectar_ferias_individuais(df_total, resultados, data_max, equipes_ignoradas):
+    """ETAPA 1 — Férias/Atestado, sempre e só por agente, sem olhar pra
+    ninguém mais da equipe. Mais de LIMITE_DIAS_SEM_LANCAMENTO_FERIAS dias
+    úteis consecutivos sem lançamento = Férias/Atestado, ponto final —
+    outro agente da mesma equipe estar de férias no mesmo período não muda
+    nada aqui, cada um é avaliado sozinho.
+
+    Retorna (eventos_ferias, ferias_por_agente, janela_por_agente):
+      - ferias_por_agente: {id_agente: [(inicio, fim), ...]} só com os
+        períodos CONFIRMADOS nesta rodada (dur > LIMITE) — é o que a etapa
+        2 usa pra excluir esses dias da análise de chuva.
+      - janela_por_agente: {id_agente: [dias_uteis...]} — o intervalo de
+        dias úteis avaliado pra cada agente (da própria primeira visita até
+        data_max), reaproveitado pela etapa 2 pra saber quais dias cada
+        agente já estava "ativo" no sistema."""
+    info_agente = {res["id_agente"]: (res["nome_agente"], res["equipe"]) for res in resultados}
+    eventos, ferias_por_agente, janela_por_agente = [], {}, {}
+
     for res in resultados:
         if res["equipe"].lower() in equipes_ignoradas:
             continue  # equipe cadastrada em EQUIPES_SEM_DETECCAO_AUTOMATICA — não avalia
@@ -454,94 +504,70 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
         dias_uteis_agente = _dias_uteis_no_intervalo(primeiro_dia_agente, data_max)
         if not dias_uteis_agente:
             continue
+        janela_por_agente[res["id_agente"]] = dias_uteis_agente
+
         dias_com_visita = set(df_ag["dia"])
         faltando = {d for d in dias_uteis_agente if d not in dias_com_visita}
         runs = _runs_consecutivos_uteis(dias_uteis_agente, faltando)
-        if runs:
-            runs_por_agente[res["id_agente"]] = runs
-
-    # Candidatos a "possíveis férias": só os runs > LIMITE. Runs menores (1
-    # a 5 dias) não geram evento pendente — são só "possível ausência
-    # pontual"/"monitorando", que já aparecem naturalmente na aba Ausências
-    # normal, sem precisar de confirmação de ninguém.
-    candidatos = []
-    for id_ag, runs in runs_por_agente.items():
-        nome, equipe = info_agente[id_ag]
         for ini, fim, dur in runs:
             if dur > LIMITE_DIAS_SEM_LANCAMENTO_FERIAS:
-                candidatos.append({"id_agente": id_ag, "nome_agente": nome, "equipe": equipe,
-                                    "inicio": ini, "fim": fim, "duracao": dur})
-
-    # Agrupa candidatos da MESMA equipe que estiveram ausentes AO MESMO
-    # TEMPO de verdade (interseção real do período) — 2+ agentes = possível
-    # paralisação coletiva, não férias individual.
-    #
-    # IMPORTANTE: não é "sobrepõe com QUALQUER membro já no grupo" (isso
-    # forma uma CORRENTE — A toca em B, B toca em C, e o grupo vira uma
-    # bolha de meses juntando gente que nunca ficou ausente ao mesmo tempo,
-    # como A e C aqui). É sobrepor com a INTERSEÇÃO do grupo até agora, que
-    # só pode encolher conforme mais gente entra — garante que todo mundo
-    # do grupo final tenha pelo menos um dia em comum ausente junto.
-    eventos, usados = [], set()
-    por_equipe = {}
-    for i, c in enumerate(candidatos):
-        por_equipe.setdefault(c["equipe"], []).append(i)
-
-    for equipe, idxs in por_equipe.items():
-        idxs_restantes = list(idxs)
-        while idxs_restantes:
-            i = idxs_restantes.pop(0)
-            if i in usados:
-                continue
-            grupo = [i]
-            usados.add(i)
-            intersecao_ini = candidatos[i]["inicio"]
-            intersecao_fim = candidatos[i]["fim"]
-            mudou = True
-            while mudou:
-                mudou = False
-                for j in list(idxs_restantes):
-                    if j in usados:
-                        continue
-                    c_j = candidatos[j]
-                    novo_ini = max(intersecao_ini, c_j["inicio"])
-                    novo_fim = min(intersecao_fim, c_j["fim"])
-                    if novo_ini <= novo_fim:  # ainda sobra pelo menos 1 dia em comum pro grupo inteiro
-                        grupo.append(j)
-                        usados.add(j)
-                        idxs_restantes.remove(j)
-                        intersecao_ini, intersecao_fim = novo_ini, novo_fim
-                        mudou = True
-
-            membros = [candidatos[k] for k in grupo]
-            if len(membros) >= 2:
+                nome, equipe = info_agente[res["id_agente"]]
                 eventos.append({
-                    "tipo": "paralisacao_coletiva", "equipe": equipe,
-                    "agentes_envolvidos": sorted({m["id_agente"] for m in membros}),
-                    "nomes_envolvidos": sorted({m["nome_agente"] for m in membros}),
-                    # "inicio"/"fim" = a INTERSEÇÃO (o período em que TODOS
-                    # estavam ausentes ao mesmo tempo) — é só pra rotular o
-                    # evento e mostrar "eles pararam juntos aqui". A
-                    # EXCLUSÃO de verdade usa "membros" abaixo, com o
-                    # período INDIVIDUAL completo de cada um — sem isso, um
-                    # agente cuja férias só toca a de outro por 2 dias teria
-                    # só esses 2 dias excluídos, e o resto da férias dele
-                    # ficaria sem excluir por engano.
-                    "inicio": intersecao_ini.strftime("%d/%m/%Y"), "fim": intersecao_fim.strftime("%d/%m/%Y"),
-                    "duracao": len(_dias_uteis_no_intervalo(intersecao_ini, intersecao_fim)),
-                    "membros": [
-                        {"id_agente": m["id_agente"], "nome_agente": m["nome_agente"],
-                         "inicio": m["inicio"].strftime("%d/%m/%Y"), "fim": m["fim"].strftime("%d/%m/%Y")}
-                        for m in membros
-                    ],
+                    "tipo": "possiveis_ferias", "id_agente": res["id_agente"], "nome_agente": nome,
+                    "equipe": equipe, "inicio": ini, "fim": fim, "duracao": dur,
                 })
-            else:
-                m = membros[0]
-                eventos.append({
-                    "tipo": "possiveis_ferias", "id_agente": m["id_agente"], "nome_agente": m["nome_agente"],
-                    "equipe": m["equipe"], "inicio": m["inicio"].strftime("%d/%m/%Y"),
-                    "fim": m["fim"].strftime("%d/%m/%Y"), "duracao": m["duracao"],
-                })
+                ferias_por_agente.setdefault(res["id_agente"], []).append((ini, fim))
+    return eventos, ferias_por_agente, janela_por_agente
+
+
+def _detectar_chuva_coletiva(df_total, resultados, data_max, equipes_ignoradas,
+                              ferias_por_agente, janela_por_agente):
+    """ETAPA 2 — Chuva, por equipe, dia a dia, só entre os agentes ATIVOS
+    daquele dia (ou seja: dentro da própria janela de trabalho E fora de
+    qualquer período de Férias/Atestado já confirmado pela etapa 1). Se
+    TODOS os agentes ativos de uma equipe num dia útil não lançaram nada,
+    esse dia é Chuva pra aquela equipe. Dias consecutivos com o mesmo
+    padrão viram um único evento (a paralisação "acaba" no primeiro dia em
+    que a maioria volta — um agente isolado que continua sumido não
+    prolonga o evento sozinho, porque nesse dia ele já não está mais entre
+    "todos os agentes ativos sem lançamento": os outros voltaram)."""
+    def em_ferias(id_ag, dia):
+        return any(ini <= dia <= fim for ini, fim in ferias_por_agente.get(id_ag, ()))
+
+    info_agente = {res["id_agente"]: (res["nome_agente"], res["equipe"]) for res in resultados}
+    dias_lancados_por_agente = df_total.groupby("id_agente")["dia"].apply(set).to_dict()
+
+    por_equipe_ids = {}
+    for res in resultados:
+        if res["equipe"].lower() in equipes_ignoradas:
+            continue
+        if res["id_agente"] not in janela_por_agente:
+            continue
+        por_equipe_ids.setdefault(res["equipe"], []).append(res["id_agente"])
+
+    eventos = []
+    for equipe, ids in por_equipe_ids.items():
+        janelas_set = {i: set(janela_por_agente[i]) for i in ids}
+        todos_dias = sorted(set().union(*janelas_set.values()))
+
+        dias_chuva = set()
+        for dia in todos_dias:
+            ativos = [i for i in ids if dia in janelas_set[i] and not em_ferias(i, dia)]
+            if not ativos:
+                continue  # ninguém ativo nesse dia (todo mundo de férias, ou fora da janela) — não dá pra falar em chuva
+            if all(dia not in dias_lancados_por_agente.get(i, set()) for i in ativos):
+                dias_chuva.add(dia)
+
+        for ini, fim, dur in _runs_consecutivos_uteis(todos_dias, dias_chuva):
+            dias_do_evento = [d for d in todos_dias if ini <= d <= fim]
+            ativos_no_evento = sorted({i for d in dias_do_evento for i in ids
+                                        if d in janelas_set[i] and not em_ferias(i, d)})
+            eventos.append({
+                "tipo": "paralisacao_coletiva", "equipe": equipe,
+                "agentes_envolvidos": ativos_no_evento,
+                "nomes_envolvidos": sorted({info_agente[i][0] for i in ativos_no_evento}),
+                "inicio": ini.strftime("%d/%m/%Y"), "fim": fim.strftime("%d/%m/%Y"), "duracao": dur,
+            })
     return eventos
 
 
@@ -551,16 +577,21 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
     agente/equipe + início) — só atualiza o "fim"/duração se o mesmo
     período continuar aparecendo (ex.: férias que ainda não terminou).
 
-    Comportamento (a partir de +5 dias úteis sem lançamento):
-      - "possiveis_ferias" (agente sozinho): CONFIRMADO AUTOMATICAMENTE como
-        Férias/Atestado e já sai de todos os cálculos — não precisa de
-        nenhuma ação do supervisor. Se na verdade for falta mesmo (não
-        justificada), o supervisor marca como "falta" no deteccao_editor.html
-        — aí sim volta a contar normalmente, com o motivo documentado.
-      - "paralisacao_coletiva" (2+ agentes da mesma equipe no mesmo
-        período): continua PENDENTE, porque não dá pra adivinhar sozinho se
-        foi chuva, capacitação, reunião ou outra coisa — precisa o
-        supervisor escolher o motivo antes de confirmar.
+    Comportamento:
+      - "possiveis_ferias" (agente sozinho, >5 dias úteis sem lançamento):
+        CONFIRMADO AUTOMATICAMENTE como Férias/Atestado e já sai de todos os
+        cálculos — não precisa de nenhuma ação do supervisor. Se na verdade
+        for falta mesmo (não justificada), o supervisor marca como "falta"
+        (no deteccao_editor.html, se existir, ou editando o JSON direto) —
+        aí sim volta a contar normalmente, com o motivo documentado.
+      - "paralisacao_coletiva" (todos os agentes ATIVOS — ou seja, já fora
+        de qualquer Férias/Atestado — de uma equipe sem lançamento no mesmo
+        dia): CONFIRMADO AUTOMATICAMENTE como Chuva — é o padrão, não fica
+        pendente esperando ninguém escolher motivo (ver seção 13b). Se na
+        verdade foi outra coisa (capacitação, reunião, outra paralisação),
+        o supervisor troca o "categoria_coletiva" manualmente — a partir
+        daí a correção fica protegida e não é sobrescrita nas próximas
+        coletas, mesmo que o padrão de dias sem lançamento continue.
     """
     anteriores = []
     if os.path.exists(caminho):
@@ -595,9 +626,10 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
             novo["categoria_coletiva"] = None
             novo["detectado_em"] = datetime.now().strftime("%d/%m/%Y %H:%M")
             finais.append(novo)
-        else:  # paralisacao_coletiva nova — continua pendente, precisa de motivo
-            novo["status"] = "pendente"
-            novo["categoria_coletiva"] = None
+        else:  # paralisacao_coletiva nova — CONFIRMADA automaticamente como Chuva (padrão)
+            novo["status"] = "confirmada"
+            novo["categoria_coletiva"] = "Chuva"
+            novo["confirmado_automaticamente"] = True
             novo["detectado_em"] = datetime.now().strftime("%d/%m/%Y %H:%M")
             finais.append(novo)
 
@@ -623,12 +655,18 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(finais, f, ensure_ascii=False, indent=2)
     n_pend = sum(1 for e in finais if e.get("status") == "pendente")
-    n_auto = sum(1 for e in finais if e.get("confirmado_automaticamente") and e.get("status") == "confirmada")
-    if n_auto:
-        log.info("🌴 %s período(s) de férias/atestado confirmado(s) automaticamente (>5 dias úteis seguidos).", n_auto)
+    n_ferias_auto = sum(1 for e in finais if e["tipo"] == "possiveis_ferias"
+                         and e.get("confirmado_automaticamente") and e.get("status") == "confirmada")
+    n_chuva_auto = sum(1 for e in finais if e["tipo"] == "paralisacao_coletiva"
+                        and e.get("confirmado_automaticamente") and e.get("status") == "confirmada")
+    if n_ferias_auto:
+        log.info("🌴 %s período(s) de férias/atestado confirmado(s) automaticamente (>5 dias úteis seguidos).",
+                  n_ferias_auto)
+    if n_chuva_auto:
+        log.info("🌧️ %s período(s) de chuva confirmado(s) automaticamente por equipe (todos os agentes ativos "
+                  "sem lançamento no mesmo dia).", n_chuva_auto)
     if n_pend:
-        log.info("🔎 %s paralisação(ões) coletiva(s) pendente(s) de motivo em %s (abra deteccao_editor.html).",
-                  n_pend, caminho)
+        log.info("🔎 %s detecção(ões) pendente(s) de decisão manual em %s.", n_pend, caminho)
     if n_revisao:
         log.warning("⚠️ %s decisão(ões) antiga(s) marcada(s) pra revisão em %s — o padrão que gerou "
                      "não aparece mais na análise atual (abra deteccao_editor.html).", n_revisao, caminho)
@@ -653,22 +691,23 @@ def _cronograma_efetivo(deteccoes):
             sufixo = "" if "(automático)" in motivo or "(confirmada)" in motivo else " (automático)"
             efetivo.append({"alvo": "agente", "id_agente": e["id_agente"], "motivo": f"{motivo}{sufixo}",
                              "inicio": e["inicio"], "fim": e["fim"]})
-        else:  # paralisacao_coletiva confirmada — um registro por agente
-               # envolvido, usando o período INDIVIDUAL completo de cada um
-               # (guardado em "membros"), não a interseção do grupo — senão
-               # um agente cuja férias só toca a de outro por 2 dias teria
-               # só esses 2 dias excluídos, e o resto da férias real dele
-               # ficaria sem excluir por engano (bug real, já corrigido).
-            motivo = e.get("categoria_coletiva") or "Outra atividade coletiva"
+        else:  # paralisacao_coletiva confirmada (Chuva, por padrão) — um
+               # registro por agente envolvido. Diferente da versão antiga,
+               # o evento já nasce day-by-day (etapa 2 da detecção): todo
+               # agente em "agentes_envolvidos" ficou sem lançamento em TODO
+               # o intervalo inicio/fim do próprio evento (é a definição do
+               # evento), então não precisa de período individual à parte
+               # (o antigo campo "membros" só existia pela lógica anterior,
+               # baseada em interseção de férias que se tocavam — mantido
+               # aqui só por compatibilidade com eventos salvos antes desta
+               # correção).
+            motivo = e.get("categoria_coletiva") or "Chuva"
             membros = e.get("membros")
             if membros:
                 for m in membros:
                     efetivo.append({"alvo": "agente", "id_agente": m["id_agente"], "motivo": f"{motivo} (confirmada)",
                                      "inicio": m["inicio"], "fim": m["fim"]})
             else:
-                # Compatibilidade com eventos antigos gerados antes dessa
-                # correção (sem "membros" salvo) — cai pra interseção mesmo,
-                # melhor que nada até serem regerados do zero na próxima coleta.
                 for id_ag in e.get("agentes_envolvidos", []):
                     efetivo.append({"alvo": "agente", "id_agente": id_ag, "motivo": f"{motivo} (confirmada)",
                                      "inicio": e["inicio"], "fim": e["fim"]})
