@@ -3251,6 +3251,16 @@ def _montar_df_total_e_resultados(htmls):
         sub = sub.sort_values("dt_chegada").reset_index(drop=True)
         nome = sub["nome_agente"].iloc[0]
         equipe = sub["equipe"].iloc[0]
+        if str(nome).startswith("Agente_"):
+            # Nome genérico já GRAVADO num arquivo de semana antigo (de
+            # antes de existir esse cache, ou de uma coleta em que a
+            # resolução falhou naquele momento). Não precisa recoletar a
+            # semana pra corrigir — se o nome de verdade já foi aprendido
+            # DEPOIS (em qualquer outra semana, ou colado manualmente em
+            # data/agentes_nomes.json), usa ele aqui na hora de consolidar.
+            nome_cache = _cache_nomes_agentes().get(str(id_ag), {}).get("nome")
+            if nome_cache:
+                nome = nome_cache
         resumo = resumo_agente(sub)
 
         pend_semanas = pendencia.get(str(id_ag), [])
