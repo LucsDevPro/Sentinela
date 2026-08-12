@@ -232,14 +232,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="11/08/2026 23:46">
+<body data-print-date="11/08/2026 23:51">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 11/08/2026 23:46</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 11/08/2026 23:51</div>
       </div>
     </div>
     <div class="header-actions">
@@ -253,7 +253,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         Modo apresentação (ocultar nomes)
       </label>
       <button type="button" class="print-btn print-full-btn" onclick="printFullReport()">🖨️ Imprimir relatório completo do mês</button>
-      <div class="header-meta">3 agentes · 2 equipes · 46 imóveis</div>
+      <div class="header-meta">5 agentes · 3 equipes · 75 imóveis</div>
     </div>
   </div>
 </header>
@@ -275,11 +275,11 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section active" id="visao-geral">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Total Agentes</div><div class="kpi-value">3</div><div class="kpi-sub">2 equipes</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Total Geral de Imóveis</div><div class="kpi-value">46</div><div class="kpi-sub">42 abertos · 4 fechados · 0 recusados</div></div>
-    <div class="kpi yellow"><div class="kpi-label">% Pendência Geral</div><div class="kpi-value">8,7%</div><div class="kpi-sub">(fechados+recusados) ÷ total</div></div>
-    <div class="kpi red"><div class="kpi-label">Agentes Críticos</div><div class="kpi-value">0</div><div class="kpi-sub">3 normal · 0 atenção</div></div>
-    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">5</div><div class="kpi-sub">1 alertas · 4 ausências</div></div>
+    <div class="kpi blue"><div class="kpi-label">Total Agentes</div><div class="kpi-value">5</div><div class="kpi-sub">3 equipes</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Total Geral de Imóveis</div><div class="kpi-value">75</div><div class="kpi-sub">57 abertos · 18 fechados · 0 recusados</div></div>
+    <div class="kpi yellow"><div class="kpi-label">% Pendência Geral</div><div class="kpi-value">24,0%</div><div class="kpi-sub">(fechados+recusados) ÷ total</div></div>
+    <div class="kpi red"><div class="kpi-label">Agentes Críticos</div><div class="kpi-value">2</div><div class="kpi-sub">3 normal · 0 atenção</div></div>
+    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">7</div><div class="kpi-sub">1 alertas · 6 ausências</div></div>
   </div>
 
   <div class="hover-legend">
@@ -293,8 +293,20 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   <span class="legend-tip">% Pendência = (Imóveis Fechados + Recusados) ÷ Total Geral</span></span>
   </div>
 
-  <h3 style="margin-bottom:14px;font-size:1.05rem;">Agentes em Situação Crítica (0)</h3>
+  <h3 style="margin-bottom:14px;font-size:1.05rem;">Agentes em Situação Crítica (2)</h3>
   <div class="criticos-list">
+    
+    <div class="critico-item">
+      <span class="ci-pct">100,0%</span>
+      <div class="ci-name">Carlos Alberto Albiero</div>
+      <div class="ci-meta">Equipe 1 · 1 imóveis abertos · 1 rápidas · média 2,0 min</div>
+    </div>
+    
+    <div class="critico-item">
+      <span class="ci-pct">50,0%</span>
+      <div class="ci-name">Mateus Falcao de Souza</div>
+      <div class="ci-meta">Equipe 2 · 14 imóveis abertos · 7 rápidas · média 2,8 min</div>
+    </div>
     
   </div>
   
@@ -325,7 +337,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).
       </p>
     <div class="filters">
-      <select id="filterEquipe"><option value="">Todas as equipes</option><option>Equipe 1</option><option>Equipe 3</option></select>
+      <select id="filterEquipe"><option value="">Todas as equipes</option><option>Equipe 1</option><option>Equipe 2</option><option>Equipe 3</option></select>
       <select id="filterClass"><option value="">Todas as classificações</option><option value="NORMAL">🟢 Normal</option><option value="ATENÇÃO">🟡 Atenção</option><option value="CRÍTICO">🔴 Crítico</option></select>
       <input type="text" id="filterName" placeholder="Buscar agente...">
       
@@ -336,6 +348,97 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           <th class="sticky-col">Agente</th><th>Equipe</th><th>Classificação</th><th>Imóveis Abertos</th><th>Dias Trab.</th><th>Visitas/Dia</th><th>Média (min)</th><th>Mediana</th><th>Rápidas</th><th>% Rápidas</th><th>Longas</th><th>Negativas</th><th>Dias c/ Meta</th><th>Duplicadas</th><th>Seq. Suspeita</th><th>No Almoço</th><th>Fora Exped.</th><th>Fechados</th><th>Recusados</th><th>Total Geral</th><th>% Pendência</th><th>Horas Trab/Dia</th><th>Horas Trab/Sem</th><th>Horas Úteis/Dia</th><th>Custo Hora Útil</th><th>Média Início Manhã</th><th>Média Fim Manhã</th><th>Média Início Tarde</th><th>Média Fim Tarde</th>
         </tr></thead>
         <tbody>
+          
+          <tr class="row-critico" data-equipe="Equipe 1" data-class="🔴 CRÍTICO" data-semana="todas">
+            
+              <td class="sticky-col agent-name">Carlos Alberto Albiero</td>
+              
+            
+              <td>Equipe 1</td>
+              
+            
+              <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+              
+            
+              <td class="num">1</td>
+              
+            
+              <td class="num">1</td>
+              
+            
+              <td class="num">1,0</td>
+              
+            
+              <td class="num">2,0</td>
+              
+            
+              <td class="num">2</td>
+              
+            
+              <td class="num">1</td>
+              
+            
+              <td class="num pct">100,0%</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">1</td>
+              
+            
+              <td class="num pct">0,0%</td>
+              
+            
+              <td class="num">0,0</td>
+              
+            
+              <td class="num">0,0</td>
+              
+            
+              <td class="num">0,0</td>
+              
+            
+              <td>R$ 6631,36</td>
+              
+            
+              <td>10:19</td>
+              
+            
+              <td>10:21</td>
+              
+            
+              <td>None</td>
+              
+            
+              <td>None</td>
+              
+            
+          </tr>
           
           <tr class="" data-equipe="Equipe 1" data-class="🟢 NORMAL" data-semana="todas">
             
@@ -519,6 +622,97 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           </tr>
           
+          <tr class="row-critico" data-equipe="Equipe 2" data-class="🔴 CRÍTICO" data-semana="todas">
+            
+              <td class="sticky-col agent-name">Mateus Falcao de Souza</td>
+              
+            
+              <td>Equipe 2</td>
+              
+            
+              <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+              
+            
+              <td class="num">14</td>
+              
+            
+              <td class="num">1</td>
+              
+            
+              <td class="num">14,0</td>
+              
+            
+              <td class="num">2,8</td>
+              
+            
+              <td class="num">2</td>
+              
+            
+              <td class="num">7</td>
+              
+            
+              <td class="num pct">50,0%</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">14</td>
+              
+            
+              <td class="num">0</td>
+              
+            
+              <td class="num">28</td>
+              
+            
+              <td class="num pct">50,0%</td>
+              
+            
+              <td class="num">1,0</td>
+              
+            
+              <td class="num">1,0</td>
+              
+            
+              <td class="num">0,7</td>
+              
+            
+              <td>R$ 340,07</td>
+              
+            
+              <td>08:05</td>
+              
+            
+              <td>09:05</td>
+              
+            
+              <td>None</td>
+              
+            
+              <td>None</td>
+              
+            
+          </tr>
+          
           <tr class="" data-equipe="Equipe 3" data-class="🟢 NORMAL" data-semana="todas">
             
               <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td>
@@ -623,19 +817,34 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="team-card" style="border-top: 4px solid #1080D6">
       <div class="team-name">Equipe 1</div>
       <div class="team-stats">
-        <div><span class="ts-val">2</span><span class="ts-label">Agentes</span></div>
-        <div><span class="ts-val">27</span><span class="ts-label">Total Geral</span></div>
-        <div><span class="ts-val">0</span><span class="ts-label">Críticos</span></div>
+        <div><span class="ts-val">3</span><span class="ts-label">Agentes</span></div>
+        <div><span class="ts-val">28</span><span class="ts-label">Total Geral</span></div>
+        <div><span class="ts-val">1</span><span class="ts-label">Críticos</span></div>
         <div><span class="ts-val">2</span><span class="ts-label">Normais</span></div>
       </div>
       <div class="team-bar">
-        <div class="tb-critico" style="width:0%"></div>
+        <div class="tb-critico" style="width:33%"></div>
         <div class="tb-atencao" style="width:0%"></div>
-        <div class="tb-normal" style="width:100%"></div>
+        <div class="tb-normal" style="width:67%"></div>
       </div>
     </div>
     
     <div class="team-card" style="border-top: 4px solid #6B62D6">
+      <div class="team-name">Equipe 2</div>
+      <div class="team-stats">
+        <div><span class="ts-val">1</span><span class="ts-label">Agentes</span></div>
+        <div><span class="ts-val">28</span><span class="ts-label">Total Geral</span></div>
+        <div><span class="ts-val">1</span><span class="ts-label">Críticos</span></div>
+        <div><span class="ts-val">0</span><span class="ts-label">Normais</span></div>
+      </div>
+      <div class="team-bar">
+        <div class="tb-critico" style="width:100%"></div>
+        <div class="tb-atencao" style="width:0%"></div>
+        <div class="tb-normal" style="width:0%"></div>
+      </div>
+    </div>
+    
+    <div class="team-card" style="border-top: 4px solid #29AEE0">
       <div class="team-name">Equipe 3</div>
       <div class="team-stats">
         <div><span class="ts-val">1</span><span class="ts-label">Agentes</span></div>
@@ -666,10 +875,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
   <div class="section" id="areas">
   <div class="table-section">
-    <h3>📍 Análise por Área (3 áreas)</h3>
+    <h3>📍 Análise por Área (5 áreas)</h3>
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por % Rápidas por padrão. Passe o mouse sobre "Quarteirões" para ver a lista completa.</p>
     <div class="filters">
-      <select id="filterAreaArea"><option value="">Todas as áreas</option><option>405 - ALTOS DA GLÓRIA</option><option>408 - PARQUE DE EXPOSIÇÕES</option><option>425 - JARDIM ESTORIL</option></select>
+      <select id="filterAreaArea"><option value="">Todas as áreas</option><option>405 - ALTOS DA GLÓRIA</option><option>408 - PARQUE DE EXPOSIÇÕES</option><option>409 - ANDREAZZA</option><option>415 - CENTRO 1</option><option>425 - JARDIM ESTORIL</option></select>
       <input type="text" id="filterAreaName" placeholder="Buscar agente...">
     </div>
     <div class="table-wrap">
@@ -679,6 +888,24 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           <th>Quarteirões</th><th>Rápidas</th><th>% Rápidas</th><th>Fechados</th><th>Recusados</th><th>% Pendência</th><th>Alerta</th>
         </tr></thead>
         <tbody>
+          
+          <tr class="row-critico" data-area="409 - ANDREAZZA">
+            <td class="agent-name">Carlos Alberto Albiero</td><td>Equipe 1</td><td>409 - ANDREAZZA</td>
+            <td class="num">1</td><td class="num">2,0</td><td class="num">2</td>
+            <td class="num" title="Q022">1</td>
+            <td class="num">1</td><td class="num pct">100,0%</td>
+            <td class="num">0</td><td class="num">0</td><td class="num pct">0,0%</td>
+            <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+          </tr>
+          
+          <tr class="row-critico" data-area="415 - CENTRO 1">
+            <td class="agent-name">Mateus Falcao de Souza</td><td>Equipe 2</td><td>415 - CENTRO 1</td>
+            <td class="num">14</td><td class="num">2,8</td><td class="num">2</td>
+            <td class="num" title="Q001, Q009, Q010">3</td>
+            <td class="num">7</td><td class="num pct">50,0%</td>
+            <td class="num">14</td><td class="num">0</td><td class="num pct">50,0%</td>
+            <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
+          </tr>
           
           <tr class="" data-area="408 - PARQUE DE EXPOSIÇÕES">
             <td class="agent-name">Rozentina Matos de Oliveira</td><td>Equipe 1</td><td>408 - PARQUE DE EXPOSIÇÕES</td>
@@ -723,7 +950,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="alert-card" onclick="showAlert('alm')"><div class="ac-icon">🍽️</div><div class="ac-val" style="color:var(--cyan)">0</div><div class="ac-label">No Horário de Almoço</div></div>
     <div class="alert-card" onclick="showAlert('teto')"><div class="ac-icon">🖥️</div><div class="ac-val" style="color:var(--navy)">0</div><div class="ac-label">Acima de 15min (auditoria)</div></div>
     <div class="alert-card" onclick="goToSection('pendencias')"><div class="ac-icon">🚫</div><div class="ac-val" style="color:var(--red)">0</div><div class="ac-label">Imóveis Recusados</div></div>
-    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">4</div><div class="ac-label">Possíveis Ausências</div></div>
+    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">6</div><div class="ac-label">Possíveis Ausências</div></div>
   </div>
 
   
@@ -851,13 +1078,30 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="ausencias">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">4</div><div class="kpi-sub">turnos sem visita registrada</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Agentes Envolvidos</div><div class="kpi-value">2</div><div class="kpi-sub">de 3 monitorados</div></div>
-    <div class="kpi yellow"><div class="kpi-label">Dia Mais Crítico</div><div class="kpi-value">Terça</div><div class="kpi-sub">3 ausências</div></div>
-    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">3 de 4 (75%)</div></div>
+    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">6</div><div class="kpi-sub">turnos sem visita registrada</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Agentes Envolvidos</div><div class="kpi-value">4</div><div class="kpi-sub">de 5 monitorados</div></div>
+    <div class="kpi yellow"><div class="kpi-label">Dia Mais Crítico</div><div class="kpi-value">Terça</div><div class="kpi-sub">5 ausências</div></div>
+    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">3 de 6 (50%)</div></div>
   </div>
   <div class="legend-box"><strong>Como ler:</strong> cada registro é um turno (manhã ou tarde) de um dia útil em que o agente não teve nenhuma visita lançada no sistema. Pode ser folga, atestado, falta ou apenas ausência de registro — confirme sempre com a escala antes de qualquer tratativa. Turnos do Cronograma abaixo (equipe inteira parada) já entram nessa lista, mas podem ser ocultados com o checkbox.</div>
 
+  
+  <div class="table-section">
+    <h3>🌴 Quem está de Férias, Atestado ou Afins (3)</h3>
+    <p class="table-hint">Relatório rápido de quem tem um período de férias/atestado confirmado agora, sem precisar abrir o Cronograma completo. Férias detectadas automaticamente (mais de 5 dias úteis seguidos sem lançamento) já aparecem aqui sozinhas — confira em <code>deteccao_editor.html</code> se alguma precisar ser corrigida pra "falta".</p>
+    <div class="table-wrap"><table class="data-table compact sortable" id="tableFeriasAtestado">
+      <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th></tr></thead>
+      <tbody>
+        
+        <tr><td>23/07/2026 a 11/08/2026</td><td>Férias/Atestado (automático)</td><td>Agente_3035</td></tr>
+        
+        <tr><td>31/07/2026 a 11/08/2026</td><td>Férias/Atestado (automático)</td><td>Agente_2951</td></tr>
+        
+        <tr><td>03/08/2026 a 11/08/2026</td><td>Férias/Atestado (automático)</td><td>Agente_125</td></tr>
+        
+      </tbody>
+    </table></div>
+  </div>
   
 
   
@@ -867,6 +1111,171 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="table-wrap"><table class="data-table compact sortable" id="tableCronograma">
       <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th><th>Origem</th></tr></thead>
       <tbody>
+        
+        <tr>
+          <td>23/07/2026 a 11/08/2026</td><td>Férias/Atestado (automático)</td><td>Agente_3035</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>31/07/2026 a 11/08/2026</td><td>Férias/Atestado (automático)</td><td>Agente_2951</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>03/08/2026 a 11/08/2026</td><td>Férias/Atestado (automático)</td><td>Agente_125</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_81</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_99</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_115</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_134</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_142</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_151</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_465</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Mateus Falcao de Souza</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_2917</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>07/08/2026 a 10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_3127</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_113</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_120</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_1936</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_1938</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Miglidiane Maciel Ajala</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_2918</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_3038</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026</td><td>Chuva (confirmada)</td><td>Agente_3128</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_80</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_86</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_110</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_124</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_149</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_157</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_161</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_1942</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_1943</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_1996</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>10/08/2026 a 11/08/2026</td><td>Chuva (confirmada)</td><td>Agente_2789</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr class="row-atencao">
+          <td>11/08/2026</td><td>Nenhum agente da equipe registrou visita neste turno</td><td>Todos da Equipe 2 (1/1)</td>
+          <td><span class="badge badge-atencao">🤖 Auto-detectado</span></td>
+        </tr>
         
         <tr class="row-atencao">
           <td>11/08/2026</td><td>Nenhum agente da equipe registrou visita neste turno</td><td>Todos da Equipe 3 (1/1)</td>
@@ -881,7 +1290,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   <div class="charts-grid">
     <div class="chart-card">
       <h3>Mapa de Calor — Dia da Semana × Turno</h3>
-      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 1, "Tarde": 0}, "Terça": {"Manhã": 2, "Tarde": 1}, "Quarta": {"Manhã": 0, "Tarde": 0}, "Quinta": {"Manhã": 0, "Tarde": 0}, "Sexta": {"Manhã": 0, "Tarde": 0}}' style="margin-top:6px;"></div>
+      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 1, "Tarde": 0}, "Terça": {"Manhã": 2, "Tarde": 3}, "Quarta": {"Manhã": 0, "Tarde": 0}, "Quinta": {"Manhã": 0, "Tarde": 0}, "Sexta": {"Manhã": 0, "Tarde": 0}}' style="margin-top:6px;"></div>
       <p class="chart-note"><strong>Metodologia:</strong> conta, para cada combinação de dia da semana e turno, quantos turnos ficaram sem nenhuma visita registrada, somando todos os agentes. Cor mais escura = mais ausências naquele cruzamento.</p>
     </div>
     <div class="chart-card">
@@ -891,13 +1300,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
   </div>
   <div class="table-section">
-    <h3>📅 Todos os Registros de Ausência (4)</h3>
+    <h3>📅 Todos os Registros de Ausência (6)</h3>
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
     <label class="checkbox-label">
-      <input type="checkbox" id="filterAusHideAllAbsent"> Ocultar turnos em que <strong>toda a equipe</strong> ficou ausente (1 registros — prováveis paralisações pontuais da equipe, listadas na tabela de Cronograma acima)
+      <input type="checkbox" id="filterAusHideAllAbsent"> Ocultar turnos em que <strong>toda a equipe</strong> ficou ausente (2 registros — prováveis paralisações pontuais da equipe, listadas na tabela de Cronograma acima)
     </label>
     <div class="filters">
-      <select id="filterAusEquipe"><option value="">Todas as equipes</option><option>Equipe 1</option><option>Equipe 3</option></select>
+      <select id="filterAusEquipe"><option value="">Todas as equipes</option><option>Equipe 1</option><option>Equipe 2</option><option>Equipe 3</option></select>
       <select id="filterAusTurno"><option value="">Todos os turnos</option><option>Manhã</option><option>Tarde</option></select>
       <select id="filterAusDia"><option value="">Todos os dias</option><option>Segunda</option><option>Terça</option><option>Quarta</option><option>Quinta</option><option>Sexta</option></select>
       <input type="text" id="filterAusName" placeholder="Buscar agente...">
@@ -920,9 +1329,21 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr>
+            <td class="sticky-col agent-name">Carlos Alberto Albiero</td><td>Equipe 1</td><td>11/08/2026</td>
+            <td>Terça</td><td>Tarde</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr>
             <td class="sticky-col agent-name">Evelyn Santana Santos Oliveira</td><td>Equipe 1</td><td>11/08/2026</td>
             <td>Terça</td><td>Tarde</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr data-allabsent="1">
+            <td class="sticky-col agent-name">Mateus Falcao de Souza</td><td>Equipe 2</td><td>11/08/2026</td>
+            <td>Terça</td><td>Tarde</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala) <span class="badge badge-atencao" title="Nenhum agente da equipe registrou visita neste turno">🤖 equipe parada</span></td>
           </tr>
           
           <tr data-allabsent="1">
@@ -950,7 +1371,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
   </div>
   <div class="table-section">
-    <h3>📊 Resumo de Pendência por Agente (3)</h3>
+    <h3>📊 Resumo de Pendência por Agente (5)</h3>
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por % Pendência por padrão.</p>
     <div class="table-wrap">
       <table class="data-table sortable" id="tablePendencias">
@@ -958,9 +1379,21 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         <tbody>
           
           <tr>
+            <td class="sticky-col agent-name">Mateus Falcao de Souza</td><td>Equipe 2</td>
+            <td class="num">14</td><td class="num">14</td><td class="num">0</td>
+            <td class="num">28</td><td class="num pct">50,0%</td>
+          </tr>
+          
+          <tr>
             <td class="sticky-col agent-name">Rozentina Matos de Oliveira</td><td>Equipe 1</td>
             <td class="num">19</td><td class="num">4</td><td class="num">0</td>
             <td class="num">23</td><td class="num pct">17,4%</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Carlos Alberto Albiero</td><td>Equipe 1</td>
+            <td class="num">1</td><td class="num">0</td><td class="num">0</td>
+            <td class="num">1</td><td class="num pct">0,0%</td>
           </tr>
           
           <tr>
@@ -992,8 +1425,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 
   <div class="kpi-grid">
     <div class="kpi blue"><div class="kpi-label">Líder do Ranking</div><div class="kpi-value">Miglidiane Maciel Ajala</div><div class="kpi-sub">104,0 pontos</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">99,7</div><div class="kpi-sub">de todos os agentes</div></div>
-    <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">3 / 0</div><div class="kpi-sub">agentes em cada faixa</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">97,0</div><div class="kpi-sub">de todos os agentes</div></div>
+    <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">5 / 0</div><div class="kpi-sub">agentes em cada faixa</div></div>
     <div class="kpi red"><div class="kpi-label">🟠 Atenção / 🔴 Crítico</div><div class="kpi-value">0 / 0</div><div class="kpi-sub">agentes em cada faixa</div></div>
   </div>
 
@@ -1006,7 +1439,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   </div>
 
   <div class="table-section">
-    <h3>🏆 Ranking Geral (3)</h3>
+    <h3>🏆 Ranking Geral (5)</h3>
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão.</p>
     <div class="table-wrap">
       <table class="data-table sortable" id="tableRanking">
@@ -1031,9 +1464,25 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="">
             <td class="num">3º</td>
+            <td class="sticky-col agent-name">Carlos Alberto Albiero</td>
+            <td>Equipe 1</td>
+            <td class="num">94,8</td>
+            <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
+          </tr>
+          
+          <tr class="">
+            <td class="num">4º</td>
             <td class="sticky-col agent-name">Evelyn Santana Santos Oliveira</td>
             <td>Equipe 1</td>
             <td class="num">93,8</td>
+            <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
+          </tr>
+          
+          <tr class="">
+            <td class="num">5º</td>
+            <td class="sticky-col agent-name">Mateus Falcao de Souza</td>
+            <td>Equipe 2</td>
+            <td class="num">91,2</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
           
@@ -1045,12 +1494,100 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
   
 <div class="table-section" id="alert-ranking-detalhe">
-  <h3>📋 Detalhamento — Critérios Aplicados por Agente (15)</h3>
+  <h3>📋 Detalhamento — Critérios Aplicados por Agente (23)</h3>
   <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
   <div class="table-wrap">
     <table class="data-table compact sortable" id="table-ranking-detalhe">
       <thead><tr><th>Agente</th><th>Equipe</th><th>Critério</th><th>Quantidade</th><th>Peso (pts/ocorrência)</th><th>Pontos Aplicados</th></tr></thead>
       <tbody>
+        
+        <tr>
+          
+            <td class="agent-name">Carlos Alberto Albiero</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Dia sem bater a meta diária</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,50</td>
+            
+          
+            <td class="num">-1,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Carlos Alberto Albiero</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Início manhã após 08h30</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-0,6</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Carlos Alberto Albiero</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Turno sem lançamento (não é chuva/reunião/férias)</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">1,50</td>
+            
+          
+            <td class="num">-3,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Carlos Alberto Albiero</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td>Visita rápida</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-0,6</td>
+            
+          
+        </tr>
         
         <tr>
           
@@ -1158,6 +1695,94 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">-9,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Mateus Falcao de Souza</td>
+            
+          
+            <td>Equipe 2</td>
+            
+          
+            <td>Dia sem bater a meta diária</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,50</td>
+            
+          
+            <td class="num">-1,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Mateus Falcao de Souza</td>
+            
+          
+            <td>Equipe 2</td>
+            
+          
+            <td>Fim manhã antes de 10h00</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-0,6</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Mateus Falcao de Souza</td>
+            
+          
+            <td>Equipe 2</td>
+            
+          
+            <td>Turno sem lançamento (não é chuva/reunião/férias)</td>
+            
+          
+            <td class="num">1</td>
+            
+          
+            <td class="num">1,50</td>
+            
+          
+            <td class="num">-3,0</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Mateus Falcao de Souza</td>
+            
+          
+            <td>Equipe 2</td>
+            
+          
+            <td>Visita rápida</td>
+            
+          
+            <td class="num">7</td>
+            
+          
+            <td class="num">0,30</td>
+            
+          
+            <td class="num">-4,2</td>
             
           
         </tr>
@@ -1427,12 +2052,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="custos">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Custo Médio Hora Útil</div><div class="kpi-value">R$ 373,81</div><div class="kpi-sub">média entre os 3 agentes</div></div>
+    <div class="kpi blue"><div class="kpi-label">Custo Médio Hora Útil</div><div class="kpi-value">R$ 1.618,57</div><div class="kpi-sub">média entre os 5 agentes</div></div>
     <div class="kpi green"><div class="kpi-label">Custo Mínimo</div><div class="kpi-value">R$ 128,76</div><div class="kpi-sub">Miglidiane Maciel Ajala</div></div>
-    <div class="kpi red"><div class="kpi-label">Custo Máximo</div><div class="kpi-value">R$ 828,92</div><div class="kpi-sub">Evelyn Santana Santos Oliveira</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Média Horas Trab./Dia</div><div class="kpi-value">1,5h</div><div class="kpi-sub">jornada total no dia</div></div>
-    <div class="kpi orange"><div class="kpi-label">Média Horas Trab./Semana</div><div class="kpi-value">1,5h</div><div class="kpi-sub">soma da semana</div></div>
-    <div class="kpi yellow"><div class="kpi-label">Média Horas Úteis/Dia</div><div class="kpi-value">1,1h</div><div class="kpi-sub">tempo real em visitas</div></div>
+    <div class="kpi red"><div class="kpi-label">Custo Máximo</div><div class="kpi-value">R$ 6.631,36</div><div class="kpi-sub">Carlos Alberto Albiero</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Média Horas Trab./Dia</div><div class="kpi-value">1,1h</div><div class="kpi-sub">jornada total no dia</div></div>
+    <div class="kpi orange"><div class="kpi-label">Média Horas Trab./Semana</div><div class="kpi-value">1,1h</div><div class="kpi-sub">soma da semana</div></div>
+    <div class="kpi yellow"><div class="kpi-label">Média Horas Úteis/Dia</div><div class="kpi-value">0,8h</div><div class="kpi-sub">tempo real em visitas</div></div>
   </div>
   <div class="legend-box">
     <strong>Horas Trabalhadas</strong> = jornada total do dia (primeira chegada até a última saída), descontando sobreposição com o almoço.
@@ -1473,10 +2098,24 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         <tbody>
           
           <tr>
+            <td class="sticky-col agent-name">Carlos Alberto Albiero</td><td>Equipe 1</td>
+            <td class="num">1</td><td class="num">1</td><td class="num">1,0</td>
+            <td class="num">0,0h</td><td class="num">0,0h</td>
+            <td class="num">0,0h</td><td class="num">R$ 6631,36</td>
+          </tr>
+          
+          <tr>
             <td class="sticky-col agent-name">Evelyn Santana Santos Oliveira</td><td>Equipe 1</td>
             <td class="num">4</td><td class="num">4</td><td class="num">4,0</td>
             <td class="num">0,3h</td><td class="num">0,3h</td>
             <td class="num">0,3h</td><td class="num">R$ 828,92</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Mateus Falcao de Souza</td><td>Equipe 2</td>
+            <td class="num">28</td><td class="num">14</td><td class="num">14,0</td>
+            <td class="num">1,0h</td><td class="num">1,0h</td>
+            <td class="num">0,7h</td><td class="num">R$ 340,07</td>
           </tr>
           
           <tr>
@@ -1550,7 +2189,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 11/08/2026 23:46</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 11/08/2026 23:51</footer>
 
 <script>
 function goToSection(id) {
@@ -1796,22 +2435,22 @@ function sizeForAgents(canvasId, count) {
 new Chart(document.getElementById('chartClass'), {
   type: 'doughnut',
   data: { labels: ['🟢 Normal', '🟡 Atenção', '🔴 Crítico'],
-    datasets: [{ data: [3, 0, 0], backgroundColor: ['#12B76A', '#F2B01E', '#E4572E'], borderWidth: 0 }] },
+    datasets: [{ data: [3, 0, 2], backgroundColor: ['#12B76A', '#F2B01E', '#E4572E'], borderWidth: 0 }] },
   options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
 });
 
 new Chart(document.getElementById('chartTeam'), {
   type: 'bar',
-  data: { labels: ["Equipe 1", "Equipe 3"],
+  data: { labels: ["Equipe 1", "Equipe 2", "Equipe 3"],
     datasets: [
-      { label: 'Imóveis Abertos', data: [23, 19], backgroundColor: '#1080D6', borderRadius: 6 },
-      { label: 'Visitas Rápidas', data: [1, 0], backgroundColor: '#E4572E', borderRadius: 6 }
+      { label: 'Imóveis Abertos', data: [24, 14, 19], backgroundColor: '#1080D6', borderRadius: 6 },
+      { label: 'Visitas Rápidas', data: [2, 7, 0], backgroundColor: '#E4572E', borderRadius: 6 }
     ] },
   options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }, plugins: { legend: { position: 'bottom' } } }
 });
 
 (function(){
-  const d = [{"label": "Rozentina Matos de Oliveira", "v": 5.26, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 0.0, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 100.0, "cls": "🔴 CRÍTICO"}, {"label": "Mateus Falcao de Souza", "v": 50.0, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 5.26, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.0, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 0.0, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
   sizeForAgents('chartPct', d.length);
   new Chart(document.getElementById('chartPct'), {
     type: 'bar',
@@ -1825,11 +2464,11 @@ new Chart(document.getElementById('chartTeam'), {
 
 new Chart(document.getElementById('chartTeamStack'), {
   type: 'bar',
-  data: { labels: ["Equipe 1", "Equipe 3"],
+  data: { labels: ["Equipe 1", "Equipe 2", "Equipe 3"],
     datasets: [
-      { label: 'Normal', data: [2, 1], backgroundColor: '#12B76A', borderRadius: 4 },
-      { label: 'Atenção', data: [0, 0], backgroundColor: '#F2B01E', borderRadius: 4 },
-      { label: 'Crítico', data: [0, 0], backgroundColor: '#E4572E', borderRadius: 4 }
+      { label: 'Normal', data: [2, 0, 1], backgroundColor: '#12B76A', borderRadius: 4 },
+      { label: 'Atenção', data: [0, 0, 0], backgroundColor: '#F2B01E', borderRadius: 4 },
+      { label: 'Crítico', data: [1, 1, 0], backgroundColor: '#E4572E', borderRadius: 4 }
     ] },
   options: { responsive: true, maintainAspectRatio: false,
     scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 2 } } },
@@ -1838,11 +2477,11 @@ new Chart(document.getElementById('chartTeamStack'), {
 
 new Chart(document.getElementById('chartTeamStatus'), {
   type: 'bar',
-  data: { labels: ["Equipe 1", "Equipe 3"],
+  data: { labels: ["Equipe 1", "Equipe 2", "Equipe 3"],
     datasets: [
-      { label: 'Abertos', data: [23, 19], backgroundColor: '#1080D6', borderRadius: 4 },
-      { label: 'Fechados', data: [4, 0], backgroundColor: '#F2994A', borderRadius: 4 },
-      { label: 'Recusados', data: [0, 0], backgroundColor: '#E4572E', borderRadius: 4 }
+      { label: 'Abertos', data: [24, 14, 19], backgroundColor: '#1080D6', borderRadius: 4 },
+      { label: 'Fechados', data: [4, 14, 0], backgroundColor: '#F2994A', borderRadius: 4 },
+      { label: 'Recusados', data: [0, 0, 0], backgroundColor: '#E4572E', borderRadius: 4 }
     ] },
   options: { responsive: true, maintainAspectRatio: false,
     scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true } },
@@ -1850,7 +2489,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 });
 
 (function(){
-  const d = [{"label": "Evelyn Santana Santos Oliveira", "v": 828.92, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 163.74, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 128.76, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 6631.36, "cls": "🔴 CRÍTICO"}, {"label": "Evelyn Santana Santos Oliveira", "v": 828.92, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 340.07, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 163.74, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 128.76, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
   sizeForAgents('chartCusto', d.length);
   new Chart(document.getElementById('chartCusto'), {
     type: 'bar',
@@ -1864,7 +2503,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 })();
 
 (function(){
-  const d = [{"label": "Evelyn Santana Santos Oliveira", "v": 0.27, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 1.35, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 1.72, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 0.03, "cls": "🔴 CRÍTICO"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.27, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 0.65, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 1.35, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 1.72, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
   sizeForAgents('chartHoras', d.length);
   new Chart(document.getElementById('chartHoras'), {
     type: 'bar',
@@ -1878,7 +2517,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 })();
 
 (function(){
-  const d = [{"label": "Evelyn Santana Santos Oliveira", "v": 0.33, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 2.05, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 2.22, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 0.03, "cls": "🔴 CRÍTICO"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.33, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 1.0, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 2.05, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 2.22, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
   sizeForAgents('chartHorasTrabDia', d.length);
   new Chart(document.getElementById('chartHorasTrabDia'), {
     type: 'bar',
@@ -1890,7 +2529,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 })();
 
 (function(){
-  const d = [{"label": "Evelyn Santana Santos Oliveira", "v": 0.33, "cls": "🟢 NORMAL"}, {"label": "Rozentina Matos de Oliveira", "v": 2.05, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 2.22, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 0.03, "cls": "🔴 CRÍTICO"}, {"label": "Evelyn Santana Santos Oliveira", "v": 0.33, "cls": "🟢 NORMAL"}, {"label": "Mateus Falcao de Souza", "v": 1.0, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 2.05, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 2.22, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
   sizeForAgents('chartHorasTrabSemana', d.length);
   new Chart(document.getElementById('chartHorasTrabSemana'), {
     type: 'bar',
@@ -1904,9 +2543,9 @@ new Chart(document.getElementById('chartTeamStatus'), {
 
 new Chart(document.getElementById('chartPendTop'), {
   type: 'bar',
-  data: { labels: ["Rozentina Matos de Oliveira", "Evelyn Santana Santos Oliveira", "Miglidiane Maciel Ajala"],
-    datasets: [{ label: '% Pendência', data: [17.39, 0.0, 0.0],
-      backgroundColor: [17.39, 0.0, 0.0].map(p => p > 40 ? '#E4572E' : p > 25 ? '#F2B01E' : '#12B76A'),
+  data: { labels: ["Mateus Falcao de Souza", "Rozentina Matos de Oliveira", "Carlos Alberto Albiero", "Evelyn Santana Santos Oliveira", "Miglidiane Maciel Ajala"],
+    datasets: [{ label: '% Pendência', data: [50.0, 17.39, 0.0, 0.0, 0.0],
+      backgroundColor: [50.0, 17.39, 0.0, 0.0, 0.0].map(p => p > 40 ? '#E4572E' : p > 25 ? '#F2B01E' : '#12B76A'),
       borderRadius: 4, barThickness: 16 }] },
   options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     scales: { x: { beginAtZero: true }, y: { grid: { display: false } } },
@@ -1916,7 +2555,7 @@ new Chart(document.getElementById('chartPendTop'), {
 
 
 (function(){
-  const d = [{"label": "Miglidiane Maciel Ajala", "v": 104.0, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 101.2, "color": "#12B76A"}, {"label": "Evelyn Santana Santos Oliveira", "v": 93.8, "color": "#12B76A"}];
+  const d = [{"label": "Miglidiane Maciel Ajala", "v": 104.0, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 101.2, "color": "#12B76A"}, {"label": "Carlos Alberto Albiero", "v": 94.8, "color": "#12B76A"}, {"label": "Evelyn Santana Santos Oliveira", "v": 93.8, "color": "#12B76A"}, {"label": "Mateus Falcao de Souza", "v": 91.2, "color": "#12B76A"}];
   sizeForAgents('chartRanking', d.length);
   new Chart(document.getElementById('chartRanking'), {
     type: 'bar',
@@ -1935,8 +2574,8 @@ new Chart(document.getElementById('chartPendTop'), {
 
 new Chart(document.getElementById('chartAusTop'), {
   type: 'bar',
-  data: { labels: ["Evelyn Santana Santos Oliveira", "Miglidiane Maciel Ajala"],
-    datasets: [{ label: 'Ausências', data: [3, 1], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
+  data: { labels: ["Evelyn Santana Santos Oliveira", "Mateus Falcao de Souza", "Miglidiane Maciel Ajala", "Carlos Alberto Albiero"],
+    datasets: [{ label: 'Ausências', data: [3, 1, 1, 1], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
   options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } },
     plugins: { legend: { display: false } } }
