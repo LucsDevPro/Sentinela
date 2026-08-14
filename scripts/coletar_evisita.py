@@ -2509,7 +2509,18 @@ def _preparar_cronograma(resultados, data_min=None, data_max=None, lista_cronogr
             alvo_fmt = entrada.get("equipe", "—")
         else:
             id_ag = entrada.get("id_agente")
-            alvo_fmt = nomes_por_id.get(id_ag, f"Agente_{id_ag}")
+            # Cronograma pode ser gerado num RECORTE (um mês/semana só, nas
+            # páginas de histórico) — se o agente não teve NENHUM
+            # lançamento dentro desse recorte específico (o caso mais
+            # comum: o mês inteiro de férias, tipo aqui), ele não aparece
+            # em `resultados` (que só cobre o recorte) e cai no genérico,
+            # MESMO que o nome dele já seja conhecido globalmente. Cai pro
+            # cache persistente antes de desistir — sem isso, "Julho/2026"
+            # isolado mostra "Agente_86" mesmo com o Acumulado (que enxerga
+            # o ano inteiro, inclusive os meses em que ele trabalhou)
+            # mostrando o nome certo.
+            nome_no_cache = _cache_nomes_agentes().get(str(id_ag), {}).get("nome")
+            alvo_fmt = nomes_por_id.get(id_ag) or nome_no_cache or f"Agente_{id_ag}"
         motivo = entrada.get("motivo", "")
         motivo_base = motivo.replace(" (confirmada)", "").replace(" (automático)", "")
         registros.append({
