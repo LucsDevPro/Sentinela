@@ -117,6 +117,20 @@ MESES_OFICIAIS = [
     (313, 317, "Julho/2026"),   # id_ciclo=163
 ]
 
+# A partir de PRIMEIRA_SEMANA_DETALHE_SEMANAL cada semana já vira sua
+# própria página (não agrupa mais por mês, ver acima) — mas às vezes também
+# faz sentido ter uma visão consolidada de VÁRIAS dessas semanas juntas
+# (ex.: uma "Home de Agosto" somando as semanas 31-34), SEM deixar de gerar
+# as páginas semanais individuais nem substituir nada. Cadastre aqui como
+# (semana_inicio, semana_fim, "Label") — atualizar_historico_do_cache() gera
+# um arquivo ADICIONAL consolidando esse intervalo, em paralelo às páginas
+# de semana que já existem. Funciona mesmo com o mês ainda incompleto: soma
+# só as semanas desse intervalo que já foram coletadas até agora, e cresce
+# sozinho conforme as semanas seguintes chegam.
+MESES_ADICIONAIS = [
+    (318, 321, "Agosto/2026"),   # semanas 31-34, id_ciclo=163 (padrão)
+]
+
 
 def _grupo_mes_oficial(html_id):
     """Nome do mês oficial (tabela acima) pra essa semana, ou None se a
@@ -819,10 +833,10 @@ PONTOS_GANHO_SEM_AUSENCIA          = 5     # bônus único: ZERO turnos sem lan�
 PONTOS_GANHO_PONTUALIDADE_PERFEITA = 3     # bônus único: ZERO violações de horário (início/fim) no período
 
 # Faixas de classificação da pontuação final
-NOTA_FAIXA_EXCELENTE = 85   # >= 85        -> 🟢 EXCELENTE
-NOTA_FAIXA_BOM        = 70  # 70 a 84,9    -> 🟡 BOM
-NOTA_FAIXA_ATENCAO    = 60  # 60 a 69,9    -> 🟠 ATENÇÃO
-                              # abaixo de 60 (<= 59) -> 🔴 CRÍTICO
+NOTA_FAIXA_EXCELENTE = 90   # >= 90        -> 🟢 EXCELENTE
+NOTA_FAIXA_BOM        = 75  # 75 a 89,9    -> 🟡 BOM
+NOTA_FAIXA_ATENCAO    = 60  # 60 a 74,9    -> 🟠 ATENÇÃO
+                              # abaixo de 60 (< 60) -> 🔴 CRÍTICO
 
 # ============================================================
 # Fim dos parâmetros editáveis — o restante do código normalmente não
@@ -3477,6 +3491,32 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
             "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M"),
         })
         log.info("🗂️  Histórico atualizado: %s (%s)", destino, label)
+
+    # Consolidados ADICIONAIS (MESES_ADICIONAIS) — somam várias semanas que
+    # já têm (e continuam tendo) página individual própria no loop acima.
+    # Não mexe em nada do que já foi gerado ali; só acrescenta mais um
+    # arquivo por cima, cobrindo só as semanas do intervalo que já estão em
+    # `htmls` (soma o que já tem, mesmo que o mês ainda não tenha fechado).
+    for ini, fim, label in MESES_ADICIONAIS:
+        semanas_disponiveis = sorted(h for h in htmls if ini <= h <= fim)
+        if not semanas_disponiveis:
+            continue  # nenhuma semana desse intervalo coletada ainda
+        nome_arquivo = f"semanas_{ini}-{fim}.xlsx" if ini != fim else f"semana_{ini}.xlsx"
+        caminho_tmp = consolidar_semanas(semanas_disponiveis, pasta_saida_tmp, lista_cronograma)
+        if not caminho_tmp:
+            continue
+        destino = os.path.join(pasta_historico, nome_arquivo)
+        shutil.copy2(caminho_tmp, destino)
+        fim_disponivel = semanas_disponiveis[-1]
+        entradas_cache.append({
+            "arquivo": nome_arquivo, "label": label, "origem": "cache",
+            "semana_inicio": ini, "semana_fim": fim,
+            "semana_ano_inicio": sem.html_para_semana(ini, sem.ano_da_semana_html(ini)),
+            "semana_ano_fim": sem.html_para_semana(fim_disponivel, sem.ano_da_semana_html(fim_disponivel)),
+            "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        })
+        log.info("🗂️  Histórico (consolidado adicional) atualizado: %s (%s — %s de %s semana(s) já coletada(s))",
+                  destino, label, len(semanas_disponiveis), fim - ini + 1)
 
     # Entradas manuais primeiro (geralmente mais antigas, tipo Jan-Maio),
     # depois as automáticas em ordem cronológica — mas isso é só estético,
