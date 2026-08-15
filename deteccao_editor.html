@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentinela — Editor de Detecções</title>
+<style>
+  :root {
+    --navy: #0B3D75; --navy2: #0F4C8F; --navy-deep: #062246;
+    --bg: #FAFBFD; --card: #FFFFFF; --bg-soft: #F3F6FA;
+    --border: #E7ECF3; --border-soft: #F0F3F8;
+    --text: #1A2B42; --text2: #6B7A8F; --text3: #97A3B3;
+    --green: #12B76A; --yellow: #F2B01E; --red: #E4572E;
+    --blue: #1080D6; --orange: #F2994A; --purple: #7C4DFF;
+    --radius: 16px; --radius-sm: 10px;
+    --shadow: 0 1px 2px rgba(11,61,117,0.04), 0 4px 16px -6px rgba(11,61,117,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px; line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(120deg, var(--navy-deep) 0%, var(--navy) 55%, var(--navy2) 100%);
+    padding: 22px 0; margin-bottom: 28px; box-shadow: 0 2px 20px -4px rgba(6,34,70,0.35);
+  }
+  header .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  header h1 { color: #fff; font-size: 1.3rem; margin: 0 0 4px; letter-spacing: 0.01em; }
+  header h1 span { color: #7FC4FF; font-weight: 400; }
+  header p { color: #AFC9EA; margin: 0; font-size: 0.85rem; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 24px; margin-bottom: 24px;
+  }
+  .card h2 { margin: 0 0 4px; font-size: 1.05rem; }
+  .card .hint { color: var(--text2); font-size: 0.82rem; margin: 0 0 18px; }
+  label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+  select, input {
+    padding: 7px 9px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.82rem; background: var(--bg-soft); color: var(--text); font-family: inherit;
+  }
+  select:focus, input:focus { outline: 2px solid var(--blue); outline-offset: 1px; background: #fff; }
+  button {
+    cursor: pointer; border: none; border-radius: 9px; font-weight: 700; font-size: 0.82rem;
+    padding: 10px 16px; font-family: inherit; transition: filter .15s, transform .1s;
+  }
+  button:active { transform: scale(0.98); }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.15); }
+  .btn-ghost { background: var(--bg-soft); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--border-soft); }
+  .btn-mini { padding: 5px 10px; font-size: 0.72rem; border-radius: 7px; }
+  .btn-falta { background: rgba(228,87,46,0.12); color: #B23A16; }
+  .btn-falta:hover { background: rgba(228,87,46,0.22); }
+  .btn-confirmar { background: rgba(18,183,106,0.12); color: #0A8F52; }
+  .btn-confirmar:hover { background: rgba(18,183,106,0.22); }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.83rem; }
+  th { text-align: left; padding: 8px 10px; color: var(--text2); font-size: 0.7rem; text-transform: uppercase;
+       letter-spacing: 0.03em; border-bottom: 1px solid var(--border); }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--border-soft); vertical-align: middle; }
+  tr:hover td { background: var(--bg-soft); }
+  .badge { display: inline-flex; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+  .badge-ferias { background: rgba(18,183,106,0.12); color: #0A8F52; }
+  .badge-chuva { background: rgba(16,128,214,0.12); color: #0A5FA0; }
+  .badge-falta { background: rgba(228,87,46,0.14); color: #B23A16; }
+  .badge-revisao { background: rgba(242,153,74,0.18); color: #A15A00; }
+  .empty-row td { text-align: center; color: var(--text3); padding: 28px; font-style: italic; }
+  .actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  textarea {
+    width: 100%; min-height: 140px; font-family: "SF Mono", Consolas, monospace; font-size: 0.78rem;
+    padding: 12px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg-soft); color: var(--text);
+  }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--navy-deep); color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 0.85rem; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .2s, bottom .2s;
+  }
+  .toast.show { opacity: 1; bottom: 34px; }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+    background: var(--navy); color: #fff; border-radius: 50%; font-size: 0.72rem; font-weight: 700; margin-right: 8px;
+  }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab-btn { background: var(--bg-soft); color: var(--text2); border: 1px solid var(--border); }
+  .tab-btn.active { background: var(--navy); color: #fff; }
+  .nota-revisao { font-size: 0.76rem; color: #A15A00; margin-top: 4px; }
+  .motivo-select { min-width: 190px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>S E N T I N E L A <span>— Editor de Detecções</span></h1>
+    <p>Confirme, corrija o motivo ou marque como falta as férias/chuvas detectadas automaticamente — depois é só colar o resultado no GitHub.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2><span class="step-num">1</span>Carregar nomes dos agentes (opcional, mas recomendado)</h2>
+    <p class="hint">Cole aqui o conteúdo de <code>data/agentes_nomes.json</code> pra ver nomes de verdade em vez de só o ID. Se pular, mostra o ID normalmente.</p>
+    <textarea id="nomesBox" placeholder='Cole aqui o conteúdo de data/agentes_nomes.json (opcional)'></textarea>
+    <div class="actions-row">
+      <button class="btn-ghost" onclick="carregarNomes()">Carregar nomes</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">2</span>Carregar as detecções atuais</h2>
+    <p class="hint">Abra <code>data/deteccoes_pendentes.json</code> no GitHub, copie o conteúdo inteiro e cole aqui.</p>
+    <textarea id="importBox" placeholder='Cole aqui o conteúdo de data/deteccoes_pendentes.json'></textarea>
+    <div class="actions-row">
+      <button class="btn-primary" onclick="importarJson()">Carregar na tabela</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">3</span>Revisar e corrigir</h2>
+    <p class="hint">
+      Tudo já vem <b>confirmado automaticamente</b> (Férias/Atestado ou Chuva, conforme o padrão) — você só precisa mexer no que estiver ERRADO.
+      Pra chuva, troque o motivo se na verdade foi outra coisa (capacitação, reunião...). Pra qualquer um dos dois, marque <b>"Marcar falta"</b>
+      se não for justificado de verdade — some da lista de "confirmado" e volta a contar normalmente na pontuação do agente, com o motivo documentado.
+      Itens em laranja ("revisar") são decisões antigas cujo padrão não apareceu mais na última coleta — pode ser dado corrigido, ou pode não fazer mais sentido; dê uma olhada.
+    </p>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabTodos" onclick="mudarFiltro('todos')">Todos (<span id="cTodos">0</span>)</button>
+      <button class="tab-btn" id="tabRevisao" onclick="mudarFiltro('revisao')">⚠️ Precisam revisão (<span id="cRevisao">0</span>)</button>
+      <button class="tab-btn" id="tabFerias" onclick="mudarFiltro('ferias')">🌴 Férias/Atestado (<span id="cFerias">0</span>)</button>
+      <button class="tab-btn" id="tabChuva" onclick="mudarFiltro('chuva')">🌧️ Chuva/Coletiva (<span id="cChuva">0</span>)</button>
+    </div>
+    <table>
+      <thead><tr><th>Quem</th><th>Equipe</th><th>Período</th><th>Status</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">4</span>Copiar pro GitHub</h2>
+    <p class="hint">
+      Copie o texto abaixo e cole no arquivo <code>data/deteccoes_pendentes.json</code> do repositório
+      (GitHub → abrir o arquivo → ✏️ Edit → apagar tudo → colar → Commit changes). Suas correções ficam protegidas —
+      a próxima coleta automática não sobrescreve o que você decidir aqui.
+    </p>
+    <textarea id="outputBox" readonly placeholder="[]"></textarea>
+    <div class="actions-row">
+      <button class="btn-primary" onclick="copiarJson()">📋 Copiar JSON</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATEGORIAS_PARALISACAO_COLETIVA = ["Chuva", "Capacitação", "Reunião/atividade coletiva", "Outra atividade coletiva"];
+
+let registros = []; // conteúdo bruto de deteccoes_pendentes.json
+let NOMES_AGENTES = {}; // id_agente (string) -> {nome, equipe}
+let filtroAtual = 'todos';
+
+function carregarNomes() {
+  const txt = document.getElementById('nomesBox').value.trim();
+  if (!txt) { NOMES_AGENTES = {}; mostrarToast('Nenhum nome carregado — a lista vai mostrar os IDs.'); }
+  else {
+    try {
+      NOMES_AGENTES = JSON.parse(txt);
+      mostrarToast(`${Object.keys(NOMES_AGENTES).length} nome(s) carregado(s).`);
+    } catch (e) {
+      mostrarToast('JSON inválido — confira se copiou o arquivo certo.');
+      return;
+    }
+  }
+  renderizar();
+}
+
+function nomeAgente(id) {
+  const info = NOMES_AGENTES[String(id)];
+  return info ? info.nome : `Agente ID ${id}`;
+}
+
+function quemFmt(r) {
+  if (r.tipo === 'possiveis_ferias') return r.nome_agente || nomeAgente(r.id_agente);
+  const nomes = r.nomes_envolvidos || [];
+  return nomes.length ? nomes.join(', ') : `${(r.agentes_envolvidos || []).length} agente(s)`;
+}
+
+function importarJson() {
+  const txt = document.getElementById('importBox').value.trim();
+  if (!txt) { registros = []; renderizar(); return; }
+  try {
+    const dados = JSON.parse(txt);
+    if (!Array.isArray(dados)) throw new Error('não é uma lista');
+    registros = dados;
+    renderizar();
+    mostrarToast(`${registros.length} detecção(ões) carregada(s).`);
+  } catch (e) {
+    mostrarToast('JSON inválido — confira se copiou o arquivo certo.');
+  }
+}
+
+function mudarFiltro(f) {
+  filtroAtual = f;
+  ['Todos','Revisao','Ferias','Chuva'].forEach(k => {
+    document.getElementById('tab' + k).classList.toggle('active', k.toLowerCase() === f || (f === 'todos' && k === 'Todos'));
+  });
+  renderizar();
+}
+
+function passaNoFiltro(r) {
+  if (filtroAtual === 'todos') return true;
+  if (filtroAtual === 'revisao') return !!r.revisao_necessaria;
+  if (filtroAtual === 'ferias') return r.tipo === 'possiveis_ferias';
+  if (filtroAtual === 'chuva') return r.tipo === 'paralisacao_coletiva';
+  return true;
+}
+
+function statusCelula(r, idx) {
+  if (r.status === 'falta' || r.status === 'rejeitada') {
+    return `<span class="badge badge-falta">Marcado como falta</span>
+            <div><button class="btn-mini btn-confirmar" onclick="marcarConfirmada(${idx})">Desfazer (voltar a confirmar)</button></div>`;
+  }
+  if (r.tipo === 'possiveis_ferias') {
+    return `<span class="badge badge-ferias">✅ Confirmado — Férias/Atestado</span>
+            <div><button class="btn-mini btn-falta" onclick="marcarFalta(${idx})">Marcar falta</button></div>`;
+  }
+  // paralisacao_coletiva
+  const catual = r.categoria_coletiva || 'Chuva';
+  const opts = CATEGORIAS_PARALISACAO_COLETIVA.map(c =>
+    `<option value="${c}" ${c === catual ? 'selected' : ''}>${c}</option>`).join('');
+  return `<span class="badge badge-chuva">✅ Confirmado</span>
+          <div>
+            <select class="motivo-select" onchange="mudarCategoria(${idx}, this.value)">${opts}</select>
+            <button class="btn-mini btn-falta" onclick="marcarFalta(${idx})">Marcar falta</button>
+          </div>`;
+}
+
+function marcarFalta(idx) {
+  registros[idx].status = 'falta';
+  registros[idx].corrigido_manualmente = true;
+  renderizar();
+  mostrarToast('Marcado como falta — não esqueça de copiar o JSON no passo 4.');
+}
+
+function marcarConfirmada(idx) {
+  registros[idx].status = 'confirmada';
+  renderizar();
+  mostrarToast('Voltou a ficar confirmado.');
+}
+
+function mudarCategoria(idx, valor) {
+  registros[idx].categoria_coletiva = valor;
+  registros[idx].corrigido_manualmente = true;
+  renderizar();
+  mostrarToast('Motivo atualizado — não esqueça de copiar o JSON no passo 4.');
+}
+
+function renderizar() {
+  const tbody = document.getElementById('tbody');
+  const visiveis = registros.map((r, i) => ({ r, i })).filter(({ r }) => passaNoFiltro(r));
+
+  document.getElementById('cTodos').textContent = registros.length;
+  document.getElementById('cRevisao').textContent = registros.filter(r => r.revisao_necessaria).length;
+  document.getElementById('cFerias').textContent = registros.filter(r => r.tipo === 'possiveis_ferias').length;
+  document.getElementById('cChuva').textContent = registros.filter(r => r.tipo === 'paralisacao_coletiva').length;
+
+  if (visiveis.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Nenhum registro nessa aba.</td></tr>';
+  } else {
+    tbody.innerHTML = visiveis.map(({ r, i }) => `
+      <tr>
+        <td>
+          ${r.tipo === 'possiveis_ferias' ? '🌴' : '🌧️'} ${quemFmt(r)}
+          ${r.revisao_necessaria ? `<div><span class="badge badge-revisao">⚠️ Revisar</span></div>
+             <div class="nota-revisao">${r.nota_revisao || ''}</div>` : ''}
+        </td>
+        <td>${r.equipe || '—'}</td>
+        <td>${r.inicio} a ${r.fim}</td>
+        <td colspan="2">${statusCelula(r, i)}</td>
+      </tr>`).join('');
+  }
+  document.getElementById('outputBox').value = JSON.stringify(registros, null, 2);
+}
+
+function copiarJson() {
+  const box = document.getElementById('outputBox');
+  box.select();
+  navigator.clipboard.writeText(box.value).then(() => {
+    mostrarToast('JSON copiado! Agora é só colar no GitHub.');
+  }).catch(() => {
+    document.execCommand('copy');
+    mostrarToast('JSON copiado! Agora é só colar no GitHub.');
+  });
+}
+
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+renderizar();
+</script>
+
+</body>
+</html>
