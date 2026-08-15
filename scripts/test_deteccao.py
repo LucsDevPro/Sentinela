@@ -253,6 +253,42 @@ def teste_6_motivo_manual_preservado(tmp_path="/tmp/deteccoes_teste.json"):
     os.remove(tmp_path)
 
 
+# ============================================================ Teste 7 ====
+def teste_7_ferias_nao_duplica_quando_inicio_varia(tmp_path="/tmp/deteccoes_teste7.json"):
+    # Reproduz o bug real: a MESMA férias em andamento, mas o início
+    # calculado varia alguns dias entre duas coletas (ex.: um lançamento
+    # atrasado que só aparece no site depois) — não pode virar duas
+    # entradas confirmadas lado a lado; tem que atualizar a mesma.
+    import os
+    if os.path.exists(tmp_path):
+        os.remove(tmp_path)
+
+    dias1 = dias_uteis_entre("01/07/2026", "20/07/2026")  # última visita 20/07
+    a = montar_resultado(60, "Fulana de Tal", "Equipe 1", dias1)
+    df1 = montar_df_total([a])
+    df1 = pd.concat([df1, pd.DataFrame({"id_agente": [60], "dia": [d("30/07/2026")]})], ignore_index=True)
+    a["df"] = pd.concat([a["df"], pd.DataFrame({"dia": [d("30/07/2026")]})], ignore_index=True)
+    eventos1 = ce.detectar_ausencias_e_paralisacoes(df1, [a])
+    ce.atualizar_deteccoes_pendentes(eventos1, caminho=tmp_path)
+
+    # Segunda coleta: mesma agente, mas agora um lançamento retroativo em
+    # 22/07 apareceu no site — o início da ausência recalcula pra 23/07 em
+    # vez de 21/07 (poucos dias de diferença, mesmo evento).
+    dias2 = dias_uteis_entre("01/07/2026", "20/07/2026") + [d("22/07/2026")]
+    b = montar_resultado(60, "Fulana de Tal", "Equipe 1", dias2)
+    df2 = montar_df_total([b])
+    df2 = pd.concat([df2, pd.DataFrame({"id_agente": [60], "dia": [d("30/07/2026")]})], ignore_index=True)
+    b["df"] = pd.concat([b["df"], pd.DataFrame({"dia": [d("30/07/2026")]})], ignore_index=True)
+    eventos2 = ce.detectar_ausencias_e_paralisacoes(df2, [b])
+    deteccoes = ce.atualizar_deteccoes_pendentes(eventos2, caminho=tmp_path)
+
+    ferias = [e for e in deteccoes if e["tipo"] == "possiveis_ferias" and e["id_agente"] == 60]
+    checar("Teste 7 — não duplica quando o início varia poucos dias entre coletas",
+           len(ferias) == 1, f"eventos={ferias}")
+
+    os.remove(tmp_path)
+
+
 if __name__ == "__main__":
     teste_1_ferias_individual()
     teste_2_ferias_nao_contamina_chuva()
@@ -260,6 +296,7 @@ if __name__ == "__main__":
     teste_4_chuva_varios_dias_um_evento()
     teste_5_ponto_estrategico_nao_gera_ferias()
     teste_6_motivo_manual_preservado()
+    teste_7_ferias_nao_duplica_quando_inicio_varia()
 
     print()
     if FALHAS:

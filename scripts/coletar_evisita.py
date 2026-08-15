@@ -639,11 +639,35 @@ def _detectar_chuva_coletiva(df_total, resultados, data_max, equipes_ignoradas,
     return eventos
 
 
+def _periodos_se_tocam(ini1, fim1, ini2, fim2, tolerancia_dias=3):
+    """True se dois períodos [ini1,fim1] e [ini2,fim2] (objetos date) se
+    sobrepõem OU estão a poucos dias um do outro — tratados como o MESMO
+    evento contínuo, não dois eventos separados. A tolerância existe porque
+    o início calculado de uma férias/atestado AINDA EM ANDAMENTO pode variar
+    ±alguns dias de uma coleta pra outra (ex.: um lançamento atrasado que só
+    aparece no site depois muda onde a sequência "sem lançamento" começa a
+    contar) — sem essa folga, cada pequena variação virava um evento
+    DUPLICADO em vez de atualizar o mesmo."""
+    from datetime import timedelta
+    return ini1 <= fim2 + timedelta(days=tolerancia_dias) and ini2 <= fim1 + timedelta(days=tolerancia_dias)
+
+
 def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pendentes.json"):
     """Funde os eventos detectados agora com o que já existia no arquivo,
-    preservando decisões já tomadas pela CHAVE do evento (tipo +
-    agente/equipe + início) — só atualiza o "fim"/duração se o mesmo
-    período continuar aparecendo (ex.: férias que ainda não terminou).
+    preservando decisões já tomadas.
+
+    Chave de comparação:
+      - "paralisacao_coletiva": tipo + equipe + início EXATO (o intervalo de
+        um evento de chuva é recalculado do zero a cada rodada a partir do
+        zero de novo, então não sofre do mesmo problema de "início que
+        varia aos poucos" que a férias tem).
+      - "possiveis_ferias": tipo + agente + SOBREPOSIÇÃO de período (ver
+        _periodos_se_tocam) — não exige início exato igual, porque uma
+        férias/atestado ainda em andamento pode ter o início recalculado
+        alguns dias pra frente/trás entre coletas sucessivas sem deixar de
+        ser a MESMA férias. Quando casa, funde os dois períodos (usa o
+        início mais antigo e o fim mais recente dos dois) em vez de criar
+        uma entrada nova ao lado da antiga.
 
     Comportamento:
       - "possiveis_ferias" (agente sozinho, >5 dias úteis sem lançamento):
@@ -670,48 +694,113 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
 
     STATUS_PROTEGIDOS = ("confirmada", "falta", "rejeitada")  # "rejeitada" = nome antigo de "falta", mantido por compatibilidade
 
-    def chave(e):
-        if e["tipo"] == "paralisacao_coletiva":
-            return ("paralisacao_coletiva", e["equipe"], e["inicio"])
-        return ("possiveis_ferias", e["id_agente"], e["inicio"])
+    def parse(s):
+        return datetime.strptime(s, "%d/%m/%Y").date()
 
-    por_chave = {chave(e): e for e in anteriores}
-    finais, vistos = [], set()
+    anteriores_ferias = [e for e in anteriores if e["tipo"] == "possiveis_ferias"]
+    anteriores_paralisacao = {("paralisacao_coletiva", e["equipe"], e["inicio"]): e
+                               for e in anteriores if e["tipo"] == "paralisacao_coletiva"}
+
+    # Auto-limpeza: funde duplicatas que já existiam no arquivo ANTES desta
+    # correção (geradas quando a chave de comparação ainda era o início
+    # exato) — sem isso, elas ficariam presas lado a lado pra sempre, já
+    # que o merge abaixo só evita criar duplicata NOVA, não junta as que já
+    # estão salvas. Roda toda vez (é barato e idempotente — depois da
+    # primeira limpeza não sobra mais nada pra fundir).
+    ferias_fundidas, usadas_na_limpeza = [], set()
+    for i, e1 in enumerate(anteriores_ferias):
+        if i in usadas_na_limpeza:
+            continue
+        grupo = [e1]
+        usadas_na_limpeza.add(i)
+        for j in range(i + 1, len(anteriores_ferias)):
+            if j in usadas_na_limpeza:
+                continue
+            e2 = anteriores_ferias[j]
+            if e2["id_agente"] != e1["id_agente"]:
+                continue
+            if any(_periodos_se_tocam(parse(m["inicio"]), parse(m["fim"]), parse(e2["inicio"]), parse(e2["fim"]))
+                   for m in grupo):
+                grupo.append(e2)
+                usadas_na_limpeza.add(j)
+        if len(grupo) > 1:
+            base = max(grupo, key=lambda x: x.get("detectado_em", ""))  # mantém a mais recente como "base"
+            ini_final = min(parse(m["inicio"]) for m in grupo)
+            fim_final = max(parse(m["fim"]) for m in grupo)
+            base["inicio"] = ini_final.strftime("%d/%m/%Y")
+            base["fim"] = fim_final.strftime("%d/%m/%Y")
+            base["duracao"] = len(_dias_uteis_no_intervalo(ini_final, fim_final))
+            base.pop("revisao_necessaria", None)
+            base.pop("nota_revisao", None)
+            ferias_fundidas.append(base)
+            log.info("🧹 Duplicata de férias fundida: %s (%d entradas viraram 1 — %s a %s).",
+                      base.get("nome_agente", base["id_agente"]), len(grupo), base["inicio"], base["fim"])
+        else:
+            ferias_fundidas.append(e1)
+    anteriores_ferias = ferias_fundidas
+
+    usados_ferias, vistos_paralisacao = set(), set()
+    finais = []
     for novo in eventos_detectados:
-        k = chave(novo)
-        vistos.add(k)
-        anterior = por_chave.get(k)
-        if anterior and anterior.get("status") in STATUS_PROTEGIDOS:
-            anterior["fim"] = novo["fim"]
-            anterior["duracao"] = novo["duracao"]
-            anterior.pop("revisao_necessaria", None)  # o padrão voltou a aparecer — não precisa mais de revisão
+        if novo["tipo"] == "paralisacao_coletiva":
+            k = ("paralisacao_coletiva", novo["equipe"], novo["inicio"])
+            vistos_paralisacao.add(k)
+            anterior = anteriores_paralisacao.get(k)
+            if anterior and anterior.get("status") in STATUS_PROTEGIDOS:
+                anterior["fim"] = novo["fim"]
+                anterior["duracao"] = novo["duracao"]
+                anterior.pop("revisao_necessaria", None)
+                anterior.pop("nota_revisao", None)
+                finais.append(anterior)
+            else:  # paralisacao_coletiva nova — CONFIRMADA automaticamente como Chuva (padrão)
+                novo["status"] = "confirmada"
+                novo["categoria_coletiva"] = "Chuva"
+                novo["confirmado_automaticamente"] = True
+                novo["detectado_em"] = datetime.now().strftime("%d/%m/%Y %H:%M")
+                finais.append(novo)
+            continue
+
+        # possiveis_ferias — casa por SOBREPOSIÇÃO de período com uma
+        # detecção anterior do MESMO agente, não por início idêntico.
+        ini_novo, fim_novo = parse(novo["inicio"]), parse(novo["fim"])
+        idx_match = None
+        for i, ant in enumerate(anteriores_ferias):
+            if i in usados_ferias or ant["id_agente"] != novo["id_agente"] or ant.get("status") not in STATUS_PROTEGIDOS:
+                continue
+            if _periodos_se_tocam(ini_novo, fim_novo, parse(ant["inicio"]), parse(ant["fim"])):
+                idx_match = i
+                break
+        if idx_match is not None:
+            usados_ferias.add(idx_match)
+            anterior = anteriores_ferias[idx_match]
+            ini_final = min(ini_novo, parse(anterior["inicio"]))
+            fim_final = max(fim_novo, parse(anterior["fim"]))
+            anterior["inicio"] = ini_final.strftime("%d/%m/%Y")
+            anterior["fim"] = fim_final.strftime("%d/%m/%Y")
+            anterior["duracao"] = len(_dias_uteis_no_intervalo(ini_final, fim_final))
+            anterior.pop("revisao_necessaria", None)
             anterior.pop("nota_revisao", None)
             finais.append(anterior)
-        elif novo["tipo"] == "possiveis_ferias":
+        else:
             novo["status"] = "confirmada"
             novo["motivo"] = "Férias/Atestado"
             novo["confirmado_automaticamente"] = True
             novo["categoria_coletiva"] = None
             novo["detectado_em"] = datetime.now().strftime("%d/%m/%Y %H:%M")
             finais.append(novo)
-        else:  # paralisacao_coletiva nova — CONFIRMADA automaticamente como Chuva (padrão)
-            novo["status"] = "confirmada"
-            novo["categoria_coletiva"] = "Chuva"
-            novo["confirmado_automaticamente"] = True
-            novo["detectado_em"] = datetime.now().strftime("%d/%m/%Y %H:%M")
-            finais.append(novo)
 
     n_revisao = 0
-    for k, anterior in por_chave.items():
-        if k not in vistos and anterior.get("status") in STATUS_PROTEGIDOS:
-            # Uma decisão já tomada (confirmada/falta) que a análise ATUAL não
-            # gera mais — pode ser um dado que mudou, ou (como aconteceu de
-            # verdade aqui) uma correção no cálculo que revelou que a
-            # detecção original era um falso positivo. Mantém a decisão
-            # em vigor (não desfaz sozinho — pode ser uma correção legítima
-            # de dados também), mas marca pra revisão em vez de proteger
-            # essa decisão pra sempre sem ninguém saber que precisa olhar
-            # de novo.
+    for i, anterior in enumerate(anteriores_ferias):
+        if i not in usados_ferias and anterior.get("status") in STATUS_PROTEGIDOS:
+            if not anterior.get("revisao_necessaria"):
+                n_revisao += 1
+            anterior["revisao_necessaria"] = True
+            anterior["nota_revisao"] = ("O padrão que gerou esta detecção não aparece mais na análise atual "
+                                         "— pode ser correção de dados, ou uma correção no sistema que revelou "
+                                         "um falso positivo. Confira se a decisão ainda faz sentido.")
+            finais.append(anterior)
+    for k, anterior in anteriores_paralisacao.items():
+        if k not in vistos_paralisacao and anterior.get("status") in STATUS_PROTEGIDOS:
             if not anterior.get("revisao_necessaria"):
                 n_revisao += 1
             anterior["revisao_necessaria"] = True
