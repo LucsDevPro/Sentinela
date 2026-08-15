@@ -86,6 +86,30 @@ jobs:
       - name: Instalar dependências
         run: pip install -r requirements.txt
 
+      # Confere ANTES de mais nada se os arquivos JSON que às vezes são
+      # editados na mão direto pelo GitHub (deteccoes_pendentes.json,
+      # agentes_nomes.json, cronograma_ausencias.json, config_home.json)
+      # ainda são JSON válido. Um erro de digitação num desses (vírgula
+      # sobrando/faltando) faz o código cair no fallback silencioso (trata
+      # como arquivo vazio) em vez de avisar — isso já aconteceu de verdade
+      # (o cache de nomes inteiro sumiu assim numa consolidação). Falha o
+      # workflow alto e claro aqui, ANTES de gastar ~1h de coleta em cima de
+      # um estado corrompido.
+      - name: Validar arquivos JSON críticos
+        run: python scripts/validar_json.py
+
+      # Roda a suíte de testes da lógica de detecção (férias/chuva) ANTES de
+      # gerar qualquer coisa — se uma mudança futura no coletar_evisita.py
+      # quebrar essa lógica, o workflow falha aqui, ANTES de publicar um
+      # dashboard errado no ar. Usa os mesmos secrets do passo de coleta
+      # (necessário só pra importar o módulo — o teste não faz nenhuma
+      # requisição de verdade ao e-Visita).
+      - name: Rodar testes da lógica de detecção
+        env:
+          EVISITA_CPF: ${{ secrets.EVISITA_CPF }}
+          EVISITA_SENHA: ${{ secrets.EVISITA_SENHA }}
+        run: python scripts/test_deteccao.py
+
       # Só coleta dados novos quando disparado por agendamento ou manualmente
       # (com a opção marcada). Em push (planilha subida à mão, ou mudança nos
       # templates) pula essa etapa e só regenera o HTML. O cache de semanas
