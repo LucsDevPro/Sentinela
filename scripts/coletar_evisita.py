@@ -112,9 +112,35 @@ PRIMEIRA_SEMANA_DETALHE_SEMANAL = 318
 # página própria (ver atualizar_historico_do_cache), não precisa de
 # agrupamento de mês nenhum.
 MESES_OFICIAIS = [
-    (305, 308, "Maio/2026"),    # id_ciclo=162
-    (309, 312, "Junho/2026"),   # id_ciclo=162
+    # Maio e Junho/2026 foram ARQUIVADOS (ver MESES_ARQUIVADOS logo abaixo)
+    # — saíram daqui de propósito, não é esquecimento.
     (313, 317, "Julho/2026"),   # id_ciclo=163
+]
+
+# Meses que já foram gerados e "fechados" — não são mais regenerados
+# automaticamente a cada rodada (ver atualizar_historico_do_cache(), que
+# preserva no manifest.json qualquer entrada com "origem": "manual" sem
+# tocar nela). O arquivo .xlsx continua no repositório normalmente, do
+# jeito que foi gerado da última vez, e continua acessível pelo
+# home_editor.html/historico como qualquer outro mês.
+#
+# Isso existe por dois motivos: (1) performance — não tem por que
+# reprocessar um mês que já fechou há tempos toda vez que o workflow roda,
+# só cresce o tempo de execução à toa conforme o histórico cresce; (2)
+# estabilidade — um mês fechado não deveria mudar de número sozinho por
+# causa de uma correção de código futura (ex.: a correção de nome de agente
+# ou a de duplicata de férias que fizemos), senão os números "oficiais" de
+# um mês passado ficam instáveis, o que é ruim pra confiança/auditoria.
+#
+# Pra REABRIR um mês arquivado (só se precisar corrigir algo grave nele de
+# verdade): tire a entrada correspondente de data/historico/manifest.json
+# (ou troque "origem" de "manual" pra "cache") e rode
+# `consolidar_semanas([...semanas do mês...], "data/historico", ...)` na
+# mão uma vez — depois arquive de novo trocando "origem" de volta pra
+# "manual". Não é algo pra acontecer sozinho numa rodada automática.
+MESES_ARQUIVADOS = [
+    (305, 308, "Maio/2026"),
+    (309, 312, "Junho/2026"),
 ]
 
 # A partir de PRIMEIRA_SEMANA_DETALHE_SEMANAL cada semana já vira sua
@@ -425,21 +451,30 @@ def _carregar_cronograma_ausencias(caminho="data/cronograma_ausencias.json"):
 CRONOGRAMA_AUSENCIAS = _carregar_cronograma_ausencias()
 
 # --- 13b) DETECÇÃO AUTOMÁTICA DE FÉRIAS/ATESTADO E CHUVA -------------------
-# A detecção roda em DUAS ETAPAS SEPARADAS, nessa ordem obrigatória — é o que
-# evita que férias de agentes diferentes que por acaso se sobrepõem no
-# calendário sejam confundidas com uma paralisação coletiva de equipe:
+# A detecção roda em DUAS ETAPAS SEPARADAS, nessa ordem obrigatória:
 #
-#   1) FÉRIAS/ATESTADO — puramente INDIVIDUAL, nunca depende de equipe.
-#      Analisa, por agente (sozinho, sem olhar pra ninguém mais da equipe),
-#      sequências de dias ÚTEIS CONSECUTIVOS sem nenhum lançamento de visita
-#      (ignora sábado, domingo e feriados em FERIADOS_NACIONAIS):
-#        1 a 4 dias -> possível ausência pontual (só informativo, nada muda)
-#        5 dias     -> "continuar monitorando" (ainda só informativo)
-#        > 5 dias   -> Férias/Atestado, CONFIRMADO AUTOMATICAMENTE, sem
-#                      precisar de nenhuma ação do supervisor.
-#      Dois (ou mais) agentes da mesma equipe de férias em períodos que se
-#      cruzam NÃO formam evento nenhum entre si — cada um é confirmado
-#      individualmente, isolado dos demais.
+#   1) FÉRIAS/ATESTADO — por agente. Regras, nessa ordem:
+#        a) Menos de LIMITE_DIAS_UTEIS_FERIAS (7) dias ÚTEIS consecutivos
+#           sem lançamento (ignora sábado, domingo e feriados em
+#           FERIADOS_NACIONAIS) = só "ausência" pontual (falta/folga/
+#           atestado) — não vira evento nenhum, fica de fora.
+#        b) >= 7 dias úteis = candidato a férias. Nenhuma OCORRÊNCIA passa
+#           de LIMITE_DIAS_CORRIDOS_OCORRENCIA (30) dias CORRIDOS — uma
+#           ausência mais longa que isso é dividida em várias ocorrências
+#           consecutivas de até 30 dias cada (ver _dividir_em_ocorrencias),
+#           pra nunca virar um período gigante sem fim visível.
+#        c) Cada ocorrência é CONFIRMADA AUTOMATICAMENTE como Férias/
+#           Atestado, sem precisar de nenhuma ação do supervisor — mesmo
+#           que o período dela SOBREPONHA o de outro agente da mesma
+#           equipe (dois agentes de férias ao mesmo tempo não é, por si
+#           só, motivo pra represar a pontuação de ninguém esperando
+#           revisão manual). Quando sobrepõe, a ocorrência ainda fica
+#           marcada com "revisao_classificacao_necessaria" — não muda o
+#           cálculo em nada, é só um sinalizador pro supervisor conferir
+#           com calma no deteccao_editor.html se é coincidência de duas
+#           férias mesmo, ou se era uma paralisação coletiva que a etapa 2
+#           (chuva) não pegou por não ter sido a equipe INTEIRA parada no
+#           mesmo dia.
 #
 #   2) CHUVA — por EQUIPE, dia a dia, só entre os agentes ATIVOS daquele dia
 #      (isto é, depois de EXCLUIR quem já está em Férias/Atestado confirmado
@@ -450,15 +485,35 @@ CRONOGRAMA_AUSENCIAS = _carregar_cronograma_ausencias()
 #      consecutivos com o mesmo padrão viram um único evento. Se depois
 #      descobrir que não foi chuva de verdade (foi capacitação, reunião
 #      etc.), corrija manualmente o "categoria_coletiva" do evento em
-#      data/deteccoes_pendentes.json (ou via deteccao_editor.html, se
-#      existir) — a correção fica protegida e não é sobrescrita nas
-#      próximas coletas.
+#      data/deteccoes_pendentes.json (ou via deteccao_editor.html) — a
+#      correção fica protegida e não é sobrescrita nas próximas coletas.
 #
 # NADA disso muda cálculo nenhum sozinho até ser gravado em
 # data/deteccoes_pendentes.json — só QUANDO CONFIRMADO o período entra no
 # mesmo mecanismo do cronograma (e aí sim some da aba Ausências e da
-# pontuação — ver _cronograma_efetivo() logo abaixo).
-LIMITE_DIAS_SEM_LANCAMENTO_FERIAS = 5
+# pontuação — ver _cronograma_efetivo() logo abaixo). Como as duas
+# categorias (férias e chuva) já nascem confirmadas automaticamente, isso
+# acontece sempre — a marcação de "revisao_classificacao_necessaria" acima
+# é só informativa, nunca atrasa a exclusão do cálculo.
+LIMITE_DIAS_UTEIS_FERIAS = 7
+
+# Nenhuma OCORRÊNCIA de férias/atestado passa disso, em dias CORRIDOS (não
+# úteis) — uma ausência mais longa é dividida em várias ocorrências
+# consecutivas de até esse tamanho cada (ver _dividir_em_ocorrencias()).
+LIMITE_DIAS_CORRIDOS_OCORRENCIA = 30
+
+# Quantos dias de folga uma detecção pode variar (início/fim recalculados
+# um pouco pra frente/trás) entre duas coletas sucessivas e AINDA ser
+# tratada como "a mesma" ausência/chuva (funde e atualiza) em vez de virar
+# um evento duplicado do lado do antigo — ver _periodos_se_tocam(). Trade-off:
+# valor MAIOR funde mais fácil (menos risco de duplicata por causa de
+# lançamento atrasado aparecendo depois, mas mais risco de juntar sem
+# querer duas ausências de fato diferentes que só calharam de ficar
+# próximas). Valor MENOR é o oposto. 3 dias já resolveu os casos reais
+# vistos até agora (lançamento atrasado costuma aparecer 1-2 dias depois);
+# se um dia aparecer fusão errada de duas ausências realmente distintas,
+# é aqui que se ajusta pra baixo.
+TOLERANCIA_DIAS_MESMO_EVENTO = 3
 
 # Equipes que NÃO passam pela detecção automática de férias/chuva — times
 # com dinâmica diferente do resto, onde faz mais sentido cadastrar
@@ -543,23 +598,51 @@ def detectar_ausencias_e_paralisacoes(df_total, resultados):
     return eventos_ferias + eventos_chuva
 
 
+def _dividir_em_ocorrencias(ini, fim, limite_dias_corridos=LIMITE_DIAS_CORRIDOS_OCORRENCIA):
+    """Quebra [ini, fim] (datas) em pedaços de no máximo `limite_dias_corridos`
+    dias CORRIDOS cada (não úteis), preservando a ordem cronológica — evita
+    que uma ausência muito longa vire UMA ocorrência só, gigante, sem fim
+    visível. A cada `limite_dias_corridos`, fecha a ocorrência atual e abre
+    uma nova pro resto, se a ausência continuar."""
+    pedacos, cursor = [], ini
+    while cursor <= fim:
+        fim_pedaco = min(cursor + timedelta(days=limite_dias_corridos - 1), fim)
+        pedacos.append((cursor, fim_pedaco))
+        cursor = fim_pedaco + timedelta(days=1)
+    return pedacos
+
+
+def _periodos_se_sobrepoem(a_ini, a_fim, b_ini, b_fim):
+    """True se [a_ini,a_fim] e [b_ini,b_fim] têm pelo menos 1 dia em comum —
+    SEM nenhuma tolerância (diferente de _periodos_se_tocam, que é usada só
+    pra reconhecer 'a mesma ausência' entre duas coletas sucessivas do MESMO
+    agente). Usada aqui pra decidir se as ocorrências de dois agentes
+    DIFERENTES da mesma equipe realmente coincidiram no calendário."""
+    return a_ini <= b_fim and b_ini <= a_fim
+
+
 def _detectar_ferias_individuais(df_total, resultados, data_max, equipes_ignoradas):
-    """ETAPA 1 — Férias/Atestado, sempre e só por agente, sem olhar pra
-    ninguém mais da equipe. Mais de LIMITE_DIAS_SEM_LANCAMENTO_FERIAS dias
-    úteis consecutivos sem lançamento = Férias/Atestado, ponto final —
-    outro agente da mesma equipe estar de férias no mesmo período não muda
-    nada aqui, cada um é avaliado sozinho.
+    """ETAPA 1 — Férias/Atestado, por agente (ver regras completas no
+    comentário da seção 13b acima). Resumo:
+      1) >= LIMITE_DIAS_UTEIS_FERIAS dias úteis seguidos sem lançamento =
+         candidato a férias (menos que isso é só "ausência", fica de fora).
+      2) Cada candidato é dividido em ocorrências de até
+         LIMITE_DIAS_CORRIDOS_OCORRENCIA dias corridos.
+      3) Toda ocorrência é confirmada automaticamente — mesmo sobrepondo a
+         de outro agente da equipe — mas ganha
+         "revisao_classificacao_necessaria" quando sobrepõe, pro supervisor
+         conferir o motivo com calma sem atrasar a exclusão da pontuação.
 
     Retorna (eventos_ferias, ferias_por_agente, janela_por_agente):
-      - ferias_por_agente: {id_agente: [(inicio, fim), ...]} só com os
-        períodos CONFIRMADOS nesta rodada (dur > LIMITE) — é o que a etapa
-        2 usa pra excluir esses dias da análise de chuva.
+      - ferias_por_agente: {id_agente: [(inicio, fim), ...]} com TODAS as
+        ocorrências desta rodada (independente de sobrepor ou não) — é o
+        que a etapa 2 usa pra excluir esses dias da análise de chuva.
       - janela_por_agente: {id_agente: [dias_uteis...]} — o intervalo de
         dias úteis avaliado pra cada agente (da própria primeira visita até
-        data_max), reaproveitado pela etapa 2 pra saber quais dias cada
-        agente já estava "ativo" no sistema."""
+        data_max), reaproveitado pela etapa 2."""
     info_agente = {res["id_agente"]: (res["nome_agente"], res["equipe"]) for res in resultados}
-    eventos, ferias_por_agente, janela_por_agente = [], {}, {}
+    janela_por_agente = {}
+    candidatos_por_agente = {}  # id_agente -> [(ini, fim), ...] já divididos em ocorrências de até 30 dias
 
     for res in resultados:
         if res["equipe"].lower() in equipes_ignoradas:
@@ -575,16 +658,44 @@ def _detectar_ferias_individuais(df_total, resultados, data_max, equipes_ignorad
 
         dias_com_visita = set(df_ag["dia"])
         faltando = {d for d in dias_uteis_agente if d not in dias_com_visita}
-        runs = _runs_consecutivos_uteis(dias_uteis_agente, faltando)
-        for ini, fim, dur in runs:
-            if dur > LIMITE_DIAS_SEM_LANCAMENTO_FERIAS:
-                nome, equipe = info_agente[res["id_agente"]]
-                eventos.append({
-                    "tipo": "possiveis_ferias", "id_agente": res["id_agente"], "nome_agente": nome,
-                    "equipe": equipe, "inicio": ini.strftime("%d/%m/%Y"), "fim": fim.strftime("%d/%m/%Y"),
-                    "duracao": dur,
-                })
-                ferias_por_agente.setdefault(res["id_agente"], []).append((ini, fim))
+        for ini, fim, dur in _runs_consecutivos_uteis(dias_uteis_agente, faltando):
+            if dur < LIMITE_DIAS_UTEIS_FERIAS:
+                continue  # <7 dias úteis = só ausência pontual, não vira candidato a férias
+            for ini_oc, fim_oc in _dividir_em_ocorrencias(ini, fim):
+                candidatos_por_agente.setdefault(res["id_agente"], []).append((ini_oc, fim_oc))
+
+    # Índice por equipe, pra checar sobreposição entre agentes DIFERENTES.
+    ocorrencias_por_equipe = {}
+    for id_ag, ocorrencias in candidatos_por_agente.items():
+        equipe = info_agente[id_ag][1]
+        for ini_oc, fim_oc in ocorrencias:
+            ocorrencias_por_equipe.setdefault(equipe, []).append((id_ag, ini_oc, fim_oc))
+
+    eventos, ferias_por_agente = [], {}
+    for id_ag, ocorrencias in candidatos_por_agente.items():
+        nome, equipe = info_agente[id_ag]
+        for ini_oc, fim_oc in ocorrencias:
+            sobrepoe = any(
+                outro_id != id_ag and _periodos_se_sobrepoem(ini_oc, fim_oc, o_ini, o_fim)
+                for outro_id, o_ini, o_fim in ocorrencias_por_equipe.get(equipe, [])
+            )
+            evento = {
+                "tipo": "possiveis_ferias", "id_agente": id_ag, "nome_agente": nome, "equipe": equipe,
+                "inicio": ini_oc.strftime("%d/%m/%Y"), "fim": fim_oc.strftime("%d/%m/%Y"),
+                "duracao": len(_dias_uteis_no_intervalo(ini_oc, fim_oc)),
+            }
+            if sobrepoe:
+                evento["revisao_classificacao_necessaria"] = True
+                evento["nota_revisao_classificacao"] = (
+                    "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser "
+                    "coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a "
+                    "detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). "
+                    "Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa "
+                    "marcação é só pra revisar o motivo com calma, não bloqueia nada."
+                )
+            eventos.append(evento)
+            ferias_por_agente.setdefault(id_ag, []).append((ini_oc, fim_oc))
+
     return eventos, ferias_por_agente, janela_por_agente
 
 
@@ -639,7 +750,7 @@ def _detectar_chuva_coletiva(df_total, resultados, data_max, equipes_ignoradas,
     return eventos
 
 
-def _periodos_se_tocam(ini1, fim1, ini2, fim2, tolerancia_dias=3):
+def _periodos_se_tocam(ini1, fim1, ini2, fim2, tolerancia_dias=TOLERANCIA_DIAS_MESMO_EVENTO):
     """True se dois períodos [ini1,fim1] e [ini2,fim2] (objetos date) se
     sobrepõem OU estão a poucos dias um do outro — tratados como o MESMO
     evento contínuo, não dois eventos separados. A tolerância existe porque
@@ -647,7 +758,12 @@ def _periodos_se_tocam(ini1, fim1, ini2, fim2, tolerancia_dias=3):
     ±alguns dias de uma coleta pra outra (ex.: um lançamento atrasado que só
     aparece no site depois muda onde a sequência "sem lançamento" começa a
     contar) — sem essa folga, cada pequena variação virava um evento
-    DUPLICADO em vez de atualizar o mesmo."""
+    DUPLICADO em vez de atualizar o mesmo.
+
+    O padrão vem de TOLERANCIA_DIAS_MESMO_EVENTO (constante lá em cima,
+    perto de LIMITE_DIAS_UTEIS_FERIAS) — se um dia aparecer um caso de
+    fusão ERRADA (duas férias de fato diferentes, só que próximas,
+    grudando sem querer sozinhas), é ali que se ajusta, não aqui."""
     from datetime import timedelta
     return ini1 <= fim2 + timedelta(days=tolerancia_dias) and ini2 <= fim1 + timedelta(days=tolerancia_dias)
 
@@ -656,18 +772,15 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
     """Funde os eventos detectados agora com o que já existia no arquivo,
     preservando decisões já tomadas.
 
-    Chave de comparação:
-      - "paralisacao_coletiva": tipo + equipe + início EXATO (o intervalo de
-        um evento de chuva é recalculado do zero a cada rodada a partir do
-        zero de novo, então não sofre do mesmo problema de "início que
-        varia aos poucos" que a férias tem).
-      - "possiveis_ferias": tipo + agente + SOBREPOSIÇÃO de período (ver
-        _periodos_se_tocam) — não exige início exato igual, porque uma
-        férias/atestado ainda em andamento pode ter o início recalculado
-        alguns dias pra frente/trás entre coletas sucessivas sem deixar de
-        ser a MESMA férias. Quando casa, funde os dois períodos (usa o
-        início mais antigo e o fim mais recente dos dois) em vez de criar
-        uma entrada nova ao lado da antiga.
+    Chave de comparação (igual pros dois tipos, ver mesmo_grupo()): mesmo
+    agente (férias) ou mesma equipe (chuva) E período que se SOBREPÕE ou
+    está a poucos dias de distância (ver _periodos_se_tocam) — não exige
+    início exato igual, porque tanto uma férias/atestado quanto uma chuva
+    ainda em andamento podem ter o início recalculado alguns dias pra
+    frente/trás entre coletas sucessivas (ex.: um lançamento atrasado que só
+    aparece no site depois) sem deixar de ser o MESMO evento. Quando casa,
+    funde os dois períodos (usa o início mais antigo e o fim mais recente
+    dos dois) em vez de criar uma entrada nova ao lado da antiga.
 
     Comportamento:
       - "possiveis_ferias" (agente sozinho, >5 dias úteis sem lançamento):
@@ -697,61 +810,101 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
     def parse(s):
         return datetime.strptime(s, "%d/%m/%Y").date()
 
-    anteriores_ferias = [e for e in anteriores if e["tipo"] == "possiveis_ferias"]
-    anteriores_paralisacao = {("paralisacao_coletiva", e["equipe"], e["inicio"]): e
-                               for e in anteriores if e["tipo"] == "paralisacao_coletiva"}
+    def mesmo_grupo(a, b):
+        """Dois eventos são 'o mesmo', pra fins de merge, se forem do mesmo
+        agente (férias) ou da mesma equipe (chuva), os períodos se tocarem
+        (ver _periodos_se_tocam) E a fusão dos dois não passar do teto de
+        LIMITE_DIAS_CORRIDOS_OCORRENCIA dias corridos — sem essa segunda
+        checagem, duas ocorrências de férias cortadas de propósito em
+        pedaços de até 30 dias (ver _dividir_em_ocorrencias) voltariam a
+        virar uma só, gigante, na primeira limpeza automática seguinte."""
+        chave_a = a.get("id_agente") if a["tipo"] == "possiveis_ferias" else a.get("equipe")
+        chave_b = b.get("id_agente") if b["tipo"] == "possiveis_ferias" else b.get("equipe")
+        if chave_a != chave_b:
+            return False
+        ini_a, fim_a = parse(a["inicio"]), parse(a["fim"])
+        ini_b, fim_b = parse(b["inicio"]), parse(b["fim"])
+        if not _periodos_se_tocam(ini_a, fim_a, ini_b, fim_b):
+            return False
+        fundido_dias = (max(fim_a, fim_b) - min(ini_a, ini_b)).days + 1
+        return fundido_dias <= LIMITE_DIAS_CORRIDOS_OCORRENCIA
 
-    # Auto-limpeza: funde duplicatas que já existiam no arquivo ANTES desta
-    # correção (geradas quando a chave de comparação ainda era o início
-    # exato) — sem isso, elas ficariam presas lado a lado pra sempre, já
-    # que o merge abaixo só evita criar duplicata NOVA, não junta as que já
-    # estão salvas. Roda toda vez (é barato e idempotente — depois da
-    # primeira limpeza não sobra mais nada pra fundir).
-    ferias_fundidas, usadas_na_limpeza = [], set()
-    for i, e1 in enumerate(anteriores_ferias):
-        if i in usadas_na_limpeza:
-            continue
-        grupo = [e1]
-        usadas_na_limpeza.add(i)
-        for j in range(i + 1, len(anteriores_ferias)):
-            if j in usadas_na_limpeza:
+    def fundir_lista(anteriores_tipo):
+        """Auto-limpeza: funde duplicatas que já existem numa lista de
+        eventos do MESMO tipo (geradas quando a comparação ainda era por
+        início exato, antes desta correção) — sem isso, ficariam presas
+        lado a lado pra sempre, já que o merge mais abaixo só evita criar
+        duplicata NOVA, não junta as que já estão salvas. Idempotente —
+        depois da primeira limpeza não sobra mais nada pra fundir."""
+        fundidas, usadas = [], set()
+        for i, e1 in enumerate(anteriores_tipo):
+            if i in usadas:
                 continue
-            e2 = anteriores_ferias[j]
-            if e2["id_agente"] != e1["id_agente"]:
-                continue
-            if any(_periodos_se_tocam(parse(m["inicio"]), parse(m["fim"]), parse(e2["inicio"]), parse(e2["fim"]))
-                   for m in grupo):
-                grupo.append(e2)
-                usadas_na_limpeza.add(j)
-        if len(grupo) > 1:
-            base = max(grupo, key=lambda x: x.get("detectado_em", ""))  # mantém a mais recente como "base"
-            ini_final = min(parse(m["inicio"]) for m in grupo)
-            fim_final = max(parse(m["fim"]) for m in grupo)
-            base["inicio"] = ini_final.strftime("%d/%m/%Y")
-            base["fim"] = fim_final.strftime("%d/%m/%Y")
-            base["duracao"] = len(_dias_uteis_no_intervalo(ini_final, fim_final))
-            base.pop("revisao_necessaria", None)
-            base.pop("nota_revisao", None)
-            ferias_fundidas.append(base)
-            log.info("🧹 Duplicata de férias fundida: %s (%d entradas viraram 1 — %s a %s).",
-                      base.get("nome_agente", base["id_agente"]), len(grupo), base["inicio"], base["fim"])
-        else:
-            ferias_fundidas.append(e1)
-    anteriores_ferias = ferias_fundidas
+            grupo = [e1]
+            usadas.add(i)
+            for j in range(i + 1, len(anteriores_tipo)):
+                if j in usadas:
+                    continue
+                e2 = anteriores_tipo[j]
+                if any(mesmo_grupo(m, e2) for m in grupo):
+                    grupo.append(e2)
+                    usadas.add(j)
+            if len(grupo) > 1:
+                base = max(grupo, key=lambda x: x.get("detectado_em", ""))  # mantém a mais recente como "base"
+                ini_final = min(parse(m["inicio"]) for m in grupo)
+                fim_final = max(parse(m["fim"]) for m in grupo)
+                base["inicio"] = ini_final.strftime("%d/%m/%Y")
+                base["fim"] = fim_final.strftime("%d/%m/%Y")
+                base["duracao"] = len(_dias_uteis_no_intervalo(ini_final, fim_final))
+                base.pop("revisao_necessaria", None)
+                base.pop("nota_revisao", None)
+                quem = base.get("nome_agente") or base.get("equipe") or base.get("id_agente")
+                log.info("🧹 Duplicata fundida: %s (%d entradas viraram 1 — %s a %s).",
+                          quem, len(grupo), base["inicio"], base["fim"])
+                fundidas.append(base)
+            else:
+                fundidas.append(e1)
+        return fundidas
 
-    usados_ferias, vistos_paralisacao = set(), set()
+    anteriores_ferias = fundir_lista([e for e in anteriores if e["tipo"] == "possiveis_ferias"])
+    anteriores_chuva = fundir_lista([e for e in anteriores if e["tipo"] == "paralisacao_coletiva"])
+
+    def casar_e_fundir(novo, anteriores_tipo, usados):
+        """Procura em anteriores_tipo um evento PROTEGIDO que seja 'o
+        mesmo' que `novo` (ver mesmo_grupo) e ainda não usado nesta rodada.
+        Se achar, funde os dois (união dos períodos) e devolve o registro
+        atualizado; senão devolve None."""
+        for i, ant in enumerate(anteriores_tipo):
+            if i in usados or ant.get("status") not in STATUS_PROTEGIDOS or not mesmo_grupo(ant, novo):
+                continue
+            usados.add(i)
+            ini_final = min(parse(novo["inicio"]), parse(ant["inicio"]))
+            fim_final = max(parse(novo["fim"]), parse(ant["fim"]))
+            ant["inicio"] = ini_final.strftime("%d/%m/%Y")
+            ant["fim"] = fim_final.strftime("%d/%m/%Y")
+            ant["duracao"] = len(_dias_uteis_no_intervalo(ini_final, fim_final))
+            ant.pop("revisao_necessaria", None)
+            ant.pop("nota_revisao", None)
+            # revisao_classificacao_necessaria reflete o estado ATUAL
+            # (sobrepõe outro agente da equipe ou não) — sempre atualiza
+            # pro que a detecção de agora diz, não é "sticky" (liga e
+            # nunca desliga sozinho, diferente de revisao_necessaria).
+            if novo.get("revisao_classificacao_necessaria"):
+                ant["revisao_classificacao_necessaria"] = True
+                ant["nota_revisao_classificacao"] = novo.get("nota_revisao_classificacao")
+            else:
+                ant.pop("revisao_classificacao_necessaria", None)
+                ant.pop("nota_revisao_classificacao", None)
+            return ant
+        return None
+
+    usados_ferias, usados_chuva = set(), set()
     finais = []
     for novo in eventos_detectados:
         if novo["tipo"] == "paralisacao_coletiva":
-            k = ("paralisacao_coletiva", novo["equipe"], novo["inicio"])
-            vistos_paralisacao.add(k)
-            anterior = anteriores_paralisacao.get(k)
-            if anterior and anterior.get("status") in STATUS_PROTEGIDOS:
-                anterior["fim"] = novo["fim"]
-                anterior["duracao"] = novo["duracao"]
-                anterior.pop("revisao_necessaria", None)
-                anterior.pop("nota_revisao", None)
-                finais.append(anterior)
+            fundido = casar_e_fundir(novo, anteriores_chuva, usados_chuva)
+            if fundido:
+                finais.append(fundido)
             else:  # paralisacao_coletiva nova — CONFIRMADA automaticamente como Chuva (padrão)
                 novo["status"] = "confirmada"
                 novo["categoria_coletiva"] = "Chuva"
@@ -760,27 +913,9 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
                 finais.append(novo)
             continue
 
-        # possiveis_ferias — casa por SOBREPOSIÇÃO de período com uma
-        # detecção anterior do MESMO agente, não por início idêntico.
-        ini_novo, fim_novo = parse(novo["inicio"]), parse(novo["fim"])
-        idx_match = None
-        for i, ant in enumerate(anteriores_ferias):
-            if i in usados_ferias or ant["id_agente"] != novo["id_agente"] or ant.get("status") not in STATUS_PROTEGIDOS:
-                continue
-            if _periodos_se_tocam(ini_novo, fim_novo, parse(ant["inicio"]), parse(ant["fim"])):
-                idx_match = i
-                break
-        if idx_match is not None:
-            usados_ferias.add(idx_match)
-            anterior = anteriores_ferias[idx_match]
-            ini_final = min(ini_novo, parse(anterior["inicio"]))
-            fim_final = max(fim_novo, parse(anterior["fim"]))
-            anterior["inicio"] = ini_final.strftime("%d/%m/%Y")
-            anterior["fim"] = fim_final.strftime("%d/%m/%Y")
-            anterior["duracao"] = len(_dias_uteis_no_intervalo(ini_final, fim_final))
-            anterior.pop("revisao_necessaria", None)
-            anterior.pop("nota_revisao", None)
-            finais.append(anterior)
+        fundido = casar_e_fundir(novo, anteriores_ferias, usados_ferias)
+        if fundido:
+            finais.append(fundido)
         else:
             novo["status"] = "confirmada"
             novo["motivo"] = "Férias/Atestado"
@@ -799,8 +934,8 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
                                          "— pode ser correção de dados, ou uma correção no sistema que revelou "
                                          "um falso positivo. Confira se a decisão ainda faz sentido.")
             finais.append(anterior)
-    for k, anterior in anteriores_paralisacao.items():
-        if k not in vistos_paralisacao and anterior.get("status") in STATUS_PROTEGIDOS:
+    for i, anterior in enumerate(anteriores_chuva):
+        if i not in usados_chuva and anterior.get("status") in STATUS_PROTEGIDOS:
             if not anterior.get("revisao_necessaria"):
                 n_revisao += 1
             anterior["revisao_necessaria"] = True
@@ -3538,7 +3673,10 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
         lista_cronograma = rodar_deteccao_completa(pasta_semanas)
 
     grupos = {}  # chave -> lista de html_ids do grupo
+    ids_arquivados = {h for ini, fim, _ in MESES_ARQUIVADOS for h in range(ini, fim + 1)}
     for h in htmls:
+        if h in ids_arquivados:
+            continue  # mês arquivado (ver MESES_ARQUIVADOS) — já tem entrada "manual" fixa, não gera nada novo pra ele
         mes_oficial = _grupo_mes_oficial(h)
         if mes_oficial:
             grupos.setdefault(("mes-oficial", mes_oficial), []).append(h)

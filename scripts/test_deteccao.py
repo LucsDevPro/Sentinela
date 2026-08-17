@@ -21,6 +21,7 @@ Uso: python3 scripts/test_deteccao.py
 """
 import sys
 import types
+import json
 from datetime import date, datetime
 
 import pandas as pd
@@ -289,6 +290,171 @@ def teste_7_ferias_nao_duplica_quando_inicio_varia(tmp_path="/tmp/deteccoes_test
     os.remove(tmp_path)
 
 
+# ============================================================ Teste 8 ====
+def teste_8_chuva_nao_duplica_quando_inicio_varia(tmp_path="/tmp/deteccoes_teste8.json"):
+    # Mesmo bug do Teste 7, só que pro lado da chuva: um evento de chuva
+    # ainda "em aberto" (equipe inteira sem lançar) recalcula com o início
+    # levemente diferente entre duas coletas (equipe parou 06/07, mas uma
+    # coleta anterior só tinha visto o padrão a partir de 07/07) — tem que
+    # atualizar o mesmo evento, não duplicar.
+    import os
+    if os.path.exists(tmp_path):
+        os.remove(tmp_path)
+
+    dias_base = dias_uteis_entre("01/07/2026", "20/07/2026")
+    dias_parados_v1 = [d("07/07/2026"), d("08/07/2026"), d("09/07/2026")]
+    dias_com_visita_v1 = [dd for dd in dias_base if dd not in dias_parados_v1]
+    a1 = montar_resultado(70, "A", "Equipe 1", dias_com_visita_v1)
+    b1 = montar_resultado(71, "B", "Equipe 1", dias_com_visita_v1)
+    df1 = montar_df_total([a1, b1])
+    eventos1 = ce.detectar_ausencias_e_paralisacoes(df1, [a1, b1])
+    ce.atualizar_deteccoes_pendentes(eventos1, caminho=tmp_path)
+
+    # Segunda coleta: um lançamento retroativo do dia 07/07 apareceu no
+    # site pra um dos dois — agora o padrão "equipe inteira parada" só bate
+    # a partir de 08/07 (início mudou 1 dia, mesmo evento).
+    dias_parados_v2 = [d("08/07/2026"), d("09/07/2026")]
+    dias_com_visita_v2 = [dd for dd in dias_base if dd not in dias_parados_v2]
+    a2 = montar_resultado(70, "A", "Equipe 1", dias_com_visita_v2)
+    b2 = montar_resultado(71, "B", "Equipe 1", dias_com_visita_v2)
+    df2 = montar_df_total([a2, b2])
+    eventos2 = ce.detectar_ausencias_e_paralisacoes(df2, [a2, b2])
+    deteccoes = ce.atualizar_deteccoes_pendentes(eventos2, caminho=tmp_path)
+
+    chuva = [e for e in deteccoes if e["tipo"] == "paralisacao_coletiva" and e["equipe"] == "Equipe 1"]
+    checar("Teste 8 — chuva não duplica quando o início varia poucos dias entre coletas",
+           len(chuva) == 1, f"eventos={chuva}")
+
+    os.remove(tmp_path)
+
+
+# ============================================================ Teste 9 ====
+def teste_9_menos_de_7_dias_uteis_e_so_ausencia():
+    # 6 dias úteis seguidos sem lançamento (era férias no limiar antigo,
+    # >5) NÃO pode virar férias agora — o novo limiar é >= 7.
+    dias_trab = dias_uteis_entre("01/07/2026", "13/07/2026")  # última visita 13/07 (segunda)
+    a = montar_resultado(80, "Seis Dias", "Equipe 1", dias_trab)
+    df = montar_df_total([a])
+    # 6 dias úteis sem lançamento: 14,15,16,17,20,21/07 -> volta 22/07
+    df = pd.concat([df, pd.DataFrame({"id_agente": [80], "dia": [d("22/07/2026")]})], ignore_index=True)
+    a["df"] = pd.concat([a["df"], pd.DataFrame({"dia": [d("22/07/2026")]})], ignore_index=True)
+    eventos = ce.detectar_ausencias_e_paralisacoes(df, [a])
+    ferias = [e for e in eventos if e["tipo"] == "possiveis_ferias" and e["id_agente"] == 80]
+    checar("Teste 9 — 6 dias úteis sem lançamento NÃO vira férias (limiar é 7)", len(ferias) == 0, str(ferias))
+
+
+def teste_9b_exatamente_7_dias_uteis_vira_ferias():
+    dias_trab = dias_uteis_entre("01/07/2026", "13/07/2026")
+    a = montar_resultado(81, "Sete Dias", "Equipe 1", dias_trab)
+    df = montar_df_total([a])
+    # 7 dias úteis sem lançamento: 14,15,16,17,20,21,22/07 -> volta 23/07
+    df = pd.concat([df, pd.DataFrame({"id_agente": [81], "dia": [d("23/07/2026")]})], ignore_index=True)
+    a["df"] = pd.concat([a["df"], pd.DataFrame({"dia": [d("23/07/2026")]})], ignore_index=True)
+    eventos = ce.detectar_ausencias_e_paralisacoes(df, [a])
+    ferias = [e for e in eventos if e["tipo"] == "possiveis_ferias" and e["id_agente"] == 81]
+    checar("Teste 9b — exatamente 7 dias úteis JÁ vira férias", len(ferias) == 1, str(ferias))
+
+
+# ============================================================ Teste 10 ===
+def teste_10_ocorrencia_maior_que_30_dias_e_dividida():
+    # ~70 dias corridos sem lançamento -> tem que virar 3 ocorrências
+    # (30 + 30 + resto), nenhuma passando de 30 dias corridos.
+    dias_trab = dias_uteis_entre("01/05/2026", "01/06/2026")
+    a = montar_resultado(82, "Ausência Longa", "Equipe 1", dias_trab)
+    df = montar_df_total([a])
+    volta = d("11/08/2026")  # ausente de 02/06 a 10/08 (~70 dias corridos)
+    df = pd.concat([df, pd.DataFrame({"id_agente": [82], "dia": [volta]})], ignore_index=True)
+    a["df"] = pd.concat([a["df"], pd.DataFrame({"dia": [volta]})], ignore_index=True)
+    eventos = ce.detectar_ausencias_e_paralisacoes(df, [a])
+    ferias = sorted([e for e in eventos if e["tipo"] == "possiveis_ferias" and e["id_agente"] == 82],
+                     key=lambda e: e["inicio"])
+    checar("Teste 10 — ausência de ~70 dias corridos vira mais de uma ocorrência", len(ferias) >= 3, str(ferias))
+    if ferias:
+        for e in ferias:
+            dur_corrida = (d(e["fim"]) - d(e["inicio"])).days + 1
+            checar(f"Teste 10 — ocorrência {e['inicio']}-{e['fim']} não passa de 30 dias corridos",
+                   dur_corrida <= 30, f"{dur_corrida} dias")
+
+
+# ============================================================ Teste 11 ===
+def teste_11_sobreposicao_confirma_mas_marca_revisao(tmp_path="/tmp/deteccoes_teste11.json"):
+    # Dois agentes da MESMA equipe de férias em períodos que se sobrepõem:
+    # os dois têm que ficar CONFIRMADOS automaticamente (não represa
+    # pontuação), mas com revisao_classificacao_necessaria=True.
+    import os
+    if os.path.exists(tmp_path):
+        os.remove(tmp_path)
+    dias_base = dias_uteis_entre("01/07/2026", "20/07/2026")
+    a = montar_resultado(83, "Sobreposto A", "Equipe 1", dias_base)
+    b = montar_resultado(84, "Sobreposto B", "Equipe 1", dias_base)
+    df = montar_df_total([a, b])
+    volta = d("15/08/2026")
+    df = pd.concat([df, pd.DataFrame({"id_agente": [83, 84], "dia": [volta, volta]})], ignore_index=True)
+    a["df"] = pd.concat([a["df"], pd.DataFrame({"dia": [volta]})], ignore_index=True)
+    b["df"] = pd.concat([b["df"], pd.DataFrame({"dia": [volta]})], ignore_index=True)
+    eventos = ce.detectar_ausencias_e_paralisacoes(df, [a, b])
+    deteccoes = ce.atualizar_deteccoes_pendentes(eventos, caminho=tmp_path)
+    ferias_ab = [e for e in deteccoes if e["tipo"] == "possiveis_ferias" and e["id_agente"] in (83, 84)]
+    checar("Teste 11 — os dois ficam CONFIRMADOS (não represa)",
+           all(e["status"] == "confirmada" for e in ferias_ab), str(ferias_ab))
+    checar("Teste 11 — os dois ficam marcados pra revisão de classificação",
+           all(e.get("revisao_classificacao_necessaria") for e in ferias_ab), str(ferias_ab))
+    os.remove(tmp_path)
+
+
+# ============================================================ Teste 12 ===
+def teste_12_isolado_nao_marca_revisao(tmp_path="/tmp/deteccoes_teste12.json"):
+    # Um agente sozinho, sem ninguém mais da equipe ausente no mesmo
+    # período -> confirmado, SEM marcação de revisão de classificação.
+    import os
+    if os.path.exists(tmp_path):
+        os.remove(tmp_path)
+    dias_base = dias_uteis_entre("01/07/2026", "20/07/2026")
+    a = montar_resultado(85, "Isolada", "Equipe 1", dias_base)
+    outro = montar_resultado(86, "Sempre Trabalhando", "Equipe 1",
+                              dias_uteis_entre("01/07/2026", "20/08/2026"))
+    df = montar_df_total([a, outro])
+    volta = d("15/08/2026")
+    df = pd.concat([df, pd.DataFrame({"id_agente": [85], "dia": [volta]})], ignore_index=True)
+    a["df"] = pd.concat([a["df"], pd.DataFrame({"dia": [volta]})], ignore_index=True)
+    eventos = ce.detectar_ausencias_e_paralisacoes(df, [a, outro])
+    deteccoes = ce.atualizar_deteccoes_pendentes(eventos, caminho=tmp_path)
+    ferias_a = [e for e in deteccoes if e["tipo"] == "possiveis_ferias" and e["id_agente"] == 85]
+    checar("Teste 12 — agente isolado confirmado sem marcação de revisão",
+           len(ferias_a) >= 1 and not any(e.get("revisao_classificacao_necessaria") for e in ferias_a),
+           str(ferias_a))
+    os.remove(tmp_path)
+
+
+# ============================================================ Teste 13 ===
+def teste_13_fusao_nao_desfaz_teto_de_30_dias(tmp_path="/tmp/deteccoes_teste13.json"):
+    # Duas ocorrências de 30 dias adjacentes (mesmo agente, cortadas de
+    # propósito pelo teto) não podem virar UMA só de 60 dias na limpeza
+    # automática de uma rodada seguinte.
+    import os
+    if os.path.exists(tmp_path):
+        os.remove(tmp_path)
+    dados = [
+        {"tipo": "possiveis_ferias", "id_agente": 90, "nome_agente": "Agente Longo", "equipe": "Equipe 1",
+         "inicio": "01/06/2026", "fim": "30/06/2026", "duracao": 22, "status": "confirmada",
+         "motivo": "Férias/Atestado", "confirmado_automaticamente": True, "categoria_coletiva": None,
+         "detectado_em": "01/07/2026 08:00"},
+        {"tipo": "possiveis_ferias", "id_agente": 90, "nome_agente": "Agente Longo", "equipe": "Equipe 1",
+         "inicio": "01/07/2026", "fim": "20/07/2026", "duracao": 14, "status": "confirmada",
+         "motivo": "Férias/Atestado", "confirmado_automaticamente": True, "categoria_coletiva": None,
+         "detectado_em": "01/07/2026 08:00"},
+    ]
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=2)
+    # Roda com uma lista de eventos VAZIA (só pra forçar a auto-limpeza a
+    # rodar em cima do que já está no arquivo).
+    deteccoes = ce.atualizar_deteccoes_pendentes([], caminho=tmp_path)
+    ferias_90 = [e for e in deteccoes if e["id_agente"] == 90]
+    checar("Teste 13 — dois pedaços de ~30 dias continuam separados (não viram 1 de 50 dias)",
+           len(ferias_90) == 2, str(ferias_90))
+    os.remove(tmp_path)
+
+
 if __name__ == "__main__":
     teste_1_ferias_individual()
     teste_2_ferias_nao_contamina_chuva()
@@ -297,6 +463,13 @@ if __name__ == "__main__":
     teste_5_ponto_estrategico_nao_gera_ferias()
     teste_6_motivo_manual_preservado()
     teste_7_ferias_nao_duplica_quando_inicio_varia()
+    teste_8_chuva_nao_duplica_quando_inicio_varia()
+    teste_9_menos_de_7_dias_uteis_e_so_ausencia()
+    teste_9b_exatamente_7_dias_uteis_vira_ferias()
+    teste_10_ocorrencia_maior_que_30_dias_e_dividida()
+    teste_11_sobreposicao_confirma_mas_marca_revisao()
+    teste_12_isolado_nao_marca_revisao()
+    teste_13_fusao_nao_desfaz_teto_de_30_dias()
 
     print()
     if FALHAS:
