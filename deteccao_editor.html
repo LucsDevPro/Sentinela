@@ -66,6 +66,11 @@
   .badge-chuva { background: rgba(16,128,214,0.12); color: #0A5FA0; }
   .badge-falta { background: rgba(228,87,46,0.14); color: #B23A16; }
   .badge-revisao { background: rgba(242,153,74,0.18); color: #A15A00; }
+  .badge-sobreposicao { background: rgba(124,77,255,0.14); color: #5B34C7; }
+  .aviso-box {
+    font-size: 0.82rem; margin-bottom: 14px; padding: 12px 14px; border-radius: 9px;
+    background: rgba(124,77,255,0.08); border: 1px solid rgba(124,77,255,0.25); color: #5B34C7;
+  }
   .empty-row td { text-align: center; color: var(--text3); padding: 28px; font-style: italic; }
   .actions-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
   textarea {
@@ -86,6 +91,13 @@
   .tab-btn { background: var(--bg-soft); color: var(--text2); border: 1px solid var(--border); }
   .tab-btn.active { background: var(--navy); color: #fff; }
   .nota-revisao { font-size: 0.76rem; color: #A15A00; margin-top: 4px; }
+  .resumo-box { font-size: 0.82rem; margin-bottom: 10px; padding: 10px 12px; background: var(--bg-soft); border-radius: 9px; border: 1px solid var(--border); }
+  .resumo-add { color: #0A8F52; font-weight: 700; }
+  .resumo-rem { color: #B23A16; font-weight: 700; }
+  .resumo-corrigido { color: #A15A00; font-weight: 700; }
+  .resumo-inalt { color: var(--text2); }
+  .resumo-ok { color: #0A8F52; }
+  .resumo-info { color: var(--text2); }
   .motivo-select { min-width: 190px; }
 </style>
 </head>
@@ -124,11 +136,16 @@
       Tudo já vem <b>confirmado automaticamente</b> (Férias/Atestado ou Chuva, conforme o padrão) — você só precisa mexer no que estiver ERRADO.
       Pra chuva, troque o motivo se na verdade foi outra coisa (capacitação, reunião...). Pra qualquer um dos dois, marque <b>"Marcar falta"</b>
       se não for justificado de verdade — some da lista de "confirmado" e volta a contar normalmente na pontuação do agente, com o motivo documentado.
-      Itens em laranja ("revisar") são decisões antigas cujo padrão não apareceu mais na última coleta — pode ser dado corrigido, ou pode não fazer mais sentido; dê uma olhada.
+      Itens em laranja ("padrão sumiu") são decisões antigas cujo padrão não apareceu mais na última coleta — pode ser dado corrigido, ou pode não
+      fazer mais sentido; dê uma olhada. Itens em roxo ("sobrepõe outro agente") já estão confirmados normalmente — a marcação é só um aviso de que
+      duas pessoas da mesma equipe ficaram ausentes ao mesmo tempo, o que pode ser coincidência de férias ou pode ser uma paralisação coletiva que a
+      chuva não pegou (por não ter sido a equipe inteira); vale conferir com calma, mas não precisa correr.
     </p>
+    <div id="avisoSobreposicao" class="aviso-box" style="display:none"></div>
     <div class="tabs">
       <button class="tab-btn active" id="tabTodos" onclick="mudarFiltro('todos')">Todos (<span id="cTodos">0</span>)</button>
-      <button class="tab-btn" id="tabRevisao" onclick="mudarFiltro('revisao')">⚠️ Precisam revisão (<span id="cRevisao">0</span>)</button>
+      <button class="tab-btn" id="tabRevisao" onclick="mudarFiltro('revisao')">⚠️ Padrão sumiu (<span id="cRevisao">0</span>)</button>
+      <button class="tab-btn" id="tabSobreposicao" onclick="mudarFiltro('sobreposicao')">🔎 Sobrepõe outro agente (<span id="cSobreposicao">0</span>)</button>
       <button class="tab-btn" id="tabFerias" onclick="mudarFiltro('ferias')">🌴 Férias/Atestado (<span id="cFerias">0</span>)</button>
       <button class="tab-btn" id="tabChuva" onclick="mudarFiltro('chuva')">🌧️ Chuva/Coletiva (<span id="cChuva">0</span>)</button>
     </div>
@@ -145,6 +162,7 @@
       (GitHub → abrir o arquivo → ✏️ Edit → apagar tudo → colar → Commit changes). Suas correções ficam protegidas —
       a próxima coleta automática não sobrescreve o que você decidir aqui.
     </p>
+    <div id="resumoMudancas" class="resumo-box"></div>
     <textarea id="outputBox" readonly placeholder="[]"></textarea>
     <div class="actions-row">
       <button class="btn-primary" onclick="copiarJson()">📋 Copiar JSON</button>
@@ -159,6 +177,7 @@
 const CATEGORIAS_PARALISACAO_COLETIVA = ["Chuva", "Capacitação", "Reunião/atividade coletiva", "Outra atividade coletiva"];
 
 let registros = []; // conteúdo bruto de deteccoes_pendentes.json
+let registrosOriginais = []; // snapshot do que foi importado no passo 2 — usado só pro resumo/preview do passo 4
 let NOMES_AGENTES = {}; // id_agente (string) -> {nome, equipe}
 let filtroAtual = 'todos';
 
@@ -190,11 +209,12 @@ function quemFmt(r) {
 
 function importarJson() {
   const txt = document.getElementById('importBox').value.trim();
-  if (!txt) { registros = []; renderizar(); return; }
+  if (!txt) { registros = []; registrosOriginais = []; renderizar(); return; }
   try {
     const dados = JSON.parse(txt);
     if (!Array.isArray(dados)) throw new Error('não é uma lista');
     registros = dados;
+    registrosOriginais = JSON.parse(JSON.stringify(dados)); // snapshot pro resumo do passo 4
     renderizar();
     mostrarToast(`${registros.length} detecção(ões) carregada(s).`);
   } catch (e) {
@@ -204,7 +224,7 @@ function importarJson() {
 
 function mudarFiltro(f) {
   filtroAtual = f;
-  ['Todos','Revisao','Ferias','Chuva'].forEach(k => {
+  ['Todos','Revisao','Sobreposicao','Ferias','Chuva'].forEach(k => {
     document.getElementById('tab' + k).classList.toggle('active', k.toLowerCase() === f || (f === 'todos' && k === 'Todos'));
   });
   renderizar();
@@ -213,6 +233,7 @@ function mudarFiltro(f) {
 function passaNoFiltro(r) {
   if (filtroAtual === 'todos') return true;
   if (filtroAtual === 'revisao') return !!r.revisao_necessaria;
+  if (filtroAtual === 'sobreposicao') return !!r.revisao_classificacao_necessaria;
   if (filtroAtual === 'ferias') return r.tipo === 'possiveis_ferias';
   if (filtroAtual === 'chuva') return r.tipo === 'paralisacao_coletiva';
   return true;
@@ -262,10 +283,29 @@ function renderizar() {
   const tbody = document.getElementById('tbody');
   const visiveis = registros.map((r, i) => ({ r, i })).filter(({ r }) => passaNoFiltro(r));
 
+  const nFerias = registros.filter(r => r.tipo === 'possiveis_ferias').length;
+  const nSobreposicao = registros.filter(r => r.revisao_classificacao_necessaria).length;
   document.getElementById('cTodos').textContent = registros.length;
   document.getElementById('cRevisao').textContent = registros.filter(r => r.revisao_necessaria).length;
-  document.getElementById('cFerias').textContent = registros.filter(r => r.tipo === 'possiveis_ferias').length;
+  document.getElementById('cSobreposicao').textContent = nSobreposicao;
+  document.getElementById('cFerias').textContent = nFerias;
   document.getElementById('cChuva').textContent = registros.filter(r => r.tipo === 'paralisacao_coletiva').length;
+
+  const avisoEl = document.getElementById('avisoSobreposicao');
+  if (avisoEl) {
+    // Só mostra o aviso quando uma FRAÇÃO grande das férias está marcada
+    // (equipes pequenas, com várias pessoas de férias no mesmo mês, geram
+    // isso naturalmente e em volume — não é sinal de bug, é o esperado).
+    if (nFerias >= 4 && nSobreposicao / nFerias >= 0.3) {
+      avisoEl.style.display = 'block';
+      avisoEl.innerHTML = `💡 <b>${nSobreposicao} de ${nFerias}</b> férias estão marcadas como "sobrepõe outro agente" — isso é `
+        + `normal em equipes pequenas quando várias pessoas tiram férias no mesmo período. Não precisa revisar tudo às pressas: `
+        + `cada uma já está confirmada e contando normalmente na pontuação; a marcação é só um convite pra você conferir com calma `
+        + `se algum desses casos era, na real, uma paralisação coletiva.`;
+    } else {
+      avisoEl.style.display = 'none';
+    }
+  }
 
   if (visiveis.length === 0) {
     tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Nenhum registro nessa aba.</td></tr>';
@@ -274,8 +314,10 @@ function renderizar() {
       <tr>
         <td>
           ${r.tipo === 'possiveis_ferias' ? '🌴' : '🌧️'} ${quemFmt(r)}
-          ${r.revisao_necessaria ? `<div><span class="badge badge-revisao">⚠️ Revisar</span></div>
+          ${r.revisao_necessaria ? `<div><span class="badge badge-revisao">⚠️ Padrão sumiu</span></div>
              <div class="nota-revisao">${r.nota_revisao || ''}</div>` : ''}
+          ${r.revisao_classificacao_necessaria ? `<div><span class="badge badge-sobreposicao">🔎 Sobrepõe outro agente</span></div>
+             <div class="nota-revisao">${r.nota_revisao_classificacao || ''}</div>` : ''}
         </td>
         <td>${r.equipe || '—'}</td>
         <td>${r.inicio} a ${r.fim}</td>
@@ -283,9 +325,53 @@ function renderizar() {
       </tr>`).join('');
   }
   document.getElementById('outputBox').value = JSON.stringify(registros, null, 2);
+  atualizarResumo();
+}
+
+function chaveRegistro(r) {
+  const quem = r.tipo === 'possiveis_ferias' ? r.id_agente : r.equipe;
+  return `${r.tipo}|${quem}|${r.inicio}|${r.fim}`;
+}
+
+function calcularDiff() {
+  const origPorChave = new Map(registrosOriginais.map(r => [chaveRegistro(r), r]));
+  let corrigidos = 0, novos = 0, inalterados = 0;
+  registros.forEach(r => {
+    const orig = origPorChave.get(chaveRegistro(r));
+    if (!orig) { novos++; return; }
+    if (orig.status !== r.status || orig.categoria_coletiva !== r.categoria_coletiva) corrigidos++;
+    else inalterados++;
+  });
+  const curChaves = new Set(registros.map(chaveRegistro));
+  const removidos = registrosOriginais.filter(r => !curChaves.has(chaveRegistro(r))).length;
+  return { corrigidos, novos, removidos, inalterados };
+}
+
+function atualizarResumo() {
+  const el = document.getElementById('resumoMudancas');
+  if (!el) return;
+  const { corrigidos, novos, removidos, inalterados } = calcularDiff();
+  if (corrigidos === 0 && novos === 0 && removidos === 0) {
+    el.innerHTML = registrosOriginais.length
+      ? '<span class="resumo-ok">✅ Nada foi corrigido em relação ao que foi importado no passo 2 — tudo continua como a detecção automática decidiu.</span>'
+      : '<span class="resumo-info">Nada importado ainda — carregue o JSON no passo 2 primeiro.</span>';
+    return;
+  }
+  const partes = [];
+  if (corrigidos) partes.push(`<span class="resumo-corrigido">✏️ ${corrigidos} corrigido(s) manualmente</span>`);
+  if (novos) partes.push(`<span class="resumo-add">+${novos} novo(s)</span>`);
+  if (removidos) partes.push(`<span class="resumo-rem">−${removidos} removido(s)</span>`);
+  if (inalterados) partes.push(`<span class="resumo-inalt">${inalterados} sem alteração</span>`);
+  el.innerHTML = '📝 Mudanças em relação ao que foi importado: ' + partes.join(' · ');
 }
 
 function copiarJson() {
+  const { corrigidos, novos, removidos } = calcularDiff();
+  if (corrigidos + novos + removidos > 0) {
+    const msg = `Confirma copiar?\n\n✏️ ${corrigidos} corrigido(s) manualmente\n+${novos} novo(s)\n−${removidos} removido(s)\n\n`
+              + `Isso vai SUBSTITUIR o arquivo inteiro no GitHub quando você colar — confira se está certo antes de continuar.`;
+    if (!window.confirm(msg)) { mostrarToast('Cópia cancelada.'); return; }
+  }
   const box = document.getElementById('outputBox');
   box.select();
   navigator.clipboard.writeText(box.value).then(() => {
