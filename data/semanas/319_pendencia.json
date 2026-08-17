@@ -1,4 +1,16 @@
 {
+  "116": {
+    "nome_agente": "Wagner Tarlei Gomes",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 10,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "410 - SALGADO FILHO": 10
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "1935": {
     "nome_agente": "Gabriel Alan de Oliveira Martins",
     "equipe": "Equipe 1",
@@ -63,6 +75,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 4,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 4
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "79": {
     "nome_agente": "Raquel Ortiz dos Santos",
     "equipe": "Equipe 1",
@@ -76,13 +100,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
+  "3101": {
+    "nome_agente": "Carlos Alberto Albiero",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 4,
+    "imoveis_fechados": 21,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 4
+      "409 - ANDREAZZA": 5,
+      "410 - SALGADO FILHO": 16
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -114,6 +139,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "134": {
+    "nome_agente": "Tania Maria Montania",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 32,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "416 - CENTRO 2": 32
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "85": {
     "nome_agente": "Adriano Ricardo Thiel",
     "equipe": "Equipe 1",
@@ -140,19 +177,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3101": {
-    "nome_agente": "Carlos Alberto Albiero",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 21,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "409 - ANDREAZZA": 5,
-      "410 - SALGADO FILHO": 16
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "99": {
     "nome_agente": "Fabiana de Figueredo Vieira",
     "equipe": "Equipe 2",
@@ -160,18 +184,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "411 - JARDIM AEROPORTO": 13
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "134": {
-    "nome_agente": "Tania Maria Montania",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 32,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "416 - CENTRO 2": 32
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -189,13 +201,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "151": {
-    "nome_agente": "Gilmar Bitencourt Luiz",
+  "465": {
+    "nome_agente": "Suely Aguiar Alves Luiz",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 28,
+    "imoveis_fechados": 2,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "418 - CENTRO 4": 28
+      "414 - PARQUE DOS ERVAIS": 2
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -213,18 +225,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "465": {
-    "nome_agente": "Suely Aguiar Alves Luiz",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 2,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "414 - PARQUE DOS ERVAIS": 2
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "113": {
     "nome_agente": "Selba Ramona Afonso",
     "equipe": "Equipe 3",
@@ -237,14 +237,25 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "120": {
-    "nome_agente": "Emidio Rainer Vilhalba",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 27,
+  "151": {
+    "nome_agente": "Gilmar Bitencourt Luiz",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 32,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "430 - VILA RENÔ": 6,
-      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 21
+      "418 - CENTRO 4": 32
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "2917": {
+    "nome_agente": "Bianca Afonso Narbaez",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 22,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "419 - CENTRO 5": 22
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -262,13 +273,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2917": {
-    "nome_agente": "Bianca Afonso Narbaez",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 22,
+  "120": {
+    "nome_agente": "Emidio Rainer Vilhalba",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 27,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "419 - CENTRO 5": 22
+      "430 - VILA RENÔ": 6,
+      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 21
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -409,10 +421,11 @@
   "1996": {
     "nome_agente": "Sara Eliane Talaveira de Oliveira",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 16,
+    "imoveis_fechados": 25,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "435 - JARDIM PRIMOR": 16
+      "435 - JARDIM PRIMOR": 16,
+      "434 - VILA AUREA": 9
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -451,11 +464,12 @@
   "157": {
     "nome_agente": "Walquiria Araujo Flores",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 76,
+    "imoveis_fechados": 87,
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "435 - JARDIM PRIMOR": 64,
-      "440 - JARDIM IBIRAPUERA": 12
+      "440 - JARDIM IBIRAPUERA": 12,
+      "434 - VILA AUREA": 11
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
