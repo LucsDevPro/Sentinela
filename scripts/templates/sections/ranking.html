@@ -5,6 +5,12 @@
     rápidas/duplicadas/em sequência suspeita, ausências e meta diária somam ou descontam pontos.
     Faixas: <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
     <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).
+    <br>
+    <strong>Dias Trabalhados</strong> vs. <strong>Dias Úteis Esperados no Mês</strong>: se um agente
+    trabalhou menos dias que o esperado (férias, atestado, entrou no meio do mês), os critérios são
+    ajustados proporcionalmente — pra não punir/premiar só por ter sido observado por menos tempo.
+    "Dias Úteis Esperados" já desconta os dias em que a equipe toda ficou parada por chuva, capacitação
+    ou reunião.
   </div>
 
   <div class="kpi-grid">
@@ -24,13 +30,15 @@
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão.</p>
     <div class="table-wrap">
       <table class="data-table sortable" id="tableRanking">
-        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
+        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
         <tbody>
           {% for r in ranking %}
           <tr class="{{ r.classificacao|row_class }}">
             <td class="num">{{ r.posicao|br }}º</td>
             <td class="sticky-col agent-name">{{ r.agente }}</td>
             <td>{{ r.equipe }}</td>
+            <td class="num">{{ r.dias_trabalhados|br }}</td>
+            <td class="num">{{ r.dias_uteis_esperados|br }}</td>
             <td class="num">{{ r.pontos|br(1) }}</td>
             <td>{{ r.classificacao|rank_badge }}</td>
           </tr>
