@@ -163,6 +163,14 @@ a.id-link:hover { color: var(--navy); border-bottom-style: solid; }
 /* ---------- Legend / alert cards ---------- */
 .legend-box { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; font-size: 0.8rem; color: var(--text2); }
 .legend-box strong { color: var(--navy); }
+.legend-box p { margin: 0 0 10px; }
+.legend-box ul { margin: 0 0 10px; padding-left: 20px; }
+.legend-box li { margin-bottom: 4px; }
+.legend-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 0.78rem; }
+.legend-table th, .legend-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+.legend-table th { color: var(--navy); font-weight: 700; }
+.legend-table td.ganho { color: var(--green); font-weight: 700; text-align: right; white-space: nowrap; }
+.legend-table td.perda { color: var(--red); font-weight: 700; text-align: right; white-space: nowrap; }
 .alert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 26px; }
 .alert-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; cursor: pointer; transition: all 0.15s; text-align: center; box-shadow: var(--shadow); }
 .alert-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--blue); }

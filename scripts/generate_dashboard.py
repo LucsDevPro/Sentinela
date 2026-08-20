@@ -260,11 +260,16 @@ RESUMO_SEMANAL_COLS = {"Semana": "semana", "Período": "periodo", **RESUMO_COLS}
 RANKING_COLS = {
     "Posição": "posicao", "Agente": "agente", "Equipe": "equipe",
     "Dias Trabalhados": "dias_trabalhados", "Dias Úteis Esperados no Mês": "dias_uteis_esperados",
+    "Turnos Sem Trabalhar": "turnos_sem_trabalhar",
     "Pontuação Final": "pontos", "Classificação": "classificacao",
 }
 RANKING_DET_COLS = {
     "Agente": "agente", "Equipe": "equipe", "Critério": "criterio",
-    "Quantidade": "qtd", "Peso (pontos/ocorrência)": "peso", "Pontos Aplicados": "pontos",
+    "Quantidade": "qtd",
+    "Peso Nominal (tabela de critérios)": "peso_nominal",
+    "Fator de Normalização": "fator_normalizacao",
+    "Peso Efetivo (nominal × fator)": "peso",
+    "Pontos Aplicados": "pontos",
 }
 
 def cap_first(v):
