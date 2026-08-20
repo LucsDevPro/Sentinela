@@ -128,12 +128,15 @@ def somente_bloqueio(df):
 # ============================================================ filtros ====
 
 def br(v, decimals=0):
-    """Formata número no padrão pt-BR."""
+    """Formata número no padrão pt-BR. Tolerante a valor ausente/indefinido
+    (ex.: coluna nova que ainda não existe num Analise_Consolidada.xlsx
+    gerado por uma versão antiga do coletar_evisita.py) — nesses casos
+    mostra "—" em vez de quebrar o dashboard inteiro."""
     if v is None or (isinstance(v, float) and pd.isna(v)):
         return "—"
     try:
         s = f"{float(v):,.{decimals}f}"
-    except (TypeError, ValueError):
+    except Exception:
         return "—"
     return s.replace(",", "§").replace(".", ",").replace("§", ".")
 
