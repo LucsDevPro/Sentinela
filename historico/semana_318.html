@@ -287,14 +287,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="20/08/2026 19:16">
+<body data-print-date="20/08/2026 19:18">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 20/08/2026 19:16</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 20/08/2026 19:18</div>
       </div>
     </div>
     <div class="header-actions">
@@ -5597,16 +5597,51 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="ranking">
   <div class="legend-box">
-    Todo agente começa o período com <strong>100 pontos</strong>. Critérios como pontualidade, visitas
-    rápidas/duplicadas/em sequência suspeita, ausências e meta diária somam ou descontam pontos.
-    Faixas: <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
-    <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).
-    <br>
-    <strong>Dias Trabalhados</strong> vs. <strong>Dias Úteis Esperados no Mês</strong>: se um agente
-    trabalhou menos dias que o esperado (férias, atestado, entrou no meio do mês), os critérios são
-    ajustados proporcionalmente — pra não punir/premiar só por ter sido observado por menos tempo.
-    "Dias Úteis Esperados" já desconta os dias em que a equipe toda ficou parada por chuva, capacitação
-    ou reunião.
+    <p><strong>Como a pontuação é calculada:</strong> todo agente começa o período com <strong>100
+    pontos</strong>. Cada comportamento do dia a dia soma ou desconta pontos, seguindo a tabela abaixo:</p>
+
+    <table class="legend-table">
+      <thead><tr><th>Critério</th><th>Pontos por ocorrência</th></tr></thead>
+      <tbody>
+        <tr><td>✅ Dia com meta diária de visitas batida</td><td class="ganho">+1,0 / dia</td></tr>
+        <tr><td>✅ Bônus: nenhuma visita rápida no período inteiro</td><td class="ganho">+5,0 (único)</td></tr>
+        <tr><td>✅ Bônus: nenhuma ausência no período inteiro</td><td class="ganho">+5,0 (único)</td></tr>
+        <tr><td>✅ Bônus: pontualidade perfeita no período inteiro</td><td class="ganho">+3,0 (único)</td></tr>
+        <tr><td>❌ Dia sem bater a meta diária de visitas</td><td class="perda">−0,5 / dia</td></tr>
+        <tr><td>❌ Turno sem lançamento (falta não justificada)</td><td class="perda">−1,5 / turno</td></tr>
+        <tr><td>❌ Visita em sequência suspeita (lançamento em lote)</td><td class="perda">−1,0 / visita</td></tr>
+        <tr><td>❌ Visita duplicada</td><td class="perda">−0,3 / visita</td></tr>
+        <tr><td>❌ Início manhã atrasado / fim manhã antecipado</td><td class="perda">−0,3 / dia</td></tr>
+        <tr><td>❌ Início tarde atrasado / fim tarde antecipado</td><td class="perda">−0,3 / dia</td></tr>
+        <tr><td>❌ Visita fora do expediente / fim de semana</td><td class="perda">−0,5 / visita</td></tr>
+        <tr><td>❌ Visita no horário de almoço</td><td class="perda">−0,5 / visita</td></tr>
+        <tr><td>❌ Visita rápida (menos do que o tempo mínimo)</td><td class="perda">−0,2 / visita</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Faixas de classificação:</strong>
+    <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
+    <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).</p>
+
+    <p><strong>Por que a Quantidade × Peso da tabela de Detalhamento não bate direto com os Pontos
+    Aplicados?</strong> Porque existe um <strong>Fator de Normalização</strong> no meio da conta. Ele
+    existe pra período nenhum ser injusto com ninguém:</p>
+    <ul>
+      <li>Se o agente trabalhou <strong>menos dias que o esperado</strong> no período (entrou depois,
+      tirou atestado, mês ainda não fechou), cada ocorrência PESA MAIS — porque a mesma taxa de erro,
+      observada em poucos dias, projetaria um resultado pior se o período fosse completo.</li>
+      <li>Se o período avaliado é <strong>mais longo que 1 mês</strong> (ex.: Ranking Acumulado, somando
+      vários meses), cada ocorrência PESA MENOS — pra não punir alguém só por ter sido observado durante
+      mais tempo (mais dias trabalhados = naturalmente mais ocorrências brutas, mesmo com o mesmo
+      comportamento de sempre).</li>
+    </ul>
+    <p>Na prática: <strong>Peso Efetivo = Peso Nominal (da tabela acima) × Fator de Normalização</strong>,
+    e <strong>Pontos Aplicados = Quantidade × Peso Efetivo</strong>. O fator é limitado a no máximo 2x pra
+    não exagerar em casos extremos. As colunas <strong>Dias Trabalhados</strong> / <strong>Dias Úteis
+    Esperados no Mês</strong> / <strong>Turnos Sem Trabalhar</strong> (na tabela de Ranking Geral) e
+    <strong>Peso Nominal</strong> / <strong>Fator de Normalização</strong> / <strong>Peso Efetivo</strong>
+    (na tabela de Detalhamento, mais abaixo) mostram cada peça dessa conta separada, pra dar pra conferir
+    na mão.</p>
   </div>
 
   <div class="kpi-grid">
@@ -5629,7 +5664,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão.</p>
     <div class="table-wrap">
       <table class="data-table sortable" id="tableRanking">
-        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
+        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Turnos Sem Trabalhar</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
         <tbody>
           
           <tr class="">
@@ -5638,6 +5673,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">4</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5648,6 +5684,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">3</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5658,6 +5695,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">2</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5668,6 +5706,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">2</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5678,6 +5717,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">2</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5688,6 +5728,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">4</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5698,6 +5739,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">5</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5708,6 +5750,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">1</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5718,6 +5761,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">2</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5728,6 +5772,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">1</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5738,6 +5783,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5748,6 +5794,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">1</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5758,6 +5805,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">3</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5768,6 +5816,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">1</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5778,6 +5827,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5788,6 +5838,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5798,6 +5849,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5808,6 +5860,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">4</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5818,6 +5871,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">4</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5828,6 +5882,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">3</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5838,6 +5893,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5848,6 +5904,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5858,6 +5915,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 3</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5868,6 +5926,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">3</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5878,6 +5937,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">2</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5888,6 +5948,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">2</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5898,6 +5959,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">1</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5908,6 +5970,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">3</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5918,6 +5981,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">1</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5928,6 +5992,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">2</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">99,5</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5938,6 +6003,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">1</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">99,1</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5948,6 +6014,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">2</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">98,9</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5958,6 +6025,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">4</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">98,8</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5968,6 +6036,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">3</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">96,9</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5978,6 +6047,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 1</td>
             <td class="num">3</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">93,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5988,6 +6058,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">4</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">92,8</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -5998,6 +6069,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 2</td>
             <td class="num">2</td>
             <td class="num">20</td>
+            <td class="num">—</td>
             <td class="num">89,9</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -6008,6 +6080,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">3</td>
             <td class="num">21</td>
+            <td class="num">—</td>
             <td class="num">88,8</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -6018,6 +6091,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Equipe 4</td>
             <td class="num">4</td>
             <td class="num">19</td>
+            <td class="num">—</td>
             <td class="num">85,3</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -6034,7 +6108,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
   <div class="table-wrap">
     <table class="data-table compact sortable" id="table-ranking-detalhe">
-      <thead><tr><th>Agente</th><th>Equipe</th><th>Critério</th><th>Quantidade</th><th>Peso (pts/ocorrência)</th><th>Pontos Aplicados</th></tr></thead>
+      <thead><tr><th>Agente</th><th>Equipe</th><th>Critério</th><th>Quantidade</th><th>Peso Nominal</th><th>Fator Normalização</th><th>Peso Efetivo</th><th>Pontos Aplicados</th></tr></thead>
       <tbody>
         
         <tr>
@@ -6049,6 +6123,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6076,6 +6156,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6093,6 +6179,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6120,6 +6212,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -6142,6 +6240,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -6159,6 +6263,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6186,6 +6296,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6203,6 +6319,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6230,6 +6352,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -6247,6 +6375,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6274,6 +6408,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -6291,6 +6431,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6318,6 +6464,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,8</td>
             
           
@@ -6335,6 +6487,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6362,6 +6520,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6384,6 +6548,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -6401,6 +6571,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6428,6 +6604,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -6445,6 +6627,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6472,6 +6660,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6489,6 +6683,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6516,6 +6716,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,5</td>
             
           
@@ -6533,6 +6739,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6560,6 +6772,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,8</td>
             
           
@@ -6577,6 +6795,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6604,6 +6828,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-16,2</td>
             
           
@@ -6626,6 +6856,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6643,6 +6879,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6670,6 +6912,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">3,0</td>
             
           
@@ -6687,6 +6935,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6714,6 +6968,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6736,6 +6996,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6753,6 +7019,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6780,6 +7052,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -6797,6 +7075,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6824,6 +7108,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6841,6 +7131,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6868,6 +7164,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -6885,6 +7187,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6912,6 +7220,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -6934,6 +7248,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -6951,6 +7271,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -6978,6 +7304,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -6995,6 +7327,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7022,6 +7360,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7039,6 +7383,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7066,6 +7416,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -7083,6 +7439,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7110,6 +7472,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -7132,6 +7500,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7149,6 +7523,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7176,6 +7556,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -7193,6 +7579,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7220,6 +7612,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -7242,6 +7640,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7259,6 +7663,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7286,6 +7696,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-2,0</td>
             
           
@@ -7303,6 +7719,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7330,6 +7752,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,2</td>
             
           
@@ -7347,6 +7775,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7374,6 +7808,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,8</td>
             
           
@@ -7396,6 +7836,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7413,6 +7859,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7440,6 +7892,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">3,0</td>
             
           
@@ -7457,6 +7915,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7484,6 +7948,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7501,6 +7971,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">4</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7528,6 +8004,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -7545,6 +8027,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7572,6 +8060,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,8</td>
             
           
@@ -7589,6 +8083,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7616,6 +8116,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7638,6 +8144,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7655,6 +8167,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7682,6 +8200,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -7699,6 +8223,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7726,6 +8256,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -7743,6 +8279,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7770,6 +8312,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7787,6 +8335,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7814,6 +8368,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">3,0</td>
             
           
@@ -7836,6 +8396,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -7853,6 +8419,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7880,6 +8452,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -7897,6 +8475,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7924,6 +8508,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -7941,6 +8531,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -7968,6 +8564,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -7985,6 +8587,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8012,6 +8620,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -8029,6 +8643,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">3</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8056,6 +8676,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8078,6 +8704,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8095,6 +8727,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8122,6 +8760,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-4,8</td>
             
           
@@ -8139,6 +8783,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8166,6 +8816,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-2,0</td>
             
           
@@ -8183,6 +8839,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">3</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8210,6 +8872,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8227,6 +8895,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8254,6 +8928,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-6,6</td>
             
           
@@ -8271,6 +8951,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8298,6 +8984,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -8320,6 +9012,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,5</td>
             
           
@@ -8337,6 +9035,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8364,6 +9068,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-5,4</td>
             
           
@@ -8381,6 +9091,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8408,6 +9124,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -8425,6 +9147,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8452,6 +9180,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8469,6 +9203,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8496,6 +9236,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-3,0</td>
             
           
@@ -8513,6 +9259,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8540,6 +9292,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -8557,6 +9315,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">3</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8584,6 +9348,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8606,6 +9376,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8623,6 +9399,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8650,6 +9432,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,8</td>
             
           
@@ -8667,6 +9455,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8694,6 +9488,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -8711,6 +9511,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8738,6 +9544,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8760,6 +9572,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8777,6 +9595,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8804,6 +9628,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-13,8</td>
             
           
@@ -8821,6 +9651,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8848,6 +9684,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -8865,6 +9707,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8892,6 +9740,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -8909,6 +9763,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8936,6 +9796,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-3,0</td>
             
           
@@ -8953,6 +9819,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -8980,6 +9852,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -8997,6 +9875,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9024,6 +9908,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -9041,6 +9931,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9068,6 +9964,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,5</td>
             
           
@@ -9090,6 +9992,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9107,6 +10015,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9134,6 +10048,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-4,2</td>
             
           
@@ -9151,6 +10071,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9178,6 +10104,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -9195,6 +10127,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9222,6 +10160,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9244,6 +10188,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9261,6 +10211,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">3</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9288,6 +10244,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-13,2</td>
             
           
@@ -9305,6 +10267,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9332,6 +10300,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -9349,6 +10323,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9376,6 +10356,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9398,6 +10384,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9415,6 +10407,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9442,6 +10440,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-10,2</td>
             
           
@@ -9464,6 +10468,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -9481,6 +10491,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9508,6 +10524,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">3,0</td>
             
           
@@ -9530,6 +10552,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -9547,6 +10575,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9574,6 +10608,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -9596,6 +10636,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -9613,6 +10659,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9640,6 +10692,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,2</td>
             
           
@@ -9657,6 +10715,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9684,6 +10748,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,2</td>
             
           
@@ -9706,6 +10776,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -9723,6 +10799,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9750,6 +10832,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">3,0</td>
             
           
@@ -9767,6 +10855,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9794,6 +10888,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9811,6 +10911,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9838,6 +10944,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9855,6 +10967,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9882,6 +11000,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -9899,6 +11023,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9926,6 +11056,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -9943,6 +11079,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -9970,6 +11112,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -9992,6 +11140,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -10009,6 +11163,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10036,6 +11196,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10053,6 +11219,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10080,6 +11252,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -10097,6 +11275,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10124,6 +11308,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-1,0</td>
             
           
@@ -10141,6 +11331,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10168,6 +11364,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10185,6 +11387,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10212,6 +11420,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -10229,6 +11443,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10256,6 +11476,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10273,6 +11499,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10300,6 +11532,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -10317,6 +11555,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10344,6 +11588,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,5</td>
             
           
@@ -10361,6 +11611,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10388,6 +11644,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10405,6 +11667,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10432,6 +11700,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">1,0</td>
             
           
@@ -10449,6 +11723,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10476,6 +11756,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10498,6 +11784,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10515,6 +11807,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10542,6 +11840,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-4,8</td>
             
           
@@ -10564,6 +11868,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -10581,6 +11891,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10608,6 +11924,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10625,6 +11947,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">4</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10652,6 +11980,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -10674,6 +12008,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -10691,6 +12031,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10718,6 +12064,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10735,6 +12087,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">1</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10762,6 +12120,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">5,0</td>
             
           
@@ -10779,6 +12143,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10806,6 +12176,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10823,6 +12199,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td class="num">2</td>
+            
+          
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
             
           
             <td class="num">—</td>
@@ -10850,6 +12232,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">—</td>
             
           
+            <td class="num">—</td>
+            
+          
+            <td class="num">—</td>
+            
+          
             <td class="num">-0,6</td>
             
           
@@ -10860,6 +12248,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   </div>
 </div>
 
+  <p class="table-hint">
+    <strong>Peso Nominal</strong> é o valor fixo da tabela de critérios (ex.: 0,20 por visita rápida).
+    <strong>Fator Normalização</strong> ajusta esse peso pra cima ou pra baixo dependendo de quantos dias
+    o agente trabalhou em relação ao esperado no mês (ver seção do Ranking Geral acima). <strong>Peso
+    Efetivo</strong> = Nominal × Fator — é ele, multiplicado pela Quantidade, que dá os Pontos Aplicados.
+  </p>
   
 </div>
   
@@ -11282,7 +12676,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 20/08/2026 19:16</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 20/08/2026 19:18</footer>
 
 <script>
 function goToSection(id) {
