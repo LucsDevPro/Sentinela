@@ -38,11 +38,25 @@
   "470": {
     "nome_agente": "Cris Milene Cardenas da Silva",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 23,
+    "imoveis_fechados": 35,
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "410 - SALGADO FILHO": 12,
-      "403 - JARDIM UNIVERSITARIO": 11
+      "403 - JARDIM UNIVERSITARIO": 23
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "672": {
+    "nome_agente": "Adriana de Jesus Saraiva",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 60,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "410 - SALGADO FILHO": 3,
+      "404 - JARDIM DOS ESTADOS": 39,
+      "401 - EMÍLIO DIAS BRANDÃO": 18
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -88,32 +102,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 35,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 33,
-      "410 - SALGADO FILHO": 2
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3101": {
-    "nome_agente": "Carlos Alberto Albiero",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 14,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "409 - ANDREAZZA": 13,
-      "402 - JARDIM MARAMBAIA": 1
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "125": {
     "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
     "equipe": "Equipe 2",
@@ -127,15 +115,26 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "672": {
-    "nome_agente": "Adriana de Jesus Saraiva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 60,
+  "3035": {
+    "nome_agente": "Teonilda Florentino Vieira",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 13,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "410 - SALGADO FILHO": 3,
-      "404 - JARDIM DOS ESTADOS": 39,
-      "401 - EMÍLIO DIAS BRANDÃO": 18
+      "420 - FERROVIARIA": 13
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3101": {
+    "nome_agente": "Carlos Alberto Albiero",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 23,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "409 - ANDREAZZA": 22,
+      "402 - JARDIM MARAMBAIA": 1
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -179,6 +178,19 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 35,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 33,
+      "410 - SALGADO FILHO": 2
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "142": {
     "nome_agente": "William Anderson Chamorro Tavares",
     "equipe": "Equipe 2",
@@ -187,18 +199,6 @@
     "fechados_por_area": {
       "420 - FERROVIARIA": 14,
       "413 - BAIRRO DA GRANJA": 31
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3035": {
-    "nome_agente": "Teonilda Florentino Vieira",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 13,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "420 - FERROVIARIA": 13
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -229,18 +229,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2951": {
-    "nome_agente": "Alana Amanda Fernandes Ovelar",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 42,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 42
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "2917": {
     "nome_agente": "Bianca Afonso Narbaez",
     "equipe": "Equipe 2",
@@ -249,6 +237,18 @@
     "fechados_por_area": {
       "420 - FERROVIARIA": 21,
       "419 - CENTRO 5": 12
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "2951": {
+    "nome_agente": "Alana Amanda Fernandes Ovelar",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 42,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 42
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -381,19 +381,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "80": {
-    "nome_agente": "Gisele Lopes Justiniano",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 32,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "435 - JARDIM PRIMOR": 15,
-      "441 - PARQUE DOS IPES": 17
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "1936": {
     "nome_agente": "Geancarlos Ferreira Barrios",
     "equipe": "Equipe 3",
@@ -402,6 +389,19 @@
     "fechados_por_area": {
       "427 - JAMIL SALDANHA DERZI": 52,
       "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 22
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "80": {
+    "nome_agente": "Gisele Lopes Justiniano",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 55,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "435 - JARDIM PRIMOR": 15,
+      "441 - PARQUE DOS IPES": 40
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -445,36 +445,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1996": {
-    "nome_agente": "Sara Eliane Talaveira de Oliveira",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 24,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "438 - JARDIM PLANALTO": 16,
-      "435 - JARDIM PRIMOR": 8
-    },
-    "recusados_por_area": {
-      "435 - JARDIM PRIMOR": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 17021528,
-        "regiao": "URBANA",
-        "area": "435 - JARDIM PRIMOR",
-        "quarteirao": "Q004",
-        "logradouro": "Rua JOAO PESSOA",
-        "imovel": "560 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Normal",
-        "data_chegada": "19/08/2026 16:13",
-        "data_saida": "19/08/2026 16:14",
-        "nome_agente": "Sara Eliane Talaveira de Oliveira",
-        "equipe": "Equipe 4"
-      }
-    ],
-    "paginas_falhas": []
-  },
   "2789": {
     "nome_agente": "Kariele Jackeline Rodrigues Silva",
     "equipe": "Equipe 4",
@@ -495,6 +465,19 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "440 - JARDIM IBIRAPUERA": 24
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "110": {
+    "nome_agente": "Anderson Jose de Santana",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 27,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "435 - JARDIM PRIMOR": 25,
+      "442 - JARDIM INDEPENDÊNCIA": 2
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -538,17 +521,34 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "110": {
-    "nome_agente": "Anderson Jose de Santana",
+  "1996": {
+    "nome_agente": "Sara Eliane Talaveira de Oliveira",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 27,
-    "imoveis_recusados": 0,
+    "imoveis_fechados": 24,
+    "imoveis_recusados": 1,
     "fechados_por_area": {
-      "435 - JARDIM PRIMOR": 25,
-      "442 - JARDIM INDEPENDÊNCIA": 2
+      "438 - JARDIM PLANALTO": 16,
+      "435 - JARDIM PRIMOR": 8
     },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
+    "recusados_por_area": {
+      "435 - JARDIM PRIMOR": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 17021528,
+        "regiao": "URBANA",
+        "area": "435 - JARDIM PRIMOR",
+        "quarteirao": "Q004",
+        "logradouro": "Rua JOAO PESSOA",
+        "imovel": "560 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Normal",
+        "data_chegada": "19/08/2026 16:13",
+        "data_saida": "19/08/2026 16:14",
+        "nome_agente": "Sara Eliane Talaveira de Oliveira",
+        "equipe": "Equipe 4"
+      }
+    ],
     "paginas_falhas": []
   }
 }
