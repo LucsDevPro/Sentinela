@@ -53,8 +53,8 @@
     "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
     "inicio": "06/08/2026",
-    "fim": "17/08/2026",
-    "duracao": 8,
+    "fim": "19/08/2026",
+    "duracao": 10,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "confirmada",
@@ -69,8 +69,8 @@
     "nome_agente": "Teonilda Florentino Vieira",
     "equipe": "Equipe 2",
     "inicio": "23/07/2026",
-    "fim": "17/08/2026",
-    "duracao": 18,
+    "fim": "19/08/2026",
+    "duracao": 20,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "confirmada",
@@ -259,8 +259,8 @@
     "nome_agente": "Ramona dos Santos Oliveira",
     "equipe": "Equipe 4",
     "inicio": "07/08/2026",
-    "fim": "17/08/2026",
-    "duracao": 7,
+    "fim": "19/08/2026",
+    "duracao": 9,
     "status": "confirmada",
     "motivo": "Férias/Atestado",
     "confirmado_automaticamente": true,
@@ -1012,6 +1012,8 @@
     "status": "confirmada",
     "categoria_coletiva": "Chuva",
     "confirmado_automaticamente": true,
-    "detectado_em": "18/08/2026 05:48"
+    "detectado_em": "18/08/2026 05:48",
+    "revisao_necessaria": true,
+    "nota_revisao": "O padrão que gerou esta detecção não aparece mais na análise atual — pode ser correção de dados, ou uma correção no sistema que revelou um falso positivo. Confira se a decisão ainda faz sentido."
   }
 ]
