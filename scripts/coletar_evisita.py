@@ -549,6 +549,47 @@ def _dias_uteis_no_intervalo(data_min, data_max, feriados=FERIADOS_NACIONAIS):
     return dias
 
 
+def _dias_uteis_do_mes_civil(data_ref, feriados=FERIADOS_NACIONAIS):
+    """Lista (não só a contagem) dos dias úteis do MÊS CIVIL INTEIRO (dia 1
+    ao último dia) que contém `data_ref` — usada por _dias_uteis_mes_civil
+    (só a contagem) e por _preparar_ranking (que precisa dos dias em si,
+    pra descontar chuva/capacitação/reunião do alvo por equipe)."""
+    primeiro_dia = data_ref.replace(day=1)
+    if data_ref.month == 12:
+        ultimo_dia = data_ref.replace(day=31)
+    else:
+        ultimo_dia = data_ref.replace(month=data_ref.month + 1, day=1) - timedelta(days=1)
+    return _dias_uteis_no_intervalo(primeiro_dia, ultimo_dia, feriados)
+
+
+def _dias_uteis_mes_civil(data_ref, feriados=FERIADOS_NACIONAIS):
+    """Nº de dias úteis do MÊS CIVIL INTEIRO (dia 1 ao último dia) que contém
+    `data_ref` — não é o número de dias já passados, é o mês completo,
+    então serve como referência estável de "1 mês de calibração" mesmo com
+    o mês ainda em andamento. Usado por calcular_pontuacao() no lugar de um
+    número fixo tipo 22, porque nem todo mês tem a mesma quantidade de dias
+    úteis (feriados, fins de semana caindo diferente)."""
+    return len(_dias_uteis_do_mes_civil(data_ref, feriados))
+
+
+def _dias_paralisacao_coletiva_no_mes(id_agente, equipe, dias_do_mes, lista_cronograma):
+    """Quantos dias, dentre `dias_do_mes` (dias úteis do mês civil), foram
+    paralisação COLETIVA da equipe do agente (Chuva/Capacitação/Reunião/
+    Outra atividade coletiva — ver CATEGORIAS_PARALISACAO_COLETIVA) —
+    NÃO conta férias/atestado individuais aqui, porque essas já são
+    tratadas à parte (excluídas de dias_trabalhados/qtd_ausencias, sem
+    precisar encolher o alvo do mês pra isso). Usada por _preparar_ranking
+    pra tirar do alvo de normalização os dias em que NINGUÉM da equipe
+    tinha como trabalhar mesmo — não é justo cobrar esses dias de ninguém,
+    nem "inflando" o fator de quem não pôde trabalhar por causa deles."""
+    total = 0
+    for dia in dias_do_mes:
+        motivo = _obter_motivo_cronograma(id_agente, equipe, dia, lista_cronograma)
+        if motivo and any(cat.lower() in motivo.lower() for cat in CATEGORIAS_PARALISACAO_COLETIVA):
+            total += 1
+    return total
+
+
 def _runs_consecutivos_uteis(dias_uteis, faltando_set):
     """dias_uteis: lista ordenada de dias úteis do período. faltando_set:
     subconjunto sem lançamento. Retorna (dia_inicio, dia_fim, duracao) pra
@@ -1661,25 +1702,37 @@ def _classificar_pontuacao(pontos):
     return "🔴 CRÍTICO", "FFB3B3"
 
 
-def calcular_pontuacao(res, qtd_ausencias):
+def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES):
     """
     Calcula a pontuação final de um agente a partir de PONTOS_INICIAIS,
     aplicando todos os critérios de perda/ganho configurados. Retorna
     (pontos_final, classificacao, cor, lista_detalhamento).
 
-    IMPORTANTE — normalização "por mês": PONTOS_INICIAIS (100) foi
-    calibrado assumindo um período de ~DIAS_UTEIS_MES (22) dias úteis
-    trabalhados. Sem normalizar, um agente avaliado num período maior
-    (ex.: o Acumulado, somando vários meses) acumula 3-4x mais OCORRÊNCIAS
+    IMPORTANTE — normalização "por 1 mês de calibração": PONTOS_INICIAIS
+    (100) foi calibrado assumindo ~1 mês (`alvo_dias_mes` dias úteis)
+    trabalhado. Sem normalizar, um agente avaliado num período maior (ex.:
+    o Acumulado, somando vários meses) acumula 3-4x mais OCORRÊNCIAS
     BRUTAS de cada critério do que em 1 mês — mesmo com o desempenho
     EXATAMENTE IGUAL, dia a dia — e a pontuação despencava pro chão
     (comprovado: mesmo padrão de desempenho dava 102 pontos em 1 mês e 0
     pontos em 4 meses seguidos, sem essa correção).
 
+    `alvo_dias_mes` é o Nº DE DIAS ÚTEIS DO MÊS CIVIL sendo avaliado (via
+    _dias_uteis_mes_civil, calculado sobre o mês INTEIRO, ainda que em
+    andamento) — não é uma constante chutada tipo 22 fixo, porque nem todo
+    mês tem o mesmo número de dias úteis (feriados, fins de semana caindo
+    diferente). Isso é decisivo pro Ranking do mês corrente/em andamento:
+    o alvo tem que ficar ESTÁVEL representando "1 mês", mesmo enquanto o
+    mês não fechou — só assim o Acumulado (que soma vários meses) continua
+    sendo escalado pra baixo corretamente. Se o alvo fosse recalculado a
+    partir dos próprios dias já trabalhados no período (em vez do mês civil
+    inteiro), o fator viraria sempre ~1 tanto pra 1 mês quanto pra vários
+    meses — e o bug do parágrafo acima voltaria a acontecer no Acumulado.
+
     O fator é LIMITADO a TETO_FATOR_NORMALIZACAO (2x, por padrão) — sem
     esse teto, o efeito inverso acontece pra quem trabalhou POUCOS dias no
     período (ex.: alguém que ficou de férias quase o mês inteiro): com só
-    2 dias trabalhados, o fator sem teto seria 22/2 = 11x, transformando
+    2 dias trabalhados, o fator sem teto seria alvo/2 ≈ 10-11x, transformando
     6 visitas rápidas (peso 0,3 = 1,8 ponto normal) em quase 20 pontos
     perdidos — um punhado de dias ruins vira um mês inteiro ruim, o que
     não é justo nem realista (a amostra é pequena demais pra extrapolar
@@ -1689,7 +1742,7 @@ def calcular_pontuacao(res, qtd_ausencias):
     df = res["df"]
     pontos = float(PONTOS_INICIAIS)
     detalhes = []
-    fator_normalizacao = min(DIAS_UTEIS_MES / r["dias_trabalhados"], TETO_FATOR_NORMALIZACAO) \
+    fator_normalizacao = min(alvo_dias_mes / r["dias_trabalhados"], TETO_FATOR_NORMALIZACAO) \
         if r["dias_trabalhados"] > 0 else 1.0
 
     def aplicar(motivo, qtd, peso, sinal, normalizar=True):
@@ -1699,12 +1752,19 @@ def calcular_pontuacao(res, qtd_ausencias):
         qtd_calc = qtd * fator_normalizacao if normalizar else qtd
         delta = sinal * qtd_calc * peso
         pontos += delta
+        # peso_exibido: o peso EFETIVO já com o fator de normalização
+        # embutido (quando normalizar=True), pra "qtd × peso" bater com
+        # "pontos" na tabela de detalhe — sem isso, quem confere a conta
+        # na mão vê "89 × 0,30 = 26,7" mas o "Pontos Aplicados" mostra
+        # 53,4, e parece erro (não é: é o fator de normalização aplicado
+        # por trás, invisível na tabela). Ver calcular_pontuacao().
+        peso_exibido = round(peso * fator_normalizacao, 4) if normalizar else peso
         detalhes.append({
             "nome_agente": res["nome_agente"],
             "equipe": res["equipe"],
             "motivo": motivo,
             "qtd": qtd,  # sempre a contagem BRUTA real, pra não confundir quem for auditar
-            "peso": peso,
+            "peso": peso_exibido,
             "pontos": round(delta, 2),
         })
 
@@ -1967,6 +2027,8 @@ COLS_RANKING = [
     ("Posição", "posicao"),
     ("Agente", "nome_agente"),
     ("Equipe", "equipe"),
+    ("Dias Trabalhados", "dias_trabalhados"),
+    ("Dias Úteis Esperados no Mês", "dias_uteis_esperados"),
     ("Pontuação Final", "pontos"),
     ("Classificação", "classificacao"),
 ]
@@ -2824,12 +2886,26 @@ def _preparar_pendencias_resumo(resultados):
     return registros
 
 
-def _preparar_ranking(resultados, regs_ausencias):
+def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronograma=None):
     """
     Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
       - lista principal ordenada por pontuação (posição 1 = maior pontuação)
       - lista de detalhamento (todos os critérios aplicados, por agente)
+
+    `data_max`: última data do período sendo consolidado (df_total["dia"].max()).
+    Usada pra achar o MÊS CIVIL de referência do fator de normalização
+    (_dias_uteis_mes_civil) — ver docstring de calcular_pontuacao(). Se não
+    vier (uso avulso/testes), cai no DIAS_UTEIS_MES fixo de sempre.
+
+    `lista_cronograma`: cronograma efetivo (ver _cronograma_efetivo) — usado
+    pra descontar do alvo de cada agente os dias em que a EQUIPE dele
+    inteira ficou parada por chuva/capacitação/reunião (ver
+    _dias_paralisacao_coletiva_no_mes). Sem isso, esses dias contariam como
+    "deveria ter trabalhado" no alvo, mesmo não sendo culpa de ninguém.
     """
+    dias_do_mes = _dias_uteis_do_mes_civil(data_max) if data_max is not None else []
+    alvo_dias_mes_base = len(dias_do_mes) if dias_do_mes else DIAS_UTEIS_MES
+
     ausencias_por_agente = {}  # id_agente -> contagem — NUNCA por nome (agentes
     # diferentes podem ter o mesmo nome; contar por nome misturaria as
     # ausências de um com a pontuação do outro)
@@ -2842,10 +2918,24 @@ def _preparar_ranking(resultados, regs_ausencias):
     principal, todos_detalhes = [], []
     for res in resultados:
         qtd_ausencias = ausencias_por_agente.get(res["id_agente"], 0)
-        pontos, classif, fill, detalhes = calcular_pontuacao(res, qtd_ausencias)
+        if dias_do_mes:
+            dias_coletivos = _dias_paralisacao_coletiva_no_mes(
+                res["id_agente"], res["equipe"], dias_do_mes, lista_cronograma)
+            alvo_dias_mes = max(alvo_dias_mes_base - dias_coletivos, 1)
+        else:
+            alvo_dias_mes = alvo_dias_mes_base
+        pontos, classif, fill, detalhes = calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes)
         principal.append({
             "nome_agente": res["nome_agente"],
             "equipe": res["equipe"],
+            # Dias trabalhados x Dias úteis esperados no mês (já descontando
+            # chuva/capacitação/reunião da própria equipe) ficam expostos
+            # aqui pra QUALQUER gestor — mesmo sem entender a fórmula por
+            # trás — enxergar de cara se a pontuação de alguém foi ajustada
+            # por ter trabalhado menos (ou mais) dias que o esperado no mês,
+            # sem precisar abrir a aba de Detalhe. Ver calcular_pontuacao().
+            "dias_trabalhados": res["resumo"]["dias_trabalhados"],
+            "dias_uteis_esperados": alvo_dias_mes,
             "pontos": pontos,
             "classificacao": classif,
             "_fill": fill,
@@ -3100,7 +3190,8 @@ def salvar_excel_consolidado(resultados, df_total, pasta_saida, semanas_ponto_es
         _adicionar_legenda(ws_rs, linha_final_rs + 2)
 
     # --- Ranking / Pontuação ---
-    ranking_principal, ranking_detalhe = _preparar_ranking(resultados, regs_aus)
+    data_max_periodo = df_total["dia"].max() if not df_total.empty else None
+    ranking_principal, ranking_detalhe = _preparar_ranking(resultados, regs_aus, data_max_periodo, lista_cronograma)
 
     ws_rk = wb.create_sheet("Ranking")
     for col, (titulo, _) in enumerate(COLS_RANKING, 1):

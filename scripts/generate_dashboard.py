@@ -256,6 +256,7 @@ PE_COLS = {
 RESUMO_SEMANAL_COLS = {"Semana": "semana", "Período": "periodo", **RESUMO_COLS}
 RANKING_COLS = {
     "Posição": "posicao", "Agente": "agente", "Equipe": "equipe",
+    "Dias Trabalhados": "dias_trabalhados", "Dias Úteis Esperados no Mês": "dias_uteis_esperados",
     "Pontuação Final": "pontos", "Classificação": "classificacao",
 }
 RANKING_DET_COLS = {
