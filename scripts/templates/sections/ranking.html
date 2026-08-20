@@ -1,16 +1,51 @@
 {% from "macros.html" import kpi, chart_card, alert_table %}
 <div class="section" id="ranking">
   <div class="legend-box">
-    Todo agente começa o período com <strong>100 pontos</strong>. Critérios como pontualidade, visitas
-    rápidas/duplicadas/em sequência suspeita, ausências e meta diária somam ou descontam pontos.
-    Faixas: <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
-    <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).
-    <br>
-    <strong>Dias Trabalhados</strong> vs. <strong>Dias Úteis Esperados no Mês</strong>: se um agente
-    trabalhou menos dias que o esperado (férias, atestado, entrou no meio do mês), os critérios são
-    ajustados proporcionalmente — pra não punir/premiar só por ter sido observado por menos tempo.
-    "Dias Úteis Esperados" já desconta os dias em que a equipe toda ficou parada por chuva, capacitação
-    ou reunião.
+    <p><strong>Como a pontuação é calculada:</strong> todo agente começa o período com <strong>100
+    pontos</strong>. Cada comportamento do dia a dia soma ou desconta pontos, seguindo a tabela abaixo:</p>
+
+    <table class="legend-table">
+      <thead><tr><th>Critério</th><th>Pontos por ocorrência</th></tr></thead>
+      <tbody>
+        <tr><td>✅ Dia com meta diária de visitas batida</td><td class="ganho">+1,0 / dia</td></tr>
+        <tr><td>✅ Bônus: nenhuma visita rápida no período inteiro</td><td class="ganho">+5,0 (único)</td></tr>
+        <tr><td>✅ Bônus: nenhuma ausência no período inteiro</td><td class="ganho">+5,0 (único)</td></tr>
+        <tr><td>✅ Bônus: pontualidade perfeita no período inteiro</td><td class="ganho">+3,0 (único)</td></tr>
+        <tr><td>❌ Dia sem bater a meta diária de visitas</td><td class="perda">−0,5 / dia</td></tr>
+        <tr><td>❌ Turno sem lançamento (falta não justificada)</td><td class="perda">−1,5 / turno</td></tr>
+        <tr><td>❌ Visita em sequência suspeita (lançamento em lote)</td><td class="perda">−1,0 / visita</td></tr>
+        <tr><td>❌ Visita duplicada</td><td class="perda">−0,3 / visita</td></tr>
+        <tr><td>❌ Início manhã atrasado / fim manhã antecipado</td><td class="perda">−0,3 / dia</td></tr>
+        <tr><td>❌ Início tarde atrasado / fim tarde antecipado</td><td class="perda">−0,3 / dia</td></tr>
+        <tr><td>❌ Visita fora do expediente / fim de semana</td><td class="perda">−0,5 / visita</td></tr>
+        <tr><td>❌ Visita no horário de almoço</td><td class="perda">−0,5 / visita</td></tr>
+        <tr><td>❌ Visita rápida (menos do que o tempo mínimo)</td><td class="perda">−0,2 / visita</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Faixas de classificação:</strong>
+    <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
+    <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).</p>
+
+    <p><strong>Por que a Quantidade × Peso da tabela de Detalhamento não bate direto com os Pontos
+    Aplicados?</strong> Porque existe um <strong>Fator de Normalização</strong> no meio da conta. Ele
+    existe pra período nenhum ser injusto com ninguém:</p>
+    <ul>
+      <li>Se o agente trabalhou <strong>menos dias que o esperado</strong> no período (entrou depois,
+      tirou atestado, mês ainda não fechou), cada ocorrência PESA MAIS — porque a mesma taxa de erro,
+      observada em poucos dias, projetaria um resultado pior se o período fosse completo.</li>
+      <li>Se o período avaliado é <strong>mais longo que 1 mês</strong> (ex.: Ranking Acumulado, somando
+      vários meses), cada ocorrência PESA MENOS — pra não punir alguém só por ter sido observado durante
+      mais tempo (mais dias trabalhados = naturalmente mais ocorrências brutas, mesmo com o mesmo
+      comportamento de sempre).</li>
+    </ul>
+    <p>Na prática: <strong>Peso Efetivo = Peso Nominal (da tabela acima) × Fator de Normalização</strong>,
+    e <strong>Pontos Aplicados = Quantidade × Peso Efetivo</strong>. O fator é limitado a no máximo 2x pra
+    não exagerar em casos extremos. As colunas <strong>Dias Trabalhados</strong> / <strong>Dias Úteis
+    Esperados no Mês</strong> / <strong>Turnos Sem Trabalhar</strong> (na tabela de Ranking Geral) e
+    <strong>Peso Nominal</strong> / <strong>Fator de Normalização</strong> / <strong>Peso Efetivo</strong>
+    (na tabela de Detalhamento, mais abaixo) mostram cada peça dessa conta separada, pra dar pra conferir
+    na mão.</p>
   </div>
 
   <div class="kpi-grid">
@@ -30,7 +65,7 @@
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão.</p>
     <div class="table-wrap">
       <table class="data-table sortable" id="tableRanking">
-        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
+        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Turnos Sem Trabalhar</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
         <tbody>
           {% for r in ranking %}
           <tr class="{{ r.classificacao|row_class }}">
@@ -39,6 +74,7 @@
             <td>{{ r.equipe }}</td>
             <td class="num">{{ r.dias_trabalhados|br }}</td>
             <td class="num">{{ r.dias_uteis_esperados|br }}</td>
+            <td class="num">{{ r.turnos_sem_trabalhar|br }}</td>
             <td class="num">{{ r.pontos|br(1) }}</td>
             <td>{{ r.classificacao|rank_badge }}</td>
           </tr>
@@ -51,6 +87,14 @@
   {% if ranking_detalhe %}
   {{ alert_table(ranking_detalhe, "Detalhamento — Critérios Aplicados por Agente", "📋", "ranking-detalhe",
      [("agente","Agente","str"), ("equipe","Equipe","str"), ("criterio","Critério","str"),
-      ("qtd","Quantidade","num"), ("peso","Peso (pts/ocorrência)","num2"), ("pontos","Pontos Aplicados","num1")]) }}
+      ("qtd","Quantidade","num"), ("peso_nominal","Peso Nominal","num2"),
+      ("fator_normalizacao","Fator Normalização","num2"), ("peso","Peso Efetivo","num2"),
+      ("pontos","Pontos Aplicados","num1")]) }}
+  <p class="table-hint">
+    <strong>Peso Nominal</strong> é o valor fixo da tabela de critérios (ex.: 0,20 por visita rápida).
+    <strong>Fator Normalização</strong> ajusta esse peso pra cima ou pra baixo dependendo de quantos dias
+    o agente trabalhou em relação ao esperado no mês (ver seção do Ranking Geral acima). <strong>Peso
+    Efetivo</strong> = Nominal × Fator — é ele, multiplicado pela Quantidade, que dá os Pontos Aplicados.
+  </p>
   {% endif %}
 </div>
