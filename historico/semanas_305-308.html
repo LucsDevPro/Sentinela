@@ -279,14 +279,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="20/08/2026 01:20">
+<body data-print-date="20/08/2026 18:37">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 20/08/2026 01:20</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 20/08/2026 18:37</div>
       </div>
     </div>
     <div class="header-actions">
@@ -91019,6 +91019,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     rápidas/duplicadas/em sequência suspeita, ausências e meta diária somam ou descontam pontos.
     Faixas: <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
     <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).
+    <br>
+    <strong>Dias Trabalhados</strong> vs. <strong>Dias Úteis Esperados no Mês</strong>: se um agente
+    trabalhou menos dias que o esperado (férias, atestado, entrou no meio do mês), os critérios são
+    ajustados proporcionalmente — pra não punir/premiar só por ter sido observado por menos tempo.
+    "Dias Úteis Esperados" já desconta os dias em que a equipe toda ficou parada por chuva, capacitação
+    ou reunião.
   </div>
 
   <div class="kpi-grid">
@@ -91041,13 +91047,15 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão.</p>
     <div class="table-wrap">
       <table class="data-table sortable" id="tableRanking">
-        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
+        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
         <tbody>
           
           <tr class="">
             <td class="num">1º</td>
             <td class="sticky-col agent-name">Gilmar Bitencourt Luiz</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">92,6</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
           </tr>
@@ -91056,6 +91064,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">2º</td>
             <td class="sticky-col agent-name">Selba Ramona Afonso</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">89,7</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91064,6 +91074,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">3º</td>
             <td class="sticky-col agent-name">William Anderson Chamorro Tavares</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">88,2</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91072,6 +91084,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">4º</td>
             <td class="sticky-col agent-name">Rozentina Matos de Oliveira</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">85,9</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91080,6 +91094,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">5º</td>
             <td class="sticky-col agent-name">Fabiana de Figueredo Vieira</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">85,3</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91088,6 +91104,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">6º</td>
             <td class="sticky-col agent-name">Ana Gabriela Silva Garcete</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">81,8</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91096,6 +91114,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">7º</td>
             <td class="sticky-col agent-name">Brauher Luiz Alvarenga Gonzalez</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">81,4</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91104,6 +91124,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">8º</td>
             <td class="sticky-col agent-name">Cicero Isrrael Sanabria</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">78,5</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91112,6 +91134,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">9º</td>
             <td class="sticky-col agent-name">Suely Aguiar Alves Luiz</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">76,0</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91120,6 +91144,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">10º</td>
             <td class="sticky-col agent-name">Adriana de Jesus Saraiva</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">76,0</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
@@ -91128,6 +91154,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">11º</td>
             <td class="sticky-col agent-name">Adriano Ricardo Thiel</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">71,0</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91136,6 +91164,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">12º</td>
             <td class="sticky-col agent-name">Naime Cristina Freitas</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">71,0</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91144,6 +91174,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">13º</td>
             <td class="sticky-col agent-name">Walquiria Araujo Flores</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">70,8</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91152,6 +91184,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">14º</td>
             <td class="sticky-col agent-name">Wesley de Souza Leal</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">69,4</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91160,6 +91194,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">15º</td>
             <td class="sticky-col agent-name">Evelyn Santana Santos Oliveira</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">68,4</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91168,6 +91204,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">16º</td>
             <td class="sticky-col agent-name">Gabriel Alan de Oliveira Martins</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">66,0</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91176,6 +91214,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">17º</td>
             <td class="sticky-col agent-name">Cris Milene Cardenas da Silva</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">64,9</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91184,6 +91224,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">18º</td>
             <td class="sticky-col agent-name">Alana Amanda Fernandes Ovelar</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">62,2</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91192,6 +91234,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">19º</td>
             <td class="sticky-col agent-name">Tania Maria Montania</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">60,1</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
           </tr>
@@ -91200,6 +91244,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">20º</td>
             <td class="sticky-col agent-name">Sara Eliane Talaveira de Oliveira</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">51,5</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91208,6 +91254,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">21º</td>
             <td class="sticky-col agent-name">Bianca Afonso Narbaez</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">51,2</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91216,6 +91264,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">22º</td>
             <td class="sticky-col agent-name">Anderson Jose de Santana</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">46,1</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91224,6 +91274,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">23º</td>
             <td class="sticky-col agent-name">Carlos Alberto Albiero</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">45,9</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91232,6 +91284,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">24º</td>
             <td class="sticky-col agent-name">Raquel Ortiz dos Santos</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">40,5</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91240,6 +91294,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">25º</td>
             <td class="sticky-col agent-name">Ramona dos Santos Oliveira</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">37,9</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91248,6 +91304,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">26º</td>
             <td class="sticky-col agent-name">Silvina Regina de Souza Valiente</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">27,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91256,6 +91314,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">27º</td>
             <td class="sticky-col agent-name">Gisele Olimpia Torres</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">11,6</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91264,6 +91324,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">28º</td>
             <td class="sticky-col agent-name">Marco Antonio Ayala de Matos Freitas</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">9,8</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91272,6 +91334,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">29º</td>
             <td class="sticky-col agent-name">Wagner Tarlei Gomes</td>
             <td>Equipe 1</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">6,8</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91280,6 +91344,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">30º</td>
             <td class="sticky-col agent-name">Mateus Falcao de Souza</td>
             <td>Equipe 2</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">2,8</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91288,6 +91354,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">31º</td>
             <td class="sticky-col agent-name">Claine Luisa Figueiredo Torraca</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91296,6 +91364,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">32º</td>
             <td class="sticky-col agent-name">Emidio Rainer Vilhalba</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91304,6 +91374,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">33º</td>
             <td class="sticky-col agent-name">Geancarlos Ferreira Barrios</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91312,6 +91384,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">34º</td>
             <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91320,6 +91394,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">35º</td>
             <td class="sticky-col agent-name">Rosalina Beniel Vargas</td>
             <td>Equipe 3</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91328,6 +91404,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">36º</td>
             <td class="sticky-col agent-name">Gisele Lopes Justiniano</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91336,6 +91414,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">37º</td>
             <td class="sticky-col agent-name">Juliana Patricia Goncalves</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91344,6 +91424,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">38º</td>
             <td class="sticky-col agent-name">Kariele Jackeline Rodrigues Silva</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91352,6 +91434,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">39º</td>
             <td class="sticky-col agent-name">Kátia Cilene Silveira Machado</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91360,6 +91444,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">40º</td>
             <td class="sticky-col agent-name">Rafael Ramos Recalde</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -91368,6 +91454,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">41º</td>
             <td class="sticky-col agent-name">Rozana Reis da Silva</td>
             <td>Equipe 4</td>
+            <td class="num">—</td>
+            <td class="num">—</td>
             <td class="num">0,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
           </tr>
@@ -100088,7 +100176,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 20/08/2026 01:20</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 20/08/2026 18:37</footer>
 
 <script>
 function goToSection(id) {
