@@ -294,14 +294,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="20/08/2026 20:13">
+<body data-print-date="20/08/2026 20:14">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 20/08/2026 20:13</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 20/08/2026 20:14</div>
       </div>
     </div>
     <div class="header-actions">
@@ -25758,54 +25758,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
   
 <div class="section" id="ranking">
-  <div class="legend-box">
-    <p><strong>Como a pontuação é calculada:</strong> todo agente começa o período com <strong>100
-    pontos</strong>. Cada comportamento do dia a dia soma ou desconta pontos, seguindo a tabela abaixo:</p>
-
-    <table class="legend-table">
-      <thead><tr><th>Critério</th><th>Pontos por ocorrência</th></tr></thead>
-      <tbody>
-        <tr><td>✅ Dia com meta diária de visitas batida</td><td class="ganho">+1,0 / dia</td></tr>
-        <tr><td>✅ Bônus: nenhuma visita rápida no período inteiro</td><td class="ganho">+5,0 (único)</td></tr>
-        <tr><td>✅ Bônus: nenhuma ausência no período inteiro</td><td class="ganho">+5,0 (único)</td></tr>
-        <tr><td>✅ Bônus: pontualidade perfeita no período inteiro</td><td class="ganho">+3,0 (único)</td></tr>
-        <tr><td>❌ Dia sem bater a meta diária de visitas</td><td class="perda">−0,5 / dia</td></tr>
-        <tr><td>❌ Turno sem lançamento (falta não justificada)</td><td class="perda">−1,5 / turno</td></tr>
-        <tr><td>❌ Visita em sequência suspeita (lançamento em lote)</td><td class="perda">−1,0 / visita</td></tr>
-        <tr><td>❌ Visita duplicada</td><td class="perda">−0,3 / visita</td></tr>
-        <tr><td>❌ Início manhã atrasado / fim manhã antecipado</td><td class="perda">−0,3 / dia</td></tr>
-        <tr><td>❌ Início tarde atrasado / fim tarde antecipado</td><td class="perda">−0,3 / dia</td></tr>
-        <tr><td>❌ Visita fora do expediente / fim de semana</td><td class="perda">−0,5 / visita</td></tr>
-        <tr><td>❌ Visita no horário de almoço</td><td class="perda">−0,5 / visita</td></tr>
-        <tr><td>❌ Visita rápida (menos do que o tempo mínimo)</td><td class="perda">−0,2 / visita</td></tr>
-      </tbody>
-    </table>
-
-    <p><strong>Faixas de classificação:</strong>
-    <strong>🟢 Excelente</strong> (≥ 90) · <strong>🟡 Bom</strong> (75–89,9) ·
-    <strong>🟠 Atenção</strong> (60–74,9) · <strong>🔴 Crítico</strong> (&lt; 60).</p>
-
-    <p><strong>Por que a Quantidade × Peso da tabela de Detalhamento não bate direto com os Pontos
-    Aplicados?</strong> Porque existe um <strong>Fator de Normalização</strong> no meio da conta. Ele
-    existe pra período nenhum ser injusto com ninguém:</p>
-    <ul>
-      <li>Se o agente trabalhou <strong>menos dias que o esperado</strong> no período (entrou depois,
-      tirou atestado, mês ainda não fechou), cada ocorrência PESA MAIS — porque a mesma taxa de erro,
-      observada em poucos dias, projetaria um resultado pior se o período fosse completo.</li>
-      <li>Se o período avaliado é <strong>mais longo que 1 mês</strong> (ex.: Ranking Acumulado, somando
-      vários meses), cada ocorrência PESA MENOS — pra não punir alguém só por ter sido observado durante
-      mais tempo (mais dias trabalhados = naturalmente mais ocorrências brutas, mesmo com o mesmo
-      comportamento de sempre).</li>
-    </ul>
-    <p>Na prática: <strong>Peso Efetivo = Peso Nominal (da tabela acima) × Fator de Normalização</strong>,
-    e <strong>Pontos Aplicados = Quantidade × Peso Efetivo</strong>. O fator é limitado a no máximo 2x pra
-    não exagerar em casos extremos. As colunas <strong>Dias Trabalhados</strong> / <strong>Dias Úteis
-    Esperados no Mês</strong> / <strong>Turnos Sem Trabalhar</strong> (na tabela de Ranking Geral) e
-    <strong>Peso Nominal</strong> / <strong>Fator de Normalização</strong> / <strong>Peso Efetivo</strong>
-    (na tabela de Detalhamento, mais abaixo) mostram cada peça dessa conta separada, pra dar pra conferir
-    na mão.</p>
-  </div>
-
   <div class="kpi-grid">
     <div class="kpi blue"><div class="kpi-label">Líder do Ranking</div><div class="kpi-value">Cicero Isrrael Sanabria</div><div class="kpi-sub">100,0 pontos</div></div>
     <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">77,5</div><div class="kpi-sub">de todos os agentes</div></div>
@@ -26294,6 +26246,35 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         </tbody>
       </table>
     </div>
+
+    <details class="legend-box legend-collapsible">
+      <summary>❓ Como a pontuação é calculada</summary>
+      <p>Todo agente começa com <strong>100 pontos</strong>. Faixas: 🟢 ≥90 · 🟡 75–89,9 · 🟠 60–74,9 · 🔴 &lt;60.</p>
+      <table class="legend-table">
+        <tbody>
+          <tr><td>✅ Dia com meta batida</td><td class="ganho">+1,0/dia</td>
+              <td>❌ Dia sem bater meta</td><td class="perda">−0,5/dia</td></tr>
+          <tr><td>✅ Bônus sem visita rápida no período</td><td class="ganho">+5,0</td>
+              <td>❌ Turno sem trabalhar (falta)</td><td class="perda">−1,5/turno</td></tr>
+          <tr><td>✅ Bônus sem ausência no período</td><td class="ganho">+5,0</td>
+              <td>❌ Sequência suspeita (lote)</td><td class="perda">−1,0/visita</td></tr>
+          <tr><td>✅ Bônus pontualidade perfeita</td><td class="ganho">+3,0</td>
+              <td>❌ Visita duplicada</td><td class="perda">−0,3/visita</td></tr>
+          <tr><td></td><td></td>
+              <td>❌ Atraso/saída antecipada (manhã/tarde)</td><td class="perda">−0,3/dia</td></tr>
+          <tr><td></td><td></td>
+              <td>❌ Fora do expediente / almoço</td><td class="perda">−0,5/visita</td></tr>
+          <tr><td></td><td></td>
+              <td>❌ Visita rápida (abaixo do tempo mínimo)</td><td class="perda">−0,2/visita</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Fator de Normalização:</strong> os pesos acima são ajustados pra cima (agente trabalhou
+      menos dias que o esperado) ou pra baixo (período longo, ex. Acumulado), pra ninguém ser
+      punido/premiado só pelo tamanho do período observado. Peso Efetivo = Peso Nominal × Fator — ver
+      colunas <strong>Dias Trabalhados</strong>/<strong>Turnos Sem Trabalhar</strong> acima e
+      <strong>Peso Nominal</strong>/<strong>Fator</strong>/<strong>Peso Efetivo</strong> no Detalhamento
+      abaixo, pra conferir a conta na mão.</p>
+    </details>
   </div>
 
   
@@ -35411,12 +35392,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   </div>
 </div>
 
-  <p class="table-hint">
-    <strong>Peso Nominal</strong> é o valor fixo da tabela de critérios (ex.: 0,20 por visita rápida).
-    <strong>Fator Normalização</strong> ajusta esse peso pra cima ou pra baixo dependendo de quantos dias
-    o agente trabalhou em relação ao esperado no mês (ver seção do Ranking Geral acima). <strong>Peso
-    Efetivo</strong> = Nominal × Fator — é ele, multiplicado pela Quantidade, que dá os Pontos Aplicados.
-  </p>
   
 </div>
   
@@ -35874,7 +35849,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 20/08/2026 20:13</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 20/08/2026 20:14</footer>
 
 <script>
 function goToSection(id) {
