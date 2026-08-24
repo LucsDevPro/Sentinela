@@ -53,8 +53,8 @@
     "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
     "inicio": "06/08/2026",
-    "fim": "21/08/2026",
-    "duracao": 12,
+    "fim": "24/08/2026",
+    "duracao": 13,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "confirmada",
@@ -259,8 +259,8 @@
     "nome_agente": "Ramona dos Santos Oliveira",
     "equipe": "Equipe 4",
     "inicio": "07/08/2026",
-    "fim": "21/08/2026",
-    "duracao": 11,
+    "fim": "24/08/2026",
+    "duracao": 12,
     "status": "confirmada",
     "motivo": "Férias/Atestado",
     "confirmado_automaticamente": true,
@@ -399,6 +399,41 @@
     "categoria_coletiva": "Chuva",
     "confirmado_automaticamente": true,
     "detectado_em": "16/08/2026 09:25"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 1",
+    "agentes_envolvidos": [
+      30,
+      73,
+      79,
+      85,
+      116,
+      470,
+      672,
+      1935,
+      3037,
+      3101
+    ],
+    "nomes_envolvidos": [
+      "Adriana de Jesus Saraiva",
+      "Adriano Ricardo Thiel",
+      "Ana Gabriela Silva Garcete",
+      "Carlos Alberto Albiero",
+      "Cris Milene Cardenas da Silva",
+      "Evelyn Santana Santos Oliveira",
+      "Gabriel Alan de Oliveira Martins",
+      "Raquel Ortiz dos Santos",
+      "Rozentina Matos de Oliveira",
+      "Wagner Tarlei Gomes"
+    ],
+    "inicio": "24/08/2026",
+    "fim": "24/08/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "24/08/2026 17:27"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -799,6 +834,39 @@
     "categoria_coletiva": "Chuva",
     "confirmado_automaticamente": true,
     "detectado_em": "16/08/2026 09:25"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 3",
+    "agentes_envolvidos": [
+      113,
+      120,
+      1936,
+      1938,
+      2721,
+      2918,
+      2951,
+      3038,
+      3128
+    ],
+    "nomes_envolvidos": [
+      "Alana Amanda Fernandes Ovelar",
+      "Claine Luisa Figueiredo Torraca",
+      "Emidio Rainer Vilhalba",
+      "Geancarlos Ferreira Barrios",
+      "Marco Antonio Ayala de Matos Freitas",
+      "Miglidiane Maciel Ajala",
+      "Naime Cristina Freitas",
+      "Rosalina Beniel Vargas",
+      "Selba Ramona Afonso"
+    ],
+    "inicio": "24/08/2026",
+    "fim": "24/08/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "24/08/2026 17:27"
   },
   {
     "tipo": "paralisacao_coletiva",
