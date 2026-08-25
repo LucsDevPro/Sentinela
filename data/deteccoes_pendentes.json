@@ -402,41 +402,6 @@
   },
   {
     "tipo": "paralisacao_coletiva",
-    "equipe": "Equipe 1",
-    "agentes_envolvidos": [
-      30,
-      73,
-      79,
-      85,
-      116,
-      470,
-      672,
-      1935,
-      3037,
-      3101
-    ],
-    "nomes_envolvidos": [
-      "Adriana de Jesus Saraiva",
-      "Adriano Ricardo Thiel",
-      "Ana Gabriela Silva Garcete",
-      "Carlos Alberto Albiero",
-      "Cris Milene Cardenas da Silva",
-      "Evelyn Santana Santos Oliveira",
-      "Gabriel Alan de Oliveira Martins",
-      "Raquel Ortiz dos Santos",
-      "Rozentina Matos de Oliveira",
-      "Wagner Tarlei Gomes"
-    ],
-    "inicio": "24/08/2026",
-    "fim": "24/08/2026",
-    "duracao": 1,
-    "status": "confirmada",
-    "categoria_coletiva": "Chuva",
-    "confirmado_automaticamente": true,
-    "detectado_em": "24/08/2026 17:27"
-  },
-  {
-    "tipo": "paralisacao_coletiva",
     "equipe": "Equipe 2",
     "agentes_envolvidos": [
       81,
@@ -837,39 +802,6 @@
   },
   {
     "tipo": "paralisacao_coletiva",
-    "equipe": "Equipe 3",
-    "agentes_envolvidos": [
-      113,
-      120,
-      1936,
-      1938,
-      2721,
-      2918,
-      2951,
-      3038,
-      3128
-    ],
-    "nomes_envolvidos": [
-      "Alana Amanda Fernandes Ovelar",
-      "Claine Luisa Figueiredo Torraca",
-      "Emidio Rainer Vilhalba",
-      "Geancarlos Ferreira Barrios",
-      "Marco Antonio Ayala de Matos Freitas",
-      "Miglidiane Maciel Ajala",
-      "Naime Cristina Freitas",
-      "Rosalina Beniel Vargas",
-      "Selba Ramona Afonso"
-    ],
-    "inicio": "24/08/2026",
-    "fim": "24/08/2026",
-    "duracao": 1,
-    "status": "confirmada",
-    "categoria_coletiva": "Chuva",
-    "confirmado_automaticamente": true,
-    "detectado_em": "24/08/2026 17:27"
-  },
-  {
-    "tipo": "paralisacao_coletiva",
     "equipe": "Equipe 4",
     "agentes_envolvidos": [
       80,
@@ -1046,6 +978,78 @@
     "categoria_coletiva": "Chuva",
     "confirmado_automaticamente": true,
     "detectado_em": "16/08/2026 09:25"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 1",
+    "agentes_envolvidos": [
+      30,
+      73,
+      79,
+      85,
+      116,
+      470,
+      672,
+      1935,
+      3037,
+      3101
+    ],
+    "nomes_envolvidos": [
+      "Adriana de Jesus Saraiva",
+      "Adriano Ricardo Thiel",
+      "Ana Gabriela Silva Garcete",
+      "Carlos Alberto Albiero",
+      "Cris Milene Cardenas da Silva",
+      "Evelyn Santana Santos Oliveira",
+      "Gabriel Alan de Oliveira Martins",
+      "Raquel Ortiz dos Santos",
+      "Rozentina Matos de Oliveira",
+      "Wagner Tarlei Gomes"
+    ],
+    "inicio": "24/08/2026",
+    "fim": "24/08/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "24/08/2026 17:27",
+    "revisao_necessaria": true,
+    "nota_revisao": "O padrão que gerou esta detecção não aparece mais na análise atual — pode ser correção de dados, ou uma correção no sistema que revelou um falso positivo. Confira se a decisão ainda faz sentido."
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 3",
+    "agentes_envolvidos": [
+      113,
+      120,
+      1936,
+      1938,
+      2721,
+      2918,
+      2951,
+      3038,
+      3128
+    ],
+    "nomes_envolvidos": [
+      "Alana Amanda Fernandes Ovelar",
+      "Claine Luisa Figueiredo Torraca",
+      "Emidio Rainer Vilhalba",
+      "Geancarlos Ferreira Barrios",
+      "Marco Antonio Ayala de Matos Freitas",
+      "Miglidiane Maciel Ajala",
+      "Naime Cristina Freitas",
+      "Rosalina Beniel Vargas",
+      "Selba Ramona Afonso"
+    ],
+    "inicio": "24/08/2026",
+    "fim": "24/08/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "24/08/2026 17:27",
+    "revisao_necessaria": true,
+    "nota_revisao": "O padrão que gerou esta detecção não aparece mais na análise atual — pode ser correção de dados, ou uma correção no sistema que revelou um falso positivo. Confira se a decisão ainda faz sentido."
   },
   {
     "tipo": "paralisacao_coletiva",
