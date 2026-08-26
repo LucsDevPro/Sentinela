@@ -38,20 +38,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "470": {
-    "nome_agente": "Cris Milene Cardenas da Silva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 53,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "410 - SALGADO FILHO": 12,
-      "403 - JARDIM UNIVERSITARIO": 23,
-      "401 - EMÍLIO DIAS BRANDÃO": 18
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3037": {
     "nome_agente": "Evelyn Santana Santos Oliveira",
     "equipe": "Equipe 1",
@@ -79,6 +65,20 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "85": {
+    "nome_agente": "Adriano Ricardo Thiel",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 70,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "407 - MOOCA": 53,
+      "401 - EMÍLIO DIAS BRANDÃO": 6,
+      "402 - JARDIM MARAMBAIA": 11
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "79": {
     "nome_agente": "Raquel Ortiz dos Santos",
     "equipe": "Equipe 1",
@@ -92,15 +92,40 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "85": {
-    "nome_agente": "Adriano Ricardo Thiel",
+  "470": {
+    "nome_agente": "Cris Milene Cardenas da Silva",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 70,
+    "imoveis_fechados": 53,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "407 - MOOCA": 53,
-      "401 - EMÍLIO DIAS BRANDÃO": 6,
-      "402 - JARDIM MARAMBAIA": 11
+      "410 - SALGADO FILHO": 12,
+      "403 - JARDIM UNIVERSITARIO": 23,
+      "401 - EMÍLIO DIAS BRANDÃO": 18
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 45,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 43,
+      "410 - SALGADO FILHO": 2
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3035": {
+    "nome_agente": "Teonilda Florentino Vieira",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 29,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "420 - FERROVIARIA": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -144,19 +169,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 45,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 43,
-      "410 - SALGADO FILHO": 2
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "99": {
     "nome_agente": "Fabiana de Figueredo Vieira",
     "equipe": "Equipe 2",
@@ -165,18 +177,6 @@
     "fechados_por_area": {
       "420 - FERROVIARIA": 11,
       "411 - JARDIM AEROPORTO": 38
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3035": {
-    "nome_agente": "Teonilda Florentino Vieira",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 29,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "420 - FERROVIARIA": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -417,11 +417,11 @@
   "2918": {
     "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
-    "imoveis_fechados": 110,
+    "imoveis_fechados": 109,
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "428 - JARDIM COIMBRA": 30,
-      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 26,
+      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 25,
       "429 - COOPHA FRONTEIRA": 54
     },
     "recusados_por_area": {},
