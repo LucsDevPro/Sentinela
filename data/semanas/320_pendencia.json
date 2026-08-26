@@ -106,26 +106,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 45,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 43,
-      "410 - SALGADO FILHO": 2
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3035": {
-    "nome_agente": "Teonilda Florentino Vieira",
+  "125": {
+    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 29,
+    "imoveis_fechados": 65,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "420 - FERROVIARIA": 29
+      "420 - FERROVIARIA": 41,
+      "422 - VILA TORRES": 24
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -156,6 +144,19 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 45,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 43,
+      "410 - SALGADO FILHO": 2
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "99": {
     "nome_agente": "Fabiana de Figueredo Vieira",
     "equipe": "Equipe 2",
@@ -169,6 +170,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "3035": {
+    "nome_agente": "Teonilda Florentino Vieira",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 29,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "420 - FERROVIARIA": 29
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "142": {
     "nome_agente": "William Anderson Chamorro Tavares",
     "equipe": "Equipe 2",
@@ -177,19 +190,6 @@
     "fechados_por_area": {
       "420 - FERROVIARIA": 14,
       "413 - BAIRRO DA GRANJA": 46
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "125": {
-    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 65,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "420 - FERROVIARIA": 41,
-      "422 - VILA TORRES": 24
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -234,6 +234,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "2951": {
+    "nome_agente": "Alana Amanda Fernandes Ovelar",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 42,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 42
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "2917": {
     "nome_agente": "Bianca Afonso Narbaez",
     "equipe": "Equipe 2",
@@ -242,18 +254,6 @@
     "fechados_por_area": {
       "420 - FERROVIARIA": 21,
       "419 - CENTRO 5": 18
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "2951": {
-    "nome_agente": "Alana Amanda Fernandes Ovelar",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 42,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 42
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -299,6 +299,19 @@
         "equipe": "Equipe 3"
       }
     ],
+    "paginas_falhas": []
+  },
+  "113": {
+    "nome_agente": "Selba Ramona Afonso",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 72,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "431 - PANAMBI": 53,
+      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 19
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
   "2721": {
@@ -415,19 +428,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "113": {
-    "nome_agente": "Selba Ramona Afonso",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 72,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "431 - PANAMBI": 53,
-      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 19
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "1936": {
     "nome_agente": "Geancarlos Ferreira Barrios",
     "equipe": "Equipe 3",
@@ -441,19 +441,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1943": {
-    "nome_agente": "Juliana Patricia Goncalves",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 27,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "445 - JARDIM IVONE": 18,
-      "436 - ALEGRETE": 9
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "80": {
     "nome_agente": "Gisele Lopes Justiniano",
     "equipe": "Equipe 4",
@@ -462,6 +449,19 @@
     "fechados_por_area": {
       "435 - JARDIM PRIMOR": 15,
       "441 - PARQUE DOS IPES": 40
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "1943": {
+    "nome_agente": "Juliana Patricia Goncalves",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 27,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "445 - JARDIM IVONE": 18,
+      "436 - ALEGRETE": 9
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
