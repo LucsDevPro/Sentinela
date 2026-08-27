@@ -11,6 +11,20 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "116": {
+    "nome_agente": "Wagner Tarlei Gomes",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 25,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "410 - SALGADO FILHO": 5,
+      "400 - JULIA CARDINAL": 13,
+      "401 - EMÍLIO DIAS BRANDÃO": 7
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "73": {
     "nome_agente": "Ana Gabriela Silva Garcete",
     "equipe": "Equipe 1",
@@ -51,15 +65,15 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "116": {
-    "nome_agente": "Wagner Tarlei Gomes",
+  "672": {
+    "nome_agente": "Adriana de Jesus Saraiva",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 25,
+    "imoveis_fechados": 69,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "410 - SALGADO FILHO": 5,
-      "400 - JULIA CARDINAL": 13,
-      "401 - EMÍLIO DIAS BRANDÃO": 7
+      "410 - SALGADO FILHO": 3,
+      "404 - JARDIM DOS ESTADOS": 48,
+      "401 - EMÍLIO DIAS BRANDÃO": 18
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -100,20 +114,6 @@
     "fechados_por_area": {
       "408 - PARQUE DE EXPOSIÇÕES": 43,
       "410 - SALGADO FILHO": 2
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "672": {
-    "nome_agente": "Adriana de Jesus Saraiva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 69,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "410 - SALGADO FILHO": 3,
-      "404 - JARDIM DOS ESTADOS": 48,
-      "401 - EMÍLIO DIAS BRANDÃO": 18
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -195,19 +195,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "465": {
-    "nome_agente": "Suely Aguiar Alves Luiz",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 29,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "420 - FERROVIARIA": 12,
-      "414 - PARQUE DOS ERVAIS": 17
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "81": {
     "nome_agente": "Wesley de Souza Leal",
     "equipe": "Equipe 2",
@@ -259,6 +246,19 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "465": {
+    "nome_agente": "Suely Aguiar Alves Luiz",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 29,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "420 - FERROVIARIA": 12,
+      "414 - PARQUE DOS ERVAIS": 17
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "1938": {
     "nome_agente": "Marco Antonio Ayala de Matos Freitas",
     "equipe": "Equipe 3",
@@ -299,19 +299,6 @@
         "equipe": "Equipe 3"
       }
     ],
-    "paginas_falhas": []
-  },
-  "113": {
-    "nome_agente": "Selba Ramona Afonso",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 72,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "431 - PANAMBI": 53,
-      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 19
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
   "2721": {
@@ -400,6 +387,19 @@
     ],
     "paginas_falhas": []
   },
+  "113": {
+    "nome_agente": "Selba Ramona Afonso",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 72,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "431 - PANAMBI": 53,
+      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 19
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "3038": {
     "nome_agente": "Naime Cristina Freitas",
     "equipe": "Equipe 3",
@@ -441,19 +441,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1943": {
-    "nome_agente": "Juliana Patricia Goncalves",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 27,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "445 - JARDIM IVONE": 18,
-      "436 - ALEGRETE": 9
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "80": {
     "nome_agente": "Gisele Lopes Justiniano",
     "equipe": "Equipe 4",
@@ -467,15 +454,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "161": {
-    "nome_agente": "Rozana Reis da Silva",
+  "1943": {
+    "nome_agente": "Juliana Patricia Goncalves",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 114,
+    "imoveis_fechados": 27,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "435 - JARDIM PRIMOR": 30,
-      "444 - KAMEL SAAD 2": 77,
-      "436 - ALEGRETE": 7
+      "445 - JARDIM IVONE": 18,
+      "436 - ALEGRETE": 9
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -524,14 +510,27 @@
     ],
     "paginas_falhas": []
   },
-  "149": {
-    "nome_agente": "Kátia Cilene Silveira Machado",
+  "157": {
+    "nome_agente": "Walquiria Araujo Flores",
     "equipe": "Equipe 4",
     "imoveis_fechados": 59,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "443 - KAMEL SAAD 1": 51,
-      "434 - VILA AUREA": 8
+      "440 - JARDIM IBIRAPUERA": 59
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "161": {
+    "nome_agente": "Rozana Reis da Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 114,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "435 - JARDIM PRIMOR": 30,
+      "444 - KAMEL SAAD 2": 77,
+      "436 - ALEGRETE": 7
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -546,6 +545,19 @@
       "435 - JARDIM PRIMOR": 45,
       "442 - JARDIM INDEPENDÊNCIA": 2,
       "436 - ALEGRETE": 8
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "149": {
+    "nome_agente": "Kátia Cilene Silveira Machado",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 59,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "443 - KAMEL SAAD 1": 51,
+      "434 - VILA AUREA": 8
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -571,18 +583,6 @@
     "fechados_por_area": {
       "446 - GUY VILELA": 42,
       "435 - JARDIM PRIMOR": 19
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "157": {
-    "nome_agente": "Walquiria Araujo Flores",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 59,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "440 - JARDIM IBIRAPUERA": 59
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
