@@ -11,20 +11,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "116": {
-    "nome_agente": "Wagner Tarlei Gomes",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 25,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "410 - SALGADO FILHO": 5,
-      "400 - JULIA CARDINAL": 13,
-      "401 - EMÍLIO DIAS BRANDÃO": 7
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "73": {
     "nome_agente": "Ana Gabriela Silva Garcete",
     "equipe": "Equipe 1",
@@ -52,19 +38,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3037": {
-    "nome_agente": "Evelyn Santana Santos Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 33,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "410 - SALGADO FILHO": 10,
-      "405 - ALTOS DA GLÓRIA": 23
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "672": {
     "nome_agente": "Adriana de Jesus Saraiva",
     "equipe": "Equipe 1",
@@ -79,14 +52,28 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "79": {
-    "nome_agente": "Raquel Ortiz dos Santos",
+  "3037": {
+    "nome_agente": "Evelyn Santana Santos Oliveira",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 52,
+    "imoveis_fechados": 33,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "410 - SALGADO FILHO": 10,
+      "405 - ALTOS DA GLÓRIA": 23
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "116": {
+    "nome_agente": "Wagner Tarlei Gomes",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 25,
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "410 - SALGADO FILHO": 5,
-      "406 - JARDIM PRIMAVERA": 47
+      "400 - JULIA CARDINAL": 13,
+      "401 - EMÍLIO DIAS BRANDÃO": 7
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -106,6 +93,19 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "79": {
+    "nome_agente": "Raquel Ortiz dos Santos",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 52,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "410 - SALGADO FILHO": 5,
+      "406 - JARDIM PRIMAVERA": 47
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "30": {
     "nome_agente": "Rozentina Matos de Oliveira",
     "equipe": "Equipe 1",
@@ -114,18 +114,6 @@
     "fechados_por_area": {
       "408 - PARQUE DE EXPOSIÇÕES": 43,
       "410 - SALGADO FILHO": 2
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3035": {
-    "nome_agente": "Teonilda Florentino Vieira",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 29,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "420 - FERROVIARIA": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -144,26 +132,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3101": {
-    "nome_agente": "Carlos Alberto Albiero",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 38,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "409 - ANDREAZZA": 37,
-      "402 - JARDIM MARAMBAIA": 1
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3127": {
-    "nome_agente": "Gisele Olimpia Torres",
+  "3035": {
+    "nome_agente": "Teonilda Florentino Vieira",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 62,
+    "imoveis_fechados": 29,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "420 - FERROVIARIA": 62
+      "420 - FERROVIARIA": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -182,6 +157,31 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "3127": {
+    "nome_agente": "Gisele Olimpia Torres",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 62,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "420 - FERROVIARIA": 62
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "465": {
+    "nome_agente": "Suely Aguiar Alves Luiz",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 29,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "420 - FERROVIARIA": 12,
+      "414 - PARQUE DOS ERVAIS": 17
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "142": {
     "nome_agente": "William Anderson Chamorro Tavares",
     "equipe": "Equipe 2",
@@ -190,6 +190,19 @@
     "fechados_por_area": {
       "420 - FERROVIARIA": 14,
       "413 - BAIRRO DA GRANJA": 46
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3101": {
+    "nome_agente": "Carlos Alberto Albiero",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 38,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "409 - ANDREAZZA": 37,
+      "402 - JARDIM MARAMBAIA": 1
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -221,19 +234,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2917": {
-    "nome_agente": "Bianca Afonso Narbaez",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 39,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "420 - FERROVIARIA": 21,
-      "419 - CENTRO 5": 18
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "2951": {
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
@@ -246,14 +246,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "465": {
-    "nome_agente": "Suely Aguiar Alves Luiz",
+  "2917": {
+    "nome_agente": "Bianca Afonso Narbaez",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 29,
+    "imoveis_fechados": 39,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "420 - FERROVIARIA": 12,
-      "414 - PARQUE DOS ERVAIS": 17
+      "420 - FERROVIARIA": 21,
+      "419 - CENTRO 5": 18
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -387,19 +387,6 @@
     ],
     "paginas_falhas": []
   },
-  "113": {
-    "nome_agente": "Selba Ramona Afonso",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 72,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "431 - PANAMBI": 53,
-      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 19
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3038": {
     "nome_agente": "Naime Cristina Freitas",
     "equipe": "Equipe 3",
@@ -423,6 +410,19 @@
       "428 - JARDIM COIMBRA": 30,
       "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 25,
       "429 - COOPHA FRONTEIRA": 54
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "113": {
+    "nome_agente": "Selba Ramona Afonso",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 72,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "431 - PANAMBI": 53,
+      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 19
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -536,20 +536,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "110": {
-    "nome_agente": "Anderson Jose de Santana",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 55,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "435 - JARDIM PRIMOR": 45,
-      "442 - JARDIM INDEPENDÊNCIA": 2,
-      "436 - ALEGRETE": 8
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "149": {
     "nome_agente": "Kátia Cilene Silveira Machado",
     "equipe": "Equipe 4",
@@ -570,6 +556,20 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "434 - VILA AUREA": 54
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "110": {
+    "nome_agente": "Anderson Jose de Santana",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 55,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "435 - JARDIM PRIMOR": 45,
+      "442 - JARDIM INDEPENDÊNCIA": 2,
+      "436 - ALEGRETE": 8
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
