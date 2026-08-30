@@ -294,14 +294,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="28/08/2026 01:49">
+<body data-print-date="30/08/2026 08:30">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 28/08/2026 01:49</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 30/08/2026 08:30</div>
       </div>
     </div>
     <div class="header-actions">
@@ -341,7 +341,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="kpi cyan"><div class="kpi-label">Total Geral de Imóveis</div><div class="kpi-value">6.833</div><div class="kpi-sub">4.777 abertos · 2.050 fechados · 6 recusados</div></div>
     <div class="kpi yellow"><div class="kpi-label">% Pendência Geral</div><div class="kpi-value">30,1%</div><div class="kpi-sub">(fechados+recusados) ÷ total</div></div>
     <div class="kpi red"><div class="kpi-label">Agentes Críticos</div><div class="kpi-value">9</div><div class="kpi-sub">23 normal · 6 atenção</div></div>
-    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">100</div><div class="kpi-sub">46 alertas · 54 ausências</div></div>
+    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">96</div><div class="kpi-sub">46 alertas · 50 ausências</div></div>
   </div>
 
   <div class="hover-legend">
@@ -4788,7 +4788,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="alert-card" onclick="showAlert('alm')"><div class="ac-icon">🍽️</div><div class="ac-val" style="color:var(--cyan)">10</div><div class="ac-label">No Horário de Almoço</div></div>
     <div class="alert-card" onclick="showAlert('teto')"><div class="ac-icon">🖥️</div><div class="ac-val" style="color:var(--navy)">62</div><div class="ac-label">Acima de 15min (auditoria)</div></div>
     <div class="alert-card" onclick="goToSection('pendencias')"><div class="ac-icon">🚫</div><div class="ac-val" style="color:var(--red)">6</div><div class="ac-label">Imóveis Recusados</div></div>
-    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">54</div><div class="ac-label">Possíveis Ausências</div></div>
+    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">50</div><div class="ac-label">Possíveis Ausências</div></div>
   </div>
 
   
@@ -8623,16 +8623,16 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="ausencias">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">54</div><div class="kpi-sub">turnos sem visita registrada</div></div>
+    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">50</div><div class="kpi-sub">turnos sem visita registrada</div></div>
     <div class="kpi cyan"><div class="kpi-label">Agentes Envolvidos</div><div class="kpi-value">31</div><div class="kpi-sub">de 38 monitorados</div></div>
-    <div class="kpi yellow"><div class="kpi-label">Dia Mais Crítico</div><div class="kpi-value">Quinta</div><div class="kpi-sub">27 ausências</div></div>
-    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">38 de 54 (70%)</div></div>
+    <div class="kpi yellow"><div class="kpi-label">Dia Mais Crítico</div><div class="kpi-value">Quinta</div><div class="kpi-sub">25 ausências</div></div>
+    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">36 de 50 (72%)</div></div>
   </div>
   <div class="legend-box"><strong>Como ler:</strong> cada registro é um turno (manhã ou tarde) de um dia útil em que o agente não teve nenhuma visita lançada no sistema. Pode ser folga, atestado, falta ou apenas ausência de registro — confirme sempre com a escala antes de qualquer tratativa. Turnos do Cronograma abaixo (equipe inteira parada) já entram nessa lista, mas podem ser ocultados com o checkbox.</div>
 
   
   <div class="table-section">
-    <h3>🌴 Quem está de Férias, Atestado ou Afins (6)</h3>
+    <h3>🌴 Quem está de Férias, Atestado ou Afins (7)</h3>
     <p class="table-hint">Relatório rápido de quem tem um período de férias/atestado confirmado agora, sem precisar abrir o Cronograma completo. Férias detectadas automaticamente (mais de 5 dias úteis seguidos sem lançamento) já aparecem aqui sozinhas — confira em <code>deteccao_editor.html</code> se alguma precisar ser corrigida pra "falta".</p>
     <div class="table-wrap"><table class="data-table compact sortable" id="tableFeriasAtestado">
       <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th></tr></thead>
@@ -8644,11 +8644,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr><td>06/08/2026 a 24/08/2026</td><td>Férias/Atestado (automático)</td><td>Cicero Isrrael Sanabria</td></tr>
         
-        <tr><td>07/08/2026 a 27/08/2026</td><td>Férias/Atestado (automático)</td><td>Ramona dos Santos Oliveira</td></tr>
+        <tr><td>07/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Ramona dos Santos Oliveira</td></tr>
         
-        <tr><td>17/08/2026 a 27/08/2026</td><td>Férias/Atestado (automático)</td><td>Mateus Falcao de Souza</td></tr>
+        <tr><td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Mateus Falcao de Souza</td></tr>
         
-        <tr><td>17/08/2026 a 27/08/2026</td><td>Férias/Atestado (automático)</td><td>Tania Maria Montania</td></tr>
+        <tr><td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Tania Maria Montania</td></tr>
+        
+        <tr><td>20/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Alana Amanda Fernandes Ovelar</td></tr>
         
       </tbody>
     </table></div>
@@ -8679,22 +8681,27 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         </tr>
         
         <tr>
-          <td>07/08/2026 a 27/08/2026</td><td>Férias/Atestado (automático)</td><td>Ramona dos Santos Oliveira</td>
+          <td>07/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Ramona dos Santos Oliveira</td>
           <td><span class="small-muted">Cronograma</span></td>
         </tr>
         
         <tr>
-          <td>17/08/2026 a 27/08/2026</td><td>Férias/Atestado (automático)</td><td>Mateus Falcao de Souza</td>
+          <td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Mateus Falcao de Souza</td>
           <td><span class="small-muted">Cronograma</span></td>
         </tr>
         
         <tr>
-          <td>17/08/2026 a 27/08/2026</td><td>Férias/Atestado (automático)</td><td>Tania Maria Montania</td>
+          <td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Tania Maria Montania</td>
           <td><span class="small-muted">Cronograma</span></td>
         </tr>
         
         <tr>
           <td>17/08/2026</td><td>Chuva (confirmada)</td><td>Equipe 4</td>
+          <td><span class="small-muted">Cronograma</span></td>
+        </tr>
+        
+        <tr>
+          <td>20/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Alana Amanda Fernandes Ovelar</td>
           <td><span class="small-muted">Cronograma</span></td>
         </tr>
         
@@ -8706,7 +8713,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   <div class="charts-grid">
     <div class="chart-card">
       <h3>Mapa de Calor — Dia da Semana × Turno</h3>
-      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 0, "Tarde": 1}, "Terça": {"Manhã": 4, "Tarde": 2}, "Quarta": {"Manhã": 3, "Tarde": 6}, "Quinta": {"Manhã": 25, "Tarde": 2}, "Sexta": {"Manhã": 6, "Tarde": 5}}' style="margin-top:6px;"></div>
+      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 0, "Tarde": 1}, "Terça": {"Manhã": 4, "Tarde": 2}, "Quarta": {"Manhã": 3, "Tarde": 6}, "Quinta": {"Manhã": 24, "Tarde": 1}, "Sexta": {"Manhã": 5, "Tarde": 4}}' style="margin-top:6px;"></div>
       <p class="chart-note"><strong>Metodologia:</strong> conta, para cada combinação de dia da semana e turno, quantos turnos ficaram sem nenhuma visita registrada, somando todos os agentes. Cor mais escura = mais ausências naquele cruzamento.</p>
     </div>
     <div class="chart-card">
@@ -8716,7 +8723,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
   </div>
   <div class="table-section">
-    <h3>📅 Todos os Registros de Ausência (54)</h3>
+    <h3>📅 Todos os Registros de Ausência (50)</h3>
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
     <label class="checkbox-label">
       <input type="checkbox" id="filterAusHideAllAbsent"> Ocultar turnos em que <strong>toda a equipe</strong> ficou ausente (0 registros — prováveis paralisações pontuais da equipe, listadas na tabela de Cronograma acima)
@@ -8931,12 +8938,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr>
-            <td class="sticky-col agent-name">Alana Amanda Fernandes Ovelar</td><td>Equipe 3</td><td>20/08/2026</td>
-            <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
-          </tr>
-          
-          <tr>
             <td class="sticky-col agent-name">Claine Luisa Figueiredo Torraca</td><td>Equipe 3</td><td>20/08/2026</td>
             <td>Quinta</td><td>Manhã</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
@@ -8951,24 +8952,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           <tr>
             <td class="sticky-col agent-name">Rosalina Beniel Vargas</td><td>Equipe 3</td><td>20/08/2026</td>
             <td>Quinta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
-          </tr>
-          
-          <tr>
-            <td class="sticky-col agent-name">Alana Amanda Fernandes Ovelar</td><td>Equipe 3</td><td>20/08/2026</td>
-            <td>Quinta</td><td>Tarde</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
-          </tr>
-          
-          <tr>
-            <td class="sticky-col agent-name">Alana Amanda Fernandes Ovelar</td><td>Equipe 3</td><td>21/08/2026</td>
-            <td>Sexta</td><td>Manhã</td>
-            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
-          </tr>
-          
-          <tr>
-            <td class="sticky-col agent-name">Alana Amanda Fernandes Ovelar</td><td>Equipe 3</td><td>21/08/2026</td>
-            <td>Sexta</td><td>Tarde</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
           
@@ -9521,8 +9504,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 <div class="section" id="ranking">
   <div class="kpi-grid">
     <div class="kpi blue"><div class="kpi-label">Líder do Ranking</div><div class="kpi-value">Adriano Ricardo Thiel</div><div class="kpi-sub">100,0 pontos</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">89,2</div><div class="kpi-sub">de todos os agentes</div></div>
-    <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">22 / 11</div><div class="kpi-sub">agentes em cada faixa</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">89,5</div><div class="kpi-sub">de todos os agentes</div></div>
+    <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">23 / 10</div><div class="kpi-sub">agentes em cada faixa</div></div>
     <div class="kpi red"><div class="kpi-label">🟠 Atenção / 🔴 Crítico</div><div class="kpi-value">4 / 1</div><div class="kpi-sub">agentes em cada faixa</div></div>
   </div>
 
@@ -9621,6 +9604,17 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="">
             <td class="num">8º</td>
+            <td class="sticky-col agent-name">Alana Amanda Fernandes Ovelar</td>
+            <td>Equipe 3</td>
+            <td class="num">2</td>
+            <td class="num">15</td>
+            <td class="num">1</td>
+            <td class="num">100,0</td>
+            <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
+          </tr>
+          
+          <tr class="">
+            <td class="num">9º</td>
             <td class="sticky-col agent-name">Geancarlos Ferreira Barrios</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
@@ -9631,7 +9625,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">9º</td>
+            <td class="num">10º</td>
             <td class="sticky-col agent-name">Naime Cristina Freitas</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
@@ -9642,7 +9636,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">10º</td>
+            <td class="num">11º</td>
             <td class="sticky-col agent-name">Rosalina Beniel Vargas</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
@@ -9653,7 +9647,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">11º</td>
+            <td class="num">12º</td>
             <td class="sticky-col agent-name">Selba Ramona Afonso</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
@@ -9664,7 +9658,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">12º</td>
+            <td class="num">13º</td>
             <td class="sticky-col agent-name">Adriana de Jesus Saraiva</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
@@ -9675,7 +9669,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">13º</td>
+            <td class="num">14º</td>
             <td class="sticky-col agent-name">Marco Antonio Ayala de Matos Freitas</td>
             <td>Equipe 3</td>
             <td class="num">1</td>
@@ -9686,7 +9680,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">14º</td>
+            <td class="num">15º</td>
             <td class="sticky-col agent-name">Fabiana de Figueredo Vieira</td>
             <td>Equipe 2</td>
             <td class="num">4</td>
@@ -9697,7 +9691,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">15º</td>
+            <td class="num">16º</td>
             <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
@@ -9708,7 +9702,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">16º</td>
+            <td class="num">17º</td>
             <td class="sticky-col agent-name">Cris Milene Cardenas da Silva</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
@@ -9719,7 +9713,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">17º</td>
+            <td class="num">18º</td>
             <td class="sticky-col agent-name">Ana Gabriela Silva Garcete</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
@@ -9730,7 +9724,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">18º</td>
+            <td class="num">19º</td>
             <td class="sticky-col agent-name">Silvina Regina de Souza Valiente</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
@@ -9741,7 +9735,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">19º</td>
+            <td class="num">20º</td>
             <td class="sticky-col agent-name">Gisele Lopes Justiniano</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
@@ -9752,7 +9746,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">20º</td>
+            <td class="num">21º</td>
             <td class="sticky-col agent-name">Claine Luisa Figueiredo Torraca</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
@@ -9763,7 +9757,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">21º</td>
+            <td class="num">22º</td>
             <td class="sticky-col agent-name">Evelyn Santana Santos Oliveira</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
@@ -9774,7 +9768,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           </tr>
           
           <tr class="">
-            <td class="num">22º</td>
+            <td class="num">23º</td>
             <td class="sticky-col agent-name">Sara Eliane Talaveira de Oliveira</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
@@ -9782,17 +9776,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">2</td>
             <td class="num">90,9</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
-          </tr>
-          
-          <tr class="">
-            <td class="num">23º</td>
-            <td class="sticky-col agent-name">Alana Amanda Fernandes Ovelar</td>
-            <td>Equipe 3</td>
-            <td class="num">2</td>
-            <td class="num">15</td>
-            <td class="num">5</td>
-            <td class="num">89,9</td>
-            <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
           
           <tr class="">
@@ -10435,7 +10418,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Turno sem lançamento (não é chuva/reunião/férias)</td>
             
           
-            <td class="num">5</td>
+            <td class="num">1</td>
             
           
             <td class="num">1,50</td>
@@ -10447,7 +10430,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">3,00</td>
             
           
-            <td class="num">-15,0</td>
+            <td class="num">-3,0</td>
             
           
         </tr>
@@ -17368,7 +17351,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 28/08/2026 01:49</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 30/08/2026 08:30</footer>
 
 <script>
 function goToSection(id) {
@@ -17734,7 +17717,7 @@ new Chart(document.getElementById('chartPendTop'), {
 
 
 (function(){
-  const d = [{"label": "Adriano Ricardo Thiel", "v": 100.0, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 100.0, "color": "#12B76A"}, {"label": "Bianca Afonso Narbaez", "v": 100.0, "color": "#12B76A"}, {"label": "Gilmar Bitencourt Luiz", "v": 100.0, "color": "#12B76A"}, {"label": "Suely Aguiar Alves Luiz", "v": 100.0, "color": "#12B76A"}, {"label": "Wesley de Souza Leal", "v": 100.0, "color": "#12B76A"}, {"label": "William Anderson Chamorro Tavares", "v": 100.0, "color": "#12B76A"}, {"label": "Geancarlos Ferreira Barrios", "v": 100.0, "color": "#12B76A"}, {"label": "Naime Cristina Freitas", "v": 100.0, "color": "#12B76A"}, {"label": "Rosalina Beniel Vargas", "v": 100.0, "color": "#12B76A"}, {"label": "Selba Ramona Afonso", "v": 100.0, "color": "#12B76A"}, {"label": "Adriana de Jesus Saraiva", "v": 99.2, "color": "#12B76A"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 98.7, "color": "#12B76A"}, {"label": "Fabiana de Figueredo Vieira", "v": 98.5, "color": "#12B76A"}, {"label": "Miglidiane Maciel Ajala", "v": 98.2, "color": "#12B76A"}, {"label": "Cris Milene Cardenas da Silva", "v": 97.9, "color": "#12B76A"}, {"label": "Ana Gabriela Silva Garcete", "v": 97.1, "color": "#12B76A"}, {"label": "Silvina Regina de Souza Valiente", "v": 95.5, "color": "#12B76A"}, {"label": "Gisele Lopes Justiniano", "v": 93.8, "color": "#12B76A"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 92.6, "color": "#12B76A"}, {"label": "Evelyn Santana Santos Oliveira", "v": 92.3, "color": "#12B76A"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 90.9, "color": "#12B76A"}, {"label": "Alana Amanda Fernandes Ovelar", "v": 89.9, "color": "#F2D93B"}, {"label": "Juliana Patricia Goncalves", "v": 89.7, "color": "#F2D93B"}, {"label": "Rozana Reis da Silva", "v": 87.7, "color": "#F2D93B"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 87.5, "color": "#F2D93B"}, {"label": "Teonilda Florentino Vieira", "v": 84.9, "color": "#F2D93B"}, {"label": "Walquiria Araujo Flores", "v": 84.7, "color": "#F2D93B"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 83.2, "color": "#F2D93B"}, {"label": "Gisele Olimpia Torres", "v": 81.9, "color": "#F2D93B"}, {"label": "Wagner Tarlei Gomes", "v": 78.4, "color": "#F2D93B"}, {"label": "Emidio Rainer Vilhalba", "v": 77.7, "color": "#F2D93B"}, {"label": "Carlos Alberto Albiero", "v": 76.4, "color": "#F2D93B"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 68.2, "color": "#F2994A"}, {"label": "Raquel Ortiz dos Santos", "v": 65.7, "color": "#F2994A"}, {"label": "Anderson Jose de Santana", "v": 61.3, "color": "#F2994A"}, {"label": "Kátia Cilene Silveira Machado", "v": 60.2, "color": "#F2994A"}, {"label": "Rafael Ramos Recalde", "v": 58.0, "color": "#E4572E"}];
+  const d = [{"label": "Adriano Ricardo Thiel", "v": 100.0, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 100.0, "color": "#12B76A"}, {"label": "Bianca Afonso Narbaez", "v": 100.0, "color": "#12B76A"}, {"label": "Gilmar Bitencourt Luiz", "v": 100.0, "color": "#12B76A"}, {"label": "Suely Aguiar Alves Luiz", "v": 100.0, "color": "#12B76A"}, {"label": "Wesley de Souza Leal", "v": 100.0, "color": "#12B76A"}, {"label": "William Anderson Chamorro Tavares", "v": 100.0, "color": "#12B76A"}, {"label": "Alana Amanda Fernandes Ovelar", "v": 100.0, "color": "#12B76A"}, {"label": "Geancarlos Ferreira Barrios", "v": 100.0, "color": "#12B76A"}, {"label": "Naime Cristina Freitas", "v": 100.0, "color": "#12B76A"}, {"label": "Rosalina Beniel Vargas", "v": 100.0, "color": "#12B76A"}, {"label": "Selba Ramona Afonso", "v": 100.0, "color": "#12B76A"}, {"label": "Adriana de Jesus Saraiva", "v": 99.2, "color": "#12B76A"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 98.7, "color": "#12B76A"}, {"label": "Fabiana de Figueredo Vieira", "v": 98.5, "color": "#12B76A"}, {"label": "Miglidiane Maciel Ajala", "v": 98.2, "color": "#12B76A"}, {"label": "Cris Milene Cardenas da Silva", "v": 97.9, "color": "#12B76A"}, {"label": "Ana Gabriela Silva Garcete", "v": 97.1, "color": "#12B76A"}, {"label": "Silvina Regina de Souza Valiente", "v": 95.5, "color": "#12B76A"}, {"label": "Gisele Lopes Justiniano", "v": 93.8, "color": "#12B76A"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 92.6, "color": "#12B76A"}, {"label": "Evelyn Santana Santos Oliveira", "v": 92.3, "color": "#12B76A"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 90.9, "color": "#12B76A"}, {"label": "Juliana Patricia Goncalves", "v": 89.7, "color": "#F2D93B"}, {"label": "Rozana Reis da Silva", "v": 87.7, "color": "#F2D93B"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 87.5, "color": "#F2D93B"}, {"label": "Teonilda Florentino Vieira", "v": 84.9, "color": "#F2D93B"}, {"label": "Walquiria Araujo Flores", "v": 84.7, "color": "#F2D93B"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 83.2, "color": "#F2D93B"}, {"label": "Gisele Olimpia Torres", "v": 81.9, "color": "#F2D93B"}, {"label": "Wagner Tarlei Gomes", "v": 78.4, "color": "#F2D93B"}, {"label": "Emidio Rainer Vilhalba", "v": 77.7, "color": "#F2D93B"}, {"label": "Carlos Alberto Albiero", "v": 76.4, "color": "#F2D93B"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 68.2, "color": "#F2994A"}, {"label": "Raquel Ortiz dos Santos", "v": 65.7, "color": "#F2994A"}, {"label": "Anderson Jose de Santana", "v": 61.3, "color": "#F2994A"}, {"label": "Kátia Cilene Silveira Machado", "v": 60.2, "color": "#F2994A"}, {"label": "Rafael Ramos Recalde", "v": 58.0, "color": "#E4572E"}];
   sizeForAgents('chartRanking', d.length);
   new Chart(document.getElementById('chartRanking'), {
     type: 'bar',
@@ -17768,8 +17751,8 @@ new Chart(document.getElementById('chartPendTop'), {
 
 new Chart(document.getElementById('chartAusTop'), {
   type: 'bar',
-  data: { labels: ["Alana Amanda Fernandes Ovelar", "Teonilda Florentino Vieira", "Wagner Tarlei Gomes", "Brauher Luiz Alvarenga Gonzalez", "Gisele Olimpia Torres", "Kátia Cilene Silveira Machado", "Raquel Ortiz dos Santos", "Gabriel Alan de Oliveira Martins", "Sara Eliane Talaveira de Oliveira", "Rafael Ramos Recalde", "Evelyn Santana Santos Oliveira", "Gisele Lopes Justiniano", "Emidio Rainer Vilhalba", "Fabiana de Figueredo Vieira", "Anderson Jose de Santana"],
-    datasets: [{ label: 'Ausências', data: [5, 4, 4, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
+  data: { labels: ["Wagner Tarlei Gomes", "Teonilda Florentino Vieira", "Brauher Luiz Alvarenga Gonzalez", "Gisele Olimpia Torres", "Emidio Rainer Vilhalba", "Kátia Cilene Silveira Machado", "Raquel Ortiz dos Santos", "Rafael Ramos Recalde", "Gabriel Alan de Oliveira Martins", "Evelyn Santana Santos Oliveira", "Sara Eliane Talaveira de Oliveira", "Gisele Lopes Justiniano", "Fabiana de Figueredo Vieira", "Anderson Jose de Santana", "Silvina Regina de Souza Valiente"],
+    datasets: [{ label: 'Ausências', data: [4, 4, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
   options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } },
     plugins: { legend: { display: false } } }
