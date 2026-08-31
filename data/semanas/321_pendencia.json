@@ -117,18 +117,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 29,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 29
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3101": {
     "nome_agente": "Carlos Alberto Albiero",
     "equipe": "Equipe 1",
@@ -137,6 +125,20 @@
     "fechados_por_area": {
       "409 - ANDREAZZA": 7,
       "400 - JULIA CARDINAL": 2
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "125": {
+    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 39,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "437 - RESIDENCIAL PONTA PORÃ 2": 10,
+      "422 - VILA TORRES": 2,
+      "445 - JARDIM IVONE": 27
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -160,7 +162,7 @@
         "area": "437 - RESIDENCIAL PONTA PORÃ 2",
         "quarteirao": "Q016",
         "logradouro": "Rua JABOTICABEIRA",
-        "imovel": "775 - 3 - TB",
+        "imovel": "775 - 2 - R",
         "atividade": "Tratamento",
         "tipo_visita": "Recuperação",
         "data_chegada": "27/08/2026 14:33",
@@ -171,15 +173,26 @@
     ],
     "paginas_falhas": []
   },
-  "125": {
-    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
+  "115": {
+    "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 39,
+    "imoveis_fechados": 46,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "437 - RESIDENCIAL PONTA PORÃ 2": 10,
-      "422 - VILA TORRES": 2,
-      "445 - JARDIM IVONE": 27
+      "412 - COHAB": 40,
+      "445 - JARDIM IVONE": 6
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 29,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -192,19 +205,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "419 - CENTRO 5": 32
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "115": {
-    "nome_agente": "Cicero Isrrael Sanabria",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 46,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "412 - COHAB": 40,
-      "445 - JARDIM IVONE": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -271,13 +271,56 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "151": {
-    "nome_agente": "Gilmar Bitencourt Luiz",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 46,
+  "113": {
+    "nome_agente": "Selba Ramona Afonso",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 91,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "418 - CENTRO 4": 46
+      "431 - PANAMBI": 45,
+      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 46
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "120": {
+    "nome_agente": "Emidio Rainer Vilhalba",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 98,
+    "imoveis_recusados": 1,
+    "fechados_por_area": {
+      "429 - COOPHA FRONTEIRA": 56,
+      "430 - VILA RENÔ": 42
+    },
+    "recusados_por_area": {
+      "430 - VILA RENÔ": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 17166871,
+        "regiao": "URBANA",
+        "area": "430 - VILA RENÔ",
+        "quarteirao": "Q031",
+        "logradouro": "Rua OTÁVIO BOEIRA",
+        "imovel": "187 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Recuperação",
+        "data_chegada": "27/08/2026 08:21",
+        "data_saida": "27/08/2026 08:24",
+        "nome_agente": "Emidio Rainer Vilhalba",
+        "equipe": "Equipe 3"
+      }
+    ],
+    "paginas_falhas": []
+  },
+  "2721": {
+    "nome_agente": "Miglidiane Maciel Ajala",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 11,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "425 - JARDIM ESTORIL": 11
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -295,26 +338,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "113": {
-    "nome_agente": "Selba Ramona Afonso",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 91,
+  "151": {
+    "nome_agente": "Gilmar Bitencourt Luiz",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 46,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "431 - PANAMBI": 45,
-      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 46
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "2721": {
-    "nome_agente": "Miglidiane Maciel Ajala",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 11,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "425 - JARDIM ESTORIL": 11
+      "418 - CENTRO 4": 46
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -393,36 +423,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "120": {
-    "nome_agente": "Emidio Rainer Vilhalba",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 98,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "429 - COOPHA FRONTEIRA": 56,
-      "430 - VILA RENÔ": 42
-    },
-    "recusados_por_area": {
-      "430 - VILA RENÔ": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 17166871,
-        "regiao": "URBANA",
-        "area": "430 - VILA RENÔ",
-        "quarteirao": "Q031",
-        "logradouro": "Rua OTÁVIO BOEIRA",
-        "imovel": "187 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Recuperação",
-        "data_chegada": "27/08/2026 08:21",
-        "data_saida": "27/08/2026 08:24",
-        "nome_agente": "Emidio Rainer Vilhalba",
-        "equipe": "Equipe 3"
-      }
-    ],
-    "paginas_falhas": []
-  },
   "2918": {
     "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
@@ -445,6 +445,20 @@
     "fechados_por_area": {
       "429 - COOPHA FRONTEIRA": 53,
       "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 35
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "80": {
+    "nome_agente": "Gisele Lopes Justiniano",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 44,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "436 - ALEGRETE": 10,
+      "441 - PARQUE DOS IPES": 18,
+      "434 - VILA AUREA": 16
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -502,20 +516,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "80": {
-    "nome_agente": "Gisele Lopes Justiniano",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 44,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "436 - ALEGRETE": 10,
-      "441 - PARQUE DOS IPES": 18,
-      "434 - VILA AUREA": 16
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "157": {
     "nome_agente": "Walquiria Araujo Flores",
     "equipe": "Equipe 4",
@@ -560,19 +560,6 @@
     ],
     "paginas_falhas": []
   },
-  "86": {
-    "nome_agente": "Silvina Regina de Souza Valiente",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 97,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "434 - VILA AUREA": 67,
-      "442 - JARDIM INDEPENDÊNCIA": 30
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "149": {
     "nome_agente": "Kátia Cilene Silveira Machado",
     "equipe": "Equipe 4",
@@ -603,7 +590,7 @@
         "area": "446 - GUY VILELA",
         "quarteirao": "Q018",
         "logradouro": "Rua JOAQUIM MURTINHO",
-        "imovel": "378 - 2 - R",
+        "imovel": "239 - R",
         "atividade": "Tratamento",
         "tipo_visita": "Normal",
         "data_chegada": "28/08/2026 14:09",
@@ -612,6 +599,19 @@
         "equipe": "Equipe 4"
       }
     ],
+    "paginas_falhas": []
+  },
+  "86": {
+    "nome_agente": "Silvina Regina de Souza Valiente",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 97,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "434 - VILA AUREA": 67,
+      "442 - JARDIM INDEPENDÊNCIA": 30
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
     "paginas_falhas": []
   }
 }

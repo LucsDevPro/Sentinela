@@ -117,15 +117,15 @@
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
     "inicio": "31/07/2026",
-    "fim": "17/08/2026",
-    "duracao": 12,
-    "revisao_classificacao_necessaria": true,
-    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "fim": "28/08/2026",
+    "duracao": 21,
     "status": "confirmada",
     "motivo": "Férias/Atestado",
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "16/08/2026 09:25"
+    "detectado_em": "30/08/2026 12:28",
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada."
   },
   {
     "tipo": "possiveis_ferias",
@@ -139,7 +139,7 @@
     "motivo": "Férias/Atestado",
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "30/08/2026 12:28"
+    "detectado_em": "31/08/2026 14:40"
   },
   {
     "tipo": "possiveis_ferias",
