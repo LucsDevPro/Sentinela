@@ -40,6 +40,20 @@
     ],
     "paginas_falhas": []
   },
+  "1935": {
+    "nome_agente": "Gabriel Alan de Oliveira Martins",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 84,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "402 - JARDIM MARAMBAIA": 60,
+      "401 - EMÍLIO DIAS BRANDÃO": 10,
+      "404 - JARDIM DOS ESTADOS": 14
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "672": {
     "nome_agente": "Adriana de Jesus Saraiva",
     "equipe": "Equipe 1",
@@ -64,6 +78,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "79": {
+    "nome_agente": "Raquel Ortiz dos Santos",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 135,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "406 - JARDIM PRIMAVERA": 135
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "3037": {
     "nome_agente": "Evelyn Santana Santos Oliveira",
     "equipe": "Equipe 1",
@@ -72,20 +98,6 @@
     "fechados_por_area": {
       "405 - ALTOS DA GLÓRIA": 95,
       "403 - JARDIM UNIVERSITARIO": 17
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "1935": {
-    "nome_agente": "Gabriel Alan de Oliveira Martins",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 84,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "402 - JARDIM MARAMBAIA": 60,
-      "401 - EMÍLIO DIAS BRANDÃO": 10,
-      "404 - JARDIM DOS ESTADOS": 14
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -105,18 +117,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 29,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 29
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3101": {
     "nome_agente": "Carlos Alberto Albiero",
     "equipe": "Equipe 1",
@@ -130,40 +130,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "125": {
-    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 39,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "437 - RESIDENCIAL PONTA PORÃ 2": 10,
-      "422 - VILA TORRES": 2,
-      "445 - JARDIM IVONE": 27
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "79": {
-    "nome_agente": "Raquel Ortiz dos Santos",
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 135,
+    "imoveis_fechados": 29,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "406 - JARDIM PRIMAVERA": 135
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "115": {
-    "nome_agente": "Cicero Isrrael Sanabria",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 46,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "412 - COHAB": 40,
-      "445 - JARDIM IVONE": 6
+      "408 - PARQUE DE EXPOSIÇÕES": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -198,6 +171,20 @@
     ],
     "paginas_falhas": []
   },
+  "125": {
+    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 39,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "437 - RESIDENCIAL PONTA PORÃ 2": 10,
+      "422 - VILA TORRES": 2,
+      "445 - JARDIM IVONE": 27
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "3127": {
     "nome_agente": "Gisele Olimpia Torres",
     "equipe": "Equipe 2",
@@ -210,13 +197,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "142": {
-    "nome_agente": "William Anderson Chamorro Tavares",
+  "115": {
+    "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 30,
+    "imoveis_fechados": 46,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "413 - BAIRRO DA GRANJA": 30
+      "412 - COHAB": 40,
+      "445 - JARDIM IVONE": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -229,6 +217,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "411 - JARDIM AEROPORTO": 26
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "142": {
+    "nome_agente": "William Anderson Chamorro Tavares",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 30,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "413 - BAIRRO DA GRANJA": 30
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -409,6 +409,20 @@
     ],
     "paginas_falhas": []
   },
+  "3038": {
+    "nome_agente": "Naime Cristina Freitas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 121,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "429 - COOPHA FRONTEIRA": 49,
+      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 58,
+      "442 - JARDIM INDEPENDÊNCIA": 14
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "2918": {
     "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
@@ -472,20 +486,6 @@
       "444 - KAMEL SAAD 2": 97,
       "434 - VILA AUREA": 14,
       "443 - KAMEL SAAD 1": 38
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3038": {
-    "nome_agente": "Naime Cristina Freitas",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 121,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "429 - COOPHA FRONTEIRA": 49,
-      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 58,
-      "442 - JARDIM INDEPENDÊNCIA": 14
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
