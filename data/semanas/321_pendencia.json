@@ -66,13 +66,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "470": {
-    "nome_agente": "Cris Milene Cardenas da Silva",
+  "79": {
+    "nome_agente": "Raquel Ortiz dos Santos",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 113,
+    "imoveis_fechados": 135,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "403 - JARDIM UNIVERSITARIO": 113
+      "406 - JARDIM PRIMAVERA": 135
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -91,13 +91,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "79": {
-    "nome_agente": "Raquel Ortiz dos Santos",
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 135,
+    "imoveis_fechados": 29,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "406 - JARDIM PRIMAVERA": 135
+      "408 - PARQUE DE EXPOSIÇÕES": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -130,13 +130,27 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
+  "470": {
+    "nome_agente": "Cris Milene Cardenas da Silva",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 29,
+    "imoveis_fechados": 113,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 29
+      "403 - JARDIM UNIVERSITARIO": 113
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "125": {
+    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 39,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "437 - RESIDENCIAL PONTA PORÃ 2": 10,
+      "422 - VILA TORRES": 2,
+      "445 - JARDIM IVONE": 27
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -171,15 +185,14 @@
     ],
     "paginas_falhas": []
   },
-  "125": {
-    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
+  "115": {
+    "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 39,
+    "imoveis_fechados": 46,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "437 - RESIDENCIAL PONTA PORÃ 2": 10,
-      "422 - VILA TORRES": 2,
-      "445 - JARDIM IVONE": 27
+      "412 - COHAB": 40,
+      "445 - JARDIM IVONE": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -209,6 +222,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "142": {
+    "nome_agente": "William Anderson Chamorro Tavares",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 30,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "413 - BAIRRO DA GRANJA": 30
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "465": {
     "nome_agente": "Suely Aguiar Alves Luiz",
     "equipe": "Equipe 2",
@@ -217,6 +242,18 @@
     "fechados_por_area": {
       "414 - PARQUE DOS ERVAIS": 14,
       "416 - CENTRO 2": 3
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "2917": {
+    "nome_agente": "Bianca Afonso Narbaez",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 17,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "419 - CENTRO 5": 17
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -234,19 +271,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "115": {
-    "nome_agente": "Cicero Isrrael Sanabria",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 46,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "412 - COHAB": 40,
-      "445 - JARDIM IVONE": 6
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "151": {
     "nome_agente": "Gilmar Bitencourt Luiz",
     "equipe": "Equipe 2",
@@ -254,30 +278,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "418 - CENTRO 4": 46
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "142": {
-    "nome_agente": "William Anderson Chamorro Tavares",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 30,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "413 - BAIRRO DA GRANJA": 30
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "2917": {
-    "nome_agente": "Bianca Afonso Narbaez",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 17,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "419 - CENTRO 5": 17
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -303,32 +303,6 @@
     "fechados_por_area": {
       "431 - PANAMBI": 45,
       "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 46
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "2721": {
-    "nome_agente": "Miglidiane Maciel Ajala",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 11,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "425 - JARDIM ESTORIL": 11
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3038": {
-    "nome_agente": "Naime Cristina Freitas",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 121,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "429 - COOPHA FRONTEIRA": 49,
-      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 58,
-      "442 - JARDIM INDEPENDÊNCIA": 14
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -362,20 +336,6 @@
         "equipe": "Equipe 3"
       }
     ],
-    "paginas_falhas": []
-  },
-  "2918": {
-    "nome_agente": "Claine Luisa Figueiredo Torraca",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 131,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "429 - COOPHA FRONTEIRA": 41,
-      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 77,
-      "428 - JARDIM COIMBRA": 13
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
   "3128": {
@@ -437,6 +397,20 @@
     ],
     "paginas_falhas": []
   },
+  "3038": {
+    "nome_agente": "Naime Cristina Freitas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 121,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "429 - COOPHA FRONTEIRA": 49,
+      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 58,
+      "442 - JARDIM INDEPENDÊNCIA": 14
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "1936": {
     "nome_agente": "Geancarlos Ferreira Barrios",
     "equipe": "Equipe 3",
@@ -450,14 +424,41 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1943": {
-    "nome_agente": "Juliana Patricia Goncalves",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 129,
+  "2721": {
+    "nome_agente": "Miglidiane Maciel Ajala",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 11,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "434 - VILA AUREA": 23,
-      "445 - JARDIM IVONE": 106
+      "425 - JARDIM ESTORIL": 11
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "2918": {
+    "nome_agente": "Claine Luisa Figueiredo Torraca",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 131,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "429 - COOPHA FRONTEIRA": 41,
+      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 77,
+      "428 - JARDIM COIMBRA": 13
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "80": {
+    "nome_agente": "Gisele Lopes Justiniano",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 44,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "436 - ALEGRETE": 10,
+      "441 - PARQUE DOS IPES": 18,
+      "434 - VILA AUREA": 16
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -477,14 +478,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2789": {
-    "nome_agente": "Kariele Jackeline Rodrigues Silva",
+  "1943": {
+    "nome_agente": "Juliana Patricia Goncalves",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 74,
+    "imoveis_fechados": 129,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "439 - BOSQUE CARANDÁ": 61,
-      "434 - VILA AUREA": 13
+      "434 - VILA AUREA": 23,
+      "445 - JARDIM IVONE": 106
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -502,15 +503,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "80": {
-    "nome_agente": "Gisele Lopes Justiniano",
+  "2789": {
+    "nome_agente": "Kariele Jackeline Rodrigues Silva",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 44,
+    "imoveis_fechados": 74,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "436 - ALEGRETE": 10,
-      "441 - PARQUE DOS IPES": 18,
-      "434 - VILA AUREA": 16
+      "439 - BOSQUE CARANDÁ": 61,
+      "434 - VILA AUREA": 13
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
