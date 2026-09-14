@@ -323,7 +323,7 @@ def load_all(path):
     neg = primeira_tabela(path, "Visitas Negativas", ["ID Visita"])
     fora = primeira_tabela(path, "Fora do Expediente", ["ID Visita"])
     almoco = primeira_tabela(path, "Visitas no Almoço", ["ID Visita"])
-    teto_media = primeira_tabela(path, "Visitas Acima de 15min", ["ID Visita"])
+    teto_media = primeira_tabela(path, "Visitas Acima de 20min", ["ID Visita"])
     ausencias = primeira_tabela(path, "Ausências", ["Agente"])
     cronograma = primeira_tabela(path, "Cronograma", ["Motivo"])
 

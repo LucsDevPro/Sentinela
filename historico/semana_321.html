@@ -143,20 +143,21 @@ header h1 span { color: #7FC4FF; font-weight: 500; }
 .print-btn:hover { background: var(--navy2); }
 
 /* ---------- Tables ---------- */
-.table-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 26px; box-shadow: var(--shadow); }
-.table-section h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-.table-hint { font-size: 0.74rem; color: var(--text3); margin-bottom: 14px; }
+.table-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; box-shadow: var(--shadow); }
+.table-section h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+.table-hint { font-size: 0.74rem; color: var(--text3); margin-bottom: 10px; }
 .table-wrap { overflow: auto; border-radius: var(--radius-sm); border: 1px solid var(--border-soft); }
-table.data-table { width: auto; min-width: 0; margin: 0 auto; border-collapse: collapse; font-size: 0.72rem; }
-table.data-table th { background: var(--bg-soft); position: sticky; top: 0; z-index: 5; padding: 7px 8px; text-align: center; font-weight: 700; color: var(--text2); border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.03em; }
+table.data-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; line-height: 1.25; }
+table.data-table th { background: var(--bg-soft); position: sticky; top: 0; z-index: 5; padding: 6px 10px; text-align: center; font-weight: 700; color: var(--text2); border-bottom: 2px solid var(--border); white-space: nowrap; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.03em; }
 table.sortable thead th { cursor: pointer; user-select: none; transition: color .15s, background .15s; }
 table.sortable thead th:hover { color: var(--navy); background: var(--border-soft); }
 table.sortable thead th::after { content: ""; display: inline-block; width: 0.6em; margin-left: 3px; opacity: .3; }
 table.sortable thead th.sorted-asc::after { content: "▲"; opacity: 1; color: var(--blue); }
 table.sortable thead th.sorted-desc::after { content: "▼"; opacity: 1; color: var(--blue); }
-table.data-table td { padding: 6px 8px; border-bottom: 1px solid var(--border-soft); white-space: nowrap; text-align: center; }
+table.data-table td { padding: 4px 10px; border-bottom: 1px solid var(--border-soft); white-space: nowrap; text-align: center; }
+table.data-table tbody tr:nth-child(even) { background: var(--bg); }
 table.data-table tbody tr:hover { background: var(--bg-soft); }
-table.data-table.compact td, table.data-table.compact th { padding: 5px 7px; font-size: 0.7rem; }
+table.data-table.compact td, table.data-table.compact th { padding: 3px 8px; font-size: 0.7rem; }
 
 /* Modo apresentação: borra nomes de agentes em tabelas e gráficos, sem
    remover a estrutura — útil pra projetar/compartilhar tela sem expor
@@ -169,6 +170,7 @@ body.modo-apresentacao .pe-agente-nome {
   user-select: none;
 }
 .sticky-col { position: sticky; left: 0; background: var(--card); z-index: 2; font-weight: 700; }
+table.data-table tbody tr:nth-child(even) .sticky-col { background: var(--bg); }
 table.data-table tbody tr:hover .sticky-col { background: var(--bg-soft); }
 .row-critico { background: rgba(228,87,46,0.04); }
 .row-atencao { background: rgba(242,176,30,0.07); }
@@ -294,20 +296,20 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 }
 </style>
 </head>
-<body data-print-date="13/09/2026 08:32">
+<body data-print-date="13/09/2026 21:33">
 <header>
   <div class="container">
     <div class="header-brand">
       <img src="../assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 13/09/2026 08:32</div>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · 13/09/2026 21:33</div>
       </div>
     </div>
     <div class="header-actions">
       
       <select class="period-select" onchange="if(this.value) window.location.href=this.value">
-        <option value="../index.html" >🏠 Início (Agosto/2026)</option><option value="../acumulado.html" >📊 Acumulado (todas as semanas)</option><option value="semanas_318-321.html" >📅 Agosto/2026</option><option value="semana_321.html" selected>📅 Semana 34/2026 (23/08 a 29/08)</option><option value="semana_320.html" >📅 Semana 33/2026 (16/08 a 22/08)</option><option value="semana_319.html" >📅 Semana 32/2026 (09/08 a 15/08)</option><option value="semana_318.html" >📅 Semana 31/2026 (02/08 a 08/08)</option><option value="semanas_313-317.html" >📅 Julho/2026</option><option value="semanas_309-312.html" >📅 Junho/2026</option><option value="semanas_305-308.html" >📅 Maio/2026</option>
+        <option value="../index.html" >🏠 Início (Setembro/2026)</option><option value="../acumulado.html" >📊 Acumulado (todas as semanas)</option><option value="semanas_318-321.html" >📅 Agosto/2026</option><option value="semana_321.html" selected>📅 Semana 34/2026 (23/08 a 29/08)</option><option value="semana_320.html" >📅 Semana 33/2026 (16/08 a 22/08)</option><option value="semana_319.html" >📅 Semana 32/2026 (09/08 a 15/08)</option><option value="semana_318.html" >📅 Semana 31/2026 (02/08 a 08/08)</option><option value="semanas_313-317.html" >📅 Julho/2026</option><option value="semanas_309-312.html" >📅 Junho/2026</option><option value="semanas_305-308.html" >📅 Maio/2026</option>
       </select>
       
       <label class="presentation-toggle">
@@ -341,7 +343,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="kpi cyan"><div class="kpi-label">Total Geral de Imóveis</div><div class="kpi-value">7.212</div><div class="kpi-sub">4.599 abertos · 2.605 fechados · 8 recusados</div></div>
     <div class="kpi yellow"><div class="kpi-label">% Pendência Geral</div><div class="kpi-value">36,2%</div><div class="kpi-sub">(fechados+recusados) ÷ total</div></div>
     <div class="kpi red"><div class="kpi-label">Agentes Críticos</div><div class="kpi-value">11</div><div class="kpi-sub">24 normal · 3 atenção</div></div>
-    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">322</div><div class="kpi-sub">259 alertas · 63 ausências</div></div>
+    <div class="kpi orange"><div class="kpi-label">Alertas + Ausências</div><div class="kpi-value">323</div><div class="kpi-sub">259 alertas · 64 ausências</div></div>
   </div>
 
   <div class="hover-legend">
@@ -373,7 +375,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="critico-item">
       <span class="ci-pct">52,3%</span>
       <div class="ci-name">Kariele Jackeline Rodrigues Silva</div>
-      <div class="ci-meta">Equipe 4 · 132 imóveis abertos · 69 rápidas · média 2,8 min</div>
+      <div class="ci-meta">Equipe 4 · 132 imóveis abertos · 69 rápidas · média 2,9 min</div>
     </div>
     
     <div class="critico-item">
@@ -633,7 +635,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">24,8</td>
               
             
-              <td class="num">5,3</td>
+              <td class="num">5,5</td>
               
             
               <td class="num">4</td>
@@ -684,10 +686,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">21,9</td>
               
             
-              <td class="num">2,1</td>
+              <td class="num">2,3</td>
               
             
-              <td>R$ 102,81</td>
+              <td>R$ 97,52</td>
               
             
               <td>08:25</td>
@@ -869,7 +871,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">2,1</td>
               
             
-              <td>R$ 104,76</td>
+              <td>R$ 103,94</td>
               
             
               <td>08:20</td>
@@ -960,7 +962,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">3,0</td>
               
             
-              <td>R$ 74,51</td>
+              <td>R$ 73,85</td>
               
             
               <td>08:34</td>
@@ -1051,7 +1053,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">2,7</td>
               
             
-              <td>R$ 81,97</td>
+              <td>R$ 81,37</td>
               
             
               <td>08:45</td>
@@ -1361,7 +1363,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">20,0</td>
               
             
-              <td class="num">6,9</td>
+              <td class="num">7,0</td>
               
             
               <td class="num">6</td>
@@ -1415,7 +1417,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">2,3</td>
               
             
-              <td>R$ 95,76</td>
+              <td>R$ 94,90</td>
               
             
               <td>09:04</td>
@@ -1597,7 +1599,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">3,9</td>
               
             
-              <td>R$ 56,62</td>
+              <td>R$ 56,20</td>
               
             
               <td>07:47</td>
@@ -1634,7 +1636,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">19,0</td>
               
             
-              <td class="num">7,0</td>
+              <td class="num">7,1</td>
               
             
               <td class="num">6</td>
@@ -1688,7 +1690,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">2,2</td>
               
             
-              <td>R$ 100,02</td>
+              <td>R$ 98,39</td>
               
             
               <td>09:00</td>
@@ -1725,7 +1727,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">21,4</td>
               
             
-              <td class="num">10,3</td>
+              <td class="num">10,5</td>
               
             
               <td class="num">10</td>
@@ -1776,10 +1778,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">30,0</td>
               
             
-              <td class="num">3,7</td>
+              <td class="num">3,8</td>
               
             
-              <td>R$ 60,34</td>
+              <td>R$ 58,95</td>
               
             
               <td>08:07</td>
@@ -1907,7 +1909,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">17,0</td>
               
             
-              <td class="num">10,8</td>
+              <td class="num">11,0</td>
               
             
               <td class="num">11</td>
@@ -1961,7 +1963,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">3,1</td>
               
             
-              <td>R$ 72,16</td>
+              <td>R$ 70,92</td>
               
             
               <td>08:31</td>
@@ -2180,7 +2182,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">15,0</td>
               
             
-              <td class="num">7,6</td>
+              <td class="num">7,7</td>
               
             
               <td class="num">8</td>
@@ -2234,7 +2236,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">1,9</td>
               
             
-              <td>R$ 115,73</td>
+              <td>R$ 114,73</td>
               
             
               <td>08:54</td>
@@ -2635,7 +2637,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">22,0</td>
               
             
-              <td class="num">4,4</td>
+              <td class="num">4,5</td>
               
             
               <td class="num">4</td>
@@ -2689,7 +2691,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">1,6</td>
               
             
-              <td>R$ 137,44</td>
+              <td>R$ 134,65</td>
               
             
               <td>08:51</td>
@@ -3272,7 +3274,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">33,0</td>
               
             
-              <td class="num">2,8</td>
+              <td class="num">2,9</td>
               
             
               <td class="num">2</td>
@@ -3326,7 +3328,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">1,6</td>
               
             
-              <td>R$ 142,99</td>
+              <td>R$ 141,09</td>
               
             
               <td>08:59</td>
@@ -3417,7 +3419,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">2,7</td>
               
             
-              <td>R$ 82,27</td>
+              <td>R$ 81,77</td>
               
             
               <td>09:28</td>
@@ -3508,7 +3510,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">1,9</td>
               
             
-              <td>R$ 116,34</td>
+              <td>R$ 116,14</td>
               
             
               <td>08:52</td>
@@ -3781,7 +3783,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
               <td class="num">2,4</td>
               
             
-              <td>R$ 91,22</td>
+              <td>R$ 90,47</td>
               
             
               <td>09:02</td>
@@ -4099,7 +4101,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="row-critico" data-area="425 - JARDIM ESTORIL">
             <td class="agent-name">Miglidiane Maciel Ajala</td><td>Equipe 3</td><td>425 - JARDIM ESTORIL</td>
-            <td class="num">88</td><td class="num">4,4</td><td class="num">4</td>
+            <td class="num">88</td><td class="num">4,5</td><td class="num">4</td>
             <td class="num" title="Q044, Q045, Q049, Q050, Q051">5</td>
             <td class="num">22</td><td class="num pct">25,0%</td>
             <td class="num">11</td><td class="num">0</td><td class="num pct">11,1%</td>
@@ -4216,7 +4218,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="405 - ALTOS DA GLÓRIA">
             <td class="agent-name">Evelyn Santana Santos Oliveira</td><td>Equipe 1</td><td>405 - ALTOS DA GLÓRIA</td>
-            <td class="num">139</td><td class="num">5,4</td><td class="num">5</td>
+            <td class="num">139</td><td class="num">5,5</td><td class="num">5</td>
             <td class="num" title="Q004, Q011, Q012, Q013, Q020, Q021, Q022, Q023, Q024, Q026, Q027, Q028, Q029, Q030, Q031, Q032, Q033, Q034, Q036">19</td>
             <td class="num">13</td><td class="num pct">9,3%</td>
             <td class="num">95</td><td class="num">0</td><td class="num pct">40,6%</td>
@@ -4243,7 +4245,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="401 - EMÍLIO DIAS BRANDÃO">
             <td class="agent-name">Ana Gabriela Silva Garcete</td><td>Equipe 1</td><td>401 - EMÍLIO DIAS BRANDÃO</td>
-            <td class="num">97</td><td class="num">5,3</td><td class="num">4</td>
+            <td class="num">97</td><td class="num">5,6</td><td class="num">4</td>
             <td class="num" title="Q010, Q014, Q021, Q022, Q025, Q027, Q030, Q033, Q034, Q035, Q036, Q037">12</td>
             <td class="num">8</td><td class="num pct">8,2%</td>
             <td class="num">86</td><td class="num">0</td><td class="num pct">47,0%</td>
@@ -4324,7 +4326,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="419 - CENTRO 5">
             <td class="agent-name">Bianca Afonso Narbaez</td><td>Equipe 2</td><td>419 - CENTRO 5</td>
-            <td class="num">80</td><td class="num">6,9</td><td class="num">6</td>
+            <td class="num">80</td><td class="num">7,0</td><td class="num">6</td>
             <td class="num" title="Q003, Q008, Q015, Q016, Q019, Q020, Q021">7</td>
             <td class="num">4</td><td class="num pct">5,0%</td>
             <td class="num">17</td><td class="num">0</td><td class="num pct">17,5%</td>
@@ -4423,7 +4425,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="413 - BAIRRO DA GRANJA">
             <td class="agent-name">William Anderson Chamorro Tavares</td><td>Equipe 2</td><td>413 - BAIRRO DA GRANJA</td>
-            <td class="num">75</td><td class="num">7,6</td><td class="num">8</td>
+            <td class="num">75</td><td class="num">7,7</td><td class="num">8</td>
             <td class="num" title="Q013, Q023, Q024, Q025, Q026, Q027, Q029, Q030, Q033, Q034, Q035, Q036, Q037">13</td>
             <td class="num">0</td><td class="num pct">0,0%</td>
             <td class="num">30</td><td class="num">0</td><td class="num pct">28,6%</td>
@@ -4432,7 +4434,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="418 - CENTRO 4">
             <td class="agent-name">Gilmar Bitencourt Luiz</td><td>Equipe 2</td><td>418 - CENTRO 4</td>
-            <td class="num">107</td><td class="num">10,3</td><td class="num">10</td>
+            <td class="num">107</td><td class="num">10,5</td><td class="num">10</td>
             <td class="num" title="Q007, Q009, Q010">3</td>
             <td class="num">0</td><td class="num pct">0,0%</td>
             <td class="num">46</td><td class="num">0</td><td class="num pct">30,1%</td>
@@ -4441,7 +4443,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="411 - JARDIM AEROPORTO">
             <td class="agent-name">Fabiana de Figueredo Vieira</td><td>Equipe 2</td><td>411 - JARDIM AEROPORTO</td>
-            <td class="num">95</td><td class="num">7,0</td><td class="num">6</td>
+            <td class="num">95</td><td class="num">7,1</td><td class="num">6</td>
             <td class="num" title="Q019, Q022, Q026, Q028, Q029, Q030">6</td>
             <td class="num">0</td><td class="num pct">0,0%</td>
             <td class="num">26</td><td class="num">0</td><td class="num pct">21,5%</td>
@@ -4477,7 +4479,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="" data-area="414 - PARQUE DOS ERVAIS">
             <td class="agent-name">Suely Aguiar Alves Luiz</td><td>Equipe 2</td><td>414 - PARQUE DOS ERVAIS</td>
-            <td class="num">63</td><td class="num">11,6</td><td class="num">11</td>
+            <td class="num">63</td><td class="num">11,9</td><td class="num">11</td>
             <td class="num" title="Q001, Q003, Q004, Q005, Q006, Q007, Q008, Q013, Q016, Q017">10</td>
             <td class="num">0</td><td class="num pct">0,0%</td>
             <td class="num">14</td><td class="num">0</td><td class="num pct">18,2%</td>
@@ -4624,9 +4626,9 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="alert-card" onclick="showAlert('neg')"><div class="ac-icon">🔻</div><div class="ac-val" style="color:var(--purple)">2</div><div class="ac-label">Duração Negativa</div></div>
     <div class="alert-card" onclick="showAlert('fora')"><div class="ac-icon">🕐</div><div class="ac-val" style="color:var(--yellow)">146</div><div class="ac-label">Fora do Expediente</div></div>
     <div class="alert-card" onclick="showAlert('alm')"><div class="ac-icon">🍽️</div><div class="ac-val" style="color:var(--cyan)">83</div><div class="ac-label">No Horário de Almoço</div></div>
-    <div class="alert-card" onclick="showAlert('teto')"><div class="ac-icon">🖥️</div><div class="ac-val" style="color:var(--navy)">41</div><div class="ac-label">Acima de 15min (auditoria)</div></div>
+    <div class="alert-card" onclick="showAlert('teto')"><div class="ac-icon">🖥️</div><div class="ac-val" style="color:var(--navy)">14</div><div class="ac-label">Acima de 20min (auditoria)</div></div>
     <div class="alert-card" onclick="goToSection('pendencias')"><div class="ac-icon">🚫</div><div class="ac-val" style="color:var(--red)">8</div><div class="ac-label">Imóveis Recusados</div></div>
-    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">63</div><div class="ac-label">Possíveis Ausências</div></div>
+    <div class="alert-card" onclick="goToSection('ausencias')"><div class="ac-icon">📅</div><div class="ac-val" style="color:var(--text2)">64</div><div class="ac-label">Possíveis Ausências</div></div>
   </div>
 
   
@@ -13768,7 +13770,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 
   
 <div class="table-section" id="alert-teto">
-  <h3>🖥️ Acima de 15min (auditoria de manipulação de horário) (41)</h3>
+  <h3>🖥️ Acima de 20min (auditoria de manipulação de horário) (14)</h3>
   <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
   <div class="table-wrap">
     <table class="data-table compact sortable" id="table-teto">
@@ -14015,40 +14017,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Evelyn Santana Santos Oliveira</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17148181/detalhes" target="_blank" rel="noopener">17148181</a></td>
-            
-          
-            <td>405 - ALTOS DA GLÓRIA</td>
-            
-          
-            <td>Q013</td>
-            
-          
-            <td>Rua ARNALDO VASQUES</td>
-            
-          
-            <td>325 - R</td>
-            
-          
-            <td>26/08/2026 13:43</td>
-            
-          
-            <td>26/08/2026 14:05</td>
-            
-          
-            <td class="num">22</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
             <td class="agent-name">William Anderson Chamorro Tavares</td>
             
           
@@ -14083,40 +14051,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
         
         <tr>
           
-            <td class="agent-name">Kariele Jackeline Rodrigues Silva</td>
-            
-          
-            <td>Equipe 4</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17125360/detalhes" target="_blank" rel="noopener">17125360</a></td>
-            
-          
-            <td>439 - BOSQUE CARANDÁ</td>
-            
-          
-            <td>Q028</td>
-            
-          
-            <td>Avenida PERPETUO SOCORRO</td>
-            
-          
-            <td>03 - OU</td>
-            
-          
-            <td>25/08/2026 09:35</td>
-            
-          
-            <td>25/08/2026 09:57</td>
-            
-          
-            <td class="num">22</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
             <td class="agent-name">Fabiana de Figueredo Vieira</td>
             
           
@@ -14142,6 +14076,74 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             
           
             <td>25/08/2026 15:55</td>
+            
+          
+            <td class="num">22</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Evelyn Santana Santos Oliveira</td>
+            
+          
+            <td>Equipe 1</td>
+            
+          
+            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17148181/detalhes" target="_blank" rel="noopener">17148181</a></td>
+            
+          
+            <td>405 - ALTOS DA GLÓRIA</td>
+            
+          
+            <td>Q013</td>
+            
+          
+            <td>Rua ARNALDO VASQUES</td>
+            
+          
+            <td>325 - R</td>
+            
+          
+            <td>26/08/2026 13:43</td>
+            
+          
+            <td>26/08/2026 14:05</td>
+            
+          
+            <td class="num">22</td>
+            
+          
+        </tr>
+        
+        <tr>
+          
+            <td class="agent-name">Kariele Jackeline Rodrigues Silva</td>
+            
+          
+            <td>Equipe 4</td>
+            
+          
+            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17125360/detalhes" target="_blank" rel="noopener">17125360</a></td>
+            
+          
+            <td>439 - BOSQUE CARANDÁ</td>
+            
+          
+            <td>Q028</td>
+            
+          
+            <td>Avenida PERPETUO SOCORRO</td>
+            
+          
+            <td>03 - OU</td>
+            
+          
+            <td>25/08/2026 09:35</td>
+            
+          
+            <td>25/08/2026 09:57</td>
             
           
             <td class="num">22</td>
@@ -14251,924 +14253,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
         </tr>
         
-        <tr>
-          
-            <td class="agent-name">Suely Aguiar Alves Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17098947/detalhes" target="_blank" rel="noopener">17098947</a></td>
-            
-          
-            <td>414 - PARQUE DOS ERVAIS</td>
-            
-          
-            <td>Q006</td>
-            
-          
-            <td>Rua FELIPE DE BRUM</td>
-            
-          
-            <td>75 - R</td>
-            
-          
-            <td>24/08/2026 09:26</td>
-            
-          
-            <td>24/08/2026 09:46</td>
-            
-          
-            <td class="num">20</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gabriel Alan de Oliveira Martins</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17153643/detalhes" target="_blank" rel="noopener">17153643</a></td>
-            
-          
-            <td>402 - JARDIM MARAMBAIA</td>
-            
-          
-            <td>Q032</td>
-            
-          
-            <td>Rua CORONEL ORLANDO SAPUCAIA</td>
-            
-          
-            <td>17 - R</td>
-            
-          
-            <td>26/08/2026 14:07</td>
-            
-          
-            <td>26/08/2026 14:27</td>
-            
-          
-            <td class="num">20</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Miglidiane Maciel Ajala</td>
-            
-          
-            <td>Equipe 3</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17195999/detalhes" target="_blank" rel="noopener">17195999</a></td>
-            
-          
-            <td>425 - JARDIM ESTORIL</td>
-            
-          
-            <td>Q050</td>
-            
-          
-            <td>Avenida COSTA E SILVA</td>
-            
-          
-            <td>843 - R</td>
-            
-          
-            <td>28/08/2026 08:55</td>
-            
-          
-            <td>28/08/2026 09:15</td>
-            
-          
-            <td class="num">20</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17197913/detalhes" target="_blank" rel="noopener">17197913</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q009</td>
-            
-          
-            <td>Rua GENERAL OSORIO</td>
-            
-          
-            <td>1542 - R</td>
-            
-          
-            <td>28/08/2026 14:32</td>
-            
-          
-            <td>28/08/2026 14:52</td>
-            
-          
-            <td class="num">20</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Fabiana de Figueredo Vieira</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17112709/detalhes" target="_blank" rel="noopener">17112709</a></td>
-            
-          
-            <td>411 - JARDIM AEROPORTO</td>
-            
-          
-            <td>Q029</td>
-            
-          
-            <td>Rua ROSA AZUL</td>
-            
-          
-            <td>295 - 1 - R</td>
-            
-          
-            <td>24/08/2026 15:00</td>
-            
-          
-            <td>24/08/2026 15:20</td>
-            
-          
-            <td class="num">20</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17184331/detalhes" target="_blank" rel="noopener">17184331</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q007</td>
-            
-          
-            <td>Rua BALTAZAR SALDANHA</td>
-            
-          
-            <td>546 - R</td>
-            
-          
-            <td>27/08/2026 10:09</td>
-            
-          
-            <td>27/08/2026 10:28</td>
-            
-          
-            <td class="num">19</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Suely Aguiar Alves Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17098960/detalhes" target="_blank" rel="noopener">17098960</a></td>
-            
-          
-            <td>414 - PARQUE DOS ERVAIS</td>
-            
-          
-            <td>Q006</td>
-            
-          
-            <td>Avenida COMANDANTE CARDOSO</td>
-            
-          
-            <td>360 - 1 - R</td>
-            
-          
-            <td>24/08/2026 15:24</td>
-            
-          
-            <td>24/08/2026 15:43</td>
-            
-          
-            <td class="num">19</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17197908/detalhes" target="_blank" rel="noopener">17197908</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q009</td>
-            
-          
-            <td>Rua GENERAL OSORIO</td>
-            
-          
-            <td>1486 - R</td>
-            
-          
-            <td>28/08/2026 13:55</td>
-            
-          
-            <td>28/08/2026 14:13</td>
-            
-          
-            <td class="num">18</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Ana Gabriela Silva Garcete</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17130027/detalhes" target="_blank" rel="noopener">17130027</a></td>
-            
-          
-            <td>401 - EMÍLIO DIAS BRANDÃO</td>
-            
-          
-            <td>Q022</td>
-            
-          
-            <td>Rua BARRA VELHA</td>
-            
-          
-            <td>1154 - R</td>
-            
-          
-            <td>25/08/2026 09:31</td>
-            
-          
-            <td>25/08/2026 09:49</td>
-            
-          
-            <td class="num">18</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17184336/detalhes" target="_blank" rel="noopener">17184336</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q007</td>
-            
-          
-            <td>Rua GENERAL OSORIO</td>
-            
-          
-            <td>1391 - R</td>
-            
-          
-            <td>27/08/2026 13:23</td>
-            
-          
-            <td>27/08/2026 13:41</td>
-            
-          
-            <td class="num">18</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Evelyn Santana Santos Oliveira</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17092097/detalhes" target="_blank" rel="noopener">17092097</a></td>
-            
-          
-            <td>405 - ALTOS DA GLÓRIA</td>
-            
-          
-            <td>Q013</td>
-            
-          
-            <td>Rua ARNALDO VASQUES</td>
-            
-          
-            <td>347 - R</td>
-            
-          
-            <td>24/08/2026 09:00</td>
-            
-          
-            <td>24/08/2026 09:18</td>
-            
-          
-            <td class="num">18</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17197904/detalhes" target="_blank" rel="noopener">17197904</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q009</td>
-            
-          
-            <td>Rua BALTAZAR SALDANHA</td>
-            
-          
-            <td>645 - R</td>
-            
-          
-            <td>28/08/2026 10:02</td>
-            
-          
-            <td>28/08/2026 10:20</td>
-            
-          
-            <td class="num">18</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Miglidiane Maciel Ajala</td>
-            
-          
-            <td>Equipe 3</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17196006/detalhes" target="_blank" rel="noopener">17196006</a></td>
-            
-          
-            <td>425 - JARDIM ESTORIL</td>
-            
-          
-            <td>Q050</td>
-            
-          
-            <td>Rua 01 DE MARÇO</td>
-            
-          
-            <td>69 - 1 - OU</td>
-            
-          
-            <td>28/08/2026 09:32</td>
-            
-          
-            <td>28/08/2026 09:50</td>
-            
-          
-            <td class="num">18</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17197903/detalhes" target="_blank" rel="noopener">17197903</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q009</td>
-            
-          
-            <td>Rua BALTAZAR SALDANHA</td>
-            
-          
-            <td>669 - R</td>
-            
-          
-            <td>28/08/2026 09:41</td>
-            
-          
-            <td>28/08/2026 09:59</td>
-            
-          
-            <td class="num">18</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17197893/detalhes" target="_blank" rel="noopener">17197893</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q009</td>
-            
-          
-            <td>Rua CALOGERAS</td>
-            
-          
-            <td>1493 - R</td>
-            
-          
-            <td>28/08/2026 08:17</td>
-            
-          
-            <td>28/08/2026 08:34</td>
-            
-          
-            <td class="num">17</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Suely Aguiar Alves Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17195900/detalhes" target="_blank" rel="noopener">17195900</a></td>
-            
-          
-            <td>414 - PARQUE DOS ERVAIS</td>
-            
-          
-            <td>Q016</td>
-            
-          
-            <td>Rua 13 DE SETEMBRO</td>
-            
-          
-            <td>1502 - R</td>
-            
-          
-            <td>28/08/2026 14:53</td>
-            
-          
-            <td>28/08/2026 15:10</td>
-            
-          
-            <td class="num">17</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Cicero Isrrael Sanabria</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17133115/detalhes" target="_blank" rel="noopener">17133115</a></td>
-            
-          
-            <td>412 - COHAB</td>
-            
-          
-            <td>Q017</td>
-            
-          
-            <td>Rua VALENCIO DE BRUM</td>
-            
-          
-            <td>536 - R</td>
-            
-          
-            <td>25/08/2026 09:33</td>
-            
-          
-            <td>25/08/2026 09:50</td>
-            
-          
-            <td class="num">17</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Suely Aguiar Alves Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17098963/detalhes" target="_blank" rel="noopener">17098963</a></td>
-            
-          
-            <td>414 - PARQUE DOS ERVAIS</td>
-            
-          
-            <td>Q006</td>
-            
-          
-            <td>Rua ARINO MOREIRA</td>
-            
-          
-            <td>39 - R</td>
-            
-          
-            <td>24/08/2026 15:46</td>
-            
-          
-            <td>24/08/2026 16:03</td>
-            
-          
-            <td class="num">17</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17184338/detalhes" target="_blank" rel="noopener">17184338</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q007</td>
-            
-          
-            <td>Rua GENERAL OSORIO</td>
-            
-          
-            <td>1353 - C</td>
-            
-          
-            <td>27/08/2026 13:50</td>
-            
-          
-            <td>27/08/2026 14:07</td>
-            
-          
-            <td class="num">17</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gabriel Alan de Oliveira Martins</td>
-            
-          
-            <td>Equipe 1</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17137370/detalhes" target="_blank" rel="noopener">17137370</a></td>
-            
-          
-            <td>402 - JARDIM MARAMBAIA</td>
-            
-          
-            <td>Q029</td>
-            
-          
-            <td>Rua DR HELIO BRANDAO</td>
-            
-          
-            <td>647 - R</td>
-            
-          
-            <td>25/08/2026 16:03</td>
-            
-          
-            <td>25/08/2026 16:19</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Fabiana de Figueredo Vieira</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17178582/detalhes" target="_blank" rel="noopener">17178582</a></td>
-            
-          
-            <td>411 - JARDIM AEROPORTO</td>
-            
-          
-            <td>Q026</td>
-            
-          
-            <td>Rua ROSA AMARELA</td>
-            
-          
-            <td>305 - R</td>
-            
-          
-            <td>27/08/2026 09:33</td>
-            
-          
-            <td>27/08/2026 09:49</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Suely Aguiar Alves Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17098957/detalhes" target="_blank" rel="noopener">17098957</a></td>
-            
-          
-            <td>414 - PARQUE DOS ERVAIS</td>
-            
-          
-            <td>Q006</td>
-            
-          
-            <td>Avenida COMANDANTE CARDOSO</td>
-            
-          
-            <td>258 - R</td>
-            
-          
-            <td>24/08/2026 14:31</td>
-            
-          
-            <td>24/08/2026 14:47</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Suely Aguiar Alves Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17098958/detalhes" target="_blank" rel="noopener">17098958</a></td>
-            
-          
-            <td>414 - PARQUE DOS ERVAIS</td>
-            
-          
-            <td>Q006</td>
-            
-          
-            <td>Avenida COMANDANTE CARDOSO</td>
-            
-          
-            <td>258 - 2 - OU</td>
-            
-          
-            <td>24/08/2026 14:47</td>
-            
-          
-            <td>24/08/2026 15:03</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Suely Aguiar Alves Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17098959/detalhes" target="_blank" rel="noopener">17098959</a></td>
-            
-          
-            <td>414 - PARQUE DOS ERVAIS</td>
-            
-          
-            <td>Q006</td>
-            
-          
-            <td>Avenida COMANDANTE CARDOSO</td>
-            
-          
-            <td>332 - R</td>
-            
-          
-            <td>24/08/2026 15:05</td>
-            
-          
-            <td>24/08/2026 15:21</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Gilmar Bitencourt Luiz</td>
-            
-          
-            <td>Equipe 2</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17197898/detalhes" target="_blank" rel="noopener">17197898</a></td>
-            
-          
-            <td>418 - CENTRO 4</td>
-            
-          
-            <td>Q009</td>
-            
-          
-            <td>Rua BALTAZAR SALDANHA</td>
-            
-          
-            <td>749 - C</td>
-            
-          
-            <td>28/08/2026 08:53</td>
-            
-          
-            <td>28/08/2026 09:09</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Silvina Regina de Souza Valiente</td>
-            
-          
-            <td>Equipe 4</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17130878/detalhes" target="_blank" rel="noopener">17130878</a></td>
-            
-          
-            <td>434 - VILA AUREA</td>
-            
-          
-            <td>Q044</td>
-            
-          
-            <td>Rua BENJAMIN CONSTANT</td>
-            
-          
-            <td>512 - 1 - R</td>
-            
-          
-            <td>25/08/2026 10:27</td>
-            
-          
-            <td>25/08/2026 10:43</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
-        <tr>
-          
-            <td class="agent-name">Rafael Ramos Recalde</td>
-            
-          
-            <td>Equipe 4</td>
-            
-          
-            <td><a class="id-link" href="https://evisita.saude.ms.gov.br/endemias/sis_visita/17170026/detalhes" target="_blank" rel="noopener">17170026</a></td>
-            
-          
-            <td>446 - GUY VILELA</td>
-            
-          
-            <td>Q015</td>
-            
-          
-            <td>Avenida TAMANDARE</td>
-            
-          
-            <td>466 - R</td>
-            
-          
-            <td>27/08/2026 14:46</td>
-            
-          
-            <td>27/08/2026 15:02</td>
-            
-          
-            <td class="num">16</td>
-            
-          
-        </tr>
-        
       </tbody>
     </table>
   </div>
@@ -15178,36 +14262,13 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="ausencias">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">63</div><div class="kpi-sub">turnos sem visita registrada</div></div>
+    <div class="kpi blue"><div class="kpi-label">Possíveis Ausências</div><div class="kpi-value">64</div><div class="kpi-sub">turnos sem visita registrada</div></div>
     <div class="kpi cyan"><div class="kpi-label">Agentes Envolvidos</div><div class="kpi-value">38</div><div class="kpi-sub">de 38 monitorados</div></div>
     <div class="kpi yellow"><div class="kpi-label">Dia Mais Crítico</div><div class="kpi-value">Quarta</div><div class="kpi-sub">40 ausências</div></div>
-    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">47 de 63 (75%)</div></div>
+    <div class="kpi orange"><div class="kpi-label">Turno Mais Crítico</div><div class="kpi-value">Manhã</div><div class="kpi-sub">47 de 64 (73%)</div></div>
   </div>
   <div class="legend-box"><strong>Como ler:</strong> cada registro é um turno (manhã ou tarde) de um dia útil em que o agente não teve nenhuma visita lançada no sistema. Pode ser folga, atestado, falta ou apenas ausência de registro — confirme sempre com a escala antes de qualquer tratativa. Turnos do Cronograma abaixo (equipe inteira parada) já entram nessa lista, mas podem ser ocultados com o checkbox.</div>
 
-  
-  <div class="table-section">
-    <h3>🌴 Quem está de Férias, Atestado ou Afins (6)</h3>
-    <p class="table-hint">Relatório rápido de quem tem um período de férias/atestado confirmado agora, sem precisar abrir o Cronograma completo. Férias detectadas automaticamente (mais de 5 dias úteis seguidos sem lançamento) já aparecem aqui sozinhas — confira em <code>deteccao_editor.html</code> se alguma precisar ser corrigida pra "falta".</p>
-    <div class="table-wrap"><table class="data-table compact sortable" id="tableFeriasAtestado">
-      <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th></tr></thead>
-      <tbody>
-        
-        <tr><td>31/07/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Alana Amanda Fernandes Ovelar</td></tr>
-        
-        <tr><td>06/08/2026 a 24/08/2026</td><td>Férias/Atestado (automático)</td><td>Cicero Isrrael Sanabria</td></tr>
-        
-        <tr><td>07/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Ramona dos Santos Oliveira</td></tr>
-        
-        <tr><td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Mateus Falcao de Souza</td></tr>
-        
-        <tr><td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Tania Maria Montania</td></tr>
-        
-        <tr><td>20/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Alana Amanda Fernandes Ovelar</td></tr>
-        
-      </tbody>
-    </table></div>
-  </div>
   
 
   
@@ -15217,46 +14278,6 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     <div class="table-wrap"><table class="data-table compact sortable" id="tableCronograma">
       <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th><th>Origem</th></tr></thead>
       <tbody>
-        
-        <tr>
-          <td>31/07/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Alana Amanda Fernandes Ovelar</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>06/08/2026 a 24/08/2026</td><td>Férias/Atestado (automático)</td><td>Cicero Isrrael Sanabria</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>07/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Ramona dos Santos Oliveira</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Mateus Falcao de Souza</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>17/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Tania Maria Montania</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>20/08/2026 a 28/08/2026</td><td>Férias/Atestado (automático)</td><td>Alana Amanda Fernandes Ovelar</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>24/08/2026</td><td>Chuva (confirmada)</td><td>Equipe 1</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
-        
-        <tr>
-          <td>24/08/2026</td><td>Chuva (confirmada)</td><td>Equipe 3</td>
-          <td><span class="small-muted">Cronograma</span></td>
-        </tr>
         
         <tr class="row-atencao">
           <td>26/08/2026</td><td>Nenhum agente da equipe registrou visita neste turno</td><td>Todos da Equipe 3 (8/8)</td>
@@ -15276,7 +14297,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   <div class="charts-grid">
     <div class="chart-card">
       <h3>Mapa de Calor — Dia da Semana × Turno</h3>
-      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 0, "Tarde": 2}, "Terça": {"Manhã": 2, "Tarde": 2}, "Quarta": {"Manhã": 35, "Tarde": 5}, "Quinta": {"Manhã": 4, "Tarde": 2}, "Sexta": {"Manhã": 6, "Tarde": 5}}' style="margin-top:6px;"></div>
+      <div class="heat-grid" id="heatmapAus" data-heat='{"Segunda": {"Manhã": 0, "Tarde": 3}, "Terça": {"Manhã": 2, "Tarde": 2}, "Quarta": {"Manhã": 35, "Tarde": 5}, "Quinta": {"Manhã": 4, "Tarde": 2}, "Sexta": {"Manhã": 6, "Tarde": 5}}' style="margin-top:6px;"></div>
       <p class="chart-note"><strong>Metodologia:</strong> conta, para cada combinação de dia da semana e turno, quantos turnos ficaram sem nenhuma visita registrada, somando todos os agentes. Cor mais escura = mais ausências naquele cruzamento.</p>
     </div>
     <div class="chart-card">
@@ -15286,7 +14307,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
   </div>
   <div class="table-section">
-    <h3>📅 Todos os Registros de Ausência (63)</h3>
+    <h3>📅 Todos os Registros de Ausência (64)</h3>
     <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter).</p>
     <label class="checkbox-label">
       <input type="checkbox" id="filterAusHideAllAbsent"> Ocultar turnos em que <strong>toda a equipe</strong> ficou ausente (18 registros — prováveis paralisações pontuais da equipe, listadas na tabela de Cronograma acima)
@@ -15497,6 +14518,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           <tr>
             <td class="sticky-col agent-name">Teonilda Florentino Vieira</td><td>Equipe 2</td><td>28/08/2026</td>
             <td>Sexta</td><td>Tarde</td>
+            <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td><td>Equipe 3</td><td>24/08/2026</td>
+            <td>Segunda</td><td>Tarde</td>
             <td class="small-muted">Sem visita registrada nesse turno — possível folga, atestado ou falta (confirmar com a escala)</td>
           </tr>
           
@@ -16207,7 +15234,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 <div class="section" id="ranking">
   <div class="kpi-grid">
     <div class="kpi blue"><div class="kpi-label">Líder do Ranking</div><div class="kpi-value">Gilmar Bitencourt Luiz</div><div class="kpi-sub">100,0 pontos</div></div>
-    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">79,7</div><div class="kpi-sub">de todos os agentes</div></div>
+    <div class="kpi cyan"><div class="kpi-label">Pontuação Média</div><div class="kpi-value">79,6</div><div class="kpi-sub">de todos os agentes</div></div>
     <div class="kpi green"><div class="kpi-label">🟢 Excelente / 🟡 Bom</div><div class="kpi-value">11 / 15</div><div class="kpi-sub">agentes em cada faixa</div></div>
     <div class="kpi red"><div class="kpi-label">🟠 Atenção / 🔴 Crítico</div><div class="kpi-value">7 / 5</div><div class="kpi-sub">agentes em cada faixa</div></div>
   </div>
@@ -16233,7 +15260,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Gilmar Bitencourt Luiz</td>
             <td>Equipe 2</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16244,7 +15271,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Naime Cristina Freitas</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16255,7 +15282,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Rosalina Beniel Vargas</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">100,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16266,7 +15293,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Fabiana de Figueredo Vieira</td>
             <td>Equipe 2</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">99,8</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16277,7 +15304,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Wesley de Souza Leal</td>
             <td>Equipe 2</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">99,8</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16288,7 +15315,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Cris Milene Cardenas da Silva</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">97,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16299,7 +15326,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">William Anderson Chamorro Tavares</td>
             <td>Equipe 2</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">96,5</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16310,7 +15337,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Geancarlos Ferreira Barrios</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">2</td>
             <td class="num">95,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16321,7 +15348,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Adriana de Jesus Saraiva</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">2</td>
             <td class="num">92,3</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16332,7 +15359,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Walquiria Araujo Flores</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">91,0</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16343,7 +15370,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Gisele Lopes Justiniano</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">2</td>
             <td class="num">90,4</td>
             <td><span class="badge badge-excelente">🟢 EXCELENTE</span></td>
@@ -16354,7 +15381,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Rozentina Matos de Oliveira</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">89,8</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16365,7 +15392,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Suely Aguiar Alves Luiz</td>
             <td>Equipe 2</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">88,6</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16376,7 +15403,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Marco Antonio Ayala de Matos Freitas</td>
             <td>Equipe 3</td>
             <td class="num">4</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">4</td>
             <td class="num">87,3</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16387,7 +15414,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Evelyn Santana Santos Oliveira</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">87,2</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16398,7 +15425,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Silvina Regina de Souza Valiente</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">86,2</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16409,7 +15436,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Gabriel Alan de Oliveira Martins</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">86,0</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16420,7 +15447,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Rozana Reis da Silva</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">85,2</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16431,7 +15458,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Selba Ramona Afonso</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">84,0</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16442,7 +15469,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Sara Eliane Talaveira de Oliveira</td>
             <td>Equipe 4</td>
             <td class="num">3</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">4</td>
             <td class="num">82,2</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16453,7 +15480,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Adriano Ricardo Thiel</td>
             <td>Equipe 1</td>
             <td class="num">4</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">2</td>
             <td class="num">82,0</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16464,7 +15491,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Carlos Alberto Albiero</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">2</td>
             <td class="num">81,0</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16475,7 +15502,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Ana Gabriela Silva Garcete</td>
             <td>Equipe 1</td>
             <td class="num">4</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">3</td>
             <td class="num">80,2</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
@@ -16483,34 +15510,34 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           
           <tr class="">
             <td class="num">24º</td>
-            <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td>
-            <td>Equipe 3</td>
-            <td class="num">4</td>
-            <td class="num">18</td>
-            <td class="num">3</td>
-            <td class="num">78,4</td>
-            <td><span class="badge badge-bom">🟡 BOM</span></td>
-          </tr>
-          
-          <tr class="">
-            <td class="num">25º</td>
             <td class="sticky-col agent-name">Juliana Patricia Goncalves</td>
             <td>Equipe 4</td>
             <td class="num">3</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">3</td>
             <td class="num">77,2</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
           
           <tr class="">
-            <td class="num">26º</td>
+            <td class="num">25º</td>
             <td class="sticky-col agent-name">Wagner Tarlei Gomes</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">3</td>
             <td class="num">76,4</td>
+            <td><span class="badge badge-bom">🟡 BOM</span></td>
+          </tr>
+          
+          <tr class="">
+            <td class="num">26º</td>
+            <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td>
+            <td>Equipe 3</td>
+            <td class="num">4</td>
+            <td class="num">20</td>
+            <td class="num">4</td>
+            <td class="num">75,4</td>
             <td><span class="badge badge-bom">🟡 BOM</span></td>
           </tr>
           
@@ -16519,7 +15546,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Bianca Afonso Narbaez</td>
             <td>Equipe 2</td>
             <td class="num">4</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">3</td>
             <td class="num">72,8</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
@@ -16530,7 +15557,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Raquel Ortiz dos Santos</td>
             <td>Equipe 1</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">71,6</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
@@ -16552,7 +15579,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Kariele Jackeline Rodrigues Silva</td>
             <td>Equipe 4</td>
             <td class="num">4</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">67,1</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
@@ -16574,7 +15601,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Anderson Jose de Santana</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">65,3</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
@@ -16585,7 +15612,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Emidio Rainer Vilhalba</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">64,0</td>
             <td><span class="badge badge-rank-atencao">🟠 ATENÇÃO</span></td>
@@ -16596,7 +15623,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Claine Luisa Figueiredo Torraca</td>
             <td>Equipe 3</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">54,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
@@ -16607,7 +15634,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Rafael Ramos Recalde</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">51,0</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
@@ -16618,7 +15645,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Kátia Cilene Silveira Machado</td>
             <td>Equipe 4</td>
             <td class="num">5</td>
-            <td class="num">18</td>
+            <td class="num">20</td>
             <td class="num">1</td>
             <td class="num">47,2</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
@@ -16629,7 +15656,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Gisele Olimpia Torres</td>
             <td>Equipe 2</td>
             <td class="num">5</td>
-            <td class="num">19</td>
+            <td class="num">20</td>
             <td class="num">3</td>
             <td class="num">44,9</td>
             <td><span class="badge badge-critico">🔴 CRÍTICO</span></td>
@@ -21517,7 +20544,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td>Turno sem lançamento (não é chuva/reunião/férias)</td>
             
           
-            <td class="num">3</td>
+            <td class="num">4</td>
             
           
             <td class="num">1,50</td>
@@ -21529,7 +20556,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="num">3,00</td>
             
           
-            <td class="num">-9,0</td>
+            <td class="num">-12,0</td>
             
           
         </tr>
@@ -24844,8 +23871,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
           <tr>
             <td class="num">34</td><td>24/08 a 27/08</td><td class="agent-name">Antonio Cezar Marques</td><td>Ponto Estratégico</td>
             <td><span class="badge badge-normal">🟢 NORMAL</span></td><td class="num">33</td><td class="num">4</td>
-            <td class="num">8,2</td><td class="num">12,7</td><td class="num">0</td>
-            <td class="num pct">0,0%</td><td class="num">1,8</td><td class="num">R$ 126,61</td>
+            <td class="num">8,2</td><td class="num">14,2</td><td class="num">0</td>
+            <td class="num pct">0,0%</td><td class="num">1,9</td><td class="num">R$ 113,60</td>
           </tr>
           
         </tbody>
@@ -24862,7 +23889,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   
 <div class="section" id="custos">
   <div class="kpi-grid">
-    <div class="kpi blue"><div class="kpi-label">Custo Médio Hora Útil</div><div class="kpi-value">R$ 117,35</div><div class="kpi-sub">média entre os 38 agentes</div></div>
+    <div class="kpi blue"><div class="kpi-label">Custo Médio Hora Útil</div><div class="kpi-value">R$ 116,82</div><div class="kpi-sub">média entre os 38 agentes</div></div>
     <div class="kpi green"><div class="kpi-label">Custo Mínimo</div><div class="kpi-value">R$ 52,15</div><div class="kpi-sub">Sara Eliane Talaveira de Oliveira</div></div>
     <div class="kpi red"><div class="kpi-label">Custo Máximo</div><div class="kpi-value">R$ 255,05</div><div class="kpi-sub">Carlos Alberto Albiero</div></div>
     <div class="kpi cyan"><div class="kpi-label">Média Horas Trab./Dia</div><div class="kpi-value">4,7h</div><div class="kpi-sub">jornada total no dia</div></div>
@@ -24960,7 +23987,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Kariele Jackeline Rodrigues Silva</td><td>Equipe 4</td>
             <td class="num">206</td><td class="num">132</td><td class="num">33,0</td>
             <td class="num">3,4h</td><td class="num">13,5h</td>
-            <td class="num">1,6h</td><td class="num">R$ 142,99</td>
+            <td class="num">1,6h</td><td class="num">R$ 141,09</td>
           </tr>
           
           <tr>
@@ -24974,7 +24001,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Miglidiane Maciel Ajala</td><td>Equipe 3</td>
             <td class="num">99</td><td class="num">88</td><td class="num">22,0</td>
             <td class="num">3,5h</td><td class="num">13,8h</td>
-            <td class="num">1,6h</td><td class="num">R$ 137,44</td>
+            <td class="num">1,6h</td><td class="num">R$ 134,65</td>
           </tr>
           
           <tr>
@@ -24995,14 +24022,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Rafael Ramos Recalde</td><td>Equipe 4</td>
             <td class="num">270</td><td class="num">184</td><td class="num">36,8</td>
             <td class="num">4,8h</td><td class="num">23,9h</td>
-            <td class="num">1,9h</td><td class="num">R$ 116,34</td>
+            <td class="num">1,9h</td><td class="num">R$ 116,14</td>
           </tr>
           
           <tr>
             <td class="sticky-col agent-name">William Anderson Chamorro Tavares</td><td>Equipe 2</td>
             <td class="num">105</td><td class="num">75</td><td class="num">15,0</td>
             <td class="num">4,5h</td><td class="num">22,8h</td>
-            <td class="num">1,9h</td><td class="num">R$ 115,73</td>
+            <td class="num">1,9h</td><td class="num">R$ 114,73</td>
           </tr>
           
           <tr>
@@ -25044,14 +24071,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Cris Milene Cardenas da Silva</td><td>Equipe 1</td>
             <td class="num">223</td><td class="num">110</td><td class="num">22,0</td>
             <td class="num">5,5h</td><td class="num">27,6h</td>
-            <td class="num">2,1h</td><td class="num">R$ 104,76</td>
-          </tr>
-          
-          <tr>
-            <td class="sticky-col agent-name">Ana Gabriela Silva Garcete</td><td>Equipe 1</td>
-            <td class="num">185</td><td class="num">99</td><td class="num">24,8</td>
-            <td class="num">5,5h</td><td class="num">21,9h</td>
-            <td class="num">2,1h</td><td class="num">R$ 102,81</td>
+            <td class="num">2,1h</td><td class="num">R$ 103,94</td>
           </tr>
           
           <tr>
@@ -25065,14 +24085,21 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Fabiana de Figueredo Vieira</td><td>Equipe 2</td>
             <td class="num">121</td><td class="num">95</td><td class="num">19,0</td>
             <td class="num">4,7h</td><td class="num">23,5h</td>
-            <td class="num">2,2h</td><td class="num">R$ 100,02</td>
+            <td class="num">2,2h</td><td class="num">R$ 98,39</td>
+          </tr>
+          
+          <tr>
+            <td class="sticky-col agent-name">Ana Gabriela Silva Garcete</td><td>Equipe 1</td>
+            <td class="num">185</td><td class="num">99</td><td class="num">24,8</td>
+            <td class="num">5,5h</td><td class="num">21,9h</td>
+            <td class="num">2,3h</td><td class="num">R$ 97,52</td>
           </tr>
           
           <tr>
             <td class="sticky-col agent-name">Bianca Afonso Narbaez</td><td>Equipe 2</td>
             <td class="num">97</td><td class="num">80</td><td class="num">20,0</td>
             <td class="num">4,6h</td><td class="num">18,4h</td>
-            <td class="num">2,3h</td><td class="num">R$ 95,76</td>
+            <td class="num">2,3h</td><td class="num">R$ 94,90</td>
           </tr>
           
           <tr>
@@ -25086,7 +24113,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Silvina Regina de Souza Valiente</td><td>Equipe 4</td>
             <td class="num">230</td><td class="num">133</td><td class="num">26,6</td>
             <td class="num">5,0h</td><td class="num">24,9h</td>
-            <td class="num">2,4h</td><td class="num">R$ 91,22</td>
+            <td class="num">2,4h</td><td class="num">R$ 90,47</td>
           </tr>
           
           <tr>
@@ -25114,14 +24141,14 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Kátia Cilene Silveira Machado</td><td>Equipe 4</td>
             <td class="num">258</td><td class="num">218</td><td class="num">43,6</td>
             <td class="num">4,4h</td><td class="num">22,0h</td>
-            <td class="num">2,7h</td><td class="num">R$ 82,27</td>
+            <td class="num">2,7h</td><td class="num">R$ 81,77</td>
           </tr>
           
           <tr>
             <td class="sticky-col agent-name">Gabriel Alan de Oliveira Martins</td><td>Equipe 1</td>
             <td class="num">246</td><td class="num">162</td><td class="num">32,4</td>
             <td class="num">5,4h</td><td class="num">27,2h</td>
-            <td class="num">2,7h</td><td class="num">R$ 81,97</td>
+            <td class="num">2,7h</td><td class="num">R$ 81,37</td>
           </tr>
           
           <tr>
@@ -25135,28 +24162,28 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
             <td class="sticky-col agent-name">Evelyn Santana Santos Oliveira</td><td>Equipe 1</td>
             <td class="num">278</td><td class="num">166</td><td class="num">33,2</td>
             <td class="num">5,8h</td><td class="num">28,8h</td>
-            <td class="num">3,0h</td><td class="num">R$ 74,51</td>
+            <td class="num">3,0h</td><td class="num">R$ 73,85</td>
           </tr>
           
           <tr>
             <td class="sticky-col agent-name">Suely Aguiar Alves Luiz</td><td>Equipe 2</td>
             <td class="num">102</td><td class="num">85</td><td class="num">17,0</td>
             <td class="num">6,1h</td><td class="num">30,6h</td>
-            <td class="num">3,1h</td><td class="num">R$ 72,16</td>
+            <td class="num">3,1h</td><td class="num">R$ 70,92</td>
           </tr>
           
           <tr>
             <td class="sticky-col agent-name">Gilmar Bitencourt Luiz</td><td>Equipe 2</td>
             <td class="num">153</td><td class="num">107</td><td class="num">21,4</td>
             <td class="num">6,0h</td><td class="num">30,0h</td>
-            <td class="num">3,7h</td><td class="num">R$ 60,34</td>
+            <td class="num">3,8h</td><td class="num">R$ 58,95</td>
           </tr>
           
           <tr>
             <td class="sticky-col agent-name">Cicero Isrrael Sanabria</td><td>Equipe 2</td>
             <td class="num">280</td><td class="num">234</td><td class="num">58,5</td>
             <td class="num">6,5h</td><td class="num">26,2h</td>
-            <td class="num">3,9h</td><td class="num">R$ 56,62</td>
+            <td class="num">3,9h</td><td class="num">R$ 56,20</td>
           </tr>
           
           <tr>
@@ -25230,7 +24257,7 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 </div>
 </div>
 
-<footer>Dashboard gerado automaticamente · GitHub Actions · 13/09/2026 08:32</footer>
+<footer>Dashboard gerado automaticamente · GitHub Actions · 13/09/2026 21:33</footer>
 
 <script>
 function goToSection(id) {
@@ -25530,7 +24557,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 });
 
 (function(){
-  const d = [{"label": "Carlos Alberto Albiero", "v": 255.05, "cls": "🟡 ATENÇÃO"}, {"label": "Juliana Patricia Goncalves", "v": 250.24, "cls": "🔴 CRÍTICO"}, {"label": "Raquel Ortiz dos Santos", "v": 242.02, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 210.52, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 169.6, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 159.41, "cls": "🟡 ATENÇÃO"}, {"label": "Anderson Jose de Santana", "v": 159.03, "cls": "🔴 CRÍTICO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 142.99, "cls": "🔴 CRÍTICO"}, {"label": "Rozana Reis da Silva", "v": 140.79, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 137.44, "cls": "🔴 CRÍTICO"}, {"label": "Walquiria Araujo Flores", "v": 130.03, "cls": "🟢 NORMAL"}, {"label": "Teonilda Florentino Vieira", "v": 117.37, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 116.34, "cls": "🔴 CRÍTICO"}, {"label": "William Anderson Chamorro Tavares", "v": 115.73, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 113.6, "cls": "🟡 ATENÇÃO"}, {"label": "Wagner Tarlei Gomes", "v": 111.45, "cls": "🔴 CRÍTICO"}, {"label": "Gisele Lopes Justiniano", "v": 110.52, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 109.84, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 106.27, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 104.76, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 102.81, "cls": "🟢 NORMAL"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 102.02, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 100.02, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 95.76, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 93.01, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 91.22, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 89.49, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 85.79, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 82.48, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 82.27, "cls": "🔴 CRÍTICO"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 81.97, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 81.07, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 74.51, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 72.16, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 60.34, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 56.62, "cls": "🔴 CRÍTICO"}, {"label": "Selba Ramona Afonso", "v": 52.59, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 52.15, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 255.05, "cls": "🟡 ATENÇÃO"}, {"label": "Juliana Patricia Goncalves", "v": 250.24, "cls": "🔴 CRÍTICO"}, {"label": "Raquel Ortiz dos Santos", "v": 242.02, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 210.52, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 169.6, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 159.41, "cls": "🟡 ATENÇÃO"}, {"label": "Anderson Jose de Santana", "v": 159.03, "cls": "🔴 CRÍTICO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 141.09, "cls": "🔴 CRÍTICO"}, {"label": "Rozana Reis da Silva", "v": 140.79, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 134.65, "cls": "🔴 CRÍTICO"}, {"label": "Walquiria Araujo Flores", "v": 130.03, "cls": "🟢 NORMAL"}, {"label": "Teonilda Florentino Vieira", "v": 117.37, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 116.14, "cls": "🔴 CRÍTICO"}, {"label": "William Anderson Chamorro Tavares", "v": 114.73, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 113.6, "cls": "🟡 ATENÇÃO"}, {"label": "Wagner Tarlei Gomes", "v": 111.45, "cls": "🔴 CRÍTICO"}, {"label": "Gisele Lopes Justiniano", "v": 110.52, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 109.84, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 106.27, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 103.94, "cls": "🟢 NORMAL"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 102.02, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 98.39, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 97.52, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 94.9, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 93.01, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 90.47, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 89.49, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 85.79, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 82.48, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 81.77, "cls": "🔴 CRÍTICO"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 81.37, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 81.07, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 73.85, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 70.92, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 58.95, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 56.2, "cls": "🔴 CRÍTICO"}, {"label": "Selba Ramona Afonso", "v": 52.59, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 52.15, "cls": "🟢 NORMAL"}].slice().sort((a,b) => b.v - a.v);
   sizeForAgents('chartCusto', d.length);
   new Chart(document.getElementById('chartCusto'), {
     type: 'bar',
@@ -25544,7 +24571,7 @@ new Chart(document.getElementById('chartTeamStatus'), {
 })();
 
 (function(){
-  const d = [{"label": "Carlos Alberto Albiero", "v": 0.87, "cls": "🟡 ATENÇÃO"}, {"label": "Juliana Patricia Goncalves", "v": 0.88, "cls": "🔴 CRÍTICO"}, {"label": "Raquel Ortiz dos Santos", "v": 0.91, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 1.05, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 1.3, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 1.39, "cls": "🟡 ATENÇÃO"}, {"label": "Anderson Jose de Santana", "v": 1.39, "cls": "🔴 CRÍTICO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 1.55, "cls": "🔴 CRÍTICO"}, {"label": "Rozana Reis da Silva", "v": 1.57, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 1.61, "cls": "🔴 CRÍTICO"}, {"label": "Walquiria Araujo Flores", "v": 1.7, "cls": "🟢 NORMAL"}, {"label": "Teonilda Florentino Vieira", "v": 1.88, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 1.9, "cls": "🔴 CRÍTICO"}, {"label": "William Anderson Chamorro Tavares", "v": 1.91, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 1.95, "cls": "🟡 ATENÇÃO"}, {"label": "Wagner Tarlei Gomes", "v": 1.98, "cls": "🔴 CRÍTICO"}, {"label": "Gisele Lopes Justiniano", "v": 2.0, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 2.01, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 2.08, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 2.11, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 2.15, "cls": "🟢 NORMAL"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 2.17, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 2.21, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 2.31, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 2.38, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 2.42, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 2.47, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 2.58, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 2.68, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 2.69, "cls": "🔴 CRÍTICO"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 2.7, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 2.73, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 2.97, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 3.06, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 3.66, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 3.9, "cls": "🔴 CRÍTICO"}, {"label": "Selba Ramona Afonso", "v": 4.2, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 4.24, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
+  const d = [{"label": "Carlos Alberto Albiero", "v": 0.87, "cls": "🟡 ATENÇÃO"}, {"label": "Juliana Patricia Goncalves", "v": 0.88, "cls": "🔴 CRÍTICO"}, {"label": "Raquel Ortiz dos Santos", "v": 0.91, "cls": "🔴 CRÍTICO"}, {"label": "Rozentina Matos de Oliveira", "v": 1.05, "cls": "🟢 NORMAL"}, {"label": "Adriana de Jesus Saraiva", "v": 1.3, "cls": "🟢 NORMAL"}, {"label": "Gisele Olimpia Torres", "v": 1.39, "cls": "🟡 ATENÇÃO"}, {"label": "Anderson Jose de Santana", "v": 1.39, "cls": "🔴 CRÍTICO"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 1.57, "cls": "🔴 CRÍTICO"}, {"label": "Rozana Reis da Silva", "v": 1.57, "cls": "🟢 NORMAL"}, {"label": "Miglidiane Maciel Ajala", "v": 1.64, "cls": "🔴 CRÍTICO"}, {"label": "Walquiria Araujo Flores", "v": 1.7, "cls": "🟢 NORMAL"}, {"label": "Teonilda Florentino Vieira", "v": 1.88, "cls": "🔴 CRÍTICO"}, {"label": "Rafael Ramos Recalde", "v": 1.9, "cls": "🔴 CRÍTICO"}, {"label": "William Anderson Chamorro Tavares", "v": 1.93, "cls": "🟢 NORMAL"}, {"label": "Adriano Ricardo Thiel", "v": 1.95, "cls": "🟡 ATENÇÃO"}, {"label": "Wagner Tarlei Gomes", "v": 1.98, "cls": "🔴 CRÍTICO"}, {"label": "Gisele Lopes Justiniano", "v": 2.0, "cls": "🟢 NORMAL"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 2.01, "cls": "🟢 NORMAL"}, {"label": "Geancarlos Ferreira Barrios", "v": 2.08, "cls": "🟢 NORMAL"}, {"label": "Cris Milene Cardenas da Silva", "v": 2.13, "cls": "🟢 NORMAL"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 2.17, "cls": "🟢 NORMAL"}, {"label": "Fabiana de Figueredo Vieira", "v": 2.25, "cls": "🟢 NORMAL"}, {"label": "Ana Gabriela Silva Garcete", "v": 2.27, "cls": "🟢 NORMAL"}, {"label": "Bianca Afonso Narbaez", "v": 2.33, "cls": "🟢 NORMAL"}, {"label": "Emidio Rainer Vilhalba", "v": 2.38, "cls": "🔴 CRÍTICO"}, {"label": "Silvina Regina de Souza Valiente", "v": 2.44, "cls": "🟢 NORMAL"}, {"label": "Wesley de Souza Leal", "v": 2.47, "cls": "🟢 NORMAL"}, {"label": "Rosalina Beniel Vargas", "v": 2.58, "cls": "🟢 NORMAL"}, {"label": "Naime Cristina Freitas", "v": 2.68, "cls": "🟢 NORMAL"}, {"label": "Kátia Cilene Silveira Machado", "v": 2.7, "cls": "🔴 CRÍTICO"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 2.72, "cls": "🟢 NORMAL"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 2.73, "cls": "🟢 NORMAL"}, {"label": "Evelyn Santana Santos Oliveira", "v": 2.99, "cls": "🟢 NORMAL"}, {"label": "Suely Aguiar Alves Luiz", "v": 3.12, "cls": "🟢 NORMAL"}, {"label": "Gilmar Bitencourt Luiz", "v": 3.75, "cls": "🟢 NORMAL"}, {"label": "Cicero Isrrael Sanabria", "v": 3.93, "cls": "🔴 CRÍTICO"}, {"label": "Selba Ramona Afonso", "v": 4.2, "cls": "🟢 NORMAL"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 4.24, "cls": "🟢 NORMAL"}].slice().sort((a,b) => a.v - b.v);
   sizeForAgents('chartHoras', d.length);
   new Chart(document.getElementById('chartHoras'), {
     type: 'bar',
@@ -25596,7 +24623,7 @@ new Chart(document.getElementById('chartPendTop'), {
 
 
 (function(){
-  const d = [{"label": "Gilmar Bitencourt Luiz", "v": 100.0, "color": "#12B76A"}, {"label": "Naime Cristina Freitas", "v": 100.0, "color": "#12B76A"}, {"label": "Rosalina Beniel Vargas", "v": 100.0, "color": "#12B76A"}, {"label": "Fabiana de Figueredo Vieira", "v": 99.8, "color": "#12B76A"}, {"label": "Wesley de Souza Leal", "v": 99.8, "color": "#12B76A"}, {"label": "Cris Milene Cardenas da Silva", "v": 97.0, "color": "#12B76A"}, {"label": "William Anderson Chamorro Tavares", "v": 96.5, "color": "#12B76A"}, {"label": "Geancarlos Ferreira Barrios", "v": 95.0, "color": "#12B76A"}, {"label": "Adriana de Jesus Saraiva", "v": 92.3, "color": "#12B76A"}, {"label": "Walquiria Araujo Flores", "v": 91.0, "color": "#12B76A"}, {"label": "Gisele Lopes Justiniano", "v": 90.4, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 89.8, "color": "#F2D93B"}, {"label": "Suely Aguiar Alves Luiz", "v": 88.6, "color": "#F2D93B"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 87.3, "color": "#F2D93B"}, {"label": "Evelyn Santana Santos Oliveira", "v": 87.2, "color": "#F2D93B"}, {"label": "Silvina Regina de Souza Valiente", "v": 86.2, "color": "#F2D93B"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 86.0, "color": "#F2D93B"}, {"label": "Rozana Reis da Silva", "v": 85.2, "color": "#F2D93B"}, {"label": "Selba Ramona Afonso", "v": 84.0, "color": "#F2D93B"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 82.2, "color": "#F2D93B"}, {"label": "Adriano Ricardo Thiel", "v": 82.0, "color": "#F2D93B"}, {"label": "Carlos Alberto Albiero", "v": 81.0, "color": "#F2D93B"}, {"label": "Ana Gabriela Silva Garcete", "v": 80.2, "color": "#F2D93B"}, {"label": "Miglidiane Maciel Ajala", "v": 78.4, "color": "#F2D93B"}, {"label": "Juliana Patricia Goncalves", "v": 77.2, "color": "#F2D93B"}, {"label": "Wagner Tarlei Gomes", "v": 76.4, "color": "#F2D93B"}, {"label": "Bianca Afonso Narbaez", "v": 72.8, "color": "#F2994A"}, {"label": "Raquel Ortiz dos Santos", "v": 71.6, "color": "#F2994A"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 71.0, "color": "#F2994A"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 67.1, "color": "#F2994A"}, {"label": "Teonilda Florentino Vieira", "v": 66.4, "color": "#F2994A"}, {"label": "Anderson Jose de Santana", "v": 65.3, "color": "#F2994A"}, {"label": "Emidio Rainer Vilhalba", "v": 64.0, "color": "#F2994A"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 54.0, "color": "#E4572E"}, {"label": "Rafael Ramos Recalde", "v": 51.0, "color": "#E4572E"}, {"label": "Kátia Cilene Silveira Machado", "v": 47.2, "color": "#E4572E"}, {"label": "Gisele Olimpia Torres", "v": 44.9, "color": "#E4572E"}, {"label": "Cicero Isrrael Sanabria", "v": 38.2, "color": "#E4572E"}];
+  const d = [{"label": "Gilmar Bitencourt Luiz", "v": 100.0, "color": "#12B76A"}, {"label": "Naime Cristina Freitas", "v": 100.0, "color": "#12B76A"}, {"label": "Rosalina Beniel Vargas", "v": 100.0, "color": "#12B76A"}, {"label": "Fabiana de Figueredo Vieira", "v": 99.8, "color": "#12B76A"}, {"label": "Wesley de Souza Leal", "v": 99.8, "color": "#12B76A"}, {"label": "Cris Milene Cardenas da Silva", "v": 97.0, "color": "#12B76A"}, {"label": "William Anderson Chamorro Tavares", "v": 96.5, "color": "#12B76A"}, {"label": "Geancarlos Ferreira Barrios", "v": 95.0, "color": "#12B76A"}, {"label": "Adriana de Jesus Saraiva", "v": 92.3, "color": "#12B76A"}, {"label": "Walquiria Araujo Flores", "v": 91.0, "color": "#12B76A"}, {"label": "Gisele Lopes Justiniano", "v": 90.4, "color": "#12B76A"}, {"label": "Rozentina Matos de Oliveira", "v": 89.8, "color": "#F2D93B"}, {"label": "Suely Aguiar Alves Luiz", "v": 88.6, "color": "#F2D93B"}, {"label": "Marco Antonio Ayala de Matos Freitas", "v": 87.3, "color": "#F2D93B"}, {"label": "Evelyn Santana Santos Oliveira", "v": 87.2, "color": "#F2D93B"}, {"label": "Silvina Regina de Souza Valiente", "v": 86.2, "color": "#F2D93B"}, {"label": "Gabriel Alan de Oliveira Martins", "v": 86.0, "color": "#F2D93B"}, {"label": "Rozana Reis da Silva", "v": 85.2, "color": "#F2D93B"}, {"label": "Selba Ramona Afonso", "v": 84.0, "color": "#F2D93B"}, {"label": "Sara Eliane Talaveira de Oliveira", "v": 82.2, "color": "#F2D93B"}, {"label": "Adriano Ricardo Thiel", "v": 82.0, "color": "#F2D93B"}, {"label": "Carlos Alberto Albiero", "v": 81.0, "color": "#F2D93B"}, {"label": "Ana Gabriela Silva Garcete", "v": 80.2, "color": "#F2D93B"}, {"label": "Juliana Patricia Goncalves", "v": 77.2, "color": "#F2D93B"}, {"label": "Wagner Tarlei Gomes", "v": 76.4, "color": "#F2D93B"}, {"label": "Miglidiane Maciel Ajala", "v": 75.4, "color": "#F2D93B"}, {"label": "Bianca Afonso Narbaez", "v": 72.8, "color": "#F2994A"}, {"label": "Raquel Ortiz dos Santos", "v": 71.6, "color": "#F2994A"}, {"label": "Brauher Luiz Alvarenga Gonzalez", "v": 71.0, "color": "#F2994A"}, {"label": "Kariele Jackeline Rodrigues Silva", "v": 67.1, "color": "#F2994A"}, {"label": "Teonilda Florentino Vieira", "v": 66.4, "color": "#F2994A"}, {"label": "Anderson Jose de Santana", "v": 65.3, "color": "#F2994A"}, {"label": "Emidio Rainer Vilhalba", "v": 64.0, "color": "#F2994A"}, {"label": "Claine Luisa Figueiredo Torraca", "v": 54.0, "color": "#E4572E"}, {"label": "Rafael Ramos Recalde", "v": 51.0, "color": "#E4572E"}, {"label": "Kátia Cilene Silveira Machado", "v": 47.2, "color": "#E4572E"}, {"label": "Gisele Olimpia Torres", "v": 44.9, "color": "#E4572E"}, {"label": "Cicero Isrrael Sanabria", "v": 38.2, "color": "#E4572E"}];
   sizeForAgents('chartRanking', d.length);
   new Chart(document.getElementById('chartRanking'), {
     type: 'bar',
@@ -25630,8 +24657,8 @@ new Chart(document.getElementById('chartPendTop'), {
 
 new Chart(document.getElementById('chartAusTop'), {
   type: 'bar',
-  data: { labels: ["Marco Antonio Ayala de Matos Freitas", "Sara Eliane Talaveira de Oliveira", "Juliana Patricia Goncalves", "Wagner Tarlei Gomes", "Ana Gabriela Silva Garcete", "Miglidiane Maciel Ajala", "Bianca Afonso Narbaez", "Gisele Olimpia Torres", "Carlos Alberto Albiero", "Adriano Ricardo Thiel", "Gisele Lopes Justiniano", "Geancarlos Ferreira Barrios", "Adriana de Jesus Saraiva", "Brauher Luiz Alvarenga Gonzalez", "Teonilda Florentino Vieira"],
-    datasets: [{ label: 'Ausências', data: [4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
+  data: { labels: ["Miglidiane Maciel Ajala", "Sara Eliane Talaveira de Oliveira", "Marco Antonio Ayala de Matos Freitas", "Wagner Tarlei Gomes", "Ana Gabriela Silva Garcete", "Juliana Patricia Goncalves", "Bianca Afonso Narbaez", "Gisele Olimpia Torres", "Carlos Alberto Albiero", "Adriano Ricardo Thiel", "Gisele Lopes Justiniano", "Geancarlos Ferreira Barrios", "Adriana de Jesus Saraiva", "Brauher Luiz Alvarenga Gonzalez", "Teonilda Florentino Vieira"],
+    datasets: [{ label: 'Ausências', data: [4, 4, 4, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2], backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
   options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } },
     plugins: { legend: { display: false } } }

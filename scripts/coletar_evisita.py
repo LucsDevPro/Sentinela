@@ -154,7 +154,8 @@ MESES_ARQUIVADOS = [
 # só as semanas desse intervalo que já foram coletadas até agora, e cresce
 # sozinho conforme as semanas seguintes chegam.
 MESES_ADICIONAIS = [
-    (318, 321, "Agosto/2026"),   # semanas 31-34, id_ciclo=163 (padrão)
+    (318, 321, "Agosto/2026"),    # semanas 31-34, id_ciclo=163 (padrão, Tratamento) / 155 (PE)
+    (322, 326, "Setembro/2026"),  # semanas 35-39, id_ciclo=164 (Tratamento) / 156 (PE)
 ]
 
 
@@ -248,7 +249,8 @@ ID_ATIVIDADE_PONTO_ESTRATEGICO = 3   # 3 = Ponto Estratégico (vs 4 = Tratamento
 # cada ciclo conhecido como (semana_inicio, semana_fim, id_ciclo):
 #   - ciclo 1: semanas 313-317 (28/06 a 01/08/2026) -> id_ciclo 154
 #   - ciclo 2: semanas 318-321 (02/08 a 29/08/2026) -> id_ciclo 155
-# Quando um novo ciclo começar no site (semana 322 em diante), adicione uma
+#   - ciclo 3: semanas 322-326 (30/08 a 03/10/2026, Setembro) -> id_ciclo 156
+# Quando um novo ciclo começar no site (semana 327 em diante), adicione uma
 # nova linha aqui com o id_ciclo daquele ciclo. Enquanto uma semana cair fora
 # de todas as faixas cadastradas (ou o id_ciclo estiver None), a coleta do
 # Ponto Estratégico é pulada com um aviso claro em vez de mandar um id_ciclo
@@ -256,6 +258,7 @@ ID_ATIVIDADE_PONTO_ESTRATEGICO = 3   # 3 = Ponto Estratégico (vs 4 = Tratamento
 CICLOS_PONTO_ESTRATEGICO = [
     (313, 317, 154),
     (318, 321, 155),
+    (322, 326, 156),
 ]
 
 def ciclo_para_semana(semana, ciclos=CICLOS_PONTO_ESTRATEGICO):
@@ -273,11 +276,13 @@ def ciclo_para_semana(semana, ciclos=CICLOS_PONTO_ESTRATEGICO):
 # é fixo como o ID_CICLO abaixo fazia parecer. Confirmado com a URL real do
 # site: id_ciclo=162&semana_inicio=305&semana_fim=312 (semanas 305-312,
 # maio-junho/2026) — o ciclo muda a partir da semana 313, onde passa a valer
-# o ID_CICLO "padrão" (163, definido mais abaixo). Faixas SEM entrada aqui
+# o ID_CICLO "padrão" (163, definido mais abaixo), e muda de novo a partir da
+# semana 322 (Setembro/2026), que usa id_ciclo 164. Faixas SEM entrada aqui
 # caem no id_ciclo padrão automaticamente — só precisa cadastrar aqui os
 # ciclos ANTIGOS/diferentes do padrão atual.
 CICLOS_TRATAMENTO = [
     (305, 312, 162),
+    (322, 326, 164),
 ]
 
 def ciclo_tratamento_para_semana(html_id, id_ciclo_padrao):
@@ -308,7 +313,12 @@ TEMPO_MAX_VISITA_MIN = 30    # visita com duração maior que isso (min) = "long
 # média/mediana de tempo por visita, qualquer visita acima disso entra no
 # cálculo de média/mediana como se tivesse durado exatamente esse teto (não
 # afeta a contagem de "longas" acima, nem a listagem de alerta — só a média).
-TETO_DURACAO_MEDIA_MIN = 15
+# Ex. real que motivou subir o teto de 15 -> 20min: um lançamento do agente
+# Gabriel de 2.888 minutos numa única visita — o lançamento em si continua
+# intacto na planilha/aba de auditoria (ver _preparar_acima_teto_media), só
+# o valor USADO nos cálculos (média, mediana, horas úteis, gráficos etc.)
+# entra capado em TETO_DURACAO_MEDIA_MIN.
+TETO_DURACAO_MEDIA_MIN = 20
 META_VISITAS_DIA     = 20    # meta de visitas por dia, usada na coluna "Dias c/ Meta"
 
 # --- 6) CLASSIFICAÇÃO DO AGENTE (🟢🟡🔴), baseada em % de visitas rápidas --
@@ -1860,11 +1870,11 @@ def _horas_trabalhadas_diarias(df):
         deveria estar em expediente nesse intervalo).
       - horas_uteis: soma das durações de visita naquele dia (tempo
         efetivamente dentro de imóveis/atividade), em horas — cada visita
-        entra CAPADA em TETO_DURACAO_MEDIA_MIN (15min) nessa soma. Isso é
+        entra CAPADA em TETO_DURACAO_MEDIA_MIN (20min) nessa soma. Isso é
         proposital: lançamentos feitos pela web (fora do horário real da
         visita) às vezes vêm com durações artificialmente longas, o que
         infla horas trabalhadas e distorce custo/hora pra menos (parece
-        mais eficiente do que é). Capar em 15min neutraliza essa distorção
+        mais eficiente do que é). Capar em 20min neutraliza essa distorção
         sem precisar identificar quais lançamentos vieram da web — o
         "alerta_neg"/"acima_teto_media" continuam mostrando a duração REAL
         (sem cap) pra quem quiser auditar o lançamento em si.
@@ -2613,7 +2623,7 @@ def _preparar_negativas(df_total):
 def _preparar_acima_teto_media(df_total):
     """
     Monta a lista de visitas com duração acima de TETO_DURACAO_MEDIA_MIN
-    (15min por padrão) — pra auditoria de possível manipulação de horário
+    (20min por padrão) — pra auditoria de possível manipulação de horário
     de saída (lançamento pelo computador). Essas visitas entram no cálculo
     de média/mediana com duração limitada ao teto, mas aqui aparecem com a
     duração REAL registrada, pra facilitar a checagem.
@@ -3114,7 +3124,7 @@ def salvar_excel_consolidado(resultados, df_total, pasta_saida, semanas_ponto_es
                ultima_linha_dados=ultima_linha_dados_n)
     _adicionar_legenda(ws_n, linha_final_n + 2)
 
-    ws_teto = wb.create_sheet("Visitas Acima de 15min")
+    ws_teto = wb.create_sheet(f"Visitas Acima de {TETO_DURACAO_MEDIA_MIN}min")
     for col, (titulo, _) in enumerate(COLS_ACIMA_TETO_MEDIA, 1):
         ws_teto.cell(row=2, column=col, value=titulo)
     regs_teto = _preparar_acima_teto_media(df_total)
@@ -3476,6 +3486,13 @@ def _carregar_df_semana(caminho_xlsx):
                 {"true": True, "1": True, "1.0": True,
                  "false": False, "0": False, "0.0": False}
             ).fillna(False)
+    # "acima_teto_media" é recalculada aqui em vez de confiar no valor
+    # cacheado: se TETO_DURACAO_MEDIA_MIN mudar (ex.: de 15 pra 20min), uma
+    # semana já coletada ANTES da mudança não deve continuar presa ao teto
+    # antigo — a próxima consolidação já reflete o teto atual, sem precisar
+    # recoletar nada do e-Visita.
+    if "duracao_min" in df.columns:
+        df["acima_teto_media"] = df["duracao_min"] > TETO_DURACAO_MEDIA_MIN
     return df
 
 

@@ -10,8 +10,8 @@ manualmente em `data/`) como alternativa/backup, caso a coleta automática
 falhe ou você precise reprocessar um dado específico.
 
 **Página inicial configurável + aba "Acumulado":** o `index.html` (home)
-mostra o período definido em `data/config_home.json` — por padrão, Julho/2026
-(`{"arquivo": "data/historico/semanas_313-317.xlsx", "label": "Julho/2026"}`).
+mostra o período definido em `data/config_home.json` — por padrão, Setembro/2026
+(`{"arquivo": "data/historico/semanas_322-326.xlsx", "label": "Setembro/2026"}`).
 Separado da home, `acumulado.html` sempre mostra a SOMA de TODAS as semanas
 já coletadas até agora (não depende de configuração nenhuma, é sempre o
 `data/Analise_Consolidada.xlsx` puro) — os dois aparecem lado a lado no
@@ -56,7 +56,8 @@ não é fixo — muda em pontos específicos do ano. Isso já está mapeado em
 ```python
 CICLOS_TRATAMENTO = [
     (305, 312, 162),  # semanas 305-312 (maio-junho/2026) usam id_ciclo 162
-    # a partir da semana 313 em diante, usa o ID_CICLO padrão (163)
+    (322, 326, 164),  # semanas 322-326 (setembro/2026) usam id_ciclo 164
+    # faixas sem entrada aqui usam o ID_CICLO padrão (163)
 ]
 ```
 Se o site mudar de ciclo de novo no futuro, adicione uma nova linha aqui — o
@@ -462,19 +463,33 @@ entradas marcadas `"origem": "manual"`, só nas que ela mesma gerou
 (`"origem": "cache"`) — então sua planilha antiga nunca é sobrescrita nem
 apagada, mesmo rodando a coleta automática infinitas vezes depois.
 
-## Cálculo de horas trabalhadas — cada visita conta no máximo 15 minutos
+## Teto de duração por visita — cada visita conta no máximo 20 minutos nos cálculos
 
-Visitas com mais de 15 minutos de duração (`TETO_DURACAO_MEDIA_MIN`) são
-comuns quando o lançamento é feito pela web em vez de no momento real da
-visita — a duração fica artificialmente longa e infla "horas trabalhadas",
-o que distorce a média e faz o custo por hora parecer mais baixo do que é
-de verdade. Pra neutralizar isso, o cálculo de horas trabalhadas conta
-cada visita com no máximo 15 minutos, não importa a duração real lançada.
+Visitas com mais de 20 minutos de duração (`TETO_DURACAO_MEDIA_MIN`, em
+`scripts/coletar_evisita.py`) são comuns quando o lançamento é feito pela
+web em vez de no momento real da visita — a duração fica artificialmente
+longa e distorce médias, estatísticas e gráficos. Caso real que motivou
+esse teto: um lançamento do agente Gabriel de **2.888 minutos** numa única
+visita, que estava entrando "normalmente" nos cálculos. Pra neutralizar
+isso, qualquer visita acima do teto conta como se tivesse durado
+exatamente o teto (ex.: 2.888min → considerado como 20min) — visitas de
+até 20min entram com o valor real, sem alteração nenhuma.
 
-Isso afeta só "Horas Trab/Dia", "Horas Trab/Semana" e o "Custo Hora Útil"
-— os alertas de "Acima de 15min (auditoria)" e "Visitas Suspeitas"
-continuam usando a duração REAL (sem esse limite), porque pra auditar um
-lançamento manipulado você precisa ver o valor de verdade, não o capado.
+Isso afeta o **Tempo Médio/Mediana** (Resumo Geral, Por Área e Ponto
+Estratégico), as **Horas Trab/Dia**, **Horas Trab/Semana** e o **Custo
+Hora Útil**, e qualquer gráfico que use esses números — todos calculados a
+partir do valor CAPADO. O lançamento original nunca é alterado nem
+excluído: a aba/alerta "Acima de 20min (auditoria)" continua mostrando a
+duração REAL de cada visita acima do teto (é justamente a lista pra
+auditar um lançamento manipulado, então precisa do valor de verdade, não
+do capado). Já "Visitas Suspeitas" é um alerta diferente (sequência de
+lançamentos muito próximos no tempo) e não usa esse teto.
+
+Esse teto é recalculado a cada consolidação a partir da duração bruta
+guardada no cache (`data/semanas/`) — se o valor de `TETO_DURACAO_MEDIA_MIN`
+mudar de novo no futuro, basta rodar a coleta/geração de novo (sem precisar
+recoletar nada do e-Visita) que TODO o histórico já cacheado é
+recalculado com o teto novo.
 
 ## Importante: não mude os nomes das abas/colunas da planilha
 
