@@ -2,10 +2,10 @@
   "116": {
     "nome_agente": "Wagner Tarlei Gomes",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 9,
+    "imoveis_fechados": 18,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "400 - JULIA CARDINAL": 9
+      "400 - JULIA CARDINAL": 18
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -62,10 +62,10 @@
   "3037": {
     "nome_agente": "Evelyn Santana Santos Oliveira",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 40,
+    "imoveis_fechados": 41,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "405 - ALTOS DA GLÓRIA": 40
+      "405 - ALTOS DA GLÓRIA": 41
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -95,18 +95,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3101": {
-    "nome_agente": "Carlos Alberto Albiero",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 9,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "409 - ANDREAZZA": 9
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "30": {
     "nome_agente": "Rozentina Matos de Oliveira",
     "equipe": "Equipe 1",
@@ -119,13 +107,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3035": {
-    "nome_agente": "Teonilda Florentino Vieira",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 14,
+  "3101": {
+    "nome_agente": "Carlos Alberto Albiero",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 9,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "410 - SALGADO FILHO": 14
+      "409 - ANDREAZZA": 9
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -138,6 +126,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "412 - COHAB": 22
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3035": {
+    "nome_agente": "Teonilda Florentino Vieira",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 14,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "410 - SALGADO FILHO": 14
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -338,36 +338,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3038": {
-    "nome_agente": "Naime Cristina Freitas",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 67,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "423 - SANTA IZABEL": 25,
-      "426 - NOVA PONTA PORÃ": 42
-    },
-    "recusados_por_area": {
-      "423 - SANTA IZABEL": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 17343989,
-        "regiao": "URBANA",
-        "area": "423 - SANTA IZABEL",
-        "quarteirao": "Q009",
-        "logradouro": "Rua ANHANDUI",
-        "imovel": "146 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Normal",
-        "data_chegada": "08/09/2026 09:51",
-        "data_saida": "08/09/2026 09:52",
-        "nome_agente": "Naime Cristina Freitas",
-        "equipe": "Equipe 3"
-      }
-    ],
-    "paginas_falhas": []
-  },
   "2918": {
     "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
@@ -424,6 +394,36 @@
     ],
     "paginas_falhas": []
   },
+  "3038": {
+    "nome_agente": "Naime Cristina Freitas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 72,
+    "imoveis_recusados": 1,
+    "fechados_por_area": {
+      "423 - SANTA IZABEL": 30,
+      "426 - NOVA PONTA PORÃ": 42
+    },
+    "recusados_por_area": {
+      "423 - SANTA IZABEL": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 17343989,
+        "regiao": "URBANA",
+        "area": "423 - SANTA IZABEL",
+        "quarteirao": "Q009",
+        "logradouro": "Rua ANHANDUI",
+        "imovel": "146 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Normal",
+        "data_chegada": "08/09/2026 09:51",
+        "data_saida": "08/09/2026 09:52",
+        "nome_agente": "Naime Cristina Freitas",
+        "equipe": "Equipe 3"
+      }
+    ],
+    "paginas_falhas": []
+  },
   "1936": {
     "nome_agente": "Geancarlos Ferreira Barrios",
     "equipe": "Equipe 3",
@@ -456,6 +456,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "436 - ALEGRETE": 44
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "161": {
+    "nome_agente": "Rozana Reis da Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 22,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "444 - KAMEL SAAD 2": 22
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -509,18 +521,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "110": {
-    "nome_agente": "Anderson Jose de Santana",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 32,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "442 - JARDIM INDEPENDÊNCIA": 32
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "149": {
     "nome_agente": "Kátia Cilene Silveira Machado",
     "equipe": "Equipe 4",
@@ -528,6 +528,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "443 - KAMEL SAAD 1": 33
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "110": {
+    "nome_agente": "Anderson Jose de Santana",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 32,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "442 - JARDIM INDEPENDÊNCIA": 32
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -552,18 +564,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "446 - GUY VILELA": 28
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "161": {
-    "nome_agente": "Rozana Reis da Silva",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 22,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "444 - KAMEL SAAD 2": 22
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
