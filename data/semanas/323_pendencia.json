@@ -35,6 +35,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "470": {
+    "nome_agente": "Cris Milene Cardenas da Silva",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 35,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "403 - JARDIM UNIVERSITARIO": 35
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "672": {
     "nome_agente": "Adriana de Jesus Saraiva",
     "equipe": "Equipe 1",
@@ -83,6 +95,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "30": {
+    "nome_agente": "Rozentina Matos de Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 103,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "408 - PARQUE DE EXPOSIÇÕES": 103
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "3101": {
     "nome_agente": "Carlos Alberto Albiero",
     "equipe": "Equipe 1",
@@ -90,18 +114,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "409 - ANDREAZZA": 9
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "470": {
-    "nome_agente": "Cris Milene Cardenas da Silva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 35,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "403 - JARDIM UNIVERSITARIO": 35
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -184,18 +196,6 @@
     ],
     "paginas_falhas": []
   },
-  "30": {
-    "nome_agente": "Rozentina Matos de Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 103,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "408 - PARQUE DE EXPOSIÇÕES": 103
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "99": {
     "nome_agente": "Fabiana de Figueredo Vieira",
     "equipe": "Equipe 2",
@@ -256,6 +256,30 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "2917": {
+    "nome_agente": "Bianca Afonso Narbaez",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 37,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "419 - CENTRO 5": 37
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "1938": {
+    "nome_agente": "Marco Antonio Ayala de Matos Freitas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 16,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "432 - ÁREA B - RESIDENCIAL PONTA PORÃ 1": 16
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "120": {
     "nome_agente": "Emidio Rainer Vilhalba",
     "equipe": "Equipe 3",
@@ -301,13 +325,14 @@
     ],
     "paginas_falhas": []
   },
-  "1938": {
-    "nome_agente": "Marco Antonio Ayala de Matos Freitas",
+  "113": {
+    "nome_agente": "Selba Ramona Afonso",
     "equipe": "Equipe 3",
-    "imoveis_fechados": 16,
+    "imoveis_fechados": 97,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "432 - ÁREA B - RESIDENCIAL PONTA PORÃ 1": 16
+      "431 - PANAMBI": 67,
+      "426 - NOVA PONTA PORÃ": 30
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -357,18 +382,6 @@
     ],
     "paginas_falhas": []
   },
-  "2917": {
-    "nome_agente": "Bianca Afonso Narbaez",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 37,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "419 - CENTRO 5": 37
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "2918": {
     "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
@@ -411,19 +424,6 @@
     ],
     "paginas_falhas": []
   },
-  "113": {
-    "nome_agente": "Selba Ramona Afonso",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 97,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "431 - PANAMBI": 67,
-      "426 - NOVA PONTA PORÃ": 30
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "80": {
     "nome_agente": "Gisele Lopes Justiniano",
     "equipe": "Equipe 4",
@@ -436,13 +436,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "161": {
-    "nome_agente": "Rozana Reis da Silva",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 22,
+  "1936": {
+    "nome_agente": "Geancarlos Ferreira Barrios",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 19,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "444 - KAMEL SAAD 2": 22
+      "427 - JAMIL SALDANHA DERZI": 6,
+      "426 - NOVA PONTA PORÃ": 13
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -472,13 +473,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2789": {
-    "nome_agente": "Kariele Jackeline Rodrigues Silva",
+  "161": {
+    "nome_agente": "Rozana Reis da Silva",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 30,
+    "imoveis_fechados": 22,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "439 - BOSQUE CARANDÁ": 30
+      "444 - KAMEL SAAD 2": 22
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -496,13 +497,25 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "2789": {
+    "nome_agente": "Kariele Jackeline Rodrigues Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 30,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "439 - BOSQUE CARANDÁ": 30
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "157": {
     "nome_agente": "Walquiria Araujo Flores",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 16,
+    "imoveis_fechados": 32,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "440 - JARDIM IBIRAPUERA": 16
+      "440 - JARDIM IBIRAPUERA": 32
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -527,19 +540,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "442 - JARDIM INDEPENDÊNCIA": 32
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "1936": {
-    "nome_agente": "Geancarlos Ferreira Barrios",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 19,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "427 - JAMIL SALDANHA DERZI": 6,
-      "426 - NOVA PONTA PORÃ": 13
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],

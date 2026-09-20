@@ -27,7 +27,7 @@
     "semana_fim": 317,
     "semana_ano_inicio": 26,
     "semana_ano_fim": 30,
-    "gerado_em": "15/09/2026 12:25"
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semana_318.xlsx",
@@ -37,7 +37,7 @@
     "semana_fim": 318,
     "semana_ano_inicio": 31,
     "semana_ano_fim": 31,
-    "gerado_em": "15/09/2026 12:25"
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semana_319.xlsx",
@@ -47,7 +47,7 @@
     "semana_fim": 319,
     "semana_ano_inicio": 32,
     "semana_ano_fim": 32,
-    "gerado_em": "15/09/2026 12:25"
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semana_320.xlsx",
@@ -57,7 +57,7 @@
     "semana_fim": 320,
     "semana_ano_inicio": 33,
     "semana_ano_fim": 33,
-    "gerado_em": "15/09/2026 12:25"
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semana_321.xlsx",
@@ -67,7 +67,7 @@
     "semana_fim": 321,
     "semana_ano_inicio": 34,
     "semana_ano_fim": 34,
-    "gerado_em": "15/09/2026 12:25"
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semana_322.xlsx",
@@ -77,7 +77,7 @@
     "semana_fim": 322,
     "semana_ano_inicio": 35,
     "semana_ano_fim": 35,
-    "gerado_em": "15/09/2026 12:25"
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semana_323.xlsx",
@@ -87,7 +87,17 @@
     "semana_fim": 323,
     "semana_ano_inicio": 36,
     "semana_ano_fim": 36,
-    "gerado_em": "15/09/2026 12:25"
+    "gerado_em": "20/09/2026 12:04"
+  },
+  {
+    "arquivo": "semana_324.xlsx",
+    "label": "Semana 37/2026 (13/09 a 19/09)",
+    "origem": "cache",
+    "semana_inicio": 324,
+    "semana_fim": 324,
+    "semana_ano_inicio": 37,
+    "semana_ano_fim": 37,
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semanas_318-321.xlsx",
@@ -97,7 +107,7 @@
     "semana_fim": 321,
     "semana_ano_inicio": 31,
     "semana_ano_fim": 34,
-    "gerado_em": "15/09/2026 12:26"
+    "gerado_em": "20/09/2026 12:04"
   },
   {
     "arquivo": "semanas_322-326.xlsx",
@@ -106,7 +116,7 @@
     "semana_inicio": 322,
     "semana_fim": 326,
     "semana_ano_inicio": 35,
-    "semana_ano_fim": 36,
-    "gerado_em": "15/09/2026 12:26"
+    "semana_ano_fim": 37,
+    "gerado_em": "20/09/2026 12:04"
   }
 ]
