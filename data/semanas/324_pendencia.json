@@ -23,6 +23,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "73": {
+    "nome_agente": "Ana Gabriela Silva Garcete",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 38,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "401 - EMÍLIO DIAS BRANDÃO": 38
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "470": {
     "nome_agente": "Cris Milene Cardenas da Silva",
     "equipe": "Equipe 1",
@@ -47,18 +59,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "79": {
-    "nome_agente": "Raquel Ortiz dos Santos",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 10,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "406 - JARDIM PRIMAVERA": 10
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "3037": {
     "nome_agente": "Evelyn Santana Santos Oliveira",
     "equipe": "Equipe 1",
@@ -66,6 +66,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "405 - ALTOS DA GLÓRIA": 54
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "79": {
+    "nome_agente": "Raquel Ortiz dos Santos",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 10,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "406 - JARDIM PRIMAVERA": 10
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -83,25 +95,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "85": {
-    "nome_agente": "Adriano Ricardo Thiel",
+  "3101": {
+    "nome_agente": "Carlos Alberto Albiero",
     "equipe": "Equipe 1",
-    "imoveis_fechados": 37,
+    "imoveis_fechados": 6,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "407 - MOOCA": 37
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "73": {
-    "nome_agente": "Ana Gabriela Silva Garcete",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 38,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "401 - EMÍLIO DIAS BRANDÃO": 38
+      "409 - ANDREAZZA": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -172,6 +172,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "85": {
+    "nome_agente": "Adriano Ricardo Thiel",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 37,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "407 - MOOCA": 37
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "134": {
     "nome_agente": "Tania Maria Montania",
     "equipe": "Equipe 2",
@@ -191,18 +203,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "411 - JARDIM AEROPORTO": 19
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3101": {
-    "nome_agente": "Carlos Alberto Albiero",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 6,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "409 - ANDREAZZA": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -446,31 +446,30 @@
     ],
     "paginas_falhas": []
   },
-  "2918": {
-    "nome_agente": "Claine Luisa Figueiredo Torraca",
+  "3038": {
+    "nome_agente": "Naime Cristina Freitas",
     "equipe": "Equipe 3",
-    "imoveis_fechados": 47,
+    "imoveis_fechados": 49,
     "imoveis_recusados": 1,
     "fechados_por_area": {
-      "426 - NOVA PONTA PORÃ": 17,
-      "428 - JARDIM COIMBRA": 30
+      "423 - SANTA IZABEL": 49
     },
     "recusados_por_area": {
-      "428 - JARDIM COIMBRA": 1
+      "423 - SANTA IZABEL": 1
     },
     "visitas_recusados_raw": [
       {
-        "id_visita": 17541459,
+        "id_visita": 17510853,
         "regiao": "URBANA",
-        "area": "428 - JARDIM COIMBRA",
-        "quarteirao": "Q023",
-        "logradouro": "Rua PROF GICELA MARIA BRUSAMARELLO",
-        "imovel": "434 - 2 - R",
+        "area": "423 - SANTA IZABEL",
+        "quarteirao": "Q013",
+        "logradouro": "Travessa TRAVESSA ALINE E. MARQUES",
+        "imovel": "94 - R",
         "atividade": "Tratamento",
         "tipo_visita": "Normal",
-        "data_chegada": "18/09/2026 15:31",
-        "data_saida": "18/09/2026 15:33",
-        "nome_agente": "Claine Luisa Figueiredo Torraca",
+        "data_chegada": "16/09/2026 08:35",
+        "data_saida": "16/09/2026 08:36",
+        "nome_agente": "Naime Cristina Freitas",
         "equipe": "Equipe 3"
       }
     ],
@@ -495,6 +494,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "441 - PARQUE DOS IPES": 68
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "161": {
+    "nome_agente": "Rozana Reis da Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 24,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "444 - KAMEL SAAD 2": 24
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -529,18 +540,6 @@
     ],
     "paginas_falhas": []
   },
-  "161": {
-    "nome_agente": "Rozana Reis da Silva",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 24,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "444 - KAMEL SAAD 2": 24
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "1943": {
     "nome_agente": "Juliana Patricia Goncalves",
     "equipe": "Equipe 4",
@@ -553,35 +552,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3038": {
-    "nome_agente": "Naime Cristina Freitas",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 49,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "423 - SANTA IZABEL": 49
-    },
-    "recusados_por_area": {
-      "423 - SANTA IZABEL": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 17510853,
-        "regiao": "URBANA",
-        "area": "423 - SANTA IZABEL",
-        "quarteirao": "Q013",
-        "logradouro": "Travessa TRAVESSA ALINE E. MARQUES",
-        "imovel": "94 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Normal",
-        "data_chegada": "16/09/2026 08:35",
-        "data_saida": "16/09/2026 08:36",
-        "nome_agente": "Naime Cristina Freitas",
-        "equipe": "Equipe 3"
-      }
-    ],
-    "paginas_falhas": []
-  },
   "2789": {
     "nome_agente": "Kariele Jackeline Rodrigues Silva",
     "equipe": "Equipe 4",
@@ -589,6 +559,48 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "439 - BOSQUE CARANDÁ": 40
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "2918": {
+    "nome_agente": "Claine Luisa Figueiredo Torraca",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 47,
+    "imoveis_recusados": 1,
+    "fechados_por_area": {
+      "426 - NOVA PONTA PORÃ": 17,
+      "428 - JARDIM COIMBRA": 30
+    },
+    "recusados_por_area": {
+      "428 - JARDIM COIMBRA": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 17541459,
+        "regiao": "URBANA",
+        "area": "428 - JARDIM COIMBRA",
+        "quarteirao": "Q023",
+        "logradouro": "Rua PROF GICELA MARIA BRUSAMARELLO",
+        "imovel": "434 - 2 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Normal",
+        "data_chegada": "18/09/2026 15:31",
+        "data_saida": "18/09/2026 15:33",
+        "nome_agente": "Claine Luisa Figueiredo Torraca",
+        "equipe": "Equipe 3"
+      }
+    ],
+    "paginas_falhas": []
+  },
+  "157": {
+    "nome_agente": "Walquiria Araujo Flores",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 36,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "440 - JARDIM IBIRAPUERA": 36
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -606,13 +618,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "157": {
-    "nome_agente": "Walquiria Araujo Flores",
+  "149": {
+    "nome_agente": "Kátia Cilene Silveira Machado",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 36,
+    "imoveis_fechados": 27,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "440 - JARDIM IBIRAPUERA": 36
+      "443 - KAMEL SAAD 1": 27
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -630,13 +642,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "149": {
-    "nome_agente": "Kátia Cilene Silveira Machado",
+  "1942": {
+    "nome_agente": "Rafael Ramos Recalde",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 27,
+    "imoveis_fechados": 21,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "443 - KAMEL SAAD 1": 27
+      "446 - GUY VILELA": 21
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -649,18 +661,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "434 - VILA AUREA": 48
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "1942": {
-    "nome_agente": "Rafael Ramos Recalde",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 21,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "446 - GUY VILELA": 21
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
