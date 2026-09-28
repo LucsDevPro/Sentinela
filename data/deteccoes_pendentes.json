@@ -117,8 +117,8 @@
     "nome_agente": "Teonilda Florentino Vieira",
     "equipe": "Equipe 2",
     "inicio": "14/09/2026",
-    "fim": "25/09/2026",
-    "duracao": 10,
+    "fim": "28/09/2026",
+    "duracao": 11,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "confirmada",
@@ -155,7 +155,7 @@
     "motivo": "Férias/Atestado",
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "27/09/2026 12:57"
+    "detectado_em": "28/09/2026 14:41"
   },
   {
     "tipo": "possiveis_ferias",
@@ -282,6 +282,20 @@
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
     "detectado_em": "16/08/2026 09:25"
+  },
+  {
+    "tipo": "possiveis_ferias",
+    "id_agente": 113,
+    "nome_agente": "Selba Ramona Afonso",
+    "equipe": "Equipe 3",
+    "inicio": "18/09/2026",
+    "fim": "28/09/2026",
+    "duracao": 7,
+    "status": "confirmada",
+    "motivo": "Férias/Atestado",
+    "confirmado_automaticamente": true,
+    "categoria_coletiva": null,
+    "detectado_em": "28/09/2026 14:41"
   },
   {
     "tipo": "possiveis_ferias",
@@ -577,6 +591,41 @@
     "categoria_coletiva": "Chuva",
     "confirmado_automaticamente": true,
     "detectado_em": "20/09/2026 12:03"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 1",
+    "agentes_envolvidos": [
+      30,
+      73,
+      79,
+      85,
+      116,
+      470,
+      672,
+      1935,
+      3037,
+      3101
+    ],
+    "nomes_envolvidos": [
+      "Adriana de Jesus Saraiva",
+      "Adriano Ricardo Thiel",
+      "Ana Gabriela Silva Garcete",
+      "Carlos Alberto Albiero",
+      "Cris Milene Cardenas da Silva",
+      "Evelyn Santana Santos Oliveira",
+      "Gabriel Alan de Oliveira Martins",
+      "Raquel Ortiz dos Santos",
+      "Rozentina Matos de Oliveira",
+      "Wagner Tarlei Gomes"
+    ],
+    "inicio": "28/09/2026",
+    "fim": "28/09/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "28/09/2026 14:41"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1184,6 +1233,37 @@
   },
   {
     "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 3",
+    "agentes_envolvidos": [
+      120,
+      1936,
+      1938,
+      2721,
+      2918,
+      2951,
+      3038,
+      3128
+    ],
+    "nomes_envolvidos": [
+      "Alana Amanda Fernandes Ovelar",
+      "Claine Luisa Figueiredo Torraca",
+      "Emidio Rainer Vilhalba",
+      "Geancarlos Ferreira Barrios",
+      "Marco Antonio Ayala de Matos Freitas",
+      "Miglidiane Maciel Ajala",
+      "Naime Cristina Freitas",
+      "Rosalina Beniel Vargas"
+    ],
+    "inicio": "28/09/2026",
+    "fim": "28/09/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "28/09/2026 14:41"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
     "equipe": "Equipe 4",
     "agentes_envolvidos": [
       80,
@@ -1469,6 +1549,43 @@
     "categoria_coletiva": "Chuva",
     "confirmado_automaticamente": true,
     "detectado_em": "27/09/2026 12:57"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 4",
+    "agentes_envolvidos": [
+      80,
+      86,
+      110,
+      124,
+      149,
+      157,
+      161,
+      1942,
+      1943,
+      1996,
+      2789
+    ],
+    "nomes_envolvidos": [
+      "Anderson Jose de Santana",
+      "Gisele Lopes Justiniano",
+      "Juliana Patricia Goncalves",
+      "Kariele Jackeline Rodrigues Silva",
+      "Kátia Cilene Silveira Machado",
+      "Rafael Ramos Recalde",
+      "Ramona dos Santos Oliveira",
+      "Rozana Reis da Silva",
+      "Sara Eliane Talaveira de Oliveira",
+      "Silvina Regina de Souza Valiente",
+      "Walquiria Araujo Flores"
+    ],
+    "inicio": "28/09/2026",
+    "fim": "28/09/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "28/09/2026 14:41"
   },
   {
     "tipo": "paralisacao_coletiva",
