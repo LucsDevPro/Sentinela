@@ -65,6 +65,38 @@
   },
   {
     "tipo": "possiveis_ferias",
+    "id_agente": 115,
+    "nome_agente": "Cicero Isrrael Sanabria",
+    "equipe": "Equipe 2",
+    "inicio": "21/09/2026",
+    "fim": "02/10/2026",
+    "duracao": 10,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "status": "confirmada",
+    "motivo": "Férias/Atestado",
+    "confirmado_automaticamente": true,
+    "categoria_coletiva": null,
+    "detectado_em": "04/10/2026 12:59"
+  },
+  {
+    "tipo": "possiveis_ferias",
+    "id_agente": 151,
+    "nome_agente": "Gilmar Bitencourt Luiz",
+    "equipe": "Equipe 2",
+    "inicio": "21/09/2026",
+    "fim": "02/10/2026",
+    "duracao": 10,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias/Atestado e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "status": "confirmada",
+    "motivo": "Férias/Atestado",
+    "confirmado_automaticamente": true,
+    "categoria_coletiva": null,
+    "detectado_em": "04/10/2026 12:59"
+  },
+  {
+    "tipo": "possiveis_ferias",
     "id_agente": 2030,
     "nome_agente": "Mateus Falcao de Souza",
     "equipe": "Equipe 2",
@@ -155,7 +187,7 @@
     "motivo": "Férias/Atestado",
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "29/09/2026 13:29"
+    "detectado_em": "04/10/2026 12:59"
   },
   {
     "tipo": "possiveis_ferias",
@@ -289,8 +321,8 @@
     "nome_agente": "Selba Ramona Afonso",
     "equipe": "Equipe 3",
     "inicio": "18/09/2026",
-    "fim": "28/09/2026",
-    "duracao": 7,
+    "fim": "02/10/2026",
+    "duracao": 11,
     "status": "confirmada",
     "motivo": "Férias/Atestado",
     "confirmado_automaticamente": true,
@@ -360,6 +392,20 @@
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
     "detectado_em": "16/08/2026 09:25"
+  },
+  {
+    "tipo": "possiveis_ferias",
+    "id_agente": 1942,
+    "nome_agente": "Rafael Ramos Recalde",
+    "equipe": "Equipe 4",
+    "inicio": "21/09/2026",
+    "fim": "02/10/2026",
+    "duracao": 10,
+    "status": "confirmada",
+    "motivo": "Férias/Atestado",
+    "confirmado_automaticamente": true,
+    "categoria_coletiva": null,
+    "detectado_em": "04/10/2026 12:59"
   },
   {
     "tipo": "possiveis_ferias",
