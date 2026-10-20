@@ -41,6 +41,49 @@
     ],
     "paginas_falhas": []
   },
+  "470": {
+    "nome_agente": "Cris Milene Cardenas da Silva",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 41,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "435 - JARDIM PRIMOR": 33,
+      "403 - JARDIM UNIVERSITARIO": 8
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3037": {
+    "nome_agente": "Evelyn Santana Santos Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 26,
+    "imoveis_recusados": 1,
+    "fechados_por_area": {
+      "435 - JARDIM PRIMOR": 19,
+      "405 - ALTOS DA GLÓRIA": 7
+    },
+    "recusados_por_area": {
+      "405 - ALTOS DA GLÓRIA": 1
+    },
+    "visitas_recusados_raw": [
+      {
+        "id_visita": 17767858,
+        "regiao": "URBANA",
+        "area": "405 - ALTOS DA GLÓRIA",
+        "quarteirao": "Q021",
+        "logradouro": "Rua ARNALDO VASQUES",
+        "imovel": "258 - R",
+        "atividade": "Tratamento",
+        "tipo_visita": "Normal",
+        "data_chegada": "02/10/2026 15:40",
+        "data_saida": "02/10/2026 15:40",
+        "nome_agente": "Evelyn Santana Santos Oliveira",
+        "equipe": "Equipe 1"
+      }
+    ],
+    "paginas_falhas": []
+  },
   "73": {
     "nome_agente": "Ana Gabriela Silva Garcete",
     "equipe": "Equipe 1",
@@ -61,6 +104,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "404 - JARDIM DOS ESTADOS": 4
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3101": {
+    "nome_agente": "Carlos Alberto Albiero",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 3,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "409 - ANDREAZZA": 3
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -105,61 +160,6 @@
     ],
     "paginas_falhas": []
   },
-  "3101": {
-    "nome_agente": "Carlos Alberto Albiero",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 3,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "409 - ANDREAZZA": 3
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "3037": {
-    "nome_agente": "Evelyn Santana Santos Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 26,
-    "imoveis_recusados": 1,
-    "fechados_por_area": {
-      "435 - JARDIM PRIMOR": 19,
-      "405 - ALTOS DA GLÓRIA": 7
-    },
-    "recusados_por_area": {
-      "405 - ALTOS DA GLÓRIA": 1
-    },
-    "visitas_recusados_raw": [
-      {
-        "id_visita": 17767858,
-        "regiao": "URBANA",
-        "area": "405 - ALTOS DA GLÓRIA",
-        "quarteirao": "Q021",
-        "logradouro": "Rua ARNALDO VASQUES",
-        "imovel": "258 - R",
-        "atividade": "Tratamento",
-        "tipo_visita": "Normal",
-        "data_chegada": "02/10/2026 15:40",
-        "data_saida": "02/10/2026 15:40",
-        "nome_agente": "Evelyn Santana Santos Oliveira",
-        "equipe": "Equipe 1"
-      }
-    ],
-    "paginas_falhas": []
-  },
-  "470": {
-    "nome_agente": "Cris Milene Cardenas da Silva",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 41,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "435 - JARDIM PRIMOR": 33,
-      "403 - JARDIM UNIVERSITARIO": 8
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "125": {
     "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
     "equipe": "Equipe 2",
@@ -179,6 +179,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "410 - SALGADO FILHO": 39
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3127": {
+    "nome_agente": "Gisele Olimpia Torres",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 89,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "421 - JARDIM IPANEMA": 89
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -208,13 +220,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3127": {
-    "nome_agente": "Gisele Olimpia Torres",
+  "99": {
+    "nome_agente": "Fabiana de Figueredo Vieira",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 89,
+    "imoveis_fechados": 13,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "421 - JARDIM IPANEMA": 89
+      "411 - JARDIM AEROPORTO": 13
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -232,18 +244,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "99": {
-    "nome_agente": "Fabiana de Figueredo Vieira",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 13,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "411 - JARDIM AEROPORTO": 13
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "142": {
     "nome_agente": "William Anderson Chamorro Tavares",
     "equipe": "Equipe 2",
@@ -254,13 +254,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "81": {
-    "nome_agente": "Wesley de Souza Leal",
+  "2917": {
+    "nome_agente": "Bianca Afonso Narbaez",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 11,
+    "imoveis_fechados": 7,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "417 - CENTRO 3": 11
+      "419 - CENTRO 5": 7
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -295,13 +295,25 @@
     ],
     "paginas_falhas": []
   },
-  "2917": {
-    "nome_agente": "Bianca Afonso Narbaez",
+  "81": {
+    "nome_agente": "Wesley de Souza Leal",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 7,
+    "imoveis_fechados": 11,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "419 - CENTRO 5": 7
+      "417 - CENTRO 3": 11
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "1938": {
+    "nome_agente": "Marco Antonio Ayala de Matos Freitas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 153,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "432 - ÁREA B - RESIDENCIAL PONTA PORÃ 1": 153
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -362,18 +374,6 @@
     ],
     "paginas_falhas": []
   },
-  "2918": {
-    "nome_agente": "Claine Luisa Figueiredo Torraca",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 69,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "428 - JARDIM COIMBRA": 69
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "2721": {
     "nome_agente": "Miglidiane Maciel Ajala",
     "equipe": "Equipe 3",
@@ -386,37 +386,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1938": {
-    "nome_agente": "Marco Antonio Ayala de Matos Freitas",
+  "2918": {
+    "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
-    "imoveis_fechados": 153,
+    "imoveis_fechados": 69,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "432 - ÁREA B - RESIDENCIAL PONTA PORÃ 1": 153
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "80": {
-    "nome_agente": "Gisele Lopes Justiniano",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 35,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "441 - PARQUE DOS IPES": 35
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "161": {
-    "nome_agente": "Rozana Reis da Silva",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 29,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "444 - KAMEL SAAD 2": 29
+      "428 - JARDIM COIMBRA": 69
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -434,13 +410,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "2789": {
-    "nome_agente": "Kariele Jackeline Rodrigues Silva",
+  "80": {
+    "nome_agente": "Gisele Lopes Justiniano",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 16,
+    "imoveis_fechados": 35,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "439 - BOSQUE CARANDÁ": 16
+      "441 - PARQUE DOS IPES": 35
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -453,6 +429,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "436 - ALEGRETE": 35
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "161": {
+    "nome_agente": "Rozana Reis da Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 29,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "444 - KAMEL SAAD 2": 29
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -482,6 +470,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "2789": {
+    "nome_agente": "Kariele Jackeline Rodrigues Silva",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 16,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "439 - BOSQUE CARANDÁ": 16
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "157": {
     "nome_agente": "Walquiria Araujo Flores",
     "equipe": "Equipe 4",
@@ -489,6 +489,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "440 - JARDIM IBIRAPUERA": 56
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "110": {
+    "nome_agente": "Anderson Jose de Santana",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 30,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "442 - JARDIM INDEPENDÊNCIA": 30
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -513,18 +525,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "434 - VILA AUREA": 32
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "110": {
-    "nome_agente": "Anderson Jose de Santana",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 30,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "442 - JARDIM INDEPENDÊNCIA": 30
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
