@@ -1,0 +1,43 @@
+<div class="section" id="media-mensal">
+  <div class="table-section">
+    <h3>📈 Média Mensal por Agente ({{ media_mensal.agentes|length }})</h3>
+    <p class="table-hint">Pontuação final de cada agente em cada mês e a <strong>média simples</strong> dessas
+    pontuações (só dos meses em que o agente aparece — "—" = sem registro naquele mês). Clique no cabeçalho
+    pra ordenar. O mês em andamento entra com a pontuação parcial até agora. <strong>Tendência</strong> = pontuação do último mês menos a do mês anterior (▲ subiu, ▼ caiu, em pontos).</p>
+    {% if media_mensal.agentes %}
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableMediaMensal">
+        <thead><tr>
+          <th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th>
+          {% for m in media_mensal.meses %}<th>{{ m }}</th>{% endfor %}
+          <th>Média</th><th>Meses</th><th>Tendência</th><th>Evolução</th>
+        </tr></thead>
+        <tbody>
+          {% for a in media_mensal.agentes %}
+          <tr>
+            <td class="num">{{ a.posicao|br }}º</td>
+            <td class="sticky-col agent-name">{{ a.agente }}</td>
+            <td>{{ a.equipe }}</td>
+            {% for v in a.meses %}
+            <td class="num">{% if v %}<span class="badge badge-{{ v.cls }}">{{ v.pontos|br(1) }}</span>{% else %}—{% endif %}</td>
+            {% endfor %}
+            <td class="num"><strong><span class="badge badge-{{ a.cls }}">{{ a.media|br(1) }}</span></strong></td>
+            <td class="num">{{ a.n_meses|br }}</td>
+            <td class="num trend trend-{{ a.delta_cls or 'none' }}">{{ a.delta_txt }}</td>
+            <td class="spark-cell spark-{{ a.delta_cls or 'none' }}">{{ a.spark }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <details class="legend-box legend-collapsible">
+      <summary>❓ Como a média é calculada</summary>
+      <p>Média simples das pontuações finais mensais do Ranking de cada mês (cada mês já com o cálculo
+      que ele tinha). Faixas da média: 🟢 ≥90 · 🟡 75–89,9 · 🟠 60–74,9 · 🔴 &lt;60. Meses de Maio a Setembro/2026
+      foram calculados com fator de normalização; de Outubro/2026 em diante, sem fator (peso igual pra todos).</p>
+    </details>
+    {% else %}
+    <p class="table-hint">Ainda não há meses com ranking disponível.</p>
+    {% endif %}
+  </div>
+</div>

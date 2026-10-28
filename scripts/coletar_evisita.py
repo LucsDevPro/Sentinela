@@ -96,26 +96,48 @@ nome_periodo         = sem.nome_periodo         # rótulo amigável (nome do mê
 # ID em qualquer ano, não pra decidir de onde a coleta começa).
 PRIMEIRA_SEMANA_COLETA = 305
 
-# A partir daqui, cada semana ganha sua PRÓPRIA página no histórico (em vez
-# de ser agrupada com o resto do mês) — HTML 318 = Semana 31/2026
-# (02/08/2026), início de Agosto. Semanas ANTES disso continuam agrupadas
-# por mês civil, como sempre foram. Ver atualizar_historico_do_cache().
+# Páginas SEMANAIS soltas (uma página por semana, a partir da semana 318 =
+# 02/08/2026) foram ARQUIVADAS: o histórico agora só tem páginas MENSAIS
+# (ver MESES_OFICIAIS). As planilhas semanais antigas ficam preservadas em
+# data/historico/arquivo_semanal/ (fora do menu), e o cache bruto de cada
+# semana continua intacto em data/semanas/. Se algum dia quiser voltar a
+# gerar uma página por semana, troque a flag abaixo para True — semanas que
+# não pertencem a nenhum mês de MESES_OFICIAIS passam a virar página própria
+# (comportamento antigo, a partir de PRIMEIRA_SEMANA_DETALHE_SEMANAL).
+GERAR_PAGINAS_SEMANAIS = False
 PRIMEIRA_SEMANA_DETALHE_SEMANAL = 318
+PASTA_ARQUIVO_SEMANAL = "arquivo_semanal"   # dentro de data/historico/
 
 # Limites REAIS de cada mês, confirmados direto pelos parâmetros da URL do
 # e-Visita (semana_inicio/semana_fim/id_ciclo) — NÃO batem exatamente com o
 # calendário civil (ex.: a semana 313 começa domingo 28/06, mas já pertence
-# ao ciclo de Julho no site, não Junho). Por isso o agrupamento do
-# histórico usa esta tabela em vez de inferir pela data de início da
-# semana. Só precisa cadastrar aqui os meses ANTES de
-# PRIMEIRA_SEMANA_DETALHE_SEMANAL — a partir dali cada semana já vira
-# página própria (ver atualizar_historico_do_cache), não precisa de
-# agrupamento de mês nenhum.
+# ao ciclo de Julho no site, não Junho; Setembro foi de 322 a 326 e terminou
+# em 03/10). Por isso o agrupamento do histórico usa esta tabela em vez de
+# inferir pela data de início da semana.
+#
+# O nome do arquivo de cada mês usa SEMPRE o intervalo oficial daqui (ex.:
+# semanas_327-330.xlsx), mesmo que o mês ainda esteja incompleto — assim o
+# nome não muda a cada semana que chega e o link da home
+# (data/config_home.json) nunca quebra. O mês cresce sozinho conforme as
+# semanas seguintes são coletadas.
+#
+# PARA ADICIONAR UM MÊS NOVO: acrescente uma linha aqui, uma em
+# CICLOS_TRATAMENTO e uma em CICLOS_PONTO_ESTRATEGICO (mais abaixo).
 MESES_OFICIAIS = [
-    # Maio e Junho/2026 foram ARQUIVADOS (ver MESES_ARQUIVADOS logo abaixo)
-    # — saíram daqui de propósito, não é esquecimento.
-    (313, 317, "Julho/2026"),   # id_ciclo=163
+    # Maio a Setembro/2026 foram ARQUIVADOS (ver MESES_ARQUIVADOS logo abaixo)
+    # — saíram daqui de propósito, não é esquecimento. Ciclos deles:
+    #   Julho 163 (padrão) / PE 154 · Agosto 163 / PE 155 · Setembro 164 / PE 156
+    (327, 330, "Outubro/2026"),   # Tratamento 164 / PE 157 (arquivar quando fechar, na semana 330)
+    (331, 334, "Novembro/2026"),  # Tratamento 165 / PE 158
 ]
+
+# A partir desta semana o id_ciclo de Tratamento NÃO pode mais cair no
+# padrão (ID_CICLO=163) por esquecimento: se a semana não estiver em
+# CICLOS_TRATAMENTO, ela é PULADA com erro claro (em vez de coletar com o
+# ciclo errado e gravar um cache vazio, que foi o que aconteceu com
+# Outubro). Também é a primeira semana cujo ciclo coletado é registrado em
+# data/semanas/_ciclos_coletados.json e conferido a cada execução.
+PRIMEIRA_SEMANA_CICLO_EXPLICITO = 327
 
 # Meses que já foram gerados e "fechados" — não são mais regenerados
 # automaticamente a cada rodada (ver atualizar_historico_do_cache(), que
@@ -141,22 +163,22 @@ MESES_OFICIAIS = [
 MESES_ARQUIVADOS = [
     (305, 308, "Maio/2026"),
     (309, 312, "Junho/2026"),
+    # Julho, Agosto e Setembro foram arquivados em 27/10/2026, com a planilha
+    # EXATAMENTE como estava (números que os agentes já viram). Obs.: refazer
+    # Setembro com o código atual daria outros números (o mês de referência
+    # dos dias esperados foi corrigido e passou a descontar a chuva/paralisação
+    # de Setembro) — por isso ele só muda se for REABERTO de propósito.
+    (313, 317, "Julho/2026"),
+    (318, 321, "Agosto/2026"),
+    (322, 326, "Setembro/2026"),
 ]
 
-# A partir de PRIMEIRA_SEMANA_DETALHE_SEMANAL cada semana já vira sua
-# própria página (não agrupa mais por mês, ver acima) — mas às vezes também
-# faz sentido ter uma visão consolidada de VÁRIAS dessas semanas juntas
-# (ex.: uma "Home de Agosto" somando as semanas 31-34), SEM deixar de gerar
-# as páginas semanais individuais nem substituir nada. Cadastre aqui como
-# (semana_inicio, semana_fim, "Label") — atualizar_historico_do_cache() gera
-# um arquivo ADICIONAL consolidando esse intervalo, em paralelo às páginas
-# de semana que já existem. Funciona mesmo com o mês ainda incompleto: soma
-# só as semanas desse intervalo que já foram coletadas até agora, e cresce
-# sozinho conforme as semanas seguintes chegam.
-MESES_ADICIONAIS = [
-    (318, 321, "Agosto/2026"),    # semanas 31-34, id_ciclo=163 (padrão, Tratamento) / 155 (PE)
-    (322, 326, "Setembro/2026"),  # semanas 35-39, id_ciclo=164 (Tratamento) / 156 (PE)
-]
+# Consolidados EXTRAS, além dos meses de MESES_OFICIAIS (ex.: um trimestre
+# ou um intervalo qualquer somando várias semanas). Formato:
+# (semana_inicio, semana_fim, "Label"). Hoje vazio: Agosto e Setembro, que
+# viviam aqui, passaram para MESES_OFICIAIS (mesmos nomes de arquivo, então
+# nada muda para quem já tinha esses links).
+MESES_ADICIONAIS = []
 
 
 def _grupo_mes_oficial(html_id):
@@ -166,6 +188,14 @@ def _grupo_mes_oficial(html_id):
     for ini, fim, nome in MESES_OFICIAIS:
         if ini <= html_id <= fim:
             return nome
+    return None
+
+
+def _faixa_mes_oficial(nome):
+    """(semana_inicio, semana_fim) oficiais de um mês de MESES_OFICIAIS."""
+    for ini, fim, n in MESES_OFICIAIS:
+        if n == nome:
+            return ini, fim
     return None
 
 # --- Coleta semana a semana --------------------------------------------------
@@ -213,7 +243,30 @@ def decidir_semanas_a_coletar(hoje=None, pasta_semanas=PASTA_SEMANAS):
         return list(range(PRIMEIRA_SEMANA_COLETA, atual + 1))
     ultima = max(ja)
     fim = max(atual, ultima)
-    return list(range(ultima, fim + 1))
+    semanas = set(range(ultima, fim + 1))
+
+    # Reprocessamento seguro: qualquer semana >= PRIMEIRA_SEMANA_CICLO_EXPLICITO
+    # (e já disponível, ou seja <= semana atual) cujo cache não foi coletado
+    # com o ciclo configurado hoje entra de novo — cobre semanas que ficaram
+    # sem coleta por falta de configuração (ex.: Outubro, 327-330), inclusive
+    # buracos no meio (semana 328 falhou mas a 329 passou). Depois de coletada
+    # com sucesso o ciclo fica registrado e ela deixa de ser reprocessada.
+    registrados = _ler_ciclos_coletados(pasta_semanas)
+    for h in range(PRIMEIRA_SEMANA_CICLO_EXPLICITO, atual + 1):
+        if ciclo_tratamento_configurado(h) is None:
+            log.error("❌ Semana %s (%s) NÃO tem id_ciclo de Tratamento em CICLOS_TRATAMENTO — "
+                       "não será coletada. Cadastre o ciclo (ver README, 'Novo mês').",
+                       h, sem.rotulo_semana_html(h))
+            semanas.discard(h)
+            continue
+        reg = registrados.get(str(h), {})
+        esperado = _ciclos_esperados(h)
+        if (reg.get("tratamento"), reg.get("pe")) != (esperado["tratamento"], esperado["pe"]):
+            if h not in semanas:
+                log.info("🔁 Semana %s será reprocessada (ciclo registrado %s ≠ configurado %s).",
+                          h, (reg.get("tratamento"), reg.get("pe")), (esperado["tratamento"], esperado["pe"]))
+            semanas.add(h)
+    return sorted(semanas)
 
 # Valores de pendência do e-Visita. O relatório principal (tempos de visita,
 # alertas, etc.) é sempre baseado nos ABERTOS (ID_PENDENCIA_ABERTOS) — são os
@@ -255,10 +308,14 @@ ID_ATIVIDADE_PONTO_ESTRATEGICO = 3   # 3 = Ponto Estratégico (vs 4 = Tratamento
 # de todas as faixas cadastradas (ou o id_ciclo estiver None), a coleta do
 # Ponto Estratégico é pulada com um aviso claro em vez de mandar um id_ciclo
 # errado pro site.
+#   - ciclo 4: semanas 327-330 (04/10 a 31/10/2026, Outubro)  -> id_ciclo 157
+#   - ciclo 5: semanas 331-334 (Novembro/2026)                 -> id_ciclo 158
 CICLOS_PONTO_ESTRATEGICO = [
     (313, 317, 154),
     (318, 321, 155),
     (322, 326, 156),
+    (327, 330, 157),
+    (331, 334, 158),
 ]
 
 def ciclo_para_semana(semana, ciclos=CICLOS_PONTO_ESTRATEGICO):
@@ -280,19 +337,67 @@ def ciclo_para_semana(semana, ciclos=CICLOS_PONTO_ESTRATEGICO):
 # semana 322 (Setembro/2026), que usa id_ciclo 164. Faixas SEM entrada aqui
 # caem no id_ciclo padrão automaticamente — só precisa cadastrar aqui os
 # ciclos ANTIGOS/diferentes do padrão atual.
+#   - semanas 327-330 (Outubro/2026)  -> id_ciclo 164
+#   - semanas 331-334 (Novembro/2026) -> id_ciclo 165
 CICLOS_TRATAMENTO = [
     (305, 312, 162),
     (322, 326, 164),
+    (327, 330, 164),
+    (331, 334, 165),
 ]
 
-def ciclo_tratamento_para_semana(html_id, id_ciclo_padrao):
-    """Como ciclo_para_semana(), mas com fallback pro id_ciclo padrão em vez
-    de None — toda semana tem uma coleta de Tratamento a fazer, então não dá
-    pra simplesmente pular como acontece no Ponto Estratégico."""
+def ciclo_tratamento_configurado(html_id):
+    """id_ciclo de Tratamento cadastrado EXPLICITAMENTE em CICLOS_TRATAMENTO
+    pra essa semana, ou None se não houver faixa que a cubra."""
     for ini, fim, id_ciclo in CICLOS_TRATAMENTO:
         if ini <= html_id <= fim:
             return id_ciclo
-    return id_ciclo_padrao
+    return None
+
+def ciclo_tratamento_para_semana(html_id, id_ciclo_padrao):
+    """Como ciclo_para_semana(), mas com fallback pro id_ciclo padrão em vez
+    de None — toda semana tem uma coleta de Tratamento a fazer. ATENÇÃO: a
+    partir de PRIMEIRA_SEMANA_CICLO_EXPLICITO o fallback não é mais usado
+    pela coleta (ver coletar_uma_semana): semana sem ciclo cadastrado é
+    pulada com erro claro, porque o padrão (163) devolve dados vazios."""
+    cadastrado = ciclo_tratamento_configurado(html_id)
+    return cadastrado if cadastrado is not None else id_ciclo_padrao
+
+
+# --- Registro do ciclo realmente usado em cada semana ------------------------
+# data/semanas/_ciclos_coletados.json guarda, pra cada semana coletada COM
+# SUCESSO a partir de PRIMEIRA_SEMANA_CICLO_EXPLICITO, quais id_ciclo foram
+# usados ({"327": {"tratamento": 164, "pe": 157, "coletado_em": "..."}}).
+# Serve pra decidir_semanas_a_coletar() reprocessar sozinha qualquer semana
+# cujo ciclo registrado não bate com o configurado (ou que nunca foi coletada
+# direito), sem precisar de flag manual — e parar de reprocessar assim que
+# estiver certa (idempotente).
+NOME_ARQUIVO_CICLOS_COLETADOS = "_ciclos_coletados.json"
+
+def _ciclos_esperados(html_id):
+    return {"tratamento": ciclo_tratamento_configurado(html_id),
+            "pe": ciclo_para_semana(html_id)}
+
+def _ler_ciclos_coletados(pasta_semanas):
+    caminho = os.path.join(pasta_semanas, NOME_ARQUIVO_CICLOS_COLETADOS)
+    if not os.path.exists(caminho):
+        return {}
+    try:
+        with open(caminho, encoding="utf-8") as f:
+            dados = json.load(f)
+        return dados if isinstance(dados, dict) else {}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+def _registrar_ciclos_coletados(html_id, pasta_semanas=None):
+    pasta_semanas = pasta_semanas or PASTA_SEMANAS
+    dados = _ler_ciclos_coletados(pasta_semanas)
+    registro = _ciclos_esperados(html_id)
+    registro["coletado_em"] = datetime.now().strftime("%d/%m/%Y %H:%M")
+    dados[str(html_id)] = registro
+    os.makedirs(pasta_semanas, exist_ok=True)
+    with open(os.path.join(pasta_semanas, NOME_ARQUIVO_CICLOS_COLETADOS), "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=2, sort_keys=True)
 
 # (o antigo "semana_inicio_ciclo_pe" não é mais necessário: como agora cada
 # semana é coletada individualmente, não existe mais a ideia de "buscar o
@@ -538,16 +643,55 @@ TOLERANCIA_DIAS_MESMO_EVENTO = 3
 # Comparação sem diferenciar maiúsculas/minúsculas.
 EQUIPES_SEM_DETECCAO_AUTOMATICA = ["Equipe Bloqueio", "Ponto Estratégico"]
 
-# Feriados nacionais/locais a ignorar na contagem de dias úteis consecutivos
-# — formato "dd/mm/aaaa". Vazio por padrão; cadastre aqui os feriados de
-# 2026 que afetam a equipe, senão eles entram como "dia sem lançamento" na
-# detecção (o que geralmente é inofensivo, só engrossa o intervalo em 1 dia).
-FERIADOS_NACIONAIS = []
+# Feriados NACIONAIS (dia útil que não é dia de trabalho) — formato "dd/mm/aaaa".
+# Cobrem 2026 e 2027. Ficaram de fora os "pontos facultativos" (Carnaval,
+# Corpus Christi, Quarta-feira de Cinzas) e os feriados que caem em sábado/
+# domingo não fazem diferença na conta. Feriado estadual/municipal NÃO está
+# aqui: acrescente na lista se a equipe também não trabalha nele.
+FERIADOS_NACIONAIS = [
+    # 2026
+    "01/01/2026",  # Confraternização Universal
+    "03/04/2026",  # Sexta-feira Santa
+    "21/04/2026",  # Tiradentes
+    "01/05/2026",  # Dia do Trabalho
+    "07/09/2026",  # Independência do Brasil
+    "12/10/2026",  # Nossa Senhora Aparecida
+    "02/11/2026",  # Finados
+    "15/11/2026",  # Proclamação da República (domingo)
+    "20/11/2026",  # Consciência Negra
+    "25/12/2026",  # Natal
+    # 2027
+    "01/01/2027",  # Confraternização Universal
+    "26/03/2027",  # Sexta-feira Santa
+    "21/04/2027",  # Tiradentes
+    "01/05/2027",  # Dia do Trabalho (sábado)
+    "07/09/2027",  # Independência do Brasil
+    "12/10/2027",  # Nossa Senhora Aparecida
+    "02/11/2027",  # Finados
+    "15/11/2027",  # Proclamação da República
+    "20/11/2027",  # Consciência Negra (sábado)
+    "25/12/2027",  # Natal (sábado)
+]
+
+# A PARTIR DE QUANDO a lista vale: só feriados desta data em diante entram na
+# contagem de dias úteis (cálculo antigo, ranking novo e detecção de férias).
+# Meses anteriores (Maio–Junho) seguem como foram calculados. Quem decide é
+# esta data — pra valer desde sempre, coloque None.
+FERIADOS_VALEM_A_PARTIR_DE = date(2026, 7, 1)
+
+def _feriados_em_vigor():
+    """Feriados de FERIADOS_NACIONAIS que valem na contagem (>= FERIADOS_VALEM_A_PARTIR_DE)."""
+    if FERIADOS_VALEM_A_PARTIR_DE is None:
+        return list(FERIADOS_NACIONAIS)
+    return [f for f in FERIADOS_NACIONAIS
+            if datetime.strptime(f, "%d/%m/%Y").date() >= FERIADOS_VALEM_A_PARTIR_DE]
+
+_FERIADOS_PADRAO = _feriados_em_vigor()
 
 CATEGORIAS_PARALISACAO_COLETIVA = ["Chuva", "Capacitação", "Reunião/atividade coletiva", "Outra atividade coletiva"]
 
 
-def _dias_uteis_no_intervalo(data_min, data_max, feriados=FERIADOS_NACIONAIS):
+def _dias_uteis_no_intervalo(data_min, data_max, feriados=_FERIADOS_PADRAO):
     """Lista, em ordem, todo dia ÚTIL (seg-sex, fora feriados) entre
     data_min e data_max (objetos date, inclusive nas duas pontas)."""
     feriados_set = {pd.to_datetime(f, format="%d/%m/%Y", errors="coerce").date() for f in feriados}
@@ -559,7 +703,7 @@ def _dias_uteis_no_intervalo(data_min, data_max, feriados=FERIADOS_NACIONAIS):
     return dias
 
 
-def _dias_uteis_do_mes_civil(data_ref, feriados=FERIADOS_NACIONAIS):
+def _dias_uteis_do_mes_civil(data_ref, feriados=_FERIADOS_PADRAO):
     """Lista (não só a contagem) dos dias úteis do MÊS CIVIL INTEIRO (dia 1
     ao último dia) que contém `data_ref` — usada por _dias_uteis_mes_civil
     (só a contagem) e por _preparar_ranking (que precisa dos dias em si,
@@ -572,7 +716,7 @@ def _dias_uteis_do_mes_civil(data_ref, feriados=FERIADOS_NACIONAIS):
     return _dias_uteis_no_intervalo(primeiro_dia, ultimo_dia, feriados)
 
 
-def _dias_uteis_alvo_periodo(data_min, data_max, feriados=FERIADOS_NACIONAIS):
+def _dias_uteis_alvo_periodo(data_min, data_max, feriados=_FERIADOS_PADRAO):
     """Devolve a lista de dias úteis que serve de ALVO ("1 mês de
     calibração") pro fator de normalização — o critério muda dependendo do
     tipo de período:
@@ -594,10 +738,22 @@ def _dias_uteis_alvo_periodo(data_min, data_max, feriados=FERIADOS_NACIONAIS):
     if data_min is not None and (data_min.year, data_min.month) == (data_max.year, data_max.month):
         primeiro_dia = data_max.replace(day=1)
         return _dias_uteis_no_intervalo(primeiro_dia, data_max, feriados)
+    # Período de tamanho "mensal" que atravessa a virada de mês (ex.: Setembro
+    # = 31/08 a 02/10, pois a semana 326 termina em 03/10): o alvo é o mês
+    # civil onde cai a MAIORIA dos dias úteis do período (Setembro), e não o do
+    # último dia (Outubro, que dava 22 dias úteis pra um mês de 21). Períodos
+    # longos (Acumulado) continuam usando o mês do último dia, como sempre.
+    if data_min is not None and (data_max - data_min).days <= AVISO_AFASTAMENTO_PERIODO_MAX_DIAS:
+        por_mes = {}
+        for d in _dias_uteis_no_intervalo(data_min, data_max, feriados):
+            por_mes[(d.year, d.month)] = por_mes.get((d.year, d.month), 0) + 1
+        if por_mes:
+            ano, mes = max(por_mes, key=lambda k: (por_mes[k], k))
+            return _dias_uteis_do_mes_civil(date(ano, mes, 1), feriados)
     return _dias_uteis_do_mes_civil(data_max, feriados)
 
 
-def _dias_uteis_mes_civil(data_ref, feriados=FERIADOS_NACIONAIS):
+def _dias_uteis_mes_civil(data_ref, feriados=_FERIADOS_PADRAO):
     """Nº de dias úteis do MÊS CIVIL INTEIRO (dia 1 ao último dia) que contém
     `data_ref` — não é o número de dias já passados, é o mês completo,
     então serve como referência estável de "1 mês de calibração" mesmo com
@@ -1103,6 +1259,35 @@ NOTA_MAXIMA = 100    # pontuação não passa disso (None = sem teto)
 # que quem trabalhou poucos dias no período (ex.: maioria de férias) tenha
 # qualquer deslize nesses poucos dias amplificado de forma extrema.
 TETO_FATOR_NORMALIZACAO = 2.0
+
+# A partir desta data (início da semana 327 = Outubro/2026) o ranking NÃO usa
+# mais o fator de normalização: Peso Efetivo = Peso Nominal para todos os
+# agentes, e "Dias Úteis Esperados" desconta os dias de férias/atestado/
+# folga/paralisação de cada um. O critério é a PRIMEIRA data do período
+# analisado: períodos que começam antes disso (Maio–Setembro, Acumulado)
+# continuam EXATAMENTE como eram — mesma fórmula, mesmos números. Pra
+# desligar essa regra e voltar tudo ao método antigo, coloque None.
+RANKING_SEM_NORMALIZACAO_A_PARTIR_DE = date(2026, 10, 4)
+
+# Bônus únicos (sem visita rápida / sem ausência / pontualidade perfeita) só
+# valem pra quem trabalhou pelo menos esta fração dos dias úteis ESPERADOS —
+# senão quem trabalhou 2 dias levava os mesmos +13 pontos de quem trabalhou o
+# mês inteiro. Só vale no método novo (Outubro/2026 em diante, ver acima).
+BONUS_MIN_FRACAO_DIAS_ESPERADOS = 0.5
+
+# Aviso "possível afastamento não registrado" na coluna Observação do ranking:
+# o agente trabalhou menos que esta fração dos dias esperados E tem pelo menos
+# este número de turnos sem lançamento. Provavelmente é férias/licença/atestado
+# que falta lançar no cronograma — a gestão deve conferir antes de punir.
+AVISO_AFASTAMENTO_FRACAO_MAX = 0.7
+AVISO_AFASTAMENTO_TURNOS_MIN = 4
+AVISO_AFASTAMENTO_PERIODO_MAX_DIAS = 45   # só em períodos de ~1 mês (não no Acumulado)
+
+def _ranking_sem_normalizacao(data_min):
+    """True se o período que começa em `data_min` usa o ranking novo (sem
+    fator de normalização). Ver RANKING_SEM_NORMALIZACAO_A_PARTIR_DE."""
+    return (RANKING_SEM_NORMALIZACAO_A_PARTIR_DE is not None and data_min is not None
+            and data_min >= RANKING_SEM_NORMALIZACAO_A_PARTIR_DE)
 
 # Horários de referência para os critérios de pontualidade por turno
 # (avaliados DIA A DIA, não pela média do período).
@@ -1737,11 +1922,23 @@ def _classificar_pontuacao(pontos):
     return "🔴 CRÍTICO", "FFB3B3"
 
 
-def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES):
+def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES, normalizar_periodo=True, ajustes=()):
     """
     Calcula a pontuação final de um agente a partir de PONTOS_INICIAIS,
     aplicando todos os critérios de perda/ganho configurados. Retorna
     (pontos_final, classificacao, cor, lista_detalhamento).
+
+    `ajustes`: lista de (motivo, pontos) — ajustes MANUAIS do gestor (ver
+    data/ajustes_ranking.json e _carregar_ajustes_ranking). Entram no
+    Detalhamento/Extrato como linha própria "Ajuste manual: <motivo>", sem
+    normalização, antes do limite de 0 a 100.
+
+    `normalizar_periodo=False` (ranking de Outubro/2026 em diante, ver
+    RANKING_SEM_NORMALIZACAO_A_PARTIR_DE): NÃO aplica o fator de normalização
+    descrito abaixo — fator fixo em 1,0, então Peso Efetivo = Peso Nominal
+    para todos os agentes e pontos = 100 + Σ(qtd × peso nominal). Todo o resto
+    do texto abaixo descreve o método ANTIGO (normalizar_periodo=True), que
+    segue valendo para os períodos anteriores e para o Acumulado.
 
     IMPORTANTE — normalização "por 1 mês de calibração": PONTOS_INICIAIS
     (100) foi calibrado assumindo ~1 mês (`alvo_dias_mes` dias úteis)
@@ -1784,8 +1981,11 @@ def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES):
     df = res["df"]
     pontos = float(PONTOS_INICIAIS)
     detalhes = []
-    fator_normalizacao = min(alvo_dias_mes / r["dias_trabalhados"], TETO_FATOR_NORMALIZACAO) \
-        if r["dias_trabalhados"] > 0 else 1.0
+    if not normalizar_periodo:
+        fator_normalizacao = 1.0
+    else:
+        fator_normalizacao = min(alvo_dias_mes / r["dias_trabalhados"], TETO_FATOR_NORMALIZACAO) \
+            if r["dias_trabalhados"] > 0 else 1.0
 
     def aplicar(motivo, qtd, peso, sinal, normalizar=True):
         nonlocal pontos
@@ -1845,12 +2045,34 @@ def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES):
 
     aplicar("Dia com meta diária batida", r["dias_atingiu_meta"], PONTOS_GANHO_DIA_COM_META, +1, normalizar=False)
 
-    if r["visitas_rapidas"] == 0 and r["total_visitas"] > 0:
-        aplicar("Bônus: nenhuma visita rápida no período", 1, PONTOS_GANHO_SEM_VISITA_RAPIDA, +1, normalizar=False)
-    if qtd_ausencias == 0 and r["dias_trabalhados"] > 0:
-        aplicar("Bônus: nenhum turno sem lançamento no período", 1, PONTOS_GANHO_SEM_AUSENCIA, +1, normalizar=False)
-    if sum(pont_diaria.values()) == 0 and r["dias_trabalhados"] > 0:
-        aplicar("Bônus: pontualidade perfeita no período", 1, PONTOS_GANHO_PONTUALIDADE_PERFEITA, +1, normalizar=False)
+    bonus_rapida = r["visitas_rapidas"] == 0 and r["total_visitas"] > 0
+    bonus_ausencia = qtd_ausencias == 0 and r["dias_trabalhados"] > 0
+    bonus_pontual = sum(pont_diaria.values()) == 0 and r["dias_trabalhados"] > 0
+    # Método novo: bônus só pra quem trabalhou >= 50% dos dias esperados.
+    # Método antigo (períodos até Setembro/2026 e Acumulado): sem essa regra.
+    bonus_elegivel = True
+    if not normalizar_periodo:
+        bonus_elegivel = (alvo_dias_mes > 0
+                          and r["dias_trabalhados"] >= BONUS_MIN_FRACAO_DIAS_ESPERADOS * alvo_dias_mes)
+    if bonus_elegivel:
+        if bonus_rapida:
+            aplicar("Bônus: nenhuma visita rápida no período", 1, PONTOS_GANHO_SEM_VISITA_RAPIDA, +1, normalizar=False)
+        if bonus_ausencia:
+            aplicar("Bônus: nenhum turno sem lançamento no período", 1, PONTOS_GANHO_SEM_AUSENCIA, +1, normalizar=False)
+        if bonus_pontual:
+            aplicar("Bônus: pontualidade perfeita no período", 1, PONTOS_GANHO_PONTUALIDADE_PERFEITA, +1, normalizar=False)
+    elif bonus_rapida or bonus_ausencia or bonus_pontual:
+        # Linha informativa (0 ponto) pra ficar claro por que o bônus não veio.
+        detalhes.append({
+            "nome_agente": res["nome_agente"], "equipe": res["equipe"],
+            "motivo": (f"Bônus não concedido: trabalhou {r['dias_trabalhados']} de {alvo_dias_mes} dias esperados "
+                       f"(mínimo {int(BONUS_MIN_FRACAO_DIAS_ESPERADOS * 100)}%)"),
+            "qtd": 0, "peso_nominal": 0, "fator_normalizacao": 1.0, "peso": 0, "pontos": 0.0,
+        })
+
+    for motivo_ajuste, pontos_ajuste in ajustes:
+        aplicar(f"Ajuste manual: {motivo_ajuste}", 1, abs(pontos_ajuste),
+                1 if pontos_ajuste > 0 else -1, normalizar=False)
 
     if NOTA_MINIMA is not None:
         pontos = max(pontos, NOTA_MINIMA)
@@ -2076,6 +2298,7 @@ COLS_RANKING = [
     ("Turnos Sem Trabalhar", "turnos_sem_trabalhar"),
     ("Pontuação Final", "pontos"),
     ("Classificação", "classificacao"),
+    ("Observação", "observacao"),
 ]
 
 COLS_RANKING_DETALHE = [
@@ -2933,7 +3156,67 @@ def _preparar_pendencias_resumo(resultados):
     return registros
 
 
-def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronograma=None, data_min=None):
+def _observacao_ranking(res, qtd_ausencias, dias_periodo, alvo_exibido, sem_normalizacao,
+                        lista_cronograma, data_min, data_max):
+    """Texto da coluna Observação do ranking: avisa quando o agente parece ter
+    um afastamento (férias/licença/atestado) que não está no cronograma —
+    trabalhou bem menos dias que o esperado E tem vários turnos sem lançamento.
+    Só em períodos de ~1 mês (no Acumulado os números não são comparáveis).
+    Devolve "" quando não há nada a avisar."""
+    if not dias_periodo or data_min is None or data_max is None:
+        return ""
+    if (data_max - data_min).days > AVISO_AFASTAMENTO_PERIODO_MAX_DIAS:
+        return ""
+    if sem_normalizacao:
+        esperados = alvo_exibido   # já desconta o cronograma
+    else:
+        dias_trab = set(res["df"]["dia"]) if "dia" in res["df"].columns else set()
+        esperados = len(dias_periodo) - sum(
+            1 for d in dias_periodo
+            if d not in dias_trab and _obter_motivo_cronograma(res["id_agente"], res["equipe"], d, lista_cronograma))
+    trab = res["resumo"]["dias_trabalhados"]
+    if esperados > 0 and trab < AVISO_AFASTAMENTO_FRACAO_MAX * esperados and qtd_ausencias >= AVISO_AFASTAMENTO_TURNOS_MIN:
+        return (f"⚠️ Possível afastamento não registrado: trabalhou {trab} de {esperados} dias esperados "
+                f"e tem {qtd_ausencias} turnos sem lançamento — conferir férias/licença/atestado no cronograma")
+    return ""
+
+
+CAMINHO_AJUSTES_RANKING = "data/ajustes_ranking.json"
+
+def _carregar_ajustes_ranking(caminho=CAMINHO_AJUSTES_RANKING):
+    """Ajustes MANUAIS de pontuação, lançados pelo gestor em
+    data/ajustes_ranking.json. Cada item:
+        {"id_agente": 116, "data": "15/10/2026", "pontos": 2.0,
+         "motivo": "Instabilidade do e-Visita — visitas lançadas depois"}
+    `pontos` positivo soma, negativo desconta. O ajuste vale em todo período
+    que contenha `data` (o mês dela e o Acumulado), aparece no Detalhamento e
+    no Extrato do agente com o motivo, e respeita o limite de 0 a 100.
+    Itens inválidos são ignorados com aviso no log (validar_json.py barra
+    esses erros antes da coleta). Devolve lista de dicts já validados, com
+    "data" como objeto date."""
+    if not os.path.exists(caminho):
+        return []
+    try:
+        with open(caminho, encoding="utf-8") as f:
+            itens = json.load(f)
+    except (json.JSONDecodeError, OSError) as e:
+        log.warning("Ajustes de ranking ignorados — %s ilegível: %s", caminho, e)
+        return []
+    validos = []
+    for i, it in enumerate(itens if isinstance(itens, list) else []):
+        try:
+            validos.append({
+                "id_agente": int(it["id_agente"]),
+                "data": datetime.strptime(str(it["data"]), "%d/%m/%Y").date(),
+                "pontos": float(it["pontos"]),
+                "motivo": str(it["motivo"]).strip() or "sem motivo informado",
+            })
+        except (KeyError, TypeError, ValueError) as e:
+            log.warning("Ajuste de ranking #%s ignorado (%s): %s", i + 1, e, it)
+    return validos
+
+
+def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronograma=None, data_min=None, ajustes=None):
     """
     Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
       - lista principal ordenada por pontuação (posição 1 = maior pontuação)
@@ -2951,7 +3234,18 @@ def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronogram
     _dias_paralisacao_coletiva_no_mes). Sem isso, esses dias contariam como
     "deveria ter trabalhado" no alvo, mesmo não sendo culpa de ninguém.
     """
-    dias_do_mes = _dias_uteis_alvo_periodo(data_min, data_max) if data_max is not None else []
+    ajustes_todos = _carregar_ajustes_ranking() if ajustes is None else ajustes
+    # Ranking novo (sem normalização): ver RANKING_SEM_NORMALIZACAO_A_PARTIR_DE.
+    sem_normalizacao = _ranking_sem_normalizacao(data_min)
+    if sem_normalizacao and data_max is not None:
+        # Método novo: os dias úteis esperados são os do PRÓPRIO período — do
+        # domingo que abre a primeira semana (ex.: 04/10 pra Outubro) até a
+        # última data. NÃO do dia 1º do mês civil: 01 e 02/10 pertencem à
+        # semana 326 (Setembro) e inflariam o esperado de Outubro em 2 dias.
+        inicio_periodo = data_min - timedelta(days=(data_min.weekday() + 1) % 7)
+        dias_do_mes = _dias_uteis_no_intervalo(inicio_periodo, data_max)
+    else:
+        dias_do_mes = _dias_uteis_alvo_periodo(data_min, data_max) if data_max is not None else []
     alvo_dias_mes_base = len(dias_do_mes) if dias_do_mes else DIAS_UTEIS_MES
 
     ausencias_por_agente = {}  # id_agente -> contagem — NUNCA por nome (agentes
@@ -2966,13 +3260,31 @@ def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronogram
     principal, todos_detalhes = [], []
     for res in resultados:
         qtd_ausencias = ausencias_por_agente.get(res["id_agente"], 0)
-        if dias_do_mes:
+        if dias_do_mes and sem_normalizacao:
+            # Método novo: "esperado" = dias úteis do período menos os dias
+            # JUSTIFICADOS pelo cronograma (férias, atestado, folga, chuva,
+            # reunião...) em que o agente NÃO trabalhou. Dia justificado em
+            # que ele trabalhou mesmo assim continua contando como esperado
+            # (senão "trabalhados" passaria de "esperados"). Só exibição:
+            # nenhum fator usa esse número.
+            dias_trab = set(res["df"]["dia"]) if "dia" in res["df"].columns else set()
+            justificados = sum(
+                1 for d in dias_do_mes
+                if d not in dias_trab and _obter_motivo_cronograma(
+                    res["id_agente"], res["equipe"], d, lista_cronograma))
+            alvo_dias_mes = max(alvo_dias_mes_base - justificados, 0)
+        elif dias_do_mes:
             dias_coletivos = _dias_paralisacao_coletiva_no_mes(
                 res["id_agente"], res["equipe"], dias_do_mes, lista_cronograma)
             alvo_dias_mes = max(alvo_dias_mes_base - dias_coletivos, 1)
         else:
             alvo_dias_mes = alvo_dias_mes_base
-        pontos, classif, fill, detalhes = calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes)
+        ajustes_agente = [(a["motivo"], a["pontos"]) for a in ajustes_todos
+                          if a["id_agente"] == res["id_agente"] and data_min is not None and data_max is not None
+                          and data_min <= a["data"] <= data_max]
+        pontos, classif, fill, detalhes = calcular_pontuacao(
+            res, qtd_ausencias, alvo_dias_mes, normalizar_periodo=not sem_normalizacao,
+            ajustes=ajustes_agente)
         principal.append({
             "nome_agente": res["nome_agente"],
             "equipe": res["equipe"],
@@ -2993,6 +3305,8 @@ def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronogram
             "turnos_sem_trabalhar": qtd_ausencias,
             "pontos": pontos,
             "classificacao": classif,
+            "observacao": _observacao_ranking(res, qtd_ausencias, dias_do_mes, alvo_dias_mes,
+                                              sem_normalizacao, lista_cronograma, data_min, data_max),
             "_fill": fill,
         })
         for d in detalhes:
@@ -3496,15 +3810,71 @@ def _carregar_df_semana(caminho_xlsx):
     return df
 
 
-def salvar_cache_semana(html_id, df_tratamento, pendencia_por_agente, df_pe=None):
+def _mesclar_com_cache_anterior(html_id, df_tratamento, pendencia_por_agente, ids_falha):
+    """Evita que uma recoleta PIOR apague dados bons que já estavam no cache.
+
+    Regra: a recoleta SUBSTITUI os dados de cada agente (nunca soma por cima,
+    então não há duplicata) — exceto para agentes que falharam nesta rodada
+    (`ids_falha`: sem página 1, sessão caída, erro) ou que vieram com páginas
+    faltando e MENOS visitas do que já estava salvo: pra esses, mantém o que
+    já existia no cache. Devolve (df, pendencia) já mesclados."""
+    df_ant = _carregar_df_semana(_caminho_semana(html_id, ".xlsx"))
+    caminho_pend = _caminho_semana(html_id, "_pendencia.json")
+    pend_ant = {}
+    if os.path.exists(caminho_pend):
+        try:
+            with open(caminho_pend, encoding="utf-8") as f:
+                pend_ant = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pend_ant = {}
+
+    df_novo = df_tratamento if df_tratamento is not None else pd.DataFrame()
+    if df_ant.empty and not pend_ant:
+        return df_novo, pendencia_por_agente
+
+    manter = {str(i) for i in ids_falha}
+    for id_ag, p in pendencia_por_agente.items():
+        if p.get("paginas_falhas"):
+            n_novo = 0 if df_novo.empty else int((df_novo["id_agente"].astype(str) == str(id_ag)).sum())
+            n_ant = 0 if df_ant.empty else int((df_ant["id_agente"].astype(str) == str(id_ag)).sum())
+            if n_ant > n_novo:
+                manter.add(str(id_ag))
+
+    pendencia_final = dict(pendencia_por_agente)
+    frames = []
+    if not df_novo.empty:
+        frames.append(df_novo[~df_novo["id_agente"].astype(str).isin(manter)])
+    if not df_ant.empty:
+        # agentes que a recoleta não trouxe NENHUMA linha mas falharam, ou a
+        # serem mantidos explicitamente
+        frames.append(df_ant[df_ant["id_agente"].astype(str).isin(manter)])
+    for id_ag in manter:
+        if id_ag in pend_ant:
+            pendencia_final[id_ag] = pend_ant[id_ag]
+    if manter:
+        log.warning("🛡️ Semana %s: mantidos dados já salvos de %s agente(s) que falharam/vieram incompletos "
+                     "nesta recoleta: %s", html_id, len(manter), sorted(manter))
+    df_final = pd.concat(frames, ignore_index=True) if frames else df_novo
+    return df_final, pendencia_final
+
+
+def salvar_cache_semana(html_id, df_tratamento, pendencia_por_agente, df_pe=None, ids_falha=()):
     """Grava em disco tudo que foi coletado para UMA semana: a planilha de
     visitas (tratamento), a planilha de Ponto Estratégico (se houve) e um
-    JSON com os números de pendência (fechados/recusados) por agente."""
+    JSON com os números de pendência (fechados/recusados) por agente.
+
+    Nunca piora um cache existente: uma recoleta vazia não apaga a planilha
+    nem o JSON de pendência anteriores, e agentes que falharam mantêm os
+    dados antigos (ver _mesclar_com_cache_anterior)."""
     os.makedirs(PASTA_SEMANAS, exist_ok=True)
+    df_tratamento, pendencia_por_agente = _mesclar_com_cache_anterior(
+        html_id, df_tratamento, pendencia_por_agente, ids_falha)
     if df_tratamento is not None and not df_tratamento.empty:
         _salvar_df_semana(df_tratamento, _caminho_semana(html_id, ".xlsx"))
-    with open(_caminho_semana(html_id, "_pendencia.json"), "w", encoding="utf-8") as f:
-        json.dump(pendencia_por_agente, f, ensure_ascii=False, indent=2)
+    caminho_pend = _caminho_semana(html_id, "_pendencia.json")
+    if pendencia_por_agente or not os.path.exists(caminho_pend):
+        with open(caminho_pend, "w", encoding="utf-8") as f:
+            json.dump(pendencia_por_agente, f, ensure_ascii=False, indent=2)
     if df_pe is not None and not df_pe.empty:
         _salvar_df_semana(df_pe, _caminho_semana(html_id, "_pe.xlsx"))
     log.info("💾 Semana %s (Semana do Ano %s) cacheada em %s",
@@ -3516,6 +3886,13 @@ def coletar_uma_semana(session, html_id, id_ano, id_ciclo):
     aplicável) para uma única semana (HTML ID) e já salva o cache em disco
     antes de retornar. Retorna um dict com estatísticas de integridade pra
     logar no resumo final."""
+    if html_id >= PRIMEIRA_SEMANA_CICLO_EXPLICITO and ciclo_tratamento_configurado(html_id) is None:
+        motivo = (f"semana {html_id} sem id_ciclo de Tratamento em CICLOS_TRATAMENTO — "
+                  f"coleta pulada (o ciclo padrão {id_ciclo} devolveria dados vazios)")
+        log.error("❌ %s", motivo)
+        return {"html_id": html_id, "sessao_caiu": False,
+                "agentes_ausentes": [("-", "-", motivo)], "agentes_incompletos": [],
+                "total_agentes": 0}
     id_ciclo_semana = ciclo_tratamento_para_semana(html_id, id_ciclo)
     cfg = {"semana_inicio": html_id, "semana_fim": html_id, "id_ano": id_ano, "id_ciclo": id_ciclo_semana}
     trabalhos = [(eq, ag) for eq, agentes in AGENTES_POR_EQUIPE.items() for ag in agentes]
@@ -3592,7 +3969,17 @@ def coletar_uma_semana(session, html_id, id_ano, id_ciclo):
         if frames_pe:
             df_pe = pd.concat(frames_pe, ignore_index=True)
 
-    salvar_cache_semana(html_id, df_tratamento, pendencia_por_agente, df_pe)
+    ids_falha = [ag for ag, _eq, _motivo in agentes_ausentes if ag != "-"]
+    salvar_cache_semana(html_id, df_tratamento, pendencia_por_agente, df_pe, ids_falha=ids_falha)
+
+    # Só registra o ciclo como "coletado" se a coleta foi íntegra — senão a
+    # semana volta sozinha pra fila na próxima execução.
+    if (html_id >= PRIMEIRA_SEMANA_CICLO_EXPLICITO and not sessao_caiu
+            and not agentes_ausentes and not agentes_incompletos and not df_tratamento.empty):
+        _registrar_ciclos_coletados(html_id)
+    elif html_id >= PRIMEIRA_SEMANA_CICLO_EXPLICITO:
+        log.warning("⚠️ Semana %s coletada de forma incompleta/vazia — ciclo NÃO registrado; "
+                     "será reprocessada na próxima execução.", html_id)
 
     return {
         "html_id": html_id, "sessao_caiu": sessao_caiu,
@@ -3835,8 +4222,8 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
         mes_oficial = _grupo_mes_oficial(h)
         if mes_oficial:
             grupos.setdefault(("mes-oficial", mes_oficial), []).append(h)
-        elif h >= PRIMEIRA_SEMANA_DETALHE_SEMANAL:
-            grupos[("semana", h)] = [h]  # cada semana é o grupo dela mesma, sozinha
+        elif GERAR_PAGINAS_SEMANAIS and h >= PRIMEIRA_SEMANA_DETALHE_SEMANAL:
+            grupos[("semana", h)] = [h]  # cada semana é o grupo dela mesma, sozinha (modo antigo, desligado por padrão)
         else:
             # Fallback só pra semanas fora da tabela MESES_OFICIAIS e ainda
             # antes do corte semanal — não deveria acontecer no uso normal,
@@ -3853,8 +4240,11 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
             nome_arquivo = f"semana_{ini}.xlsx"
             label = sem.rotulo_semana_html(ini)
         elif chave[0] == "mes-oficial":
-            nome_arquivo = f"semanas_{ini}-{fim}.xlsx" if ini != fim else f"semana_{ini}.xlsx"
             label = chave[1]  # nome exato de MESES_OFICIAIS, ex.: "Julho/2026"
+            # Nome do arquivo = faixa OFICIAL do mês (estável, mesmo com o mês
+            # incompleto) — ver comentário de MESES_OFICIAIS.
+            ini_of, fim_of = _faixa_mes_oficial(label)
+            nome_arquivo = f"semanas_{ini_of}-{fim_of}.xlsx"
         else:
             nome_arquivo = f"semanas_{ini}-{fim}.xlsx" if ini != fim else f"semana_{ini}.xlsx"
             label = nome_periodo(ini, fim)
@@ -3865,14 +4255,18 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
         destino = os.path.join(pasta_historico, nome_arquivo)
         shutil.copy2(caminho_tmp, destino)
 
+        if chave[0] == "mes-oficial":
+            sem_ini, sem_fim = ini_of, fim_of
+        else:
+            sem_ini, sem_fim = ini, fim
         entradas_cache.append({
             "arquivo": nome_arquivo, "label": label, "origem": "cache",
-            "semana_inicio": ini, "semana_fim": fim,
-            "semana_ano_inicio": sem.html_para_semana(ini, sem.ano_da_semana_html(ini)),
+            "semana_inicio": sem_ini, "semana_fim": sem_fim,
+            "semana_ano_inicio": sem.html_para_semana(sem_ini, sem.ano_da_semana_html(sem_ini)),
             "semana_ano_fim": sem.html_para_semana(fim, sem.ano_da_semana_html(fim)),
             "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M"),
         })
-        log.info("🗂️  Histórico atualizado: %s (%s)", destino, label)
+        log.info("🗂️  Histórico atualizado: %s (%s — %s semana(s) coletada(s))", destino, label, len(semanas_grupo))
 
     # Consolidados ADICIONAIS (MESES_ADICIONAIS) — somam várias semanas que
     # já têm (e continuam tendo) página individual própria no loop acima.
@@ -3917,11 +4311,55 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
     # entrada do manifest (cache ou manual). Evita ficar com uma planilha
     # velha e desatualizada (sem o cronograma/férias, por exemplo) escondida
     # na pasta, sem ninguém saber que ela não é mais usada.
+    #
+    # EXCEÇÃO (preserva histórico): planilhas de página SEMANAL
+    # (semana_<N>.xlsx) não são apagadas — vão para
+    # data/historico/arquivo_semanal/, fora do menu e fora da geração de HTML.
     arquivos_referenciados = {e["arquivo"] for e in manifest}
     for f_nome in os.listdir(pasta_historico):
         if f_nome.endswith(".xlsx") and f_nome not in arquivos_referenciados:
-            os.remove(os.path.join(pasta_historico, f_nome))
-            log.info("🗑️  Removida planilha órfã do histórico (não referenciada no manifest): %s", f_nome)
+            origem = os.path.join(pasta_historico, f_nome)
+            if re.fullmatch(r"semana_\d+\.xlsx", f_nome):
+                pasta_arq = os.path.join(pasta_historico, PASTA_ARQUIVO_SEMANAL)
+                os.makedirs(pasta_arq, exist_ok=True)
+                shutil.move(origem, os.path.join(pasta_arq, f_nome))
+                log.info("📦 Página semanal arquivada (fora do menu): %s -> %s/", f_nome, PASTA_ARQUIVO_SEMANAL)
+            else:
+                os.remove(origem)
+                log.info("🗑️  Removida planilha órfã do histórico (não referenciada no manifest): %s", f_nome)
+
+
+def _resumo_github(semanas, resumo_integridade):
+    """Escreve o resultado da coleta no resumo da execução do GitHub Actions
+    ($GITHUB_STEP_SUMMARY) e emite anotações ::error::/::warning:: — assim
+    quem abre a aba Actions vê de cara o que foi coletado e o que falhou,
+    sem precisar ler 1h de log. Fora do GitHub (sem a variável) não faz nada
+    além de imprimir as anotações."""
+    linhas = ["## 📥 Resumo da coleta no e-Visita", ""]
+    if not resumo_integridade:
+        linhas.append("Nada novo para coletar nesta execução.")
+    else:
+        linhas.append(f"Semanas processadas: **{', '.join(str(r['html_id']) for r in resumo_integridade)}**")
+        linhas.append("")
+        problemas = 0
+        for r in resumo_integridade:
+            for id_ag, eq, motivo in r["agentes_ausentes"]:
+                problemas += 1
+                linhas.append(f"- ❌ Semana {r['html_id']} — agente {id_ag} ({eq}): {motivo}")
+                print(f"::error title=Coleta incompleta (semana {r['html_id']})::agente {id_ag} ({eq}): {motivo}")
+            for nome, eq, paginas in r["agentes_incompletos"]:
+                problemas += 1
+                linhas.append(f"- ⚠️ Semana {r['html_id']} — {nome} ({eq}): páginas {paginas} não coletadas")
+                print(f"::warning title=Páginas faltando (semana {r['html_id']})::{nome} ({eq}): páginas {paginas}")
+        if not problemas:
+            linhas.append("✅ Coleta íntegra em todas as semanas processadas.")
+        else:
+            linhas += ["", "Os dados que já estavam salvos desses agentes foram **mantidos**; as semanas "
+                           "afetadas serão reprocessadas na próxima execução."]
+    resumo = os.environ.get("GITHUB_STEP_SUMMARY")
+    if resumo:
+        with open(resumo, "a", encoding="utf-8") as f:
+            f.write("\n".join(linhas) + "\n\n")
 
 
 def main():
@@ -3965,6 +4403,7 @@ def main():
             log.error("=" * 60)
         else:
             log.info("✅ Coleta íntegra em todas as semanas processadas.")
+        _resumo_github(semanas_a_coletar, resumo_integridade)
 
     # Consolidação: sempre reconstrói o Analise_Consolidada.xlsx a partir de
     # TODO o cache disponível (não só das semanas coletadas agora), e

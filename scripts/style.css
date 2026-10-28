@@ -200,7 +200,12 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 .heat-cell span { display: block; font-size: 0.62rem; font-weight: 500; opacity: .85; text-transform: uppercase; margin-top: 2px; }
 
 @media print {
-  @page { size: landscape; margin: 12mm; }
+  @page { size: A4 landscape; margin: 10mm; }
+  /* Causa das "páginas em branco": a animação fadein (opacity 0 -> 1) das
+     abas recomeça quando a aba passa de display:none pra block na hora de
+     imprimir, e o navegador captura o PDF com a aba ainda em opacity 0 —
+     texto existe mas fica invisível. Em impressão nunca há animação. */
+  .section, .section.active { animation: none !important; opacity: 1 !important; transform: none !important; }
   header, .nav-tabs, footer, .filters, .print-btn, .chart-card, .kpi-grid, .legend-box, .hover-legend, .criticos-list, .alert-grid, .table-hint, .charts-grid { display: none !important; }
   body.print-mode .section { display: block !important; }
   body.print-mode .table-section { display: none !important; }
@@ -208,8 +213,23 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   body.print-mode .table-section.print-target .table-hint { display: none !important; }
   .sticky-col, table.data-table thead th { position: static !important; }
   .table-wrap { overflow: visible !important; }
-  table.data-table { font-size: 9px !important; width: 100% !important; }
-  table.data-table td, table.data-table th { white-space: normal !important; word-break: break-word; }
+  table.data-table { font-size: 9px !important; width: 100% !important; table-layout: auto !important; }
+  /* Células NUNCA quebram letra por letra: texto só quebra entre palavras
+     (cabeçalhos) ou fica numa linha só (dados). A regra antiga
+     (word-break: break-word em todas as células) fazia tabelas largas — como
+     o Resumo Completo por Agente, com 29 colunas — espremerem cada coluna
+     até caber 1 letra por linha, gerando linhas gigantes e dezenas de
+     páginas praticamente em branco. */
+  table.data-table td { white-space: nowrap !important; word-break: normal !important; overflow-wrap: normal !important; padding: 2px 4px !important; }
+  table.data-table th { white-space: normal !important; word-break: normal !important; overflow-wrap: normal !important; hyphens: none !important; padding: 3px 3px !important; }
+  /* Tabelas com muitas colunas (marcadas por printPrepararTabelas() no
+     bootstrap.js) ganham fonte menor pra caber na largura da folha. */
+  table.data-table.print-wide { font-size: 6.2px !important; }
+  table.data-table.print-wide td { padding: 1.5px 2px !important; }
+  table.data-table.print-wide th { padding: 2px 1px !important; font-size: 5.6px !important; letter-spacing: 0 !important; }
+  table.data-table.print-wide .badge { padding: 0 2px !important; font-size: 5.6px !important; }
+  table.data-table.print-muito-wide { font-size: 5.2px !important; }
+  table.data-table.print-muito-wide th { font-size: 4.8px !important; }
   a.id-link { color: inherit !important; text-decoration: none !important; }
 
   /* Sem isso o Chrome/Firefox apagam as cores de fundo por padrão ao
@@ -266,6 +286,8 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
      não deixar uma página em branco à toa. */
   body.print-mode-full .table-section { page-break-before: always; }
   body.print-mode-full .section > .table-section:first-of-type { page-break-before: avoid; }
+  body.print-mode-full .section > .table-section.print-first { page-break-before: avoid; }
+  body.print-mode-full .legend-box { page-break-inside: avoid; break-inside: avoid; }
   body.print-mode-full .kpi-grid { display: grid !important; }
   body.print-mode-full .legend-box { display: block !important; }
   body.print-mode-full::before {
@@ -273,3 +295,56 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
     display: block; font-size: 14px; font-weight: 700; margin-bottom: 16px;
   }
 }
+
+
+/* ---------- Extrato por agente (modal + impressão em 1 folha) ---------- */
+.extrato-btn { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 7px; padding: 3px 9px; font-size: 0.68rem; font-weight: 600; cursor: pointer; color: var(--text2); white-space: nowrap; }
+.extrato-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.extrato-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 1000; overflow: auto; padding: 24px 12px; }
+.extrato-overlay.open { display: block; }
+body.extrato-aberto { overflow: hidden; }
+.extrato-card { background: #fff; color: #1A2B42; max-width: 780px; margin: 0 auto; padding: 24px 30px 28px; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+.extrato-actions { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 10px; }
+.extrato-fechar { background: transparent; border: 1px solid var(--border); border-radius: 9px; padding: 9px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--text2); }
+.extrato-card h2 { font-size: 1.15rem; margin: 0 0 2px; }
+.ex-sub { font-size: 0.82rem; color: #5B6B82; margin-bottom: 14px; }
+.ex-resumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+.ex-resumo div { border: 1px solid #DCE3EC; border-radius: 9px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.ex-resumo span { font-size: 0.64rem; text-transform: uppercase; color: #5B6B82; font-weight: 700; letter-spacing: .03em; }
+.ex-resumo strong { font-size: 0.95rem; }
+.ex-resumo em { font-style: normal; font-size: 0.72rem; }
+.ex-obs { background: #FFF4E0; border: 1px solid #F2B45B; border-radius: 9px; padding: 8px 12px; font-size: 0.78rem; margin-bottom: 12px; }
+.ex-tabela { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.ex-tabela th { background: #EEF2F7; text-align: right; padding: 6px 8px; font-size: 0.68rem; text-transform: uppercase; color: #5B6B82; }
+.ex-tabela th:first-child { text-align: left; }
+.ex-tabela td { padding: 5px 8px; border-bottom: 1px solid #E6EBF2; }
+.ex-tabela td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.ex-tabela .neg { color: #C0392B; font-weight: 600; }
+.ex-tabela .pos { color: #0A8F52; font-weight: 600; }
+.ex-tabela .ex-base td { background: #F6F8FB; color: #5B6B82; }
+.ex-tabela .ex-total td { background: #1A2B42; color: #fff; font-weight: 700; font-size: 0.86rem; }
+.ex-nota { font-size: 0.7rem; color: #5B6B82; margin-top: 10px; line-height: 1.4; }
+@media (max-width: 640px) { .ex-resumo { grid-template-columns: repeat(2, 1fr); } .extrato-card { padding: 16px; } }
+
+/* Média Mensal: tendência e mini-gráfico */
+.trend-up { color: #0A8F52; font-weight: 700; }
+.trend-up::before { content: "▲ "; }
+.trend-down { color: #C0392B; font-weight: 700; }
+.trend-down::before { content: "▼ "; }
+.trend-flat { color: var(--text2); }
+.trend-flat::before { content: "= "; }
+.spark-cell svg { vertical-align: middle; }
+.spark polyline { stroke: #7C8BA1; }
+.spark circle { fill: #7C8BA1; }
+.spark-up .spark polyline { stroke: #12B76A; } .spark-up .spark circle { fill: #12B76A; }
+.spark-down .spark polyline { stroke: #E5484D; } .spark-down .spark circle { fill: #E5484D; }
+
+@media print {
+  /* Extrato: só a folha do agente, em retrato, uma página */
+  body.print-extrato > *:not(#extratoOverlay) { display: none !important; }
+  body.print-extrato #extratoOverlay { display: block !important; position: static !important; background: none !important; padding: 0 !important; overflow: visible !important; page: extrato; }
+  body.print-extrato .extrato-card { box-shadow: none !important; max-width: none !important; padding: 0 !important; border-radius: 0 !important; }
+  body.print-extrato .extrato-actions { display: none !important; }
+  body.print-extrato.extrato-aberto { overflow: visible !important; }
+}
+@page extrato { size: A4 portrait; margin: 14mm; }

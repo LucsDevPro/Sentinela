@@ -63,6 +63,7 @@ function parseCellValue(text) {
   }
   // tenta número no padrão pt-BR: "1.234,56" | "12,3%" | "R$ 93,80" | "225"
   let clean = t.replace(/^R\$\s?/, '').replace(/%$/, '').trim();
+  clean = clean.replace(/^\+/, '');
   if (/^-?[\d.,]+$/.test(clean)) {
     clean = clean.replace(/\./g, '').replace(',', '.');
     const num = parseFloat(clean);
@@ -104,17 +105,113 @@ function findColIndex(table, headerText) {
   }
   return -1;
 }
+// Marca tabelas com muitas colunas pra o CSS de impressão usar fonte menor
+// (ver .print-wide em style.css) — sem isso, 29 colunas não cabem na folha.
+function printPrepararTabelas() {
+  document.querySelectorAll('table.data-table').forEach(t => {
+    const n = t.querySelectorAll('thead th').length;
+    t.classList.toggle('print-wide', n > 12);
+    t.classList.toggle('print-muito-wide', n > 24);
+  });
+  // A 1ª tabela de cada aba NÃO quebra página antes (o seletor :first-of-type
+  // do CSS não pega, porque os KPIs/gráficos da aba também são <div>) — sem
+  // isso os KPIs ficavam sozinhos numa folha e a tabela vinha na seguinte.
+  document.querySelectorAll('.section').forEach(sec => {
+    const primeira = sec.querySelector(':scope > .table-section');
+    sec.querySelectorAll(':scope > .table-section').forEach(t => t.classList.toggle('print-first', t === primeira));
+  });
+  // Legendas recolhidas (<details>) saem ABERTAS no papel; o estado é restaurado depois.
+  document.querySelectorAll('details:not([open])').forEach(d => { d.dataset.fechadoPorImpressao = '1'; d.open = true; });
+}
+function printRestaurarDetails() {
+  document.querySelectorAll('details[data-fechado-por-impressao]').forEach(d => {
+    d.open = false; delete d.dataset.fechadoPorImpressao;
+  });
+}
 function printSection(section) {
+  printPrepararTabelas();
   document.querySelectorAll('.table-section.print-target').forEach(el => el.classList.remove('print-target'));
   section.classList.add('print-target');
   document.body.classList.add('print-mode');
   window.print();
 }
 function printFullReport() {
+  printPrepararTabelas();
   document.body.classList.add('print-mode-full');
   window.print();
 }
+/* ===== Extrato por agente: folha com a conta da pontuação ===== */
+function _esc(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function _fmt(n, d) {
+  if (n == null || n === '' || isNaN(Number(n))) return '—';
+  return Number(n).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+}
+function abrirExtrato(nome) {
+  const E = window.EXTRATOS || {};
+  const a = (E.agentes || {})[nome];
+  if (!a) return;
+  const oculto = document.body.classList.contains('modo-apresentacao');
+  const semNorm = !!E.sem_normalizacao;
+  const soma = (a.detalhes || []).reduce((t, d) => t + (Number(d.pontos) || 0), 0);
+  const bruto = (E.pontos_iniciais || 100) + soma;
+  const ajuste = Number(a.pontos) - bruto;
+  const linhas = (a.detalhes || []).map(d => {
+    const p = Number(d.pontos) || 0;
+    const cols = semNorm
+      ? `<td class="num">${_fmt(d.qtd, 0)}</td><td class="num">${_fmt(d.peso_nominal, 2)}</td>`
+      : `<td class="num">${_fmt(d.qtd, 0)}</td><td class="num">${_fmt(d.peso_nominal, 2)}</td><td class="num">${_fmt(d.fator, 2)}</td><td class="num">${_fmt(d.peso, 2)}</td>`;
+    return `<tr><td>${_esc(d.criterio)}</td>${cols}<td class="num ${p < 0 ? 'neg' : (p > 0 ? 'pos' : '')}">${p > 0 ? '+' : ''}${_fmt(p, 2)}</td></tr>`;
+  }).join('');
+  const cab = semNorm
+    ? '<th>Critério</th><th>Quantidade</th><th>Peso</th><th>Pontos</th>'
+    : '<th>Critério</th><th>Quantidade</th><th>Peso nominal</th><th>Fator</th><th>Peso efetivo</th><th>Pontos</th>';
+  const nCols = semNorm ? 3 : 5;
+  const metodo = semNorm
+    ? 'Sem fator de normalização: todos os agentes usam o mesmo peso. Pontos = quantidade × peso.'
+    : 'Com fator de normalização: peso efetivo = peso nominal × fator (ajuste pelo número de dias trabalhados no período).';
+  document.getElementById('extratoConteudo').innerHTML = `
+    <h2>Extrato de pontuação</h2>
+    <div class="ex-sub">${oculto ? 'Agente (oculto no modo apresentação)' : _esc(a.agente)} · ${_esc(a.equipe)} · ${_esc(E.periodo || '')}</div>
+    <div class="ex-resumo">
+      <div><span>Posição</span><strong>${_fmt(a.posicao, 0)}º de ${_fmt(E.total_agentes, 0)}</strong></div>
+      <div><span>Pontuação final</span><strong>${_fmt(a.pontos, 1)}</strong><em>${_esc(a.classificacao)}</em></div>
+      <div><span>Dias trabalhados</span><strong>${_fmt(a.dias_trabalhados, 0)} de ${_fmt(a.dias_esperados, 0)} esperados</strong></div>
+      <div><span>Turnos sem trabalhar</span><strong>${_fmt(a.turnos_sem, 0)}</strong></div>
+    </div>
+    ${a.observacao ? `<div class="ex-obs">${_esc(a.observacao)}</div>` : ''}
+    <table class="ex-tabela">
+      <thead><tr>${cab}</tr></thead>
+      <tbody>
+        <tr class="ex-base"><td colspan="${nCols}">Pontos iniciais</td><td class="num">${_fmt(E.pontos_iniciais || 100, 2)}</td></tr>
+        ${linhas}
+        ${Math.abs(ajuste) > 0.011 ? `<tr class="ex-base"><td colspan="${nCols}">Limite aplicado (a pontuação fica entre 0 e 100)</td><td class="num">${ajuste > 0 ? '+' : ''}${_fmt(ajuste, 2)}</td></tr>` : ''}
+        <tr class="ex-total"><td colspan="${nCols}">Pontuação final</td><td class="num">${_fmt(a.pontos, 2)}</td></tr>
+      </tbody>
+    </table>
+    <p class="ex-nota">${_esc(metodo)} Faixas: 🟢 ≥90 · 🟡 75–89,9 · 🟠 60–74,9 · 🔴 &lt;60. Dias esperados já descontam férias, atestado, folga, chuva e reuniões registrados no cronograma (método novo).</p>`;
+  document.getElementById('extratoOverlay').classList.add('open');
+  document.body.classList.add('extrato-aberto');
+}
+function fecharExtrato() {
+  document.getElementById('extratoOverlay').classList.remove('open');
+  document.body.classList.remove('extrato-aberto');
+}
+function imprimirExtrato() {
+  document.body.classList.add('print-extrato');
+  window.print();
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.extrato-btn');
+  if (b) { abrirExtrato(b.dataset.agente); return; }
+  if (e.target.id === 'extratoOverlay') fecharExtrato();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharExtrato(); });
+
 window.addEventListener('afterprint', () => {
+  printRestaurarDetails();
+  document.body.classList.remove('print-extrato');
   document.body.classList.remove('print-mode');
   document.body.classList.remove('print-mode-full');
   document.querySelectorAll('.table-section.print-target').forEach(el => el.classList.remove('print-target'));

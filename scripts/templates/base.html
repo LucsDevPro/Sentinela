@@ -43,6 +43,7 @@
     <button class="nav-tab" data-section="ausencias">Ausências</button>
     <button class="nav-tab" data-section="pendencias">Pendências</button>
     <button class="nav-tab" data-section="ranking">Ranking</button>
+    <button class="nav-tab" data-section="media-mensal">Média Mensal</button>
     <button class="nav-tab" data-section="ponto-estrategico">Ponto Estratégico</button>
     <button class="nav-tab" data-section="custos">Custos & Produtividade</button>
   </div>
@@ -55,12 +56,25 @@
   {% include "sections/ausencias.html" %}
   {% include "sections/pendencias.html" %}
   {% include "sections/ranking.html" %}
+  {% include "sections/media_mensal.html" %}
   {% include "sections/ponto_estrategico.html" %}
   {% include "sections/custos.html" %}
 </div>
 
+<!-- Extrato por agente (ver bootstrap.js: abrirExtrato / imprimirExtrato) -->
+<div id="extratoOverlay" class="extrato-overlay" role="dialog" aria-modal="true" aria-label="Extrato de pontuação do agente">
+  <div class="extrato-card">
+    <div class="extrato-actions">
+      <button type="button" class="print-btn" onclick="imprimirExtrato()">🖨️ Imprimir / salvar em PDF</button>
+      <button type="button" class="extrato-fechar" onclick="fecharExtrato()">✕ Fechar</button>
+    </div>
+    <div id="extratoConteudo"></div>
+  </div>
+</div>
+
 <footer>Dashboard gerado automaticamente · GitHub Actions · {{ now_str }}</footer>
 
+<script>window.EXTRATOS = {{ extratos | tojson }};</script>
 <script>
 {{ bootstrap_js | safe }}
 {% include "charts.js" %}

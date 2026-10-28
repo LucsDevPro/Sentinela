@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lançar atestado</title>
+<style>
+  body{font-family:system-ui,sans-serif;max-width:520px;margin:24px auto;padding:0 16px;color:#222}
+  h1{font-size:1.3rem} label{display:block;margin:14px 0 4px;font-weight:600}
+  select,input{width:100%;padding:10px;font-size:1rem;box-sizing:border-box}
+  button{margin-top:20px;width:100%;padding:12px;font-size:1rem;background:#1a6b3c;color:#fff;border:0;border-radius:6px;cursor:pointer}
+  .hint{font-size:.85rem;color:#555;margin-top:6px} .aviso{background:#fff7e0;padding:10px;border-radius:6px;font-size:.9rem}
+  a.volta{display:inline-block;margin-bottom:8px}
+</style>
+</head>
+<body>
+<a class="volta" href="index.html">← Voltar ao dashboard</a>
+<h1>🩺 Lançar atestado</h1>
+<p class="aviso">Informe só o agente e as datas. <b>Não digite CID nem diagnóstico.</b> O atestado não desconta pontos.</p>
+
+<label for="ag">Agente</label>
+<select id="ag"><option value="">Carregando…</option></select>
+<label for="ini">Primeiro dia</label>
+<input type="date" id="ini">
+<label for="fim">Último dia</label>
+<input type="date" id="fim">
+<p class="hint">Um dia só? Deixe o último dia igual ao primeiro (preenche sozinho).</p>
+<div id="repoBox" style="display:none">
+  <label for="repo">Repositório (usuario/nome)</label>
+  <input id="repo" placeholder="SEU-USUARIO/dashboard-visitas">
+</div>
+<button id="ir">Abrir formulário já preenchido</button>
+<p class="hint">Abre o GitHub com tudo preenchido; é só clicar em "Submit new issue". O site atualiza sozinho em alguns minutos. Precisa estar logado no GitHub com acesso ao repositório.</p>
+
+<script>
+const $ = id => document.getElementById(id);
+const hoje = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+$('ini').value = hoje; $('fim').value = hoje;
+$('ini').addEventListener('change', () => { if (!$('fim').value || $('fim').value < $('ini').value) $('fim').value = $('ini').value; });
+
+function repoDaUrl() {
+  const m = location.hostname.match(/^(.+)\.github\.io$/);
+  const seg = location.pathname.split('/').filter(Boolean)[0];
+  return m && seg ? `${m[1]}/${seg}` : '';
+}
+let repo = repoDaUrl();
+if (!repo) { $('repoBox').style.display = ''; try { $('repo').value = localStorage.getItem('repoAtestado') || ''; } catch(e){} }
+
+fetch('data/agentes_nomes.json').then(r => r.json()).then(d => {
+  const itens = Object.entries(d).map(([id, v]) => {
+    const nome = (v.nome || `Agente ${id}`).trim(), eq = (v.equipe || '').trim();
+    return `${nome} — ${eq ? eq + ' ' : ''}(ID ${id})`;
+  }).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  $('ag').innerHTML = '<option value="">Escolha o agente…</option>' + itens.map(t => `<option>${t}</option>`).join('');
+}).catch(() => { $('ag').innerHTML = '<option value="">Erro ao carregar a lista</option>'; });
+
+const br = iso => iso.split('-').reverse().join('/');
+$('ir').onclick = () => {
+  if (!$('ag').value) return alert('Escolha o agente.');
+  if (!$('ini').value || !$('fim').value) return alert('Preencha as datas.');
+  if ($('fim').value < $('ini').value) return alert('O último dia não pode ser antes do primeiro.');
+  if (!repo) {
+    repo = $('repo').value.trim();
+    if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) return alert('Informe o repositório no formato usuario/nome.');
+    try { localStorage.setItem('repoAtestado', repo); } catch(e){}
+  }
+  const nome = $('ag').value.split(' — ')[0];
+  const q = new URLSearchParams({
+    template: 'atestado.yml', title: `Atestado: ${nome} (${br($('ini').value)})`,
+    agente: $('ag').value, inicio: br($('ini').value), fim: br($('fim').value)
+  });
+  window.open(`https://github.com/${repo}/issues/new?${q}`, '_blank');
+};
+</script>
+</body>
+</html>

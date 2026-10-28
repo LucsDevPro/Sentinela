@@ -10,8 +10,8 @@ manualmente em `data/`) como alternativa/backup, caso a coleta automática
 falhe ou você precise reprocessar um dado específico.
 
 **Página inicial configurável + aba "Acumulado":** o `index.html` (home)
-mostra o período definido em `data/config_home.json` — por padrão, Setembro/2026
-(`{"arquivo": "data/historico/semanas_322-326.xlsx", "label": "Setembro/2026"}`).
+mostra o período definido em `data/config_home.json` — por padrão, Outubro/2026
+(`{"arquivo": "data/historico/semanas_327-330.xlsx", "label": "Outubro/2026"}`).
 Separado da home, `acumulado.html` sempre mostra a SOMA de TODAS as semanas
 já coletadas até agora (não depende de configuração nenhuma, é sempre o
 `data/Analise_Consolidada.xlsx` puro) — os dois aparecem lado a lado no
@@ -39,11 +39,13 @@ execução (agora domingo/segunda/terça às 3h):
   1. Recoleta a última semana já salva (os dados do e-Visita ainda podem mudar).
   2. Busca a(s) semana(s) nova(s), se já estiver(em) disponível(is) no site.
   3. Consolida TODO o cache disponível num único `data/Analise_Consolidada.xlsx`.
-  4. Reconstrói `data/historico/` a partir do cache — agrupado por mês até
-     Julho/2026; a partir de Agosto/2026, cada semana fechada vira sua
-     própria página (mais detalhe, e dá pra revisar a última semana isolada,
-     sem misturar com o resto do mês). Ver `PRIMEIRA_SEMANA_DETALHE_SEMANAL`
-     em `scripts/coletar_evisita.py` se quiser mudar esse ponto de corte.
+  4. Reconstrói `data/historico/` a partir do cache — **apenas páginas
+     MENSAIS** (Julho, Agosto, Setembro, Outubro, Novembro...). As páginas
+     semanais soltas (semanas 318-326) foram arquivadas em
+     `data/historico/arquivo_semanal/` (fora do menu, dados preservados); o
+     detalhe por semana continua disponível pelo filtro de semana dentro de
+     cada página mensal. Pra voltar a gerar uma página por semana, troque
+     `GERAR_PAGINAS_SEMANAIS` pra `True` em `scripts/coletar_evisita.py`.
 
 Na primeira execução (`data/semanas/` vazio), o script coleta da semana
 18/2026 (HTML 305, início de Maio) até a semana atual, uma planilha por
@@ -57,6 +59,8 @@ não é fixo — muda em pontos específicos do ano. Isso já está mapeado em
 CICLOS_TRATAMENTO = [
     (305, 312, 162),  # semanas 305-312 (maio-junho/2026) usam id_ciclo 162
     (322, 326, 164),  # semanas 322-326 (setembro/2026) usam id_ciclo 164
+    (327, 330, 164),  # semanas 327-330 (outubro/2026)  usam id_ciclo 164
+    (331, 334, 165),  # semanas 331-334 (novembro/2026) usam id_ciclo 165
     # faixas sem entrada aqui usam o ID_CICLO padrão (163)
 ]
 ```
@@ -72,14 +76,39 @@ MESES_OFICIAIS = [
     (305, 308, "Maio/2026"),
     (309, 312, "Junho/2026"),
     (313, 317, "Julho/2026"),
+    (318, 321, "Agosto/2026"),
+    (322, 326, "Setembro/2026"),
+    (327, 330, "Outubro/2026"),
+    (331, 334, "Novembro/2026"),
 ]
 ```
-A partir da semana 318 (`PRIMEIRA_SEMANA_DETALHE_SEMANAL`), cada semana já
-vira página própria — não precisa mais cadastrar mês aqui. Se cadastrar um
-mês novo aqui manualmente (antes desse ponto de corte), a próxima coleta já
-reagrupa e renomeia os arquivos certinho, e apaga sozinha qualquer planilha
-órfã que sobrar do agrupamento antigo (ex.: se os limites de um mês forem
-corrigidos depois).
+(Maio e Junho ficam em `MESES_ARQUIVADOS`, preservados como estavam.) Agosto a Novembro/2026 também estão em `MESES_OFICIAIS` (o nome do arquivo usa
+sempre a faixa oficial do mês, ex.: `semanas_327-330.xlsx`, mesmo com o mês
+incompleto — assim o link da home nunca quebra). Ao cadastrar um mês
+novo aqui, a próxima coleta já reagrupa e renomeia os arquivos certinho; planilhas
+órfãs são apagadas, exceto as semanais (`semana_<N>.xlsx`), que vão para
+`data/historico/arquivo_semanal/`.
+
+**Novo mês (passo a passo):** quando o e-Visita abrir um ciclo novo, copie da
+URL de cada consulta o `id_ciclo` e as semanas, e cadastre 3 linhas em
+`scripts/coletar_evisita.py`: `MESES_OFICIAIS` (nome do mês),
+`CICLOS_TRATAMENTO` (atividade 4) e `CICLOS_PONTO_ESTRATEGICO` (atividade 3).
+Depois, se quiser, aponte a home em `data/config_home.json` (ou use o
+`home_editor.html`). Já estão cadastrados: Outubro (Tratamento 164 / P.E. 157,
+semanas 327-330) e Novembro (Tratamento 165 / P.E. 158, semanas 331-334).
+Trava de segurança: a partir da semana 327, semana SEM ciclo de Tratamento
+cadastrado não é coletada (erro claro no log) em vez de usar o ciclo padrão
+(que devolve dados vazios).
+
+**Reprocessamento automático e seguro:** a cada semana coletada com sucesso a
+partir da 327, o ciclo usado fica registrado em
+`data/semanas/_ciclos_coletados.json`. Toda execução reprocessa sozinha as
+semanas disponíveis cujo registro não bate com o ciclo configurado (ou que
+nunca foram coletadas direito) — foi assim que Outubro (327-330) é recuperado
+na primeira execução depois desta mudança, e depois disso para de ser
+reprocessado. A recoleta SUBSTITUI os dados da semana (nunca soma, então não
+duplica) e nunca piora o cache: coleta vazia não apaga nada, e agente que
+falhar ou vier com páginas faltando mantém os dados que já estavam salvos.
 
 Pra recoletar manualmente só uma semana específica (ex.: corrigir um dado):
 ```
@@ -87,6 +116,39 @@ python scripts/coletar_evisita.py --semana 305
 ```
 (305 é o HTML ID da semana — ver `scripts/semanas_evisita.py` pra converter
 entre HTML ID e "Semana do Ano".)
+
+**Ranking — sem fator de normalização a partir de Outubro/2026:** a regra
+mora em `RANKING_SEM_NORMALIZACAO_A_PARTIR_DE` (`scripts/coletar_evisita.py`,
+hoje `date(2026, 10, 4)` = início da semana 327). Períodos que COMEÇAM nessa
+data ou depois (Outubro, Novembro...) usam o método novo: Peso Efetivo = Peso
+Nominal para todos, pontos = 100 + Σ(quantidade × peso), e **Dias Úteis
+Esperados** = dias úteis do próprio período − dias de férias/atestado/folga/
+chuva/reunião do cronograma em que o agente não trabalhou. Períodos que
+começam antes (Maio–Setembro e o Acumulado) seguem exatamente como eram, com
+fator de normalização. Pra desligar a regra nova, coloque `None`. Testes:
+`python3 scripts/test_ranking.py`.
+
+**Aba "Média Mensal":** tabela agente × mês com a pontuação final de cada
+mês e a média simples delas (`build_media_mensal` em
+`scripts/generate_dashboard.py`). Não recalcula nada: lê a aba Ranking já
+pronta de cada mês de `data/historico/manifest.json` (só meses "Mês/Ano"),
+então meses fechados nunca mudam, e um mês novo entra sozinho na coleta
+seguinte.
+
+**Feriados nacionais:** `FERIADOS_NACIONAIS` (em `coletar_evisita.py`) traz os feriados nacionais de 2026 e 2027 (sem pontos facultativos como Carnaval e Corpus Christi; acrescente os estaduais/municipais que a equipe não trabalha). Só valem a partir de `FERIADOS_VALEM_A_PARTIR_DE` (01/07/2026): descontam os dias úteis de Julho em diante (Julho e Agosto não têm feriado nacional; Setembro 21, Outubro 19, Novembro 18) — no cálculo dos dias esperados e na detecção de férias. Meses anteriores (Maio–Junho) seguem como foram calculados. Pra valer desde sempre, coloque `None`.
+
+**Ranking — regras do método novo (Outubro/2026 em diante):**
+- **Bônus proporcionais:** os bônus únicos (+5 sem visita rápida, +5 sem turno sem lançamento, +3 pontualidade) só são concedidos a quem trabalhou pelo menos `BONUS_MIN_FRACAO_DIAS_ESPERADOS` (50%) dos dias esperados; o Detalhamento/Extrato explica quando o bônus não vem. Meses antigos mantêm a regra antiga.
+- **Observação "possível afastamento não registrado":** aparece na tabela do Ranking pra quem trabalhou pouco (< 70% dos dias esperados) e tem muitos turnos sem lançamento (≥ 4) — é sinal de férias/licença/atestado que falta lançar em `data/cronograma_ausencias.json` (ou confirmar em `deteccao_editor.html`). Parâmetros `AVISO_AFASTAMENTO_*` em `coletar_evisita.py`. Só em períodos de ~1 mês (não no Acumulado).
+- **Extrato por agente:** botão **🧾 Extrato** em cada linha do Ranking abre a folha com a conta completa (dias, bônus, perdas, limite 0–100), pronta pra imprimir ou salvar em PDF (1 página A4).
+- **Dias esperados de períodos que atravessam a virada** (ex.: Setembro, 31/08 a 02/10) usam o mês que domina o período, não o do último dia.
+- **Média Mensal** agora mostra a **tendência** (diferença do último mês pro anterior) e um mini-gráfico por agente; dá pra ordenar pela tendência.
+
+**Conferência automática de ciclos:** `scripts/validar_ciclos.py` roda a cada execução do workflow. Semana já iniciada sem `id_ciclo` (Tratamento ou P.E.) ou fora de `MESES_OFICIAIS` → o passo final da execução FALHA (o GitHub avisa por e-mail) com o motivo no resumo da execução; ciclos das próximas semanas faltando viram só um aviso. A coleta também escreve no resumo da execução os agentes ausentes/páginas faltando. Testes: `python3 scripts/test_ciclos.py`.
+
+**Impressão do relatório completo:** o botão "🖨️ Imprimir relatório completo do mês" imprime todas as abas (A4 paisagem), sem páginas em branco — a 1ª tabela de cada aba não quebra página, legendas recolhidas saem abertas e o estado é restaurado depois.
+
+**Tamanho das páginas:** `enxugar_html()` (em `generate_dashboard.py`) colapsa a indentação do HTML fora de `<script>/<style>/<pre>`; as páginas ficaram ~45% menores (Acumulado 6,9 → 3,8 MB) sem mudar o que aparece.
 
 **Semana do e-Visita vs. Semana do Ano:** o e-Visita usa dois números
 diferentes pra semana — o HTML ID (só pra consultar o sistema) e a "Semana
@@ -540,3 +602,60 @@ git branch -M main
 git remote add origin https://github.com/SEU-USUARIO/dashboard-visitas.git
 git push -u origin main
 ```
+
+---
+
+## Ajustes manuais de pontuação (`data/ajustes_ranking.json`)
+
+Para dar ou tirar pontos de um agente com justificativa (aparece no Extrato e na
+coluna de detalhes como "Ajuste manual: motivo"), adicione itens à lista:
+
+```json
+[
+  {"id_agente": 116, "data": "15/10/2026", "pontos": 2.0, "motivo": "Ação extra autorizada pela coordenação"}
+]
+```
+
+- `pontos` positivo soma, negativo desconta (sem fator de normalização).
+- O ajuste só vale no mês cuja janela contém a `data`.
+- Itens inválidos são ignorados com aviso no log; `validar_json.py` também aponta.
+- **Só afeta meses regenerados** (Outubro/Novembro). Meses arquivados não são recalculados.
+
+## Meses congelados (Maio a Setembro/2026)
+
+Maio–Setembro estão em `MESES_ARQUIVADOS` (`scripts/coletar_evisita.py`) e marcados
+`origem: "manual"` no `manifest.json`: o pipeline **não** recalcula nem reescreve
+essas planilhas, então os números publicados não mudam.
+
+- Observação: recalcular Setembro com as regras atuais (paradas coletivas abatidas
+  dos dias esperados) mudaria a pontuação de ~37 dos 42 agentes (até 17 pts).
+- Para reabrir um mês: remova-o de `MESES_ARQUIVADOS`, inclua em `MESES_OFICIAIS`
+  e rode o workflow.
+- **Depois da semana 330:** mova Outubro para `MESES_ARQUIVADOS` quando quiser congelá-lo.
+
+---
+
+## Lançar atestado pelo GitHub (formulário pré-preenchido)
+
+**Jeito mais fácil:** abra `atestado.html` no site publicado
+(`https://SEU-USUARIO.github.io/dashboard-visitas/atestado.html`), escolha o agente e as
+datas (já vêm com hoje) e clique em **Abrir formulário já preenchido**. O GitHub abre com
+tudo preenchido; basta clicar em *Submit new issue*.
+
+Também dá para ir em **Issues → New issue → Lançar atestado**.
+
+O que acontece depois (`.github/workflows/lancar-atestado.yml`):
+1. Confere agente e datas. Se algo estiver errado, comenta na issue e **não grava nada**.
+2. Acrescenta `{"alvo":"agente","id_agente":N,"motivo":"Atestado",...}` em
+   `data/cronograma_ausencias.json` (repetir o mesmo pedido não duplica).
+3. Faz o commit, dispara a atualização do site (sem recoletar no e-Visita), comenta e fecha a issue.
+
+Regras e cuidados:
+- Só dono, membros e colaboradores do repositório conseguem lançar (outras issues são ignoradas).
+- O formulário **não pede CID nem diagnóstico**; só ficam datas e o rótulo "Atestado".
+  Se o repositório for público, o nome do agente fica visível na issue — prefira repositório privado.
+- Atestado lançado tira os dias de "Turno sem lançamento" e dos dias esperados: **não desconta ponto**.
+- Entrou ou saiu agente? Rode `python scripts/gerar_form_atestado.py` e envie o
+  `.github/ISSUE_TEMPLATE/atestado.yml` atualizado.
+- Para desfazer um lançamento errado, remova a linha em `data/cronograma_ausencias.json`
+  (ou use o `cronograma_editor.html`).

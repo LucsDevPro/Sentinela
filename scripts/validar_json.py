@@ -23,7 +23,28 @@ ARQUIVOS_CRITICOS = [
     "data/cronograma_ausencias.json",
     "data/config_home.json",
     "data/outras_atividades.json",
+    "data/ajustes_ranking.json",
 ]
+
+
+def validar_ajustes(dados):
+    """data/ajustes_ranking.json: lista de {"id_agente", "data" (dd/mm/aaaa),
+    "pontos" (número), "motivo" (texto)} — erro de formato aqui faria o
+    ajuste ser ignorado em silêncio, então barra antes da coleta."""
+    from datetime import datetime
+    if not isinstance(dados, list):
+        return ["data/ajustes_ranking.json: o arquivo deve ser uma lista [ ... ]"]
+    erros = []
+    for i, it in enumerate(dados, 1):
+        try:
+            int(it["id_agente"]); float(it["pontos"])
+            datetime.strptime(str(it["data"]), "%d/%m/%Y")
+            if not str(it["motivo"]).strip():
+                raise ValueError("motivo vazio")
+        except (KeyError, TypeError, ValueError) as e:
+            erros.append(f"data/ajustes_ranking.json: ajuste #{i} inválido ({e!r}) — use "
+                         f'{{"id_agente": 116, "data": "15/10/2026", "pontos": 2.0, "motivo": "..."}}')
+    return erros
 
 
 def validar(arquivos=ARQUIVOS_CRITICOS):
@@ -31,7 +52,9 @@ def validar(arquivos=ARQUIVOS_CRITICOS):
     for caminho in arquivos:
         try:
             with open(caminho, encoding="utf-8") as f:
-                json.load(f)
+                dados = json.load(f)
+            if caminho.endswith("ajustes_ranking.json"):
+                erros.extend(validar_ajustes(dados))
         except FileNotFoundError:
             continue  # arquivo opcional, tudo bem não existir
         except json.JSONDecodeError as e:

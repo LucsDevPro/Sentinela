@@ -11,6 +11,7 @@ Uso:
 """
 import sys
 import os
+import re
 import json
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
@@ -262,6 +263,7 @@ RANKING_COLS = {
     "Dias Trabalhados": "dias_trabalhados", "Dias Úteis Esperados no Mês": "dias_uteis_esperados",
     "Turnos Sem Trabalhar": "turnos_sem_trabalhar",
     "Pontuação Final": "pontos", "Classificação": "classificacao",
+    "Observação": "observacao",
 }
 RANKING_DET_COLS = {
     "Agente": "agente", "Equipe": "equipe", "Critério": "criterio",
@@ -283,6 +285,15 @@ def cap_first(v):
 # formatação própria e case-sensitive (badge/emoji), mexer quebraria a
 # detecção de cor em class_key()/rank_class_key().
 _NAO_PADRONIZAR_TEXTO = {"classificacao"}
+
+def ranking_sem_nan(rows):
+    """Célula vazia da coluna Observação chega como NaN (que o Jinja trataria
+    como texto verdadeiro e imprimiria "nan") — vira string vazia."""
+    for r in rows:
+        v = r.get("observacao")
+        if v is None or (isinstance(v, float) and pd.isna(v)):
+            r["observacao"] = ""
+    return rows
 
 def records(df, colmap):
     renamed = df.rename(columns=colmap)
@@ -534,6 +545,141 @@ def build_team_cards(resumo, teams):
         ))
     return cards
 
+# --- Média mensal por agente -------------------------------------------------
+# Tabela "agente × mês" com a pontuação final de cada agente em cada mês e a
+# MÉDIA dessas pontuações. Não recalcula nada: lê a aba Ranking já pronta de
+# cada mês listado em data/historico/manifest.json (então meses antigos nunca
+# mudam). Só entram meses nomeados "Mês/Ano" (Maio/2026...), nunca semanas.
+# Faixas da média (as mesmas da legenda do Ranking): ≥90 / ≥75 / ≥60 / abaixo.
+LABEL_MES_RE = re.compile(r"^[^\W\d_]+/\d{4}$")
+
+def _classe_por_pontos(p):
+    if p >= 90:
+        return "excelente"
+    if p >= 75:
+        return "bom"
+    if p >= 60:
+        return "rank-atencao"
+    return "critico"
+
+def _ler_ranking_rapido(path):
+    """Lê só a tabela principal da aba Ranking de uma planilha (modo
+    somente-leitura, bem mais rápido que carregar o arquivo inteiro).
+    Devolve [(agente, equipe, pontos, classificacao)]."""
+    import openpyxl
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    try:
+        if "Ranking" not in wb.sheetnames:
+            return []
+        header, out = None, []
+        for vals in wb["Ranking"].iter_rows(values_only=True):
+            if header is None:
+                if vals and "Agente" in vals and "Pontuação Final" in vals:
+                    header = list(vals)
+                    i_ag, i_eq = header.index("Agente"), header.index("Equipe")
+                    i_pt, i_cl = header.index("Pontuação Final"), header.index("Classificação")
+                continue
+            if not vals or vals[i_ag] is None:
+                break  # fim da tabela principal
+            try:
+                out.append((str(vals[i_ag]).strip(), vals[i_eq], float(vals[i_pt]), vals[i_cl]))
+            except (TypeError, ValueError):
+                continue
+        return out
+    finally:
+        wb.close()
+
+def _sparkline(valores, w=92, h=24):
+    """Mini-gráfico (SVG inline) da pontuação mês a mês, escala fixa 0–100 pra
+    os gráficos de agentes diferentes serem comparáveis. Meses sem registro
+    ficam de fora da linha. Precisa de pelo menos 2 meses."""
+    pts = [(i, v["pontos"]) for i, v in enumerate(valores) if v]
+    if len(pts) < 2:
+        return Markup("")
+    n = max(len(valores) - 1, 1)
+    xy = [(2 + (w - 4) * i / n, 2 + (h - 4) * (1 - max(0.0, min(100.0, p)) / 100)) for i, p in pts]
+    linha = " ".join(f"{x:.1f},{y:.1f}" for x, y in xy)
+    ux, uy = xy[-1]
+    return Markup(f'<svg class="spark" viewBox="0 0 {w} {h}" width="{w}" height="{h}" aria-hidden="true">'
+                  f'<polyline points="{linha}" fill="none" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>'
+                  f'<circle cx="{ux:.1f}" cy="{uy:.1f}" r="2.3"/></svg>')
+
+def build_media_mensal():
+    manifest_path = ROOT / "data" / "historico" / "manifest.json"
+    if not manifest_path.exists():
+        return {"meses": [], "agentes": []}
+    try:
+        entradas = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {"meses": [], "agentes": []}
+    entradas = sorted((e for e in entradas if LABEL_MES_RE.match(str(e.get("label", "")))),
+                      key=lambda e: e.get("semana_inicio", 0))
+    meses, por_agente = [], {}
+    for e in entradas:
+        caminho = ROOT / "data" / "historico" / e["arquivo"]
+        if not caminho.exists():
+            continue
+        linhas = [l for l in _ler_ranking_rapido(caminho) if l[1] != EQUIPE_BLOQUEIO]
+        if not linhas:
+            continue
+        idx = len(meses)
+        meses.append(e["label"])
+        for agente, equipe, pontos, classif in linhas:
+            a = por_agente.setdefault(agente, {"agente": agente, "equipe": equipe, "valores": {}})
+            a["equipe"] = equipe  # fica a equipe do mês mais recente
+            a["valores"][idx] = {"pontos": pontos, "cls": rank_class_key(classif)}
+    agentes = []
+    for a in por_agente.values():
+        valores = [a["valores"].get(i) for i in range(len(meses))]
+        pts = [v["pontos"] for v in valores if v]
+        media = sum(pts) / len(pts)
+        # Tendência = último mês disponível menos o mês anterior disponível.
+        delta = round(pts[-1] - pts[-2], 1) if len(pts) >= 2 else None
+        agentes.append({"agente": a["agente"], "equipe": a["equipe"], "meses": valores,
+                        "media": round(media, 1), "n_meses": len(pts), "cls": _classe_por_pontos(media),
+                        "delta": delta,
+                        "delta_txt": ("—" if delta is None else (f"+{br(delta, 1)}" if delta > 0 else br(delta, 1))),
+                        "delta_cls": ("" if delta is None else ("up" if delta > 0.05 else ("down" if delta < -0.05 else "flat"))),
+                        "spark": _sparkline(valores)})
+    agentes.sort(key=lambda x: x["media"], reverse=True)
+    for i, a in enumerate(agentes, 1):
+        a["posicao"] = i
+    return {"meses": meses, "agentes": agentes}
+
+
+def build_extratos(ranking_rows, detalhe_rows, sem_normalizacao, periodo_label):
+    """Dados do "Extrato por agente" (folha de uma página com a conta da
+    pontuação, pra imprimir/salvar em PDF e entregar ao agente). Tudo vem do
+    ranking e do detalhamento já calculados — nenhuma conta nova aqui."""
+    por_agente = {}
+    for d in detalhe_rows:
+        por_agente.setdefault(d.get("agente"), []).append({
+            "criterio": d.get("criterio"), "qtd": d.get("qtd"),
+            "peso_nominal": d.get("peso_nominal"), "fator": d.get("fator_normalizacao"),
+            "peso": d.get("peso"), "pontos": d.get("pontos"),
+        })
+    extratos = {}
+    for r in ranking_rows:
+        extratos[r["agente"]] = {
+            "agente": r["agente"], "equipe": r.get("equipe"), "posicao": r.get("posicao"),
+            "dias_trabalhados": r.get("dias_trabalhados"), "dias_esperados": r.get("dias_uteis_esperados"),
+            "turnos_sem": r.get("turnos_sem_trabalhar"), "pontos": r.get("pontos"),
+            "classificacao": r.get("classificacao"), "observacao": r.get("observacao") or "",
+            "detalhes": por_agente.get(r["agente"], []),
+        }
+    return {"periodo": periodo_label, "sem_normalizacao": bool(sem_normalizacao),
+            "pontos_iniciais": 100, "total_agentes": len(ranking_rows), "agentes": extratos}
+
+def _periodo_label(periodos):
+    for p in periodos:
+        if p.get("atual"):
+            t = p["label"]
+            m = re.search(r"\((.+)\)", t)
+            if m:
+                return m.group(1)
+            return re.sub(r"^[^\w]+\s*", "", t)
+    return ""
+
 def build_kpi_ranking(ranking):
     if ranking.empty:
         return dict(media=0, lider_nome="—", lider_pontos=0, n_excelente=0, n_bom=0, n_atencao=0, n_critico=0)
@@ -667,9 +813,19 @@ def build_context(data):
         pe_agente=pe["Agente"].iloc[0] if not pe.empty else "—",
         pe_semanas=pe["Semana"].nunique() if not pe.empty else 0,
         custos=records(resumo.sort_values("CustoNum", ascending=False), RESUMO_COLS),
-        ranking=records(data["ranking"].sort_values("Posição"), RANKING_COLS) if not data["ranking"].empty else [],
+        ranking=ranking_sem_nan(records(data["ranking"].sort_values("Posição"), RANKING_COLS)) if not data["ranking"].empty else [],
+        ranking_tem_observacao=bool(not data["ranking"].empty and "Observação" in data["ranking"].columns),
         ranking_detalhe=records(data["ranking_detalhe"], RANKING_DET_COLS) if not data["ranking_detalhe"].empty else [],
         kpi_ranking=build_kpi_ranking(data["ranking"]),
+        media_mensal=build_media_mensal(),
+        # Período sem fator de normalização (ranking de Outubro/2026 em diante):
+        # todo critério do detalhamento tem fator 1,0. Períodos antigos (e o
+        # Acumulado) têm fatores diferentes de 1 e seguem exibindo o fator.
+        ranking_sem_normalizacao=bool(
+            not data["ranking_detalhe"].empty
+            and "Fator de Normalização" in data["ranking_detalhe"].columns
+            and ((pd.to_numeric(data["ranking_detalhe"]["Fator de Normalização"], errors="coerce")
+                  .fillna(1.0) - 1.0).abs() < 1e-9).all()),
         resumo_bloqueio=records(data["resumo_bloqueio"], RESUMO_COLS) if not data["resumo_bloqueio"].empty else [],
         pendencias_bloqueio=records(data["pendencias_bloqueio"], PENDENCIA_COLS) if not data["pendencias_bloqueio"].empty else [],
         chart_data=build_chart_data(data),
@@ -691,7 +847,12 @@ def carregar_periodos():
     index_path = ROOT / "index.html"
     acumulado_path = ROOT / "acumulado.html"
     home_label = "🏠 Início"
-    if CONFIG_HOME_PATH.exists():
+    if HOME_XLSX == ACUMULADO_XLSX and CONFIG_HOME_PATH.exists():
+        # config_home.json aponta pra um período que ainda não foi gerado (ex.:
+        # mês novo antes da primeira coleta) — a home caiu no acumulado, então
+        # o rótulo não pode prometer o mês configurado.
+        home_label = "🏠 Início (Acumulado)"
+    elif CONFIG_HOME_PATH.exists():
         try:
             home_label = "🏠 Início (" + json.loads(CONFIG_HOME_PATH.read_text(encoding="utf-8"))["label"] + ")"
         except (json.JSONDecodeError, KeyError):
@@ -721,6 +882,24 @@ def carregar_periodos():
                           "atual": alvo.resolve() == OUT_PATH.resolve()})
     return itens
 
+# Blocos onde espaço em branco TEM significado (código e texto pré-formatado) —
+# nunca mexemos neles ao enxugar o HTML.
+_BLOCOS_LITERAIS_RE = re.compile(r"(<script\b.*?</script>|<style\b.*?</style>|<pre\b.*?</pre>|<textarea\b.*?</textarea>)",
+                                 re.S | re.I)
+_ESPACOS_RE = re.compile(r"\s{2,}")
+
+def enxugar_html(html):
+    """Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
+    é cheio de indentação (metade dos bytes do Acumulado eram só espaço em
+    branco). Aqui toda sequência de 2+ espaços/quebras de linha FORA de
+    <script>/<style>/<pre>/<textarea> vira 1 espaço — o navegador já colapsa
+    espaços em branco do mesmo jeito, então o resultado visual é idêntico."""
+    partes = _BLOCOS_LITERAIS_RE.split(html)
+    for i in range(0, len(partes), 2):  # índices pares = fora dos blocos literais
+        partes[i] = _ESPACOS_RE.sub(" ", partes[i])
+    return "".join(partes)
+
+
 def main():
     if not XLSX_PATH.exists():
         print(f"ERRO: planilha não encontrada em {XLSX_PATH}", file=sys.stderr)
@@ -728,13 +907,15 @@ def main():
     data = load_all(XLSX_PATH)
     ctx = build_context(data)
     ctx["periodos"] = carregar_periodos()
+    ctx["extratos"] = build_extratos(ctx["ranking"], ctx["ranking_detalhe"],
+                                     ctx["ranking_sem_normalizacao"], _periodo_label(ctx["periodos"]))
     ctx["logo_href"] = os.path.relpath(ROOT / "assets" / "logo_ponta_pora.png", OUT_PATH.parent).replace(os.sep, "/")
 
     env = Environment(loader=FileSystemLoader(str(SCRIPTS_DIR / "templates")), autoescape=True)
     env.filters.update(br=br, badge=badge, id_link=id_link, class_key=class_key, row_class=row_class,
                         rank_badge=rank_badge)
     env.policies["json.dumps_kwargs"] = {"ensure_ascii": False}
-    html = env.get_template("base.html").render(**ctx)
+    html = enxugar_html(env.get_template("base.html").render(**ctx))
 
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(html, encoding="utf-8")

@@ -14,10 +14,10 @@
 
   <div class="table-section">
     <h3>🏆 Ranking Geral ({{ ranking|length }})</h3>
-    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão.</p>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão. O botão <strong>🧾 Extrato</strong> abre a folha com a conta da pontuação do agente, pronta pra imprimir ou salvar em PDF.</p>
     <div class="table-wrap">
       <table class="data-table sortable" id="tableRanking">
-        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Turnos Sem Trabalhar</th><th>Pontuação Final</th><th>Classificação</th></tr></thead>
+        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Turnos Sem Trabalhar</th><th>Pontuação Final</th><th>Classificação</th>{% if ranking_tem_observacao %}<th>Observação</th>{% endif %}<th>Extrato</th></tr></thead>
         <tbody>
           {% for r in ranking %}
           <tr class="{{ r.classificacao|row_class }}">
@@ -29,6 +29,8 @@
             <td class="num">{{ r.turnos_sem_trabalhar|br }}</td>
             <td class="num">{{ r.pontos|br(1) }}</td>
             <td>{{ r.classificacao|rank_badge }}</td>
+            {% if ranking_tem_observacao %}<td class="obs-cell">{{ r.observacao or "" }}</td>{% endif %}
+            <td><button type="button" class="extrato-btn" data-agente="{{ r.agente }}" title="Abrir a folha de pontuação deste agente (imprimir ou salvar em PDF)">🧾 Extrato</button></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -56,20 +58,42 @@
               <td>❌ Visita rápida (abaixo do tempo mínimo)</td><td class="perda">−0,2/visita</td></tr>
         </tbody>
       </table>
+      {% if ranking_sem_normalizacao %}
+      <p><strong>Sem fator de normalização:</strong> todos os agentes usam o <strong>mesmo peso</strong> da
+      tabela acima (Peso Efetivo = Peso Nominal). Pontuação = 100 + ganhos − perdas, ocorrência por ocorrência
+      — dá pra conferir na mão: <strong>Quantidade × Peso = Pontos Aplicados</strong> no Detalhamento abaixo.</p>
+      <p><strong>Dias Úteis Esperados</strong> = dias úteis do mês, sem feriados nacionais (até a data do relatório) − dias de
+      férias, atestado, folga, chuva ou reunião registrados no cronograma em que o agente não trabalhou.
+      Quem esteve de férias tem, portanto, menos dias esperados.</p>
+      <p><strong>Bônus</strong> (+5 sem visita rápida, +5 sem ausência, +3 pontualidade perfeita) só valem
+      para quem trabalhou pelo menos <strong>50% dos dias esperados</strong>; quando não é concedido, o
+      Detalhamento mostra uma linha explicando o motivo.</p>
+      <p><strong>⚠️ Observação:</strong> aparece quando o agente trabalhou bem menos que o esperado e tem vários
+      turnos sem lançamento — normalmente é afastamento (férias, licença, atestado) que falta lançar no
+      cronograma. A gestão deve conferir antes de considerar como falta.</p>
+      {% else %}
       <p><strong>Fator de Normalização:</strong> os pesos acima são ajustados pra cima (agente trabalhou
       menos dias que o esperado) ou pra baixo (período longo, ex. Acumulado), pra ninguém ser
       punido/premiado só pelo tamanho do período observado. Peso Efetivo = Peso Nominal × Fator — ver
       colunas <strong>Dias Trabalhados</strong>/<strong>Turnos Sem Trabalhar</strong> acima e
       <strong>Peso Nominal</strong>/<strong>Fator</strong>/<strong>Peso Efetivo</strong> no Detalhamento
       abaixo, pra conferir a conta na mão.</p>
+      {% endif %}
     </details>
   </div>
 
   {% if ranking_detalhe %}
+  {% if ranking_sem_normalizacao %}
+  {{ alert_table(ranking_detalhe, "Detalhamento — Critérios Aplicados por Agente", "📋", "ranking-detalhe",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("criterio","Critério","str"),
+      ("qtd","Quantidade","num"), ("peso_nominal","Peso","num2"),
+      ("pontos","Pontos Aplicados","num1")]) }}
+  {% else %}
   {{ alert_table(ranking_detalhe, "Detalhamento — Critérios Aplicados por Agente", "📋", "ranking-detalhe",
      [("agente","Agente","str"), ("equipe","Equipe","str"), ("criterio","Critério","str"),
       ("qtd","Quantidade","num"), ("peso_nominal","Peso Nominal","num2"),
       ("fator_normalizacao","Fator Normalização","num2"), ("peso","Peso Efetivo","num2"),
       ("pontos","Pontos Aplicados","num1")]) }}
+  {% endif %}
   {% endif %}
 </div>
