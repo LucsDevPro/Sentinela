@@ -1,0 +1,4 @@
+Arquivo das paginas semanais antigas (semanas 318 a 326, Agosto e Setembro/2026).
+Foram retiradas do menu: o historico agora tem apenas paginas MENSAIS.
+Os dados continuam preservados aqui e, de forma bruta, em data/semanas/.
+Esta pasta nao e lida pelo workflow nem aparece no seletor de periodo.
