@@ -1,0 +1,92 @@
+name: Lançar atestado
+description: Registra o(s) dia(s) de atestado de um agente (sem desconto de pontos).
+title: "Atestado: "
+labels: [atestado]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Preencha só o agente e as datas. **Não escreva CID, diagnóstico nem o
+        conteúdo do atestado** — o sistema guarda apenas as datas.
+  - type: dropdown
+    id: agente
+    attributes:
+      label: Agente
+      options:
+        - "Adriana de Jesus Saraiva — Equipe 1 (ID 672)"
+        - "Adriano Ricardo Thiel — Equipe 1 (ID 85)"
+        - "Alana Amanda Fernandes Ovelar — Equipe 3 (ID 2951)"
+        - "Alvaro Delgado Brandao — Equipe Bloqueio (ID 1934)"
+        - "Ana Gabriela Silva Garcete — Equipe 1 (ID 73)"
+        - "Anderson Jose de Santana — Equipe 4 (ID 110)"
+        - "Anderson Salabarrieto — Equipe Bloqueio (ID 476)"
+        - "André Luiz Benites Rocha — Equipe Bloqueio (ID 109)"
+        - "Antonio Cezar Marques — (ID 1031)"
+        - "Bianca Afonso Narbaez — Equipe 2 (ID 2917)"
+        - "Brauher Luiz Alvarenga Gonzalez — Equipe 2 (ID 125)"
+        - "Carlos Alberto Albiero — Equipe 1 (ID 3101)"
+        - "Cicero Isrrael Sanabria — Equipe 2 (ID 115)"
+        - "Claine Luisa Figueiredo Torraca — Equipe 3 (ID 2918)"
+        - "Cris Milene Cardenas da Silva — Equipe 1 (ID 470)"
+        - "Emerson de Carvalho Miranda — Equipe Bloqueio (ID 1088)"
+        - "Emidio Rainer Vilhalba — Equipe 3 (ID 120)"
+        - "Evelyn Santana Santos Oliveira — Equipe 1 (ID 3037)"
+        - "Fabiana de Figueredo Vieira — Equipe 2 (ID 99)"
+        - "Fabio Teodoro Alves Alexo — Equipe Bloqueio (ID 162)"
+        - "Gabriel Alan de Oliveira Martins — Equipe 1 (ID 1935)"
+        - "Geancarlos Ferreira Barrios — Equipe 3 (ID 1936)"
+        - "Gilmar Bitencourt Luiz — Equipe 2 (ID 151)"
+        - "Gisele Lopes Justiniano — Equipe 4 (ID 80)"
+        - "Gisele Olimpia Torres — Equipe 2 (ID 3127)"
+        - "Josoé de Oliveira — Equipe Bloqueio (ID 126)"
+        - "Juliana Patricia Goncalves — Equipe 4 (ID 1943)"
+        - "Kariele Jackeline Rodrigues Silva — Equipe 4 (ID 2789)"
+        - "Kátia Cilene Silveira Machado — Equipe 4 (ID 149)"
+        - "Marco Antonio Ayala de Matos Freitas — Equipe 3 (ID 1938)"
+        - "Marcos Alcindo Insalbralde — Equipe Bloqueio (ID 2101)"
+        - "Mateus Falcao de Souza — Equipe 2 (ID 2030)"
+        - "Miglidiane Maciel Ajala — Equipe 3 (ID 2721)"
+        - "Naime Cristina Freitas — Equipe 3 (ID 3038)"
+        - "Rafael Ramos Recalde — Equipe 4 (ID 1942)"
+        - "Ramona dos Santos Oliveira — Equipe 4 (ID 124)"
+        - "Raquel Ortiz dos Santos — Equipe 1 (ID 79)"
+        - "Robson Pavão Montania — Equipe Bloqueio (ID 122)"
+        - "Rosalina Beniel Vargas — Equipe 3 (ID 3128)"
+        - "Rozana Reis da Silva — Equipe 4 (ID 161)"
+        - "Rozentina Matos de Oliveira — Equipe 1 (ID 30)"
+        - "Sara Eliane Talaveira de Oliveira — Equipe 4 (ID 1996)"
+        - "Selba Ramona Afonso — Equipe 3 (ID 113)"
+        - "Silvina Regina de Souza Valiente — Equipe 4 (ID 86)"
+        - "Silvio de Aquino — Equipe Bloqueio (ID 155)"
+        - "Suely Aguiar Alves Luiz — Equipe 2 (ID 465)"
+        - "Tania Maria Montania — Equipe 2 (ID 134)"
+        - "Teonilda Florentino Vieira — Equipe 2 (ID 3035)"
+        - "Wagner Tarlei Gomes — Equipe 1 (ID 116)"
+        - "Walquiria Araujo Flores — Equipe 4 (ID 157)"
+        - "Wesley de Souza Leal — Equipe 2 (ID 81)"
+        - "William Anderson Chamorro Tavares — Equipe 2 (ID 142)"
+    validations:
+      required: true
+  - type: input
+    id: inicio
+    attributes:
+      label: Primeiro dia do atestado
+      description: Formato dd/mm/aaaa
+      placeholder: 27/10/2026
+    validations:
+      required: true
+  - type: input
+    id: fim
+    attributes:
+      label: Último dia do atestado
+      description: Formato dd/mm/aaaa. Para um dia só, repita a data do primeiro dia.
+      placeholder: 27/10/2026
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirmo
+    attributes:
+      label: Confirmação
+      options:
+        - label: Não informei CID nem diagnóstico neste formulário.
+          required: true
