@@ -48,5 +48,15 @@
     "semana_ano_inicio": 35,
     "semana_ano_fim": 39,
     "gerado_em": "26/10/2026 14:42"
+  },
+  {
+    "arquivo": "semanas_327-330.xlsx",
+    "label": "Outubro/2026",
+    "origem": "cache",
+    "semana_inicio": 327,
+    "semana_fim": 330,
+    "semana_ano_inicio": 40,
+    "semana_ano_fim": 43,
+    "gerado_em": "29/10/2026 01:16"
   }
 ]
