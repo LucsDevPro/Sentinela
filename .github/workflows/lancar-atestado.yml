@@ -1,0 +1,77 @@
+name: Lançar atestado
+
+# Dispara quando alguém abre uma issue pelo formulário "Lançar atestado".
+# Só quem tem acesso de escrita ao repositório (dono, membro, colaborador)
+# consegue lançar — qualquer outra pessoa tem a issue ignorada.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: lancar-atestado
+  cancel-in-progress: false
+
+jobs:
+  lancar:
+    if: >-
+      contains(github.event.issue.labels.*.name, 'atestado') &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gravar atestado no cronograma
+        id: lancar
+        env:
+          # corpo da issue é texto de terceiros: passa por variável de ambiente,
+          # nunca direto dentro do script
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set +e
+          python scripts/lancar_atestado.py > msg.txt
+          echo "codigo=$?" >> "$GITHUB_OUTPUT"
+          cat msg.txt
+
+      - name: Validar o JSON resultante
+        if: steps.lancar.outputs.codigo == '0'
+        run: python scripts/validar_json.py
+
+      - name: Commit e push
+        id: commit
+        if: steps.lancar.outputs.codigo == '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/cronograma_ausencias.json; then
+            echo "mudou=false" >> "$GITHUB_OUTPUT"
+          else
+            git add data/cronograma_ausencias.json
+            git commit -m "Atestado lançado pela issue #${{ github.event.issue.number }}"
+            git pull --rebase origin "${{ github.ref_name }}"
+            git push
+            echo "mudou=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Push feito com o token do workflow não dispara outros workflows,
+      # então regeramos o site daqui (sem recoletar no e-Visita).
+      - name: Atualizar o dashboard
+        if: steps.commit.outputs.mudou == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-dashboard.yml --ref "${{ github.ref_name }}" -f rodar_coleta=false
+
+      - name: Responder e fechar a issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -f msg.txt ] || echo "❌ Não consegui processar este pedido. Veja a aba Actions." > msg.txt
+          gh issue comment "${{ github.event.issue.number }}" --body-file msg.txt
+          if [ "${{ steps.lancar.outputs.codigo }}" = "0" ]; then
+            gh issue close "${{ github.event.issue.number }}" --reason completed
+          fi

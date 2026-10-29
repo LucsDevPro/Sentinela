@@ -37,6 +37,8 @@ concurrency:
 
 jobs:
   build:
+    outputs:
+      artefato: ${{ steps.artefato.outputs.pronto }}
     # Trava execuções sobrepostas do job de coleta/geração especificamente
     # (o "concurrency: pages" acima só protege o deploy do Pages, não isso).
     # Sem isso, disparar uma execução manual enquanto outra ainda está
@@ -98,6 +100,17 @@ jobs:
       - name: Validar arquivos JSON críticos
         run: python scripts/validar_json.py
 
+      # Confere se toda semana já iniciada tem o id_ciclo de Tratamento e de
+      # Ponto Estratégico cadastrado (scripts/coletar_evisita.py). Foi esse
+      # esquecimento que deixou Outubro/2026 sem dados. Não interrompe o
+      # restante (o site ainda é atualizado com o que existe), mas a execução
+      # termina em FALHA no último passo, com o motivo no resumo da execução —
+      # o GitHub avisa por e-mail quando uma execução falha.
+      - name: Conferir ciclos do e-Visita (Tratamento e Ponto Estratégico)
+        id: ciclos
+        continue-on-error: true
+        run: python scripts/validar_ciclos.py
+
       # Roda a suíte de testes da lógica de detecção (férias/chuva) ANTES de
       # gerar qualquer coisa — se uma mudança futura no coletar_evisita.py
       # quebrar essa lógica, o workflow falha aqui, ANTES de publicar um
@@ -109,6 +122,18 @@ jobs:
           EVISITA_CPF: ${{ secrets.EVISITA_CPF }}
           EVISITA_SENHA: ${{ secrets.EVISITA_SENHA }}
         run: python scripts/test_deteccao.py
+
+      # Testes do ranking (Outubro/2026 em diante sem fator de normalização;
+      # meses anteriores inalterados). Usa o cache de data/semanas/ como
+      # massa de teste — sem acessar o e-Visita.
+      - name: Rodar testes do ranking
+        env:
+          EVISITA_CPF: ${{ secrets.EVISITA_CPF }}
+          EVISITA_SENHA: ${{ secrets.EVISITA_SENHA }}
+        run: |
+          python scripts/test_ranking.py
+          python scripts/test_ciclos.py
+          python scripts/test_atestado.py
 
       # Só coleta dados novos quando disparado por agendamento ou manualmente
       # (com a opção marcada). Em push (planilha subida à mão, ou mudança nos
@@ -200,8 +225,24 @@ jobs:
         with:
           path: .
 
+      # Marca que o site está pronto pra publicar — o job "deploy" usa isso
+      # pra publicar mesmo se este job terminar em falha por causa dos ciclos
+      # (passo seguinte), em vez de deixar o site desatualizado.
+      - name: Marcar site como pronto pra publicar
+        id: artefato
+        run: echo "pronto=true" >> "$GITHUB_OUTPUT"
+
+      - name: Falhar a execução se faltar ciclo do e-Visita
+        if: steps.ciclos.outcome == 'failure'
+        run: |
+          echo "::error title=Ciclo do e-Visita não cadastrado::Há semana sem id_ciclo cadastrado — veja o resumo desta execução. O site foi publicado com o que já existe, mas a(s) semana(s) sem ciclo NÃO foram coletadas."
+          exit 1
+
   deploy:
     needs: build
+    # Publica mesmo se o job build terminou em falha só por causa dos ciclos
+    # (o artefato do site já estava pronto), mas nunca sem artefato.
+    if: ${{ !cancelled() && needs.build.outputs.artefato == 'true' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
