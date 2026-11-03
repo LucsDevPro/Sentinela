@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Álbum de cartinhas — Sentinela</title>
+<script src="assets/tema.js"></script>
+<link rel="stylesheet" href="assets/fontes.css">
+<link rel="stylesheet" href="assets/carta.css">
+<style>
+  :root{--bg:#EEF2F8;--card:#FFFFFF;--tx:#12233B;--mut:#4A5D7C;--bd:#D5DEEA;--pri:#F7B500;--pri-tx:#0A1B33;--warn:#8A6100;--warn-bg:#FFF4D6;--bad:#B3261E;--bad-bg:#FDECEA;--ok:#0B7A44;--ok-bg:#E4F6EC;--info-bg:#E6F1FB;--info:#1565B8;--soft:#F2F6FB;--serie:#0F5FB0;color-scheme:light}
+  :root[data-theme="dark"]{--bg:#071426;--card:#0C1F3A;--tx:#E6EDF7;--mut:#9DB2D0;--bd:#1D3C68;--pri:#F7B500;--pri-tx:#0A1B33;--warn:#FFC93D;--warn-bg:#3A2D12;--bad:#FF8478;--bad-bg:#3A1D22;--ok:#5CE59A;--ok-bg:#12301F;--info-bg:#10304F;--info:#6CC4F2;--soft:#102848;--serie:#F7B500;color-scheme:dark}
+  header.topo{border-bottom-color:#1D3C68}
+  header.topo a{color:#9DD3F5}
+  .tema-btn{background:transparent;border:1px solid #2C4F82;color:#DCE7F5;border-radius:6px;padding:6px 10px;font:inherit;font-size:.82rem;cursor:pointer;white-space:nowrap;margin-left:auto}
+  .tema-btn + a{margin-left:0}
+  .tema-btn:hover{border-color:#F7B500}
+  .ico{width:1.1em;height:1.1em;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .ico-sol{display:none}:root[data-theme="dark"] .ico-sol{display:inline}:root[data-theme="dark"] .ico-lua{display:none}
+  @media (max-width:480px){.tema-btn .tema-txt{display:none}.tema-btn{padding:6px 8px}header.topo{padding-left:10px;padding-right:10px}header.topo .marca{gap:6px}header.topo img{height:22px;padding:2px 4px}header.topo b{font-size:.9rem;letter-spacing:.02em}header.topo a{font-size:.72rem}header.topo b i{display:none}}
+  header.topo{background:#050F20;border-bottom:1px solid var(--bd);position:relative;margin:0 0 14px;padding:12px 16px 15px}
+  header.topo::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:linear-gradient(90deg,#F7B500 0 120px,#FF5143 120px 168px,#19B8A3 168px 196px,transparent 196px)}
+  header.topo .marca{display:flex;align-items:center;gap:12px;max-width:860px;margin:0 auto}
+  header.topo img{height:34px;background:#fff;padding:3px 8px;border-radius:4px}
+  header.topo b{white-space:nowrap;font-family:"Barlow Semi Condensed",system-ui,sans-serif;font-size:1.2rem;letter-spacing:.04em;color:#fff}
+  header.topo b i{font-style:normal;color:#2BA8E8;font-weight:600}
+  header.topo a{margin-left:auto;font-size:.85rem;white-space:nowrap}
+  @media (max-width:480px){header.topo .marca{gap:8px}header.topo img{height:26px;padding:2px 6px}header.topo b{font-size:1.02rem}header.topo a{font-size:.78rem}}
+  h1,h2{font-family:"Barlow Semi Condensed",system-ui,sans-serif;letter-spacing:.01em}
+  :focus-visible{outline:2px solid #F7B500;outline-offset:2px}
+  *{box-sizing:border-box} html{background:var(--bg)}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  main{max-width:860px;margin:0 auto;padding:16px}
+  h1{font-size:1.35rem;margin:6px 0 2px} h2{font-size:1.05rem;margin:0 0 8px}
+  .mut{color:var(--mut);font-size:.9rem} a{color:var(--info)}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .kpi{border:1px solid var(--bd);border-radius:10px;padding:10px} .kpi span{display:block;font-size:.72rem;text-transform:uppercase;color:var(--mut);font-weight:700}
+  .kpi strong{font-size:1.25rem}
+  .barra{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin:10px 0 4px}
+  .barra label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;font-weight:700;color:var(--mut);text-transform:uppercase}
+  select,input[type=search]{min-height:46px;padding:8px 10px;font-size:1rem;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);width:auto;min-width:150px}
+  main{max-width:1240px}
+  .album{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:14px 10px;margin:16px 0 40px;justify-items:center}
+  .slot{--e:.7;position:relative;display:block;width:190px;height:274px;text-decoration:none;color:inherit;border-radius:20px;outline-offset:6px}
+  .slot .carta{position:absolute;left:50%;top:50%;margin:-196px 0 0 -136px;height:392px;transform:scale(var(--e));transition:transform .18s ease,box-shadow .18s ease}
+  .slot:hover,.slot:focus-visible{z-index:20}
+  .slot:hover .carta,.slot:focus-visible .carta{transform:scale(1.04);box-shadow:0 18px 40px rgba(0,0,0,.45),inset 0 0 0 2px rgba(255,255,255,.5)}
+  .slot .n{position:absolute;left:-4px;top:-6px;z-index:3;min-width:34px;padding:2px 8px;border-radius:999px;background:#050F20;color:#fff;font:700 .8rem "IBM Plex Sans",sans-serif;text-align:center;border:2px solid #F7B500}
+  @media (prefers-reduced-motion:reduce){.slot .carta{transition:none}}
+  @media (hover:none){.slot:active .carta{transform:scale(1.04)}}
+  @media (max-width:480px){.album{grid-template-columns:repeat(2,1fr);gap:8px 4px}.slot{--e:.62;width:168px;height:243px}.barra select,.barra input{min-width:0;width:100%}.barra label{flex:1 0 45%}}
+  body.modo-apresentacao .nome{filter:blur(7px)}
+</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="11" height="15" rx="2"/><path d="M7 3h10a2 2 0 0 1 2 2v13"/><path d="M6.500 12h4M6.500 16h4"/></symbol></svg>
+<header class="topo"><div class="marca"><img src="assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã"><b>SENTINELA <i>álbum</i></b><button type="button" class="tema-btn" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg> <span class="tema-txt">Tema escuro</span></button><a href="index.html">← Dashboard</a></div></header>
+<main>
+  <label class="tg"><input type="checkbox" id="apres" style="width:auto;min-height:0"> Modo apresentação (ocultar nomes)</label>
+  <h1><svg class="ico" aria-hidden="true"><use href="#i-cards"/></svg> Álbum de cartinhas</h1>
+  <p class="mut">Todas as cartinhas, da maior nota para a menor. Passe o mouse (ou toque) em uma cartinha para ampliar; clique para ver a evolução do agente.</p>
+  <div class="barra">
+    <label>Mês<select id="fMes"></select></label>
+    <label>Equipe<select id="fEq"><option value="">Todas</option></select></label>
+    <label>Nível<select id="fNivel"><option value="">Todos</option><option>DESTAQUE</option><option>OURO</option><option>PRATA</option><option>BRONZE</option></select></label>
+    <label>Buscar<input type="search" id="fBusca" placeholder="parte do nome" autocomplete="off"></label>
+  </div>
+  <p class="mut" id="resumo" aria-live="polite"></p>
+  <div class="album" id="album"></div>
+</main>
+<script src="assets/agentes_dados.js"></script>
+<script src="assets/carta.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const MESES = ['janeiro','fevereiro','marco','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const ordMes = l => { const p = norm(l).split('/'); return (parseInt(p[1], 10) || 0) * 20 + MESES.indexOf(p[0]); };
+$('apres').onchange = e => document.body.classList.toggle('modo-apresentacao', e.target.checked);
+try { if (window.opener && window.opener.document.body.classList.contains('modo-apresentacao')) { $('apres').checked = true; document.body.classList.add('modo-apresentacao'); } } catch (e) {}
+const D = window.AGENTES_DADOS, ag = D && D.agentes ? Object.entries(D.agentes).map(([k, a]) => ({ k, a })) : [];
+const meses = [...new Set(ag.flatMap(x => (x.a.meses || []).map(m => m.mes)))].sort((p, q) => ordMes(p) - ordMes(q));
+if (!meses.length) { $('album').outerHTML = '<div class="card aviso">Ainda não há cartinhas. Volte depois da próxima atualização do site.</div>'; $('resumo').textContent = ''; }
+else {
+  $('fMes').innerHTML = meses.slice().reverse().map(m => `<option>${esc(m)}</option>`).join('');
+  const q0 = new URLSearchParams(location.search).get('mes'); if (q0 && meses.includes(q0)) $('fMes').value = q0;
+  const eqs = [...new Set(ag.map(x => x.a.equipe).filter(Boolean))].sort((p, q) => p.localeCompare(q, 'pt-BR', { numeric: true }));
+  $('fEq').insertAdjacentHTML('beforeend', eqs.map(e => `<option>${esc(e)}</option>`).join(''));
+  const desenhar = () => {
+    const mes = $('fMes').value, eq = $('fEq').value, niv = $('fNivel').value, bu = norm($('fBusca').value);
+    const lista = [];
+    ag.forEach(x => { const ms = (x.a.meses || []).slice().sort((p, q) => ordMes(p.mes) - ordMes(q.mes)); const i = ms.findIndex(m => m.mes === mes);
+      if (i < 0 || ms[i].pontos == null) return; lista.push({ x, ms: ms.slice(0, i + 1), u: ms[i] }); });
+    lista.sort((p, q) => q.u.pontos - p.u.pontos || p.u.pos - q.u.pos || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
+    lista.forEach((l, i) => { l.lugar = i + 1; });
+    const vis = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)) && (!niv || Carta.medidas(l.ms).tier[1] === niv));
+    $('album').innerHTML = vis.map(l => `<a class="slot" href="agente.html?${/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)}" title="Ver evolução de ${esc(l.x.a.nome)}"><span class="n" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${Carta.html(l.x.a, l.ms)}</a>`).join('');
+    $('resumo').textContent = vis.length ? `${vis.length} cartinha(s) de ${lista.length} em ${mes}.` : 'Nenhuma cartinha com esses filtros.';
+  };
+  ['fMes', 'fEq', 'fNivel'].forEach(i => $(i).onchange = desenhar); $('fBusca').oninput = desenhar;
+  desenhar();
+}
+document.addEventListener('sentinela:tema', () => {});
+</script>
+</body>
+</html>

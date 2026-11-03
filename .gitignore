@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Segredos locais (use .env.example como modelo)
+.env
+.env.*
+!.env.example
+
+# Páginas/partes de teste geradas localmente (veja CLAUDE.md)
+_teste*
+partes/_teste*
+
+# Ferramentas locais
+node_modules/
+.playwright/
+.wrangler/
+.dev.vars
+
+# Temporários e lixo de sistema
+*.tmp
+*.bak
+*~
+.DS_Store
+Thumbs.db

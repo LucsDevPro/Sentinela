@@ -1,0 +1,93 @@
+name: Aplicar decisão da coordenação
+
+# Disparado pelo Worker da Cloudflare (repository_dispatch, event_type "decisao")
+# quando a coordenação confirma/ajusta férias ou lança uma ausência na página
+# validar.html. Só quem tem o token do GitHub (o Worker) consegue disparar.
+on:
+  repository_dispatch:
+    types: [decisao]
+
+permissions:
+  contents: write
+  actions: write
+
+# Sem "concurrency": o GitHub descarta execuções pendentes quando chega outra
+# da mesma fila, e isso PERDERIA decisões. Em vez disso, cada execução reaplica
+# a decisão em cima do commit mais recente e tenta o push de novo (abaixo).
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15   # nunca fica preso: decisão é rápida
+    env:
+      # no nível do job pra poder ser usado em "if" dos passos
+      WORKER_URL: ${{ secrets.SENTINELA_WORKER_URL }}
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: "3.11"
+
+      # Só "Fechar mês"/"Reabrir mês" precisam das bibliotecas da coleta; as outras ações são leves.
+      - name: Instalar dependências
+        if: ${{ contains(toJSON(github.event.client_payload.decisao), '_mes') }}
+        run: pip install -r requirements.txt
+
+      - name: Aplicar a decisão (reaplica sobre o commit mais recente se houver conflito)
+        id: aplicar
+        env:
+          # Dados vêm do Worker, mas passam por variável de ambiente, nunca
+          # interpolados dentro do script.
+          DECISAO: ${{ toJSON(github.event.client_payload.decisao) }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          resultado=falha
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard "origin/$BRANCH"
+            set +e
+            python3 scripts/aplicar_decisao.py > msg.txt
+            codigo=$?
+            set -e
+            cat msg.txt
+            if [ "$codigo" -ne 0 ]; then resultado=recusada; break; fi
+            python3 scripts/validar_json.py
+            if git diff --quiet -- data/; then resultado=semmudanca; break; fi
+            git add data/cronograma_ausencias.json data/deteccoes_pendentes.json data/ajustes_ranking.json data/meses_arquivados.json data/historico
+            git commit -m "Decisão da coordenação (execução ${{ github.run_id }}) [skip ci]"
+            if git push origin "HEAD:$BRANCH"; then resultado=ok; break; fi
+            echo "Push rejeitado (outro commit chegou primeiro) — reaplicando, tentativa $i..."
+            sleep $((RANDOM % 8 + 3))
+          done
+          echo "resultado=$resultado" >> "$GITHUB_OUTPUT"
+          { echo "### Decisão: $resultado"; cat msg.txt; } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Atualizar o dashboard
+        if: steps.aplicar.outputs.resultado == 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-dashboard.yml --ref "${{ github.ref_name }}" -f rodar_coleta=false
+
+      # Registra o resultado no histórico privado do Worker (se estiver configurado).
+      - name: Informar o resultado ao Worker
+        if: always() && env.WORKER_URL != ''
+        env:
+          PUBLISH_TOKEN: ${{ secrets.SENTINELA_PUBLISH_TOKEN }}
+          DECISAO_ID: ${{ github.event.client_payload.decisao_id }}
+          RESULTADO: ${{ steps.aplicar.outputs.resultado }}
+        run: |
+          python3 - <<'PY' > corpo.json
+          import json, os
+          msg = open("msg.txt", encoding="utf-8").read().strip() if os.path.exists("msg.txt") else "sem mensagem"
+          print(json.dumps({"decisao_id": os.environ["DECISAO_ID"], "ok": os.environ["RESULTADO"] in ("ok", "semmudanca"), "msg": msg}))
+          PY
+          curl -sS -m 30 -X POST "$WORKER_URL/resultado" -H "Authorization: Bearer $PUBLISH_TOKEN" \
+            -H "Content-Type: application/json" --data @corpo.json || true
+
+      - name: Falhar se a decisão não foi aplicada
+        if: steps.aplicar.outputs.resultado == 'recusada' || steps.aplicar.outputs.resultado == 'falha'
+        run: exit 1

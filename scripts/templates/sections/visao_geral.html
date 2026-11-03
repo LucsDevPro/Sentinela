@@ -1,0 +1,36 @@
+{% from "macros.html" import kpi as kpi_card, chart_card, legend_chip %}
+<div class="section active" id="visao-geral">
+  <div class="kpi-grid">
+    {{ kpi_card("blue", "Total Agentes", kpi.total_agentes, teams|length ~ " equipes") }}
+    {{ kpi_card("cyan", "Total Geral de Imóveis", kpi.total_geral|br, kpi.total_abertos|br ~ " abertos · " ~ kpi.total_fechados|br ~ " fechados · " ~ kpi.total_recusados|br ~ " recusados") }}
+    {{ kpi_card("yellow", "% Pendência Geral", kpi.pct_pendencia|br(1) ~ "%", "(fechados+recusados) ÷ total") }}
+    {{ kpi_card("red", "Agentes Críticos", kpi.n_critico, kpi.n_normal ~ " normal · " ~ kpi.n_atencao ~ " atenção") }}
+    {{ kpi_card("orange", "Alertas + Ausências", alertas_totais + n_ausencias, alertas_totais ~ " alertas · " ~ n_ausencias|br ~ " ausências") }}
+  </div>
+
+  <div class="hover-legend">
+    {{ legend_chip("#12B76A", "Normal", "🟢 NORMAL = até 10% de visitas rápidas") }}
+    {{ legend_chip("#F2B01E", "Atenção", "🟡 ATENÇÃO = 11% a 20% de visitas rápidas") }}
+    {{ legend_chip("#E4572E", "Crítico", "🔴 CRÍTICO = acima de 20% de visitas rápidas") }}
+    {{ legend_chip("#6B7A8F", "% Pendência", "% Pendência = (Imóveis Fechados + Recusados) ÷ Total Geral") }}
+  </div>
+
+  <h3 style="margin-bottom:14px;font-size:1.05rem;">Agentes em Situação Crítica ({{ crit_count }})</h3>
+  <div class="criticos-list">
+    {% for r in criticos %}
+    <div class="critico-item">
+      <span class="ci-pct">{{ r.pct_rapidas|br(1) }}%</span>
+      <div class="ci-name">{{ r.agente }}</div>
+      <div class="ci-meta">{{ r.equipe }} · {{ r.abertos|br }} imóveis abertos · {{ r.rapidas|br }} rápidas · média {{ r.media_min|br(1) }} min</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if crit_count > 5 %}
+  <p class="table-hint">Mostrando os 5 piores. <a href="#" onclick="goToSection('agentes');return false;">Ver todos os {{ crit_count }} agentes críticos na aba Agentes →</a></p>
+  {% endif %}
+
+  <div class="charts-grid">
+    {{ chart_card("chartClass", "Distribuição por Classificação") }}
+    {{ chart_card("chartTeam", "Imóveis Abertos e Rápidas por Equipe") }}
+  </div>
+</div>

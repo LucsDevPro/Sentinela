@@ -1,0 +1,17 @@
+# Arquivos GERADOS (não edite à mão; o GitHub colapsa o diff deles e a busca por linguagem ignora).
+index.html                       linguist-generated=true
+acumulado.html                   linguist-generated=true
+transparencia.html               linguist-generated=true
+historico/*.html                 linguist-generated=true
+partes/*                         linguist-generated=true
+assets/agentes_dados.js          linguist-generated=true
+docs/MAPA.md                     linguist-generated=true
+data/Analise_Consolidada.xlsx    linguist-generated=true
+data/semanas/*                   linguist-generated=true
+data/historico/*.xlsx            linguist-generated=true
+data/csv/*                       linguist-generated=true
+# Bibliotecas de terceiros copiadas pro repositório.
+scripts/chart.umd.js             linguist-vendored=true
+assets/chart.umd.js              linguist-vendored=true
+# Planilhas são binárias (sem diff de texto).
+*.xlsx                           binary

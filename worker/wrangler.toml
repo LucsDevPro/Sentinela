@@ -1,0 +1,9 @@
+# Só necessário se você implantar pela linha de comando (npx wrangler deploy).
+# Pelo painel da Cloudflare basta colar o index.js — veja o README.
+name = "sentinela-worker"
+main = "index.js"
+compatibility_date = "2024-11-01"
+
+[[kv_namespaces]]
+binding = "SENTINELA_KV"
+id = "COLE-AQUI-O-ID-DO-KV"

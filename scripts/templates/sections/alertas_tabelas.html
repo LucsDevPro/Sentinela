@@ -1,0 +1,17 @@
+{% from "macros.html" import alert_table %}
+{% set base_cols = [("agente","Agente","str"), ("equipe","Equipe","str"), ("id_visita","ID Visita","id"),
+                     ("area","Área","str"), ("quarteirao","Quarteirão","str"), ("logradouro","Logradouro","str"),
+                     ("imovel","Imóvel","str"), ("chegada","Chegada","str"), ("saida","Saída","str")] %}
+  {{ alert_table(dup, "Visitas Duplicadas", "📑", "dup", base_cols + [("motivo","Motivo","str")]) }}
+  {{ alert_table(susp, "Sequências Suspeitas", "⚠️",  "sus",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("cadeia","Cadeia","str"), ("id_visita","ID Visita","id"),
+      ("area","Área","str"), ("quarteirao","Quarteirão","str"), ("logradouro","Logradouro","str"), ("imovel","Imóvel","str"),
+      ("chegada","Chegada","str"), ("saida","Saída","str"), ("diferenca_s","Diferença p/ Anterior (s)*","str")]) }}
+  {{ alert_table(neg, "Duração Negativa", "🔻", "neg", base_cols + [("duracao_min","Duração (min)","num"), ("observacao","Observação","str")]) }}
+  {{ alert_table(fora, "Fora do Expediente", "🕐", "fora",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("id_visita","ID Visita","id"), ("dia_semana","Dia da Semana","str"),
+      ("area","Área","str"), ("quarteirao","Quarteirão","str"), ("logradouro","Logradouro","str"), ("imovel","Imóvel","str"),
+      ("chegada","Chegada","str"), ("saida","Saída","str"), ("motivo","Motivo","str")]) }}
+  {{ alert_table(almoco, "No Almoço", "🍽️", "alm", base_cols) }}
+  {{ alert_table(teto_media, "Acima de 20min (auditoria de manipulação de horário)", "🖥️", "teto",
+     base_cols + [("duracao_min","Duração (min)","num")]) }}

@@ -1,0 +1,117 @@
+{% from "macros.html" import kpi, chart_card, alert_table %}
+<div class="section" id="ranking">
+  <div class="kpi-grid">
+    {{ kpi("blue", "Líder do Ranking", kpi_ranking.lider_nome, kpi_ranking.lider_pontos|br(1) ~ " pontos") }}
+    {{ kpi("cyan", "Pontuação Média", kpi_ranking.media|br(1), "de todos os agentes") }}
+    {{ kpi("green", "🟢 Excelente / 🟡 Bom", (kpi_ranking.n_excelente|string) ~ " / " ~ (kpi_ranking.n_bom|string), "agentes em cada faixa") }}
+    {{ kpi("red", "🟠 Atenção / 🔴 Crítico", (kpi_ranking.n_atencao|string) ~ " / " ~ (kpi_ranking.n_critico|string), "agentes em cada faixa") }}
+  </div>
+
+  <div class="charts-grid">
+    {{ chart_card("chartRanking", "Pontuação Final por Agente", tall=True, wide=True,
+       note="Pontuação final de cada agente no período, do maior para o menor. Cor segue a faixa de classificação.") }}
+  </div>
+
+  <div class="table-section">
+    <h3>🏆 Ranking Geral ({{ ranking|length }})</h3>
+    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por posição por padrão. O botão <strong>🧾 Extrato</strong> abre a folha com a conta da pontuação do agente, pronta pra imprimir ou salvar em PDF.</p>
+    <div class="lote-barra">
+      <label for="loteEquipe">🖨️ Extratos em lote:</label>
+      <select id="loteEquipe" aria-label="Equipe">
+        {% for eq in ranking|map(attribute='equipe')|unique|sort %}{% if eq %}<option value="{{ eq }}">{{ eq }}</option>{% endif %}{% endfor %}
+      </select>
+      <button type="button" class="extrato-btn" onclick="imprimirExtratosLote(document.getElementById('loteEquipe').value)">Imprimir da equipe</button>
+      <button type="button" class="extrato-btn" onclick="imprimirExtratosLote('')">Imprimir de todos do mês</button>
+    </div>
+    <div class="lote-barra">
+      <label>⬇️ Baixar este ranking:</label>
+      <button type="button" class="extrato-btn" onclick="baixarRankingCSV()">Planilha (CSV, abre no Excel)</button>
+      {% if xlsx_href %}<a class="extrato-btn" href="{{ xlsx_href }}" download>Dados completos do período (.xlsx)</a>{% endif %}
+    </div>
+    <div class="table-wrap">
+      <table class="data-table sortable" id="tableRanking">
+        <thead><tr><th>Posição</th><th class="sticky-col">Agente</th><th>Equipe</th><th>Dias Trabalhados</th><th>Dias Úteis Esperados no Mês</th><th>Turnos Sem Trabalhar</th><th>Pontuação Final</th><th>Classificação</th>{% if ranking_tem_observacao %}<th>Observação</th>{% endif %}<th>Extrato</th></tr></thead>
+        <tbody>
+          {% for r in ranking %}
+          <tr class="{{ r.classificacao|row_class }}">
+            <td class="num">{{ r.posicao|br }}º</td>
+            <td class="sticky-col agent-name">{{ r.agente }}</td>
+            <td>{{ r.equipe }}</td>
+            <td class="num">{{ r.dias_trabalhados|br }}</td>
+            <td class="num">{{ r.dias_uteis_esperados|br }}</td>
+            <td class="num">{{ r.turnos_sem_trabalhar|br }}</td>
+            <td class="num">{{ r.pontos|br(1) }}</td>
+            <td>{{ r.classificacao|rank_badge }}</td>
+            {% if ranking_tem_observacao %}<td class="obs-cell">{{ r.observacao or "" }}</td>{% endif %}
+            <td><button type="button" class="extrato-btn" data-agente="{{ r.agente }}" title="Abrir a folha de pontuação deste agente (imprimir ou salvar em PDF)">🧾 Extrato</button>{% if agente_href %} <a class="extrato-btn" href="{{ agente_href }}?nome={{ r.agente|urlencode }}" title="Evolução deste agente (nota por mês e por semana)">📈</a>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <details class="legend-box legend-collapsible">
+      <summary>❓ Como a pontuação é calculada</summary>
+      <p>Todo agente começa com <strong>100 pontos</strong>. Faixas: 🟢 ≥90 · 🟡 75–89,9 · 🟠 60–74,9 · 🔴 &lt;60.</p>
+      <table class="legend-table">
+        <tbody>
+          <tr><td>✅ Dia com meta batida</td><td class="ganho">+1,0/dia</td>
+              <td>❌ Dia sem bater meta</td><td class="perda">−0,5/dia</td></tr>
+          <tr><td>✅ Bônus sem visita rápida no período</td><td class="ganho">+5,0</td>
+              <td>❌ Turno sem trabalhar (falta)</td><td class="perda">−1,5/turno</td></tr>
+          <tr><td>✅ Bônus sem ausência no período</td><td class="ganho">+5,0</td>
+              <td>❌ Sequência suspeita (lote)</td><td class="perda">−1,0/visita</td></tr>
+          <tr><td>✅ Bônus pontualidade perfeita</td><td class="ganho">+3,0</td>
+              <td>❌ Visita duplicada</td><td class="perda">−0,3/visita</td></tr>
+          <tr><td></td><td></td>
+              <td>❌ Atraso/saída antecipada (manhã/tarde)</td><td class="perda">−0,3/dia</td></tr>
+          <tr><td></td><td></td>
+              <td>❌ Fora do expediente / almoço</td><td class="perda">−0,5/visita</td></tr>
+          <tr><td></td><td></td>
+              <td>❌ Visita rápida (abaixo do tempo mínimo)</td><td class="perda">−0,2/visita</td></tr>
+        </tbody>
+      </table>
+      {% if ranking_sem_normalizacao %}
+      <p><strong>Dia inteiro sem lançamento</strong> (os 2 turnos vazios): além dos 2 turnos (−1,5 cada), perde
+      <strong>−1,0</strong> a mais — o dia inteiro custa −4,0. Feriado nacional não conta como falta.
+      Férias valem no máximo <strong>30 dias</strong>: o que passar disso conta como falta.</p>
+      {% endif %}
+      {% if ranking_sem_normalizacao %}
+      <p><strong>Sem fator de normalização:</strong> todos os agentes usam o <strong>mesmo peso</strong> da
+      tabela acima (Peso Efetivo = Peso Nominal). Pontuação = 100 + ganhos − perdas, ocorrência por ocorrência
+      — dá pra conferir na mão: <strong>Quantidade × Peso = Pontos Aplicados</strong> no Detalhamento abaixo.</p>
+      <p><strong>Dias Úteis Esperados</strong> = dias úteis do mês, sem feriados nacionais (até a data do relatório) − dias de
+      férias, atestado, folga, chuva ou reunião registrados no cronograma em que o agente não trabalhou.
+      Quem esteve de férias tem, portanto, menos dias esperados.</p>
+      <p><strong>Bônus</strong> (+5 sem visita rápida, +5 sem ausência, +3 pontualidade perfeita) só valem
+      para quem trabalhou pelo menos <strong>50% dos dias esperados</strong>; quando não é concedido, o
+      Detalhamento mostra uma linha explicando o motivo.</p>
+      <p><strong>⚠️ Observação:</strong> aparece quando o agente trabalhou bem menos que o esperado e tem vários
+      turnos sem lançamento — normalmente é afastamento (férias, licença, atestado) que falta lançar no
+      cronograma. A gestão deve conferir antes de considerar como falta.</p>
+      {% else %}
+      <p><strong>Fator de Normalização:</strong> os pesos acima são ajustados pra cima (agente trabalhou
+      menos dias que o esperado) ou pra baixo (período longo, ex. Acumulado), pra ninguém ser
+      punido/premiado só pelo tamanho do período observado. Peso Efetivo = Peso Nominal × Fator — ver
+      colunas <strong>Dias Trabalhados</strong>/<strong>Turnos Sem Trabalhar</strong> acima e
+      <strong>Peso Nominal</strong>/<strong>Fator</strong>/<strong>Peso Efetivo</strong> no Detalhamento
+      abaixo, pra conferir a conta na mão.</p>
+      {% endif %}
+    </details>
+  </div>
+
+  {% if ranking_detalhe %}
+  {% if ranking_sem_normalizacao %}
+  {{ alert_table(ranking_detalhe, "Detalhamento — Critérios Aplicados por Agente", "📋", "ranking-detalhe",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("criterio","Critério","str"),
+      ("qtd","Quantidade","num"), ("peso_nominal","Peso","num2"),
+      ("pontos","Pontos Aplicados","num1")]) }}
+  {% else %}
+  {{ alert_table(ranking_detalhe, "Detalhamento — Critérios Aplicados por Agente", "📋", "ranking-detalhe",
+     [("agente","Agente","str"), ("equipe","Equipe","str"), ("criterio","Critério","str"),
+      ("qtd","Quantidade","num"), ("peso_nominal","Peso Nominal","num2"),
+      ("fator_normalizacao","Fator Normalização","num2"), ("peso","Peso Efetivo","num2"),
+      ("pontos","Pontos Aplicados","num1")]) }}
+  {% endif %}
+  {% endif %}
+</div>

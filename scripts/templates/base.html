@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ title }}</title>
+<script src="{{ tema_href }}"></script>
+<link rel="stylesheet" href="{{ fontes_href }}">
+<script src="{{ chartjs_href }}"></script>
+<style>{{ css | safe }}</style>
+</head>
+<body data-print-date="{{ now_str }}">
+{{ sprite | safe }}
+<header>
+  <div class="container">
+    <div class="header-brand">
+      <img src="{{ logo_href }}" alt="Prefeitura Municipal de Ponta Porã">
+      <div>
+        <h1>S E N T I N E L A <span>- HUB</span></h1>
+        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · {{ now_str }}</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      {% if periodos and periodos|length > 1 %}
+      <select class="period-select" onchange="if(this.value) window.location.href=this.value">
+        {% for p in periodos %}<option value="{{ p.href }}" {% if p.atual %}selected{% endif %}>{{ p.label }}</option>{% endfor %}
+      </select>
+      {% endif %}
+      <a class="print-btn" href="{{ transparencia_href }}" style="text-decoration:none">📖 Como o ranking é calculado</a>
+      <a class="print-btn" href="{{ projecao_href }}" style="text-decoration:none">📺 Tela de reunião</a>
+      <a class="print-btn" href="{{ comparar_href }}" style="text-decoration:none">🔁 Comparar meses</a>
+      <a class="print-btn" href="{{ album_href }}" style="text-decoration:none">🃏 Álbum de cartinhas</a>
+      <button type="button" class="print-btn" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg> <span class="tema-txt">Tema escuro</span></button>
+      <label class="presentation-toggle">
+        <input type="checkbox" id="togglePresentationMode">
+        Modo apresentação (ocultar nomes)
+      </label>
+      <label class="presentation-toggle">
+        <input type="checkbox" id="toggleAnimacoes" checked>
+        Animações
+      </label>
+      <button type="button" class="print-btn print-full-btn" onclick="printFullReport()">🖨️ Imprimir relatório completo do mês</button>
+      <div class="header-meta">{{ kpi.total_agentes }} agentes · {{ teams | length }} equipes · {{ kpi.total_geral | br }} imóveis</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  {% if nav_semanas %}
+  <nav class="week-nav" aria-label="Semanas de {{ nav_semanas.mes }}">
+    <span class="week-nav-titulo">📆 {{ nav_semanas.mes }}</span>
+    {% for it in nav_semanas["itens"] %}<a class="week-chip{% if it.atual %} ativa{% endif %}" href="{{ it.href }}"{% if it.atual %} aria-current="page"{% endif %}><b>{{ it.label }}</b>{% if it.periodo %}<small>{{ it.periodo }}{% if it.parcial %} · parcial{% endif %}</small>{% endif %}</a>{% endfor %}
+  </nav>
+  {% if pagina_semana %}
+  <div class="week-banner">Você está vendo apenas a <b>Semana {{ pagina_semana.numero }}</b> de {{ pagina_semana.mes }} ({{ pagina_semana.periodo }}){% if pagina_semana.parcial %} — <b>semana parcial</b>, ainda em andamento{% endif %}. As regras do ranking são as mesmas do mês, aplicadas só a estes dias.</div>
+  {% endif %}
+  {% endif %}
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-section="visao-geral">Visão Geral</button>
+    <button class="nav-tab" data-section="agentes">Agentes</button>
+    <button class="nav-tab" data-section="equipes">Equipes</button>
+    <button class="nav-tab" data-section="areas">Por Área</button>
+    <button class="nav-tab" data-section="alertas">Alertas & Irregularidades</button>
+    <button class="nav-tab" data-section="ausencias">Ausências</button>
+    <button class="nav-tab" data-section="pendencias">Pendências</button>
+    {% if acumulado_so_media %}
+    <button class="nav-tab" data-section="media-mensal">🏆 Ranking (média dos meses)</button>
+    {% else %}
+    <button class="nav-tab" data-section="ranking">Ranking</button>
+    <button class="nav-tab" data-section="media-mensal">Média Mensal</button>
+    {% endif %}
+    <button class="nav-tab" data-section="ponto-estrategico">Ponto Estratégico</button>
+    <button class="nav-tab" data-section="custos">Custos & Produtividade</button>
+  </div>
+
+  {% include "sections/visao_geral.html" %}
+  {% include "sections/agentes.html" %}
+  {% include "sections/equipes.html" %}
+  {% include "sections/areas.html" %}
+  {% include "sections/alertas.html" %}
+  {% include "sections/ausencias.html" %}
+  {% include "sections/pendencias.html" %}
+  {% if not acumulado_so_media %}{% include "sections/ranking.html" %}{% endif %}
+  {% include "sections/media_mensal.html" %}
+  {% include "sections/ponto_estrategico.html" %}
+  {% include "sections/custos.html" %}
+</div>
+
+<!-- Extrato por agente (ver bootstrap.js: abrirExtrato / imprimirExtrato) -->
+<div id="extratoOverlay" class="extrato-overlay" role="dialog" aria-modal="true" aria-label="Extrato de pontuação do agente">
+  <div class="extrato-card">
+    <div class="extrato-actions">
+      <button type="button" class="print-btn" onclick="imprimirExtrato()">🖨️ Imprimir / salvar em PDF</button>
+      <button type="button" class="extrato-fechar" onclick="fecharExtrato()">✕ Fechar</button>
+    </div>
+    <div id="extratoConteudo"></div>
+  </div>
+</div>
+
+<footer>Dashboard gerado automaticamente · GitHub Actions · {{ now_str }}</footer>
+
+<script>window.TRANSPARENCIA_HREF = {{ transparencia_href | tojson }};window.AGENTE_HREF = {{ agente_href | tojson }};window.CONTESTACAO_HREF = {{ contestacao_href | tojson }};window.WORKER_URL = {{ worker_url | tojson }};{% if extratos_src %}window.EXTRATOS_SRC = {{ extratos_src | tojson }};{% else %}window.EXTRATOS = {{ extratos | tojson }};{% endif %}</script>
+<script>
+{{ bootstrap_js | safe }}
+{% include "charts.js" %}
+</script>
+</body>
+</html>

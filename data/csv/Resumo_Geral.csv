@@ -1,0 +1,71 @@
+﻿RESUMO CONSOLIDADO — TODOS OS AGENTES;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Agente;Equipe;Classificação;Imóveis Abertos;Dias Trabalhados;Visitas/Dia;Média (min);Mediana (min);Rápidas;% Rápidas;Longas;Negativas;Dias c/ Meta;Visitas Duplicadas;Visitas em Sequência Suspeita;Visitas no Almoço (11h15-12h45);Fora do Expediente/Fim de Semana;Imóveis Fechados;Imóveis Recusados;Total Geral (Abertos+Fechados+Recusados);% Pendência;Média Horas Trabalhadas/Dia;Média Horas Trabalhadas/Semana;Média Horas Úteis/Dia;Custo Hora Útil (R$);Média Início Manhã;Média Fim Manhã;Média Início Tarde;Média Fim Tarde
+Adriana de Jesus Saraiva;Equipe 1;🟢 NORMAL;2394;105;22.8;5.18;5.0;45;1.88;3;0;66;0;2;10;16;787;2;3183;24.79;4.6;18.59;1.97;R$ 112,30;08:32;10:08;14:05;15:43
+Adriano Ricardo Thiel;Equipe 1;🟢 NORMAL;1968;72;27.33;4.66;4.0;179;9.1;0;0;53;0;0;1;5;870;0;2838;30.66;4.88;18.51;2.12;R$ 104,20;09:02;10:35;14:29;15:58
+Ana Gabriela Silva Garcete;Equipe 1;🟢 NORMAL;2490;100;24.9;5.7;4.0;77;3.09;37;2;57;2;2;1;4;944;2;3436;27.53;4.74;18.24;2.36;R$ 93,59;08:49;10:38;14:15;16:06
+Carlos Alberto Albiero;Equipe 1;🟡 ATENÇÃO;2921;109;26.8;4.65;4.0;545;18.66;3;1;69;4;16;15;64;811;9;3741;21.92;4.78;20.03;2.07;R$ 106,53;08:40;10:28;14:09;16:15
+Cris Milene Cardenas da Silva;Equipe 1;🟢 NORMAL;2247;104;21.61;5.96;5.0;50;2.23;8;0;61;0;6;23;28;1207;0;3454;34.94;4.7;18.79;2.15;R$ 102,95;08:38;10:18;14:07;16:04
+Evelyn Santana Santos Oliveira;Equipe 1;🟢 NORMAL;2183;112;19.49;6.23;6.0;81;3.71;2;0;55;14;14;8;21;1220;3;3406;35.91;4.77;20.55;2.02;R$ 109,21;08:53;10:33;14:32;16:19
+Gabriel Alan de Oliveira Martins;Equipe 1;🟢 NORMAL;2000;97;20.62;5.82;5.0;53;2.65;6;2;54;0;0;21;30;1180;1;3181;37.13;5.35;20.76;2.0;R$ 110,59;09:13;10:41;14:48;16:35
+Raquel Ortiz dos Santos;Equipe 1;🔴 CRÍTICO;2260;105;21.52;3.54;3.0;906;40.09;0;0;63;0;0;21;62;1232;2;3494;35.32;4.55;18.36;1.27;R$ 173,94;09:02;10:27;14:20;16:06
+Rozentina Matos de Oliveira;Equipe 1;🟢 NORMAL;2378;100;23.78;5.2;5.0;10;0.42;2;0;57;0;0;5;33;1495;4;3877;38.66;5.56;21.4;2.06;R$ 107,28;08:24;10:05;14:01;15:51
+Wagner Tarlei Gomes;Equipe 1;🔴 CRÍTICO;2268;85;26.68;4.53;4.0;477;21.03;2;2;54;0;8;13;39;440;2;2710;16.31;3.74;13.25;2.01;R$ 109,93;08:51;10:32;14:08;15:55
+Bianca Afonso Narbaez;Equipe 2;🟢 NORMAL;2494;94;26.53;6.4;6.0;32;1.28;0;0;69;0;21;46;70;509;0;3003;16.95;5.24;18.93;2.83;R$ 78,05;08:40;10:42;14:30;16:24
+Brauher Luiz Alvarenga Gonzalez;Equipe 2;🟢 NORMAL;2645;94;28.14;4.53;4.0;126;4.76;2;0;67;0;7;13;37;1501;9;4155;36.34;4.43;16.65;2.12;R$ 104,10;08:57;10:29;13:42;15:38
+Cicero Isrrael Sanabria;Equipe 2;🟢 NORMAL;2157;87;24.79;9.33;9.0;143;6.63;4;0;61;0;24;5;45;505;1;2663;19.0;6.18;24.44;3.86;R$ 57,31;07:56;10:38;13:36;16:22
+Fabiana de Figueredo Vieira;Equipe 2;🟢 NORMAL;2522;101;24.97;6.27;6.0;29;1.15;2;0;76;0;0;3;11;653;0;3175;20.57;4.9;19.05;2.61;R$ 84,65;08:52;10:33;14:04;16:00
+Gilmar Bitencourt Luiz;Equipe 2;🟢 NORMAL;2314;87;26.6;8.85;8.0;7;0.3;1;1;62;0;2;7;13;506;0;2820;17.94;5.98;22.61;3.92;R$ 56,35;08:17;10:45;13:24;16:26
+Gisele Olimpia Torres;Equipe 2;🔴 CRÍTICO;2199;89;24.71;4.11;3.0;730;33.2;2;0;52;0;8;54;67;1282;16;3497;37.12;4.32;16.01;1.69;R$ 130,72;09:07;10:34;13:56;16:11
+Mateus Falcao de Souza;Equipe 2;🔴 CRÍTICO;2316;90;25.73;3.3;3.0;845;36.49;6;8;54;3;19;1;10;829;1;3146;26.38;4.79;17.96;1.41;R$ 156,81;08:37;10:05;14:25;15:44
+Suely Aguiar Alves Luiz;Equipe 2;🟢 NORMAL;2410;103;23.4;10.02;10.0;7;0.29;0;0;70;0;8;12;20;464;0;2874;16.14;5.99;23.71;3.91;R$ 56,59;08:21;10:43;13:52;16:32
+Tania Maria Montania;Equipe 2;🟢 NORMAL;2462;77;31.97;5.41;5.0;11;0.45;0;2;59;0;38;17;103;353;1;2816;12.57;5.34;18.68;2.88;R$ 76,70;08:39;10:45;13:47;16:39
+Teonilda Florentino Vieira;Equipe 2;🟡 ATENÇÃO;902;39;23.13;4.48;5.0;155;17.18;0;0;22;0;0;11;13;701;1;1604;43.77;3.77;9.19;1.73;R$ 128,00;09:10;10:37;14:19;15:57
+Wesley de Souza Leal;Equipe 2;🟢 NORMAL;2405;98;24.54;5.52;5.0;12;0.5;0;0;66;0;0;5;8;528;0;2933;18.0;4.68;17.63;2.26;R$ 97,98;08:50;10:13;14:16;16:06
+William Anderson Chamorro Tavares;Equipe 2;🟢 NORMAL;2357;102;23.11;7.85;7.0;1;0.04;1;0;64;0;0;16;21;966;0;3323;29.07;4.86;19.08;3.02;R$ 73,10;08:44;10:32;13:51;16:04
+Alana Amanda Fernandes Ovelar;Equipe 3;🟢 NORMAL;947;42;22.55;7.25;7.0;2;0.21;0;0;28;0;0;2;6;746;0;1693;44.06;4.42;10.92;2.73;R$ 81,12;08:27;10:25;14:08;16:14
+Claine Luisa Figueiredo Torraca;Equipe 3;🟢 NORMAL;2347;96;24.45;5.14;5.0;43;1.83;0;1;68;90;103;75;101;2191;2;4540;48.3;4.57;16.87;2.09;R$ 105,63;08:49;10:31;13:53;15:57
+Emidio Rainer Vilhalba;Equipe 3;🔴 CRÍTICO;2322;101;22.99;3.83;3.0;602;25.93;0;0;63;2;30;31;43;1276;35;3633;36.09;4.51;17.52;1.47;R$ 150,49;08:45;10:11;14:20;15:59
+Geancarlos Ferreira Barrios;Equipe 3;🟢 NORMAL;2137;87;24.56;6.47;6.0;6;0.28;0;0;65;124;124;0;2;1043;1;3181;32.82;5.08;20.07;2.65;R$ 83,39;08:33;10:26;14:08;15:58
+Marco Antonio Ayala de Matos Freitas;Equipe 3;🟢 NORMAL;2003;82;24.43;4.96;5.0;104;5.19;1;0;50;0;4;60;75;1818;0;3821;47.58;3.82;12.04;2.02;R$ 109,57;08:36;10:31;14:14;16:15
+Miglidiane Maciel Ajala;Equipe 3;🔴 CRÍTICO;1945;77;25.26;4.64;4.0;424;21.8;0;0;53;0;0;25;37;344;0;2289;15.03;4.05;14.86;1.95;R$ 113,19;08:47;10:22;14:09;15:41
+Naime Cristina Freitas;Equipe 3;🟢 NORMAL;2171;101;21.5;5.72;5.0;33;1.52;2;0;54;0;2;0;2;1620;14;3805;42.94;4.88;18.97;2.05;R$ 107,90;08:28;10:27;13:46;16:09
+Rosalina Beniel Vargas;Equipe 3;🟢 NORMAL;2147;97;22.13;5.02;5.0;194;9.04;0;0;56;123;125;3;5;2116;27;4290;49.95;5.21;21.06;1.85;R$ 119,45;08:38;10:28;13:55;16:16
+Selba Ramona Afonso;Equipe 3;🟢 NORMAL;2490;70;35.57;6.76;7.0;1;0.04;0;1;63;0;2;46;58;1074;0;3564;30.13;5.96;20.85;4.0;R$ 55,21;08:08;10:41;13:20;16:29
+Anderson Jose de Santana;Equipe 4;🔴 CRÍTICO;2297;95;24.18;2.98;3.0;940;40.92;0;0;59;0;4;14;21;995;2;3294;30.27;3.73;14.19;1.2;R$ 184,29;08:45;09:54;13:59;15:12
+Gisele Lopes Justiniano;Equipe 4;🟢 NORMAL;2445;107;22.85;6.41;6.0;37;1.51;0;0;75;113;115;47;61;1361;1;3807;35.78;4.54;18.7;2.44;R$ 90,56;08:38;10:19;13:57;15:48
+Juliana Patricia Goncalves;Equipe 4;🔴 CRÍTICO;1606;69;23.28;4.34;3.0;620;38.61;14;4;47;44;48;0;0;712;0;2318;30.72;3.68;11.55;1.68;R$ 131,54;09:14;10:40;14:37;16:08
+Kariele Jackeline Rodrigues Silva;Equipe 4;🔴 CRÍTICO;2578;95;27.14;3.14;3.0;1079;41.85;0;0;76;74;74;30;34;981;2;3561;27.6;3.76;13.75;1.42;R$ 155,76;08:58;10:16;14:16;15:29
+Kátia Cilene Silveira Machado;Equipe 4;🔴 CRÍTICO;1909;76;25.12;4.01;3.0;625;32.74;4;0;38;0;0;119;228;783;1;2693;29.11;3.54;12.24;1.68;R$ 131,71;09:41;10:47;14:49;16:24
+Rafael Ramos Recalde;Equipe 4;🔴 CRÍTICO;2495;81;30.8;3.04;3.0;1154;46.25;0;0;63;0;0;20;37;732;1;3228;22.71;3.68;13.56;1.56;R$ 141,54;09:12;10:37;14:25;15:46
+Ramona dos Santos Oliveira;Equipe 4;🟡 ATENÇÃO;2134;81;26.35;5.12;5.0;284;13.31;1;0;59;0;4;20;33;788;1;2923;26.99;4.83;17.77;2.25;R$ 98,40;09:03;10:40;14:07;16:21
+Rozana Reis da Silva;Equipe 4;🟡 ATENÇÃO;2435;92;26.47;3.74;4.0;478;19.63;0;0;62;104;104;23;36;1609;0;4044;39.79;4.08;14.45;1.65;R$ 133,81;08:44;10:05;13:47;15:10
+Sara Eliane Talaveira de Oliveira;Equipe 4;🟢 NORMAL;2429;96;25.3;6.14;6.0;179;7.37;5;4;63;0;12;37;55;905;3;3337;27.21;4.61;17.01;2.58;R$ 85,54;08:34;10:34;14:14;16:16
+Silvina Regina de Souza Valiente;Equipe 4;🟡 ATENÇÃO;2060;85;24.24;5.42;5.0;266;12.91;4;0;48;0;4;26;42;967;3;3030;32.01;4.43;17.92;2.19;R$ 100,91;09:07;10:44;14:31;16:28
+Walquiria Araujo Flores;Equipe 4;🟡 ATENÇÃO;2408;105;22.93;4.15;4.0;389;16.15;0;1;60;0;4;24;53;1334;5;3747;35.74;4.04;16.31;1.59;R$ 139,27;08:45;10:02;13:49;15:27
+Alvaro Delgado Brandao;Equipe Bloqueio;🟡 ATENÇÃO;51;4;12.75;3.98;3.0;6;11.76;0;0;1;0;0;0;0;64;0;115;55.65;1.19;2.38;0.85;R$ 261,33;09:01;10:12;;
+Anderson Salabarrieto;Equipe Bloqueio;🟡 ATENÇÃO;83;6;13.83;5.0;4.0;15;18.07;1;1;1;0;0;0;0;56;5;144;42.36;2.88;8.65;1.14;R$ 194,09;08:31;09:14;13:32;15:52
+André Luiz Benites Rocha;Equipe Bloqueio;🟡 ATENÇÃO;42;2;21.0;6.79;6.0;7;16.67;0;0;1;2;2;0;0;22;0;64;34.38;6.15;6.15;2.38;R$ 93,07;08:19;10:07;14:47;15:58
+Emerson de Carvalho Miranda;Equipe Bloqueio;🟢 NORMAL;97;6;16.17;6.55;6.0;1;1.03;0;0;2;0;0;0;0;93;0;190;48.95;3.42;6.84;1.76;R$ 125,32;08:41;10:17;13:44;16:14
+Fabio Teodoro Alves Alexo;Equipe Bloqueio;🟡 ATENÇÃO;73;4;18.25;4.51;4.0;14;19.18;0;0;2;0;0;0;0;44;1;118;38.14;3.67;7.33;1.37;R$ 161,25;08:44;09:55;13:36;14:46
+Josoé de Oliveira;Equipe Bloqueio;🟢 NORMAL;44;3;14.67;5.68;5.0;1;2.27;0;0;1;0;0;0;0;70;0;114;61.4;3.9;11.7;1.39;R$ 159,15;08:40;09:57;14:05;15:32
+Marcos Alcindo Insalbralde;Equipe Bloqueio;🟡 ATENÇÃO;29;2;14.5;5.59;5.0;4;13.79;0;0;0;0;0;0;0;17;0;46;36.96;2.62;2.62;1.35;R$ 163,74;08:49;10:03;13:40;14:46
+Robson Pavão Montania;Equipe Bloqueio;🟢 NORMAL;82;4;20.5;5.43;5.0;3;3.66;0;0;2;0;0;0;0;77;0;159;48.43;4.37;8.73;1.85;R$ 119,22;08:40;09:59;14:06;15:42
+Silvio de Aquino;Equipe Bloqueio;🟢 NORMAL;78;5;15.6;4.73;4.0;6;7.69;0;0;2;0;0;0;0;35;0;113;30.97;3.52;8.79;1.23;R$ 179,71;08:56;09:41;14:02;15:11
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+LEGENDA — CLASSIFICAÇÃO (baseada em % de Visitas Rápidas);;;;;;;;;;;;;;;;;;;;;;;;;;;;
+🟢 NORMAL;% Rápidas até 10%;;;;;;;;;;;;;;;;;;;;;;;;;;;
+🟡 ATENÇÃO;% Rápidas entre 11% e 20%;;;;;;;;;;;;;;;;;;;;;;;;;;;
+🔴 CRÍTICO;% Rápidas acima de 20%;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+⚠️ SEQUÊNCIA SUSPEITA;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Duas ou mais visitas consecutivas do mesmo agente registradas no MESMO MINUTO de chegada são marcadas como suspeitas (o e-Visita não registra segundos, então o critério de negócio de 50s de diferença equivale, na prática, a 'mesmo minuto') — sugere lançamento em lote no sistema, não visita real de campo. Colunas: 'Visitas em Sequência Suspeita' (total de visitas envolvidas) e 'Maior Sequência Suspeita' (maior número de visitas seguidas nessa condição). Na aba 'Visitas Suspeitas', a coluna 'Diferença p/ Anterior (s)*' fica em branco quando o alerta da linha veio do par com a visita SEGUINTE (não da anterior).;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+🍽️ VISITAS NO HORÁRIO DE ALMOÇO;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+Coluna 'Visitas no Almoço (11h15-12h45)' conta as visitas com chegada registrada nesse intervalo — o horário oficial de almoço é 11h15 às 12h45, JÁ COM 15 MINUTOS DE TOLERÂNCIA em cada borda (visitas entre 11h-11h15 ou 12h45-13h não são tratadas como violação, só como 'fora do expediente' genérico) — use para checar se o agente está trabalhando no horário de almoço ou se há erro de lançamento. Essas visitas ficam de fora do cálculo de 'Início/Fim Manhã' e 'Início/Fim Tarde', que usam a primeira chegada e a última saída de cada dia (não a média de todos os horários), para refletir melhor o início e o fim reais do expediente.;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+💰 HORAS TRABALHADAS, HORAS ÚTEIS E CUSTO DA HORA ÚTIL;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+'Horas Trabalhadas' = jornada total do dia (primeira chegada até a última saída), descontando a sobreposição com o horário de almoço — depois tira-se a média entre os dias/semanas trabalhados, 'Horas Úteis' = soma das durações de visita no dia (tempo realmente dentro de imóveis), sem contar deslocamento entre visitas, 'Custo Hora Útil' = salário mensal do agente (R$ 4863,00, equivalente a 3 salários mínimos federais) dividido pelas horas úteis mensais estimadas (Média Horas Úteis/Dia × 22 dias úteis/mês). Quanto menos tempo o agente passa efetivamente em visita por dia, mais caro fica o custo por hora útil.;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ℹ️ A lista detalhada de visitas duplicadas (com endereço) está na aba 'Visitas Duplicadas' — use-a para localizar e excluir os registros repetidos.;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ℹ️ Visitas com duração NEGATIVA (saída antes da chegada — provável bug do sistema) foram excluídas do cálculo de Média/Mediana e estão detalhadas na aba 'Visitas Negativas', para investigação junto ao suporte do e-Visita.;;;;;;;;;;;;;;;;;;;;;;;;;;;;

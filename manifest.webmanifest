@@ -1,0 +1,16 @@
+{
+  "name": "Sentinela — validação",
+  "short_name": "Sentinela",
+  "description": "Validação da coordenação: férias, dias sem trabalho, ajustes e fechamento do mês.",
+  "start_url": "validar.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#071426",
+  "theme_color": "#050F20",
+  "lang": "pt-BR",
+  "icons": [
+    {"src": "assets/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "assets/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}

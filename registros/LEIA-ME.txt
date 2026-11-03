@@ -1,0 +1,3 @@
+Registro de férias e ausências justificadas lançadas em 01/11/2026.
+Sem categorias (atestado, licenças etc.) porque este repositório é público.
+A versão com categorias deve ficar fora do GitHub.

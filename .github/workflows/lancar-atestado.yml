@@ -1,0 +1,77 @@
+name: Lançar ausência e férias (formulários do GitHub)
+
+# Dispara quando alguém abre uma issue pelo formulário "Lançar ausência
+# justificada" ou "Férias (definir, ajustar ou cancelar)". A página
+# validar.html (com PIN) é o caminho principal; estes formulários seguem como
+# alternativa para quem tem acesso ao repositório.
+# Só dono, membro e colaborador conseguem lançar — issue de outra pessoa é ignorada.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+jobs:
+  lancar:
+    if: >-
+      (contains(github.event.issue.labels.*.name, 'atestado') || contains(github.event.issue.labels.*.name, 'ferias') ||
+       contains(github.event.issue.body, '### Agente')) &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      # Sem "concurrency" (o GitHub descartaria lançamentos pendentes): cada
+      # execução reaplica o lançamento sobre o commit mais recente e tenta o
+      # push de novo.
+      - name: Gravar o lançamento
+        id: lancar
+        env:
+          # corpo da issue é texto de terceiros: só por variável de ambiente
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          resultado=falha
+          for i in 1 2 3 4 5; do
+            git fetch origin "$BRANCH"
+            git reset --hard "origin/$BRANCH"
+            set +e
+            python3 scripts/lancar_ausencia.py > msg.txt
+            codigo=$?
+            set -e
+            cat msg.txt
+            if [ "$codigo" -ne 0 ]; then resultado=recusada; break; fi
+            python3 scripts/validar_json.py
+            if git diff --quiet -- data/; then resultado=semmudanca; break; fi
+            git add data/cronograma_ausencias.json data/deteccoes_pendentes.json
+            git commit -m "Lançamento pela issue #${{ github.event.issue.number }} [skip ci]"
+            if git push origin "HEAD:$BRANCH"; then resultado=ok; break; fi
+            echo "Push rejeitado — reaplicando, tentativa $i..."
+            sleep $((RANDOM % 8 + 3))
+          done
+          echo "resultado=$resultado" >> "$GITHUB_OUTPUT"
+
+      # Push feito com o token do workflow não dispara outros workflows,
+      # então regeramos o site daqui (sem recoletar no e-Visita).
+      - name: Atualizar o dashboard
+        if: steps.lancar.outputs.resultado == 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-dashboard.yml --ref "${{ github.ref_name }}" -f rodar_coleta=false
+
+      - name: Responder e fechar a issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -f msg.txt ] || echo "❌ Não consegui processar este pedido. Veja a aba Actions." > msg.txt
+          gh issue comment "${{ github.event.issue.number }}" --body-file msg.txt
+          if [ "${{ steps.lancar.outputs.resultado }}" = "ok" ] || [ "${{ steps.lancar.outputs.resultado }}" = "semmudanca" ]; then
+            gh issue close "${{ github.event.issue.number }}" --reason completed
+          fi

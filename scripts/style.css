@@ -1,0 +1,459 @@
+/* ==========================================================================
+   Sentinela — painel de monitoramento
+   Cores tiradas do logo da prefeitura: azul-marinho (base), amarelo, vermelho e verde-água
+   (a faixa do topo repete o sublinhado do logo). Números em Barlow Semi Condensed,
+   texto em IBM Plex Sans. A impressão volta ao papel branco (ver @media print).
+   ========================================================================== */
+:root {
+  /* TEMA CLARO (padrão). O escuro entra por [data-theme="dark"] logo abaixo. */
+  --navy-deep: #050F20; --navy: #14447F; --navy2: #1B5CA8;
+  --bg: #EDF1F7; --card: #FFFFFF; --bg-soft: #F3F6FB; --bg-raise: #E7EEF7;
+  --border: #D3DDEA; --border-soft: #E5EBF3; --border-strong: #AFC0D6;
+  --text: #12233B; --text2: #455879; --text3: #5A6D8C; --h: #0B2A52;
+  --green: #1FB36B; --yellow: #F7B500; --red: #F0402F; --blue: #1E9AD8; --purple: #6F68E8; --cyan: #17B5C4; --orange: #F58220;
+  --teal: #19B8A3;
+  --ok-tx: #0B7A44; --warn-tx: #8A6100; --bad-tx: #B3261E; --info-tx: #1565B8; --orange-tx: #A8520A;
+  --stripe: rgba(11,42,82,0.035); --hover: rgba(30,154,216,0.10); --grid: rgba(69,88,121,0.16);
+  --sticky-even: #F6F9FC; --sticky-hover: #E6F0FA; --sticky-crit: #FCE9E6; --sticky-warn: #FFF3D9;
+  --shadow-sm: 0 1px 2px rgba(18,35,59,.06); --shadow: 0 1px 2px rgba(18,35,59,.06); --shadow-lg: 0 10px 30px -8px rgba(18,35,59,.35);
+  --radius: 6px; --radius-sm: 4px;
+  --f-num: "Barlow Semi Condensed", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+  --f-txt: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: #071426; --card: #0C1F3A; --bg-soft: #102848; --bg-raise: #14315A;
+  --border: #1D3C68; --border-soft: #152F55; --border-strong: #2C568F;
+  --text: #E6EDF7; --text2: #9DB2D0; --text3: #7088AB; --h: #FFFFFF;
+  --green: #2FD67F; --red: #FF5143; --blue: #2BA8E8; --purple: #8F89FF; --cyan: #3DD3E0; --orange: #FF9340;
+  --ok-tx: #5CE59A; --warn-tx: #FFC93D; --bad-tx: #FF8478; --info-tx: #6CC4F2; --orange-tx: #FFA966;
+  --stripe: rgba(255,255,255,0.025); --hover: rgba(43,168,232,0.10); --grid: rgba(157,178,208,0.16);
+  --sticky-even: #0E2342; --sticky-hover: #12315A; --sticky-crit: #2A1A28; --sticky-warn: #2A2619;
+  --shadow-sm: none; --shadow: none; --shadow-lg: 0 10px 30px -8px rgba(0,0,0,.6);
+  color-scheme: dark;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--f-txt); background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh;
+  font-size: 14px; -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1560px; margin: 0 auto; padding: 0 24px; }
+:focus-visible { outline: 2px solid var(--yellow); outline-offset: 2px; }
+
+/* ---------- Header: barra de estado + faixa do logo ---------- */
+header {
+  background: var(--navy-deep); padding: 14px 0 17px; margin-bottom: 26px; position: relative;
+  border-bottom: 1px solid #1D3C68;
+}
+header::after { /* o sublinhado do logo da prefeitura */
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px;
+  background: linear-gradient(90deg, var(--yellow) 0 120px, var(--red) 120px 168px, var(--teal) 168px 196px, transparent 196px);
+}
+header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+.header-brand { display: flex; align-items: center; gap: 16px; }
+.header-brand img { height: 40px; width: auto; background: #fff; padding: 4px 9px; border-radius: 4px; }
+header h1 { font-family: var(--f-num); font-size: 1.55rem; font-weight: 700; letter-spacing: 0.04em; color: #fff; line-height: 1.1; }
+header h1 span { color: #2BA8E8; font-weight: 600; }
+.header-meta { color: #9DB2D0; font-size: 0.78rem; font-weight: 400; }
+.header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.presentation-toggle { display: flex; align-items: center; gap: 6px; color: #9DB2D0; font-size: 0.78rem; cursor: pointer; user-select: none; }
+.presentation-toggle input { accent-color: var(--yellow); cursor: pointer; }
+.print-full-btn { margin-left: 0; }
+/* Seletor de mês. O cabeçalho é azul-marinho escuro nos DOIS temas, então no tema claro
+   o seletor usa o azul dos botões (--navy) com borda clara pra não se confundir com o fundo. */
+.period-select { background: var(--navy); color: #fff; border: 1px solid #6F9BD1; border-radius: 4px; padding: 7px 10px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
+.period-select:hover { background: var(--navy2); border-color: var(--blue); }
+.period-select option { background: #fff; color: #12233B; }
+:root[data-theme="dark"] .period-select { background: #0C1F3A; color: #E6EDF7; border-color: #2C568F; }
+:root[data-theme="dark"] .period-select:hover { background: #102848; border-color: var(--blue); }
+:root[data-theme="dark"] .period-select option { background: #0C1F3A; color: #E6EDF7; }
+
+/* ---------- Abas: sublinhado amarelo na ativa ---------- */
+.nav-tabs { display: flex; gap: 0; flex-wrap: wrap; margin-bottom: 26px; border-bottom: 1px solid var(--border); }
+.nav-tab {
+  padding: 11px 16px 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; font-family: inherit;
+  color: var(--text2); transition: color .15s, background .15s; border: none; background: transparent;
+  border-bottom: 3px solid transparent; margin-bottom: -1px;
+}
+.nav-tab:hover { color: var(--h); background: var(--bg-soft); }
+.nav-tab.active { color: var(--h); border-bottom-color: var(--yellow); }
+
+/* ---------- Navegação semanal ---------- */
+.week-nav { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; margin-bottom: 14px; }
+.week-nav-titulo { align-self: center; font-family: var(--f-num); font-weight: 700; font-size: 1.05rem; color: var(--h); margin-right: 6px; }
+.week-chip { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--card); color: var(--text2); text-decoration: none; font-size: 0.84rem; line-height: 1.25; }
+.week-chip small { font-size: 0.72rem; opacity: 0.85; }
+.week-chip:hover { color: var(--h); background: var(--bg-raise); border-color: var(--border-strong); }
+.week-chip.ativa { background: var(--bg-raise); color: var(--h); border-color: var(--blue); box-shadow: inset 0 -3px 0 var(--blue); }
+.week-banner { margin-bottom: 14px; padding: 10px 14px; border-radius: 4px; background: var(--bg-soft); border: 1px dashed var(--border-strong); color: var(--text2); font-size: 0.86rem; }
+
+/* ---------- Indicadores (KPI): barra lateral de estado + número grande ---------- */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 28px; }
+.kpi { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: var(--radius); padding: 16px 20px 15px; position: relative; box-shadow: var(--shadow); }
+.kpi.blue { border-left-color: var(--blue); } .kpi.cyan { border-left-color: var(--cyan); }
+.kpi.green { border-left-color: var(--green); } .kpi.yellow { border-left-color: var(--yellow); }
+.kpi.red { border-left-color: var(--red); } .kpi.orange { border-left-color: var(--orange); }
+.kpi-label { font-size: 0.8rem; font-weight: 600; color: var(--text2); }
+.kpi-value { font-family: var(--f-num); font-size: 2.35rem; font-weight: 700; color: var(--h); margin: 2px 0 2px; letter-spacing: -0.005em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.kpi-sub { font-size: 0.76rem; color: var(--text3); }
+
+/* ---------- Legenda com dica ---------- */
+.hover-legend { display: flex; gap: 20px; flex-wrap: wrap; margin: -10px 0 24px; }
+.legend-chip { position: relative; display: inline-flex; align-items: center; gap: 7px; font-size: 0.78rem; font-weight: 600; color: var(--text2); cursor: default; padding: 4px 2px; }
+.legend-square { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex-shrink: 0; }
+.legend-tip { position: absolute; bottom: 130%; left: 0; background: #02070f; border: 1px solid var(--border-strong); color: var(--text); padding: 9px 13px; border-radius: 4px; font-size: 0.72rem; font-weight: 400; white-space: nowrap; opacity: 0; visibility: hidden; transform: translateY(4px); transition: opacity .15s, transform .15s; z-index: 30; box-shadow: var(--shadow-lg); }
+.legend-tip::after { content: ""; position: absolute; top: 100%; left: 14px; border: 5px solid transparent; border-top-color: var(--border-strong); }
+.legend-chip:hover .legend-tip { opacity: 1; visibility: visible; transform: translateY(0); }
+
+/* ---------- Seções ---------- */
+.section { display: none; animation: fadein .2s ease; }
+.section.active { display: block; }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Painéis e gráficos ---------- */
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.chart-card { background: var(--card); border: 1px solid var(--border); border-top: 2px solid var(--border-strong); border-radius: var(--radius); padding: 18px 22px 20px; box-shadow: var(--shadow); }
+.chart-card h3 { font-family: var(--f-num); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.01em; color: var(--h); margin-bottom: 14px; }
+.chart-wrap { position: relative; height: 240px; }
+.chart-wrap.tall { height: 340px; }
+.chart-note { font-size: 0.76rem; color: var(--text3); margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-soft); line-height: 1.6; max-width: 78ch; }
+.chart-note strong { color: var(--text2); }
+
+/* ---------- Lista de críticos ---------- */
+.criticos-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.critico-item { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--red); border-radius: var(--radius); padding: 12px 16px; }
+.ci-pct { float: right; font-family: var(--f-num); font-weight: 700; color: var(--bad-tx); font-size: 1.3rem; }
+.ci-name { font-weight: 600; font-size: 0.88rem; color: var(--h); margin-bottom: 2px; }
+.ci-meta { font-size: 0.74rem; color: var(--text2); }
+
+/* ---------- Equipes ---------- */
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.team-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+.team-name { font-family: var(--f-num); font-weight: 700; font-size: 1.2rem; margin-bottom: 12px; color: var(--h); }
+.team-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.ts-val { display: block; font-family: var(--f-num); font-size: 1.55rem; font-weight: 700; color: var(--h); line-height: 1.15; font-variant-numeric: tabular-nums; }
+.ts-label { font-size: 0.74rem; color: var(--text3); }
+.team-bar { display: flex; height: 6px; border-radius: 2px; overflow: hidden; background: var(--bg-soft); }
+.tb-critico { background: var(--red); } .tb-atencao { background: var(--yellow); } .tb-normal { background: var(--green); }
+
+/* ---------- Selos ---------- */
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 3px; white-space: nowrap; border: 1px solid transparent; }
+.badge-normal, .badge-excelente { background: rgba(47,214,127,0.13); color: var(--ok-tx); border-color: rgba(47,214,127,0.3); }
+.badge-atencao { background: rgba(247,181,0,0.13); color: var(--warn-tx); border-color: rgba(247,181,0,0.32); }
+.badge-critico { background: rgba(255,81,67,0.14); color: var(--bad-tx); border-color: rgba(255,81,67,0.35); }
+.badge-bom { background: rgba(160,170,20,0.14); color: var(--bom-tx, #6B7300); border-color: rgba(160,170,20,0.35); }
+:root[data-theme="dark"] { --bom-tx: #E2EC6A; }
+.badge-rank-atencao { background: rgba(255,147,64,0.14); color: var(--orange-tx); border-color: rgba(255,147,64,0.34); }
+
+/* ---------- Filtros e botões ---------- */
+.filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; position: relative; }
+.filters select, .filters input { background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 4px; font-size: 0.82rem; font-family: inherit; }
+.filters input { min-width: 200px; }
+.filters select:focus, .filters input:focus { outline: none; border-color: var(--blue); background: var(--bg-raise); }
+.checkbox-label { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text2); margin-bottom: 12px; cursor: pointer; }
+.checkbox-label input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--yellow); cursor: pointer; }
+.checkbox-label strong { color: var(--h); }
+.print-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: #fff; border: 1px solid var(--border-strong); padding: 8px 14px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; font-family: inherit; cursor: pointer; margin-left: auto; transition: background .15s, border-color .15s; }
+.print-btn:hover { background: var(--navy2); border-color: var(--blue); }
+
+/* ---------- Tabelas ---------- */
+.table-section { background: var(--card); border: 1px solid var(--border); border-top: 2px solid var(--border-strong); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; box-shadow: var(--shadow); }
+.table-section h3 { font-family: var(--f-num); font-size: 1.15rem; font-weight: 700; margin-bottom: 5px; color: var(--h); }
+.table-hint { font-size: 0.78rem; color: var(--text3); margin-bottom: 10px; max-width: 110ch; }
+.table-wrap { overflow: auto; border-radius: var(--radius-sm); border: 1px solid var(--border-soft); }
+table.data-table { width: 100%; border-collapse: collapse; font-size: 0.74rem; line-height: 1.25; }
+table.data-table th { background: var(--bg-raise); position: sticky; top: 0; z-index: 5; padding: 7px 10px; text-align: center; font-weight: 600; color: var(--text2); border-bottom: 2px solid var(--border-strong); white-space: nowrap; font-size: 0.7rem; }
+table.sortable thead th { cursor: pointer; user-select: none; transition: color .15s, background .15s; }
+table.sortable thead th:hover { color: var(--h); background: var(--border); }
+table.sortable thead th::after { content: ""; display: inline-block; width: 0.6em; margin-left: 3px; opacity: .3; }
+table.sortable thead th.sorted-asc::after { content: "▲"; opacity: 1; color: var(--yellow); }
+table.sortable thead th.sorted-desc::after { content: "▼"; opacity: 1; color: var(--yellow); }
+table.data-table td { padding: 4px 10px; border-bottom: 1px solid var(--border-soft); white-space: nowrap; text-align: center; font-variant-numeric: tabular-nums; }
+table.data-table tbody tr:nth-child(even) { background: var(--stripe); }
+table.data-table tbody tr:hover { background: var(--hover); }
+table.data-table.compact td, table.data-table.compact th { padding: 3px 8px; font-size: 0.72rem; }
+
+/* Modo apresentação: borra nomes de agentes em tabelas e gráficos, sem
+   remover a estrutura — útil pra projetar/compartilhar tela sem expor
+   quem é quem. Ativado pelo checkbox no cabeçalho. */
+body.modo-apresentacao .agent-name,
+body.modo-apresentacao .ci-name,
+body.modo-apresentacao .chart-agent-names,
+body.modo-apresentacao .pe-agente-nome {
+  filter: blur(6px);
+  user-select: none;
+}
+.sticky-col { position: sticky; left: 0; background: var(--card); z-index: 2; font-weight: 600; text-align: left !important; }
+table.data-table tbody tr:nth-child(even) .sticky-col { background: var(--sticky-even); }
+table.data-table tbody tr:hover .sticky-col { background: var(--sticky-hover); }
+.row-critico { background: rgba(255,81,67,0.07); }
+.row-atencao { background: rgba(247,181,0,0.07); }
+.row-critico .sticky-col { background: var(--sticky-crit); }
+.row-atencao .sticky-col { background: var(--sticky-warn); }
+.num { font-variant-numeric: tabular-nums; text-align: right; }
+.pct { font-weight: 600; }
+.small-muted { color: var(--text3); font-size: 0.72rem; }
+.empty-state { padding: 30px; text-align: center; color: var(--text3); }
+a.id-link { color: var(--info-tx); text-decoration: none; font-weight: 600; border-bottom: 1px dotted var(--info-tx); }
+a.id-link:hover { color: var(--h); border-bottom-style: solid; }
+
+/* ---------- Legendas e cartões de alerta ---------- */
+.legend-box { background: var(--bg-soft); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 22px; font-size: 0.82rem; color: var(--text2); max-width: 120ch; }
+.legend-box strong { color: var(--h); }
+.legend-box p { margin: 0 0 10px; }
+.legend-box ul { margin: 0 0 10px; padding-left: 20px; }
+.legend-box li { margin-bottom: 4px; }
+
+/* ---------- Painel de Custos & Produtividade ---------- */
+.cst-guia { max-width: none; }
+.cst-guia p { margin: 0 0 12px; }
+.cst-conta { display: flex; flex-direction: column; gap: 6px; background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--blue); border-radius: var(--radius-sm); padding: 12px 16px; margin: 0 0 14px; }
+.cst-conta-t { font-size: 0.72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--text3); }
+.cst-conta.cst-real { border-left-color: var(--orange); }
+.cst-ex { font-size: 0.78rem; color: var(--text2); line-height: 1.5; max-width: 110ch; }
+.cst-eq { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.cst-eq b { font-family: var(--f-num); font-size: 1.25rem; color: var(--h); font-variant-numeric: tabular-nums; }
+.cst-eq b.cst-res { color: var(--info-tx); font-size: 1.5rem; }
+.cst-eq i { font-style: normal; font-size: 1.2rem; color: var(--text3); }
+.cst-eq small { font-size: 0.72rem; color: var(--text3); margin-right: 4px; }
+.cst-glossario { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px 22px; margin: 0 0 12px; }
+.cst-glossario div { line-height: 1.5; }
+.cst-avisos { margin: 0; padding-left: 20px; border-top: 1px solid var(--border-soft); padding-top: 10px; }
+.cst-avisos li { margin-bottom: 4px; }
+.cst-titulo { font-family: var(--f-num); font-size: 1.05rem; font-weight: 700; color: var(--h); margin: 6px 0 10px; letter-spacing: .01em; }
+.cst-legenda { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: -6px 0 12px; font-size: 0.76rem; font-weight: 600; color: var(--text2); }
+.cst-legenda span { display: inline-flex; align-items: center; gap: 6px; }
+.cst-equipes { margin: 0 0 28px; }
+.cst-equipes .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+.cst-equipes table.data-table td, .cst-equipes table.data-table th { font-size: 0.8rem; padding: 8px 12px; }
+.cst-pill { display: inline-block; min-width: 74px; padding: 2px 9px; border-radius: 999px; font-weight: 700; text-align: center; }
+.cst-pill.cst-ok { background: rgba(31,179,107,.16); color: var(--ok-tx); }
+.cst-pill.cst-medio { background: rgba(247,181,0,.20); color: var(--warn-tx); }
+.cst-pill.cst-alto { background: rgba(240,64,47,.16); color: var(--bad-tx); }
+.legend-table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 0.8rem; }
+.legend-table th, .legend-table td { padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: left; }
+.legend-table th { color: var(--h); font-weight: 600; }
+.legend-table td.ganho { color: var(--ok-tx); font-weight: 600; text-align: right; white-space: nowrap; }
+.legend-table td.perda { color: var(--bad-tx); font-weight: 600; text-align: right; white-space: nowrap; }
+.legend-collapsible { margin: 14px 0 0; padding: 10px 16px; }
+.legend-collapsible summary { cursor: pointer; font-weight: 600; color: var(--h); list-style: none; }
+.legend-collapsible summary::-webkit-details-marker { display: none; }
+.legend-collapsible summary::before { content: "▸ "; color: var(--yellow); }
+.legend-collapsible[open] summary::before { content: "▾ "; }
+.legend-collapsible[open] summary { margin-bottom: 10px; }
+.legend-collapsible .legend-table { margin-bottom: 8px; }
+.alert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.alert-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; transition: border-color .15s, background .15s; text-align: center; }
+.alert-card:hover { background: var(--bg-raise); border-color: var(--yellow); }
+.ac-icon { font-size: 1.3rem; margin-bottom: 4px; }
+.ac-val { font-family: var(--f-num); font-size: 2rem; font-weight: 700; color: var(--h); line-height: 1.15; }
+.ac-label { font-size: 0.76rem; color: var(--text2); margin-top: 2px; }
+
+footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76rem; border-top: 1px solid var(--border); margin-top: 44px; }
+
+::-webkit-scrollbar { height: 9px; width: 9px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ---------- Mapa de calor ---------- */
+.heat-grid { display: grid; grid-template-columns: 80px repeat(5, 1fr); gap: 6px; }
+.heat-label { display: flex; align-items: center; font-size: 0.76rem; font-weight: 600; color: var(--text2); }
+.heat-cell { border-radius: 4px; padding: 12px 6px; text-align: center; color: #fff; font-family: var(--f-num); font-weight: 700; font-size: 1.15rem; }
+.heat-cell span { display: block; font-family: var(--f-txt); font-size: 0.62rem; font-weight: 400; opacity: .9; margin-top: 2px; }
+
+@media (max-width: 720px) {
+  .container { padding: 0 14px; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .nav-tabs { overflow-x: auto; flex-wrap: nowrap; }
+  .nav-tab { white-space: nowrap; }
+  /* Celular: cabeçalho enxuto e fora do topo fixo (senão ocupa meia tela) */
+  header { position: static; padding: 10px 0 14px; margin-bottom: 16px; }
+  header h1 { font-size: 1.25rem; }
+  .header-brand { gap: 10px; } .header-brand img { height: 34px; }
+  .header-brand .header-meta { display: none; }
+  .header-actions { gap: 8px; width: 100%; }
+  .header-actions .period-select { flex: 1 1 100%; }
+  .header-actions .print-btn { flex: 1 1 100%; justify-content: center; margin-left: 0; }
+  .header-actions .header-meta { width: 100%; }
+  .kpi-value { font-size: 2rem; }
+  .week-nav-titulo { width: 100%; }
+}
+
+@media print {
+  @page { size: A4 landscape; margin: 10mm; }
+  /* Papel branco: volta à paleta clara */
+  :root, :root[data-theme="dark"] { --h:#1A2B42; --stripe:rgba(11,42,82,0.035); --hover:transparent; --sticky-even:#fff; --sticky-hover:#fff; --sticky-crit:#FDF1EC; --sticky-warn:#FEF7E8; --bom-tx:#6B7300; --bg:#fff; --card:#fff; --bg-soft:#F3F6FA; --bg-raise:#EEF2F7; --border:#DCE3EC; --border-soft:#E6EBF2; --border-strong:#C7D1DE;
+          --text:#1A2B42; --text2:#4A5B72; --text3:#5B6B82; --ok-tx:#0A8F52; --warn-tx:#9A6B0B; --bad-tx:#B5401F; --info-tx:#1A4FA3; --orange-tx:#B1590B; color-scheme: light; }
+  body { background: #fff !important; color: #1A2B42 !important; }
+  table.data-table th, .table-section h3, .legend-box strong, .kpi-value, .team-name { color: #1A2B42 !important; }
+  table.data-table tbody tr:nth-child(even) .sticky-col, .sticky-col { background: #fff !important; }
+  .row-critico .sticky-col { background: #FDF1EC !important; } .row-atencao .sticky-col { background: #FEF7E8 !important; }
+  .table-section { border-top: 1px solid #DCE3EC !important; }
+  /* Causa das "páginas em branco": a animação fadein (opacity 0 -> 1) das
+     abas recomeça quando a aba passa de display:none pra block na hora de
+     imprimir, e o navegador captura o PDF com a aba ainda em opacity 0 —
+     texto existe mas fica invisível. Em impressão nunca há animação. */
+  .section, .section.active { animation: none !important; opacity: 1 !important; transform: none !important; }
+  header, .nav-tabs, .week-nav, footer, .filters, .print-btn, .chart-card, .kpi-grid, .legend-box, .hover-legend, .criticos-list, .alert-grid, .table-hint, .charts-grid { display: none !important; }
+  body.print-mode .section { display: block !important; }
+  body.print-mode .table-section { display: none !important; }
+  body.print-mode .table-section.print-target { display: block !important; box-shadow: none !important; border: none !important; }
+  body.print-mode .table-section.print-target .table-hint { display: none !important; }
+  .sticky-col, table.data-table thead th { position: static !important; }
+  .table-wrap { overflow: visible !important; }
+  table.data-table { font-size: 9px !important; width: 100% !important; table-layout: auto !important; }
+  /* Células NUNCA quebram letra por letra: texto só quebra entre palavras
+     (cabeçalhos) ou fica numa linha só (dados). A regra antiga
+     (word-break: break-word em todas as células) fazia tabelas largas — como
+     o Resumo Completo por Agente, com 29 colunas — espremerem cada coluna
+     até caber 1 letra por linha, gerando linhas gigantes e dezenas de
+     páginas praticamente em branco. */
+  table.data-table td { white-space: nowrap !important; word-break: normal !important; overflow-wrap: normal !important; padding: 2px 4px !important; }
+  table.data-table th { white-space: normal !important; word-break: normal !important; overflow-wrap: normal !important; hyphens: none !important; padding: 3px 3px !important; }
+  /* Tabelas com muitas colunas (marcadas por printPrepararTabelas() no
+     bootstrap.js) ganham fonte menor pra caber na largura da folha. */
+  table.data-table.print-wide { font-size: 6.2px !important; }
+  table.data-table.print-wide td { padding: 1.5px 2px !important; }
+  table.data-table.print-wide th { padding: 2px 1px !important; font-size: 5.6px !important; letter-spacing: 0 !important; }
+  table.data-table.print-wide .badge { padding: 0 2px !important; font-size: 5.6px !important; }
+  table.data-table.print-muito-wide { font-size: 5.2px !important; }
+  table.data-table.print-muito-wide th { font-size: 4.8px !important; }
+  a.id-link { color: inherit !important; text-decoration: none !important; }
+
+  /* Sem isso o Chrome/Firefox apagam as cores de fundo por padrão ao
+     imprimir — some o zebrado, o header cinza da tabela e o destaque
+     vermelho/amarelo das linhas críticas/atenção, ficando tudo branco. */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+
+  /* Repete a linha de cabeçalho (nome das colunas) em TODA página em que a
+     tabela continuar — sem isso, uma tabela de 200 linhas que ocupa 4
+     páginas só mostra "Nome / Equipe / Turno..." na primeira, e nas
+     páginas seguintes é uma parede de números sem saber o que é cada
+     coluna. */
+  table.data-table thead { display: table-header-group; }
+  table.data-table tfoot { display: table-footer-group; }
+
+  /* Nunca corta uma linha ao meio entre duas páginas (ficaria com a
+     primeira metade dos dados numa página e o resto na outra) — o
+     navegador empurra a linha inteira pra próxima página se não couber
+     inteira na atual. */
+  table.data-table tr { page-break-inside: avoid; }
+
+  /* O título da seção (h3) nunca fica sozinho no fim de uma página com a
+     tabela inteira começando só na próxima — mantém título e pelo menos a
+     primeira linha grudados. */
+  .table-section h3 { page-break-after: avoid; }
+
+  /* As setinhas de ordenação (▲▼) e o cursor de "clicável" não fazem
+     sentido no papel — é interação de tela, só polui visualmente. */
+  table.sortable thead th::after { display: none !important; }
+  table.sortable thead th { cursor: default !important; }
+
+  /* Zebrado leve pra facilitar acompanhar a linha com o olho numa tabela
+     larga — no navegador o hover já ajuda nisso, no papel não tem hover. */
+  table.data-table tbody tr:nth-child(even) { background: #F3F6FA; }
+  table.data-table tbody tr:hover { background: inherit; }
+
+  /* Evita título "órfão" (sozinho no fim da página) ou "viúvo" (sozinho no
+     topo) em qualquer texto corrido que sobre no relatório. */
+  h1, h2, h3, p, li { orphans: 3; widows: 3; }
+}
+
+@media (prefers-reduced-motion: reduce) { .section { animation: none; } }
+
+/* Relatório completo (todas as abas empilhadas, uma por página) */
+@media print {
+  body.print-mode-full .section { display: block !important; page-break-after: always; }
+  body.print-mode-full .section:last-child { page-break-after: auto; }
+  body.print-mode-full .table-section { display: block !important; box-shadow: none !important; border: none !important; }
+  /* Duas ou mais tabelas na MESMA aba (ex.: Ausências + Férias/Atestado)
+     — cada uma começa numa página nova também, senão a segunda tabela
+     nasce colada no meio da página onde a primeira terminou, cortando o
+     título dela ao meio visualmente. A primeira tabela da aba (que já
+     vem logo depois do título da seção/KPIs) fica sem quebra antes, pra
+     não deixar uma página em branco à toa. */
+  body.print-mode-full .table-section { page-break-before: always; }
+  body.print-mode-full .section > .table-section:first-of-type { page-break-before: avoid; }
+  body.print-mode-full .section > .table-section.print-first { page-break-before: avoid; }
+  body.print-mode-full .legend-box { page-break-inside: avoid; break-inside: avoid; }
+  body.print-mode-full .kpi-grid { display: grid !important; }
+  body.print-mode-full .legend-box { display: block !important; }
+  body.print-mode-full::before {
+    content: "S E N T I N E L A - HUB — Relatório Completo — " attr(data-print-date);
+    display: block; font-size: 14px; font-weight: 700; margin-bottom: 16px;
+  }
+}
+
+
+/* ---------- Extrato por agente (modal + impressão em 1 folha) ---------- */
+.extrato-btn { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 7px; padding: 3px 9px; font-size: 0.68rem; font-weight: 600; cursor: pointer; color: var(--text2); white-space: nowrap; }
+.extrato-btn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.extrato-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 1000; overflow: auto; padding: 24px 12px; }
+.extrato-overlay.open { display: block; }
+body.extrato-aberto { overflow: hidden; }
+.extrato-card { --text:#1A2B42; --text2:#4A5B72; --text3:#5B6B82; --border:#DCE3EC; --bg-soft:#F3F6FA; --bg-raise:#EEF2F7; color-scheme: light; background: #fff; color: #1A2B42; max-width: 780px; margin: 0 auto; padding: 24px 30px 28px; border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.35); }
+.extrato-actions { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 10px; }
+.extrato-fechar { background: transparent; border: 1px solid var(--border); border-radius: 9px; padding: 9px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: var(--text2); }
+.extrato-card h2 { font-size: 1.15rem; margin: 0 0 2px; }
+.ex-sub { font-size: 0.82rem; color: #5B6B82; margin-bottom: 14px; }
+.ex-resumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+.ex-resumo div { border: 1px solid #DCE3EC; border-radius: 9px; padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+.ex-resumo span { font-size: 0.64rem; text-transform: uppercase; color: #5B6B82; font-weight: 700; letter-spacing: .03em; }
+.ex-resumo strong { font-size: 0.95rem; }
+.ex-resumo em { font-style: normal; font-size: 0.72rem; }
+.ex-obs { background: #FFF4E0; border: 1px solid #F2B45B; border-radius: 9px; padding: 8px 12px; font-size: 0.78rem; margin-bottom: 12px; }
+.ex-tabela { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.ex-tabela th { background: #EEF2F7; text-align: right; padding: 6px 8px; font-size: 0.68rem; text-transform: uppercase; color: #5B6B82; }
+.ex-tabela th:first-child { text-align: left; }
+.ex-tabela td { padding: 5px 8px; border-bottom: 1px solid #E6EBF2; }
+.ex-tabela td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.ex-tabela .neg { color: #C0392B; font-weight: 600; }
+.ex-tabela .pos { color: #0A8F52; font-weight: 600; }
+.ex-tabela .ex-base td { background: #F6F8FB; color: #5B6B82; }
+.ex-tabela .ex-total td { background: #1A2B42; color: #fff; font-weight: 700; font-size: 0.86rem; }
+.ex-nota { font-size: 0.7rem; color: #5B6B82; margin-top: 10px; line-height: 1.4; }
+@media (max-width: 640px) { .ex-resumo { grid-template-columns: repeat(2, 1fr); } .extrato-card { padding: 16px; } }
+
+/* Média Mensal: tendência e mini-gráfico */
+.trend-up { color: #0A8F52; font-weight: 700; }
+.trend-up::before { content: "▲ "; }
+.trend-down { color: #C0392B; font-weight: 700; }
+.trend-down::before { content: "▼ "; }
+.trend-flat { color: var(--text2); }
+.trend-flat::before { content: "= "; }
+.spark-cell svg { vertical-align: middle; }
+.spark polyline { stroke: #7C8BA1; }
+.spark circle { fill: #7C8BA1; }
+.spark-up .spark polyline { stroke: #12B76A; } .spark-up .spark circle { fill: #12B76A; }
+.spark-down .spark polyline { stroke: #E5484D; } .spark-down .spark circle { fill: #E5484D; }
+
+@media print {
+  /* Extrato: só a folha do agente, em retrato, uma página */
+  body.print-extrato > *:not(#extratoOverlay) { display: none !important; }
+  body.print-extrato #extratoOverlay { display: block !important; position: static !important; background: none !important; padding: 0 !important; overflow: visible !important; page: extrato; }
+  body.print-extrato .extrato-card { box-shadow: none !important; max-width: none !important; padding: 0 !important; border-radius: 0 !important; }
+  body.print-extrato .extrato-actions { display: none !important; }
+  body.print-extrato.extrato-aberto { overflow: visible !important; }
+  /* Lote: uma folha por agente, quebra de página só ENTRE folhas (sem página em branco no fim) */
+  body.print-lote > *:not(#extratosLote) { display: none !important; }
+  body.print-lote #extratosLote { display: block !important; page: extrato; color: #1A2B42; }
+  body.print-lote .ex-folha { break-after: page; page-break-after: always; break-inside: avoid; }
+  body.print-lote .ex-folha:last-child { break-after: auto; page-break-after: auto; }
+  .no-print, body.print-extrato .ex-contestar { display: none !important; }
+}
+#extratosLote { display: none; }
+.ex-contestar { margin-top: 12px; border-top: 1px dashed #DCE3EC; padding-top: 8px; font-size: .8rem; }
+.ex-contestar summary { cursor: pointer; font-weight: 600; }
+.ex-contestar label { display: block; margin: 8px 0; font-weight: 600; }
+.ex-contestar input, .ex-contestar select { display: block; width: 100%; padding: 8px; margin-top: 3px; border: 1px solid #DCE3EC; border-radius: 8px; font: inherit; }
+.lote-barra { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin: 6px 0 12px; }
+.lote-barra select { padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-soft); color: inherit; }
+@page extrato { size: A4 portrait; margin: 14mm; }
+
+/* Ícones (traço) e botão de tema */
+.ico { width: 1.1em; height: 1.1em; vertical-align: -0.18em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.ico-sol { display: none; }
+:root[data-theme="dark"] .ico-sol { display: inline; }
+:root[data-theme="dark"] .ico-lua { display: none; }

@@ -1,0 +1,119 @@
+[
+  {
+    "arquivo": "semanas_305-308.xlsx",
+    "label": "Maio/2026",
+    "origem": "manual",
+    "semana_inicio": 305,
+    "semana_fim": 308,
+    "semana_ano_inicio": 18,
+    "semana_ano_fim": 21,
+    "gerado_em": "01/11/2026 21:55",
+    "reaberto_em": "30/10/2026"
+  },
+  {
+    "arquivo": "semanas_309-312.xlsx",
+    "label": "Junho/2026",
+    "origem": "manual",
+    "semana_inicio": 309,
+    "semana_fim": 312,
+    "semana_ano_inicio": 22,
+    "semana_ano_fim": 25,
+    "gerado_em": "01/11/2026 21:55",
+    "reaberto_em": "30/10/2026"
+  },
+  {
+    "arquivo": "semanas_313-317.xlsx",
+    "label": "Julho/2026",
+    "origem": "manual",
+    "semana_inicio": 313,
+    "semana_fim": 317,
+    "semana_ano_inicio": 26,
+    "semana_ano_fim": 30,
+    "gerado_em": "01/11/2026 21:55",
+    "reaberto_em": "30/10/2026"
+  },
+  {
+    "arquivo": "semanas_318-321.xlsx",
+    "label": "Agosto/2026",
+    "origem": "manual",
+    "semana_inicio": 318,
+    "semana_fim": 321,
+    "semana_ano_inicio": 31,
+    "semana_ano_fim": 34,
+    "gerado_em": "01/11/2026 21:55",
+    "reaberto_em": "30/10/2026"
+  },
+  {
+    "arquivo": "semanas_322-326.xlsx",
+    "label": "Setembro/2026",
+    "origem": "manual",
+    "semana_inicio": 322,
+    "semana_fim": 326,
+    "semana_ano_inicio": 35,
+    "semana_ano_fim": 39,
+    "gerado_em": "01/11/2026 21:55",
+    "reaberto_em": "30/10/2026"
+  },
+  {
+    "arquivo": "semanas_327-330.xlsx",
+    "label": "Outubro/2026",
+    "origem": "cache",
+    "semana_inicio": 327,
+    "semana_fim": 330,
+    "semana_ano_inicio": 40,
+    "semana_ano_fim": 43,
+    "gerado_em": "03/11/2026 05:53"
+  },
+  {
+    "arquivo": "semana_327.xlsx",
+    "tipo": "semana",
+    "mes": "Outubro/2026",
+    "label": "Outubro/2026 · Semana 1",
+    "numero_semana": 1,
+    "origem": "cache",
+    "semana_inicio": 327,
+    "semana_fim": 327,
+    "periodo": "04/10 a 10/10",
+    "parcial": false,
+    "gerado_em": "03/11/2026 05:53"
+  },
+  {
+    "arquivo": "semana_328.xlsx",
+    "tipo": "semana",
+    "mes": "Outubro/2026",
+    "label": "Outubro/2026 · Semana 2",
+    "numero_semana": 2,
+    "origem": "cache",
+    "semana_inicio": 328,
+    "semana_fim": 328,
+    "periodo": "11/10 a 17/10",
+    "parcial": false,
+    "gerado_em": "03/11/2026 05:53"
+  },
+  {
+    "arquivo": "semana_329.xlsx",
+    "tipo": "semana",
+    "mes": "Outubro/2026",
+    "label": "Outubro/2026 · Semana 3",
+    "numero_semana": 3,
+    "origem": "cache",
+    "semana_inicio": 329,
+    "semana_fim": 329,
+    "periodo": "18/10 a 24/10",
+    "parcial": false,
+    "gerado_em": "03/11/2026 05:54"
+  },
+  {
+    "arquivo": "semana_330.xlsx",
+    "tipo": "semana",
+    "mes": "Outubro/2026",
+    "label": "Outubro/2026 · Semana 4",
+    "numero_semana": 4,
+    "origem": "cache",
+    "semana_inicio": 330,
+    "semana_fim": 330,
+    "periodo": "25/10 a 31/10",
+    "parcial": false,
+    "gerado_em": "03/11/2026 05:54"
+  }
+]

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparar meses — Sentinela</title>
+<script src="assets/tema.js"></script>
+<link rel="stylesheet" href="assets/fontes.css">
+<style>
+  :root{--bg:#EEF2F8;--card:#FFFFFF;--tx:#12233B;--mut:#4A5D7C;--bd:#D5DEEA;--pri:#F7B500;--pri-tx:#0A1B33;--warn:#8A6100;--warn-bg:#FFF4D6;--bad:#B3261E;--bad-bg:#FDECEA;--ok:#0B7A44;--ok-bg:#E4F6EC;--info-bg:#E6F1FB;--info:#1565B8;--soft:#F2F6FB;--serie:#0F5FB0;color-scheme:light}
+  :root[data-theme="dark"]{--bg:#071426;--card:#0C1F3A;--tx:#E6EDF7;--mut:#9DB2D0;--bd:#1D3C68;--pri:#F7B500;--pri-tx:#0A1B33;--warn:#FFC93D;--warn-bg:#3A2D12;--bad:#FF8478;--bad-bg:#3A1D22;--ok:#5CE59A;--ok-bg:#12301F;--info-bg:#10304F;--info:#6CC4F2;--soft:#102848;--serie:#F7B500;color-scheme:dark}
+  header.topo{border-bottom-color:#1D3C68}
+  header.topo a{color:#9DD3F5}
+  .tema-btn{background:transparent;border:1px solid #2C4F82;color:#DCE7F5;border-radius:6px;padding:6px 10px;font:inherit;font-size:.82rem;cursor:pointer;white-space:nowrap;margin-left:auto}
+  .tema-btn + a{margin-left:0}
+  .tema-btn:hover{border-color:#F7B500}
+  .ico{width:1.1em;height:1.1em;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .ico-sol{display:none}:root[data-theme="dark"] .ico-sol{display:inline}:root[data-theme="dark"] .ico-lua{display:none}
+  @media (max-width:480px){.tema-btn .tema-txt{display:none}.tema-btn{padding:6px 8px}header.topo{padding-left:10px;padding-right:10px}header.topo .marca{gap:6px}header.topo img{height:22px;padding:2px 4px}header.topo b{font-size:.9rem;letter-spacing:.02em}header.topo a{font-size:.72rem}header.topo b i{display:none}}
+  header.topo{background:#050F20;border-bottom:1px solid var(--bd);position:relative;margin:0 0 14px;padding:12px 16px 15px}
+  header.topo::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:linear-gradient(90deg,#F7B500 0 120px,#FF5143 120px 168px,#19B8A3 168px 196px,transparent 196px)}
+  header.topo .marca{display:flex;align-items:center;gap:12px;max-width:860px;margin:0 auto}
+  header.topo img{height:34px;background:#fff;padding:3px 8px;border-radius:4px}
+  header.topo b{white-space:nowrap;font-family:"Barlow Semi Condensed",system-ui,sans-serif;font-size:1.2rem;letter-spacing:.04em;color:#fff}
+  header.topo b i{font-style:normal;color:#2BA8E8;font-weight:600}
+  header.topo a{margin-left:auto;font-size:.85rem;white-space:nowrap}
+  @media (max-width:480px){header.topo .marca{gap:8px}header.topo img{height:26px;padding:2px 6px}header.topo b{font-size:1.02rem}header.topo a{font-size:.78rem}}
+  h1,h2{font-family:"Barlow Semi Condensed",system-ui,sans-serif;letter-spacing:.01em}
+  :focus-visible{outline:2px solid #F7B500;outline-offset:2px}
+  *{box-sizing:border-box} html{background:var(--bg)}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  main{max-width:860px;margin:0 auto;padding:16px}
+  h1{font-size:1.35rem;margin:6px 0 2px} h2{font-size:1.05rem;margin:0 0 8px}
+  .mut{color:var(--mut);font-size:.9rem} a{color:var(--info)}
+  .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+  .kpi{border:1px solid var(--bd);border-radius:10px;padding:10px} .kpi span{display:block;font-size:.72rem;text-transform:uppercase;color:var(--mut);font-weight:700}
+  .kpi strong{font-size:1.25rem}
+  .grafico{position:relative;height:260px}
+  table{width:100%;border-collapse:collapse;font-size:.9rem} td,th{border-bottom:1px solid var(--bd);padding:6px 4px;text-align:left} td.n,th.n{text-align:right}
+  .neg{color:var(--bad);font-weight:600} .pos{color:var(--ok);font-weight:600}
+  .aviso{background:var(--warn-bg);color:var(--warn);padding:10px;border-radius:6px}
+  input{width:100%;min-height:46px;padding:10px;font-size:1rem;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+  #lista a{display:block;padding:10px 4px;border-bottom:1px solid var(--bd);text-decoration:none}
+  .ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+  .ctl label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;font-weight:700;color:var(--mut);text-transform:uppercase}
+  select{min-height:46px;padding:8px 10px;font-size:1rem;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);min-width:160px}
+  .abas{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+  .abas button{min-height:44px;padding:8px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-weight:600;cursor:pointer}
+  .abas button[aria-pressed="true"]{background:var(--pri);color:var(--pri-tx);border-color:var(--pri)}
+  .eq h2{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+  .dl{display:inline-flex;gap:4px;align-items:center;font-weight:700}
+  .dl.up{color:var(--ok)} .dl.down{color:var(--bad)} .dl.eq0{color:var(--mut)}
+  table.cmp td.n{white-space:nowrap}
+  td a{color:var(--tx);text-decoration:none;font-weight:600} td a:hover{text-decoration:underline}
+  .grafico{height:240px}
+  .sr{position:absolute;left:-9999px}
+  @media (max-width:560px){
+    table.cmp,table.cmp tbody,table.cmp tr,table.cmp td{display:block}
+    table.cmp tr{border-bottom:1px solid var(--bd);padding:6px 0;display:flex;flex-wrap:wrap;gap:2px 12px;align-items:baseline}
+    table.cmp td{border:0;padding:0;text-align:left}
+    table.cmp td:first-child{flex:1 0 100%}
+    .eq h2{font-size:1rem}
+  }
+  body.modo-apresentacao .nome{filter:blur(7px)}
+</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-compare" viewBox="0 0 24 24"><path d="M4 8h13M13 4l4 4-4 4M20 16H7M11 12l-4 4 4 4"/></symbol></svg>
+<header class="topo"><div class="marca"><img src="assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã"><b>SENTINELA <i>comparar meses</i></b><button type="button" class="tema-btn" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg> <span class="tema-txt">Tema escuro</span></button><a href="index.html">← Dashboard</a></div></header>
+<main>
+  <label class="tg"><input type="checkbox" id="apres" style="width:auto;min-height:0"> Modo apresentação (ocultar nomes)</label>
+  <h1><svg class="ico" aria-hidden="true"><use href="#i-compare"/></svg> Comparar mês com mês</h1>
+  <p class="mut">Escolha dois meses para ver quem subiu, quem caiu e como cada equipe se saiu. Só notas do ranking.</p>
+  <div id="conteudo"><p class="mut">Carregando…</p></div>
+</main>
+<script src="assets/agentes_dados.js"></script>
+<script src="assets/chart.umd.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const f1 = n => Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const sg = n => (n > 0.04 ? '+' : n < -0.04 ? '−' : '') + f1(Math.abs(n));
+const MESES = ['janeiro','fevereiro','marco','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const ordMes = l => { const p = String(l).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().split('/'); return (parseInt(p[1], 10) || 0) * 20 + MESES.indexOf(p[0]); };
+const LIMIAR = 0.5; // até meio ponto de diferença = estável
+const SV = n => `<svg class="ico" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+$('apres').onchange = e => document.body.classList.toggle('modo-apresentacao', e.target.checked);
+try { if (window.opener && window.opener.document.body.classList.contains('modo-apresentacao')) { $('apres').checked = true; document.body.classList.add('modo-apresentacao'); } } catch (e) {}
+let filtro = 'todos', grafico = null;
+function dado() {
+  const D = window.AGENTES_DADOS;
+  return D && D.agentes ? Object.entries(D.agentes).map(([k, a]) => ({ k, nome: a.nome, equipe: a.equipe || '—', meses: a.meses || [] })) : [];
+}
+function nota(a, mes) { const m = a.meses.find(x => x.mes === mes); return m && m.pontos != null ? m : null; }
+function seta(d) { return d > LIMIAR ? ['up', 'arrow-up', 'subiu'] : d < -LIMIAR ? ['down', 'arrow-down', 'caiu'] : ['eq0', 'minus', 'estável']; }
+function montar() {
+  const ag = dado(), alvo = $('conteudo');
+  const cont = {}; ag.forEach(a => a.meses.forEach(m => { cont[m.mes] = 1; }));
+  const meses = Object.keys(cont).sort((x, y) => ordMes(x) - ordMes(y));
+  if (meses.length < 2) { alvo.innerHTML = '<div class="card aviso">Preciso de pelo menos dois meses com notas para comparar. Volte depois da próxima atualização.</div>'; return; }
+  const q = new URLSearchParams(location.search);
+  let de = meses.includes(q.get('de')) ? q.get('de') : meses[meses.length - 2], para = meses.includes(q.get('para')) ? q.get('para') : meses[meses.length - 1];
+  const opt = sel => meses.map(m => `<option${m === sel ? ' selected' : ''}>${esc(m)}</option>`).join('');
+  alvo.innerHTML = `<div class="card"><div class="ctl"><label>De<select id="sDe">${opt(de)}</select></label><label>Para<select id="sPara">${opt(para)}</select></label></div></div><div id="res"></div>`;
+  $('sDe').onchange = $('sPara').onchange = () => { de = $('sDe').value; para = $('sPara').value; resultado(ag, de, para); };
+  resultado(ag, de, para);
+}
+function resultado(ag, de, para) {
+  const linhas = [];
+  let semPar = 0;
+  ag.forEach(a => { const x = nota(a, de), y = nota(a, para); if (x && y) linhas.push({ a, x, y, d: y.pontos - x.pontos, dpos: x.pos - y.pos }); else if (x || y) semPar++; });
+  const sobe = linhas.filter(l => l.d > LIMIAR).length, cai = linhas.filter(l => l.d < -LIMIAR).length, est = linhas.length - sobe - cai;
+  const mA = linhas.length ? linhas.reduce((t, l) => t + l.x.pontos, 0) / linhas.length : 0, mB = linhas.length ? linhas.reduce((t, l) => t + l.y.pontos, 0) / linhas.length : 0;
+  const equipes = [...new Set(linhas.map(l => l.a.equipe))].sort((p, q) => p.localeCompare(q, 'pt-BR', { numeric: true }));
+  const resEq = equipes.map(e => { const ls = linhas.filter(l => l.a.equipe === e); const m1 = ls.reduce((t, l) => t + l.x.pontos, 0) / ls.length, m2 = ls.reduce((t, l) => t + l.y.pontos, 0) / ls.length; return { e, ls, m1, m2, d: m2 - m1 }; });
+  const abertos = [...new Set([de, para])].filter(m => linhas.some(l => { const x = l.x.mes === m ? l.x : l.y; return !x.fechado; }));
+  const mostra = l => filtro === 'todos' || (filtro === 'sobe' && l.d > LIMIAR) || (filtro === 'cai' && l.d < -LIMIAR);
+  const bloco = r => {
+    const ls = r.ls.filter(mostra).sort((p, q) => q.d - p.d);
+    const [c, ic] = seta(r.d);
+    const tr = ls.map(l => { const [c2, i2, tx] = seta(l.d); const dp = l.dpos === 0 ? 'mesma posição' : l.dpos > 0 ? `${SV('arrow-up')} ${l.dpos} ${l.dpos === 1 ? 'posição' : 'posições'}` : `${SV('arrow-down')} ${-l.dpos} ${l.dpos === -1 ? 'posição' : 'posições'}`;
+      return `<tr><td><a class="nome" href="agente.html?${/^\d+$/.test(l.a.k) ? 'id=' + l.a.k : 'nome=' + encodeURIComponent(l.a.nome)}">${esc(l.a.nome)}</a></td><td class="n">${f1(l.x.pontos)} → ${f1(l.y.pontos)}</td><td class="n"><span class="dl ${c2}">${SV(i2)} ${sg(l.d)}<span class="sr"> (${tx})</span></span></td><td class="n mut">${dp}</td></tr>`; }).join('');
+    return `<div class="card eq"><h2><span>${esc(r.e)}</span><span class="dl ${c}">${SV(ic)} média ${f1(r.m1)} → ${f1(r.m2)} (${sg(r.d)})</span></h2>
+      <table class="cmp">${tr || '<tr><td class="mut">Ninguém nesta lista.</td></tr>'}</table></div>`;
+  };
+  $('res').innerHTML = `<div class="card"><div class="kpis">
+      <div class="kpi"><span>Média geral</span><strong>${f1(mA)} → ${f1(mB)}</strong></div>
+      <div class="kpi"><span>Subiram</span><strong class="pos" id="nSobe">${sobe}</strong></div>
+      <div class="kpi"><span>Caíram</span><strong class="neg" id="nCai">${cai}</strong></div>
+      <div class="kpi"><span>Estáveis (até ${f1(LIMIAR)} pt)</span><strong>${est}</strong></div></div>
+      ${abertos.length ? `<p class="aviso" id="avAberto">${esc(abertos.join(' e '))} ainda ${abertos.length > 1 ? 'estão abertos' : 'está aberto'}: a nota pode mudar até o fechamento do mês.</p>` : ''}
+      ${semPar ? `<p class="mut">${semPar} agente(s) aparecem em só um dos dois meses e ficaram de fora da comparação.</p>` : ''}</div>
+    <div class="card"><h2>Variação da média por equipe</h2><div class="grafico"><canvas id="gEq" role="img" aria-label="Variação da nota média por equipe"></canvas></div></div>
+    <div class="abas" role="group" aria-label="Mostrar">${[['todos', 'Todos'], ['sobe', 'Quem subiu'], ['cai', 'Quem caiu']].map(([v, t]) => `<button type="button" data-f="${v}" aria-pressed="${filtro === v}">${t}</button>`).join('')}</div>
+    ${resEq.map(bloco).join('') || '<div class="card aviso">Nenhum agente aparece nos dois meses.</div>'}
+    <p class="mut">Nota de ${esc(de)} comparada à de ${esc(para)}. “Posições” mostra quantos lugares o agente ganhou (↑) ou perdeu (↓) no ranking. Meses ainda abertos podem mudar até o fechamento.</p>`;
+  document.querySelectorAll('.abas button').forEach(b => b.onclick = () => { filtro = b.dataset.f; resultado(ag, de, para); });
+  if (grafico) grafico.destroy();
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  if (window.aplicarTemaGraficos) aplicarTemaGraficos();
+  grafico = new Chart($('gEq'), { type: 'bar', data: { labels: resEq.map(r => r.e), datasets: [{ data: resEq.map(r => Math.round(r.d * 10) / 10), backgroundColor: resEq.map(r => r.d >= 0 ? css('--ok') : css('--bad')), borderRadius: 5 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grace: '10%' } } },
+    plugins: [{ id: 'v', afterDatasetsDraw(ch) { const c = ch.ctx; c.save(); c.font = '600 12px "IBM Plex Sans",sans-serif'; c.fillStyle = css('--tx'); c.textAlign = 'center';
+      ch.getDatasetMeta(0).data.forEach((b, i) => { const v = ch.data.datasets[0].data[i]; c.textBaseline = v >= 0 ? 'bottom' : 'top'; c.fillText(sg(v), b.x, v >= 0 ? b.y - 3 : b.y + 3); }); c.restore(); } }] });
+}
+montar();
+document.addEventListener('sentinela:tema', () => location.reload());
+</script>
+</body>
+</html>

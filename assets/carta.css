@@ -1,0 +1,28 @@
+/* Cartão do agente (estilo carta de jogador). Usado em agente.html e album.html */
+.carta{--c1:#F9E08B;--c2:#D4A32F;--tx:#3A2A05;--ln:rgba(58,42,5,.35);position:relative;width:272px;min-height:392px;padding:16px 18px 14px;color:var(--tx);border-radius:22px 22px 46px 46px / 22px 22px 34px 34px;background:linear-gradient(155deg,var(--c1),var(--c2));box-shadow:0 10px 28px rgba(0,0,0,.28),inset 0 0 0 2px rgba(255,255,255,.35);overflow:hidden;font-family:"Barlow Semi Condensed",system-ui,sans-serif}
+.carta::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.14) 0 14px,transparent 14px 34px);pointer-events:none}
+.carta::after{content:"";position:absolute;left:-30%;top:-40%;width:90%;height:90%;background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent);pointer-events:none}
+.carta{--logo:linear-gradient(165deg,#A87612 0%,#7A520A 55%,#5C3C05 100%)}
+.carta.t-prata{--logo:linear-gradient(165deg,#6F7F96 0%,#4C5B70 55%,#37455A 100%);--c1:#EEF2F7;--c2:#9FADBF;--tx:#1E2B3D;--ln:rgba(30,43,61,.35)}
+.carta.t-bronze{--logo:linear-gradient(165deg,#8A4E22 0%,#63350F 55%,#4A2609 100%);--c1:#EBBE96;--c2:#A8683A;--tx:#2E1706;--ln:rgba(46,23,6,.35)}
+.carta.t-destaque{--logo:linear-gradient(165deg,#FBE08A 0%,#F7B500 55%,#C58F00 100%);--c1:#123A6B;--c2:#071A33;--tx:#FFFFFF;--ln:rgba(255,255,255,.35);box-shadow:0 10px 28px rgba(0,0,0,.35),inset 0 0 0 2px #F7B500}
+.carta.t-destaque::before{background:repeating-linear-gradient(115deg,rgba(25,184,163,.16) 0 14px,transparent 14px 34px)}
+.carta > *{position:relative;z-index:1}
+.c-topo{display:flex;align-items:flex-start;gap:12px}
+.c-ovr b{display:block;font-size:3.5rem;line-height:.9;font-weight:700;font-variant-numeric:tabular-nums}
+.c-ovr b.tres{font-size:2.9rem;padding-top:.4rem}
+.c-ovr span,.c-pos small{font-size:.78rem;letter-spacing:.12em;font-weight:600;display:block;font-family:"IBM Plex Sans",sans-serif}
+.c-pos{margin-top:6px;border-top:2px solid var(--ln);padding-top:4px;font-size:1.25rem;font-weight:700;letter-spacing:.05em}
+.c-pos small{letter-spacing:0;font-size:.7rem;white-space:nowrap}
+.c-topo{gap:10px}
+.c-logo{margin-left:auto;width:68px;height:94px;margin-top:-2px;filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 -1px 0 rgba(0,0,0,.28))}
+.c-logo i{display:block;width:100%;height:100%;background:var(--logo);-webkit-mask:url(logo_carta.png) center/contain no-repeat;mask:url(logo_carta.png) center/contain no-repeat}
+.c-foto{width:112px;height:112px;margin:-6px auto 4px;border-radius:50%;display:grid;place-items:center;font-size:2.7rem;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.28);border:3px solid var(--ln)}
+.c-nome{white-space:nowrap;text-align:center;font-size:1.45rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--ln);padding-bottom:6px;margin-bottom:8px;line-height:1.1}
+.c-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;padding:0 6px;border-bottom:2px solid var(--ln);padding-bottom:8px}
+.c-stats div{display:flex;gap:8px;align-items:baseline;font-size:1.15rem;font-weight:700}
+.c-stats b{min-width:1.7em;text-align:right;font-variant-numeric:tabular-nums}
+.c-stats span{font-weight:600;letter-spacing:.08em;font-size:1rem;opacity:.85}
+.c-rodape{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-family:"IBM Plex Sans",sans-serif;font-size:.78rem;font-weight:600}
+.c-rodape .ico{width:1em;height:1em}
+@media print{.carta{box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
