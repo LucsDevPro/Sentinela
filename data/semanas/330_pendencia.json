@@ -49,18 +49,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3037": {
-    "nome_agente": "Evelyn Santana Santos Oliveira",
-    "equipe": "Equipe 1",
-    "imoveis_fechados": 43,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "405 - ALTOS DA GLÓRIA": 43
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "672": {
     "nome_agente": "Adriana de Jesus Saraiva",
     "equipe": "Equipe 1",
@@ -69,6 +57,18 @@
     "fechados_por_area": {
       "404 - JARDIM DOS ESTADOS": 14,
       "400 - JULIA CARDINAL": 4
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3037": {
+    "nome_agente": "Evelyn Santana Santos Oliveira",
+    "equipe": "Equipe 1",
+    "imoveis_fechados": 43,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "405 - ALTOS DA GLÓRIA": 43
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -126,18 +126,6 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "3035": {
-    "nome_agente": "Teonilda Florentino Vieira",
-    "equipe": "Equipe 2",
-    "imoveis_fechados": 22,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "410 - SALGADO FILHO": 22
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "115": {
     "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
@@ -157,6 +145,18 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "410 - SALGADO FILHO": 19
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "3035": {
+    "nome_agente": "Teonilda Florentino Vieira",
+    "equipe": "Equipe 2",
+    "imoveis_fechados": 22,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "410 - SALGADO FILHO": 22
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -199,14 +199,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "465": {
-    "nome_agente": "Suely Aguiar Alves Luiz",
+  "81": {
+    "nome_agente": "Wesley de Souza Leal",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 37,
+    "imoveis_fechados": 17,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "414 - PARQUE DOS ERVAIS": 31,
-      "416 - CENTRO 2": 6
+      "417 - CENTRO 3": 2,
+      "418 - CENTRO 4": 15
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -227,27 +227,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "81": {
-    "nome_agente": "Wesley de Souza Leal",
+  "465": {
+    "nome_agente": "Suely Aguiar Alves Luiz",
     "equipe": "Equipe 2",
-    "imoveis_fechados": 17,
+    "imoveis_fechados": 37,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "417 - CENTRO 3": 2,
-      "418 - CENTRO 4": 15
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "113": {
-    "nome_agente": "Selba Ramona Afonso",
-    "equipe": "Equipe 3",
-    "imoveis_fechados": 51,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "431 - PANAMBI": 12,
-      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 39
+      "414 - PARQUE DOS ERVAIS": 31,
+      "416 - CENTRO 2": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -278,13 +265,14 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1938": {
-    "nome_agente": "Marco Antonio Ayala de Matos Freitas",
+  "113": {
+    "nome_agente": "Selba Ramona Afonso",
     "equipe": "Equipe 3",
-    "imoveis_fechados": 64,
+    "imoveis_fechados": 51,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "429 - COOPHA FRONTEIRA": 64
+      "431 - PANAMBI": 12,
+      "433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1": 39
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -333,6 +321,18 @@
         "equipe": "Equipe 3"
       }
     ],
+    "paginas_falhas": []
+  },
+  "1938": {
+    "nome_agente": "Marco Antonio Ayala de Matos Freitas",
+    "equipe": "Equipe 3",
+    "imoveis_fechados": 64,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "429 - COOPHA FRONTEIRA": 64
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
   "2721": {
@@ -398,6 +398,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "80": {
+    "nome_agente": "Gisele Lopes Justiniano",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 24,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 24
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "2918": {
     "nome_agente": "Claine Luisa Figueiredo Torraca",
     "equipe": "Equipe 3",
@@ -428,30 +440,6 @@
     ],
     "paginas_falhas": []
   },
-  "80": {
-    "nome_agente": "Gisele Lopes Justiniano",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 24,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 24
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "1943": {
-    "nome_agente": "Juliana Patricia Goncalves",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 73,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "445 - JARDIM IVONE": 73
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
   "161": {
     "nome_agente": "Rozana Reis da Silva",
     "equipe": "Equipe 4",
@@ -477,13 +465,13 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
-  "1996": {
-    "nome_agente": "Sara Eliane Talaveira de Oliveira",
+  "1943": {
+    "nome_agente": "Juliana Patricia Goncalves",
     "equipe": "Equipe 4",
-    "imoveis_fechados": 23,
+    "imoveis_fechados": 73,
     "imoveis_recusados": 0,
     "fechados_por_area": {
-      "438 - JARDIM PLANALTO": 23
+      "445 - JARDIM IVONE": 73
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -502,6 +490,18 @@
     "visitas_recusados_raw": [],
     "paginas_falhas": []
   },
+  "1996": {
+    "nome_agente": "Sara Eliane Talaveira de Oliveira",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 23,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "438 - JARDIM PLANALTO": 23
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
   "110": {
     "nome_agente": "Anderson Jose de Santana",
     "equipe": "Equipe 4",
@@ -509,20 +509,6 @@
     "imoveis_recusados": 0,
     "fechados_por_area": {
       "442 - JARDIM INDEPENDÊNCIA": 43
-    },
-    "recusados_por_area": {},
-    "visitas_recusados_raw": [],
-    "paginas_falhas": []
-  },
-  "149": {
-    "nome_agente": "Kátia Cilene Silveira Machado",
-    "equipe": "Equipe 4",
-    "imoveis_fechados": 51,
-    "imoveis_recusados": 0,
-    "fechados_por_area": {
-      "443 - KAMEL SAAD 1": 16,
-      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 29,
-      "445 - JARDIM IVONE": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
@@ -537,6 +523,20 @@
       "434 - VILA AUREA": 12,
       "437 - RESIDENCIAL PONTA PORÃ 2": 1,
       "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 31
+    },
+    "recusados_por_area": {},
+    "visitas_recusados_raw": [],
+    "paginas_falhas": []
+  },
+  "149": {
+    "nome_agente": "Kátia Cilene Silveira Machado",
+    "equipe": "Equipe 4",
+    "imoveis_fechados": 51,
+    "imoveis_recusados": 0,
+    "fechados_por_area": {
+      "443 - KAMEL SAAD 1": 16,
+      "449 - ÁREA C RESIDENCIAL PONTA PORÃ 1": 29,
+      "445 - JARDIM IVONE": 6
     },
     "recusados_por_area": {},
     "visitas_recusados_raw": [],
