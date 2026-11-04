@@ -35,6 +35,13 @@
 .c-foto.tem-foto{overflow:hidden;background:rgba(255,255,255,.28)}
 .c-foto img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
 body.sem-foto .c-foto img{display:none} /* checkbox "Ocultar fotos": ficam só as iniciais */
+/* Efeito: ao passar o mouse (ou tocar) na cartinha, SÓ a foto dá uma volta completa (360°, uma vez). Não vale para quem está só com iniciais, nem com "reduzir movimento". */
+@media (prefers-reduced-motion:no-preference){
+  .carta .c-foto.tem-foto{will-change:transform}
+  @media (hover:hover){.carta:hover .c-foto.tem-foto{animation:c-giro .9s cubic-bezier(.45,.05,.25,1) 1}}
+  @media (hover:none){.carta:active .c-foto.tem-foto{animation:c-giro .9s cubic-bezier(.45,.05,.25,1) 1}}
+}
+@keyframes c-giro{from{transform:perspective(700px) rotateY(0deg)}to{transform:perspective(700px) rotateY(360deg)}}
 .carta[data-cid]{cursor:pointer}
 .c-nome{white-space:nowrap;text-align:center;font-size:1.45rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--ln);padding-bottom:6px;margin-bottom:8px;line-height:1.1}
 .c-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;padding:0 6px;border-bottom:2px solid var(--ln);padding-bottom:8px}
@@ -45,28 +52,30 @@ body.sem-foto .c-foto img{display:none} /* checkbox "Ocultar fotos": ficam só a
 .c-rodape .ico{width:1em;height:1em}
 @media print{.carta{box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
-/* ===== Cartinha 100 ("Tempestade"): só vale com a classe b-100 (nota arredondada = 100). Fundo escuro com raios saindo da foto, moldura elétrica com faíscas na borda.
+/* ===== Cartinha Lendária ("Tempestade azul"): só vale com a classe b-100 (top 3 do mês com nota 100). Azul-marinho profundo, raios brancos com halo azul, moldura de aço azul com faíscas.
    Não mexe no tamanho nem na posição de nada. Os raios são gerados no carta.js (RAIOS/ARCOS); o PNG desenha os mesmos. Se mudar cores/medidas aqui, ajuste lá. ===== */
-.carta.b-100{--c1:#2B1160;--c2:#04020E;--tx:#FFFFFF;--ln:rgba(255,225,77,.6);--logo:linear-gradient(165deg,#FFF3B0 0%,#FFE14D 55%,#F5A300 100%);--b1:#4C1D95;--b2:#FFD60A;--b3:#FFFFFF;box-shadow:0 0 26px rgba(155,92,255,.65),0 10px 28px rgba(0,0,0,.4),inset 0 0 0 2px rgba(255,255,255,.2)}
-.carta.b-100::before{inset:13px;border:1.5px solid #FFF3A0;border-radius:9px 9px 33px 33px / 9px 9px 21px 21px;background:none;-webkit-mask:none;mask:none;box-shadow:0 0 8px #FFE14D,inset 0 0 8px rgba(255,225,77,.4)}
-.carta.b-100::after{left:0;top:0;width:100%;height:100%;background:radial-gradient(circle at 50% 40%,rgba(155,92,255,.55),transparent 50%)}
-.carta.b-100 .c-ovr b{background:linear-gradient(180deg,#FFFFFF 0%,#FFE14D 55%,#F5A300 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 6px rgba(155,92,255,.9))}
-.carta.b-100 .c-foto{background:rgba(255,255,255,.08);box-shadow:0 0 0 5px rgba(255,225,77,.9),0 0 24px rgba(155,92,255,.8)}
+.carta.b-100{--c1:#0F3A8C;--c2:#020816;--tx:#FFFFFF;--ln:rgba(140,205,255,.6);--logo:linear-gradient(165deg,#FFF3B0 0%,#FFE14D 55%,#F5A300 100%);--b1:#0A2463;--b2:#59B8FF;--b3:#FFFFFF;--bw:11px;box-shadow:0 0 26px rgba(61,155,255,.65),0 10px 28px rgba(0,0,0,.4),inset 0 0 0 2px rgba(255,255,255,.2)}
+.carta.b-100::before{inset:13px;border:1.5px solid #DDF2FF;border-radius:9px 9px 33px 33px / 9px 9px 21px 21px;background:none;-webkit-mask:none;mask:none;box-shadow:0 0 8px #59B8FF,inset 0 0 8px rgba(89,184,255,.5)}
+.carta.b-100::after{left:0;top:0;width:100%;height:100%;background:radial-gradient(circle at 50% 40%,rgba(120,190,255,.6),rgba(60,130,255,0) 55%)}
+.carta.b-100 .c-ovr b{background:linear-gradient(180deg,#FFFFFF 0%,#FFE14D 55%,#F5A300 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 6px rgba(61,155,255,.9))}
+.carta.b-100 .c-foto{background:rgba(255,255,255,.08);box-shadow:0 0 0 5px rgba(190,230,255,.95),0 0 24px rgba(89,184,255,.85)}
 .c-estrelas,.c-arcos{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .c-estrelas{z-index:0}.c-arcos{z-index:4}
 .c-estrelas path,.c-arcos path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.c-estrelas .rg{stroke:rgba(155,92,255,.55);stroke-width:5;filter:blur(2px)}
-.c-estrelas .ry{stroke:#FFE14D;stroke-width:2}
-.c-estrelas .rw{stroke:#fff;stroke-width:.9}
-.c-arcos .ag{stroke:rgba(255,225,77,.8);stroke-width:3.4;filter:blur(1.5px)}
+.c-estrelas .rg{stroke:rgba(61,155,255,.55);filter:blur(2.5px)}
+.c-estrelas .ry{stroke:#8FD8FF;filter:drop-shadow(0 0 3px #59B8FF)}
+.c-estrelas .rw{stroke:#fff}
+.c-arcos .ag{stroke:rgba(120,205,255,.85);stroke-width:3.4;filter:blur(1.5px)}
 .c-arcos .aw{stroke:#fff;stroke-width:1}
 @media (prefers-reduced-motion:no-preference){
   .c-estrelas .rai{animation:c100-raio 3.2s steps(1,end) infinite}
   .c-estrelas .rai:nth-child(3n){animation-delay:.7s}.c-estrelas .rai:nth-child(4n){animation-delay:1.5s}.c-estrelas .rai:nth-child(5n){animation-delay:2.3s}
   .c-arcos{animation:c100-arco 2.4s steps(1,end) infinite}
+  .carta.b-100::after{animation:c100-clarao 3.2s steps(1,end) infinite}
 }
-@keyframes c100-raio{0%{opacity:1}8%{opacity:.25}12%{opacity:1}18%{opacity:.5}22%{opacity:1}100%{opacity:1}}
+@keyframes c100-raio{0%{opacity:1}8%{opacity:.2}12%{opacity:1}18%{opacity:.45}22%{opacity:1}100%{opacity:1}}
 @keyframes c100-arco{0%{opacity:1}30%{opacity:.35}36%{opacity:1}70%{opacity:.6}74%{opacity:1}}
+@keyframes c100-clarao{0%{opacity:1}8%{opacity:.5}12%{opacity:1}18%{opacity:.75}22%{opacity:1}100%{opacity:1}}
 
 /* Detalhamento da nota (aparece ao passar o mouse / clicar na cartinha) */
 .c-pop{position:fixed;z-index:1000;width:360px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;box-sizing:border-box;padding:12px 14px 10px;background:#0B1B33;color:#fff;border:2px solid #F7B500;border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.5);font:400 .8rem/1.35 "IBM Plex Sans",system-ui,sans-serif}

@@ -100,7 +100,7 @@ else {
     lista.forEach(l => { l.h = hist(l); });
     lista.sort((p, q) => Carta.bruta(q.u) - Carta.bruta(p.u) || q.h - p.h || p.u.pos - q.u.pos || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
     lista.forEach((l, i) => { l.lugar = i + 1; });
-    const vis = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)) && (!niv || Carta.medidas(l.ms).tier[1] === niv));
+    const vis = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)) && (!niv || Carta.medidas(l.ms, l.x.k).tier[1] === niv));
     $('album').innerHTML = vis.map(l => `<a class="slot" href="agente.html?${/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)}" title="Ver evolução de ${esc(l.x.a.nome)}"><span class="n" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${Carta.html(l.x.a, l.ms, l.x.k)}</a>`).join('');
     $('resumo').textContent = vis.length ? `${vis.length} cartinha(s) de ${lista.length} em ${mes}.` : 'Nenhuma cartinha com esses filtros.';
   };

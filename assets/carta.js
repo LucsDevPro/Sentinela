@@ -45,34 +45,44 @@
       ['CON', cl(100 - 5 * dp)], ['EVO', delta == null ? 50 : cl(50 + 5 * delta)],
       ['POS', u.total > 1 ? cl((u.total - posicao(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]];
     // Escala única, pela nota ARREDONDADA (a que aparece no cartão): a cor do cartão e a borda seguem a mesma faixa.
-    // 100 LENDÁRIA (tempestade) | 90-99 OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
-    // Top 3 do mês com 90-99 mantém o cartão de ouro e ganha a borda holográfica ("DESTAQUE"). A de 100 é uma só, sem variação de top 3.
-    var r = Math.round(u.pontos), top3 = u.pos <= 3 && r >= 90 && r < 100;
-    var tier = r >= 100 ? ['', 'LENDÁRIA'] : top3 ? ['', 'DESTAQUE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
-    var borda = r >= 100 ? 'b-100' : top3 ? 'b-top' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
+    // LENDÁRIA (tempestade) = só o TOP 3 com nota 100 | 90-99 e demais 100 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
+    // Top 3 do mês com 90-99 (quando há menos de 3 agentes com 100) ganha o cartão de ouro com borda holográfica ("DESTAQUE").
+    // A posição vem de posicao() (para quem está no teto, ordenada pela nota bruta).
+    var r = Math.round(u.pontos), pos3 = posicao(u, id) <= 3, lend = r >= 100 && pos3, top3 = r >= 90 && r < 100 && pos3;
+    var tier = lend ? ['', 'LENDÁRIA'] : top3 ? ['', 'DESTAQUE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
+    var borda = lend ? 'b-100' : top3 ? 'b-top' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
     return { u: u, delta: delta, st: st, tier: tier, borda: borda };
   }
   /* Cartinha 100: estrelas [x, y, raio] no espaço 272x392 do cartão (usadas no HTML e no PNG) */
   var ESTRELA = 'M0-1Q.15-.15 1 0Q.15.15 0 1Q-.15.15-1 0Q-.15-.15 0-1Z';
   /* Cartinha 100 ("Tempestade"): raios gerados uma vez (sempre iguais) no espaço 272x392 do cartão; servem ao HTML (SVG) e ao PNG (canvas).
      RAIOS = descargas no fundo, saindo da foto e pelas laterais; ARCOS = faíscas em zigue-zague correndo pela borda; FAISCAS = pontinhos de luz. */
-  var RAIOS = [], ARCOS = [], FAISCAS = [];
+  var RAIOS = [], ARCOS = [], FAISCAS = []; // RAIOS = [caminho, espessura relativa]
   (function () {
-    var sd = 11; function q() { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }
+    var sd = 23; function q() { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }
     function pts(x1, y1, x2, y2, disp, n) {
       var p = [[x1, y1], [x2, y2]];
       for (var k = 0; k < n; k++) { var np = [p[0]]; for (var i = 0; i < p.length - 1; i++) { var a = p[i], b = p[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1, o = (q() - .5) * disp; np.push([(a[0] + b[0]) / 2 - dy / l * o, (a[1] + b[1]) / 2 + dx / l * o], b); } p = np; disp /= 2; }
       return p;
     }
     var d = function (p) { return 'M' + p.map(function (v) { return v[0].toFixed(1) + ' ' + v[1].toFixed(1); }).join('L'); };
-    var CX = 136, CY = 158, R0 = 64;
-    // [ângulo (0 = leste, sentido horário), raio final]
-    [[190, 120], [166, 112], [214, 100], [350, 118], [14, 112], [326, 98], [262, 92], [292, 98], [236, 90], [304, 88]].forEach(function (a) {
-      var t = a[0] * Math.PI / 180, p = pts(CX + Math.cos(t) * R0, CY + Math.sin(t) * R0, CX + Math.cos(t) * a[1], CY + Math.sin(t) * a[1], 15, 4);
-      RAIOS.push(d(p));
-      var m = p[Math.floor(p.length / 2)], u = t + (q() < .5 ? -.6 : .6); RAIOS.push(d(pts(m[0], m[1], m[0] + Math.cos(u) * 30, m[1] + Math.sin(u) * 26, 8, 3)));
+    // descarga com ramificações recursivas: cada galho sai de um ponto do tronco, mais curto e mais fino
+    function raio(x1, y1, x2, y2, disp, w, prof) {
+      var p = pts(x1, y1, x2, y2, disp, 5); RAIOS.push([d(p), w]);
+      if (prof <= 0) return;
+      var ang = Math.atan2(y2 - y1, x2 - x1), len = Math.hypot(x2 - x1, y2 - y1);
+      [.3, .55, .78].forEach(function (f) {
+        if (q() < .25) return;
+        var m = p[Math.floor(p.length * f)], u = ang + (q() < .5 ? -1 : 1) * (.5 + q() * .5), L = len * (.28 + q() * .22);
+        raio(m[0], m[1], m[0] + Math.cos(u) * L, m[1] + Math.sin(u) * L, L * .35, w * .55, prof - 1);
+      });
+    }
+    var CX = 136, CY = 158, R0 = 63;
+    // [ângulo (0 = leste, sentido horário), raio final]: troncos saindo da foto, evitando a região dos textos
+    [[188, 124], [160, 116], [212, 104], [352, 124], [18, 116], [328, 104], [262, 100], [296, 104], [238, 96]].forEach(function (a) {
+      var t = a[0] * Math.PI / 180; raio(CX + Math.cos(t) * R0, CY + Math.sin(t) * R0, CX + Math.cos(t) * a[1], CY + Math.sin(t) * a[1], 20, 1, 2);
     });
-    RAIOS.push(d(pts(20, 24, 24, 200, 12, 5))); RAIOS.push(d(pts(253, 124, 250, 250, 12, 5)));
+    raio(19, 22, 26, 206, 16, .8, 1); raio(253, 122, 249, 262, 16, .8, 1); // descargas rente às laterais
     function zig(x1, y1, x2, y2, amp) { var n = Math.round(Math.hypot(x2 - x1, y2 - y1) / 7), p = []; for (var i = 0; i <= n; i++) { var t = i / n, o = i === 0 || i === n ? 0 : (i % 2 ? 1 : -1) * amp * (.5 + q() * .8); p.push(x1 === x2 ? [x1 + o, y1 + (y2 - y1) * t] : [x1 + (x2 - x1) * t, y1 + o]); } return d(p); }
     ARCOS.push(zig(60, 5.5, 132, 5.5, 3.2), zig(266.5, 140, 266.5, 232, 3.2), zig(88, 386.5, 204, 386.5, 3.2), zig(5.5, 248, 5.5, 338, 3.2), zig(5.5, 80, 5.5, 130, 3.2));
     for (var i = 0; i < 36; i++) FAISCAS.push([16 + q() * 240, 16 + q() * 360, .5 + q() * .9, .35 + q() * .55]);
@@ -86,12 +96,12 @@
     var ini = (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
     var tend = delta == null ? SV('minus') + ' sem mês anterior' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
-    var extra100 = m.borda !== 'b-100' ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (d) { return '<g class="rai"><path class="rg" d="' + d + '"/><path class="ry" d="' + d + '"/><path class="rw" d="' + d + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#FFF3A0" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg>';
+    var extra100 = m.borda !== 'b-100' ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg>';
     return '<div class="carta ' + tier[0] + ' ' + m.borda + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
       '<div class="c-pos">' + esc(eq) + '<small>' + pos + 'º de ' + u.total + '</small></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
-      '<div class="c-nome nome"' + (curto.length > 20 ? ' style="font-size:1.05rem"' : curto.length > 15 ? ' style="font-size:1.2rem"' : '') + '>' + esc(curto) + '</div>' +
+      '<div class="c-nome nome"' + (curto.length > 20 ? ' style="font-size:1.05rem"' : curto.length > 15 ? ' style="font-size:1.08rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
       '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-borda" aria-hidden="true"></i></div>';
   }
@@ -136,21 +146,21 @@
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
       var fr100 = is100 ? (function () { var b = card.querySelector('.c-foto').getBoundingClientRect(); return { cx: X + (b.left - cr.left + b.width / 2) * S, cy: Y + (b.top - cr.top + b.height / 2) * S }; })() : null;
       if (is100) {
-        // brilho violeta atrás da foto (radial-gradient do ::after do CSS)
-        var cx0 = X + W * .5, cy0 = Y + H * .4, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .5, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);
-        g0.addColorStop(0, 'rgba(155,92,255,.55)'); g0.addColorStop(1, 'rgba(155,92,255,0)'); ctx.fillStyle = g0; ctx.fillRect(X, Y, W, H);
-        // raios (três camadas: halo violeta, amarelo, núcleo branco) e faíscas
+        // clarão azul atrás da foto (radial-gradient do ::after do CSS)
+        var cx0 = X + W * .5, cy0 = Y + H * .4, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .55, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);
+        g0.addColorStop(0, 'rgba(120,190,255,.6)'); g0.addColorStop(1, 'rgba(60,130,255,0)'); ctx.fillStyle = g0; ctx.fillRect(X, Y, W, H);
+        // raios: halo azul, miolo ciano e núcleo branco; a espessura de cada galho vem de r[1]
         ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        RAIOS.forEach(function (d) {
-          var pa = new Path2D(d);
-          ctx.save(); ctx.strokeStyle = 'rgba(155,92,255,.55)'; ctx.lineWidth = 5; ctx.shadowColor = '#9B5CFF'; ctx.shadowBlur = 10 * S; ctx.stroke(pa); ctx.restore();
-          ctx.save(); ctx.strokeStyle = '#FFE14D'; ctx.lineWidth = 2; ctx.shadowColor = '#FFE14D'; ctx.shadowBlur = 6 * S; ctx.stroke(pa); ctx.restore();
-          ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = .9; ctx.stroke(pa);
+        RAIOS.forEach(function (r) {
+          var pa = new Path2D(r[0]);
+          ctx.save(); ctx.strokeStyle = 'rgba(61,155,255,.55)'; ctx.lineWidth = 8 * r[1]; ctx.shadowColor = '#3D9BFF'; ctx.shadowBlur = 12 * S; ctx.stroke(pa); ctx.restore();
+          ctx.save(); ctx.strokeStyle = '#8FD8FF'; ctx.lineWidth = 2.8 * r[1]; ctx.shadowColor = '#59B8FF'; ctx.shadowBlur = 7 * S; ctx.stroke(pa); ctx.restore();
+          ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = Math.max(.6, 1.2 * r[1]); ctx.stroke(pa);
         });
-        FAISCAS.forEach(function (f) { ctx.globalAlpha = f[3]; ctx.fillStyle = '#FFF3A0'; ctx.beginPath(); ctx.arc(f[0], f[1], f[2], 0, 2 * Math.PI); ctx.fill(); });
+        FAISCAS.forEach(function (f) { ctx.globalAlpha = f[3]; ctx.fillStyle = '#CDEBFF'; ctx.beginPath(); ctx.arc(f[0], f[1], f[2], 0, 2 * Math.PI); ctx.fill(); });
         ctx.restore();
         // filete interno (::before do CSS: 13px para dentro)
-        ctx.save(); pathCartao(ctx, X + 13 * S, Y + 13 * S, W - 26 * S, H - 26 * S, S, 13 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = '#FFF3A0'; ctx.shadowColor = '#FFE14D'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
+        ctx.save(); pathCartao(ctx, X + 13 * S, Y + 13 * S, W - 26 * S, H - 26 * S, S, 13 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = '#DDF2FF'; ctx.shadowColor = '#59B8FF'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
       } else {
         // listras
         ctx.save(); ctx.translate(X + W / 2, Y + H / 2); ctx.rotate((115 - 90) * Math.PI / 180);
@@ -167,8 +177,8 @@
       // foto (círculo)
       var f = card.querySelector('.c-foto'), fr = rel(f), fs = getComputedStyle(f), bw = parseFloat(fs.borderTopWidth) * S;
       if (is100) { // anel dourado externo + brilho (box-shadow do CSS)
-        ctx.save(); ctx.shadowColor = 'rgba(155,92,255,.8)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
-        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(255,225,77,.9)'; ctx.stroke(); ctx.restore();
+        ctx.save(); ctx.shadowColor = 'rgba(89,184,255,.85)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
+        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(190,230,255,.95)'; ctx.stroke(); ctx.restore();
       }
       ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 - bw / 2, 0, 2 * Math.PI); ctx.fillStyle = fs.backgroundColor; ctx.fill();
       var ft = r[4];
@@ -198,7 +208,7 @@
         ctx.fillStyle = ps.color; ctx.globalAlpha = parseFloat(ps.opacity); ctx.shadowColor = 'rgba(0,0,0,0)';
         if (is100 && pe.matches('.c-ovr b')) { // número com folha de ouro
           var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFFFFF'); og.addColorStop(.55, '#FFE14D'); og.addColorStop(1, '#F5A300');
-          ctx.fillStyle = og; ctx.shadowColor = 'rgba(155,92,255,.9)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
+          ctx.fillStyle = og; ctx.shadowColor = 'rgba(61,155,255,.9)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
         }
         var ls = ps.letterSpacing === 'normal' ? 0 : parseFloat(ps.letterSpacing) * S;
         texto(ctx, t, X + (b.left - cr.left) * S, Y + (b.top - cr.top + b.height / 2) * S, ls); ctx.globalAlpha = 1; ctx.shadowColor = 'rgba(0,0,0,0)'; ctx.shadowOffsetY = 0; ctx.shadowBlur = 0;
@@ -225,7 +235,7 @@
       if (is100) { // faíscas correndo pela borda (por cima do anel)
         ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         ARCOS.forEach(function (d) { var pa = new Path2D(d);
-          ctx.save(); ctx.strokeStyle = 'rgba(255,225,77,.8)'; ctx.lineWidth = 3.4; ctx.shadowColor = '#FFE14D'; ctx.shadowBlur = 8 * S; ctx.stroke(pa); ctx.restore();
+          ctx.save(); ctx.strokeStyle = 'rgba(120,205,255,.85)'; ctx.lineWidth = 3.4; ctx.shadowColor = '#59B8FF'; ctx.shadowBlur = 8 * S; ctx.stroke(pa); ctx.restore();
           ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1; ctx.stroke(pa); });
         ctx.restore();
       }
