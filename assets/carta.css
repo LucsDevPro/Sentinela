@@ -129,59 +129,73 @@
   z-index: 1;
 }
 
-/* ===== Bordas por faixa ===== */
+/* ===== Bordas Ultimate / Prime =====
+   Moldura grossa, metálica, com brilho e glow nas faixas altas.
+   PNG (carta.js) lê --b1/--b2/--b3/--bw. */
 
 .carta {
   --b1: #1A1A1A;
-  --b2: #5C5C5C;
-  --b3: #D0D0D0;
-  --bw: 4.5px;
+  --b2: #6A6A6A;
+  --b3: #D8D8D8;
+  --bw: 5px;
 }
 
 .carta.b-60 {
-  --b1: #1A2A28;
-  --b2: #5A7A74;
-  --b3: #B8D4CC;
-  --bw: 5.5px;
+  --b1: #142420;
+  --b2: #5A8A80;
+  --b3: #C0E0D8;
+  --bw: 6px;
 }
 
 .carta.b-70 {
-  --b1: #4A1E08;
-  --b2: #C07038;
-  --b3: #F2C8A0;
-  --bw: 5.5px;
-}
-
-.carta.b-80 {
-  --b1: #243448;
-  --b2: #8AA0B8;
-  --b3: #F2F6FA;
+  --b1: #3E1808;
+  --b2: #D08040;
+  --b3: #F8D0A8;
   --bw: 6.5px;
 }
 
-.carta.b-90 {
-  --b1: #6A3C00;
-  --b2: #E0A820;
-  --b3: #FFF2C0;
-  --bw: 8.5px;
+.carta.b-80 {
+  --b1: #1E2C40;
+  --b2: #90A8C0;
+  --b3: #F4F8FC;
+  --bw: 7.5px;
 }
 
+/* Ouro — moldura chrome dourada com glow suave */
+.carta.b-90 {
+  --b1: #5A3200;
+  --b2: #F0C030;
+  --b3: #FFF8D0;
+  --bw: 10px;
+  box-shadow:
+    0 0 22px rgba(240, 180, 40, 0.35),
+    0 16px 40px rgba(0, 0, 0, 0.34),
+    0 5px 14px rgba(0, 0, 0, 0.18),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+/* Destaque / Top 3 90-99 — borda holográfica Ultimate */
 .carta.b-top {
   --b1: #FFE066;
   --b2: #FF4DB8;
   --b3: #40E0FF;
-  --bw: 9.5px;
+  --bw: 11px;
   box-shadow:
-    0 0 30px rgba(255, 77, 184, 0.38),
+    0 0 28px rgba(255, 77, 184, 0.42),
+    0 0 48px rgba(64, 224, 255, 0.22),
     0 16px 40px rgba(0, 0, 0, 0.34),
     inset 0 1.5px 0 rgba(255, 255, 255, 0.4),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.25);
 }
 
+/* Lendária — moldura gelo/chrome Ultimate Prime */
 .carta.b-100 {
-  --bw: 11.5px;
+  --bw: 13px;
 }
 
+/* Anel da borda (máscara) */
 .carta > .c-borda {
   position: absolute;
   inset: 0;
@@ -191,15 +205,44 @@
   pointer-events: none;
   background: linear-gradient(
     135deg,
-    var(--b1),
-    var(--b2) 20%,
-    var(--b3) 48%,
-    var(--b2) 78%,
-    var(--b1)
+    var(--b1) 0%,
+    var(--b2) 18%,
+    var(--b3) 38%,
+    var(--b2) 55%,
+    var(--b1) 72%,
+    var(--b2) 88%,
+    var(--b3) 100%
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* Filete interno extra nas cartas altas (anel secundário) */
+.carta.b-90 > .c-borda::after,
+.carta.b-top > .c-borda::after,
+.carta.b-100 > .c-borda::after {
+  content: "";
+  position: absolute;
+  inset: calc(var(--bw) + 2px);
+  border-radius: 14px 14px 34px 34px / 14px 14px 24px 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+.carta.b-top > .c-borda::after {
+  border-color: rgba(255, 220, 120, 0.45);
+  box-shadow:
+    inset 0 0 10px rgba(255, 100, 200, 0.2),
+    0 0 6px rgba(64, 224, 255, 0.25);
+}
+
+.carta.b-100 > .c-borda::after {
+  border-color: rgba(180, 230, 255, 0.55);
+  box-shadow:
+    inset 0 0 12px rgba(80, 180, 255, 0.3),
+    0 0 8px rgba(80, 180, 255, 0.35);
 }
 
 /* ===== Layout interno ===== */
@@ -410,10 +453,11 @@ body.sem-foto .c-foto img {
   --b1: #061A4C;
   --b2: #48A8FF;
   --b3: #FFFFFF;
-  --bw: 11.5px;
+  --bw: 13px;
   background: linear-gradient(160deg, #0A2C74 0%, #061A48 46%, #01040C 100%);
   box-shadow:
-    0 0 34px rgba(48, 148, 255, 0.5),
+    0 0 28px rgba(48, 148, 255, 0.55),
+    0 0 56px rgba(48, 148, 255, 0.28),
     0 16px 42px rgba(0, 0, 0, 0.46),
     inset 0 1.5px 0 rgba(180, 220, 255, 0.28),
     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
