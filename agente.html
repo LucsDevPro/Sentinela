@@ -76,9 +76,11 @@
 <header class="topo"><div class="marca"><img src="assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã"><b>SENTINELA <i>evolução</i></b><button type="button" class="tema-btn" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg> <span class="tema-txt">Tema escuro</span></button><a href="index.html">← Dashboard</a></div></header>
 <main>
   <label class="tg"><input type="checkbox" id="apres" style="width:auto;min-height:0"> Modo apresentação (ocultar nomes)</label>
+  <label class="tg"><input type="checkbox" id="semFoto" style="width:auto;min-height:0"> Ocultar fotos (apresentação)</label>
   <div id="conteudo"><p class="mut">Carregando…</p></div>
 </main>
 <script src="assets/agentes_dados.js"></script>
+<script src="assets/fotos.js"></script>
 <script src="assets/carta.js"></script>
 <script src="assets/chart.umd.js"></script>
 <script>
@@ -87,21 +89,25 @@ const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp
 const f1 = n => n == null ? '—' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const norm = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 $('apres').onchange = e => document.body.classList.toggle('modo-apresentacao', e.target.checked);
+$('semFoto').onchange = e => document.body.classList.toggle('sem-foto', e.target.checked);
 try { if (window.opener && window.opener.document.body.classList.contains('modo-apresentacao')) { $('apres').checked = true; document.body.classList.add('modo-apresentacao'); } } catch (e) {}
+try { if (window.opener && window.opener.document.body.classList.contains('sem-foto')) { $('semFoto').checked = true; document.body.classList.add('sem-foto'); } } catch (e) {}
 
+let idAgente = null; // id do agente aberto (usado para achar a foto da cartinha)
 function achar(D, q) {
   const id = q.get('id'), nome = q.get('nome');
-  if (id && D.agentes[id]) return D.agentes[id];
-  if (nome) return Object.values(D.agentes).find(a => norm(a.nome) === norm(nome)) || null;
+  idAgente = null;
+  if (id && D.agentes[id]) { idAgente = id; return D.agentes[id]; }
+  if (nome) { const e = Object.entries(D.agentes).find(([, a]) => norm(a.nome) === norm(nome)); if (e) { idAgente = e[0]; return e[1]; } }
   return null;
 }
 if (window.aplicarTemaGraficos) aplicarTemaGraficos(); Chart.defaults.font.family = "'IBM Plex Sans', system-ui, sans-serif";
 const SV = (n, c) => `<svg class="ico${c ? ' ' + c : ''}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 function carta(a, ms) {
-  const c = Carta.html(a, ms); if (!c) return '';
+  const c = Carta.html(a, ms, idAgente); if (!c) return '';
   const m = Carta.medidas(ms);
   return `<div class="carta-wrap">${c}
-    <div class="carta-info"><h2>Como ler o cartão</h2><table>${m.st.map(x => `<tr><td>${x[0]}</td><td>${Carta.NOMES[x[0]]}</td></tr>`).join('')}</table>
+    <div class="carta-info"><h2>Como ler o cartão</h2><p class="mut">Passe o mouse (ou clique) na cartinha para ver como chegou na nota.</p><table>${m.st.map(x => `<tr><td>${x[0]}</td><td>${Carta.NOMES[x[0]]}</td></tr>`).join('')}</table>
       <p class="mut">A nota grande é a nota do mês. As seis medidas vão de 0 a 99 e usam só dados do ranking:
       <b>ASS</b> dias trabalhados ÷ esperados · <b>TUR</b> turnos com lançamento · <b>CON</b> quanto menos a nota oscila entre os meses, maior ·
       <b>EVO</b> 50 = igual ao mês anterior, sobe 5 por ponto ganho · <b>POS</b> lugar no ranking · <b>MED</b> média dos meses.
@@ -165,7 +171,7 @@ function desenhar() {
   alvo.innerHTML = html;
   const ligar = (id, modo) => { const b = $(id); if (!b) return; b.onclick = () => {
     const msg = $('msgImg'); b.disabled = true; msg.textContent = 'Preparando a imagem…';
-    Carta.enviar(a, ms, modo, { ocultarNomes: document.body.classList.contains('modo-apresentacao') })
+    Carta.enviar(a, ms, modo, { id: idAgente, ocultarNomes: document.body.classList.contains('modo-apresentacao'), ocultarFoto: document.body.classList.contains('sem-foto') })
       .then(t => { msg.textContent = t; }, () => { msg.textContent = 'Não consegui gerar a imagem aqui. Abra a página pelo endereço do site (não pelo arquivo no computador) e tente de novo.'; })
       .then(() => { b.disabled = false; }); }; };
   ligar('bBaixar', 'baixar'); ligar('bZap', 'whatsapp');

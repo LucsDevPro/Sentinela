@@ -135,6 +135,7 @@ jobs:
           EVISITA_SENHA: ${{ secrets.EVISITA_SENHA }}
         run: |
           python scripts/test_ranking.py
+          python scripts/test_desempate.py
           python scripts/test_ciclos.py
           python scripts/test_atestado.py
           python scripts/test_ausencia.py

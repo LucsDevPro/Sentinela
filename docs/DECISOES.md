@@ -2,6 +2,13 @@
 
 Uma entrada por decisão: **data · decisão · por quê · onde está no código**. Acrescente sempre que uma regra mudar.
 
+## 04/11/2026 — desempate por média, detalhamento na cartinha e opção de ocultar fotos
+- **Desempate do ranking:** nota igual → fica na frente quem tem a maior **média dos meses anteriores** (a da tabela "Média Mensal por Agente", arredondada em 1 casa;
+  o mês do próprio período não entra; sem histórico fica atrás; empate total mantém a ordem anterior). `coleta/ausencias_ranking.py` → `_media_historica_por_agente`
+  + chave de ordenação em `_preparar_ranking`. Teste: `scripts/test_desempate.py`. O álbum (`album.html`) aplica a mesma regra no navegador.
+- **Cartinha:** passar o mouse mostra o detalhamento (todos os critérios do mês, vindos de `detalhe` em `assets/agentes_dados.js`, gerado por `scripts/gerar_agentes.py`);
+  clicar fixa (no celular, o toque). Borda por faixa de nota e cor do 100 = ouro de 90–99 (`assets/carta.css`); foto por ID em `assets/fotos.js`; checkbox "Ocultar fotos".
+
 ## 03/11/2026 — organização do repositório (branch `organizacao`)
 - **README reduzido** (853 → ~60 linhas). Conteúdo movido sem remover informação: `docs/OPERACAO.md` (coleta, detecção de férias, cronograma, atestado/férias,
   meses congelados, planilhas antigas), `docs/INSTALACAO.md` (Secrets, Pages, Worker, teste local), `docs/REGRAS_DETALHADAS.md` (ranking normalizado, teto de

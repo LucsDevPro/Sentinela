@@ -420,6 +420,68 @@ def _carregar_ajustes_ranking(caminho=CAMINHO_AJUSTES_RANKING):
     return validos
 
 
+# DESEMPATE DO RANKING: quando duas ou mais pessoas fecham o período com a MESMA nota (hoje isso é comum:
+# a nota é limitada a 100), quem tem a maior MÉDIA dos meses anteriores fica na frente. A média é a mesma
+# da tabela "Média Mensal por Agente" do dashboard (média simples das notas mensais), mas só dos meses
+# FECHADOS ANTES do período sendo calculado — o próprio mês empatado não entra, senão o empate se
+# decidiria pelo que acabou de empatar. Quem não tem histórico fica atrás de quem tem; se a média
+# também empatar, vale a ordem de antes (estável).
+CAMINHO_MANIFEST_HISTORICO = "data/historico/manifest.json"
+PASTA_HISTORICO = "data/historico"
+_RE_LABEL_MES = re.compile(r"^[^\W\d_]+/\d{4}$")
+
+
+def _ler_notas_ranking(caminho):
+    """{nome_agente: pontuação final} da tabela principal da aba Ranking de uma planilha mensal."""
+    import openpyxl
+    wb = openpyxl.load_workbook(caminho, read_only=True, data_only=True)
+    try:
+        if "Ranking" not in wb.sheetnames:
+            return {}
+        out, i_ag, i_pt = {}, None, None
+        for vals in wb["Ranking"].iter_rows(values_only=True):
+            if i_ag is None:
+                if vals and "Agente" in vals and "Pontuação Final" in vals:
+                    i_ag, i_pt = list(vals).index("Agente"), list(vals).index("Pontuação Final")
+                continue
+            if not vals or vals[i_ag] is None:
+                break
+            try:
+                out[str(vals[i_ag]).strip()] = float(vals[i_pt])
+            except (TypeError, ValueError):
+                continue
+        return out
+    finally:
+        wb.close()
+
+
+def _media_historica_por_agente(data_min, manifest=CAMINHO_MANIFEST_HISTORICO, pasta=PASTA_HISTORICO):
+    """{nome_agente: média das notas dos meses anteriores ao período que começa em `data_min`}.
+    Vazio se não houver data, manifesto ou meses anteriores (aí o desempate simplesmente não age)."""
+    if data_min is None:
+        return {}
+    try:
+        from semanas_evisita import html_id_da_data
+        inicio = html_id_da_data(data_min - timedelta(days=(data_min.weekday() + 1) % 7))
+        with open(manifest, encoding="utf-8") as f:
+            entradas = json.load(f)
+        notas = {}
+        for e in entradas:
+            if e.get("tipo") == "semana" or not _RE_LABEL_MES.match(str(e.get("label", ""))):
+                continue
+            if int(e.get("semana_fim", 0)) >= inicio:      # mês do próprio período (ou posterior): fora
+                continue
+            caminho = os.path.join(pasta, e["arquivo"])
+            if not os.path.exists(caminho):
+                continue
+            for nome, pts in _ler_notas_ranking(caminho).items():
+                notas.setdefault(nome, []).append(pts)
+        return {n: sum(v) / len(v) for n, v in notas.items() if v}
+    except Exception as exc:  # desempate é acessório: nunca pode derrubar a coleta
+        log.warning("Desempate por média histórica indisponível: %s", exc)
+        return {}
+
+
 def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronograma=None, data_min=None, ajustes=None):
     """
     Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
@@ -545,7 +607,11 @@ def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronogram
             d["_fill"] = "FFE0E0" if d["pontos"] < 0 else "E0FFE0"
         todos_detalhes.extend(detalhes)
 
-    principal.sort(key=lambda r: r["pontos"], reverse=True)
+    media_hist = _media_historica_por_agente(data_min)
+    for r in principal:   # média arredondada em 1 casa, como aparece na tabela "Média Mensal por Agente"
+        m = media_hist.get(str(r["nome_agente"]).strip())
+        r["_media_hist"] = -1.0 if m is None else round(m, 1)
+    principal.sort(key=lambda r: (r["pontos"], r["_media_hist"]), reverse=True)
     for i, r in enumerate(principal, 1):
         r["posicao"] = i
 

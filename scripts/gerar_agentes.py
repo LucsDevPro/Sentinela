@@ -23,7 +23,7 @@ def _chave(nome):
 
 
 def ler_planilha(caminho):
-    """({agente: {equipe, pos, trab, esp, turnos_sem, pontos, cls}}, {agente: [(criterio, pontos)]})"""
+    """({agente: {equipe, pos, trab, esp, turnos_sem, pontos, cls}}, {agente: [(criterio, pontos, quantidade, peso_efetivo)]})"""
     import openpyxl
     wb = openpyxl.load_workbook(caminho, read_only=True, data_only=True)
     try:
@@ -47,7 +47,7 @@ def ler_planilha(caminho):
                     continue
             elif modo == "det":
                 try:
-                    det.setdefault(str(vals[0]).strip(), []).append((str(vals[2]), float(vals[7])))
+                    det.setdefault(str(vals[0]).strip(), []).append((str(vals[2]), float(vals[7]), _num(vals[3]), _num(vals[6])))
                 except (TypeError, ValueError, IndexError):
                     continue
         return rank, det
@@ -161,8 +161,11 @@ def gerar(raiz=ROOT):
             ficha(nome, r["equipe"])["meses"].append({
                 "mes": e["label"], "pontos": _num(r["pontos"]), "trab": _num(r["trab"]), "esp": _num(r["esp"]),
                 "turnos_sem": _num(r["turnos_sem"]), "pos": r["pos"], "cls": r["cls"], "total": len(rank), "fechado": e["label"] in fechados,
-                "perdas": [{"c": c, "p": round(p, 1)} for c, p in perdas],
-                "ganhos": [{"c": c, "p": round(p, 1)} for c, p in ganhos],
+                "perdas": [{"c": x[0], "p": round(x[1], 1)} for x in perdas],
+                "ganhos": [{"c": x[0], "p": round(x[1], 1)} for x in ganhos],
+                # TODOS os critérios do mês ([critério, quantidade, peso efetivo, pontos]) — alimentam o detalhamento
+                # que aparece ao passar o mouse/clicar na cartinha (mesma tabela "Detalhamento — Critérios Aplicados").
+                "detalhe": [[x[0], x[2], x[3], round(x[1], 1)] for x in sorted(itens, key=lambda x: x[1])],
                 "paradas": paradas_no_periodo(cron, r["equipe"], _faixa_mes(e["label"]))})
     for e in sem_e:
         cam = raiz / "data" / "historico" / e["arquivo"]
