@@ -1,100 +1,686 @@
-/* Cartão do agente (estilo carta de jogador). Usado em agente.html e album.html */
-.carta{--c1:#F9E08B;--c2:#D4A32F;--tx:#3A2A05;--ln:rgba(58,42,5,.35);position:relative;width:272px;min-height:392px;padding:16px 18px 14px;color:var(--tx);border-radius:22px 22px 46px 46px / 22px 22px 34px 34px;background:linear-gradient(155deg,var(--c1),var(--c2));box-shadow:0 10px 28px rgba(0,0,0,.28),inset 0 0 0 2px rgba(255,255,255,.35);overflow:hidden;font-family:"Barlow Semi Condensed",system-ui,sans-serif}
-.carta::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.14) 0 14px,transparent 14px 34px);pointer-events:none}
-.carta::after{content:"";position:absolute;left:-30%;top:-40%;width:90%;height:90%;background:radial-gradient(closest-side,rgba(255,255,255,.55),transparent);pointer-events:none}
-.carta{--logo:linear-gradient(165deg,#A87612 0%,#7A520A 55%,#5C3C05 100%)}
-.carta.t-prata{--logo:linear-gradient(165deg,#6F7F96 0%,#4C5B70 55%,#37455A 100%);--c1:#EEF2F7;--c2:#9FADBF;--tx:#1E2B3D;--ln:rgba(30,43,61,.35)}
-.carta.t-bronze{--logo:linear-gradient(165deg,#8A4E22 0%,#63350F 55%,#4A2609 100%);--c1:#EBBE96;--c2:#A8683A;--tx:#2E1706;--ln:rgba(46,23,6,.35)}
-.carta.t-destaque{--logo:linear-gradient(165deg,#FBE08A 0%,#F7B500 55%,#C58F00 100%);--c1:#123A6B;--c2:#071A33;--tx:#FFFFFF;--ln:rgba(255,255,255,.35);box-shadow:0 10px 28px rgba(0,0,0,.35),inset 0 0 0 2px #F7B500}
-.carta.t-destaque::before{background:repeating-linear-gradient(115deg,rgba(25,184,163,.16) 0 14px,transparent 14px 34px)}
-.carta > *{position:relative;z-index:1}
-/* Escala única por nota ARREDONDADA. A faixa define a COR DO CARTÃO (t-*) e a BORDA (b-*); a borda engrossa com o nível (--bw).
-   100 = tempestade (bloco "Cartinha 100" abaixo) | 90-99 = ouro | 80-89 = prata | 70-79 = bronze | 60-69 = aço | abaixo de 60 = ferro.
-   b-top = top 3 do mês com 90-99: cartão de ouro com borda holográfica. O PNG (carta.js) lê --b1/--b2/--b3/--bw daqui, então só mexa nas cores neste bloco. */
-.carta{--b1:#2A2A2A;--b2:#6A6A6A;--b3:#B8B8B8;--bw:4px}
-.carta.b-60{--b1:#2C3A39;--b2:#6E8A86;--b3:#BAD0CC;--bw:5px}
-.carta.b-70{--b1:#5A2E0E;--b2:#C9824A;--b3:#F4CDA4;--bw:5px}
-.carta.b-80{--b1:#3A485C;--b2:#A9B8CB;--b3:#F6F9FC;--bw:6px}
-.carta.b-90{--b1:#7A4E00;--b2:#E6B422;--b3:#FFF4C4;--bw:8px}
-.carta.b-top{--b1:#FFD84D;--b2:#FF5FCB;--b3:#4DE8FF;--bw:9px;box-shadow:0 0 22px rgba(255,95,203,.45),0 10px 28px rgba(0,0,0,.3),inset 0 0 0 2px rgba(255,255,255,.35)}
-.carta.b-100{--bw:11px}
-.carta > .c-borda{position:absolute;inset:0;z-index:3;padding:var(--bw);border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,var(--b1),var(--b2) 25%,var(--b3) 50%,var(--b2) 75%,var(--b1));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
-/* aço (60-69) e ferro (abaixo de 60) */
-.carta.t-aco{--logo:linear-gradient(165deg,#5E7B76 0%,#3E5753 55%,#2A3C39 100%);--c1:#E3EEEB;--c2:#8FA8A3;--tx:#122120;--ln:rgba(18,33,32,.35)}
-.carta.t-ferro{--logo:linear-gradient(165deg,#6E6E6E 0%,#4A4A4A 55%,#2E2E2E 100%);--c1:#DADADA;--c2:#8A8A8A;--tx:#161616;--ln:rgba(22,22,22,.35)}
-.c-topo{display:flex;align-items:flex-start;gap:12px}
-.c-ovr b{display:block;font-size:3.5rem;line-height:.9;font-weight:700;font-variant-numeric:tabular-nums}
-.c-ovr b.tres{font-size:2.9rem;padding-top:.4rem}
-.c-ovr span,.c-pos small{font-size:.78rem;letter-spacing:.12em;font-weight:600;display:block;font-family:"IBM Plex Sans",sans-serif}
-.c-pos{margin-top:6px;border-top:2px solid var(--ln);padding-top:4px;font-size:1.25rem;font-weight:700;letter-spacing:.05em}
-.c-pos small{letter-spacing:0;font-size:.7rem;white-space:nowrap}
-.c-topo{gap:10px}
-.c-logo{margin-left:auto;width:68px;height:94px;margin-top:-2px;filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 -1px 0 rgba(0,0,0,.28))}
-.c-logo i{display:block;width:100%;height:100%;background:var(--logo);-webkit-mask:url(logo_carta.png) center/contain no-repeat;mask:url(logo_carta.png) center/contain no-repeat}
-.c-foto{width:112px;height:112px;margin:-6px auto 4px;border-radius:50%;display:grid;place-items:center;font-size:2.7rem;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.28);border:3px solid var(--ln)}
-.c-foto.tem-foto{overflow:hidden;background:rgba(255,255,255,.28)}
-.c-foto img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
-body.sem-foto .c-foto img{display:none} /* checkbox "Ocultar fotos": ficam só as iniciais */
-/* Efeito: ao passar o mouse (ou tocar) na cartinha, SÓ a foto dá uma volta completa (360°, uma vez). Não vale para quem está só com iniciais, nem com "reduzir movimento". */
-@media (prefers-reduced-motion:no-preference){
-  .carta .c-foto.tem-foto{will-change:transform}
-  @media (hover:hover){.carta:hover .c-foto.tem-foto{animation:c-giro .9s cubic-bezier(.45,.05,.25,1) 1}}
-  @media (hover:none){.carta:active .c-foto.tem-foto{animation:c-giro .9s cubic-bezier(.45,.05,.25,1) 1}}
-}
-@keyframes c-giro{from{transform:perspective(700px) rotateY(0deg)}to{transform:perspective(700px) rotateY(360deg)}}
-.carta[data-cid]{cursor:pointer}
-.c-nome{white-space:nowrap;text-align:center;font-size:1.45rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--ln);padding-bottom:6px;margin-bottom:8px;line-height:1.1}
-.c-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 18px;padding:0 6px;border-bottom:2px solid var(--ln);padding-bottom:8px}
-.c-stats div{display:flex;gap:8px;align-items:baseline;font-size:1.15rem;font-weight:700}
-.c-stats b{min-width:1.7em;text-align:right;font-variant-numeric:tabular-nums}
-.c-stats span{font-weight:600;letter-spacing:.08em;font-size:1rem;opacity:.85}
-.c-rodape{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-family:"IBM Plex Sans",sans-serif;font-size:.78rem;font-weight:600}
-.c-rodape .ico{width:1em;height:1em}
-@media print{.carta{box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+/* Cartão do agente — visual luxuoso unificado (todas as faixas).
+   Estilo carta colecionável premium. Usado em agente.html e album.html */
 
-/* ===== Cartinha Lendária ("Tempestade azul"): só vale com a classe b-100 (top 3 do mês com nota 100). Azul-marinho profundo, raios brancos com halo azul, moldura de aço azul com faíscas.
-   Não mexe no tamanho nem na posição de nada. Os raios são gerados no carta.js (RAIOS/ARCOS); o PNG desenha os mesmos. Se mudar cores/medidas aqui, ajuste lá. ===== */
-.carta.b-100{--c1:#0F3A8C;--c2:#020816;--tx:#FFFFFF;--ln:rgba(140,205,255,.6);--logo:linear-gradient(165deg,#FFF3B0 0%,#FFE14D 55%,#F5A300 100%);--b1:#0A2463;--b2:#59B8FF;--b3:#FFFFFF;--bw:11px;box-shadow:0 0 26px rgba(61,155,255,.65),0 10px 28px rgba(0,0,0,.4),inset 0 0 0 2px rgba(255,255,255,.2)}
-.carta.b-100::before{inset:13px;border:1.5px solid #DDF2FF;border-radius:9px 9px 33px 33px / 9px 9px 21px 21px;background:none;-webkit-mask:none;mask:none;box-shadow:0 0 8px #59B8FF,inset 0 0 8px rgba(89,184,255,.5)}
-.carta.b-100::after{left:0;top:0;width:100%;height:100%;background:radial-gradient(circle at 50% 40%,rgba(120,190,255,.6),rgba(60,130,255,0) 55%)}
-.carta.b-100 .c-ovr b{background:linear-gradient(180deg,#FFFFFF 0%,#FFE14D 55%,#F5A300 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 6px rgba(61,155,255,.9))}
-.carta.b-100 .c-foto{background:rgba(255,255,255,.08);box-shadow:0 0 0 5px rgba(190,230,255,.95),0 0 24px rgba(89,184,255,.85)}
-.c-estrelas,.c-arcos{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.c-estrelas{z-index:0}.c-arcos{z-index:4}
-.c-estrelas path,.c-arcos path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-.c-estrelas .rg{stroke:rgba(61,155,255,.55);filter:blur(2.5px)}
-.c-estrelas .ry{stroke:#8FD8FF;filter:drop-shadow(0 0 3px #59B8FF)}
-.c-estrelas .rw{stroke:#fff}
-.c-arcos .ag{stroke:rgba(120,205,255,.85);stroke-width:3.4;filter:blur(1.5px)}
-.c-arcos .aw{stroke:#fff;stroke-width:1}
-@media (prefers-reduced-motion:no-preference){
-  .c-estrelas .rai{animation:c100-raio 3.2s steps(1,end) infinite}
-  .c-estrelas .rai:nth-child(3n){animation-delay:.7s}.c-estrelas .rai:nth-child(4n){animation-delay:1.5s}.c-estrelas .rai:nth-child(5n){animation-delay:2.3s}
-  .c-arcos{animation:c100-arco 2.4s steps(1,end) infinite}
-  .carta.b-100::after{animation:c100-clarao 3.2s steps(1,end) infinite}
+.carta {
+  --c1: #F9EBC0;
+  --c2: #C48E1E;
+  --tx: #2A1F08;
+  --ln: rgba(42, 31, 8, 0.26);
+  position: relative;
+  width: 272px;
+  min-height: 392px;
+  padding: 16px 18px 14px;
+  color: var(--tx);
+  border-radius: 18px 18px 40px 40px / 18px 18px 30px 30px;
+  background:
+    linear-gradient(160deg, var(--c1) 0%, #E6C86A 38%, #D4A63A 68%, var(--c2) 100%);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.34),
+    0 5px 14px rgba(0, 0, 0, 0.18),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+  font-family: "Barlow Semi Condensed", system-ui, sans-serif;
 }
-@keyframes c100-raio{0%{opacity:1}8%{opacity:.2}12%{opacity:1}18%{opacity:.45}22%{opacity:1}100%{opacity:1}}
-@keyframes c100-arco{0%{opacity:1}30%{opacity:.35}36%{opacity:1}70%{opacity:.6}74%{opacity:1}}
-@keyframes c100-clarao{0%{opacity:1}8%{opacity:.5}12%{opacity:1}18%{opacity:.75}22%{opacity:1}100%{opacity:1}}
 
-/* Detalhamento da nota (aparece ao passar o mouse / clicar na cartinha) */
-.c-pop{position:fixed;z-index:1000;width:360px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;box-sizing:border-box;padding:12px 14px 10px;background:#0B1B33;color:#fff;border:2px solid #F7B500;border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.5);font:400 .8rem/1.35 "IBM Plex Sans",system-ui,sans-serif}
-.c-pop[hidden]{display:none}
-.c-pop.folha{left:0;right:0;bottom:0;top:auto;width:auto;max-width:none;max-height:75vh;border-radius:16px 16px 0 0}
-.c-pop-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
-.c-pop-topo b{display:block;font:700 1.05rem "Barlow Semi Condensed",sans-serif;letter-spacing:.05em;text-transform:uppercase}
-.c-pop-topo span{opacity:.75;font-size:.75rem}
-.c-pop-topo button{all:unset;cursor:pointer;font-size:1.4rem;line-height:1;padding:0 4px;opacity:.7}
-.c-pop table{width:100%;border-collapse:collapse}
-.c-pop th{font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;opacity:.65;text-align:left;padding:2px 4px;border-bottom:1px solid rgba(255,255,255,.25)}
-.c-pop td{padding:3px 4px;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top}
-.c-pop .n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.c-pop th.n{text-align:right}
-.c-pop td.pos{color:#7DE2A0;font-weight:600}.c-pop td.neg{color:#FF9C9C;font-weight:600}
-.c-pop tr.base td{opacity:.8}
-.c-pop tfoot td{padding-top:5px;border-bottom:0}
-.c-pop tr.final td{font-weight:700;font-size:.92rem;color:#F7B500}
-.c-pop small{font-weight:400;opacity:.8;color:#fff}
-.c-pop-desempate{margin:8px 0 2px;padding-top:6px;border-top:1px dashed rgba(255,255,255,.25);font-size:.76rem;opacity:.9}
-.c-pop-link{display:inline-block;margin-top:4px;color:#7FD0FF;font-weight:600}
-@media print{.c-pop{display:none}}
+/* Textura de seda metálica fina */
+.carta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.09) 0 10px,
+    transparent 10px 26px
+  );
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+/* Brilho de luxo no topo */
+.carta::after {
+  content: "";
+  position: absolute;
+  left: -20%;
+  top: -32%;
+  width: 80%;
+  height: 72%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.14) 42%,
+    transparent 68%
+  );
+  pointer-events: none;
+}
+
+.carta {
+  --logo: linear-gradient(170deg, #D4B040 0%, #9A7218 48%, #5C4208 100%);
+}
+
+/* ===== Tiers — todos com acabamento luxuoso ===== */
+
+/* Prata: platina fria, brilho de joalheria */
+.carta.t-prata {
+  --logo: linear-gradient(170deg, #C0CEDC 0%, #7A8FA8 50%, #3A4E66 100%);
+  --c1: #F7FAFD;
+  --c2: #8AA0B6;
+  --tx: #16202E;
+  --ln: rgba(22, 32, 46, 0.26);
+  background: linear-gradient(160deg, #F7FAFD 0%, #D0DBE8 40%, #A8BBCF 72%, #8AA0B6 100%);
+}
+
+/* Bronze: cobre rosado premium */
+.carta.t-bronze {
+  --logo: linear-gradient(170deg, #D08A48 0%, #9A521C 50%, #5C2E0A 100%);
+  --c1: #F4D0A8;
+  --c2: #A05A2A;
+  --tx: #281408;
+  --ln: rgba(40, 20, 8, 0.28);
+  background: linear-gradient(160deg, #F4D0A8 0%, #E0B078 38%, #C07A40 70%, #A05A2A 100%);
+}
+
+/* Destaque: azul-noite com filete ouro */
+.carta.t-destaque {
+  --logo: linear-gradient(170deg, #FFE8A0 0%, #F0B400 48%, #B07800 100%);
+  --c1: #0B2850;
+  --c2: #030C1A;
+  --tx: #FFFFFF;
+  --ln: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(160deg, #0B2850 0%, #0A1C3C 48%, #030C1A 100%);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.42),
+    0 0 0 1.5px #E0B000,
+    inset 0 1.5px 0 rgba(255, 220, 120, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.carta.t-destaque::before {
+  background: repeating-linear-gradient(
+    120deg,
+    rgba(40, 200, 180, 0.12) 0 10px,
+    transparent 10px 26px
+  );
+}
+
+/* Aço: metal escovado premium */
+.carta.t-aco {
+  --logo: linear-gradient(170deg, #8AA8A2 0%, #4E6E68 50%, #2A3E3A 100%);
+  --c1: #EDF4F2;
+  --c2: #6E8E88;
+  --tx: #0C1A18;
+  --ln: rgba(12, 26, 24, 0.26);
+  background: linear-gradient(160deg, #EDF4F2 0%, #C0D4CE 40%, #90B0A8 72%, #6E8E88 100%);
+}
+
+/* Ferro: grafite sofisticado */
+.carta.t-ferro {
+  --logo: linear-gradient(170deg, #B0B0B0 0%, #686868 50%, #2E2E2E 100%);
+  --c1: #F0F0F0;
+  --c2: #6E6E6E;
+  --tx: #121212;
+  --ln: rgba(18, 18, 18, 0.28);
+  background: linear-gradient(160deg, #F0F0F0 0%, #C8C8C8 40%, #929292 72%, #6E6E6E 100%);
+}
+
+.carta > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Bordas por faixa ===== */
+
+.carta {
+  --b1: #1A1A1A;
+  --b2: #5C5C5C;
+  --b3: #D0D0D0;
+  --bw: 4.5px;
+}
+
+.carta.b-60 {
+  --b1: #1A2A28;
+  --b2: #5A7A74;
+  --b3: #B8D4CC;
+  --bw: 5.5px;
+}
+
+.carta.b-70 {
+  --b1: #4A1E08;
+  --b2: #C07038;
+  --b3: #F2C8A0;
+  --bw: 5.5px;
+}
+
+.carta.b-80 {
+  --b1: #243448;
+  --b2: #8AA0B8;
+  --b3: #F2F6FA;
+  --bw: 6.5px;
+}
+
+.carta.b-90 {
+  --b1: #6A3C00;
+  --b2: #E0A820;
+  --b3: #FFF2C0;
+  --bw: 8.5px;
+}
+
+.carta.b-top {
+  --b1: #FFE066;
+  --b2: #FF4DB8;
+  --b3: #40E0FF;
+  --bw: 9.5px;
+  box-shadow:
+    0 0 30px rgba(255, 77, 184, 0.38),
+    0 16px 40px rgba(0, 0, 0, 0.34),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.carta.b-100 {
+  --bw: 11.5px;
+}
+
+.carta > .c-borda {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: var(--bw);
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    var(--b1),
+    var(--b2) 20%,
+    var(--b3) 48%,
+    var(--b2) 78%,
+    var(--b1)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+/* ===== Layout interno ===== */
+
+.c-topo {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.c-ovr b {
+  display: block;
+  font-size: 3.5rem;
+  line-height: 0.9;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.c-ovr b.tres {
+  font-size: 2.9rem;
+  padding-top: 0.4rem;
+}
+
+.c-ovr span,
+.c-pos small {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  display: block;
+  font-family: "IBM Plex Sans", sans-serif;
+  opacity: 0.88;
+}
+
+.c-pos {
+  margin-top: 6px;
+  border-top: 1.5px solid var(--ln);
+  padding-top: 5px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.c-pos small {
+  letter-spacing: 0;
+  font-size: 0.67rem;
+  white-space: nowrap;
+  opacity: 0.82;
+}
+
+.c-logo {
+  margin-left: auto;
+  width: 66px;
+  height: 90px;
+  margin-top: -2px;
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.48))
+    drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.22));
+}
+
+.c-logo i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--logo);
+  -webkit-mask: url(logo_carta.png) center / contain no-repeat;
+  mask: url(logo_carta.png) center / contain no-repeat;
+}
+
+/* Foto — moldura de joia */
+.c-foto {
+  width: 112px;
+  height: 112px;
+  margin: -3px auto 7px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px solid var(--ln);
+  box-shadow:
+    0 5px 16px rgba(0, 0, 0, 0.16),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.c-foto.tem-foto {
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.c-foto img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+body.sem-foto .c-foto img {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .carta .c-foto.tem-foto {
+    will-change: transform;
+  }
+  @media (hover: hover) {
+    .carta:hover .c-foto.tem-foto {
+      animation: c-giro 0.95s cubic-bezier(0.4, 0.05, 0.2, 1) 1;
+    }
+  }
+  @media (hover: none) {
+    .carta:active .c-foto.tem-foto {
+      animation: c-giro 0.95s cubic-bezier(0.4, 0.05, 0.2, 1) 1;
+    }
+  }
+}
+
+@keyframes c-giro {
+  from { transform: perspective(700px) rotateY(0deg); }
+  to   { transform: perspective(700px) rotateY(360deg); }
+}
+
+.carta[data-cid] {
+  cursor: pointer;
+}
+
+.c-nome {
+  white-space: nowrap;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1.5px solid var(--ln);
+  padding-bottom: 7px;
+  margin-bottom: 9px;
+  line-height: 1.1;
+}
+
+.c-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 16px;
+  padding: 0 4px;
+  border-bottom: 1.5px solid var(--ln);
+  padding-bottom: 9px;
+}
+
+.c-stats div {
+  display: flex;
+  gap: 7px;
+  align-items: baseline;
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+
+.c-stats b {
+  min-width: 1.7em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.c-stats span {
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.c-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 9px;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.c-rodape .ico {
+  width: 1em;
+  height: 1em;
+}
+
+@media print {
+  .carta {
+    box-shadow: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ===== Lendária — Tempestade de luxo ===== */
+
+.carta.b-100 {
+  --c1: #0A2C74;
+  --c2: #01040C;
+  --tx: #FFFFFF;
+  --ln: rgba(160, 215, 255, 0.52);
+  --logo: linear-gradient(170deg, #FFF6C8 0%, #FFD84A 46%, #E09800 100%);
+  --b1: #061A4C;
+  --b2: #48A8FF;
+  --b3: #FFFFFF;
+  --bw: 11.5px;
+  background: linear-gradient(160deg, #0A2C74 0%, #061A48 46%, #01040C 100%);
+  box-shadow:
+    0 0 34px rgba(48, 148, 255, 0.5),
+    0 16px 42px rgba(0, 0, 0, 0.46),
+    inset 0 1.5px 0 rgba(180, 220, 255, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.carta.b-100::before {
+  inset: 12px;
+  border: 1.5px solid rgba(200, 230, 255, 0.82);
+  border-radius: 9px 9px 30px 30px / 9px 9px 20px 20px;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+  box-shadow:
+    0 0 12px rgba(70, 170, 255, 0.5),
+    inset 0 0 14px rgba(70, 170, 255, 0.32);
+  opacity: 1;
+}
+
+.carta.b-100::after {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at 50% 38%,
+    rgba(100, 180, 255, 0.52) 0%,
+    rgba(40, 120, 255, 0.16) 40%,
+    transparent 64%
+  );
+}
+
+.carta.b-100 .c-ovr b {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFE86A 50%, #F0A000 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 9px rgba(55, 155, 255, 0.85));
+}
+
+.carta.b-100 .c-foto {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(180, 220, 255, 0.48);
+  box-shadow:
+    0 0 0 5px rgba(180, 225, 255, 0.88),
+    0 0 30px rgba(65, 165, 255, 0.7),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.18);
+}
+
+.c-estrelas,
+.c-arcos {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.c-estrelas { z-index: 0; }
+.c-arcos   { z-index: 4; }
+
+.c-estrelas path,
+.c-arcos path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.c-estrelas .rg {
+  stroke: rgba(48, 148, 255, 0.48);
+  filter: blur(2.8px);
+}
+
+.c-estrelas .ry {
+  stroke: #90D8FF;
+  filter: drop-shadow(0 0 4px #48B8FF);
+}
+
+.c-estrelas .rw {
+  stroke: #fff;
+}
+
+.c-arcos .ag {
+  stroke: rgba(110, 200, 255, 0.78);
+  stroke-width: 3.2;
+  filter: blur(1.6px);
+}
+
+.c-arcos .aw {
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .c-estrelas .rai {
+    animation: c100-raio 3.4s steps(1, end) infinite;
+  }
+  .c-estrelas .rai:nth-child(3n) { animation-delay: 0.7s; }
+  .c-estrelas .rai:nth-child(4n) { animation-delay: 1.5s; }
+  .c-estrelas .rai:nth-child(5n) { animation-delay: 2.4s; }
+  .c-arcos {
+    animation: c100-arco 2.6s steps(1, end) infinite;
+  }
+  .carta.b-100::after {
+    animation: c100-clarao 3.4s steps(1, end) infinite;
+  }
+}
+
+@keyframes c100-raio {
+  0%   { opacity: 1; }
+  8%   { opacity: 0.16; }
+  13%  { opacity: 1; }
+  19%  { opacity: 0.38; }
+  24%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes c100-arco {
+  0%   { opacity: 1; }
+  28%  { opacity: 0.28; }
+  35%  { opacity: 1; }
+  68%  { opacity: 0.52; }
+  74%  { opacity: 1; }
+}
+
+@keyframes c100-clarao {
+  0%   { opacity: 1; }
+  8%   { opacity: 0.42; }
+  13%  { opacity: 1; }
+  19%  { opacity: 0.68; }
+  24%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* ===== Popover de detalhamento ===== */
+
+.c-pop {
+  position: fixed;
+  z-index: 1000;
+  width: 360px;
+  max-width: calc(100vw - 16px);
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 14px 16px 12px;
+  background: linear-gradient(165deg, #0C1E38 0%, #081528 100%);
+  color: #fff;
+  border: 1.5px solid #E0B000;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 200, 60, 0.12);
+  font: 400 0.8rem / 1.4 "IBM Plex Sans", system-ui, sans-serif;
+}
+
+.c-pop[hidden] { display: none; }
+
+.c-pop.folha {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  width: auto;
+  max-width: none;
+  max-height: 75vh;
+  border-radius: 18px 18px 0 0;
+}
+
+.c-pop-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.c-pop-topo b {
+  display: block;
+  font: 700 1.08rem "Barlow Semi Condensed", sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.c-pop-topo span {
+  opacity: 0.68;
+  font-size: 0.74rem;
+}
+
+.c-pop-topo button {
+  all: unset;
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 0 4px;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.c-pop-topo button:hover { opacity: 1; }
+
+.c-pop table { width: 100%; border-collapse: collapse; }
+
+.c-pop th {
+  font-weight: 600;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.58;
+  text-align: left;
+  padding: 3px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.c-pop td {
+  padding: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: top;
+}
+
+.c-pop .n {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.c-pop th.n { text-align: right; }
+
+.c-pop td.pos { color: #6EE8A8; font-weight: 600; }
+.c-pop td.neg { color: #FF9A9A; font-weight: 600; }
+
+.c-pop tr.base td { opacity: 0.72; }
+
+.c-pop tfoot td {
+  padding-top: 6px;
+  border-bottom: 0;
+}
+
+.c-pop tr.final td {
+  font-weight: 700;
+  font-size: 0.94rem;
+  color: #F0C000;
+}
+
+.c-pop small {
+  font-weight: 400;
+  opacity: 0.72;
+  color: #fff;
+}
+
+.c-pop-desempate {
+  margin: 10px 0 2px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.18);
+  font-size: 0.75rem;
+  opacity: 0.86;
+}
+
+.c-pop-link {
+  display: inline-block;
+  margin-top: 5px;
+  color: #70D0FF;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.c-pop-link:hover { text-decoration: underline; }
+
+@media print {
+  .c-pop { display: none; }
+}

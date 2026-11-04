@@ -107,7 +107,7 @@
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF3B0', '#FFC93C', '#D9901A'], '': ['#A87612', '#7A520A', '#5C3C05'], 't-prata': ['#6F7F96', '#4C5B70', '#37455A'], 't-bronze': ['#8A4E22', '#63350F', '#4A2609'], 't-aco': ['#5E7B76', '#3E5753', '#2A3C39'], 't-ferro': ['#6E6E6E', '#4A4A4A', '#2E2E2E'], 't-destaque': ['#FBE08A', '#F7B500', '#C58F00'] };
+  var LOGO = { 'b-100': ['#FFF6C8', '#FFD84A', '#E09800'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#8AA8A2', '#4E6E68', '#2A3E3A'], 't-ferro': ['#B0B0B0', '#686868', '#2E2E2E'], 't-destaque': ['#FFE8A0', '#F0B400', '#B07800'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
