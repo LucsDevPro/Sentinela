@@ -8,16 +8,20 @@
 .carta.t-destaque{--logo:linear-gradient(165deg,#FBE08A 0%,#F7B500 55%,#C58F00 100%);--c1:#123A6B;--c2:#071A33;--tx:#FFFFFF;--ln:rgba(255,255,255,.35);box-shadow:0 10px 28px rgba(0,0,0,.35),inset 0 0 0 2px #F7B500}
 .carta.t-destaque::before{background:repeating-linear-gradient(115deg,rgba(25,184,163,.16) 0 14px,transparent 14px 34px)}
 .carta > *{position:relative;z-index:1}
-/* Borda por faixa de nota (estilo FIFA): a COR do cartão segue o nível (ouro/prata/bronze), a BORDA segue a nota.
-   100 = holográfica | 90-99 = ouro metálico | 80-89 = prata | 70-79 = cobre | 60-69 = aço | abaixo de 60 = grafite.
-   O PNG (carta.js) lê --b1/--b2/--b3 daqui, então só mexa nas cores neste bloco. */
-.carta{--b1:#2A2A2A;--b2:#5A5A5A;--b3:#8E8E8E}
-.carta.b-60{--b1:#2C3A39;--b2:#6E8A86;--b3:#BAD0CC}
-.carta.b-70{--b1:#5A2E0E;--b2:#C9824A;--b3:#F4CDA4}
-.carta.b-80{--b1:#3A485C;--b2:#A9B8CB;--b3:#F6F9FC}
-.carta.b-90{--b1:#7A4E00;--b2:#E6B422;--b3:#FFF4C4}
-.carta.b-100{--b1:#FFD84D;--b2:#FF5FCB;--b3:#4DE8FF;box-shadow:0 0 22px rgba(255,95,203,.45),0 10px 28px rgba(0,0,0,.3),inset 0 0 0 2px rgba(255,255,255,.35)}
-.carta > .c-borda{position:absolute;inset:0;z-index:3;padding:5px;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,var(--b1),var(--b2) 25%,var(--b3) 50%,var(--b2) 75%,var(--b1));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* Escala única por nota ARREDONDADA. A faixa define a COR DO CARTÃO (t-*) e a BORDA (b-*); a borda engrossa com o nível (--bw).
+   100 = tempestade (bloco "Cartinha 100" abaixo) | 90-99 = ouro | 80-89 = prata | 70-79 = bronze | 60-69 = aço | abaixo de 60 = ferro.
+   b-top = top 3 do mês com 90-99: cartão de ouro com borda holográfica. O PNG (carta.js) lê --b1/--b2/--b3/--bw daqui, então só mexa nas cores neste bloco. */
+.carta{--b1:#2A2A2A;--b2:#6A6A6A;--b3:#B8B8B8;--bw:4px}
+.carta.b-60{--b1:#2C3A39;--b2:#6E8A86;--b3:#BAD0CC;--bw:5px}
+.carta.b-70{--b1:#5A2E0E;--b2:#C9824A;--b3:#F4CDA4;--bw:5px}
+.carta.b-80{--b1:#3A485C;--b2:#A9B8CB;--b3:#F6F9FC;--bw:6px}
+.carta.b-90{--b1:#7A4E00;--b2:#E6B422;--b3:#FFF4C4;--bw:8px}
+.carta.b-top{--b1:#FFD84D;--b2:#FF5FCB;--b3:#4DE8FF;--bw:9px;box-shadow:0 0 22px rgba(255,95,203,.45),0 10px 28px rgba(0,0,0,.3),inset 0 0 0 2px rgba(255,255,255,.35)}
+.carta.b-100{--bw:11px}
+.carta > .c-borda{position:absolute;inset:0;z-index:3;padding:var(--bw);border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,var(--b1),var(--b2) 25%,var(--b3) 50%,var(--b2) 75%,var(--b1));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* aço (60-69) e ferro (abaixo de 60) */
+.carta.t-aco{--logo:linear-gradient(165deg,#5E7B76 0%,#3E5753 55%,#2A3C39 100%);--c1:#E3EEEB;--c2:#8FA8A3;--tx:#122120;--ln:rgba(18,33,32,.35)}
+.carta.t-ferro{--logo:linear-gradient(165deg,#6E6E6E 0%,#4A4A4A 55%,#2E2E2E 100%);--c1:#DADADA;--c2:#8A8A8A;--tx:#161616;--ln:rgba(22,22,22,.35)}
 .c-topo{display:flex;align-items:flex-start;gap:12px}
 .c-ovr b{display:block;font-size:3.5rem;line-height:.9;font-weight:700;font-variant-numeric:tabular-nums}
 .c-ovr b.tres{font-size:2.9rem;padding-top:.4rem}
@@ -40,6 +44,29 @@ body.sem-foto .c-foto img{display:none} /* checkbox "Ocultar fotos": ficam só a
 .c-rodape{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-family:"IBM Plex Sans",sans-serif;font-size:.78rem;font-weight:600}
 .c-rodape .ico{width:1em;height:1em}
 @media print{.carta{box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+/* ===== Cartinha 100 ("Tempestade"): só vale com a classe b-100 (nota arredondada = 100). Fundo escuro com raios saindo da foto, moldura elétrica com faíscas na borda.
+   Não mexe no tamanho nem na posição de nada. Os raios são gerados no carta.js (RAIOS/ARCOS); o PNG desenha os mesmos. Se mudar cores/medidas aqui, ajuste lá. ===== */
+.carta.b-100{--c1:#2B1160;--c2:#04020E;--tx:#FFFFFF;--ln:rgba(255,225,77,.6);--logo:linear-gradient(165deg,#FFF3B0 0%,#FFE14D 55%,#F5A300 100%);--b1:#4C1D95;--b2:#FFD60A;--b3:#FFFFFF;box-shadow:0 0 26px rgba(155,92,255,.65),0 10px 28px rgba(0,0,0,.4),inset 0 0 0 2px rgba(255,255,255,.2)}
+.carta.b-100::before{inset:13px;border:1.5px solid #FFF3A0;border-radius:9px 9px 33px 33px / 9px 9px 21px 21px;background:none;-webkit-mask:none;mask:none;box-shadow:0 0 8px #FFE14D,inset 0 0 8px rgba(255,225,77,.4)}
+.carta.b-100::after{left:0;top:0;width:100%;height:100%;background:radial-gradient(circle at 50% 40%,rgba(155,92,255,.55),transparent 50%)}
+.carta.b-100 .c-ovr b{background:linear-gradient(180deg,#FFFFFF 0%,#FFE14D 55%,#F5A300 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 0 6px rgba(155,92,255,.9))}
+.carta.b-100 .c-foto{background:rgba(255,255,255,.08);box-shadow:0 0 0 5px rgba(255,225,77,.9),0 0 24px rgba(155,92,255,.8)}
+.c-estrelas,.c-arcos{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.c-estrelas{z-index:0}.c-arcos{z-index:4}
+.c-estrelas path,.c-arcos path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.c-estrelas .rg{stroke:rgba(155,92,255,.55);stroke-width:5;filter:blur(2px)}
+.c-estrelas .ry{stroke:#FFE14D;stroke-width:2}
+.c-estrelas .rw{stroke:#fff;stroke-width:.9}
+.c-arcos .ag{stroke:rgba(255,225,77,.8);stroke-width:3.4;filter:blur(1.5px)}
+.c-arcos .aw{stroke:#fff;stroke-width:1}
+@media (prefers-reduced-motion:no-preference){
+  .c-estrelas .rai{animation:c100-raio 3.2s steps(1,end) infinite}
+  .c-estrelas .rai:nth-child(3n){animation-delay:.7s}.c-estrelas .rai:nth-child(4n){animation-delay:1.5s}.c-estrelas .rai:nth-child(5n){animation-delay:2.3s}
+  .c-arcos{animation:c100-arco 2.4s steps(1,end) infinite}
+}
+@keyframes c100-raio{0%{opacity:1}8%{opacity:.25}12%{opacity:1}18%{opacity:.5}22%{opacity:1}100%{opacity:1}}
+@keyframes c100-arco{0%{opacity:1}30%{opacity:.35}36%{opacity:1}70%{opacity:.6}74%{opacity:1}}
 
 /* Detalhamento da nota (aparece ao passar o mouse / clicar na cartinha) */
 .c-pop{position:fixed;z-index:1000;width:360px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;box-sizing:border-box;padding:12px 14px 10px;background:#0B1B33;color:#fff;border:2px solid #F7B500;border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.5);font:400 .8rem/1.35 "IBM Plex Sans",system-ui,sans-serif}

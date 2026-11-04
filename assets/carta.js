@@ -6,7 +6,32 @@
   var f1 = function (n) { return Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }); };
   var SV = function (n) { return '<svg class="ico" aria-hidden="true"><use href="#i-' + n + '"/></svg>'; };
   var NOMES = { ASS: 'Assiduidade', TUR: 'Turnos cobertos', CON: 'Consistência', EVO: 'Evolução', POS: 'Posição', MED: 'Média dos meses' };
-  function medidas(ms) {
+  /* Nota "bruta": a nota oficial é limitada a 100, mas 100 + critérios pode passar (ex.: 110,6). Só vale para quem chegou ao teto; os demais usam a nota oficial.
+     Entre quem está no teto, o ranking do cartão e do álbum ordena pela bruta (depois a média dos meses anteriores, depois a posição oficial). */
+  var r1 = function (n) { return Math.round(n * 10) / 10; };
+  function bruta(u) {
+    if (!u || u.pontos == null) return null;
+    if (u.pontos < 99.95 || !u.detalhe || !u.detalhe.length) return u.pontos;
+    return Math.max(100, r1(100 + u.detalhe.reduce(function (t, x) { return t + x[3]; }, 0)));
+  }
+  var POSMES = {};
+  function mapaPos(mes) {
+    if (POSMES[mes]) return POSMES[mes];
+    var ag = (window.AGENTES_DADOS && window.AGENTES_DADOS.agentes) || {}, L = [];
+    Object.keys(ag).forEach(function (k) {
+      var ms = ag[k].meses || [], i = -1; ms.forEach(function (m, j) { if (m.mes === mes) i = j; });
+      if (i < 0 || ms[i].pontos == null) return;
+      var v = ms.slice(0, i).map(function (m) { return m.pontos; }).filter(function (n) { return n != null; });
+      L.push({ k: k, b: bruta(ms[i]), h: v.length ? r1(v.reduce(function (t, n) { return t + n; }, 0) / v.length) : -1, p: ms[i].pos, n: String(ag[k].nome) });
+    });
+    L.sort(function (x, y) { return y.b - x.b || y.h - x.h || x.p - y.p || x.n.localeCompare(y.n, 'pt-BR'); });
+    var mp = {}; L.forEach(function (l, i) { mp[l.k] = i + 1; }); return (POSMES[mes] = mp);
+  }
+  function posicao(u, id) { // posição mostrada: só muda para quem está no teto de 100
+    if (id == null || !u || u.pontos == null || u.pontos < 99.95) return u ? u.pos : null;
+    return mapaPos(u.mes)[String(id)] || u.pos;
+  }
+  function medidas(ms, id) {
     var u = ms[ms.length - 1]; if (!u || u.pontos == null) return null;
     var ant = ms.length > 1 ? ms[ms.length - 2] : null;
     var cl = function (v) { return Math.max(0, Math.min(99, Math.round(v))); };
@@ -16,34 +41,61 @@
     var delta = ant && ant.pontos != null ? u.pontos - ant.pontos : null;
     var st = [['ASS', u.esp ? cl(u.trab / u.esp * 100) : 0], ['TUR', u.esp ? cl(100 - (u.turnos_sem || 0) / (u.esp * 2) * 100) : 0],
       ['CON', cl(100 - 5 * dp)], ['EVO', delta == null ? 50 : cl(50 + 5 * delta)],
-      ['POS', u.total > 1 ? cl((u.total - u.pos) / (u.total - 1) * 100) : 99], ['MED', cl(media)]];
-    // Cor do cartão = nível. Nota 100 usa o mesmo dourado de 90-99 (o azul de destaque só vale abaixo de 100).
-    var r = Math.round(u.pontos), top3 = u.pos <= 3 && u.pontos >= 90;
-    var tier = top3 ? [r >= 100 ? '' : 't-destaque', 'DESTAQUE'] : u.pontos >= 90 ? ['', 'OURO'] : u.pontos >= 75 ? ['t-prata', 'PRATA'] : ['t-bronze', 'BRONZE'];
-    // Borda = faixa da nota (igual ao arredondamento mostrado no cartão)
-    var borda = r >= 100 ? 'b-100' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
+      ['POS', u.total > 1 ? cl((u.total - posicao(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]];
+    // Escala única, pela nota ARREDONDADA (a que aparece no cartão): a cor do cartão e a borda seguem a mesma faixa.
+    // 100 LENDÁRIA (tempestade) | 90-99 OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
+    // Top 3 do mês com 90-99 mantém o cartão de ouro e ganha a borda holográfica ("DESTAQUE"). A de 100 é uma só, sem variação de top 3.
+    var r = Math.round(u.pontos), top3 = u.pos <= 3 && r >= 90 && r < 100;
+    var tier = r >= 100 ? ['', 'LENDÁRIA'] : top3 ? ['', 'DESTAQUE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
+    var borda = r >= 100 ? 'b-100' : top3 ? 'b-top' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
     return { u: u, delta: delta, st: st, tier: tier, borda: borda };
   }
+  /* Cartinha 100: estrelas [x, y, raio] no espaço 272x392 do cartão (usadas no HTML e no PNG) */
+  var ESTRELA = 'M0-1Q.15-.15 1 0Q.15.15 0 1Q-.15.15-1 0Q-.15-.15 0-1Z';
+  /* Cartinha 100 ("Tempestade"): raios gerados uma vez (sempre iguais) no espaço 272x392 do cartão; servem ao HTML (SVG) e ao PNG (canvas).
+     RAIOS = descargas no fundo, saindo da foto e pelas laterais; ARCOS = faíscas em zigue-zague correndo pela borda; FAISCAS = pontinhos de luz. */
+  var RAIOS = [], ARCOS = [], FAISCAS = [];
+  (function () {
+    var sd = 11; function q() { sd = (sd * 16807) % 2147483647; return sd / 2147483647; }
+    function pts(x1, y1, x2, y2, disp, n) {
+      var p = [[x1, y1], [x2, y2]];
+      for (var k = 0; k < n; k++) { var np = [p[0]]; for (var i = 0; i < p.length - 1; i++) { var a = p[i], b = p[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1, o = (q() - .5) * disp; np.push([(a[0] + b[0]) / 2 - dy / l * o, (a[1] + b[1]) / 2 + dx / l * o], b); } p = np; disp /= 2; }
+      return p;
+    }
+    var d = function (p) { return 'M' + p.map(function (v) { return v[0].toFixed(1) + ' ' + v[1].toFixed(1); }).join('L'); };
+    var CX = 136, CY = 158, R0 = 64;
+    // [ângulo (0 = leste, sentido horário), raio final]
+    [[190, 120], [166, 112], [214, 100], [350, 118], [14, 112], [326, 98], [262, 92], [292, 98], [236, 90], [304, 88]].forEach(function (a) {
+      var t = a[0] * Math.PI / 180, p = pts(CX + Math.cos(t) * R0, CY + Math.sin(t) * R0, CX + Math.cos(t) * a[1], CY + Math.sin(t) * a[1], 15, 4);
+      RAIOS.push(d(p));
+      var m = p[Math.floor(p.length / 2)], u = t + (q() < .5 ? -.6 : .6); RAIOS.push(d(pts(m[0], m[1], m[0] + Math.cos(u) * 30, m[1] + Math.sin(u) * 26, 8, 3)));
+    });
+    RAIOS.push(d(pts(20, 24, 24, 200, 12, 5))); RAIOS.push(d(pts(253, 124, 250, 250, 12, 5)));
+    function zig(x1, y1, x2, y2, amp) { var n = Math.round(Math.hypot(x2 - x1, y2 - y1) / 7), p = []; for (var i = 0; i <= n; i++) { var t = i / n, o = i === 0 || i === n ? 0 : (i % 2 ? 1 : -1) * amp * (.5 + q() * .8); p.push(x1 === x2 ? [x1 + o, y1 + (y2 - y1) * t] : [x1 + (x2 - x1) * t, y1 + o]); } return d(p); }
+    ARCOS.push(zig(60, 5.5, 132, 5.5, 3.2), zig(266.5, 140, 266.5, 232, 3.2), zig(88, 386.5, 204, 386.5, 3.2), zig(5.5, 248, 5.5, 338, 3.2), zig(5.5, 80, 5.5, 130, 3.2));
+    for (var i = 0; i < 36; i++) FAISCAS.push([16 + q() * 240, 16 + q() * 360, .5 + q() * .9, .35 + q() * .55]);
+  })();
   function html(a, ms, id, semRegistro) {
-    var m = medidas(ms); if (!m) return '';
-    var u = m.u, delta = m.delta, st = m.st, tier = m.tier;
+    var m = medidas(ms, id); if (!m) return '';
+    var u = m.u, pos = posicao(u, id), delta = m.delta, st = m.st, tier = m.tier;
     var foto = id != null && window.AGENTES_FOTOS ? window.AGENTES_FOTOS[String(id)] : '';
     var cid = ''; if (!semRegistro) { cid = String(++CID); REG[cid] = { a: a, ms: ms, id: id }; }
     var partes = String(a.nome).trim().split(/\s+/), curto = partes.length > 1 ? partes[0] + ' ' + partes[partes.length - 1] : partes[0];
     var ini = (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
     var tend = delta == null ? SV('minus') + ' sem mês anterior' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
+    var extra100 = m.borda !== 'b-100' ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (d) { return '<g class="rai"><path class="rg" d="' + d + '"/><path class="ry" d="' + d + '"/><path class="rw" d="' + d + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#FFF3A0" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg>';
     return '<div class="carta ' + tier[0] + ' ' + m.borda + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
-      '<div class="c-pos">' + esc(eq) + '<small>' + u.pos + 'º de ' + u.total + '</small></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
+      '<div class="c-pos">' + esc(eq) + '<small>' + pos + 'º de ' + u.total + '</small></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
       '<div class="c-nome nome"' + (curto.length > 20 ? ' style="font-size:1.05rem"' : curto.length > 15 ? ' style="font-size:1.2rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
-      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div><i class="c-borda" aria-hidden="true"></i></div>';
+      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-borda" aria-hidden="true"></i></div>';
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { '': ['#A87612', '#7A520A', '#5C3C05'], 't-prata': ['#6F7F96', '#4C5B70', '#37455A'], 't-bronze': ['#8A4E22', '#63350F', '#4A2609'], 't-destaque': ['#FBE08A', '#F7B500', '#C58F00'] };
+  var LOGO = { 'b-100': ['#FFF3B0', '#FFC93C', '#D9901A'], '': ['#A87612', '#7A520A', '#5C3C05'], 't-prata': ['#6F7F96', '#4C5B70', '#37455A'], 't-bronze': ['#8A4E22', '#63350F', '#4A2609'], 't-aco': ['#5E7B76', '#3E5753', '#2A3C39'], 't-ferro': ['#6E6E6E', '#4A4A4A', '#2E2E2E'], 't-destaque': ['#FBE08A', '#F7B500', '#C58F00'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -68,7 +120,7 @@
     if (!html0) return Promise.reject(new Error('sem nota'));
     host.style.cssText = 'position:fixed;left:-9999px;top:0;width:272px;pointer-events:none'; host.innerHTML = html0; document.body.appendChild(host);
     var card = host.firstElementChild, tier = (card.className.match(/t-\w+/) || [''])[0];
-    var oculta = !!opcoes.ocultarNomes;
+    var oculta = !!opcoes.ocultarNomes, is100 = card.classList.contains('b-100');
     if (opcoes.ocultarFoto) { var im0 = card.querySelector('.c-foto img'); if (im0) im0.remove(); } // sem foto: ficam as iniciais
     var imgFoto = card.querySelector('.c-foto img'), pronto = Promise.all([document.fonts ? document.fonts.ready : 0, document.fonts ? document.fonts.load('700 20px "Barlow Semi Condensed"') : 0, document.fonts ? document.fonts.load('600 14px "IBM Plex Sans"') : 0, carregar('assets/logo_carta.png'), imgFoto && !opcoes.ocultarFoto ? carregar(imgFoto.getAttribute('src')).catch(function () { return null; }) : null]);
     return pronto.then(function (r) {
@@ -80,19 +132,42 @@
       ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.30)'; ctx.shadowBlur = 28 * S; ctx.shadowOffsetY = 10 * S; pathCartao(ctx, X, Y, W, H, S); ctx.fillStyle = c2; ctx.fill(); ctx.restore();
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
-      // listras
-      ctx.save(); ctx.translate(X + W / 2, Y + H / 2); ctx.rotate((115 - 90) * Math.PI / 180);
-      ctx.fillStyle = tier === 't-destaque' ? 'rgba(25,184,163,.16)' : 'rgba(255,255,255,.14)';
-      for (var k = -Math.ceil(W + H); k < W + H; k += 34 * S) ctx.fillRect(k, -(W + H), 14 * S, 2 * (W + H));
-      ctx.restore();
-      // brilho
-      var gx = X + (-0.30 * W) + 0.45 * W, gy = Y + (-0.40 * H) + 0.45 * H, rr = Math.min(.9 * W, .9 * H) / 2;
-      var rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, rr); rg.addColorStop(0, 'rgba(255,255,255,.55)'); rg.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = rg; ctx.fillRect(X, Y, W, H);
+      var fr100 = is100 ? (function () { var b = card.querySelector('.c-foto').getBoundingClientRect(); return { cx: X + (b.left - cr.left + b.width / 2) * S, cy: Y + (b.top - cr.top + b.height / 2) * S }; })() : null;
+      if (is100) {
+        // brilho violeta atrás da foto (radial-gradient do ::after do CSS)
+        var cx0 = X + W * .5, cy0 = Y + H * .4, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .5, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);
+        g0.addColorStop(0, 'rgba(155,92,255,.55)'); g0.addColorStop(1, 'rgba(155,92,255,0)'); ctx.fillStyle = g0; ctx.fillRect(X, Y, W, H);
+        // raios (três camadas: halo violeta, amarelo, núcleo branco) e faíscas
+        ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        RAIOS.forEach(function (d) {
+          var pa = new Path2D(d);
+          ctx.save(); ctx.strokeStyle = 'rgba(155,92,255,.55)'; ctx.lineWidth = 5; ctx.shadowColor = '#9B5CFF'; ctx.shadowBlur = 10 * S; ctx.stroke(pa); ctx.restore();
+          ctx.save(); ctx.strokeStyle = '#FFE14D'; ctx.lineWidth = 2; ctx.shadowColor = '#FFE14D'; ctx.shadowBlur = 6 * S; ctx.stroke(pa); ctx.restore();
+          ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = .9; ctx.stroke(pa);
+        });
+        FAISCAS.forEach(function (f) { ctx.globalAlpha = f[3]; ctx.fillStyle = '#FFF3A0'; ctx.beginPath(); ctx.arc(f[0], f[1], f[2], 0, 2 * Math.PI); ctx.fill(); });
+        ctx.restore();
+        // filete interno (::before do CSS: 13px para dentro)
+        ctx.save(); pathCartao(ctx, X + 13 * S, Y + 13 * S, W - 26 * S, H - 26 * S, S, 13 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = '#FFF3A0'; ctx.shadowColor = '#FFE14D'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
+      } else {
+        // listras
+        ctx.save(); ctx.translate(X + W / 2, Y + H / 2); ctx.rotate((115 - 90) * Math.PI / 180);
+        ctx.fillStyle = tier === 't-destaque' ? 'rgba(25,184,163,.16)' : 'rgba(255,255,255,.14)';
+        for (var k = -Math.ceil(W + H); k < W + H; k += 34 * S) ctx.fillRect(k, -(W + H), 14 * S, 2 * (W + H));
+        ctx.restore();
+        // brilho
+        var gx = X + (-0.30 * W) + 0.45 * W, gy = Y + (-0.40 * H) + 0.45 * H, rr = Math.min(.9 * W, .9 * H) / 2;
+        var rg = ctx.createRadialGradient(gx, gy, 0, gx, gy, rr); rg.addColorStop(0, 'rgba(255,255,255,.55)'); rg.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = rg; ctx.fillRect(X, Y, W, H);
+      }
       ctx.restore();
       var rel = function (e) { var b = e.getBoundingClientRect(); return { x: X + (b.left - cr.left) * S, y: Y + (b.top - cr.top) * S, w: b.width * S, h: b.height * S }; };
       // foto (círculo)
       var f = card.querySelector('.c-foto'), fr = rel(f), fs = getComputedStyle(f), bw = parseFloat(fs.borderTopWidth) * S;
+      if (is100) { // anel dourado externo + brilho (box-shadow do CSS)
+        ctx.save(); ctx.shadowColor = 'rgba(155,92,255,.8)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
+        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(255,225,77,.9)'; ctx.stroke(); ctx.restore();
+      }
       ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 - bw / 2, 0, 2 * Math.PI); ctx.fillStyle = fs.backgroundColor; ctx.fill();
       var ft = r[4];
       if (ft) { // foto recortada em círculo (object-fit: cover, ancorada em 50% 30%)
@@ -118,9 +193,13 @@
         if (oculta && pe.closest('.nome')) t = t.replace(/[^\s]/g, '•');
         var rg2 = document.createRange(); rg2.selectNodeContents(n); var b = rg2.getBoundingClientRect();
         ctx.font = ps.fontWeight + ' ' + (parseFloat(ps.fontSize) * S) + 'px ' + ps.fontFamily;
-        ctx.fillStyle = ps.color; ctx.globalAlpha = parseFloat(ps.opacity);
+        ctx.fillStyle = ps.color; ctx.globalAlpha = parseFloat(ps.opacity); ctx.shadowColor = 'rgba(0,0,0,0)';
+        if (is100 && pe.matches('.c-ovr b')) { // número com folha de ouro
+          var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFFFFF'); og.addColorStop(.55, '#FFE14D'); og.addColorStop(1, '#F5A300');
+          ctx.fillStyle = og; ctx.shadowColor = 'rgba(155,92,255,.9)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
+        }
         var ls = ps.letterSpacing === 'normal' ? 0 : parseFloat(ps.letterSpacing) * S;
-        texto(ctx, t, X + (b.left - cr.left) * S, Y + (b.top - cr.top + b.height / 2) * S, ls); ctx.globalAlpha = 1;
+        texto(ctx, t, X + (b.left - cr.left) * S, Y + (b.top - cr.top + b.height / 2) * S, ls); ctx.globalAlpha = 1; ctx.shadowColor = 'rgba(0,0,0,0)'; ctx.shadowOffsetY = 0; ctx.shadowBlur = 0;
       }
       // setas
       card.querySelectorAll('svg.ico').forEach(function (sv) {
@@ -131,16 +210,23 @@
       var lr = rel(card.querySelector('.c-logo')), esc0 = Math.min(lr.w / logo.width, lr.h / logo.height), lw = logo.width * esc0, lh = logo.height * esc0;
       var of = document.createElement('canvas'); of.width = Math.ceil(lw); of.height = Math.ceil(lh); var oc = of.getContext('2d');
       oc.drawImage(logo, 0, 0, lw, lh); oc.globalCompositeOperation = 'source-in';
-      var cl = LOGO[tier] || LOGO[''], lg = oc.createLinearGradient(0, 0, lw * .35, lh); lg.addColorStop(0, cl[0]); lg.addColorStop(.55, cl[1]); lg.addColorStop(1, cl[2]); oc.fillStyle = lg; oc.fillRect(0, 0, lw, lh);
+      var cl = LOGO[is100 ? 'b-100' : tier] || LOGO[''], lg = oc.createLinearGradient(0, 0, lw * .35, lh); lg.addColorStop(0, cl[0]); lg.addColorStop(.55, cl[1]); lg.addColorStop(1, cl[2]); oc.fillStyle = lg; oc.fillRect(0, 0, lw, lh);
       var lx = lr.x + (lr.w - lw) / 2, ly = lr.y + (lr.h - lh) / 2;
       ctx.save(); ctx.shadowColor = 'rgba(255,255,255,.55)'; ctx.shadowOffsetY = 1 * S; ctx.drawImage(of, lx, ly); ctx.restore();
       ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.28)'; ctx.shadowOffsetY = -1 * S; ctx.drawImage(of, lx, ly); ctx.restore();
       // borda interna clara
       ctx.save(); pathCartao(ctx, X + S, Y + S, W - 2 * S, H - 2 * S, S); ctx.lineWidth = 2 * S; ctx.strokeStyle = tier === 't-destaque' ? '#F7B500' : 'rgba(255,255,255,.35)'; ctx.stroke(); ctx.restore();
       // borda por faixa de nota (anel com degradê, igual ao CSS .c-borda)
-      var B = 5 * S, bc = [cs.getPropertyValue('--b1').trim(), cs.getPropertyValue('--b2').trim(), cs.getPropertyValue('--b3').trim()];
+      var B = (parseFloat(cs.getPropertyValue('--bw')) || 5) * S, bc = [cs.getPropertyValue('--b1').trim(), cs.getPropertyValue('--b2').trim(), cs.getPropertyValue('--b3').trim()];
       var bg = gradCss(ctx, 135, X, Y, W, H, bc[0], bc[0]); bg.addColorStop(.25, bc[1]); bg.addColorStop(.5, bc[2]); bg.addColorStop(.75, bc[1]);
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore();
+      if (is100) { // faíscas correndo pela borda (por cima do anel)
+        ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ARCOS.forEach(function (d) { var pa = new Path2D(d);
+          ctx.save(); ctx.strokeStyle = 'rgba(255,225,77,.8)'; ctx.lineWidth = 3.4; ctx.shadowColor = '#FFE14D'; ctx.shadowBlur = 8 * S; ctx.stroke(pa); ctx.restore();
+          ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1; ctx.stroke(pa); });
+        ctx.restore();
+      }
       return new Promise(function (ok, erro) { try { cv.toBlob(function (bl) { bl ? ok(bl) : erro(new Error('falha ao gerar a imagem')); }, 'image/png'); } catch (e) { erro(e); } });
     }).then(function (bl) { host.remove(); return bl; }, function (e) { host.remove(); throw e; });
   }
@@ -185,7 +271,7 @@
     var ant = ms.slice(0, -1).map(function (m) { return m.pontos; }).filter(function (v) { return v != null; });
     var mh = ant.length ? ant.reduce(function (t, v) { return t + v; }, 0) / ant.length : null;
     var link = reg.id != null && !/agente\.html$/.test(location.pathname) ? '<a class="c-pop-link" href="agente.html?id=' + encodeURIComponent(reg.id) + '">Ver evolução do agente →</a>' : '';
-    return '<div class="c-pop-topo"><div><b class="nome">' + esc(a.nome) + '</b><span>' + esc(u.mes) + ' · ' + u.pos + 'º de ' + u.total + '</span></div><button type="button" data-fechar aria-label="Fechar">×</button></div>' +
+    return '<div class="c-pop-topo"><div><b class="nome">' + esc(a.nome) + '</b><span>' + esc(u.mes) + ' · ' + posicao(u, reg.id) + 'º de ' + u.total + '</span></div><button type="button" data-fechar aria-label="Fechar">×</button></div>' +
       '<table><thead><tr><th>Critério</th><th class="n">Qtd</th><th class="n">Peso</th><th class="n">Pontos</th></tr></thead><tbody>' +
       '<tr class="base"><td>Pontos iniciais</td><td></td><td></td><td class="n">100,0</td></tr>' + linhas + '</tbody>' +
       '<tfoot>' + (total == null ? '' : '<tr><td colspan="3">Total (100 + critérios)</td><td class="n">' + f1(total) + '</td></tr>') +
@@ -224,5 +310,5 @@
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fechar(); });
   window.addEventListener('scroll', function () { if (!fixo) fechar(); }, true);
-  window.Carta = { html: html, medidas: medidas, NOMES: NOMES, png: png, enviar: enviar, nomeArquivo: nomeArquivo };
+  window.Carta = { html: html, medidas: medidas, bruta: bruta, posicao: posicao, NOMES: NOMES, png: png, enviar: enviar, nomeArquivo: nomeArquivo };
 })();

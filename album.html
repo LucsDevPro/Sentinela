@@ -63,7 +63,7 @@
   <div class="barra">
     <label>Mês<select id="fMes"></select></label>
     <label>Equipe<select id="fEq"><option value="">Todas</option></select></label>
-    <label>Nível<select id="fNivel"><option value="">Todos</option><option>DESTAQUE</option><option>OURO</option><option>PRATA</option><option>BRONZE</option></select></label>
+    <label>Nível<select id="fNivel"><option value="">Todos</option><option>LENDÁRIA</option><option>DESTAQUE</option><option>OURO</option><option>PRATA</option><option>BRONZE</option><option>AÇO</option><option>FERRO</option></select></label>
     <label>Buscar<input type="search" id="fBusca" placeholder="parte do nome" autocomplete="off"></label>
   </div>
   <p class="mut" id="resumo" aria-live="polite"></p>
@@ -98,7 +98,7 @@ else {
     // desempate: média das notas dos meses ANTERIORES ao mês mostrado (a mesma da tabela "Média Mensal por Agente"); sem histórico fica atrás
     const hist = l => { const v = l.ms.slice(0, -1).map(m => m.pontos).filter(n => n != null); return v.length ? Math.round(v.reduce((t, n) => t + n, 0) / v.length * 10) / 10 : -1; };
     lista.forEach(l => { l.h = hist(l); });
-    lista.sort((p, q) => q.u.pontos - p.u.pontos || q.h - p.h || p.u.pos - q.u.pos || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
+    lista.sort((p, q) => Carta.bruta(q.u) - Carta.bruta(p.u) || q.h - p.h || p.u.pos - q.u.pos || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
     lista.forEach((l, i) => { l.lugar = i + 1; });
     const vis = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)) && (!niv || Carta.medidas(l.ms).tier[1] === niv));
     $('album').innerHTML = vis.map(l => `<a class="slot" href="agente.html?${/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)}" title="Ver evolução de ${esc(l.x.a.nome)}"><span class="n" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${Carta.html(l.x.a, l.ms, l.x.k)}</a>`).join('');
