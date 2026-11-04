@@ -37,7 +37,9 @@
     var cl = function (v) { return Math.max(0, Math.min(99, Math.round(v))); };
     var notas = ms.map(function (m) { return m.pontos; }).filter(function (v) { return v != null; });
     var media = notas.reduce(function (t, v) { return t + v; }, 0) / notas.length;
-    var dp = notas.length > 1 ? Math.sqrt(notas.reduce(function (t, v) { return t + Math.pow(v - media, 2); }, 0) / notas.length) : 0;
+    // Consistência: desvio-padrão das notas dos TRÊS ÚLTIMOS meses do período mostrado (hoje, agosto a outubro; acompanha o mês escolhido). Quanto menor a variação, maior o CON (máx. 99).
+    var rec = notas.slice(-3), mrec = rec.reduce(function (t, v) { return t + v; }, 0) / rec.length;
+    var dp = rec.length > 1 ? Math.sqrt(rec.reduce(function (t, v) { return t + Math.pow(v - mrec, 2); }, 0) / rec.length) : 0;
     var delta = ant && ant.pontos != null ? u.pontos - ant.pontos : null;
     var st = [['ASS', u.esp ? cl(u.trab / u.esp * 100) : 0], ['TUR', u.esp ? cl(100 - (u.turnos_sem || 0) / (u.esp * 2) * 100) : 0],
       ['CON', cl(100 - 5 * dp)], ['EVO', delta == null ? 50 : cl(50 + 5 * delta)],
