@@ -26,10 +26,10 @@
         {% for p in periodos %}<option value="{{ p.href }}" {% if p.atual %}selected{% endif %}>{{ p.label }}</option>{% endfor %}
       </select>
       {% endif %}
-      <a class="print-btn" href="{{ transparencia_href }}" style="text-decoration:none">📖 Como o ranking é calculado</a>
-      <a class="print-btn" href="{{ projecao_href }}" style="text-decoration:none">📺 Tela de reunião</a>
-      <a class="print-btn" href="{{ comparar_href }}" style="text-decoration:none">🔁 Comparar meses</a>
-      <a class="print-btn" href="{{ album_href }}" style="text-decoration:none">🃏 Álbum de cartinhas</a>
+      <a class="print-btn" href="{{ transparencia_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">📖</span>Como o ranking é calculado</a>
+      <a class="print-btn" href="{{ projecao_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">📺</span>Tela de reunião</a>
+      <a class="print-btn" href="{{ comparar_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">🔁</span>Comparar meses</a>
+      <a class="print-btn" href="{{ album_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">🃏</span>Álbum de cartinhas</a>
       <button type="button" class="print-btn" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg> <span class="tema-txt">Tema escuro</span></button>
       <label class="presentation-toggle">
         <input type="checkbox" id="togglePresentationMode">
@@ -39,7 +39,7 @@
         <input type="checkbox" id="toggleAnimacoes" checked>
         Animações
       </label>
-      <button type="button" class="print-btn print-full-btn" onclick="printFullReport()">🖨️ Imprimir relatório completo do mês</button>
+      <button type="button" class="print-btn print-full-btn" onclick="printFullReport()" title="Imprimir o relatório completo do mês"><span class="btn-ico" aria-hidden="true">🖨️</span>Imprimir relatório do mês</button>
       <div class="header-meta">{{ kpi.total_agentes }} agentes · {{ teams | length }} equipes · {{ kpi.total_geral | br }} imóveis</div>
     </div>
   </div>

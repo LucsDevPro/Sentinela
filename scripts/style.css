@@ -59,6 +59,11 @@ header h1 span { color: #2BA8E8; font-weight: 600; }
 .presentation-toggle { display: flex; align-items: center; gap: 6px; color: #9DB2D0; font-size: 0.78rem; cursor: pointer; user-select: none; }
 .presentation-toggle input { accent-color: var(--yellow); cursor: pointer; }
 .print-full-btn { margin-left: 0; }
+/* Botões do cabeçalho: compactos. Os ícones (emoji e SVG do tema) acompanham o tamanho do texto
+   em vez de ficarem maiores que ele. */
+.header-actions .print-btn { padding: 5px 10px; font-size: 0.74rem; gap: 5px; margin-left: 0; line-height: 1.2; }
+.header-actions .btn-ico { font-size: 0.9em; line-height: 1; display: inline-block; }
+.header-actions .print-btn .ico { width: 0.95em; height: 0.95em; }
 /* Seletor de mês. O cabeçalho é azul-marinho escuro nos DOIS temas, então no tema claro
    o seletor usa o azul dos botões (--navy) com borda clara pra não se confundir com o fundo. */
 .period-select { background: var(--navy); color: #fff; border: 1px solid #6F9BD1; border-radius: 4px; padding: 7px 10px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
@@ -273,10 +278,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   header h1 { font-size: 1.25rem; }
   .header-brand { gap: 10px; } .header-brand img { height: 34px; }
   .header-brand .header-meta { display: none; }
-  .header-actions { gap: 8px; width: 100%; }
-  .header-actions .period-select { flex: 1 1 100%; }
-  .header-actions .print-btn { flex: 1 1 100%; justify-content: center; margin-left: 0; }
-  .header-actions .header-meta { width: 100%; }
+  .header-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; }
+  .header-actions .period-select, .header-actions .presentation-toggle, .header-actions .print-full-btn,
+  .header-actions .header-meta { grid-column: 1 / -1; }
+  .header-actions .print-btn { justify-content: center; margin-left: 0; padding: 6px 6px; }
   .kpi-value { font-size: 2rem; }
   .week-nav-titulo { width: 100%; }
 }
