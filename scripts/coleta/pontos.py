@@ -28,13 +28,15 @@ NOTA_MAXIMA = 100    # pontuação não passa disso (None = sem teto)
 # qualquer deslize nesses poucos dias amplificado de forma extrema.
 TETO_FATOR_NORMALIZACAO = 2.0
 
-# A partir desta data (início da semana 327 = Outubro/2026) o ranking NÃO usa
-# mais o fator de normalização: Peso Efetivo = Peso Nominal para todos os
-# agentes, e "Dias Úteis Esperados" desconta os dias de férias/atestado/
+# O ranking NÃO usa o fator de normalização: Peso Efetivo = Peso Nominal para
+# todos os agentes, e "Dias Úteis Esperados" desconta os dias de férias/atestado/
 # folga/paralisação de cada um. O critério é a PRIMEIRA data do período
-# analisado: períodos que começam antes disso (Maio–Setembro, Acumulado)
-# continuam EXATAMENTE como eram — mesma fórmula, mesmos números. Pra
-# desligar essa regra e voltar tudo ao método antigo, coloque None.
+# analisado: períodos que começam a partir desta data usam o método novo. Com
+# 01/01/2026 isso vale para TODOS os meses (Maio/2026 em diante), mas só para
+# períodos de até AVISO_AFASTAMENTO_PERIODO_MAX_DIAS (45) dias: o Acumulado
+# (período longo) segue no método antigo, normalizado (ver
+# _ranking_sem_normalizacao). Pra desligar a regra e voltar tudo ao método
+# antigo, coloque None; pra poupar meses antigos, use a data de início desejada.
 RANKING_SEM_NORMALIZACAO_A_PARTIR_DE = date(2026, 1, 1)
 
 # Bônus únicos (sem visita rápida / sem ausência / pontualidade perfeita) só
@@ -78,10 +80,10 @@ LIMITE_AGENTES_EVENTO_TURNO = 20
 # (confirmada / falta) NÃO mudam. Ponha True pra voltar ao modo antigo.
 CONFIRMAR_FERIAS_AUTOMATICAMENTE = False
 CONFIRMAR_CHUVA_AUTOMATICAMENTE = False
-# Data a partir da qual a regra de Possível Evento vale. Padrão: Outubro/2026 em
-# diante — como as outras regras novas, não mexe nos meses já fechados (Maio a
-# Setembro). None = vale pra TODOS os períodos (Maio a Setembro reclassificariam
-# ~1.100 turnos e a média de pontos subiria 6 a 8 pontos por mês).
+# Data a partir da qual a regra de Possível Evento vale. Valor atual: None = vale
+# pra TODOS os períodos (Maio/2026 em diante; Maio a Setembro reclassificam
+# ~1.100 turnos e a média de pontos sobe 6 a 8 pontos por mês). Pra poupar os
+# meses já fechados, use a data de início de Outubro (veja o comentário no fim da linha).
 EVENTO_COLETIVO_A_PARTIR_DE = None   # vale para TODOS os períodos (Maio/2026 em diante); pra voltar a poupar os meses fechados: date(2026, 10, 4)
 CLASSIF_TURNO_SEM_LANCAMENTO = "Turno sem Lançamento"
 CLASSIF_POSSIVEL_EVENTO = "Possível Evento Externo ou Interno"
