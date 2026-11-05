@@ -37,7 +37,7 @@ Constantes: _MODULOS@50
 
 Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 
-## scripts/generate_dashboard.py (1403 linhas)
+## scripts/generate_dashboard.py (1427 linhas)
 
 - L50 `carregar_outras_atividades()` — Lê data/outras_atividades.json (equipes/atividades fora do e-Visita,
 - L102 `resolver_home_xlsx()`
@@ -96,7 +96,9 @@ Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 - L1205 `carregar_periodos()` — Monta a lista de opções do seletor de período no cabeçalho:
 - L1255 `carregar_nav_semanas()` — Barra "Semana 1 | Semana 2 | ... | Mês completo" do mês vigente.
 - L1316 `enxugar_html(html)` — Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
-- L1328 `main()`
+- L1328 `periodo_em_andamento(semana_fim_html, hoje)` — Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= …
+- L1337 `_selo_periodo(ctx)` — 'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão …
+- L1351 `main()`
 
 Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, SCRIPTS_DIR@88, CONFIG_HOME_PATH@98, ACUMULADO_XLSX@99, HOME_XLSX@116, XLSX_PATH@118, OUT_PATH@119, SALARIO_MENSAL@121, EVISITA_URL@122, DIA_ORDER@123, EQUIPE_BLOQUEIO@129, RESUMO_COLS@227, AREA_COLS@241, ALERT_COLS@248, AUSENCIA_COLS@255, PENDENCIA_COLS@259, PE_COLS@263, RESUMO_SEMANAL_COLS@272, RANKING_COLS@273, RANKING_DET_COLS@280, _NAO_PADRONIZAR_TEXTO@299, _PRESENCA_CACHE@557, TEAM_COLORS@815, LABEL_MES_RE@841, _BLOCOS_LITERAIS_RE@1312, _ESPACOS_RE@1314
 
@@ -183,19 +185,20 @@ Constantes: CAMINHO@7, EMBUTIDOS@8
 
 Constantes: CONFIG_HOME@18, EQUIPES_SOB_DEMANDA@20
 
-## scripts/regenerar_mes.py (255 linhas)
+## scripts/regenerar_mes.py (271 linhas)
 
-- L43 `escolher_alvos(arg, arquivados, oficiais)` — [(semana_ini, semana_fim, "Mês/Ano")] a regenerar.
-- L64 `semanas_faltando(alvo, em_cache)` — Semanas (HTML ID) do mês que NÃO estão no cache. Mês só pode ser refeito com …
-- L71 `ler_ranking(caminho)` — {agente: (posição, dias trabalhados, dias esperados, turnos sem trabalhar, po…
-- L90 `comparar_rankings(antigo, novo)` — Resumo do que mudou entre duas leituras de ler_ranking().
-- L107 `tirar_do_manifest(manifest, alvos)` — Manifest sem as entradas (mês e visões semanais) das semanas dos alvos.
-- L114 `congelar_no_manifest(manifest, alvos, hoje)` — Marca como congeladas ("manual") as entradas dos alvos, como o 'Fechar mês' f…
-- L124 `_sha(caminho)`
-- L133 `_linha_resumo(nome, r)`
-- L141 `main(argv)`
+- L45 `escolher_alvos(arg, arquivados, oficiais)` — [(semana_ini, semana_fim, "Mês/Ano")] a regenerar.
+- L66 `semanas_faltando(alvo, em_cache)` — Semanas (HTML ID) do mês que NÃO estão no cache. Mês só pode ser refeito com …
+- L73 `ler_ranking(caminho)` — {agente: (posição, dias trabalhados, dias esperados, turnos sem trabalhar, po…
+- L92 `comparar_rankings(antigo, novo)` — Resumo do que mudou entre duas leituras de ler_ranking().
+- L109 `tirar_do_manifest(manifest, alvos)` — Manifest sem as entradas (mês e visões semanais) das semanas dos alvos.
+- L116 `congelar_no_manifest(manifest, alvos, hoje)` — Marca como congeladas ("manual") as entradas dos alvos, como o 'Fechar mês' f…
+- L126 `podar_backups(pasta, stem, manter)` — Apaga os backups `<stem>_antes-da-regeneracao-*.xlsx` mais antigos, deixando …
+- L138 `_sha(caminho)`
+- L147 `_linha_resumo(nome, r)`
+- L155 `main(argv)`
 
-Constantes: AQUI@30, PASTA_SEMANAS@35, PASTA_HISTORICO@36, PASTA_BACKUP@37
+Constantes: AQUI@31, PASTA_SEMANAS@36, PASTA_HISTORICO@37, PASTA_BACKUP@38, BACKUPS_A_MANTER@39
 
 ## scripts/semanas_evisita.py (145 linhas)
 

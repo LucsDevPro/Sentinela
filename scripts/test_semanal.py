@@ -83,6 +83,16 @@ with tempfile.TemporaryDirectory() as tmp:
     G.OUT_PATH = root / "historico" / "semana_328.html"
     check(all("Semana" not in p["label"] for p in G.carregar_periodos()), "Seletor de período não lista semanas")
 
+# --- selo "período em andamento": sexta final do período, só enquanto hoje <= essa sexta
+from datetime import date, timedelta  # noqa: E402
+_fim = 330                                        # última semana oficial de Outubro/2026
+_sexta = G.sem_evisita.data_fim_semana_html(_fim) - timedelta(days=1)
+check(_sexta.weekday() == 4, f"a data final do período é uma sexta-feira ({_sexta})")
+check(G.periodo_em_andamento(_fim, _sexta - timedelta(days=10)) == _sexta, "antes do fim: período em andamento, devolve a sexta final")
+check(G.periodo_em_andamento(_fim, _sexta) == _sexta, "no próprio dia da sexta final ainda é 'em andamento'")
+check(G.periodo_em_andamento(_fim, _sexta + timedelta(days=1)) is None, "depois da sexta final: período fechado, sem selo")
+check(G.periodo_em_andamento(None, date(2026, 1, 1)) is None and G.periodo_em_andamento(0, date(2026, 1, 1)) is None, "sem semana_fim: sem selo")
+
 print()
 if FALHAS:
     print(f"❌ {len(FALHAS)} teste(s) falharam.")

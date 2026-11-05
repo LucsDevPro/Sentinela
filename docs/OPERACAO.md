@@ -463,6 +463,7 @@ essas planilhas, então os números publicados não mudam.
   `data/historico/backup_congelado/*_antes-da-regeneracao-<data>.xlsx`, refaz o mês a partir do cache
   (`data/semanas/`, sem e-Visita), congela de novo, confere que os outros meses congelados ficaram
   intactos e aciona o `update-dashboard` (`rodar_coleta=false`) para gerar as páginas e publicar.
+  Ficam só os 3 backups mais recentes de cada mês (`*_antes-da-regeneracao-*`); os de outros nomes não são apagados.
   Local: `python scripts/regenerar_mes.py "Setembro/2026"` (ou `todos`; `--sem-acumulado` pula o Analise_Consolidada).
   O mês só pode ser refeito se **todas** as semanas dele estiverem em `data/semanas/`.
   Ele reabre **um mês por vez, em ordem cronológica**, porque o desempate do ranking usa a média dos meses

@@ -11,7 +11,8 @@ a planilha a partir do cache (data/semanas/) e fechar de novo.
 
 O que faz, em ordem:
   1. confere que o mês existe, está congelado e que TODAS as semanas dele estão em data/semanas/;
-  2. guarda a planilha antiga em data/historico/backup_congelado/<arquivo>_antes-da-regeneracao-<data>.xlsx;
+  2. guarda a planilha antiga em data/historico/backup_congelado/<arquivo>_antes-da-regeneracao-<data>.xlsx
+     (ficam só os 3 mais recentes por mês; backups com outros nomes não são tocados);
   3. refaz a detecção e o histórico, tratando o mês como aberto — UM MÊS POR VEZ, em ordem cronológica
      (o desempate do ranking usa a média dos meses anteriores, que precisam estar no manifest); depois o Acumulado;
   4. congela o mês de novo (origem "manual" no manifest.json; data/meses_arquivados.json não muda);
@@ -35,6 +36,7 @@ os.environ.setdefault("EVISITA_SENHA", "x")
 PASTA_SEMANAS = "data/semanas"
 PASTA_HISTORICO = "data/historico"
 PASTA_BACKUP = os.path.join(PASTA_HISTORICO, "backup_congelado")
+BACKUPS_A_MANTER = 3   # por mês, só dos feitos por este script
 
 
 # ---------------------------------------------------------------------------
@@ -121,6 +123,18 @@ def congelar_no_manifest(manifest, alvos, hoje):
     return manifest
 
 
+def podar_backups(pasta, stem, manter=3):
+    """Apaga os backups `<stem>_antes-da-regeneracao-*.xlsx` mais antigos, deixando os `manter` mais recentes
+    (o carimbo AAAAMMDD-HHMM no nome ordena cronologicamente). Backups com outros nomes nunca são tocados.
+    Devolve os nomes apagados."""
+    prefixo = f"{stem}_antes-da-regeneracao-"
+    nomes = sorted(n for n in os.listdir(pasta) if n.startswith(prefixo) and n.endswith(".xlsx"))
+    apagar = nomes[:-manter] if manter > 0 else nomes
+    for n in apagar:
+        os.remove(os.path.join(pasta, n))
+    return apagar
+
+
 def _sha(caminho):
     h = hashlib.sha256()
     with open(caminho, "rb") as f:
@@ -189,6 +203,8 @@ def main(argv=None):
             destino = os.path.join(PASTA_BACKUP, f"{os.path.splitext(arq)[0]}_antes-da-regeneracao-{carimbo}.xlsx")
             shutil.copy2(caminho, destino)
             print(f"💾 backup: {destino}")
+            for velho in podar_backups(PASTA_BACKUP, os.path.splitext(arq)[0], BACKUPS_A_MANTER):
+                print(f"🧹 backup antigo removido (ficam os {BACKUPS_A_MANTER} mais recentes): {velho}")
     nomes_alvo = {a[2] for a in alvos}
     outros = {}
     for e in manifest:

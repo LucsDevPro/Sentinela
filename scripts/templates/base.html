@@ -17,7 +17,7 @@
       <img src="{{ logo_href }}" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">{{ kpi.total_agentes }} agentes · {{ teams | length }} equipes · {{ kpi.total_geral | br }} imóveis · atualizado em {{ now_str }}</div>
+        <div class="header-meta">{{ kpi.total_agentes }} agentes · {{ teams | length }} equipes · {{ kpi.total_geral | br }} imóveis · atualizado em {{ now_str }}{% if periodo_parcial %} · <b class="tag-parcial" title="As notas deste mês ainda mudam até o fim do período">período em andamento até {{ periodo_parcial }}</b>{% endif %}</div>
       </div>
     </div>
     <div class="header-actions">

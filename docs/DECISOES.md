@@ -12,6 +12,9 @@
 - **Cabeçalho da home refeito:** tudo na mesma linha e na mesma altura (36 px, `--hbtn-h`); os 4 botões de texto têm a mesma largura
   (`.hbtn` em `.hnav`) e tema/imprimir viraram quadrados só com o símbolo (`.hbtn-ico`); "Ocultar nomes" e "Animações" viraram `.hopt`;
   no celular os botões ficam em 2×2. Marcação em `scripts/templates/base.html`, estilo em `scripts/style.css`.
+- **Pequenas melhorias (05/11/2026):** selo "período em andamento até dd/mm" no cabeçalho dos meses ainda abertos (`periodo_em_andamento` em
+  `generate_dashboard.py`); título e explicação do painel de férias corrigidos ("no período", limite de 7 dias úteis, "(confirmada)");
+  `regenerar_mes.py` mantém só os 3 backups mais recentes por mês. CI: `test_turno_evento.py` não rodava no CI (só no `rodar_testes.sh`) e o pip não usava cache.
 - **Workflow "Regenerar mês congelado"** (`regenerar-mes.yml` + `scripts/regenerar_mes.py`): refaz um mês antigo com as regras de hoje, com
   modo simulação e backup (ver OPERACAO.md). Reabre um mês por vez, em ordem: o desempate do ranking lê a média dos meses anteriores do
   `manifest.json`; as reaberturas de Julho–Setembro feitas no mesmo dia, todas de uma vez, deixaram Agosto e Setembro sem o desempate,

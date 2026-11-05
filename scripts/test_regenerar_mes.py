@@ -68,6 +68,24 @@ cong = R.congelar_no_manifest([dict(e, origem="cache") for e in MAN], [OFI[0]], 
 checar("congelar marca manual, não parcial e data", [(e["origem"], e.get("parcial"), e.get("reaberto_em")) for e in cong][1:] == [("manual", False, "05/11/2026")] * 2, str(cong))
 checar("congelar não toca nos outros meses", cong[0]["origem"] == "cache" and "reaberto_em" not in cong[0])
 
+# --- podar_backups
+import tempfile  # noqa: E402
+with tempfile.TemporaryDirectory() as pasta:
+    def tocar(n):
+        open(os.path.join(pasta, n), "w").close()
+    for carimbo in ["20261101-0900", "20261102-0900", "20261103-0900", "20261104-0900", "20261105-0900"]:
+        tocar(f"semanas_318-321_antes-da-regeneracao-{carimbo}.xlsx")
+    tocar("semanas_318-321_antes-das-regras-novas.xlsx")                  # outro tipo de backup: intocável
+    tocar("semanas_322-326_antes-da-regeneracao-20261001-0900.xlsx")      # outro mês: intocável
+    apagados = R.podar_backups(pasta, "semanas_318-321", manter=3)
+    restam = sorted(os.listdir(pasta))
+    checar("poda apaga os 2 mais antigos do mês", apagados == ["semanas_318-321_antes-da-regeneracao-20261101-0900.xlsx",
+                                                               "semanas_318-321_antes-da-regeneracao-20261102-0900.xlsx"], str(apagados))
+    checar("poda mantém os 3 mais recentes", [n for n in restam if "318-321_antes-da-regeneracao" in n][0].endswith("20261103-0900.xlsx"), str(restam))
+    checar("poda não toca em backups de outro tipo nem de outro mês", "semanas_318-321_antes-das-regras-novas.xlsx" in restam
+           and "semanas_322-326_antes-da-regeneracao-20261001-0900.xlsx" in restam, str(restam))
+    checar("poda sem excesso não apaga nada", R.podar_backups(pasta, "semanas_322-326", manter=3) == [])
+
 print()
 if falhas:
     print(f"❌ {len(falhas)} falha(s): {falhas}")

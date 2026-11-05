@@ -1325,6 +1325,29 @@ def enxugar_html(html):
     return "".join(partes)
 
 
+def periodo_em_andamento(semana_fim_html, hoje):
+    """Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= essa sexta); senão None.
+    `semana_fim_html` é o HTML ID da última semana OFICIAL do período (semana_fim do manifest)."""
+    if not semana_fim_html:
+        return None
+    sexta = sem_evisita.data_fim_semana_html(int(semana_fim_html)) - timedelta(days=1)
+    return sexta if hoje <= sexta else None
+
+
+def _selo_periodo(ctx):
+    """'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão ''."""
+    if ctx.get("pagina_semana") or ctx.get("acumulado_so_media"):
+        return ""
+    try:
+        man = json.loads((ROOT / "data" / "historico" / "manifest.json").read_text(encoding="utf-8"))
+        e = next(x for x in man if x.get("arquivo") == Path(XLSX_PATH).name and x.get("tipo") != "semana")
+        from zoneinfo import ZoneInfo
+        fim = periodo_em_andamento(e.get("semana_fim"), datetime.now(ZoneInfo("America/Campo_Grande")).date())
+        return fim.strftime("%d/%m") if fim else ""
+    except Exception:
+        return ""
+
+
 def main():
     if not XLSX_PATH.exists():
         print(f"ERRO: planilha não encontrada em {XLSX_PATH}", file=sys.stderr)
@@ -1336,6 +1359,7 @@ def main():
     # mensais (aba Média Mensal), não um ranking somado.
     ctx["acumulado_so_media"] = XLSX_PATH.resolve() == ACUMULADO_XLSX.resolve()
     ctx["nav_semanas"], ctx["pagina_semana"] = carregar_nav_semanas()
+    ctx["periodo_parcial"] = _selo_periodo(ctx)
     rotulo_extrato = None
     if ctx["pagina_semana"]:
         # Página de uma semana: o seletor de período aponta para o MÊS dela e

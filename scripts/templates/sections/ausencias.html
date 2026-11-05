@@ -10,8 +10,8 @@
 
   {% if ferias_atestado_rows %}
   <div class="table-section">
-    <h3>🌴 Quem está de Férias, Atestado ou Afins ({{ ferias_atestado_rows|length }})</h3>
-    <p class="table-hint">Relatório rápido de quem tem um período de férias/atestado confirmado agora, sem precisar abrir o Cronograma completo. Férias detectadas automaticamente (mais de 5 dias úteis seguidos sem lançamento) já aparecem aqui sozinhas — confira em <code>deteccao_editor.html</code> se alguma precisar ser corrigida pra "falta".</p>
+    <h3>🌴 Férias, Atestado ou Afins no período ({{ ferias_atestado_rows|length }})</h3>
+    <p class="table-hint">Todos os períodos de férias/atestado <b>confirmados</b> que tocam o período mostrado (um deles pode ter começado antes ou terminar depois). "(confirmada)" = validado pela coordenação. Quando o sistema detecta 7 dias úteis seguidos sem lançamento, a ocorrência entra como <b>pendente</b> e só aparece aqui depois de confirmada em <code>validar.html</code> ou <code>deteccao_editor.html</code>; ali também dá para trocá-la por "falta".</p>
     <div class="table-wrap"><table class="data-table compact sortable" id="tableFeriasAtestado">
       <thead><tr><th>Período</th><th>Motivo</th><th>Quem</th></tr></thead>
       <tbody>

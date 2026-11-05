@@ -76,6 +76,7 @@ header h1 span { color: #2BA8E8; font-weight: 600; }
   color: #C5D3E8; font-size: 0.78rem; cursor: pointer; user-select: none; white-space: nowrap; }
 .hopt:hover { border-color: #6F9BD1; color: #fff; }
 .hopt input { accent-color: var(--yellow); cursor: pointer; margin: 0; }
+.tag-parcial { background: var(--yellow); color: #1B1B1B; padding: 1px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 /* Seletor de mês. O cabeçalho é azul-marinho escuro nos DOIS temas, então no tema claro
    o seletor usa o azul dos botões (--navy) com borda clara pra não se confundir com o fundo. */
