@@ -705,7 +705,9 @@ def _cronograma_efetivo(deteccoes):
             continue
         if e["tipo"] == "possiveis_ferias":
             motivo = _motivo_neutro(e.get("motivo") or "Férias")
-            sufixo = "" if "(automático)" in motivo or "(confirmada)" in motivo else " (automático)"
+            # "(confirmada)" = a coordenação validou/ajustou; "(automático)" = só o sistema.
+            sufixo = "" if "(automático)" in motivo or "(confirmada)" in motivo else (
+                " (confirmada)" if e.get("validada_por") or e.get("ajustado_manual") else " (automático)")
             efetivo.append({"alvo": "agente", "id_agente": e["id_agente"], "motivo": f"{motivo}{sufixo}",
                              "inicio": e["inicio"], "fim": e["fim"]})
         else:  # paralisacao_coletiva confirmada (Chuva, por padrão)
