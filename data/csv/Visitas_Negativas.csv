@@ -1,17 +1,9 @@
-﻿VISITAS COM DURAÇÃO NEGATIVA (30 registros) — PROVÁVEL BUG DO SISTEMA, EXCLUÍDAS DA MÉDIA/MEDIANA;;;;;;;;;;
+﻿VISITAS COM DURAÇÃO NEGATIVA (17 registros) — PROVÁVEL BUG DO SISTEMA, EXCLUÍDAS DA MÉDIA/MEDIANA;;;;;;;;;;
 Agente;Equipe;ID Visita;Área;Quarteirão;Logradouro;Imóvel;Data Chegada;Data Saída;Duração (min);Observação
-Ana Gabriela Silva Garcete;Equipe 1;15475624;401 - EMÍLIO DIAS BRANDÃO;Q008;Rua RIACHO DOCE;46 - 1 - R;27/05/2026 15:12;27/05/2026 09:11;-361;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Ana Gabriela Silva Garcete;Equipe 1;17181125;401 - EMÍLIO DIAS BRANDÃO;Q036;Rua JABAQUARA;09 - TB;24/08/2026 08:19;24/08/2026 07:22;-57;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Anderson Salabarrieto;Equipe Bloqueio;15597489;433 - ÁREA A - RESIDENCIAL PONTA PORÃ 1;Q001;Rua MARIA AUXILIADORA;78 - R;26/05/2026 16:16;26/05/2026 16:11;-5;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Carlos Alberto Albiero;Equipe 1;15541737;410 - SALGADO FILHO;Q013;Rua ENGENHEIRO MAURICIO DUTRA;749 - R;22/05/2026 08:50;22/05/2026 08:35;-15;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Claine Luisa Figueiredo Torraca;Equipe 3;15549254;428 - JARDIM COIMBRA;Q019;Rua LARANJEIRA;652 - R;25/05/2026 10:03;25/05/2026 09:08;-55;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Gabriel Alan de Oliveira Martins;Equipe 1;17753980;402 - JARDIM MARAMBAIA;Q012;Rua MANOELA VIEIRA SOARES;400 - R;29/09/2026 15:18;27/09/2026 15:24;-2874;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Gabriel Alan de Oliveira Martins;Equipe 1;17752471;435 - JARDIM PRIMOR;Q024;Rua RIO PRETO;87 - R;30/09/2026 08:10;29/09/2026 08:13;-1437;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Gilmar Bitencourt Luiz;Equipe 2;16928896;418 - CENTRO 4;Q008;Rua GENERAL OSORIO;1270 - C;13/08/2026 14:19;13/08/2026 14:12;-7;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Juliana Patricia Goncalves;Equipe 4;15525833;445 - JARDIM IVONE;Q023;Rua CRISTALINA;20 - 5 - R;25/05/2026 13:40;25/05/2026 10:45;-175;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Juliana Patricia Goncalves;Equipe 4;15562399;445 - JARDIM IVONE;Q017;Rua JUAZEIRO;23 - 2 - R;25/05/2026 15:10;25/05/2026 14:15;-55;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Juliana Patricia Goncalves;Equipe 4;15541025;445 - JARDIM IVONE;Q060;Rua PERO VAZ DE CAMINHA;183 - 1 - R;27/05/2026 14:10;25/05/2026 14:15;-2875;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Juliana Patricia Goncalves;Equipe 4;15542103;445 - JARDIM IVONE;Q060;Rua IMPERATRIZ;49 - 5 - TB;27/05/2026 15:15;27/05/2026 10:18;-297;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Mateus Falcao de Souza;Equipe 2;16433966;415 - CENTRO 1;Q003;Rua VISCONDE DE TAUNAY;299 - 2 - R;08/07/2026 08:55;06/07/2026 08:58;-2877;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Mateus Falcao de Souza;Equipe 2;16451812;415 - CENTRO 1;Q003;Avenida MARECHAL FLORIANO PEIXOTO;1188 - 4 - R;13/07/2026 14:16;13/07/2026 09:18;-298;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Mateus Falcao de Souza;Equipe 2;16452211;415 - CENTRO 1;Q005;Rua PARAGUAI;2378 - C;15/07/2026 09:27;14/07/2026 09:32;-1435;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
@@ -20,16 +12,11 @@ Mateus Falcao de Souza;Equipe 2;16506274;415 - CENTRO 1;Q002;Rua RUI BARBOSA;373
 Mateus Falcao de Souza;Equipe 2;16568917;415 - CENTRO 1;Q002;Rua VISCONDE DE TAUNAY;966 - C;20/07/2026 09:30;20/07/2026 08:35;-55;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Mateus Falcao de Souza;Equipe 2;16569039;415 - CENTRO 1;Q005;Rua DOM PEDRO II;85 - 3 - R;22/07/2026 09:07;21/07/2026 09:12;-1435;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Mateus Falcao de Souza;Equipe 2;16666617;415 - CENTRO 1;Q010;Avenida MARECHAL FLORIANO PEIXOTO;1503 - 1 - OU - 101;29/07/2026 08:32;28/07/2026 08:36;-1436;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Sara Eliane Talaveira de Oliveira;Equipe 4;15953713;439 - BOSQUE CARANDÁ;Q031;Rua SAO FRANCISCO;50 - R;19/06/2026 09:14;19/06/2026 09:00;-14;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Sara Eliane Talaveira de Oliveira;Equipe 4;17191834;438 - JARDIM PLANALTO;Q042;Rua DAS CODORNAS;239 - R;28/08/2026 08:24;28/08/2026 07:34;-50;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Sara Eliane Talaveira de Oliveira;Equipe 4;17804038;438 - JARDIM PLANALTO;Q029;Rua ASTOLFO DO AMARAL;217 - 1 - OU;07/10/2026 07:55;07/10/2026 07:05;-50;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Sara Eliane Talaveira de Oliveira;Equipe 4;18080897;437 - RESIDENCIAL PONTA PORÃ 2;Q009;Rua JAMELAO;629 - 1 - OU;21/10/2026 09:09;21/10/2026 08:15;-54;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Selba Ramona Afonso;Equipe 3;15171240;431 - PANAMBI;Q010;Rua BENJAMIN CONSTANT;244 - 4 - R;12/05/2026 15:57;12/05/2026 15:03;-54;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Tania Maria Montania;Equipe 2;15547194;416 - CENTRO 2;Q001;Avenida MARECHAL FLORIANO PEIXOTO;1808 - C;28/05/2026 16:57;28/05/2026 16:02;-55;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
+Sara Eliane Talaveira de Oliveira;Equipe 4;18218801;438 - JARDIM PLANALTO;Q028;Rua DOS ANDRADAS;228 - 1 - R;29/10/2026 14:00;29/10/2026 13:44;-16;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 Tania Maria Montania;Equipe 2;18095081;416 - CENTRO 2;Q005;Avenida BRASIL;2895 - C;22/10/2026 08:58;22/10/2026 08:04;-54;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Wagner Tarlei Gomes;Equipe 1;15900723;405 - ALTOS DA GLÓRIA;Q005;Rua VICENTE  AZAMBUJA;374 - OU;16/06/2026 16:00;16/06/2026 14:17;-103;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Wagner Tarlei Gomes;Equipe 1;15965184;400 - JULIA CARDINAL;Q006;Rua LINO DO AMARAL CARDINAL;61 - 1 - TB;19/06/2026 08:30;19/06/2026 03:35;-295;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
-Walquiria Araujo Flores;Equipe 4;15663438;440 - JARDIM IBIRAPUERA;Q024;Rua MARCELO GONZALEZ REICHARDT;27 - 4 - TB;03/06/2026 15:24;03/06/2026 14:30;-54;Data/hora de saída anterior à chegada — provável erro de gravação no sistema
 ;;;;;;;;;;
 ;;;;;;;;;;
 LEGENDA — CLASSIFICAÇÃO (baseada em % de Visitas Rápidas);;;;;;;;;;
