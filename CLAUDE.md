@@ -27,7 +27,8 @@ Editores (validar/deteccao/cronograma/home .html) ─▶ Worker Cloudflare (work
 | Cronograma (justificativas) | `data/cronograma_ausencias.json`, `_obter_motivo_cronograma` (`coleta/auxiliares.py`), `MOTIVOS_CRONOGRAMA` (`coleta/parametros.py`) |
 | Agentes, equipes, ciclos, meses | `AGENTES_POR_EQUIPE`, `CICLOS_TRATAMENTO`, `MESES_OFICIAIS` (`coleta/parametros.py`); nomes em `data/agentes_nomes.json` (automático); depois rode `python3 scripts/gerar_form_atestado.py` |
 | Painel Custos & Produtividade | `scripts/generate_dashboard.py` (`build_kpi_custos`, `build_custos_*`) + `scripts/templates/sections/custos.html` |
-| Visual (CSS / JS) | `scripts/style.css`, `scripts/bootstrap.js`, `scripts/templates/charts.js` |
+| Visual (CSS / JS) do dashboard gerado | `scripts/style.css`, `scripts/bootstrap.js`, `scripts/templates/charts.js` |
+| Páginas editáveis da raiz (`validar`, `deteccao_editor`, `cronograma_editor`, `home_editor`, `agente`, `comparar`, `projecao`) | o `.html` só tem a estrutura; o código fica em `assets/<nome>.js` e `assets/<nome>.css` (o `sw.js` guarda `validar.js/.css` na casca offline: se renomear, atualize `ARQUIVOS` e suba o `CASCA`) |
 | Abas do dashboard | `scripts/templates/sections/*.html` (uma por aba), `base.html` |
 | Meses fechados/abertos | `data/meses_arquivados.json`, `data/historico/manifest.json`, `scripts/fechar_mes.py` |
 
@@ -56,14 +57,12 @@ Depois de gerar `_teste.html`, **apague** `_teste.html` e `partes/_teste*` (não
 - Variáveis de ambiente: modelo em `.env.example` (`.env` é ignorado pelo Git; o coletor lê do ambiente, sem python-dotenv).
 - Token do GitHub: usar só em URL temporária de push (`https://x-access-token:TOKEN@github.com/...`), nunca gravar no remote. Alterar `.github/workflows/*` exige permissão "Workflows" no token.
 
-## Armadilhas conhecidas (documentação/código desatualizados — confie neste arquivo e em docs/REGRAS.md)
+## Armadilhas conhecidas
 - Mês ≠ mês civil: Outubro = semanas 327–330 (a semana de 04/10 abre o mês; 01–02/10 ainda são da semana 326/Setembro).
   Maio 305–308 · Junho 309–312 · Julho 313–317 · Agosto 318–321 · Setembro 322–326 · Outubro 327–330.
-- `RANKING_SEM_NORMALIZACAO_A_PARTIR_DE = date(2026,1,1)`: o método novo vale p/ todo período de até 45 dias (todos os meses). O comentário
-  do código ainda cita "Outubro/2026"; o Acumulado (>45 dias) segue no método antigo (normalizado).
-- Detecção de férias dispara com `LIMITE_DIAS_UTEIS_FERIAS = 7` dias úteis. Desde 02/11/2026 as detecções novas entram **pendentes**
-  (comentários do código, `deteccao_editor.html` e `validar.html` ainda dizem "confirmadas automaticamente").
+- Ranking sem normalização: vale para todo período de até 45 dias (todos os meses); o Acumulado (>45 dias) segue no método antigo. Detecção de férias dispara com `LIMITE_DIAS_UTEIS_FERIAS = 7` dias úteis e as detecções novas de férias/chuva entram **pendentes** (`CONFIRMAR_*_AUTOMATICAMENTE = False` em `coleta/pontos.py`); os comentários do código já descrevem isso.
 - Os testes `scripts/test_*.py` importam `coletar_evisita`, que importa `coleta/sessao.py` (único módulo com `selenium`): sem `pip install -r requirements.txt` quase todos falham no import.
 - Atribuir `C.X = valor` na fachada (como os testes fazem) repassa o valor aos módulos que possuem `X`; em código novo, prefira passar parâmetro a mudar variável de módulo.
 - Equipes sob demanda (`EQUIPES_SEM_DETECCAO_AUTOMATICA`: Bloqueio, Ponto Estratégico) ficam fora das regras de evento; a Equipe Bloqueio também fica fora do painel de custos.
 - Nas planilhas, a 1ª tabela de cada aba termina na primeira linha em branco (as legendas vêm depois): leia só até aí.
+- Arquivos grandes: `.claude/settings.json` bloqueia a leitura dos gerados (`index.html`, `acumulado.html`, `historico/`, `partes/`, `data/semanas|csv|historico`, `data/*.xlsx`, fotos). Para dados, use `python3`/`jq` filtrando; `data/deteccoes_pendentes.json` tem ~2,4 mil linhas, não leia inteiro.

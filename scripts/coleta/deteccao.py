@@ -28,38 +28,39 @@ log = logging.getLogger("evisita")
 #           ausência mais longa que isso é dividida em várias ocorrências
 #           consecutivas de até 30 dias cada (ver _dividir_em_ocorrencias),
 #           pra nunca virar um período gigante sem fim visível.
-#        c) Cada ocorrência é CONFIRMADA AUTOMATICAMENTE como Férias/
-#           Atestado, sem precisar de nenhuma ação do supervisor — mesmo
-#           que o período dela SOBREPONHA o de outro agente da mesma
-#           equipe (dois agentes de férias ao mesmo tempo não é, por si
-#           só, motivo pra represar a pontuação de ninguém esperando
-#           revisão manual). Quando sobrepõe, a ocorrência ainda fica
-#           marcada com "revisao_classificacao_necessaria" — não muda o
-#           cálculo em nada, é só um sinalizador pro supervisor conferir
-#           com calma no deteccao_editor.html se é coincidência de duas
-#           férias mesmo, ou se era uma paralisação coletiva que a etapa 2
-#           (chuva) não pegou por não ter sido a equipe INTEIRA parada no
-#           mesmo dia.
+#        c) Cada ocorrência NOVA entra como PENDENTE (CONFIRMAR_FERIAS_AUTOMATICAMENTE
+#           = False, desde 02/11/2026): continua contando como Turno sem
+#           Lançamento até a coordenação confirmar férias/atestado (validar.html
+#           ou deteccao_editor.html). Com a flag em True volta o modo antigo
+#           (confirmada sozinha). Exceções que não dependem da flag: ocorrência
+#           com mais de 30 dias ou de agente sem abono automático entra como
+#           "falta". Quando a ocorrência SOBREPÕE a de outro agente da mesma
+#           equipe, fica marcada com "revisao_classificacao_necessaria" — não
+#           muda o cálculo, é só um sinalizador pro supervisor conferir se é
+#           coincidência de duas férias ou uma paralisação coletiva que a
+#           etapa 2 (chuva) não pegou por não ter sido a equipe INTEIRA parada.
 #
 #   2) CHUVA — por EQUIPE, dia a dia, só entre os agentes ATIVOS daquele dia
 #      (isto é, depois de EXCLUIR quem já está em Férias/Atestado confirmado
 #      nesse dia, etapa 1). Se todos os agentes ativos de uma equipe
 #      ficaram sem lançamento no mesmo dia útil, esse dia é CHUVA para
-#      aquela equipe — CONFIRMADO AUTOMATICAMENTE como Chuva (é o padrão;
-#      não fica pendente esperando ninguém escolher motivo). Dias
-#      consecutivos com o mesmo padrão viram um único evento. Se depois
-#      descobrir que não foi chuva de verdade (foi capacitação, reunião
-#      etc.), corrija manualmente o "categoria_coletiva" do evento em
-#      data/deteccoes_pendentes.json (ou via deteccao_editor.html) — a
-#      correção fica protegida e não é sobrescrita nas próximas coletas.
+#      aquela equipe — entra como PENDENTE (CONFIRMAR_CHUVA_AUTOMATICAMENTE =
+#      False, desde 02/11/2026): até a coordenação escolher o motivo (chuva,
+#      reunião, capacitação...) vale a regra de Possível Evento por turno.
+#      Com a flag em True volta o modo antigo (confirmada sozinha como Chuva).
+#      Dias consecutivos com o mesmo padrão viram um único evento. A escolha
+#      do "categoria_coletiva" (em data/deteccoes_pendentes.json, via
+#      deteccao_editor.html ou validar.html) fica protegida e não é
+#      sobrescrita nas próximas coletas.
 #
 # NADA disso muda cálculo nenhum sozinho até ser gravado em
 # data/deteccoes_pendentes.json — só QUANDO CONFIRMADO o período entra no
 # mesmo mecanismo do cronograma (e aí sim some da aba Ausências e da
-# pontuação — ver _cronograma_efetivo() logo abaixo). Como as duas
-# categorias (férias e chuva) já nascem confirmadas automaticamente, isso
-# acontece sempre — a marcação de "revisao_classificacao_necessaria" acima
-# é só informativa, nunca atrasa a exclusão do cálculo.
+# pontuação — ver _cronograma_efetivo() logo abaixo). Com as flags
+# CONFIRMAR_*_AUTOMATICAMENTE em False (padrão atual), isso só acontece
+# depois da confirmação da coordenação; "pendente" não entra no cálculo como
+# ausência abonada. A marcação de "revisao_classificacao_necessaria" acima é
+# só informativa.
 LIMITE_DIAS_UTEIS_FERIAS = 7
 
 # Nenhuma OCORRÊNCIA de férias/atestado passa disso, em dias CORRIDOS (não
@@ -310,10 +311,10 @@ def _detectar_ferias_individuais(df_total, resultados, data_max, equipes_ignorad
          candidato a férias (menos que isso é só "ausência", fica de fora).
       2) Cada candidato é dividido em ocorrências de até
          LIMITE_DIAS_CORRIDOS_OCORRENCIA dias corridos.
-      3) Toda ocorrência é confirmada automaticamente — mesmo sobrepondo a
-         de outro agente da equipe — mas ganha
-         "revisao_classificacao_necessaria" quando sobrepõe, pro supervisor
-         conferir o motivo com calma sem atrasar a exclusão da pontuação.
+      3) Toda ocorrência é devolvida aqui; quem decide pendente × confirmada
+         é atualizar_deteccoes_pendentes (flags CONFIRMAR_*_AUTOMATICAMENTE).
+         Ao sobrepor a de outro agente da equipe, ganha
+         "revisao_classificacao_necessaria" pro supervisor conferir o motivo.
 
     Retorna (eventos_ferias, ferias_por_agente, janela_por_agente):
       - ferias_por_agente: {id_agente: [(inicio, fim), ...]} com TODAS as
@@ -471,20 +472,20 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
     dos dois) em vez de criar uma entrada nova ao lado da antiga.
 
     Comportamento:
-      - "possiveis_ferias" (agente sozinho, >5 dias úteis sem lançamento):
-        CONFIRMADO AUTOMATICAMENTE como Férias/Atestado e já sai de todos os
-        cálculos — não precisa de nenhuma ação do supervisor. Se na verdade
-        for falta mesmo (não justificada), o supervisor marca como "falta"
-        (no deteccao_editor.html, se existir, ou editando o JSON direto) —
-        aí sim volta a contar normalmente, com o motivo documentado.
+      - "possiveis_ferias" (agente sozinho, >= LIMITE_DIAS_UTEIS_FERIAS dias
+        úteis sem lançamento): entra PENDENTE (continua contando como Turno
+        sem Lançamento) até a coordenação confirmar férias/atestado; com
+        CONFIRMAR_FERIAS_AUTOMATICAMENTE = True nasce confirmada (modo antigo).
+        Excesso de 30 dias ou agente sem abono automático entra como "falta".
+        Marcar como "falta" (deteccao_editor.html, validar.html ou o JSON)
+        faz o período contar normalmente, com o motivo documentado.
       - "paralisacao_coletiva" (todos os agentes ATIVOS — ou seja, já fora
         de qualquer Férias/Atestado — de uma equipe sem lançamento no mesmo
-        dia): CONFIRMADO AUTOMATICAMENTE como Chuva — é o padrão, não fica
-        pendente esperando ninguém escolher motivo (ver seção 13b). Se na
-        verdade foi outra coisa (capacitação, reunião, outra paralisação),
-        o supervisor troca o "categoria_coletiva" manualmente — a partir
-        daí a correção fica protegida e não é sobrescrita nas próximas
-        coletas, mesmo que o padrão de dias sem lançamento continue.
+        dia): entra PENDENTE até a coordenação escolher o motivo (chuva,
+        capacitação, reunião...); com CONFIRMAR_CHUVA_AUTOMATICAMENTE = True
+        nasce confirmada como Chuva (modo antigo, ver seção 13b). A escolha
+        do "categoria_coletiva" fica protegida e não é sobrescrita nas
+        próximas coletas, mesmo que o padrão de dias sem lançamento continue.
     """
     sem_abono_cfg = _carregar_agentes_sem_abono()
     anteriores = []
@@ -676,8 +677,8 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
     n_chuva_auto = sum(1 for e in finais if e["tipo"] == "paralisacao_coletiva"
                         and e.get("confirmado_automaticamente") and e.get("status") == "confirmada")
     if n_ferias_auto:
-        log.info("🌴 %s período(s) de férias/atestado confirmado(s) automaticamente (>5 dias úteis seguidos).",
-                  n_ferias_auto)
+        log.info("🌴 %s período(s) de férias/atestado confirmado(s) automaticamente (>= %s dias úteis seguidos).",
+                  n_ferias_auto, LIMITE_DIAS_UTEIS_FERIAS)
     if n_chuva_auto:
         log.info("🌧️ %s período(s) de chuva confirmado(s) automaticamente por equipe (todos os agentes ativos "
                   "sem lançamento no mesmo dia).", n_chuva_auto)
@@ -691,9 +692,9 @@ def atualizar_deteccoes_pendentes(eventos_detectados, caminho="data/deteccoes_pe
 
 def _cronograma_efetivo(deteccoes):
     """CRONOGRAMA_AUSENCIAS + as detecções com status "confirmada" (as
-    individuais de férias/atestado são confirmadas automaticamente pelo
-    sistema ao passar de 5 dias úteis; as paralisações coletivas precisam do
-    supervisor escolher o motivo antes) — convertidas pro mesmo formato, é
+    individuais de férias/atestado e as paralisações coletivas só entram aqui
+    depois de confirmadas pela coordenação, salvo se as flags
+    CONFIRMAR_*_AUTOMATICAMENTE estiverem em True) — convertidas pro mesmo formato, é
     essa lista combinada que _obter_motivo_cronograma()/_preparar_cronograma()
     usam de verdade. "pendente" e "falta"/"rejeitada" NÃO entram aqui —
     continuam contando normalmente (uma falta marcada como "falta" é uma
