@@ -153,7 +153,7 @@ li{margin:4px 0}
 
 <h2>1. A ideia em uma frase</h2>
 <div class="destaque">Todo agente começa com <b>{C.PONTOS_INICIAIS} pontos</b>. Ganha pontos por dias bons, perde pontos por falhas, e a nota final fica sempre entre <b>{C.NOTA_MINIMA} e {C.NOTA_MAXIMA}</b>.
-Em todos os meses (Maio/2026 em diante) <b>não existe fator de normalização</b>: o mesmo peso vale para todos, e a conta é simplesmente quantidade × peso.</div>
+Em todos os meses <b>não existe fator de normalização</b>: o mesmo peso vale para todos, e a conta é simplesmente quantidade × peso.</div>
 
 <h2>2. Dias esperados</h2>
 <p>É quanto o agente <i>deveria</i> ter trabalhado no período. Conta-se assim:</p>

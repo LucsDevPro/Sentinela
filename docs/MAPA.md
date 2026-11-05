@@ -163,10 +163,10 @@ Constantes: CAMINHO@11, NOMES@12
 
 Constantes: CAMINHO_DETECCOES@22, LIMITE_FERIAS_DIAS@23, ACAO_DEFINIR@24, ACAO_CANCELAR@25
 
-## scripts/meses_arquivados.py (30 linhas)
+## scripts/meses_arquivados.py (29 linhas)
 
-- L14 `carregar(caminho)` — [(semana_ini, semana_fim, "Mês/Ano"), ...] ordenado.
-- L27 `gravar(lista, caminho)`
+- L13 `carregar(caminho)` — [(semana_ini, semana_fim, "Mês/Ano"), ...] ordenado.
+- L26 `gravar(lista, caminho)`
 
 Constantes: CAMINHO@7, EMBUTIDOS@8
 
@@ -337,26 +337,26 @@ Constantes: LIMITE_DIAS_UTEIS_FERIAS@64, LIMITE_DIAS_CORRIDOS_OCORRENCIA@69, TOL
 
 - L32 `atualizar_historico_do_cache(pasta_semanas, pasta_historico, pasta_sa)` — Reconstrói as entradas AUTOMÁTICAS de data/historico/ a partir do cache
 
-## scripts/coleta/parametros.py (584 linhas)
+## scripts/coleta/parametros.py (586 linhas)
 
-- L141 `_grupo_mes_oficial(html_id)` — Nome do mês oficial (tabela acima) pra essa semana, ou None se a
-- L151 `_faixa_mes_oficial(nome)` — (semana_inicio, semana_fim) oficiais de um mês de MESES_OFICIAIS.
-- L168 `semanas_ja_coletadas(pasta_semanas)` — HTML IDs de semanas que já têm cache salvo em disco, em ordem
-- L182 `decidir_semanas_a_coletar(hoje, pasta_semanas)` — Decide quais semanas (HTML IDs) buscar nesta execução:
-- L278 `ciclo_para_semana(semana, ciclos)` — Acha o id_ciclo pra uma semana específica, numa tabela de ciclos
-- L306 `ciclo_tratamento_configurado(html_id)` — id_ciclo de Tratamento cadastrado EXPLICITAMENTE em CICLOS_TRATAMENTO
-- L314 `ciclo_tratamento_para_semana(html_id, id_ciclo_padrao)` — Como ciclo_para_semana(), mas com fallback pro id_ciclo padrão em vez
-- L334 `_ciclos_esperados(html_id)`
-- L338 `_ler_ciclos_coletados(pasta_semanas)`
-- L349 `_registrar_ciclos_coletados(html_id, pasta_semanas)`
-- L398 `_carregar_metas_equipes(caminho)` — Meta diária de visitas POR EQUIPE (opcional): {"Equipe 1": 25}. Equipe que não
-- L423 `meta_da_equipe(equipe)`
-- L506 `_cache_nomes_agentes(caminho)` — Cache persistente ID -> {nome, equipe}, mantido em memória durante a
-- L536 `_atualizar_cache_nomes_agentes(id_agente, nome, equipe, caminho)` — Grava (merge, nunca sobrescreve o arquivo inteiro) um nome de
-- L555 `_motivo_neutro(motivo)` — Repositório público: só rótulos neutros. "Atestado" (entradas antigas)
-- L567 `_carregar_cronograma_ausencias(caminho)`
+- L144 `_grupo_mes_oficial(html_id)` — Nome do mês oficial (tabela acima) pra essa semana, ou None se a
+- L154 `_faixa_mes_oficial(nome)` — (semana_inicio, semana_fim) oficiais de um mês de MESES_OFICIAIS.
+- L171 `semanas_ja_coletadas(pasta_semanas)` — HTML IDs de semanas que já têm cache salvo em disco, em ordem
+- L185 `decidir_semanas_a_coletar(hoje, pasta_semanas)` — Decide quais semanas (HTML IDs) buscar nesta execução:
+- L281 `ciclo_para_semana(semana, ciclos)` — Acha o id_ciclo pra uma semana específica, numa tabela de ciclos
+- L308 `ciclo_tratamento_configurado(html_id)` — id_ciclo de Tratamento cadastrado EXPLICITAMENTE em CICLOS_TRATAMENTO
+- L316 `ciclo_tratamento_para_semana(html_id, id_ciclo_padrao)` — Como ciclo_para_semana(), mas com fallback pro id_ciclo padrão em vez
+- L336 `_ciclos_esperados(html_id)`
+- L340 `_ler_ciclos_coletados(pasta_semanas)`
+- L351 `_registrar_ciclos_coletados(html_id, pasta_semanas)`
+- L400 `_carregar_metas_equipes(caminho)` — Meta diária de visitas POR EQUIPE (opcional): {"Equipe 1": 25}. Equipe que não
+- L425 `meta_da_equipe(equipe)`
+- L508 `_cache_nomes_agentes(caminho)` — Cache persistente ID -> {nome, equipe}, mantido em memória durante a
+- L538 `_atualizar_cache_nomes_agentes(id_agente, nome, equipe, caminho)` — Grava (merge, nunca sobrescreve o arquivo inteiro) um nome de
+- L557 `_motivo_neutro(motivo)` — Repositório público: só rótulos neutros. "Atestado" (entradas antigas)
+- L569 `_carregar_cronograma_ausencias(caminho)`
 
-Constantes: CPF@27, SENHA@28, ID_MUNICIPIO@38, ID_ATIVIDADE@39, ID_ANO@40, ID_CICLO@41, ID_TIPO_VISITA@42, ANCORA_DATA@47, ANCORA_ID@48, MESES_PT@49, PRIMEIRA_SEMANA_COLETA@59, GERAR_PAGINAS_SEMANAIS@69, PRIMEIRA_SEMANA_DETALHE_SEMANAL@70, PASTA_ARQUIVO_SEMANAL@71, MESES_OFICIAIS@88, PRIMEIRA_SEMANA_CICLO_EXPLICITO@102, PRIMEIRA_SEMANA_VISAO_SEMANAL@106, MESES_ARQUIVADOS@131, MESES_ADICIONAIS@138, PASTA_SEMANAS@165, ID_PENDENCIA_ABERTOS@233, ID_PENDENCIA_FECHADOS@234, ID_PENDENCIA_RECUSADOS@235, AGENTES_POR_EQUIPE@238, AGENTES_PONTO_ESTRATEGICO@252, ID_ATIVIDADE_PONTO_ESTRATEGICO@255, CICLOS_PONTO_ESTRATEGICO@270, CICLOS_TRATAMENTO@299, NOME_ARQUIVO_CICLOS_COLETADOS@332, MAX_WORKERS@365, DELAY_ENTRE_PAGINAS@366, TIMEOUT_CONEXAO@367, TIMEOUT_LEITURA@368, TIMEOUT_HTTP@369, BACKOFF_BASE_S@370, BACKOFF_MAX_S@371, BACKOFF_JITTER_S@372, PAGE_LOAD_TIMEOUT_S@373, ESPERA_ELEMENTO_S@374, TENTATIVAS_LOGIN@375, TENTATIVAS_SAUDE@376, MAX_SEMANAS_FALHAS_SEGUIDAS@377, ORCAMENTO_COLETA_MIN@378, TENTATIVAS_POR_PAGINA@379, TEMPO_MIN_VISITA_MIN@382, TEMPO_MAX_VISITA_MIN@383, TETO_DURACAO_MEDIA_MIN@394, META_VISITAS_DIA@395, METAS_EQUIPES@420, PCT_RAPIDAS_OK_ATE@427, PCT_RAPIDAS_ATENCAO_ATE@428, LIMIAR_SEQUENCIA_SUSPEITA_SEG@437, HORA_ALMOCO_INICIO_MIN@444, HORA_ALMOCO_FIM_MIN@445, HORA_EXPEDIENTE_MANHA_INICIO@450, HORA_EXPEDIENTE_MANHA_FIM@451, HORA_EXPEDIENTE_TARDE_INICIO@452, HORA_EXPEDIENTE_TARDE_FIM@453, SALARIO_MINIMO@456, SALARIO_AGENTE@457, DIAS_UTEIS_MES@458, PASTA_SAIDA@461, ARQUIVO_CONSOLIDADO@462, URL_LOGIN@465, URL_VISITAS@466, MOTIVOS_CRONOGRAMA@494, CAMINHO_CACHE_NOMES_AGENTES@502, CRONOGRAMA_AUSENCIAS@584
+Constantes: CPF@27, SENHA@28, ID_MUNICIPIO@38, ID_ATIVIDADE@39, ID_ANO@40, ID_CICLO@41, ID_TIPO_VISITA@42, ANCORA_DATA@47, ANCORA_ID@48, MESES_PT@49, PRIMEIRA_SEMANA_COLETA@61, GERAR_PAGINAS_SEMANAIS@71, PRIMEIRA_SEMANA_DETALHE_SEMANAL@72, PASTA_ARQUIVO_SEMANAL@73, MESES_OFICIAIS@90, PRIMEIRA_SEMANA_CICLO_EXPLICITO@105, PRIMEIRA_SEMANA_VISAO_SEMANAL@109, MESES_ARQUIVADOS@134, MESES_ADICIONAIS@141, PASTA_SEMANAS@168, ID_PENDENCIA_ABERTOS@236, ID_PENDENCIA_FECHADOS@237, ID_PENDENCIA_RECUSADOS@238, AGENTES_POR_EQUIPE@241, AGENTES_PONTO_ESTRATEGICO@255, ID_ATIVIDADE_PONTO_ESTRATEGICO@258, CICLOS_PONTO_ESTRATEGICO@273, CICLOS_TRATAMENTO@302, NOME_ARQUIVO_CICLOS_COLETADOS@334, MAX_WORKERS@367, DELAY_ENTRE_PAGINAS@368, TIMEOUT_CONEXAO@369, TIMEOUT_LEITURA@370, TIMEOUT_HTTP@371, BACKOFF_BASE_S@372, BACKOFF_MAX_S@373, BACKOFF_JITTER_S@374, PAGE_LOAD_TIMEOUT_S@375, ESPERA_ELEMENTO_S@376, TENTATIVAS_LOGIN@377, TENTATIVAS_SAUDE@378, MAX_SEMANAS_FALHAS_SEGUIDAS@379, ORCAMENTO_COLETA_MIN@380, TENTATIVAS_POR_PAGINA@381, TEMPO_MIN_VISITA_MIN@384, TEMPO_MAX_VISITA_MIN@385, TETO_DURACAO_MEDIA_MIN@396, META_VISITAS_DIA@397, METAS_EQUIPES@422, PCT_RAPIDAS_OK_ATE@429, PCT_RAPIDAS_ATENCAO_ATE@430, LIMIAR_SEQUENCIA_SUSPEITA_SEG@439, HORA_ALMOCO_INICIO_MIN@446, HORA_ALMOCO_FIM_MIN@447, HORA_EXPEDIENTE_MANHA_INICIO@452, HORA_EXPEDIENTE_MANHA_FIM@453, HORA_EXPEDIENTE_TARDE_INICIO@454, HORA_EXPEDIENTE_TARDE_FIM@455, SALARIO_MINIMO@458, SALARIO_AGENTE@459, DIAS_UTEIS_MES@460, PASTA_SAIDA@463, ARQUIVO_CONSOLIDADO@464, URL_LOGIN@467, URL_VISITAS@468, MOTIVOS_CRONOGRAMA@496, CAMINHO_CACHE_NOMES_AGENTES@504, CRONOGRAMA_AUSENCIAS@586
 
 ## scripts/coleta/pontos.py (138 linhas)
 

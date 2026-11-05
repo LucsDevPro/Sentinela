@@ -54,7 +54,7 @@ ag = d["agentes"]
 checar("há agentes", len(ag) > 10, str(len(ag)))
 checar("chave é o id do agente quando conhecido", any(k.isdigit() for k in ag))
 um = next(v for v in ag.values() if len(v["meses"]) >= 3)
-checar("série mensal em ordem cronológica", [m["mes"] for m in um["meses"]][:2] == ["Maio/2026", "Junho/2026"], str([m["mes"] for m in um["meses"]]))
+checar("série mensal em ordem cronológica", [m["mes"] for m in um["meses"]][:2] == ["Julho/2026", "Agosto/2026"], str([m["mes"] for m in um["meses"]]))
 checar("mês tem trabalhados/esperados/nota", all(m["pontos"] is not None and m["esp"] is not None for m in um["meses"]))
 checar("semanas do mês aberto presentes", any(len(v["semanas"]) >= 2 for v in ag.values()))
 checar("Equipe Bloqueio fora", not any(v["equipe"] == "Equipe Bloqueio" for v in ag.values()))

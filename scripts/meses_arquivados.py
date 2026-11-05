@@ -6,8 +6,7 @@ import json, os
 
 CAMINHO = "data/meses_arquivados.json"
 EMBUTIDOS = [
-    (305, 308, "Maio/2026"), (309, 312, "Junho/2026"), (313, 317, "Julho/2026"),
-    (318, 321, "Agosto/2026"), (322, 326, "Setembro/2026"),
+    (313, 317, "Julho/2026"), (318, 321, "Agosto/2026"), (322, 326, "Setembro/2026"),
 ]
 
 

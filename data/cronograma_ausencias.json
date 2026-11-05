@@ -34,13 +34,6 @@
     "alvo": "agente",
     "id_agente": 85,
     "motivo": "Ausência justificada",
-    "inicio": "12/06/2026",
-    "fim": "12/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 85,
-    "motivo": "Ausência justificada",
     "inicio": "20/07/2026",
     "fim": "22/07/2026"
   },
@@ -90,13 +83,6 @@
     "alvo": "agente",
     "id_agente": 73,
     "motivo": "Ausência justificada",
-    "inicio": "02/06/2026",
-    "fim": "03/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 73,
-    "motivo": "Ausência justificada",
     "inicio": "20/07/2026",
     "fim": "20/07/2026"
   },
@@ -104,29 +90,8 @@
     "alvo": "agente",
     "id_agente": 73,
     "motivo": "Ausência justificada",
-    "inicio": "11/05/2026",
-    "fim": "11/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 73,
-    "motivo": "Ausência justificada",
     "inicio": "01/07/2026",
     "fim": "01/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 73,
-    "motivo": "Ausência justificada",
-    "inicio": "18/05/2026",
-    "fim": "18/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 110,
-    "motivo": "Ausência justificada",
-    "inicio": "28/05/2026",
-    "fim": "28/05/2026"
   },
   {
     "alvo": "agente",
@@ -193,24 +158,10 @@
   },
   {
     "alvo": "agente",
-    "id_agente": 110,
-    "motivo": "Ausência justificada",
-    "inicio": "09/06/2026",
-    "fim": "09/06/2026"
-  },
-  {
-    "alvo": "agente",
     "id_agente": 2917,
     "motivo": "Ausência justificada",
     "inicio": "07/10/2026",
     "fim": "07/10/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 125,
-    "motivo": "Ausência justificada",
-    "inicio": "01/06/2026",
-    "fim": "01/06/2026"
   },
   {
     "alvo": "agente",
@@ -225,13 +176,6 @@
     "motivo": "Ausência justificada",
     "inicio": "05/08/2026",
     "fim": "05/08/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 2918,
-    "motivo": "Ausência justificada",
-    "inicio": "05/05/2026",
-    "fim": "05/05/2026"
   },
   {
     "alvo": "agente",
@@ -258,13 +202,6 @@
     "alvo": "agente",
     "id_agente": 470,
     "motivo": "Ausência justificada",
-    "inicio": "05/05/2026",
-    "fim": "05/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 470,
-    "motivo": "Ausência justificada",
     "inicio": "15/07/2026",
     "fim": "15/07/2026"
   },
@@ -274,13 +211,6 @@
     "motivo": "Ausência justificada",
     "inicio": "19/08/2026",
     "fim": "19/08/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 470,
-    "motivo": "Ausência justificada",
-    "inicio": "01/06/2026",
-    "fim": "01/06/2026"
   },
   {
     "alvo": "agente",
@@ -302,41 +232,6 @@
     "motivo": "Ausência justificada",
     "inicio": "03/09/2026",
     "fim": "03/09/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 1935,
-    "motivo": "Ausência justificada",
-    "inicio": "04/05/2026",
-    "fim": "08/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 1935,
-    "motivo": "Ausência justificada",
-    "inicio": "25/06/2026",
-    "fim": "25/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 1935,
-    "motivo": "Ausência justificada",
-    "inicio": "17/06/2026",
-    "fim": "17/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 1936,
-    "motivo": "Ausência justificada",
-    "inicio": "12/05/2026",
-    "fim": "12/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 80,
-    "motivo": "Ausência justificada",
-    "inicio": "15/06/2026",
-    "fim": "15/06/2026"
   },
   {
     "alvo": "agente",
@@ -379,27 +274,6 @@
     "motivo": "Ausência justificada",
     "inicio": "09/09/2026",
     "fim": "10/09/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 149,
-    "motivo": "Ausência justificada",
-    "inicio": "11/05/2026",
-    "fim": "11/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 149,
-    "motivo": "Ausência justificada",
-    "inicio": "25/05/2026",
-    "fim": "26/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 149,
-    "motivo": "Ausência justificada",
-    "inicio": "22/05/2026",
-    "fim": "23/05/2026"
   },
   {
     "alvo": "agente",
@@ -480,52 +354,10 @@
   },
   {
     "alvo": "agente",
-    "id_agente": 1942,
-    "motivo": "Ausência justificada",
-    "inicio": "06/05/2026",
-    "fim": "06/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 1942,
-    "motivo": "Ausência justificada",
-    "inicio": "25/05/2026",
-    "fim": "25/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 124,
-    "motivo": "Ausência justificada",
-    "inicio": "01/06/2026",
-    "fim": "01/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 124,
-    "motivo": "Ausência justificada",
-    "inicio": "02/06/2026",
-    "fim": "09/06/2026"
-  },
-  {
-    "alvo": "agente",
     "id_agente": 79,
     "motivo": "Ausência justificada",
     "inicio": "08/07/2026",
     "fim": "10/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 161,
-    "motivo": "Ausência justificada",
-    "inicio": "12/05/2026",
-    "fim": "12/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 161,
-    "motivo": "Ausência justificada",
-    "inicio": "15/06/2026",
-    "fim": "19/06/2026"
   },
   {
     "alvo": "agente",
@@ -537,24 +369,9 @@
   {
     "alvo": "agente",
     "id_agente": 30,
-    "motivo": "Meia ausência justificada",
-    "inicio": "06/05/2026",
-    "fim": "06/05/2026",
-    "turno": "Manhã"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 30,
     "motivo": "Ausência justificada",
     "inicio": "19/07/2026",
     "fim": "20/07/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 1996,
-    "motivo": "Ausência justificada",
-    "inicio": "09/06/2026",
-    "fim": "11/06/2026"
   },
   {
     "alvo": "agente",
@@ -602,34 +419,6 @@
     "alvo": "agente",
     "id_agente": 134,
     "motivo": "Ausência justificada",
-    "inicio": "12/05/2026",
-    "fim": "12/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 134,
-    "motivo": "Ausência justificada",
-    "inicio": "07/05/2026",
-    "fim": "07/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 134,
-    "motivo": "Ausência justificada",
-    "inicio": "22/05/2026",
-    "fim": "22/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 134,
-    "motivo": "Ausência justificada",
-    "inicio": "08/06/2026",
-    "fim": "08/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 134,
-    "motivo": "Ausência justificada",
     "inicio": "17/07/2026",
     "fim": "17/07/2026"
   },
@@ -653,41 +442,6 @@
     "motivo": "Ausência justificada",
     "inicio": "01/10/2026",
     "fim": "01/10/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 3035,
-    "motivo": "Ausência justificada",
-    "inicio": "30/04/2026",
-    "fim": "04/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 3035,
-    "motivo": "Ausência justificada",
-    "inicio": "20/05/2026",
-    "fim": "20/05/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 157,
-    "motivo": "Ausência justificada",
-    "inicio": "16/06/2026",
-    "fim": "16/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 81,
-    "motivo": "Ausência justificada",
-    "inicio": "26/06/2026",
-    "fim": "26/06/2026"
-  },
-  {
-    "alvo": "agente",
-    "id_agente": 142,
-    "motivo": "Ausência justificada",
-    "inicio": "22/06/2026",
-    "fim": "23/06/2026"
   },
   {
     "alvo": "agente",

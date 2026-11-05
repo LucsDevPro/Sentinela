@@ -126,9 +126,9 @@ FERIADOS_NACIONAIS = [
 
 # A PARTIR DE QUANDO a lista vale: só feriados desta data em diante entram na
 # contagem de dias úteis (cálculo antigo, ranking novo e detecção de férias).
-# Meses anteriores (Maio–Junho) seguem como foram calculados. Quem decide é
-# esta data — pra valer desde sempre, coloque None.
-FERIADOS_VALEM_A_PARTIR_DE = None   # desde 30/10/2026 valem em todos os meses (antes: só de Julho em diante)
+# None = valem em todos os meses do programa (Julho/2026 em diante). Pra
+# começar a valer só a partir de uma data, coloque a data.
+FERIADOS_VALEM_A_PARTIR_DE = None
 
 def _feriados_em_vigor():
     """Feriados de FERIADOS_NACIONAIS que valem na contagem (>= FERIADOS_VALEM_A_PARTIR_DE)."""

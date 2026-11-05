@@ -59,7 +59,7 @@ Depois de gerar `_teste.html`, **apague** `_teste.html` e `partes/_teste*` (não
 
 ## Armadilhas conhecidas
 - Mês ≠ mês civil: Outubro = semanas 327–330 (a semana de 04/10 abre o mês; 01–02/10 ainda são da semana 326/Setembro).
-  Maio 305–308 · Junho 309–312 · Julho 313–317 · Agosto 318–321 · Setembro 322–326 · Outubro 327–330.
+  Julho 313–317 · Agosto 318–321 · Setembro 322–326 · Outubro 327–330.
 - Ranking sem normalização: vale para todo período de até 45 dias (todos os meses); o Acumulado (>45 dias) segue no método antigo. Detecção de férias dispara com `LIMITE_DIAS_UTEIS_FERIAS = 7` dias úteis e as detecções novas de férias/chuva entram **pendentes** (`CONFIRMAR_*_AUTOMATICAMENTE = False` em `coleta/pontos.py`); os comentários do código já descrevem isso.
 - Os testes `scripts/test_*.py` importam `coletar_evisita`, que importa `coleta/sessao.py` (único módulo com `selenium`): sem `pip install -r requirements.txt` quase todos falham no import.
 - Atribuir `C.X = valor` na fachada (como os testes fazem) repassa o valor aos módulos que possuem `X`; em código novo, prefira passar parâmetro a mudar variável de módulo.

@@ -9,7 +9,7 @@
 data/meses_arquivados.json, marca o mês e as visões semanais dele como
 "manual" no manifest (congelados). O mês seguinte já está em MESES_OFICIAIS e
 passa a ser o mês vigente. "Reabrir" desfaz isso (cópia de segurança antes) e
-só vale pra meses de MESES_OFICIAIS (os de Maio–Setembro seguem congelados).
+só vale pra meses de MESES_OFICIAIS (os de Julho–Setembro seguem congelados).
 Nada de dado sensível: o checklist só tem contagens.
 """
 import json, os, shutil, sys

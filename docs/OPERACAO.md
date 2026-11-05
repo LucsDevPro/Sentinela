@@ -54,8 +54,8 @@ execução (agora domingo/segunda/terça às 3h):
      `GERAR_PAGINAS_SEMANAIS` pra `True` em `scripts/coleta/parametros.py`.
 
 Na primeira execução (`data/semanas/` vazio), o script coleta da semana
-18/2026 (HTML 305, início de Maio) até a semana atual, uma planilha por
-semana. O `data/semanas/` é commitado no repositório junto com o resto — é
+27/2026 (HTML 313, início de Julho) até a semana atual, uma planilha por
+semana. Maio e Junho/2026 saíram do programa em 05/11/2026 (sem coleta, página, Acumulado ou média). O `data/semanas/` é commitado no repositório junto com o resto — é
 ele que guarda "até onde já coletamos" de uma execução pra outra.
 
 **Ciclos diferentes por semana:** o `id_ciclo` usado na consulta ao e-Visita
@@ -63,7 +63,6 @@ não é fixo — muda em pontos específicos do ano. Isso já está mapeado em
 `CICLOS_TRATAMENTO`, em `scripts/coleta/parametros.py`:
 ```python
 CICLOS_TRATAMENTO = [
-    (305, 312, 162),  # semanas 305-312 (maio-junho/2026) usam id_ciclo 162
     (322, 326, 164),  # semanas 322-326 (setembro/2026) usam id_ciclo 164
     (327, 330, 164),  # semanas 327-330 (outubro/2026)  usam id_ciclo 164
     (331, 334, 165),  # semanas 331-334 (novembro/2026) usam id_ciclo 165
@@ -79,8 +78,6 @@ limites reais confirmados na URL do e-Visita, cadastrados em
 `MESES_OFICIAIS`, em `scripts/coleta/parametros.py`:
 ```python
 MESES_OFICIAIS = [
-    (305, 308, "Maio/2026"),
-    (309, 312, "Junho/2026"),
     (313, 317, "Julho/2026"),
     (318, 321, "Agosto/2026"),
     (322, 326, "Setembro/2026"),
@@ -88,7 +85,7 @@ MESES_OFICIAIS = [
     (331, 334, "Novembro/2026"),
 ]
 ```
-(Maio e Junho ficam em `MESES_ARQUIVADOS`, preservados como estavam.) Agosto a Novembro/2026 também estão em `MESES_OFICIAIS` (o nome do arquivo usa
+(Julho a Setembro ficam em `MESES_ARQUIVADOS`, congelados.) Agosto a Novembro/2026 também estão em `MESES_OFICIAIS` (o nome do arquivo usa
 sempre a faixa oficial do mês, ex.: `semanas_327-330.xlsx`, mesmo com o mês
 incompleto — assim o link da home nunca quebra). Ao cadastrar um mês
 novo aqui, a próxima coleta já reagrupa e renomeia os arquivos certinho; planilhas
@@ -118,9 +115,9 @@ falhar ou vier com páginas faltando mantém os dados que já estavam salvos.
 
 Pra recoletar manualmente só uma semana específica (ex.: corrigir um dado):
 ```
-python scripts/coletar_evisita.py --semana 305
+python scripts/coletar_evisita.py --semana 313
 ```
-(305 é o HTML ID da semana — ver `scripts/semanas_evisita.py` pra converter
+(313 é o HTML ID da semana — ver `scripts/semanas_evisita.py` pra converter
 entre HTML ID e "Semana do Ano".)
 
 **Ranking — sem fator de normalização a partir de Outubro/2026:** a regra
@@ -130,7 +127,7 @@ data ou depois (Outubro, Novembro...) usam o método novo: Peso Efetivo = Peso
 Nominal para todos, pontos = 100 + Σ(quantidade × peso), e **Dias Úteis
 Esperados** = dias úteis do próprio período − dias de férias/atestado/folga/
 chuva/reunião do cronograma em que o agente não trabalhou. Períodos que
-começam antes (Maio–Setembro e o Acumulado) seguem exatamente como eram, com
+passam de 45 dias (o Acumulado) seguem como eram, com
 fator de normalização. Pra desligar a regra nova, coloque `None`. Testes:
 `python3 scripts/test_ranking.py`.
 
@@ -450,17 +447,17 @@ coluna de detalhes como "Ajuste manual: motivo"), adicione itens à lista:
 - Itens inválidos são ignorados com aviso no log; `validar_json.py` também aponta.
 - **Só afeta meses regenerados** (Outubro/Novembro). Meses arquivados não são recalculados.
 
-## Meses congelados (Maio a Setembro/2026)
+## Meses congelados (Julho a Setembro/2026)
 
 Os meses fechados ficam em `data/meses_arquivados.json` (lido por `scripts/meses_arquivados.py`;
 o botão **Fechar mês** da página `validar.html` grava ali) e marcados
 `origem: "manual"` no `manifest.json`: o pipeline **não** recalcula nem reescreve
 essas planilhas, então os números publicados não mudam.
 
-- Observação: recalcular Setembro com as regras atuais (paradas coletivas abatidas
-  dos dias esperados) mudaria a pontuação de ~37 dos 42 agentes (até 17 pts).
+- **05/11/2026:** Julho a Setembro foram reabertos, recalculados com as regras atuais e congelados de novo
+  (a nota subiu 6 a 8 pts em média; planilhas antigas em `data/historico/backup_congelado/*_antes-das-regras-novas.xlsx`).
 - Para reabrir um mês fechado pela página: aba **Fechar mês → Reabrir** (digite o nome do mês;
-  cópia de segurança automática). Maio–Setembro seguem congelados; só o desenvolvedor reabre.
+  cópia de segurança automática). Julho–Setembro seguem congelados; só o desenvolvedor reabre.
 - **Depois da semana 330:** feche Outubro pela aba **Fechar mês** (ou `python scripts/fechar_mes.py fechar "Outubro/2026"`).
 
 ---

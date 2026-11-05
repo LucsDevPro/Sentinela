@@ -53,10 +53,12 @@ _data_inicio_semana  = sem.data_inicio_semana_html
 nome_periodo         = sem.nome_periodo         # rótulo amigável (nome do mês) pro seletor de período
 
 # Primeira semana buscada na coleta inicial (quando data/semanas/ está vazio)
-# — HTML 305 = Semana 18/2026 (03/05/2026), início de Maio. É INDEPENDENTE
+# — HTML 313 = Semana 27/2026 (28/06/2026), início de Julho. Maio e Junho/2026
+# (semanas 305–312) SAÍRAM do programa em 05/11/2026: não são coletados, não
+# têm página nem entram no Acumulado nem na média dos meses. É INDEPENDENTE
 # de ANCORA_ID/ANCORA_DATA acima (que servem só pra converter data <-> HTML
 # ID em qualquer ano, não pra decidir de onde a coleta começa).
-PRIMEIRA_SEMANA_COLETA = 305
+PRIMEIRA_SEMANA_COLETA = 313
 
 # Páginas SEMANAIS soltas (uma página por semana, a partir da semana 318 =
 # 02/08/2026) foram ARQUIVADAS: o histórico agora só tem páginas MENSAIS
@@ -86,8 +88,9 @@ PASTA_ARQUIVO_SEMANAL = "arquivo_semanal"   # dentro de data/historico/
 # PARA ADICIONAR UM MÊS NOVO: acrescente uma linha aqui, uma em
 # CICLOS_TRATAMENTO e uma em CICLOS_PONTO_ESTRATEGICO (mais abaixo).
 MESES_OFICIAIS = [
-    # Maio a Setembro/2026 foram ARQUIVADOS (ver MESES_ARQUIVADOS logo abaixo)
-    # — saíram daqui de propósito, não é esquecimento. Ciclos deles:
+    # Julho a Setembro/2026 foram ARQUIVADOS (ver MESES_ARQUIVADOS logo abaixo)
+    # — saíram daqui de propósito, não é esquecimento (Maio e Junho saíram do
+    # programa). Ciclos deles:
     #   Julho 163 (padrão) / PE 154 · Agosto 163 / PE 155 · Setembro 164 / PE 156
     (327, 330, "Outubro/2026"),   # Tratamento 164 / PE 157 (arquivar quando fechar, na semana 330)
     (331, 334, "Novembro/2026"),  # Tratamento 165 / PE 158
@@ -183,7 +186,7 @@ def decidir_semanas_a_coletar(hoje=None, pasta_semanas=PASTA_SEMANAS):
     """Decide quais semanas (HTML IDs) buscar nesta execução:
 
       - Primeira execução (nada cacheado ainda): busca da semana
-        PRIMEIRA_SEMANA_COLETA (Maio/2026) até a semana atual — uma
+        PRIMEIRA_SEMANA_COLETA (Julho/2026) até a semana atual — uma
         planilha por semana.
       - Execuções seguintes: sempre RECOLETA a última semana já salva (os
         dados do e-Visita ainda podem mudar) e, se já existir uma semana
@@ -288,16 +291,15 @@ def ciclo_para_semana(semana, ciclos=CICLOS_PONTO_ESTRATEGICO):
 
 # O id_ciclo da Atividade 4 (Tratamento) também muda ao longo do tempo — não
 # é fixo como o ID_CICLO abaixo fazia parecer. Confirmado com a URL real do
-# site: id_ciclo=162&semana_inicio=305&semana_fim=312 (semanas 305-312,
-# maio-junho/2026) — o ciclo muda a partir da semana 313, onde passa a valer
-# o ID_CICLO "padrão" (163, definido mais abaixo), e muda de novo a partir da
-# semana 322 (Setembro/2026), que usa id_ciclo 164. Faixas SEM entrada aqui
+# site: a partir da semana 313 (Julho/2026) vale o ID_CICLO "padrão" (163,
+# definido mais abaixo) e muda de novo a partir da semana 322 (Setembro/2026),
+# que usa id_ciclo 164. (Maio–Junho, semanas 305–312, ciclo 162, saíram do
+# programa e não são mais coletados.) Faixas SEM entrada aqui
 # caem no id_ciclo padrão automaticamente — só precisa cadastrar aqui os
 # ciclos ANTIGOS/diferentes do padrão atual.
 #   - semanas 327-330 (Outubro/2026)  -> id_ciclo 164
 #   - semanas 331-334 (Novembro/2026) -> id_ciclo 165
 CICLOS_TRATAMENTO = [
-    (305, 312, 162),
     (322, 326, 164),
     (327, 330, 164),
     (331, 334, 165),

@@ -1,5 +1,16 @@
 # Registro de decisões (mais recente primeiro)
 
+## 05/11/2026 — Maio e Junho saem do programa; regras novas em todos os meses; cabeçalho compacto
+- **Maio e Junho/2026 excluídos** (semanas 305–312): sem coleta (`PRIMEIRA_SEMANA_COLETA = 313`), sem página, fora do Acumulado e da média dos meses.
+  Removidos: `data/semanas/305–312*`, `data/historico/semanas_305-308/309-312` (+ backups), `historico/` e `partes/` desses meses, 13 detecções e 35 itens de
+  cronograma que terminavam antes de 28/06, e a produção de Maio/Junho em `data/outras_atividades.json`. O histórico do Git guarda tudo.
+- **Julho, Agosto e Setembro reabertos e recalculados com as regras atuais**, depois congelados de novo. Estavam com as regras antigas. Depois do recálculo a nota sobe para 38 de 49 agentes (Julho), 36 de 42 (Agosto) e
+  39 de 42 (Setembro); ninguém desce; média +6 a +8 pts (maior alta +18,5); a posição muda para 44, 34 e 32 agentes. Cópias antigas: `data/historico/backup_congelado/*_antes-das-regras-novas.xlsx`.
+  (O registro de 02/11 dizendo que "Maio–Outubro foram regenerados" não era verdade para os meses congelados.)
+- **Chuva confirmada automaticamente voltou a `pendente`** (41 paralisações coletivas de Julho em diante, antes da regra de 02/11 sem validação humana). Férias já
+  validadas pela coordenação e decisões de `falta` ficaram como estavam. Atestado: todos os 98 lançamentos já são "Ausência justificada" (sem diagnóstico).
+- **Cabeçalho da home:** botões e ícones menores (`.header-actions .print-btn`, `.btn-ico` em `scripts/style.css`; marcação em `scripts/templates/base.html`); no celular, grade de 2 colunas.
+
 ## 04/11/2026 — cartinha: nível e borda pela mesma nota arredondada; cartinha 100 redesenhada
 - **Correção:** o nível (ouro/prata/bronze/destaque) usava a nota exata e a borda usava a arredondada — 89,6 aparecia como 90, com cartão prata e borda de ouro. Agora os dois usam a nota arredondada que está escrita no cartão (≥ 90 ouro, ≥ 75 prata, abaixo bronze; destaque = top 3 com 90–99). `assets/carta.js` (`medidas`). Teste ajustado em `scripts/test_sessao10_navegador.py`.
 - **Medida CON (consistência) da cartinha:** passou a considerar só os TRÊS ÚLTIMOS meses do período mostrado (hoje, agosto a outubro): desvio-padrão dessas três notas, CON = 100 − 5 × desvio (máx. 99). Antes usava todos os meses, e um único mês fora da curva (ex.: Maio 0,0 do agente 1936) zerava o CON. Com só um mês, CON = 99. `medidas` em `assets/carta.js`.

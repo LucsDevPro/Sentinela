@@ -32,7 +32,7 @@ TETO_FATOR_NORMALIZACAO = 2.0
 # todos os agentes, e "Dias Úteis Esperados" desconta os dias de férias/atestado/
 # folga/paralisação de cada um. O critério é a PRIMEIRA data do período
 # analisado: períodos que começam a partir desta data usam o método novo. Com
-# 01/01/2026 isso vale para TODOS os meses (Maio/2026 em diante), mas só para
+# 01/01/2026 isso vale para TODOS os meses (Julho/2026 em diante), mas só para
 # períodos de até AVISO_AFASTAMENTO_PERIODO_MAX_DIAS (45) dias: o Acumulado
 # (período longo) segue no método antigo, normalizado (ver
 # _ranking_sem_normalizacao). Pra desligar a regra e voltar tudo ao método
@@ -81,10 +81,10 @@ LIMITE_AGENTES_EVENTO_TURNO = 20
 CONFIRMAR_FERIAS_AUTOMATICAMENTE = False
 CONFIRMAR_CHUVA_AUTOMATICAMENTE = False
 # Data a partir da qual a regra de Possível Evento vale. Valor atual: None = vale
-# pra TODOS os períodos (Maio/2026 em diante; Maio a Setembro reclassificam
-# ~1.100 turnos e a média de pontos sobe 6 a 8 pontos por mês). Pra poupar os
+# pra TODOS os períodos (Julho/2026 em diante; Julho a Setembro reclassificam
+# centenas de turnos e a média de pontos sobe 6 a 8 pontos por mês). Pra poupar os
 # meses já fechados, use a data de início de Outubro (veja o comentário no fim da linha).
-EVENTO_COLETIVO_A_PARTIR_DE = None   # vale para TODOS os períodos (Maio/2026 em diante); pra voltar a poupar os meses fechados: date(2026, 10, 4)
+EVENTO_COLETIVO_A_PARTIR_DE = None   # vale para TODOS os períodos (Julho/2026 em diante); pra voltar a poupar os meses fechados: date(2026, 10, 4)
 CLASSIF_TURNO_SEM_LANCAMENTO = "Turno sem Lançamento"
 CLASSIF_POSSIVEL_EVENTO = "Possível Evento Externo ou Interno"
 
