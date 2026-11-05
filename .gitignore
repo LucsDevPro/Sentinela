@@ -25,3 +25,6 @@ node_modules/
 *~
 .DS_Store
 Thumbs.db
+
+# Preferências locais do Claude Code (o settings.json é compartilhado)
+.claude/settings.local.json

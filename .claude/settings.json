@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./index.html)",
+      "Read(./acumulado.html)",
+      "Read(./historico/**)",
+      "Read(./partes/**)",
+      "Read(./data/semanas/**)",
+      "Read(./data/csv/**)",
+      "Read(./data/historico/**)",
+      "Read(./data/*.xlsx)",
+      "Read(./assets/fotos/**)",
+      "Read(./assets/agentes_dados.js)"
+    ]
+  }
+}
