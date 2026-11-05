@@ -100,7 +100,7 @@ Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 
 Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, SCRIPTS_DIR@88, CONFIG_HOME_PATH@98, ACUMULADO_XLSX@99, HOME_XLSX@116, XLSX_PATH@118, OUT_PATH@119, SALARIO_MENSAL@121, EVISITA_URL@122, DIA_ORDER@123, EQUIPE_BLOQUEIO@129, RESUMO_COLS@227, AREA_COLS@241, ALERT_COLS@248, AUSENCIA_COLS@255, PENDENCIA_COLS@259, PE_COLS@263, RESUMO_SEMANAL_COLS@272, RANKING_COLS@273, RANKING_DET_COLS@280, _NAO_PADRONIZAR_TEXTO@299, _PRESENCA_CACHE@557, TEAM_COLORS@815, LABEL_MES_RE@841, _BLOCOS_LITERAIS_RE@1312, _ESPACOS_RE@1314
 
-## scripts/gerar_agentes.py (191 linhas)
+## scripts/gerar_agentes.py (194 linhas)
 
 - L20 `_chave(nome)`
 - L25 `ler_planilha(caminho)` — ({agente: {equipe, pos, trab, esp, turnos_sem, pontos, cls}}, {agente: [(crit…
@@ -110,7 +110,7 @@ Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TE
 - L94 `paradas_no_periodo(cron, equipe, faixa)` — Paradas (já públicas no cronograma) que valem para a equipe e encostam no per…
 - L113 `_num(x)`
 - L120 `gerar(raiz)`
-- L182 `main()`
+- L185 `main()`
 
 Constantes: ROOT@12, EQUIPE_BLOQUEIO@16, LABEL_MES_RE@17, _MESES_NUM@58
 
@@ -234,7 +234,7 @@ Constantes: ARQUIVOS_CRITICOS@20
 - L234 `_preparar_fora_expediente(df_total)` — Monta a lista de visitas registradas fora do horário oficial de serviço
 - L270 `_preparar_almoco(df_total)` — Lista apenas as visitas registradas no horário de almoço (11h15-12h45, com to…
 
-## scripts/coleta/ausencias_ranking.py (574 linhas)
+## scripts/coleta/ausencias_ranking.py (640 linhas)
 
 - L47 `_primeira_visita_historica(pasta)` — {id_agente: date da PRIMEIRA visita em TODO o cache de semanas}.
 - L100 `_hoje_local()`
@@ -243,10 +243,12 @@ Constantes: ARQUIVOS_CRITICOS@20
 - L319 `_preparar_pendencias_resumo(resultados)` — Resumo de pendência por agente (abertos/fechados/recusados/total/% pendência),
 - L363 `_observacao_ranking(res, qtd_ausencias, dias_periodo, alvo_e)` — Texto da coluna Observação do ranking: avisa quando o agente parece ter
 - L390 `_carregar_ajustes_ranking(caminho)` — Ajustes MANUAIS de pontuação, lançados pelo gestor em
-- L423 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
-- L556 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
+- L434 `_ler_notas_ranking(caminho)` — {nome_agente: pontuação final} da tabela principal da aba Ranking de uma plan…
+- L458 `_media_historica_por_agente(data_min, manifest, pasta)` — {nome_agente: média das notas dos meses anteriores ao período que começa em `…
+- L485 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
+- L622 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
 
-Constantes: _CACHE_PRIMEIRA_VISITA@44, HOJE_OVERRIDE@98, CAMINHO_AJUSTES_RANKING@388
+Constantes: _CACHE_PRIMEIRA_VISITA@44, HOJE_OVERRIDE@98, CAMINHO_AJUSTES_RANKING@388, CAMINHO_MANIFEST_HISTORICO@429, PASTA_HISTORICO@430, _RE_LABEL_MES@431
 
 ## scripts/coleta/auxiliares.py (128 linhas)
 
@@ -297,27 +299,27 @@ Constantes: COLS_RESUMO@12, COLS_RANKING@44, COLS_RANKING_DETALHE@56, COLS_PONTO
 - L95 `rodar_deteccao_completa(pasta_semanas)` — Roda a detecção de possíveis férias/paralisação coletiva em cima do
 - L111 `consolidar_semanas(htmls, pasta_saida, lista_cronograma)` — Carrega o cache de cada semana em `htmls`, junta tudo e recalcula os
 
-## scripts/coleta/deteccao.py (768 linhas)
+## scripts/coleta/deteccao.py (769 linhas)
 
-- L132 `_feriados_em_vigor()` — Feriados de FERIADOS_NACIONAIS que valem na contagem (>= FERIADOS_VALEM_A_PAR…
-- L144 `_dias_uteis_no_intervalo(data_min, data_max, feriados)` — Lista, em ordem, todo dia ÚTIL (seg-sex, fora feriados) entre
-- L156 `_dias_uteis_do_mes_civil(data_ref, feriados)` — Lista (não só a contagem) dos dias úteis do MÊS CIVIL INTEIRO (dia 1
-- L169 `_dias_uteis_alvo_periodo(data_min, data_max, feriados)` — Devolve a lista de dias úteis que serve de ALVO ("1 mês de
-- L206 `_dias_uteis_mes_civil(data_ref, feriados)` — Nº de dias úteis do MÊS CIVIL INTEIRO (dia 1 ao último dia) que contém
-- L216 `_dias_paralisacao_coletiva_no_mes(id_agente, equipe, dias_do_mes, lista_cr)` — Quantos dias, dentre `dias_do_mes` (dias úteis do mês civil), foram
-- L234 `_runs_consecutivos_uteis(dias_uteis, faltando_set)` — dias_uteis: lista ordenada de dias úteis do período. faltando_set:
-- L253 `detectar_ausencias_e_paralisacoes(df_total, resultados)` — Ponto de entrada da detecção — roda em cima do df_total/resultados já
-- L283 `_dividir_em_ocorrencias(ini, fim, limite_dias_corridos)` — Quebra [ini, fim] (datas) em pedaços de no máximo `limite_dias_corridos`
-- L297 `_periodos_se_sobrepoem(a_ini, a_fim, b_ini, b_fim)` — True se [a_ini,a_fim] e [b_ini,b_fim] têm pelo menos 1 dia em comum —
-- L306 `_detectar_ferias_individuais(df_total, resultados, data_max, equipes_)` — ETAPA 1 — Férias/Atestado, por agente (ver regras completas no
-- L390 `_detectar_chuva_coletiva(df_total, resultados, data_max, equipes_)` — ETAPA 2 — Chuva, por equipe, dia a dia, só entre os agentes ATIVOS
-- L441 `_periodos_se_tocam(ini1, fim1, ini2, fim2, tolerancia_dias)` — True se dois períodos [ini1,fim1] e [ini2,fim2] (objetos date) se
-- L459 `atualizar_deteccoes_pendentes(eventos_detectados, caminho)` — Funde os eventos detectados agora com o que já existia no arquivo,
-- L692 `_cronograma_efetivo(deteccoes)` — CRONOGRAMA_AUSENCIAS + as detecções com status "confirmada" (as
-- L737 `_carregar_agentes_sem_abono(caminho)` — {id_agente: date_desde ou None}. Agentes listados NÃO ganham abono
-- L764 `_agente_sem_abono_em(id_agente, dia, cfg)`
+- L133 `_feriados_em_vigor()` — Feriados de FERIADOS_NACIONAIS que valem na contagem (>= FERIADOS_VALEM_A_PAR…
+- L145 `_dias_uteis_no_intervalo(data_min, data_max, feriados)` — Lista, em ordem, todo dia ÚTIL (seg-sex, fora feriados) entre
+- L157 `_dias_uteis_do_mes_civil(data_ref, feriados)` — Lista (não só a contagem) dos dias úteis do MÊS CIVIL INTEIRO (dia 1
+- L170 `_dias_uteis_alvo_periodo(data_min, data_max, feriados)` — Devolve a lista de dias úteis que serve de ALVO ("1 mês de
+- L207 `_dias_uteis_mes_civil(data_ref, feriados)` — Nº de dias úteis do MÊS CIVIL INTEIRO (dia 1 ao último dia) que contém
+- L217 `_dias_paralisacao_coletiva_no_mes(id_agente, equipe, dias_do_mes, lista_cr)` — Quantos dias, dentre `dias_do_mes` (dias úteis do mês civil), foram
+- L235 `_runs_consecutivos_uteis(dias_uteis, faltando_set)` — dias_uteis: lista ordenada de dias úteis do período. faltando_set:
+- L254 `detectar_ausencias_e_paralisacoes(df_total, resultados)` — Ponto de entrada da detecção — roda em cima do df_total/resultados já
+- L284 `_dividir_em_ocorrencias(ini, fim, limite_dias_corridos)` — Quebra [ini, fim] (datas) em pedaços de no máximo `limite_dias_corridos`
+- L298 `_periodos_se_sobrepoem(a_ini, a_fim, b_ini, b_fim)` — True se [a_ini,a_fim] e [b_ini,b_fim] têm pelo menos 1 dia em comum —
+- L307 `_detectar_ferias_individuais(df_total, resultados, data_max, equipes_)` — ETAPA 1 — Férias/Atestado, por agente (ver regras completas no
+- L391 `_detectar_chuva_coletiva(df_total, resultados, data_max, equipes_)` — ETAPA 2 — Chuva, por equipe, dia a dia, só entre os agentes ATIVOS
+- L442 `_periodos_se_tocam(ini1, fim1, ini2, fim2, tolerancia_dias)` — True se dois períodos [ini1,fim1] e [ini2,fim2] (objetos date) se
+- L460 `atualizar_deteccoes_pendentes(eventos_detectados, caminho)` — Funde os eventos detectados agora com o que já existia no arquivo,
+- L693 `_cronograma_efetivo(deteccoes)` — CRONOGRAMA_AUSENCIAS + as detecções com status "confirmada" (as
+- L738 `_carregar_agentes_sem_abono(caminho)` — {id_agente: date_desde ou None}. Agentes listados NÃO ganham abono
+- L765 `_agente_sem_abono_em(id_agente, dia, cfg)`
 
-Constantes: LIMITE_DIAS_UTEIS_FERIAS@63, LIMITE_DIAS_CORRIDOS_OCORRENCIA@68, TOLERANCIA_DIAS_MESMO_EVENTO@81, EQUIPES_SEM_DETECCAO_AUTOMATICA@94, FERIADOS_NACIONAIS@101, FERIADOS_VALEM_A_PARTIR_DE@130, _FERIADOS_PADRAO@139, CATEGORIAS_PARALISACAO_COLETIVA@141, CAMINHO_AGENTES_SEM_ABONO@734
+Constantes: LIMITE_DIAS_UTEIS_FERIAS@64, LIMITE_DIAS_CORRIDOS_OCORRENCIA@69, TOLERANCIA_DIAS_MESMO_EVENTO@82, EQUIPES_SEM_DETECCAO_AUTOMATICA@95, FERIADOS_NACIONAIS@102, FERIADOS_VALEM_A_PARTIR_DE@131, _FERIADOS_PADRAO@140, CATEGORIAS_PARALISACAO_COLETIVA@142, CAMINHO_AGENTES_SEM_ABONO@735
 
 ## scripts/coleta/estilo_excel.py (224 linhas)
 
@@ -356,11 +358,11 @@ Constantes: LIMITE_DIAS_UTEIS_FERIAS@63, LIMITE_DIAS_CORRIDOS_OCORRENCIA@68, TOL
 
 Constantes: CPF@27, SENHA@28, ID_MUNICIPIO@38, ID_ATIVIDADE@39, ID_ANO@40, ID_CICLO@41, ID_TIPO_VISITA@42, ANCORA_DATA@47, ANCORA_ID@48, MESES_PT@49, PRIMEIRA_SEMANA_COLETA@59, GERAR_PAGINAS_SEMANAIS@69, PRIMEIRA_SEMANA_DETALHE_SEMANAL@70, PASTA_ARQUIVO_SEMANAL@71, MESES_OFICIAIS@88, PRIMEIRA_SEMANA_CICLO_EXPLICITO@102, PRIMEIRA_SEMANA_VISAO_SEMANAL@106, MESES_ARQUIVADOS@131, MESES_ADICIONAIS@138, PASTA_SEMANAS@165, ID_PENDENCIA_ABERTOS@233, ID_PENDENCIA_FECHADOS@234, ID_PENDENCIA_RECUSADOS@235, AGENTES_POR_EQUIPE@238, AGENTES_PONTO_ESTRATEGICO@252, ID_ATIVIDADE_PONTO_ESTRATEGICO@255, CICLOS_PONTO_ESTRATEGICO@270, CICLOS_TRATAMENTO@299, NOME_ARQUIVO_CICLOS_COLETADOS@332, MAX_WORKERS@365, DELAY_ENTRE_PAGINAS@366, TIMEOUT_CONEXAO@367, TIMEOUT_LEITURA@368, TIMEOUT_HTTP@369, BACKOFF_BASE_S@370, BACKOFF_MAX_S@371, BACKOFF_JITTER_S@372, PAGE_LOAD_TIMEOUT_S@373, ESPERA_ELEMENTO_S@374, TENTATIVAS_LOGIN@375, TENTATIVAS_SAUDE@376, MAX_SEMANAS_FALHAS_SEGUIDAS@377, ORCAMENTO_COLETA_MIN@378, TENTATIVAS_POR_PAGINA@379, TEMPO_MIN_VISITA_MIN@382, TEMPO_MAX_VISITA_MIN@383, TETO_DURACAO_MEDIA_MIN@394, META_VISITAS_DIA@395, METAS_EQUIPES@420, PCT_RAPIDAS_OK_ATE@427, PCT_RAPIDAS_ATENCAO_ATE@428, LIMIAR_SEQUENCIA_SUSPEITA_SEG@437, HORA_ALMOCO_INICIO_MIN@444, HORA_ALMOCO_FIM_MIN@445, HORA_EXPEDIENTE_MANHA_INICIO@450, HORA_EXPEDIENTE_MANHA_FIM@451, HORA_EXPEDIENTE_TARDE_INICIO@452, HORA_EXPEDIENTE_TARDE_FIM@453, SALARIO_MINIMO@456, SALARIO_AGENTE@457, DIAS_UTEIS_MES@458, PASTA_SAIDA@461, ARQUIVO_CONSOLIDADO@462, URL_LOGIN@465, URL_VISITAS@466, MOTIVOS_CRONOGRAMA@494, CAMINHO_CACHE_NOMES_AGENTES@502, CRONOGRAMA_AUSENCIAS@584
 
-## scripts/coleta/pontos.py (136 linhas)
+## scripts/coleta/pontos.py (138 linhas)
 
-- L93 `_ranking_sem_normalizacao(data_min, data_max)` — True se o período que começa em `data_min` usa o ranking novo (sem
+- L95 `_ranking_sem_normalizacao(data_min, data_max)` — True se o período que começa em `data_min` usa o ranking novo (sem
 
-Constantes: COLETAR_FECHADOS_RECUSADOS@15, PONTOS_INICIAIS@23, NOTA_MINIMA@24, NOTA_MAXIMA@25, TETO_FATOR_NORMALIZACAO@29, RANKING_SEM_NORMALIZACAO_A_PARTIR_DE@38, BONUS_MIN_FRACAO_DIAS_ESPERADOS@44, PRESENCA_MINIMA_FRACAO@52, LIMITE_AGENTES_EVENTO_TURNO@72, CONFIRMAR_FERIAS_AUTOMATICAMENTE@79, CONFIRMAR_CHUVA_AUTOMATICAMENTE@80, EVENTO_COLETIVO_A_PARTIR_DE@85, CLASSIF_TURNO_SEM_LANCAMENTO@86, CLASSIF_POSSIVEL_EVENTO@87, AVISO_AFASTAMENTO_FRACAO_MAX@89, AVISO_AFASTAMENTO_TURNOS_MIN@90, AVISO_AFASTAMENTO_PERIODO_MAX_DIAS@91, HORA_LIMITE_INICIO_MANHA@104, HORA_LIMITE_FIM_MANHA@105, HORA_LIMITE_INICIO_TARDE@106, HORA_LIMITE_FIM_TARDE@107, PONTOS_PERDA_INICIO_MANHA_ATRASADO@110, PONTOS_PERDA_FIM_MANHA_ANTECIPADO@111, PONTOS_PERDA_INICIO_TARDE_ATRASADO@112, PONTOS_PERDA_FIM_TARDE_ANTECIPADO@113, PONTOS_PERDA_TURNO_SEM_LANCAMENTO@114, PONTOS_PERDA_DIA_INTEIRO_SEM_LANCAMENTO@117, PONTOS_PERDA_VISITA_RAPIDA@118, PONTOS_PERDA_VISITA_LONGA@119, PONTOS_PERDA_VISITA_DUPLICADA@120, PONTOS_PERDA_SEQUENCIA_SUSPEITA@121, PONTOS_PERDA_VISITA_NEGATIVA@122, PONTOS_PERDA_FORA_EXPEDIENTE@123, PONTOS_PERDA_VISITA_ALMOCO@124, PONTOS_PERDA_DIA_SEM_META@125, PONTOS_GANHO_DIA_COM_META@128, PONTOS_GANHO_SEM_VISITA_RAPIDA@129, PONTOS_GANHO_SEM_AUSENCIA@130, PONTOS_GANHO_PONTUALIDADE_PERFEITA@131, NOTA_FAIXA_EXCELENTE@134, NOTA_FAIXA_BOM@135, NOTA_FAIXA_ATENCAO@136
+Constantes: COLETAR_FECHADOS_RECUSADOS@15, PONTOS_INICIAIS@23, NOTA_MINIMA@24, NOTA_MAXIMA@25, TETO_FATOR_NORMALIZACAO@29, RANKING_SEM_NORMALIZACAO_A_PARTIR_DE@40, BONUS_MIN_FRACAO_DIAS_ESPERADOS@46, PRESENCA_MINIMA_FRACAO@54, LIMITE_AGENTES_EVENTO_TURNO@74, CONFIRMAR_FERIAS_AUTOMATICAMENTE@81, CONFIRMAR_CHUVA_AUTOMATICAMENTE@82, EVENTO_COLETIVO_A_PARTIR_DE@87, CLASSIF_TURNO_SEM_LANCAMENTO@88, CLASSIF_POSSIVEL_EVENTO@89, AVISO_AFASTAMENTO_FRACAO_MAX@91, AVISO_AFASTAMENTO_TURNOS_MIN@92, AVISO_AFASTAMENTO_PERIODO_MAX_DIAS@93, HORA_LIMITE_INICIO_MANHA@106, HORA_LIMITE_FIM_MANHA@107, HORA_LIMITE_INICIO_TARDE@108, HORA_LIMITE_FIM_TARDE@109, PONTOS_PERDA_INICIO_MANHA_ATRASADO@112, PONTOS_PERDA_FIM_MANHA_ANTECIPADO@113, PONTOS_PERDA_INICIO_TARDE_ATRASADO@114, PONTOS_PERDA_FIM_TARDE_ANTECIPADO@115, PONTOS_PERDA_TURNO_SEM_LANCAMENTO@116, PONTOS_PERDA_DIA_INTEIRO_SEM_LANCAMENTO@119, PONTOS_PERDA_VISITA_RAPIDA@120, PONTOS_PERDA_VISITA_LONGA@121, PONTOS_PERDA_VISITA_DUPLICADA@122, PONTOS_PERDA_SEQUENCIA_SUSPEITA@123, PONTOS_PERDA_VISITA_NEGATIVA@124, PONTOS_PERDA_FORA_EXPEDIENTE@125, PONTOS_PERDA_VISITA_ALMOCO@126, PONTOS_PERDA_DIA_SEM_META@127, PONTOS_GANHO_DIA_COM_META@130, PONTOS_GANHO_SEM_VISITA_RAPIDA@131, PONTOS_GANHO_SEM_AUSENCIA@132, PONTOS_GANHO_PONTUALIDADE_PERFEITA@133, NOTA_FAIXA_EXCELENTE@136, NOTA_FAIXA_BOM@137, NOTA_FAIXA_ATENCAO@138
 
 ## scripts/coleta/processamento.py (154 linhas)
 
