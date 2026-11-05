@@ -49,21 +49,34 @@ header::after { /* o sublinhado do logo da prefeitura */
   content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px;
   background: linear-gradient(90deg, var(--yellow) 0 120px, var(--red) 120px 168px, var(--teal) 168px 196px, transparent 196px);
 }
-header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
+header .container { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
 .header-brand { display: flex; align-items: center; gap: 16px; }
 .header-brand img { height: 40px; width: auto; background: #fff; padding: 4px 9px; border-radius: 4px; }
 header h1 { font-family: var(--f-num); font-size: 1.55rem; font-weight: 700; letter-spacing: 0.04em; color: #fff; line-height: 1.1; }
 header h1 span { color: #2BA8E8; font-weight: 600; }
 .header-meta { color: #9DB2D0; font-size: 0.78rem; font-weight: 400; }
-.header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.presentation-toggle { display: flex; align-items: center; gap: 6px; color: #9DB2D0; font-size: 0.78rem; cursor: pointer; user-select: none; }
-.presentation-toggle input { accent-color: var(--yellow); cursor: pointer; }
-.print-full-btn { margin-left: 0; }
-/* Botões do cabeçalho: compactos. Os ícones (emoji e SVG do tema) acompanham o tamanho do texto
-   em vez de ficarem maiores que ele. */
-.header-actions .print-btn { padding: 5px 10px; font-size: 0.74rem; gap: 5px; margin-left: 0; line-height: 1.2; }
-.header-actions .btn-ico { font-size: 0.9em; line-height: 1; display: inline-block; }
-.header-actions .print-btn .ico { width: 0.95em; height: 0.95em; }
+/* Ferramentas do cabeçalho: tudo na mesma linha, com a MESMA altura (--hbtn-h). Os 4 botões de texto
+   têm a mesma largura; tema e imprimir são quadrados só com o símbolo. */
+:root { --hbtn-h: 36px; }
+.header-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; }
+.header-actions .period-select { box-sizing: border-box; height: var(--hbtn-h); width: 210px; padding: 0 10px; border-radius: 6px; }
+.hnav { display: grid; grid-template-columns: repeat(4, 150px); gap: 8px; }
+.htools { display: flex; gap: 8px; }
+.hopts { display: flex; gap: 8px; margin-left: auto; }
+.hbtn { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: var(--hbtn-h); padding: 0 10px;
+  background: var(--navy); color: #fff; border: 1px solid #6F9BD1; border-radius: 6px; font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1;
+  text-decoration: none; white-space: nowrap; cursor: pointer; transition: background .15s, border-color .15s; }
+.hbtn:hover { background: var(--navy2); border-color: var(--blue); }
+.hbtn:focus-visible, .hopt:focus-within { outline: 2px solid var(--yellow); outline-offset: 2px; }
+.hbtn-ico { width: var(--hbtn-h); padding: 0; }
+.hbtn .btn-ico { display: inline-flex; align-items: center; line-height: 1; }
+.hbtn .ico { width: 1.2em; height: 1.2em; }
+.hbtn-ico .ico { width: 1.3em; height: 1.3em; }
+.hopt { box-sizing: border-box; display: inline-flex; align-items: center; gap: 7px; height: var(--hbtn-h); padding: 0 12px; border: 1px solid #2C568F; border-radius: 6px;
+  color: #C5D3E8; font-size: 0.78rem; cursor: pointer; user-select: none; white-space: nowrap; }
+.hopt:hover { border-color: #6F9BD1; color: #fff; }
+.hopt input { accent-color: var(--yellow); cursor: pointer; margin: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 /* Seletor de mês. O cabeçalho é azul-marinho escuro nos DOIS temas, então no tema claro
    o seletor usa o azul dos botões (--navy) com borda clara pra não se confundir com o fundo. */
 .period-select { background: var(--navy); color: #fff; border: 1px solid #6F9BD1; border-radius: 4px; padding: 7px 10px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
@@ -278,10 +291,10 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
   header h1 { font-size: 1.25rem; }
   .header-brand { gap: 10px; } .header-brand img { height: 34px; }
   .header-brand .header-meta { display: none; }
-  .header-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; }
-  .header-actions .period-select, .header-actions .presentation-toggle, .header-actions .print-full-btn,
-  .header-actions .header-meta { grid-column: 1 / -1; }
-  .header-actions .print-btn { justify-content: center; margin-left: 0; padding: 6px 6px; }
+  .header-actions { gap: 8px; }
+  .header-actions .period-select { width: 100%; }
+  .hnav { grid-template-columns: 1fr 1fr; width: 100%; }
+  .hopts { margin-left: 0; flex-wrap: wrap; }
   .kpi-value { font-size: 2rem; }
   .week-nav-titulo { width: 100%; }
 }

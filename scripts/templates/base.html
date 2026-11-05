@@ -17,30 +17,29 @@
       <img src="{{ logo_href }}" alt="Prefeitura Municipal de Ponta Porã">
       <div>
         <h1>S E N T I N E L A <span>- HUB</span></h1>
-        <div class="header-meta">Consolidado de todos os agentes · Atualizado automaticamente via GitHub Actions · {{ now_str }}</div>
+        <div class="header-meta">{{ kpi.total_agentes }} agentes · {{ teams | length }} equipes · {{ kpi.total_geral | br }} imóveis · atualizado em {{ now_str }}</div>
       </div>
     </div>
     <div class="header-actions">
       {% if periodos and periodos|length > 1 %}
-      <select class="period-select" onchange="if(this.value) window.location.href=this.value">
+      <select class="period-select" aria-label="Período" onchange="if(this.value) window.location.href=this.value">
         {% for p in periodos %}<option value="{{ p.href }}" {% if p.atual %}selected{% endif %}>{{ p.label }}</option>{% endfor %}
       </select>
       {% endif %}
-      <a class="print-btn" href="{{ transparencia_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">📖</span>Como o ranking é calculado</a>
-      <a class="print-btn" href="{{ projecao_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">📺</span>Tela de reunião</a>
-      <a class="print-btn" href="{{ comparar_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">🔁</span>Comparar meses</a>
-      <a class="print-btn" href="{{ album_href }}" style="text-decoration:none"><span class="btn-ico" aria-hidden="true">🃏</span>Álbum de cartinhas</a>
-      <button type="button" class="print-btn" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg> <span class="tema-txt">Tema escuro</span></button>
-      <label class="presentation-toggle">
-        <input type="checkbox" id="togglePresentationMode">
-        Modo apresentação (ocultar nomes)
-      </label>
-      <label class="presentation-toggle">
-        <input type="checkbox" id="toggleAnimacoes" checked>
-        Animações
-      </label>
-      <button type="button" class="print-btn print-full-btn" onclick="printFullReport()" title="Imprimir o relatório completo do mês"><span class="btn-ico" aria-hidden="true">🖨️</span>Imprimir relatório do mês</button>
-      <div class="header-meta">{{ kpi.total_agentes }} agentes · {{ teams | length }} equipes · {{ kpi.total_geral | br }} imóveis</div>
+      <nav class="hnav" aria-label="Outras páginas">
+        <a class="hbtn" href="{{ transparencia_href }}"><span class="btn-ico" aria-hidden="true">📖</span><span>Como é calculado</span></a>
+        <a class="hbtn" href="{{ projecao_href }}"><span class="btn-ico" aria-hidden="true">📺</span><span>Tela de reunião</span></a>
+        <a class="hbtn" href="{{ comparar_href }}"><span class="btn-ico" aria-hidden="true">🔁</span><span>Comparar meses</span></a>
+        <a class="hbtn" href="{{ album_href }}"><span class="btn-ico" aria-hidden="true">🃏</span><span>Álbum de cartinhas</span></a>
+      </nav>
+      <div class="htools">
+        <button type="button" class="hbtn hbtn-ico" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg><span class="tema-txt sr-only">Tema escuro</span></button>
+        <button type="button" class="hbtn hbtn-ico" onclick="printFullReport()" title="Imprimir o relatório completo do mês" aria-label="Imprimir o relatório completo do mês"><span class="btn-ico" aria-hidden="true">🖨️</span></button>
+      </div>
+      <div class="hopts">
+        <label class="hopt" title="Modo apresentação: oculta os nomes dos agentes"><input type="checkbox" id="togglePresentationMode"><span>Ocultar nomes</span></label>
+        <label class="hopt" title="Animações dos gráficos e das seções"><input type="checkbox" id="toggleAnimacoes" checked><span>Animações</span></label>
+      </div>
     </div>
   </div>
 </header>
