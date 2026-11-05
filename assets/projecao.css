@@ -1,0 +1,34 @@
+
+:root{--bg:#EEF2F8;--card:#FFFFFF;--tx:#12233B;--mut:#4A5D7C;--bd:#D5DEEA;--pri:#0F5FB0;--ok:#0B7A44;--bad:#B3261E;--soft:#F2F6FB;--text:#12233B;--text2:#46597A;--grid:rgba(70,89,122,.18);color-scheme:light}
+:root[data-theme="dark"]{--bg:#071426;--card:#0C1F3A;--tx:#E6EDF7;--mut:#9DB2D0;--bd:#1D3C68;--pri:#F7B500;--ok:#5CE59A;--bad:#FF8478;--soft:#102848;--text:#E6EDF7;--text2:#9DB2D0;--grid:rgba(157,178,208,.16);color-scheme:dark}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 clamp(16px,1.6vw,26px)/1.45 "IBM Plex Sans",system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
+.ico{width:1.1em;height:1.1em;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ico-sol{display:none}:root[data-theme="dark"] .ico-sol{display:inline}:root[data-theme="dark"] .ico-lua{display:none}
+header{background:#050F20;position:relative;padding:10px 20px 13px;display:flex;align-items:center;gap:14px;flex:none}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,#F7B500 0 120px,#FF5143 120px 168px,#19B8A3 168px 196px,transparent 196px)}
+header img{height:38px;background:#fff;padding:3px 8px;border-radius:4px}
+header b{font-family:"Barlow Semi Condensed",system-ui,sans-serif;font-size:1.3em;letter-spacing:.04em;color:#fff;white-space:nowrap}
+header b i{font-style:normal;color:#2BA8E8;font-weight:600}
+header .esp{flex:1}
+.bt{background:transparent;border:1px solid #2C4F82;color:#DCE7F5;border-radius:8px;padding:8px 12px;font:inherit;font-size:.7em;cursor:pointer;white-space:nowrap;display:inline-flex;gap:6px;align-items:center;text-decoration:none}
+.bt:hover,.bt:focus-visible{border-color:#F7B500;outline:none}
+select.bt{background:#0C1F3A}
+.prog{height:5px;background:var(--bd);flex:none}.prog i{display:block;height:100%;width:0;background:#19B8A3}
+main{flex:1;min-height:0;position:relative;padding:2vh 3vw}
+.slide{position:absolute;inset:2vh 3vw;display:none;flex-direction:column;gap:1.5vh}
+.slide.on{display:flex;animation:ent .35s ease}
+@keyframes ent{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.slide.on{animation:none}}
+h2{font-family:"Barlow Semi Condensed",system-ui,sans-serif;font-weight:700;font-size:2em;margin:0;color:var(--tx);letter-spacing:.01em}
+h2 small{font-family:"IBM Plex Sans",sans-serif;font-weight:400;font-size:.5em;color:var(--mut);margin-left:.6em}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(14em,1fr));gap:2vw;flex:1;align-content:center}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:3vh 2vw;text-align:center}
+.card .v{font-family:"Barlow Semi Condensed",sans-serif;font-weight:700;font-size:4.2em;line-height:1.05;color:var(--tx);font-variant-numeric:tabular-nums}
+.card .l{color:var(--mut);font-size:.9em;margin-top:.3em}
+.graf{flex:1;min-height:0;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:2vh 2vw;position:relative}
+.vazio{margin:auto;text-align:center;color:var(--mut);font-size:1.2em}
+.dots{display:flex;gap:10px;justify-content:center;padding:0 0 1.2vh;flex:none}
+.dots button{width:14px;height:14px;border-radius:50%;border:2px solid var(--mut);background:transparent;padding:0;cursor:pointer}
+.dots button.on{background:var(--pri);border-color:var(--pri)}
+.nota{color:var(--mut);font-size:.65em}

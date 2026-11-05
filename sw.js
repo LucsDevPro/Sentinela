@@ -1,8 +1,8 @@
 // Service worker mínimo: guarda só a "casca" do app (a página e os ícones) pra abrir rápido.
 // NUNCA guarda dados nem respostas do Worker (PIN, decisões, contestações): só pedidos GET
 // do próprio site, e sempre tenta a rede primeiro.
-const CASCA = "sentinela-casca-v1";
-const ARQUIVOS = ["validar.html", "manifest.webmanifest", "assets/icone-192.png", "assets/icone-512.png"];
+const CASCA = "sentinela-casca-v2";
+const ARQUIVOS = ["validar.html", "assets/validar.js", "assets/validar.css", "manifest.webmanifest", "assets/icone-192.png", "assets/icone-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CASCA).then(c => c.addAll(ARQUIVOS)).catch(() => {})); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CASCA).map(k => caches.delete(k))))); self.clients.claim(); });
 self.addEventListener("fetch", e => {
