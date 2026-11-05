@@ -183,6 +183,20 @@ Constantes: CAMINHO@7, EMBUTIDOS@8
 
 Constantes: CONFIG_HOME@18, EQUIPES_SOB_DEMANDA@20
 
+## scripts/regenerar_mes.py (255 linhas)
+
+- L43 `escolher_alvos(arg, arquivados, oficiais)` — [(semana_ini, semana_fim, "Mês/Ano")] a regenerar.
+- L64 `semanas_faltando(alvo, em_cache)` — Semanas (HTML ID) do mês que NÃO estão no cache. Mês só pode ser refeito com …
+- L71 `ler_ranking(caminho)` — {agente: (posição, dias trabalhados, dias esperados, turnos sem trabalhar, po…
+- L90 `comparar_rankings(antigo, novo)` — Resumo do que mudou entre duas leituras de ler_ranking().
+- L107 `tirar_do_manifest(manifest, alvos)` — Manifest sem as entradas (mês e visões semanais) das semanas dos alvos.
+- L114 `congelar_no_manifest(manifest, alvos, hoje)` — Marca como congeladas ("manual") as entradas dos alvos, como o 'Fechar mês' f…
+- L124 `_sha(caminho)`
+- L133 `_linha_resumo(nome, r)`
+- L141 `main(argv)`
+
+Constantes: AQUI@30, PASTA_SEMANAS@35, PASTA_HISTORICO@36, PASTA_BACKUP@37
+
 ## scripts/semanas_evisita.py (145 linhas)
 
 - L56 `_offset(ano)`
@@ -299,7 +313,7 @@ Constantes: COLS_RESUMO@12, COLS_RANKING@44, COLS_RANKING_DETALHE@56, COLS_PONTO
 - L95 `rodar_deteccao_completa(pasta_semanas)` — Roda a detecção de possíveis férias/paralisação coletiva em cima do
 - L111 `consolidar_semanas(htmls, pasta_saida, lista_cronograma)` — Carrega o cache de cada semana em `htmls`, junta tudo e recalcula os
 
-## scripts/coleta/deteccao.py (769 linhas)
+## scripts/coleta/deteccao.py (771 linhas)
 
 - L133 `_feriados_em_vigor()` — Feriados de FERIADOS_NACIONAIS que valem na contagem (>= FERIADOS_VALEM_A_PAR…
 - L145 `_dias_uteis_no_intervalo(data_min, data_max, feriados)` — Lista, em ordem, todo dia ÚTIL (seg-sex, fora feriados) entre
@@ -316,10 +330,10 @@ Constantes: COLS_RESUMO@12, COLS_RANKING@44, COLS_RANKING_DETALHE@56, COLS_PONTO
 - L442 `_periodos_se_tocam(ini1, fim1, ini2, fim2, tolerancia_dias)` — True se dois períodos [ini1,fim1] e [ini2,fim2] (objetos date) se
 - L460 `atualizar_deteccoes_pendentes(eventos_detectados, caminho)` — Funde os eventos detectados agora com o que já existia no arquivo,
 - L693 `_cronograma_efetivo(deteccoes)` — CRONOGRAMA_AUSENCIAS + as detecções com status "confirmada" (as
-- L738 `_carregar_agentes_sem_abono(caminho)` — {id_agente: date_desde ou None}. Agentes listados NÃO ganham abono
-- L765 `_agente_sem_abono_em(id_agente, dia, cfg)`
+- L740 `_carregar_agentes_sem_abono(caminho)` — {id_agente: date_desde ou None}. Agentes listados NÃO ganham abono
+- L767 `_agente_sem_abono_em(id_agente, dia, cfg)`
 
-Constantes: LIMITE_DIAS_UTEIS_FERIAS@64, LIMITE_DIAS_CORRIDOS_OCORRENCIA@69, TOLERANCIA_DIAS_MESMO_EVENTO@82, EQUIPES_SEM_DETECCAO_AUTOMATICA@95, FERIADOS_NACIONAIS@102, FERIADOS_VALEM_A_PARTIR_DE@131, _FERIADOS_PADRAO@140, CATEGORIAS_PARALISACAO_COLETIVA@142, CAMINHO_AGENTES_SEM_ABONO@735
+Constantes: LIMITE_DIAS_UTEIS_FERIAS@64, LIMITE_DIAS_CORRIDOS_OCORRENCIA@69, TOLERANCIA_DIAS_MESMO_EVENTO@82, EQUIPES_SEM_DETECCAO_AUTOMATICA@95, FERIADOS_NACIONAIS@102, FERIADOS_VALEM_A_PARTIR_DE@131, _FERIADOS_PADRAO@140, CATEGORIAS_PARALISACAO_COLETIVA@142, CAMINHO_AGENTES_SEM_ABONO@737
 
 ## scripts/coleta/estilo_excel.py (224 linhas)
 

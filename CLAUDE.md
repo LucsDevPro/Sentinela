@@ -31,6 +31,7 @@ Editores (validar/deteccao/cronograma/home .html) ─▶ Worker Cloudflare (work
 | Páginas editáveis da raiz (`validar`, `deteccao_editor`, `cronograma_editor`, `home_editor`, `agente`, `comparar`, `projecao`) | o `.html` só tem a estrutura; o código fica em `assets/<nome>.js` e `assets/<nome>.css` (o `sw.js` guarda `validar.js/.css` na casca offline: se renomear, atualize `ARQUIVOS` e suba o `CASCA`) |
 | Abas do dashboard | `scripts/templates/sections/*.html` (uma por aba), `base.html` |
 | Meses fechados/abertos | `data/meses_arquivados.json`, `data/historico/manifest.json`, `scripts/fechar_mes.py` |
+| Refazer um mês congelado (corrigir meses antigos) | workflow `regenerar-mes.yml` → `scripts/regenerar_mes.py` (um mês por vez, cronológico; guarda backup) |
 
 ## Coletor (`scripts/coletar_evisita.py` é só a fachada; o código está em `scripts/coleta/`)
 Camadas (cada módulo só importa dos anteriores): `parametros` → `pontos` → `auxiliares` → `deteccao` → `sessao` (Selenium/HTTP) → `calculos` → `colunas`

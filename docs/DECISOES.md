@@ -9,7 +9,13 @@
   (O registro de 02/11 dizendo que "Maio–Outubro foram regenerados" não era verdade para os meses congelados.)
 - **Chuva confirmada automaticamente voltou a `pendente`** (41 paralisações coletivas de Julho em diante, antes da regra de 02/11 sem validação humana). Férias já
   validadas pela coordenação e decisões de `falta` ficaram como estavam. Atestado: todos os 98 lançamentos já são "Ausência justificada" (sem diagnóstico).
-- **Cabeçalho da home:** botões e ícones menores (`.header-actions .print-btn`, `.btn-ico` em `scripts/style.css`; marcação em `scripts/templates/base.html`); no celular, grade de 2 colunas.
+- **Cabeçalho da home refeito:** tudo na mesma linha e na mesma altura (36 px, `--hbtn-h`); os 4 botões de texto têm a mesma largura
+  (`.hbtn` em `.hnav`) e tema/imprimir viraram quadrados só com o símbolo (`.hbtn-ico`); "Ocultar nomes" e "Animações" viraram `.hopt`;
+  no celular os botões ficam em 2×2. Marcação em `scripts/templates/base.html`, estilo em `scripts/style.css`.
+- **Workflow "Regenerar mês congelado"** (`regenerar-mes.yml` + `scripts/regenerar_mes.py`): refaz um mês antigo com as regras de hoje, com
+  modo simulação e backup (ver OPERACAO.md). Reabre um mês por vez, em ordem: o desempate do ranking lê a média dos meses anteriores do
+  `manifest.json`; as reaberturas de Julho–Setembro feitas no mesmo dia, todas de uma vez, deixaram Agosto e Setembro sem o desempate,
+  e foram refeitas em ordem.
 
 ## 04/11/2026 — cartinha: nível e borda pela mesma nota arredondada; cartinha 100 redesenhada
 - **Correção:** o nível (ouro/prata/bronze/destaque) usava a nota exata e a borda usava a arredondada — 89,6 aparecia como 90, com cartão prata e borda de ouro. Agora os dois usam a nota arredondada que está escrita no cartão (≥ 90 ouro, ≥ 75 prata, abaixo bronze; destaque = top 3 com 90–99). `assets/carta.js` (`medidas`). Teste ajustado em `scripts/test_sessao10_navegador.py`.

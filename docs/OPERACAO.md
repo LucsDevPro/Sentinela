@@ -456,6 +456,17 @@ essas planilhas, então os números publicados não mudam.
 
 - **05/11/2026:** Julho a Setembro foram reabertos, recalculados com as regras atuais e congelados de novo
   (a nota subiu 6 a 8 pts em média; planilhas antigas em `data/historico/backup_congelado/*_antes-das-regras-novas.xlsx`).
+- **Corrigir um mês antigo (rótulo, regra nova, bug de cálculo): workflow "Regenerar mês congelado".**
+  Aba Actions → *Regenerar mês congelado* → Run workflow → `mes` = `Setembro/2026` (ou `todos`).
+  Desmarque **aplicar** para só simular: o resumo da execução mostra quantos agentes sobem/descem e
+  quantas posições mudam, sem gravar nada. Com **aplicar**, ele guarda a planilha antiga em
+  `data/historico/backup_congelado/*_antes-da-regeneracao-<data>.xlsx`, refaz o mês a partir do cache
+  (`data/semanas/`, sem e-Visita), congela de novo, confere que os outros meses congelados ficaram
+  intactos e aciona o `update-dashboard` (`rodar_coleta=false`) para gerar as páginas e publicar.
+  Local: `python scripts/regenerar_mes.py "Setembro/2026"` (ou `todos`; `--sem-acumulado` pula o Analise_Consolidada).
+  O mês só pode ser refeito se **todas** as semanas dele estiverem em `data/semanas/`.
+  Ele reabre **um mês por vez, em ordem cronológica**, porque o desempate do ranking usa a média dos meses
+  anteriores lida do `manifest.json`: sem isso, quem empata na nota ficaria na posição errada.
 - Para reabrir um mês fechado pela página: aba **Fechar mês → Reabrir** (digite o nome do mês;
   cópia de segurança automática). Julho–Setembro seguem congelados; só o desenvolvedor reabre.
 - **Depois da semana 330:** feche Outubro pela aba **Fechar mês** (ou `python scripts/fechar_mes.py fechar "Outubro/2026"`).
