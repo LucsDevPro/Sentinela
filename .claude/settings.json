@@ -10,7 +10,10 @@
       "Read(./data/historico/**)",
       "Read(./data/*.xlsx)",
       "Read(./assets/fotos/**)",
-      "Read(./assets/agentes_dados.js)"
+      "Read(./assets/agentes_dados.js)",
+      "Read(./data/deteccoes_pendentes.json)",
+      "Read(./scripts/chart.umd.js)",
+      "Read(./assets/chart.umd.js)"
     ]
   }
 }

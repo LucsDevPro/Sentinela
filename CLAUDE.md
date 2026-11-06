@@ -1,69 +1,59 @@
-# Sentinela Prime — guia rápido para o Claude
+# Sentinela Prime — guia para o Claude
 
-Leia ESTE arquivo primeiro. Depois, só se precisar: `docs/REGRAS.md` (regras de negócio), `docs/DECISOES.md` (decisões por data; o fim do arquivo é um
-histórico longo de sessões, leia só o topo) e `docs/MAPA.md` (índice função → linha; os maiores arquivos têm 600 a 1.400 linhas, **não leia inteiros**: use `grep -n` / `sed -n 'A,Bp'`).
-Manuais longos (não leia por padrão): `docs/OPERACAO.md`, `docs/INSTALACAO.md`, `docs/REGRAS_DETALHADAS.md`; o `README.md` é só um resumo.
+Leia ESTE arquivo primeiro; as regras de cada área carregam sozinhas de `.claude/rules/` quando você abre arquivos dela.
+Só abra outros docs se precisar: `docs/REGRAS.md` (regras de negócio) · topo de `docs/DECISOES.md` (decisões por data; o fim é histórico longo) · `docs/MAPA.md` (função → linha).
+Não leia por padrão: `docs/OPERACAO.md`, `INSTALACAO.md`, `REGRAS_DETALHADAS.md`. O `README.md` é só resumo.
 
 ## O que é
-Dashboard de monitoramento das visitas dos agentes de campo (e-Visita) de Ponta Porã/MS. Idioma: **português do Brasil**
-(código, commits, textos). Publicado como site estático no GitHub Pages.
+Dashboard das visitas dos agentes de campo (e-Visita) de Ponta Porã/MS, site estático no GitHub Pages. Idioma de código, commits e textos: **português do Brasil**.
 
-## Fluxo (GitHub Actions `update-dashboard.yml`: dom/seg/ter 07:00 UTC + botão "Run workflow")
+## Fluxo (workflow `update-dashboard.yml`: dom/seg/ter 07:00 UTC + "Run workflow")
 ```
-e-Visita ──Selenium──▶ data/semanas/NNN.xlsx (cache por semana)
-   scripts/coletar_evisita.py ─▶ data/Analise_Consolidada.xlsx (acumulado) + data/historico/semanas_AAA-BBB.xlsx (1 por mês)
-   scripts/generate_dashboard.py + scripts/templates/ (Jinja2) ─▶ index.html, acumulado.html, historico/*.html, partes/
-Editores (validar/deteccao/cronograma/home .html) ─▶ Worker Cloudflare (worker/index.js) ─▶ repository_dispatch
-   ─▶ scripts/aplicar_decisao.py / lancar_ausencia.py / lancar_atestado.py ─▶ data/*.json
+e-Visita ─Selenium▶ data/semanas/NNN.xlsx ─▶ data/Analise_Consolidada.xlsx + data/historico/semanas_AAA-BBB.xlsx
+generate_dashboard.py + scripts/templates/ (Jinja2) ─▶ index.html, acumulado.html, historico/, partes/
+Editores .html ─▶ Worker Cloudflare ─▶ repository_dispatch ─▶ scripts/aplicar_decisao|lancar_*.py ─▶ data/*.json
 ```
 
-## Onde fica cada coisa
-| Quero mexer em… | Arquivo (função/constante) |
+## Onde mexer
+| Quero alterar… | Onde |
 |---|---|
-| Pontuação e pesos (PONTOS_*) | `scripts/coleta/pontos.py` (constantes) e `scripts/coleta/calculos.py` → `calcular_pontuacao` |
-| Turno sem lançamento / Possível Evento | `coleta/ausencias_ranking.py` → `_preparar_ausencias`; `coleta/pontos.py` → `LIMITE_AGENTES_EVENTO_TURNO`, `EVENTO_COLETIVO_A_PARTIR_DE` |
-| Ranking e dias esperados | `coleta/ausencias_ranking.py` → `_preparar_ranking`; `coleta/pontos.py` → `RANKING_SEM_NORMALIZACAO_A_PARTIR_DE` |
-| Detecção automática férias/chuva | `coleta/deteccao.py` → `detectar_ausencias_e_paralisacoes`, `atualizar_deteccoes_pendentes`; `CONFIRMAR_*_AUTOMATICAMENTE` em `coleta/pontos.py` |
-| Cronograma (justificativas) | `data/cronograma_ausencias.json`, `_obter_motivo_cronograma` (`coleta/auxiliares.py`), `MOTIVOS_CRONOGRAMA` (`coleta/parametros.py`) |
-| Agentes, equipes, ciclos, meses | `AGENTES_POR_EQUIPE`, `CICLOS_TRATAMENTO`, `MESES_OFICIAIS` (`coleta/parametros.py`); nomes em `data/agentes_nomes.json` (automático); depois rode `python3 scripts/gerar_form_atestado.py` |
-| Painel Custos & Produtividade | `scripts/generate_dashboard.py` (`build_kpi_custos`, `build_custos_*`) + `scripts/templates/sections/custos.html` |
-| Visual (CSS / JS) do dashboard gerado | `scripts/style.css`, `scripts/bootstrap.js`, `scripts/templates/charts.js` |
-| Páginas editáveis da raiz (`validar`, `deteccao_editor`, `cronograma_editor`, `home_editor`, `agente`, `comparar`, `projecao`) | o `.html` só tem a estrutura; o código fica em `assets/<nome>.js` e `assets/<nome>.css` (o `sw.js` guarda `validar.js/.css` na casca offline: se renomear, atualize `ARQUIVOS` e suba o `CASCA`) |
-| Abas do dashboard | `scripts/templates/sections/*.html` (uma por aba), `base.html` |
-| Meses fechados/abertos | `data/meses_arquivados.json`, `data/historico/manifest.json`, `scripts/fechar_mes.py` |
-| Refazer um mês congelado (corrigir meses antigos) | workflow `regenerar-mes.yml` → `scripts/regenerar_mes.py` (um mês por vez, cronológico; guarda backup) |
+| Pontuação e pesos | `coleta/pontos.py` (constantes) + `coleta/calculos.py` → `calcular_pontuacao` |
+| Turno sem lançamento / Evento | `coleta/ausencias_ranking.py` → `_preparar_ausencias`; constantes em `pontos.py` |
+| Ranking e dias esperados | `coleta/ausencias_ranking.py` → `_preparar_ranking` |
+| Detecção de férias/chuva | `coleta/deteccao.py`; `CONFIRMAR_*_AUTOMATICAMENTE` em `pontos.py` |
+| Cronograma / justificativas | `data/cronograma_ausencias.json`, `coleta/auxiliares.py`, `MOTIVOS_CRONOGRAMA` (`parametros.py`) |
+| Agentes, equipes, ciclos, meses | `coleta/parametros.py`; nomes em `data/agentes_nomes.json`; depois `python3 scripts/gerar_form_atestado.py` |
+| Painel Custos | `generate_dashboard.py` (`build_kpi_custos`, `build_custos_*`) + `templates/sections/custos.html` |
+| Visual / abas | `scripts/style.css`, `bootstrap.js`, `templates/charts.js`, `templates/sections/*.html`, `base.html` |
+| Páginas editáveis da raiz | `.html` só tem estrutura; código em `assets/<nome>.js/.css` |
+| Meses fechados | `data/meses_arquivados.json`, `data/historico/manifest.json`, `scripts/fechar_mes.py` |
+| Refazer mês congelado | workflow `regenerar-mes.yml` → `scripts/regenerar_mes.py` (um mês por vez, em ordem) |
 
-## Coletor (`scripts/coletar_evisita.py` é só a fachada; o código está em `scripts/coleta/`)
-Camadas (cada módulo só importa dos anteriores): `parametros` → `pontos` → `auxiliares` → `deteccao` → `sessao` (Selenium/HTTP) → `calculos` → `colunas`
-→ `estilo_excel` → `abas` → `ausencias_ranking` → `saida_excel` → `processamento` → `cache_semanas` → `consolidacao` → `historico` → `execucao` (`main`).
-`import coletar_evisita as C` continua valendo para tudo (`C.calcular_pontuacao`, `C.CPF`...). Achar uma função: `grep -n "def nome" scripts/coleta/*.py` ou `docs/MAPA.md`.
+Achar função: `grep -n "def nome" scripts/coleta/*.py` ou `docs/MAPA.md`. Arquivos têm até 1.400 linhas: **não leia inteiros**, use `grep -n` / `sed -n 'A,Bp'`.
 
 ## Comandos
-```bash
-./scripts/rodar_testes.sh                 # 13 testes Python do CI, uma linha cada (~30 s). Rode antes de todo commit.
-node worker/test_worker.mjs               # testes do Worker (também no CI)
-python3 scripts/generate_dashboard.py data/historico/semanas_327-330.xlsx _teste.html   # página de teste (Outubro)
-python3 tools/shot.py _teste.html custos  # screenshot claro/escuro + erros de JS (precisa playwright)
-python3 scripts/gerar_mapa.py             # atualiza docs/MAPA.md depois de mexer em funções
 ```
-Depois de gerar `_teste.html`, **apague** `_teste.html` e `partes/_teste*` (não commitar).
+pip install -r requirements.txt          # obrigatório: quase todo teste importa selenium
+./scripts/rodar_testes.sh [filtro]       # testes Python do CI (~15 s). Rode antes de todo commit
+node worker/test_worker.mjs              # testes do Worker
+python3 scripts/generate_dashboard.py data/historico/semanas_327-330.xlsx _teste.html   # página de teste (~2 s)
+python3 scripts/gerar_mapa.py            # atualiza docs/MAPA.md (--check só verifica)
+python3 scripts/regerar_paginas.py       # regera TODAS as páginas a partir dos dados (~20 s); --so-home só o index
+python3 scripts/resumo.py meses|deteccoes|ranking|cronograma|manifest   # consultas curtas: use em vez de ler JSON/xlsx
+python3 scripts/regenerar_mes.py "Setembro/2026"   # refaz um mês congelado (ou `todos`); veja docs/OPERACAO.md
+python3 tools/comparar_saidas.py         # refatorou o gerador? exige saída idêntica à do HEAD (--autoteste prova que pega erro)
+```
+Depois de gerar `_teste.html`, **apague** `_teste.html` e `partes/_teste*`.
 
-## Convenções
-- **Nunca edite à mão** arquivos gerados: `index.html`, `acumulado.html`, `transparencia.html`, `historico/*.html`, `partes/*`,
-  `assets/agentes_dados.js`, `data/Analise_Consolidada.xlsx`, `data/historico/*.xlsx`, `data/semanas/*`, `data/csv/*`.
-  Mudou o código/template → o workflow regenera. O bot faz commits "Atualiza coleta e dashboard automaticamente": sempre `git pull --rebase` antes de push.
-- Agente é identificado por **ID**, nunca por nome, em qualquer lógica (nomes podem repetir).
-- Regra nova → constante com nome claro + comentário do porquê + teste em `scripts/test_*.py` + linha em `docs/DECISOES.md`.
-- Dados públicos: nunca gravar CID/diagnóstico (atestado = "Ausência justificada").
-- Variáveis de ambiente: modelo em `.env.example` (`.env` é ignorado pelo Git; o coletor lê do ambiente, sem python-dotenv).
-- Token do GitHub: usar só em URL temporária de push (`https://x-access-token:TOKEN@github.com/...`), nunca gravar no remote. Alterar `.github/workflows/*` exige permissão "Workflows" no token.
+## Regras que valem sempre
+- **Nunca edite à mão** os gerados: `index.html`, `acumulado.html`, `transparencia.html`, `historico/*`, `partes/*`, `assets/agentes_dados.js`, `data/Analise_Consolidada.xlsx`, `data/historico/*.xlsx`, `data/semanas/*`, `data/csv/*`. Mudou código/template → o workflow regenera.
+- Agente = sempre por **ID**, nunca por nome.
+- Regra nova = constante com nome claro + comentário do porquê + teste em `scripts/test_*.py` + linha em `docs/DECISOES.md`.
+- Repositório público: nunca gravar senha, token, CID ou diagnóstico (atestado = "Ausência justificada"). `.env` fora do Git (modelo: `.env.example`).
+- O bot também commita ("Atualiza coleta e dashboard automaticamente"): sempre `git pull --rebase` antes de push.
+- Token do GitHub só em URL temporária de push, nunca no remote.
 
-## Armadilhas conhecidas
-- Mês ≠ mês civil: Outubro = semanas 327–330 (a semana de 04/10 abre o mês; 01–02/10 ainda são da semana 326/Setembro).
-  Julho 313–317 · Agosto 318–321 · Setembro 322–326 · Outubro 327–330.
-- Ranking sem normalização: vale para todo período de até 45 dias (todos os meses); o Acumulado (>45 dias) segue no método antigo. Detecção de férias dispara com `LIMITE_DIAS_UTEIS_FERIAS = 7` dias úteis e as detecções novas de férias/chuva entram **pendentes** (`CONFIRMAR_*_AUTOMATICAMENTE = False` em `coleta/pontos.py`); os comentários do código já descrevem isso.
-- Os testes `scripts/test_*.py` importam `coletar_evisita`, que importa `coleta/sessao.py` (único módulo com `selenium`): sem `pip install -r requirements.txt` quase todos falham no import.
-- Atribuir `C.X = valor` na fachada (como os testes fazem) repassa o valor aos módulos que possuem `X`; em código novo, prefira passar parâmetro a mudar variável de módulo.
-- Equipes sob demanda (`EQUIPES_SEM_DETECCAO_AUTOMATICA`: Bloqueio, Ponto Estratégico) ficam fora das regras de evento; a Equipe Bloqueio também fica fora do painel de custos.
-- Nas planilhas, a 1ª tabela de cada aba termina na primeira linha em branco (as legendas vêm depois): leia só até aí.
-- Arquivos grandes: `.claude/settings.json` bloqueia a leitura dos gerados (`index.html`, `acumulado.html`, `historico/`, `partes/`, `data/semanas|csv|historico`, `data/*.xlsx`, fotos). Para dados, use `python3`/`jq` filtrando; `data/deteccoes_pendentes.json` tem ~2,4 mil linhas, não leia inteiro.
+## Armadilhas
+- Mês ≠ mês civil: Outubro = semanas 327–330 (a semana de 04/10 abre o mês).
+- Detecções novas de férias/chuva entram **pendentes** (`CONFIRMAR_*_AUTOMATICAMENTE = False`).
+- Leitura bloqueada em `.claude/settings.json` (gerados e `deteccoes_pendentes.json`). Para dados, use `python3`/`jq` filtrando.
