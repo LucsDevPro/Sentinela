@@ -24,8 +24,10 @@ from .pontos import (
     AVISO_AFASTAMENTO_TURNOS_MIN,
     CLASSIF_POSSIVEL_EVENTO,
     CLASSIF_TURNO_SEM_LANCAMENTO,
+    CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE,
     EVENTO_COLETIVO_A_PARTIR_DE,
     LIMITE_AGENTES_EVENTO_TURNO,
+    MOTIVOS_EVENTO_COLETIVO,
     _ranking_sem_normalizacao,
 )
 from .auxiliares import NOMES_DIA_SEMANA, _meios_turnos_no_dia, _obter_motivo_cronograma
@@ -132,6 +134,7 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
     ]
 
     registros = []
+    cobertos_evento = {}  # (dia_fmt, turno) -> agentes sem lançamento, cobertos por chuva/reunião (só contam no limite se a opção estiver ligada)
     ativos = {}  # (equipe, dia_fmt, turno) -> agentes avaliados e NÃO cobertos pelo cronograma (trabalharam ou não)
     feriados_validos = {datetime.strptime(f, "%d/%m/%Y").date() for f in _feriados_em_vigor()}
     dia_min_periodo = df_total["dia"].min()
@@ -184,6 +187,9 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
                 motivo = _obter_motivo_cronograma(res["id_agente"], res["equipe"], dia, lista_cronograma,
                                                   turno=turno_nome)
                 if motivo:
+                    if not sob_demanda and motivo in MOTIVOS_EVENTO_COLETIVO:
+                        kc = (dia_fmt, turno_nome)
+                        cobertos_evento[kc] = cobertos_evento.get(kc, 0) + 1
                     continue  # dia/turno já explicado (cronograma, ou detecção confirmada) — não é ausência a investigar
                 if not sob_demanda:
                     ativos[(res["equipe"], dia_fmt, turno_nome)] = ativos.get((res["equipe"], dia_fmt, turno_nome), 0) + 1
@@ -218,7 +224,9 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
             continue
         ke = (r["equipe"], r["dia_fmt"], r["turno"])
         n_equipe, n_ativos = ausentes_equipe[ke], ativos.get(ke, 0)
-        n_global = ausentes_global[(r["dia_fmt"], r["turno"])]
+        kg = (r["dia_fmt"], r["turno"])
+        n_cobertos = cobertos_evento.get(kg, 0) if CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE else 0
+        n_global = ausentes_global[kg] + n_cobertos
         muitos = n_global >= LIMITE_AGENTES_EVENTO_TURNO
         toda_equipe = n_ativos >= 2 and n_equipe >= n_ativos
         if not (muitos or toda_equipe):
@@ -228,9 +236,10 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
             continue  # período anterior à regra: continua Turno sem Lançamento
         motivos = []
         if muitos:
-            motivos.append(f"{n_global} agentes sem lançamento neste turno (limite de {LIMITE_AGENTES_EVENTO_TURNO})")
-        if toda_equipe:
-            motivos.append(f"toda a equipe ({n_equipe} de {n_ativos} agentes ativos) sem lançamento neste turno")
+            extra = f", {n_cobertos} já cobertos por chuva/reunião" if n_cobertos else ""
+            motivos.append(f"{n_global} agentes sem lançamento neste turno (limite de {LIMITE_AGENTES_EVENTO_TURNO}{extra}) — possível evento externo ou interno")
+        elif toda_equipe:
+            motivos.append(f"toda a equipe ({n_equipe} de {n_ativos} agentes ativos) sem lançamento neste turno — possível chuva isolada ou reunião da equipe")
         r["classificacao"] = CLASSIF_POSSIVEL_EVENTO
         r["observacao"] = (f"{CLASSIF_POSSIVEL_EVENTO} — " + " e ".join(motivos) +
                            ". Sem desconto de pontos; confirme o motivo (chuva, reunião, capacitação, evento) no cronograma.")

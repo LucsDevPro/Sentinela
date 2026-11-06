@@ -65,13 +65,23 @@ PRESENCA_MINIMA_FRACAO = 0.5
 # externo (chuva, falta de energia...) ou interno (reunião, capacitação) do
 # que dezenas de faltas individuais coincidentes. Aí o turno é classificado
 # automaticamente como "Possível Evento Externo ou Interno" — sem desconto —
-# pra coordenação confirmar o motivo no cronograma. Dois gatilhos:
-#   1) LIMITE_AGENTES_EVENTO_TURNO ou mais agentes (de qualquer equipe) sem
-#      lançamento no MESMO dia e turno;
-#   2) TODOS os agentes ativos de uma equipe (2 ou mais) sem lançamento no turno.
+# pra coordenação confirmar o motivo no cronograma. ORDEM DE DECISÃO (regra da
+# coordenação, 05/11/2026): 1º o limite geral, 2º a regra da equipe, 3º a falta.
+#   1) LIMITE_AGENTES_EVENTO_TURNO (22) ou mais agentes (de qualquer equipe) sem
+#      lançamento no MESMO dia e turno = evento externo/interno — é a regra MÁXIMA;
+#   2) abaixo do limite, vale a regra da equipe: TODOS os agentes ativos da equipe
+#      (2 ou mais) sem lançamento no turno = chuva isolada ou reunião da equipe;
+#   3) senão é Turno sem Lançamento (falta; desconta) — salvo o que o cronograma
+#      já explica (atestado, folga, férias...), conferido ANTES de tudo.
 # "Ativo" = não coberto pelo cronograma naquele turno. Equipes sob demanda
 # (EQUIPES_SEM_DETECCAO_AUTOMATICA, ex.: Bloqueio) não entram nas duas regras.
-LIMITE_AGENTES_EVENTO_TURNO = 20
+LIMITE_AGENTES_EVENTO_TURNO = 22
+# Quem já está coberto no cronograma por um EVENTO COLETIVO (chuva, reunião/treinamento) e ficou sem
+# lançamento no turno entra na contagem do limite? False (padrão): só contam os não cobertos. True:
+# contam também — assim confirmar a chuva de uma equipe não tira o turno das outras do limite.
+# Férias, folga e atestado (ausências individuais) nunca entram na contagem.
+CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = False
+MOTIVOS_EVENTO_COLETIVO = ("Chuva", "Reunião/Treinamento")
 # Detecção automática (data/deteccoes_pendentes.json): a regra agora é "ausência
 # sem lançamento = Turno sem Lançamento (desconta)" até alguém verificar. Por
 # isso as detecções NOVAS entram como "pendente" (continuam contando como turno

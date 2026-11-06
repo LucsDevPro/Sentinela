@@ -15,6 +15,13 @@
 - **Pequenas melhorias (05/11/2026):** selo "período em andamento até dd/mm" no cabeçalho dos meses ainda abertos (`periodo_em_andamento` em
   `generate_dashboard.py`); título e explicação do painel de férias corrigidos ("no período", limite de 7 dias úteis, "(confirmada)");
   `regenerar_mes.py` mantém só os 3 backups mais recentes por mês. CI: `test_turno_evento.py` não rodava no CI (só no `rodar_testes.sh`) e o pip não usava cache.
+- **Regra do turno sem lançamento, ordem de decisão (coordenação, 05/11/2026):** 1º **22 ou mais agentes** sem lançamento no mesmo turno = evento
+  externo/interno (regra máxima; era 20); 2º abaixo disso, **toda a equipe** (agentes ativos, 2+) sem lançamento = chuva isolada ou reunião;
+  3º senão, falta (desconta), salvo o que o cronograma cobre (atestado, folga, férias). Só a observação da aba Ausências mudou de texto
+  (a classificação segue "Possível Evento Externo ou Interno"). Julho–Outubro recalculados. **Opção `CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE`**
+  (padrão False = como antes: só contam os não cobertos pelo cronograma): ligada, quem já está coberto por chuva/reunião também entra nos 22,
+  e confirmar a chuva de uma equipe deixa de tirar o turno das outras do limite (sem ela, em Setembro, confirmar 7 paralisações como chuva
+  faria 8 agentes perderem até 1,5 pt). Férias, folga e atestado nunca contam. Teste: `test_turno_evento.py`.
 - **Workflow "Regenerar mês congelado"** (`regenerar-mes.yml` + `scripts/regenerar_mes.py`): refaz um mês antigo com as regras de hoje, com
   modo simulação e backup (ver OPERACAO.md). Reabre um mês por vez, em ordem: o desempate do ranking lê a média dos meses anteriores do
   `manifest.json`; as reaberturas de Julho–Setembro feitas no mesmo dia, todas de uma vez, deixaram Agosto e Setembro sem o desempate,
@@ -58,7 +65,7 @@ Uma entrada por decisão: **data · decisão · por quê · onde está no códig
 - **Possível Evento vale para todos os períodos (Maio–Outubro)** (`EVENTO_COLETIVO_A_PARTIR_DE = None`). Reclassifica ~1.100 turnos
   (Maio 246, Junho 161, Julho 198, Agosto 143, Setembro 202, Outubro 157); média de pontos sobe de 6 a 8 por mês, ninguém desce.
   Para poupar o passado: `date(2026, 10, 4)`.
-- **Turno sem Lançamento é o padrão; Possível Evento Externo/Interno** com 20+ agentes no mesmo turno ou equipe inteira sem lançamento
+- **Turno sem Lançamento é o padrão; Possível Evento Externo/Interno** com 22+ agentes no mesmo turno (era 20; mudou em 05/11/2026) ou equipe inteira sem lançamento
   (sem desconto). Antes de descontar, confere cronograma. Por quê: coordenação quer verificar chuva/treinamento/atestado/férias/folga/reunião
   antes de punir. → `_preparar_ausencias`, `LIMITE_AGENTES_EVENTO_TURNO`. Teste: `test_turno_evento.py`.
 - **Detecções novas de férias e paralisação entram `pendente`** (antes entravam confirmadas). Decisões antigas intactas.

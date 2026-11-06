@@ -251,21 +251,21 @@ Constantes: ARQUIVOS_CRITICOS@20
 - L234 `_preparar_fora_expediente(df_total)` — Monta a lista de visitas registradas fora do horário oficial de serviço
 - L270 `_preparar_almoco(df_total)` — Lista apenas as visitas registradas no horário de almoço (11h15-12h45, com to…
 
-## scripts/coleta/ausencias_ranking.py (640 linhas)
+## scripts/coleta/ausencias_ranking.py (649 linhas)
 
-- L47 `_primeira_visita_historica(pasta)` — {id_agente: date da PRIMEIRA visita em TODO o cache de semanas}.
-- L100 `_hoje_local()`
-- L110 `_preparar_ausencias(df_total, resultados, lista_cronograma, )` — Para cada agente, dia útil e turno (Manhã 7h-11h / Tarde 13h-17h) dentro
-- L245 `_preparar_cronograma(resultados, data_min, data_max, lista_cr)` — Lista, de forma unificada e ordenada por data, todo o cronograma de
-- L319 `_preparar_pendencias_resumo(resultados)` — Resumo de pendência por agente (abertos/fechados/recusados/total/% pendência),
-- L363 `_observacao_ranking(res, qtd_ausencias, dias_periodo, alvo_e)` — Texto da coluna Observação do ranking: avisa quando o agente parece ter
-- L390 `_carregar_ajustes_ranking(caminho)` — Ajustes MANUAIS de pontuação, lançados pelo gestor em
-- L434 `_ler_notas_ranking(caminho)` — {nome_agente: pontuação final} da tabela principal da aba Ranking de uma plan…
-- L458 `_media_historica_por_agente(data_min, manifest, pasta)` — {nome_agente: média das notas dos meses anteriores ao período que começa em `…
-- L485 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
-- L622 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
+- L49 `_primeira_visita_historica(pasta)` — {id_agente: date da PRIMEIRA visita em TODO o cache de semanas}.
+- L102 `_hoje_local()`
+- L112 `_preparar_ausencias(df_total, resultados, lista_cronograma, )` — Para cada agente, dia útil e turno (Manhã 7h-11h / Tarde 13h-17h) dentro
+- L254 `_preparar_cronograma(resultados, data_min, data_max, lista_cr)` — Lista, de forma unificada e ordenada por data, todo o cronograma de
+- L328 `_preparar_pendencias_resumo(resultados)` — Resumo de pendência por agente (abertos/fechados/recusados/total/% pendência),
+- L372 `_observacao_ranking(res, qtd_ausencias, dias_periodo, alvo_e)` — Texto da coluna Observação do ranking: avisa quando o agente parece ter
+- L399 `_carregar_ajustes_ranking(caminho)` — Ajustes MANUAIS de pontuação, lançados pelo gestor em
+- L443 `_ler_notas_ranking(caminho)` — {nome_agente: pontuação final} da tabela principal da aba Ranking de uma plan…
+- L467 `_media_historica_por_agente(data_min, manifest, pasta)` — {nome_agente: média das notas dos meses anteriores ao período que começa em `…
+- L494 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
+- L631 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
 
-Constantes: _CACHE_PRIMEIRA_VISITA@44, HOJE_OVERRIDE@98, CAMINHO_AJUSTES_RANKING@388, CAMINHO_MANIFEST_HISTORICO@429, PASTA_HISTORICO@430, _RE_LABEL_MES@431
+Constantes: _CACHE_PRIMEIRA_VISITA@46, HOJE_OVERRIDE@100, CAMINHO_AJUSTES_RANKING@397, CAMINHO_MANIFEST_HISTORICO@438, PASTA_HISTORICO@439, _RE_LABEL_MES@440
 
 ## scripts/coleta/auxiliares.py (128 linhas)
 
@@ -375,11 +375,11 @@ Constantes: LIMITE_DIAS_UTEIS_FERIAS@64, LIMITE_DIAS_CORRIDOS_OCORRENCIA@69, TOL
 
 Constantes: CPF@27, SENHA@28, ID_MUNICIPIO@38, ID_ATIVIDADE@39, ID_ANO@40, ID_CICLO@41, ID_TIPO_VISITA@42, ANCORA_DATA@47, ANCORA_ID@48, MESES_PT@49, PRIMEIRA_SEMANA_COLETA@61, GERAR_PAGINAS_SEMANAIS@71, PRIMEIRA_SEMANA_DETALHE_SEMANAL@72, PASTA_ARQUIVO_SEMANAL@73, MESES_OFICIAIS@90, PRIMEIRA_SEMANA_CICLO_EXPLICITO@105, PRIMEIRA_SEMANA_VISAO_SEMANAL@109, MESES_ARQUIVADOS@134, MESES_ADICIONAIS@141, PASTA_SEMANAS@168, ID_PENDENCIA_ABERTOS@236, ID_PENDENCIA_FECHADOS@237, ID_PENDENCIA_RECUSADOS@238, AGENTES_POR_EQUIPE@241, AGENTES_PONTO_ESTRATEGICO@255, ID_ATIVIDADE_PONTO_ESTRATEGICO@258, CICLOS_PONTO_ESTRATEGICO@273, CICLOS_TRATAMENTO@302, NOME_ARQUIVO_CICLOS_COLETADOS@334, MAX_WORKERS@367, DELAY_ENTRE_PAGINAS@368, TIMEOUT_CONEXAO@369, TIMEOUT_LEITURA@370, TIMEOUT_HTTP@371, BACKOFF_BASE_S@372, BACKOFF_MAX_S@373, BACKOFF_JITTER_S@374, PAGE_LOAD_TIMEOUT_S@375, ESPERA_ELEMENTO_S@376, TENTATIVAS_LOGIN@377, TENTATIVAS_SAUDE@378, MAX_SEMANAS_FALHAS_SEGUIDAS@379, ORCAMENTO_COLETA_MIN@380, TENTATIVAS_POR_PAGINA@381, TEMPO_MIN_VISITA_MIN@384, TEMPO_MAX_VISITA_MIN@385, TETO_DURACAO_MEDIA_MIN@396, META_VISITAS_DIA@397, METAS_EQUIPES@422, PCT_RAPIDAS_OK_ATE@429, PCT_RAPIDAS_ATENCAO_ATE@430, LIMIAR_SEQUENCIA_SUSPEITA_SEG@439, HORA_ALMOCO_INICIO_MIN@446, HORA_ALMOCO_FIM_MIN@447, HORA_EXPEDIENTE_MANHA_INICIO@452, HORA_EXPEDIENTE_MANHA_FIM@453, HORA_EXPEDIENTE_TARDE_INICIO@454, HORA_EXPEDIENTE_TARDE_FIM@455, SALARIO_MINIMO@458, SALARIO_AGENTE@459, DIAS_UTEIS_MES@460, PASTA_SAIDA@463, ARQUIVO_CONSOLIDADO@464, URL_LOGIN@467, URL_VISITAS@468, MOTIVOS_CRONOGRAMA@496, CAMINHO_CACHE_NOMES_AGENTES@504, CRONOGRAMA_AUSENCIAS@586
 
-## scripts/coleta/pontos.py (138 linhas)
+## scripts/coleta/pontos.py (148 linhas)
 
-- L95 `_ranking_sem_normalizacao(data_min, data_max)` — True se o período que começa em `data_min` usa o ranking novo (sem
+- L105 `_ranking_sem_normalizacao(data_min, data_max)` — True se o período que começa em `data_min` usa o ranking novo (sem
 
-Constantes: COLETAR_FECHADOS_RECUSADOS@15, PONTOS_INICIAIS@23, NOTA_MINIMA@24, NOTA_MAXIMA@25, TETO_FATOR_NORMALIZACAO@29, RANKING_SEM_NORMALIZACAO_A_PARTIR_DE@40, BONUS_MIN_FRACAO_DIAS_ESPERADOS@46, PRESENCA_MINIMA_FRACAO@54, LIMITE_AGENTES_EVENTO_TURNO@74, CONFIRMAR_FERIAS_AUTOMATICAMENTE@81, CONFIRMAR_CHUVA_AUTOMATICAMENTE@82, EVENTO_COLETIVO_A_PARTIR_DE@87, CLASSIF_TURNO_SEM_LANCAMENTO@88, CLASSIF_POSSIVEL_EVENTO@89, AVISO_AFASTAMENTO_FRACAO_MAX@91, AVISO_AFASTAMENTO_TURNOS_MIN@92, AVISO_AFASTAMENTO_PERIODO_MAX_DIAS@93, HORA_LIMITE_INICIO_MANHA@106, HORA_LIMITE_FIM_MANHA@107, HORA_LIMITE_INICIO_TARDE@108, HORA_LIMITE_FIM_TARDE@109, PONTOS_PERDA_INICIO_MANHA_ATRASADO@112, PONTOS_PERDA_FIM_MANHA_ANTECIPADO@113, PONTOS_PERDA_INICIO_TARDE_ATRASADO@114, PONTOS_PERDA_FIM_TARDE_ANTECIPADO@115, PONTOS_PERDA_TURNO_SEM_LANCAMENTO@116, PONTOS_PERDA_DIA_INTEIRO_SEM_LANCAMENTO@119, PONTOS_PERDA_VISITA_RAPIDA@120, PONTOS_PERDA_VISITA_LONGA@121, PONTOS_PERDA_VISITA_DUPLICADA@122, PONTOS_PERDA_SEQUENCIA_SUSPEITA@123, PONTOS_PERDA_VISITA_NEGATIVA@124, PONTOS_PERDA_FORA_EXPEDIENTE@125, PONTOS_PERDA_VISITA_ALMOCO@126, PONTOS_PERDA_DIA_SEM_META@127, PONTOS_GANHO_DIA_COM_META@130, PONTOS_GANHO_SEM_VISITA_RAPIDA@131, PONTOS_GANHO_SEM_AUSENCIA@132, PONTOS_GANHO_PONTUALIDADE_PERFEITA@133, NOTA_FAIXA_EXCELENTE@136, NOTA_FAIXA_BOM@137, NOTA_FAIXA_ATENCAO@138
+Constantes: COLETAR_FECHADOS_RECUSADOS@15, PONTOS_INICIAIS@23, NOTA_MINIMA@24, NOTA_MAXIMA@25, TETO_FATOR_NORMALIZACAO@29, RANKING_SEM_NORMALIZACAO_A_PARTIR_DE@40, BONUS_MIN_FRACAO_DIAS_ESPERADOS@46, PRESENCA_MINIMA_FRACAO@54, LIMITE_AGENTES_EVENTO_TURNO@78, CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE@83, MOTIVOS_EVENTO_COLETIVO@84, CONFIRMAR_FERIAS_AUTOMATICAMENTE@91, CONFIRMAR_CHUVA_AUTOMATICAMENTE@92, EVENTO_COLETIVO_A_PARTIR_DE@97, CLASSIF_TURNO_SEM_LANCAMENTO@98, CLASSIF_POSSIVEL_EVENTO@99, AVISO_AFASTAMENTO_FRACAO_MAX@101, AVISO_AFASTAMENTO_TURNOS_MIN@102, AVISO_AFASTAMENTO_PERIODO_MAX_DIAS@103, HORA_LIMITE_INICIO_MANHA@116, HORA_LIMITE_FIM_MANHA@117, HORA_LIMITE_INICIO_TARDE@118, HORA_LIMITE_FIM_TARDE@119, PONTOS_PERDA_INICIO_MANHA_ATRASADO@122, PONTOS_PERDA_FIM_MANHA_ANTECIPADO@123, PONTOS_PERDA_INICIO_TARDE_ATRASADO@124, PONTOS_PERDA_FIM_TARDE_ANTECIPADO@125, PONTOS_PERDA_TURNO_SEM_LANCAMENTO@126, PONTOS_PERDA_DIA_INTEIRO_SEM_LANCAMENTO@129, PONTOS_PERDA_VISITA_RAPIDA@130, PONTOS_PERDA_VISITA_LONGA@131, PONTOS_PERDA_VISITA_DUPLICADA@132, PONTOS_PERDA_SEQUENCIA_SUSPEITA@133, PONTOS_PERDA_VISITA_NEGATIVA@134, PONTOS_PERDA_FORA_EXPEDIENTE@135, PONTOS_PERDA_VISITA_ALMOCO@136, PONTOS_PERDA_DIA_SEM_META@137, PONTOS_GANHO_DIA_COM_META@140, PONTOS_GANHO_SEM_VISITA_RAPIDA@141, PONTOS_GANHO_SEM_AUSENCIA@142, PONTOS_GANHO_PONTUALIDADE_PERFEITA@143, NOTA_FAIXA_EXCELENTE@146, NOTA_FAIXA_BOM@147, NOTA_FAIXA_ATENCAO@148
 
 ## scripts/coleta/processamento.py (154 linhas)
 

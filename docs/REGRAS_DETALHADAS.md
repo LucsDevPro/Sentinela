@@ -100,9 +100,14 @@ recalculado com o teto novo.
 - **Antes de descontar** o sistema confere o cronograma: chuva, treinamento (`Reunião/Treinamento`), atestado
   (`Ausência justificada`), férias, folga e reunião. Turno coberto por qualquer um deles não desconta.
 - **Evento coletivo, classificado sozinho como "Possível Evento Externo ou Interno" (sem desconto):**
-  1. `LIMITE_AGENTES_EVENTO_TURNO` (20) ou mais agentes, de qualquer equipe, sem lançamento no mesmo dia e turno;
-  2. todos os agentes ativos de uma equipe (2 ou mais) sem lançamento no turno. "Ativo" = não coberto pelo
-     cronograma naquele turno (quem está de férias não conta).
+  Ordem de decisão (coordenação, 05/11/2026): 1º o limite geral, 2º a regra da equipe, 3º a falta.
+  1. `LIMITE_AGENTES_EVENTO_TURNO` (**22**) ou mais agentes, de qualquer equipe, sem lançamento no mesmo dia e turno
+     = evento externo/interno. É a regra **máxima**;
+  2. abaixo do limite: todos os agentes ativos de uma equipe (2 ou mais) sem lançamento no turno = chuva isolada ou
+     reunião da equipe. "Ativo" = não coberto pelo cronograma naquele turno (quem está de férias não conta);
+  3. senão: Turno sem Lançamento (falta), salvo o que o cronograma já cobre (atestado, folga, férias...).
+  `CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE` decide se quem já está coberto por chuva/reunião no cronograma entra na
+  contagem do limite (férias, folga e atestado nunca entram).
   Equipes sob demanda (Bloqueio) ficam fora das duas regras. A aba Ausências mostra a classificação no começo
   da Observação. Se o evento for de fato falta, lance um ajuste em `data/ajustes_ranking.json`.
 - **Detecção automática** (`data/deteccoes_pendentes.json`): detecções NOVAS de férias e de paralisação coletiva
