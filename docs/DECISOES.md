@@ -1,5 +1,14 @@
 # Registro de decisões (mais recente primeiro)
 
+## 06/11/2026 — otimizações de leitura/geração (menos token, mais rápido)
+- **`scripts/xlsx_scan.py`** abre a planilha UMA vez, em `read_only`, e lê por `iter_rows` (antes: reabria a cada aba e criava um objeto por célula). Geração do dashboard 3 a 7× mais rápida
+  (Outubro 7,9 s → 1,5 s; Acumulado 14,8 s → 2,2 s), **HTML e `partes/` idênticos byte a byte** (conferido em 3 planilhas e pelo `tools/comparar_saidas.py`). As planilhas abertas são fechadas ao sair do processo (`atexit`).
+- **`CLAUDE.md` enxuto** (7,4 → ~5 KB) + **`.claude/rules/`** (coleta, dashboard, editores/Worker, workflows): carregam só quando se abre arquivos da área.
+  `.claude/settings.json` bloqueia também `data/deteccoes_pendentes.json` e os `chart.umd.js` — para dados use `python3 scripts/resumo.py`.
+- **`scripts/resumo.py`** (consultas curtas: meses, detecções, ranking com `--vs` backup, cronograma, manifest), **`scripts/regerar_paginas.py`** (todas as páginas numa chamada) e
+  **`tools/comparar_saidas.py`** (rede de segurança para refatorar o gerador: as chamadas do CI em duas versões, saída idêntica). Testes: `test_resumo.py`.
+- `docs/PROMPT_DIVISAO_DASHBOARD.md`: plano para dividir `generate_dashboard.py`. **Não executado de propósito** (60 funções pequenas; ganho pequeno para o risco).
+
 ## 05/11/2026 — Maio e Junho saem do programa; regras novas em todos os meses; cabeçalho compacto
 - **Maio e Junho/2026 excluídos** (semanas 305–312): sem coleta (`PRIMEIRA_SEMANA_COLETA = 313`), sem página, fora do Acumulado e da média dos meses.
   Removidos: `data/semanas/305–312*`, `data/historico/semanas_305-308/309-312` (+ backups), `historico/` e `partes/` desses meses, 13 detecções e 35 itens de

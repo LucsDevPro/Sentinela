@@ -150,6 +150,7 @@ jobs:
           python scripts/test_sessao10.py
           python scripts/test_turno_evento.py
           python scripts/test_regenerar_mes.py
+          python scripts/test_resumo.py
           node worker/test_worker.mjs
 
       # Só coleta dados novos quando disparado por agendamento ou manualmente

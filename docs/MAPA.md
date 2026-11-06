@@ -200,6 +200,32 @@ Constantes: CONFIG_HOME@18, EQUIPES_SOB_DEMANDA@20
 
 Constantes: AQUI@31, PASTA_SEMANAS@36, PASTA_HISTORICO@37, PASTA_BACKUP@38, BACKUPS_A_MANTER@39
 
+## scripts/regerar_paginas.py (54 linhas)
+
+- L19 `_rodar(args)`
+- L28 `main(argv)`
+
+Constantes: RAIZ@16
+
+## scripts/resumo.py (182 linhas)
+
+- L27 `_d(texto)`
+- L34 `janela_do_mes(semana_ini, semana_fim)` — (primeiro dia, última sexta-feira) do período formado pelas semanas HTML ini.…
+- L40 `filtrar_deteccoes(dets, janela, status, tipo)` — Detecções que tocam a janela (ini, fim), com o status e o tipo pedidos (None …
+- L55 `contar_deteccoes(dets, janelas)` — {mes: {(tipo curto, status): n}} — um evento que toca 2 meses entra nos dois.
+- L68 `linha_deteccao(e)`
+- L79 `_json(caminho, padrao)`
+- L87 `_meses()` — [(label, semana_ini, semana_fim, 'congelado'|'aberto')] em ordem cronológica.
+- L95 `_arquivo_do_mes(label)`
+- L105 `cmd_meses(_a)`
+- L111 `cmd_deteccoes(a)`
+- L130 `cmd_ranking(a)`
+- L151 `cmd_cronograma(a)`
+- L159 `cmd_manifest(_a)`
+- L165 `main(argv)`
+
+Constantes: AQUI@20, RAIZ@22, TIPOS@24
+
 ## scripts/semanas_evisita.py (145 linhas)
 
 - L56 `_offset(ano)`
@@ -231,12 +257,14 @@ Constantes: SEMANAS_A_FRENTE_AVISO@29
 
 Constantes: ARQUIVOS_CRITICOS@20
 
-## scripts/xlsx_scan.py (50 linhas)
+## scripts/xlsx_scan.py (82 linhas)
 
-- L4 `scan_tables(ws, max_col)`
-- L33 `tables_to_dfs(tables)`
-- L45 `get_tables(path, sheet_name)`
-- L49 `get_table(path, sheet_name, index)`
+- L8 `scan_tables(ws, max_col)`
+- L41 `tables_to_dfs(tables)`
+- L54 `_abrir(path, mtime_ns, tamanho)`
+- L69 `_fechar_planilhas()`
+- L76 `get_tables(path, sheet_name)`
+- L81 `get_table(path, sheet_name, index)`
 
 ## scripts/coleta/abas.py (295 linhas)
 

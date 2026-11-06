@@ -5,7 +5,7 @@
 #       ./scripts/rodar_testes.sh ranking    (só os que tiverem "ranking" no nome)
 # Precisa de: pip install -r requirements.txt   (os testes rodam da raiz do repositório)
 cd "$(dirname "$0")/.." || exit 1
-TESTES=(deteccao desempate ranking ciclos atestado ausencia decisao regras semanal coleta sessao8 sessao9 sessao10 turno_evento regenerar_mes)
+TESTES=(deteccao desempate ranking ciclos atestado ausencia decisao regras semanal coleta sessao8 sessao9 sessao10 turno_evento regenerar_mes resumo)
 FILTRO="${1:-}"
 falhas=0; rodados=0
 for t in "${TESTES[@]}"; do
