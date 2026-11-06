@@ -457,6 +457,8 @@ essas planilhas, então os números publicados não mudam.
 - **05/11/2026:** Julho a Setembro foram reabertos, recalculados com as regras atuais e congelados de novo
   (a nota subiu 6 a 8 pts em média; planilhas antigas em `data/historico/backup_congelado/*_antes-das-regras-novas.xlsx`).
 - **Corrigir um mês antigo (rótulo, regra nova, bug de cálculo): workflow "Regenerar mês congelado".**
+  > ⚠️ **Pendente:** se a aba Actions ainda não mostra esse workflow, o arquivo ainda está em `docs/pendentes/` (o token do assistente
+  > não tinha o escopo `workflow`). Instruções em `docs/pendentes/LEIA-ME.md`. O script local (`scripts/regenerar_mes.py`) já funciona.
   Aba Actions → *Regenerar mês congelado* → Run workflow → `mes` = `Setembro/2026` (ou `todos`).
   Desmarque **aplicar** para só simular: o resumo da execução mostra quantos agentes sobem/descem e
   quantas posições mudam, sem gravar nada. Com **aplicar**, ele guarda a planilha antiga em

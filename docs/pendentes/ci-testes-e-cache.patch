@@ -1,0 +1,42 @@
+diff --git a/.github/workflows/update-dashboard.yml b/.github/workflows/update-dashboard.yml
+index af26f15..2e11d6a 100644
+--- a/.github/workflows/update-dashboard.yml
++++ b/.github/workflows/update-dashboard.yml
+@@ -14,7 +14,8 @@ name: Coletar e Atualizar Dashboard
+ on:
+   schedule:
+     - cron: "0 7 * * 0,1,2"   # 07:00 UTC = 03:00 em Ponta Porã (UTC-4), dom/seg/ter
+-  push: {}
++  push:
++    branches: [main]   # só na main: um push em branch de teste não deve coletar, gerar, commitar nem publicar nada
+   workflow_dispatch:
+     inputs:
+       rodar_coleta:
+@@ -87,6 +88,7 @@ jobs:
+         uses: actions/setup-python@v5.3.0
+         with:
+           python-version: "3.11"
++          cache: pip   # reaproveita o pip entre execuções (selenium, pandas...) em vez de baixar tudo de novo
+ 
+       - name: Instalar dependências
+         run: pip install -r requirements.txt
+@@ -126,8 +128,8 @@ jobs:
+           EVISITA_SENHA: ${{ secrets.EVISITA_SENHA }}
+         run: python scripts/test_deteccao.py
+ 
+-      # Testes do ranking (Outubro/2026 em diante sem fator de normalização;
+-      # meses anteriores inalterados). Usa o cache de data/semanas/ como
++      # Testes do ranking e das demais regras (ranking sem fator de normalização em
++      # todos os meses do programa; o Acumulado segue no método antigo). Usa o cache de data/semanas/ como
+       # massa de teste — sem acessar o e-Visita.
+       - name: Rodar testes do ranking
+         env:
+@@ -146,6 +148,8 @@ jobs:
+           python scripts/test_sessao8.py
+           python scripts/test_sessao9.py
+           python scripts/test_sessao10.py
++          python scripts/test_turno_evento.py
++          python scripts/test_regenerar_mes.py
+           node worker/test_worker.mjs
+ 
+       # Só coleta dados novos quando disparado por agendamento ou manualmente

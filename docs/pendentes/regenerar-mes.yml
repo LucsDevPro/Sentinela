@@ -1,0 +1,95 @@
+name: Regenerar mês congelado
+
+# Refaz a planilha de um mês ANTIGO (congelado) com o código e as regras de hoje e congela de novo.
+# Use quando uma correção afeta meses fechados (um rótulo, uma regra nova, um bug de cálculo): os meses
+# arquivados nunca são recalculados sozinhos pela coleta.
+#
+# Como usar: aba Actions -> "Regenerar mês congelado" -> Run workflow.
+#   mes     : "Setembro/2026" (um mês congelado) ou "todos"
+#   aplicar : desmarque para SIMULAR — o resumo da execução mostra o que mudaria nas notas, mas nada é gravado.
+#
+# Não coleta nada no e-Visita: usa o cache de data/semanas/. Ao terminar (com "aplicar"), aciona o workflow
+# "Coletar e Atualizar Dashboard" com rodar_coleta=false, que gera as páginas HTML e publica no Pages.
+on:
+  workflow_dispatch:
+    inputs:
+      mes:
+        description: 'Mês congelado (ex.: Setembro/2026) ou "todos"'
+        type: string
+        required: true
+      aplicar:
+        description: "Gravar no repositório e publicar? (desmarque para só simular e ver o resumo)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  actions: write   # para acionar o workflow de geração das páginas
+
+jobs:
+  regenerar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Mesma fila da coleta: nunca roda junto com ela (as duas escrevem em data/historico/).
+    concurrency:
+      group: coleta-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: Garantir commit mais recente
+        run: |
+          git fetch origin "${{ github.ref_name }}"
+          git reset --hard "origin/${{ github.ref_name }}"
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Conferir os JSON de dados
+        run: python3 scripts/validar_json.py
+
+      # O texto digitado passa por variável de ambiente, nunca interpolado dentro do script.
+      - name: Regenerar o mês
+        env:
+          MES: ${{ inputs.mes }}
+        run: python3 scripts/regenerar_mes.py "$MES"
+
+      - name: Gravar no repositório
+        if: ${{ inputs.aplicar }}
+        env:
+          MES: ${{ inputs.mes }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/Analise_Consolidada.xlsx data/historico data/deteccoes_pendentes.json
+          if git diff --staged --quiet; then
+            echo "Nada mudou — o mês já estava igual ao que o código atual produz."
+            echo "mudou=nao" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          git commit -m "Regenera ${MES} com as regras atuais [skip ci]"
+          for i in 1 2 3 4 5; do
+            if git push origin "HEAD:${BRANCH}"; then echo "mudou=sim" >> "$GITHUB_ENV"; exit 0; fi
+            echo "Push rejeitado (outro commit chegou primeiro) — rebaseando, tentativa $i..."
+            git fetch origin "${BRANCH}"
+            # Rebase normal (sem "-X ours"): se houver conflito de verdade, falha visivelmente em vez de
+            # descartar em silêncio a planilha regenerada.
+            git rebase "origin/${BRANCH}" || { git rebase --abort; echo "::error::Conflito ao rebasear — rode de novo."; exit 1; }
+            sleep 5
+          done
+          echo "::error::Push falhou após 5 tentativas — rode de novo."
+          exit 1
+
+      # Pushes feitos com o GITHUB_TOKEN não disparam outros workflows, mas workflow_dispatch dispara.
+      - name: Gerar as páginas e publicar
+        if: ${{ inputs.aplicar && env.mudou == 'sim' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run update-dashboard.yml --ref "${{ github.ref_name }}" -f rodar_coleta=false
