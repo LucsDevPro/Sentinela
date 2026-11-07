@@ -34,7 +34,7 @@ Achar função: `grep -n "def nome" scripts/coleta/*.py` ou `docs/MAPA.md`. Arqu
 ## Comandos
 ```
 pip install -r requirements.txt          # obrigatório: quase todo teste importa selenium
-./scripts/rodar_testes.sh [filtro]       # testes Python do CI (~15 s). Rode antes de todo commit
+python3 scripts/rodar_testes.py [filtro] [-v]   # testes Python (~20 s, roda no Windows). Antes de todo commit. (rodar_testes.sh só chama este)
 node worker/test_worker.mjs              # testes do Worker
 python3 scripts/generate_dashboard.py data/historico/semanas_327-330.xlsx _teste.html   # página de teste (~2 s)
 python3 scripts/gerar_mapa.py            # atualiza docs/MAPA.md (--check só verifica)

@@ -226,6 +226,13 @@ Constantes: RAIZ@16
 
 Constantes: AQUI@20, RAIZ@22, TIPOS@24
 
+## scripts/rodar_testes.py (71 linhas)
+
+- L24 `_resumo(saida)`
+- L30 `main(argv)`
+
+Constantes: RAIZ@18, TESTES@19, LIMITE_S@21
+
 ## scripts/semanas_evisita.py (145 linhas)
 
 - L56 `_offset(ano)`
@@ -306,17 +313,18 @@ Constantes: _CACHE_PRIMEIRA_VISITA@46, HOJE_OVERRIDE@100, CAMINHO_AJUSTES_RANKIN
 
 Constantes: NOMES_DIA_SEMANA@27, _PREPOSICOES_NOME@39
 
-## scripts/coleta/cache_semanas.py (293 linhas)
+## scripts/coleta/cache_semanas.py (326 linhas)
 
-- L52 `_caminho_semana(html_id, sufixo, pasta_semanas)`
-- L57 `_salvar_df_semana(df, caminho_xlsx)`
-- L62 `_carregar_df_semana(caminho_xlsx)` — Recarrega uma planilha de semana cacheada, corrigindo os tipos que o
-- L90 `_mesclar_com_cache_anterior(html_id, df_tratamento, pendencia_por_ag)` — Evita que uma recoleta PIOR apague dados bons que já estavam no cache.
-- L146 `salvar_cache_semana(html_id, df_tratamento, pendencia_por_ag)` — Grava em disco tudo que foi coletado para UMA semana: a planilha de
-- L169 `coletar_uma_semana(session, html_id, id_ano, id_ciclo)` — Coleta TODOS os agentes (tratamento + Ponto Estratégico, quando
-- L276 `_salvar_agentes_nomes(resultados, caminho)` — Atualiza (MERGE — nunca apaga o que já tinha) o mapa ID -> Nome de
+- L53 `_caminho_semana(html_id, sufixo, pasta_semanas)`
+- L69 `_ler_aba_visitas(caminho_xlsx)`
+- L87 `_salvar_df_semana(df, caminho_xlsx)`
+- L95 `_carregar_df_semana(caminho_xlsx)` — Recarrega uma planilha de semana cacheada, corrigindo os tipos que o
+- L123 `_mesclar_com_cache_anterior(html_id, df_tratamento, pendencia_por_ag)` — Evita que uma recoleta PIOR apague dados bons que já estavam no cache.
+- L179 `salvar_cache_semana(html_id, df_tratamento, pendencia_por_ag)` — Grava em disco tudo que foi coletado para UMA semana: a planilha de
+- L202 `coletar_uma_semana(session, html_id, id_ano, id_ciclo)` — Coleta TODOS os agentes (tratamento + Ponto Estratégico, quando
+- L309 `_salvar_agentes_nomes(resultados, caminho)` — Atualiza (MERGE — nunca apaga o que já tinha) o mapa ID -> Nome de
 
-Constantes: _COLS_BOOL_SEMANA@42, _COLS_DATETIME_SEMANA@49
+Constantes: _COLS_BOOL_SEMANA@43, _COLS_DATETIME_SEMANA@50, _CACHE_LEITURA@64, _CACHE_LEITURA_MAX@65, _LOCK_CACHE@66
 
 ## scripts/coleta/calculos.py (626 linhas)
 

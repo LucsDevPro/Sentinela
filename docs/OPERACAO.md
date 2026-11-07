@@ -200,7 +200,7 @@ o `.html` dela, não precisa tocar no Python.
 │   ├── coletar_evisita.py (fachada) · coleta/ (16 módulos: parâmetros, regras, ranking, planilhas, cache) · generate_dashboard.py · gerar_agentes.py
 │   ├── aplicar_decisao.py · lancar_ausencia.py · lancar_atestado.py · fechar_mes.py · publicar_sugestoes.py
 │   ├── gerar_form_atestado.py · gerar_transparencia.py · gerar_mapa.py · icones.py · meses_arquivados.py
-│   ├── semanas_evisita.py · validar_ciclos.py · validar_json.py · xlsx_scan.py · rodar_testes.sh · test_*.py
+│   ├── semanas_evisita.py · validar_ciclos.py · validar_json.py · xlsx_scan.py · rodar_testes.py · test_*.py
 │   ├── style.css · bootstrap.js · chart.umd.js
 │   └── templates/ (base.html, macros.html, charts.js, sections/*.html — um arquivo por aba)
 ├── worker/               ← Cloudflare Worker (index.js, wrangler.toml, test_worker.mjs)

@@ -1,6 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
 ## 06/11/2026 — otimizações de leitura/geração (menos token, mais rápido)
+- **Cache em memória da leitura das semanas** (`_ler_aba_visitas` em `coleta/cache_semanas.py`): guarda o `read_excel` CRU (as conversões, como `acima_teto_media`, rodam a cada
+  chamada), chave = caminho + data de modificação + tamanho, devolve cópia, invalidado por `_salvar_df_semana`, seguro entre threads; `SENTINELA_SEM_CACHE_LEITURA=1` desliga.
+  **Ganho medido (modesto): Acumulado 66 → 46 s, rodada do histórico 47 → 39 s, detecção sem ganho (lê cada semana uma vez); `regenerar_mes todos` ≈ 228 → 184 s (~20%).**
+  Saída idêntica com e sem cache (152 mil células de 8 planilhas + `deteccoes_pendentes.json`). Próximo gargalo medido: `_primeira_visita_historica` reabre todas as semanas (~15 s por processo).
+- **`scripts/rodar_testes.py`** (roda no Windows) passa a ser a ÚNICA lista de testes; `rodar_testes.sh` só chama ele. Teste novo: `test_cache_leitura.py`.
 - **`scripts/xlsx_scan.py`** abre a planilha UMA vez, em `read_only`, e lê por `iter_rows` (antes: reabria a cada aba e criava um objeto por célula). Geração do dashboard 3 a 7× mais rápida
   (Outubro 7,9 s → 1,5 s; Acumulado 14,8 s → 2,2 s), **HTML e `partes/` idênticos byte a byte** (conferido em 3 planilhas e pelo `tools/comparar_saidas.py`). As planilhas abertas são fechadas ao sair do processo (`atexit`).
 - **`CLAUDE.md` enxuto** (7,4 → ~5 KB) + **`.claude/rules/`** (coleta, dashboard, editores/Worker, workflows): carregam só quando se abre arquivos da área.
