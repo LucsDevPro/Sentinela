@@ -6,6 +6,7 @@ Faz parte do pacote `scripts/coleta/` (antes tudo ficava em coletar_evisita.py).
 import logging
 import os
 import json
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pandas as pd
 import semanas_evisita as sem
@@ -54,9 +55,41 @@ def _caminho_semana(html_id, sufixo="", pasta_semanas=PASTA_SEMANAS):
     return os.path.join(pasta_semanas, nome)
 
 
+# Cache EM MEMÓRIA (só dura o processo) da leitura crua da aba "visitas" de cada semana. Ler uma planilha com
+# pd.read_excel custa ~1,5 s e a mesma semana era relida em cada etapa (detecção, Acumulado, cada mês do
+# histórico): a detecção sozinha gastava 53 de 56 s nisso. Guarda o resultado CRU do read_excel (as conversões
+# de _carregar_df_semana rodam a cada chamada, então mudar uma constante como TETO_DURACAO_MEDIA_MIN continua
+# valendo) e sempre devolve uma CÓPIA. A chave inclui data de modificação e tamanho: se a planilha mudar, relê.
+# SENTINELA_SEM_CACHE_LEITURA=1 desliga (útil para comparar resultados).
+_CACHE_LEITURA = {}          # (caminho absoluto, mtime_ns, tamanho) -> DataFrame cru
+_CACHE_LEITURA_MAX = 64      # ~1,6 MB por semana: 64 semanas cabem em ~100 MB
+_LOCK_CACHE = threading.Lock()   # a coleta lê semanas em threads: só as operações no dicionário ficam sob o lock
+
+
+def _ler_aba_visitas(caminho_xlsx):
+    if os.environ.get("SENTINELA_SEM_CACHE_LEITURA") == "1":
+        return pd.read_excel(caminho_xlsx, sheet_name="visitas")
+    st = os.stat(caminho_xlsx)
+    chave = (os.path.abspath(caminho_xlsx), st.st_mtime_ns, st.st_size)
+    with _LOCK_CACHE:
+        df = _CACHE_LEITURA.get(chave)
+    if df is None:
+        df = pd.read_excel(caminho_xlsx, sheet_name="visitas")      # fora do lock: leituras em paralelo seguem paralelas
+        with _LOCK_CACHE:
+            for k in [k for k in _CACHE_LEITURA if k[0] == chave[0]]:    # versão velha do mesmo arquivo
+                _CACHE_LEITURA.pop(k, None)
+            while len(_CACHE_LEITURA) >= _CACHE_LEITURA_MAX:
+                _CACHE_LEITURA.pop(next(iter(_CACHE_LEITURA)), None)
+            _CACHE_LEITURA[chave] = df
+    return df.copy()
+
+
 def _salvar_df_semana(df, caminho_xlsx):
     os.makedirs(os.path.dirname(caminho_xlsx), exist_ok=True)
     df.to_excel(caminho_xlsx, sheet_name="visitas", index=False)
+    with _LOCK_CACHE:
+        for k in [k for k in _CACHE_LEITURA if k[0] == os.path.abspath(caminho_xlsx)]:
+            _CACHE_LEITURA.pop(k, None)
 
 
 def _carregar_df_semana(caminho_xlsx):
@@ -65,7 +98,7 @@ def _carregar_df_semana(caminho_xlsx):
     virar 'True'/'False' em string etc.)."""
     if not os.path.exists(caminho_xlsx):
         return pd.DataFrame()
-    df = pd.read_excel(caminho_xlsx, sheet_name="visitas")
+    df = _ler_aba_visitas(caminho_xlsx)
     for col in _COLS_DATETIME_SEMANA:
         if col in df.columns:
             df[col] = pd.to_datetime(df[col], errors="coerce")
