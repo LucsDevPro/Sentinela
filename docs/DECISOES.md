@@ -1,5 +1,13 @@
 # Registro de decisões (mais recente primeiro)
 
+## 06/11/2026 — álbum vivo, "Como é calculado" dentro do álbum, cronograma por dia recolhido
+- **"Como é calculado" virou a 2ª aba do álbum** (`album.html#como-calcula`). `gerar_transparencia.py` agora grava `assets/como_calcula.js` (o álbum carrega ao abrir a aba) e `transparencia.html` só redireciona
+  (links antigos). O texto ganhou a seção **"3. Turno sem lançamento: falta ou evento?"** (ordem: cronograma → 22+ agentes = evento → equipe inteira = chuva isolada/reunião → falta) e a data de recálculo vem do `manifest.json`.
+- **Cartinhas vivas** (`carta.css` seção "EFEITOS VIVOS" + `assets/carta_fx.js`; `carta.js` ganhou `.c-brilho`, `.c-glitter` e `--v` nos atributos): inclinação 3D e brilho holográfico que seguem o mouse, faixa de luz e faíscas nas cartas
+  altas (OURO/DESTAQUE/LENDÁRIA), moldura que gira, flutuar no DESTAQUE/LENDÁRIA, entrada em cascata, nota que sobe contando e barras nos atributos. Só as cartas visíveis animam (`.vivo`, via IntersectionObserver);
+  tudo respeita `prefers-reduced-motion`. O PNG para baixar não mudou. **Pódio** (top 3, só sem filtros) no topo do álbum; medalhas ouro/prata/bronze. CSS/JS do álbum saíram do HTML: `assets/album.css`, `assets/album.js`.
+- **Cronograma por dia:** "Ocorrências no Cronograma (por equipe)" agora lista um `<details>` por dia (ou período), todos recolhidos, com Expandir/Recolher todos; imprime aberto. `agrupar_cronograma_por_dia` em `generate_dashboard.py`.
+
 ## 06/11/2026 — otimizações de leitura/geração (menos token, mais rápido)
 - **Cache em memória da leitura das semanas** (`_ler_aba_visitas` em `coleta/cache_semanas.py`): guarda o `read_excel` CRU (as conversões, como `acima_teto_media`, rodam a cada
   chamada), chave = caminho + data de modificação + tamanho, devolve cópia, invalidado por `_salvar_df_semana`, seguro entre threads; `SENTINELA_SEM_CACHE_LEITURA=1` desliga.

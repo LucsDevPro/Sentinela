@@ -224,7 +224,7 @@ function _extratoHtml(nome, comContestar) {
         <tr class="ex-total"><td colspan="${nCols}">Pontuação final</td><td class="num">${_fmt(a.pontos, 2)}</td></tr>
       </tbody>
     </table>
-    <p class="ex-nota">${_esc(metodo)} Faixas: 🟢 ≥90 · 🟡 75–89,9 · 🟠 60–74,9 · 🔴 &lt;60. Dias esperados já descontam férias, folga, ausência justificada, chuva e reuniões registrados no cronograma (método novo). <a href="${_esc(window.TRANSPARENCIA_HREF || 'transparencia.html')}" target="_blank" rel="noopener">Como o ranking é calculado</a>.${comContestar && window.AGENTE_HREF && !oculto ? ` <a href="${_esc(window.AGENTE_HREF)}?nome=${encodeURIComponent(a.agente)}" target="_blank" rel="noopener">Ver minha evolução</a>` : ''}</p>
+    <p class="ex-nota">${_esc(metodo)} Faixas: 🟢 ≥90 · 🟡 75–89,9 · 🟠 60–74,9 · 🔴 &lt;60. Dias esperados já descontam férias, folga, ausência justificada, chuva e reuniões registrados no cronograma (método novo). <a href="${_esc(window.TRANSPARENCIA_HREF || 'album.html#como-calcula')}" target="_blank" rel="noopener">Como o ranking é calculado</a>.${comContestar && window.AGENTE_HREF && !oculto ? ` <a href="${_esc(window.AGENTE_HREF)}?nome=${encodeURIComponent(a.agente)}" target="_blank" rel="noopener">Ver minha evolução</a>` : ''}</p>
     ${comContestar ? _blocoContestar(a, E) : ''}`;
 }
 function _mostrarExtrato(nome) {

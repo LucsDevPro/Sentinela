@@ -182,7 +182,7 @@ o `.html` dela, não precisa tocar no Python.
 .
 ├── CLAUDE.md  README.md  requirements.txt  .gitignore  .gitattributes  .env.example
 ├── *.html (raiz)        ← páginas publicadas pelo Pages; NÃO mover (URLs, sw.js, manifest, workflows)
-│   ├── index.html · acumulado.html · transparencia.html   ← GERADOS (não editar à mão)
+│   ├── index.html · acumulado.html · transparencia.html (redireciona) · assets/como_calcula.js   ← GERADOS (não editar à mão)
 │   ├── validar.html · agente.html · album.html · comparar.html · contestacao.html · projecao.html · atestado.html
 │   └── home_editor.html · cronograma_editor.html · deteccao_editor.html   ← editores (abrir no navegador)
 ├── sw.js · manifest.webmanifest   ← app instalável no celular (só guarda a "casca" de validar.html)

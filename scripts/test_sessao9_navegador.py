@@ -13,7 +13,7 @@ def checar(nome, cond, det=""):
 trab = tempfile.mkdtemp()
 for sub in ("data", "scripts", "assets"):
     shutil.copytree(os.path.join(RAIZ, sub), os.path.join(trab, sub), ignore=shutil.ignore_patterns("__pycache__", "csv"))
-for f in ("agente.html", "contestacao.html", "transparencia.html"):
+for f in ("agente.html", "contestacao.html", "album.html"):
     shutil.copy(os.path.join(RAIZ, f), trab)
 os.makedirs(os.path.join(trab, "historico")); os.makedirs(os.path.join(trab, "partes"))
 json.dump({"url": "https://w.example"}, open(os.path.join(trab, "data/config_worker.json"), "w"))

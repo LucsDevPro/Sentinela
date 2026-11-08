@@ -728,3 +728,134 @@ body.sem-foto .c-foto img {
 @media print {
   .c-pop { display: none; }
 }
+
+
+/* ===================================================================
+   EFEITOS VIVOS (assets/carta_fx.js)
+   O script liga em cada .carta: [data-fx]; --mx/--my/--rx/--ry/--brilho enquanto o ponteiro está sobre ela;
+   .vivo quando a carta está na tela (só o que se vê é animado); .entra uma vez, na primeira aparição.
+   Tudo respeita prefers-reduced-motion. O PNG para download (carta.js: png) não usa nada disto.
+   =================================================================== */
+@property --ang { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+.carta { --mx: 50%; --my: 30%; --rx: 0deg; --ry: 0deg; --brilho: 0; }
+
+/* Inclinação 3D que acompanha o ponteiro. A escala --s é definida por quem usa (o álbum usa --e). */
+.carta[data-fx] {
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--s, 1));
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.carta[data-fx].inclinando { transition: transform 0.08s linear; }
+
+/* ---- Brilho: foco de luz + folha holográfica que seguem o ponteiro; faixa de luz que varre as cartas altas ---- */
+.carta > .c-brilho { position: absolute; inset: 0; z-index: 2; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.carta > .c-brilho::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: var(--brilho);
+  transition: opacity 0.3s ease;
+  background:
+    radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.14) 26%, transparent 50%),
+    linear-gradient(115deg, transparent 20%, rgba(255, 70, 200, 0.22) 34%, rgba(70, 220, 255, 0.24) 48%, rgba(255, 230, 80, 0.22) 62%, transparent 76%);
+  background-size: 100% 100%, 280% 280%;
+  background-position: 0 0, var(--mx) var(--my);
+  mix-blend-mode: overlay;
+}
+.carta.t-destaque > .c-brilho::after,
+.carta.b-100 > .c-brilho::after { mix-blend-mode: color-dodge; }
+.carta > .c-brilho::before {
+  content: "";
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: 0;
+  width: 38%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.55) 50%, transparent 100%);
+  transform: translateX(-130%) skewX(-18deg);
+  opacity: 0;
+}
+@keyframes c-varre {
+  0%, 58% { transform: translateX(-130%) skewX(-18deg); opacity: 0; }
+  64%     { opacity: 1; }
+  100%    { transform: translateX(380%) skewX(-18deg); opacity: 0; }
+}
+@keyframes c-varre-1 {
+  0%   { transform: translateX(-130%) skewX(-18deg); opacity: 1; }
+  100% { transform: translateX(380%) skewX(-18deg); opacity: 0; }
+}
+
+/* ---- Faíscas (OURO, DESTAQUE e LENDÁRIA): duas camadas de pontos que piscam fora de compasso ---- */
+.carta > .c-glitter { position: absolute; inset: 0; z-index: 2; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.carta > .c-glitter::before,
+.carta > .c-glitter::after { content: ""; position: absolute; inset: 0; opacity: 0; background-repeat: no-repeat; }
+.carta > .c-glitter::before {
+  background-image:
+    radial-gradient(3px 3px at 14% 24%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(2.4px 2.4px at 83% 17%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(3px 3px at 90% 58%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(2.4px 2.4px at 9% 71%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(2.8px 2.8px at 52% 91%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%);
+}
+.carta > .c-glitter::after {
+  background-image:
+    radial-gradient(2.6px 2.6px at 31% 12%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(3px 3px at 68% 36%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(2.4px 2.4px at 22% 47%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(3px 3px at 76% 82%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%),
+    radial-gradient(2.4px 2.4px at 38% 64%, #fff 0 30%, rgba(255, 255, 255, 0.35) 62%, transparent 100%);
+}
+@keyframes c-brilha { 0% { opacity: 0.05; } 100% { opacity: 1; } }
+
+/* ---- Barras sob os atributos: crescem quando a carta aparece ---- */
+.c-stats div { position: relative; }
+.c-stats div::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 2px;
+  width: var(--v, 0%);
+  border-radius: 2px;
+  background: linear-gradient(90deg, currentColor, transparent);
+  opacity: 0.6;
+}
+
+@keyframes c-gira-borda { to { --ang: 360deg; } }
+@keyframes c-flutua { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+@keyframes c-entra { from { opacity: 0; translate: 0 36px; scale: 0.9; rotate: -3deg; } }
+@keyframes c-barra { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* faixa de luz: periódica nas altas, uma vez ao passar o mouse em todas */
+  .carta.vivo.b-90 > .c-brilho::before,
+  .carta.vivo.b-top > .c-brilho::before { animation: c-varre 6s ease-in-out infinite; animation-delay: var(--atraso, 0ms); }
+  .carta.vivo.b-100 > .c-brilho::before { animation: c-varre 4.2s ease-in-out infinite; animation-delay: var(--atraso, 0ms); }
+  .carta[data-fx]:hover > .c-brilho::before { animation: c-varre-1 1s ease-out 1; }
+  /* faíscas */
+  .carta.vivo > .c-glitter::before { animation: c-brilha 2.6s ease-in-out infinite alternate; }
+  .carta.vivo > .c-glitter::after { animation: c-brilha 3.4s ease-in-out -1.1s infinite alternate; }
+  /* moldura que gira (usa as cores --b1/--b2/--b3 de cada faixa) */
+  .carta[data-fx].b-90:hover > .c-borda,   /* OURO: só ao passar o mouse (pode haver dezenas na tela e o giro repinta a cada quadro) */
+  .carta.vivo.b-top > .c-borda,
+  .carta.vivo.b-100 > .c-borda {
+    background: conic-gradient(from var(--ang), var(--b1), var(--b2), var(--b3), var(--b2), var(--b1), var(--b2), var(--b3), var(--b1));
+    animation: c-gira-borda 8s linear infinite;
+  }
+  .carta.vivo.b-top > .c-borda { animation-duration: 6s; }
+  .carta.vivo.b-100 > .c-borda { animation-duration: 5s; }
+  /* flutuar: só DESTAQUE e LENDÁRIA (começa depois da entrada) */
+  .carta.vivo.b-top,
+  .carta.vivo.b-100 { animation: c-flutua 5.5s ease-in-out infinite; animation-delay: calc(var(--atraso, 0ms) + 900ms); }
+  /* entrada em cascata */
+  .carta.entra { animation: c-entra 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: var(--atraso, 0ms); }
+  .carta.entra.b-top,
+  .carta.entra.b-100 { animation: c-entra 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) backwards, c-flutua 5.5s ease-in-out infinite; animation-delay: var(--atraso, 0ms), calc(var(--atraso, 0ms) + 900ms); }
+  /* barras dos atributos */
+  .carta.vivo .c-stats div::after { transform-origin: left; animation: c-barra 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--atraso, 0ms) + 250ms); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .carta > .c-glitter::before, .carta > .c-glitter::after { opacity: 0.6; }
+  .carta[data-fx] { transition: none; }
+}
+@media print { .carta > .c-brilho, .carta > .c-glitter { display: none; } }

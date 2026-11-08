@@ -37,7 +37,7 @@ Constantes: _MODULOS@50
 
 Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 
-## scripts/generate_dashboard.py (1427 linhas)
+## scripts/generate_dashboard.py (1468 linhas)
 
 - L50 `carregar_outras_atividades()` — Lê data/outras_atividades.json (equipes/atividades fora do e-Visita,
 - L102 `resolver_home_xlsx()`
@@ -60,47 +60,48 @@ Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 - L341 `load_all(path)`
 - L431 `compute_all_absent(ausencias, resumo)` — Turnos em que TODA UMA EQUIPE ficou sem nenhuma visita registrada
 - L444 `build_cronograma_rows(cronograma, all_absent)` — Junta o cronograma manual (data/cronograma_ausencias.json — chuva,
-- L482 `build_kpi_geral(resumo)`
-- L498 `_ler_tabela_rapida(path, aba, colunas)` — Primeira tabela de uma aba (modo somente-leitura, bem mais rápido que carregar
-- L521 `_num(v)`
-- L529 `_ler_presenca(path)` — {agente: (dias_trabalhados, dias_esperados)} da aba Ranking. Nos períodos
-- L542 `_meses_historico()` — [(label, caminho)] dos meses fechados, do mais antigo pro mais recente.
-- L560 `_presenca_da_pagina()` — Presença da página que está sendo gerada. Página de um mês (ou de uma semana):
-- L582 `_preparar_custos(d, presenca)` — Acrescenta ao DataFrame (já com _hu/_ht/_hs/_dias/_vd) a presença e o custo r…
-- L610 `_custos_base(resumo)`
-- L625 `adicionar_custo_real(resumo)` — Põe a coluna CustoReal no resumo (usada pelo gráfico de custos).
-- L636 `_custo_ritmo_agregado(d)` — Folha ÷ horas úteis do mês de todos juntos (só dias trabalhados). A média
-- L644 `_custo_real_agregado(d)`
-- L649 `_custo_visita_agregado(d)`
-- L654 `build_kpi_custos(resumo)`
-- L680 `_faixa_custo(v)`
-- L686 `_faixa_presenca(pct)`
-- L690 `build_custos_rows(resumo)` — Linhas da tabela de custos: as colunas da planilha + presença, aproveitamento,
-- L721 `build_custos_equipes(resumo)` — Uma linha por equipe, com o mesmo cálculo dos números gerais.
-- L740 `build_custos_mensais()` — Custo real da hora útil de cada agente MÊS A MÊS + média dos meses.
-- L785 `build_ausencias_agg(aus)`
-- L817 `build_team_cards(resumo, teams)`
-- L843 `_classe_por_pontos(p)`
-- L852 `_ler_ranking_rapido(path)` — Lê só a tabela principal da aba Ranking de uma planilha (modo
-- L879 `_sparkline(valores, w, h)` — Mini-gráfico (SVG inline) da pontuação mês a mês, escala fixa 0–100 pra
-- L894 `build_media_mensal()`
-- L937 `_worker_url()`
-- L943 `_mes_contestavel(ctx)` — Mês ("Outubro/2026") ao qual a página se refere, se estiver ABERTO (contestaç…
-- L972 `_ids_por_nome()`
-- L979 `build_extratos(ranking_rows, detalhe_rows, sem_normaliz)` — Dados do "Extrato por agente" (folha de uma página com a conta da
-- L1004 `_periodo_label(periodos)`
-- L1014 `build_kpi_ranking(ranking)`
-- L1027 `build_chart_data(data)`
-- L1080 `build_context(data)`
-- L1173 `build_comparacao_semanal(nav, pagina_semana)` — Nota média de cada equipe, semana a semana, dentro do mês (só na página do MÊ…
-- L1205 `carregar_periodos()` — Monta a lista de opções do seletor de período no cabeçalho:
-- L1255 `carregar_nav_semanas()` — Barra "Semana 1 | Semana 2 | ... | Mês completo" do mês vigente.
-- L1316 `enxugar_html(html)` — Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
-- L1328 `periodo_em_andamento(semana_fim_html, hoje)` — Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= …
-- L1337 `_selo_periodo(ctx)` — 'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão …
-- L1351 `main()`
+- L485 `agrupar_cronograma_por_dia(rows)` — Agrupa as linhas de build_cronograma_rows por DIA (ou por período, quando o l…
+- L521 `build_kpi_geral(resumo)`
+- L537 `_ler_tabela_rapida(path, aba, colunas)` — Primeira tabela de uma aba (modo somente-leitura, bem mais rápido que carregar
+- L560 `_num(v)`
+- L568 `_ler_presenca(path)` — {agente: (dias_trabalhados, dias_esperados)} da aba Ranking. Nos períodos
+- L581 `_meses_historico()` — [(label, caminho)] dos meses fechados, do mais antigo pro mais recente.
+- L599 `_presenca_da_pagina()` — Presença da página que está sendo gerada. Página de um mês (ou de uma semana):
+- L621 `_preparar_custos(d, presenca)` — Acrescenta ao DataFrame (já com _hu/_ht/_hs/_dias/_vd) a presença e o custo r…
+- L649 `_custos_base(resumo)`
+- L664 `adicionar_custo_real(resumo)` — Põe a coluna CustoReal no resumo (usada pelo gráfico de custos).
+- L675 `_custo_ritmo_agregado(d)` — Folha ÷ horas úteis do mês de todos juntos (só dias trabalhados). A média
+- L683 `_custo_real_agregado(d)`
+- L688 `_custo_visita_agregado(d)`
+- L693 `build_kpi_custos(resumo)`
+- L719 `_faixa_custo(v)`
+- L725 `_faixa_presenca(pct)`
+- L729 `build_custos_rows(resumo)` — Linhas da tabela de custos: as colunas da planilha + presença, aproveitamento,
+- L760 `build_custos_equipes(resumo)` — Uma linha por equipe, com o mesmo cálculo dos números gerais.
+- L779 `build_custos_mensais()` — Custo real da hora útil de cada agente MÊS A MÊS + média dos meses.
+- L824 `build_ausencias_agg(aus)`
+- L856 `build_team_cards(resumo, teams)`
+- L882 `_classe_por_pontos(p)`
+- L891 `_ler_ranking_rapido(path)` — Lê só a tabela principal da aba Ranking de uma planilha (modo
+- L918 `_sparkline(valores, w, h)` — Mini-gráfico (SVG inline) da pontuação mês a mês, escala fixa 0–100 pra
+- L933 `build_media_mensal()`
+- L976 `_worker_url()`
+- L982 `_mes_contestavel(ctx)` — Mês ("Outubro/2026") ao qual a página se refere, se estiver ABERTO (contestaç…
+- L1011 `_ids_por_nome()`
+- L1018 `build_extratos(ranking_rows, detalhe_rows, sem_normaliz)` — Dados do "Extrato por agente" (folha de uma página com a conta da
+- L1043 `_periodo_label(periodos)`
+- L1053 `build_kpi_ranking(ranking)`
+- L1066 `build_chart_data(data)`
+- L1119 `build_context(data)`
+- L1213 `build_comparacao_semanal(nav, pagina_semana)` — Nota média de cada equipe, semana a semana, dentro do mês (só na página do MÊ…
+- L1245 `carregar_periodos()` — Monta a lista de opções do seletor de período no cabeçalho:
+- L1295 `carregar_nav_semanas()` — Barra "Semana 1 | Semana 2 | ... | Mês completo" do mês vigente.
+- L1356 `enxugar_html(html)` — Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
+- L1368 `periodo_em_andamento(semana_fim_html, hoje)` — Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= …
+- L1377 `_selo_periodo(ctx)` — 'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão …
+- L1391 `main()`
 
-Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, SCRIPTS_DIR@88, CONFIG_HOME_PATH@98, ACUMULADO_XLSX@99, HOME_XLSX@116, XLSX_PATH@118, OUT_PATH@119, SALARIO_MENSAL@121, EVISITA_URL@122, DIA_ORDER@123, EQUIPE_BLOQUEIO@129, RESUMO_COLS@227, AREA_COLS@241, ALERT_COLS@248, AUSENCIA_COLS@255, PENDENCIA_COLS@259, PE_COLS@263, RESUMO_SEMANAL_COLS@272, RANKING_COLS@273, RANKING_DET_COLS@280, _NAO_PADRONIZAR_TEXTO@299, _PRESENCA_CACHE@557, TEAM_COLORS@815, LABEL_MES_RE@841, _BLOCOS_LITERAIS_RE@1312, _ESPACOS_RE@1314
+Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, SCRIPTS_DIR@88, CONFIG_HOME_PATH@98, ACUMULADO_XLSX@99, HOME_XLSX@116, XLSX_PATH@118, OUT_PATH@119, SALARIO_MENSAL@121, EVISITA_URL@122, DIA_ORDER@123, EQUIPE_BLOQUEIO@129, RESUMO_COLS@227, AREA_COLS@241, ALERT_COLS@248, AUSENCIA_COLS@255, PENDENCIA_COLS@259, PE_COLS@263, RESUMO_SEMANAL_COLS@272, RANKING_COLS@273, RANKING_DET_COLS@280, _NAO_PADRONIZAR_TEXTO@299, _DIAS_CURTOS@482, _PRESENCA_CACHE@596, TEAM_COLORS@854, LABEL_MES_RE@880, _BLOCOS_LITERAIS_RE@1352, _ESPACOS_RE@1354
 
 ## scripts/gerar_agentes.py (194 linhas)
 
@@ -122,17 +123,20 @@ Constantes: ROOT@12, EQUIPE_BLOQUEIO@16, LABEL_MES_RE@17, _MESES_NUM@58
 - L14 `gerar(caminho_nomes, saida)`
 - L67 `gerar_ferias(caminho_nomes, saida)`
 
-## scripts/gerar_transparencia.py (216 linhas)
+## scripts/gerar_transparencia.py (219 linhas)
 
-- L21 `n(v, casas)` — Número em pt-BR (vírgula decimal), sem zeros inúteis.
-- L27 `hhmm(t)`
-- L31 `e(t)`
-- L35 `tabela(linhas, cab)`
-- L41 `exemplo()` — Agente FICTÍCIO calculado com as mesmas constantes do ranking.
-- L64 `_txt_meta()` — "20 visitas" ou, se houver metas por equipe (data/metas_equipes.json), "20 vi…
-- L71 `gerar()`
+- L24 `n(v, casas)` — Número em pt-BR (vírgula decimal), sem zeros inúteis.
+- L30 `hhmm(t)`
+- L34 `e(t)`
+- L38 `tabela(linhas, cab)`
+- L44 `exemplo()` — Agente FICTÍCIO calculado com as mesmas constantes do ranking.
+- L67 `_txt_meta()` — "20 visitas" ou, se houver metas por equipe (data/metas_equipes.json), "20 vi…
+- L74 `corpo_html()` — Conteúdo (HTML) do "Como é calculado", sem moldura de página.
+- L188 `_data_recalculo()` — ' em dd/mm/aaaa' da última vez que um mês congelado foi refeito (manifest.jso…
+- L198 `fragmento_js()` — assets/como_calcula.js: o HTML do conteúdo, como string JS (o álbum injeta na…
+- L203 `gerar()` — transparencia.html: só redireciona para a aba "Como é calculado" do álbum.
 
-Constantes: ROOT@18
+Constantes: ROOT@21
 
 ## scripts/icones.py (100 linhas)
 

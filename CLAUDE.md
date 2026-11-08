@@ -46,7 +46,7 @@ python3 tools/comparar_saidas.py         # refatorou o gerador? exige saída id�
 Depois de gerar `_teste.html`, **apague** `_teste.html` e `partes/_teste*`.
 
 ## Regras que valem sempre
-- **Nunca edite à mão** os gerados: `index.html`, `acumulado.html`, `transparencia.html`, `historico/*`, `partes/*`, `assets/agentes_dados.js`, `data/Analise_Consolidada.xlsx`, `data/historico/*.xlsx`, `data/semanas/*`, `data/csv/*`. Mudou código/template → o workflow regenera.
+- **Nunca edite à mão** os gerados: `index.html`, `acumulado.html`, `transparencia.html`, `historico/*`, `partes/*`, `assets/agentes_dados.js`, `assets/como_calcula.js`, `data/Analise_Consolidada.xlsx`, `data/historico/*.xlsx`, `data/semanas/*`, `data/csv/*`. Mudou código/template → o workflow regenera.
 - Agente = sempre por **ID**, nunca por nome.
 - Regra nova = constante com nome claro + comentário do porquê + teste em `scripts/test_*.py` + linha em `docs/DECISOES.md`.
 - Repositório público: nunca gravar senha, token, CID ou diagnóstico (atestado = "Ausência justificada"). `.env` fora do Git (modelo: `.env.example`).

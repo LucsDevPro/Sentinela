@@ -82,7 +82,7 @@ function desenhar() {
     html += `<div class="card"><h2>O que mais tirou pontos em ${esc(ult.mes)}</h2><table>${li(ult.perdas, 'neg')}</table></div>
       <div class="card"><h2>O que mais deu pontos</h2><table>${li(ult.ganhos, 'pos')}</table></div>`;
   }
-  html += `<p class="mut">Só dados públicos do ranking, sem informações de saúde. A conta completa está no Extrato do dashboard e em <a href="transparencia.html">Como o ranking é calculado</a>.</p>`;
+  html += `<p class="mut">Só dados públicos do ranking, sem informações de saúde. A conta completa está no Extrato do dashboard e em <a href="album.html#como-calcula">Como o ranking é calculado</a>.</p>`;
   alvo.innerHTML = html;
   const ligar = (id, modo) => { const b = $(id); if (!b) return; b.onclick = () => {
     const msg = $('msgImg'); b.disabled = true; msg.textContent = 'Preparando a imagem…';

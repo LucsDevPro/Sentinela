@@ -36,7 +36,7 @@ Os testes `*_navegador.py` e `tools/shot.py` usam Playwright e rodam só no comp
 ## Estrutura principal
 | Pasta / arquivo | Para quê |
 |---|---|
-| `*.html` na raiz | Páginas publicadas (**não mover**); `index`, `acumulado` e `transparencia` são gerados |
+| `*.html` na raiz | Páginas publicadas (**não mover**); `index`, `acumulado` e `transparencia` (só um redirecionamento para `album.html#como-calcula`) são gerados; o texto "Como é calculado" vive na aba do álbum |
 | `scripts/` | Coleta, regras, geração, testes (`coletar_evisita.py` é a fachada; o código está em `scripts/coleta/`) e `templates/` |
 | `data/` | Planilhas, cache por semana e JSONs de configuração (cronograma, ausências, metas) |
 | `worker/` | Cloudflare Worker (validação pela coordenação) |

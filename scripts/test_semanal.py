@@ -93,6 +93,24 @@ check(G.periodo_em_andamento(_fim, _sexta) == _sexta, "no próprio dia da sexta 
 check(G.periodo_em_andamento(_fim, _sexta + timedelta(days=1)) is None, "depois da sexta final: período fechado, sem selo")
 check(G.periodo_em_andamento(None, date(2026, 1, 1)) is None and G.periodo_em_andamento(0, date(2026, 1, 1)) is None, "sem semana_fim: sem selo")
 
+# --- agrupar_cronograma_por_dia: cada dia vira um grupo, em ordem cronológica (não alfabética)
+_rows = [
+    dict(periodo="05/10/2026", motivo="Chuva", quem="Equipe 2", auto=False),
+    dict(periodo="30/09/2026", motivo="Nenhum agente da equipe registrou visita neste turno", quem="Todos da Equipe 1 (9/9)", auto=True),
+    dict(periodo="05/10/2026", motivo="Reunião/Treinamento", quem="Equipe 3", auto=False),
+    dict(periodo="22/09/2026 a 25/09/2026", motivo="Férias", quem="Fulano", auto=False),
+    dict(periodo="05/10/2026", motivo="Chuva", quem="Equipe 4", auto=False),
+    dict(periodo="não é data", motivo="X", quem="Y", auto=False),
+]
+_g = G.agrupar_cronograma_por_dia(_rows)
+check([x["titulo"] for x in _g][:3] == ["22/09/2026 a 25/09/2026", "Qua 30/09/2026", "Seg 05/10/2026"], f"grupos em ordem cronológica, com o dia da semana: {[x['titulo'] for x in _g]}")
+check(_g[-1]["titulo"] == "não é data", "linha com data ilegível vai para o fim, sem quebrar")
+_d5 = next(x for x in _g if x["titulo"].endswith("05/10/2026"))
+check(_d5["n"] == 3 and _d5["motivos"] == ["Chuva", "Reunião/Treinamento"], f"mesmo dia agrupa as 3 linhas e não repete motivo: {_d5['motivos']}")
+check(next(x for x in _g if x["titulo"].startswith("Qua"))["motivos"] == ["Equipe parada (auto)"] and next(x for x in _g if x["titulo"].startswith("Qua"))["auto_n"] == 1, "paralisação automática aparece como 'Equipe parada (auto)'")
+check(G.agrupar_cronograma_por_dia([]) == [], "sem linhas -> sem grupos")
+check(sum(x["n"] for x in _g) == len(_rows), "nenhuma linha se perde no agrupamento")
+
 print()
 if FALHAS:
     print(f"❌ {len(FALHAS)} teste(s) falharam.")

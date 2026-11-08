@@ -14,7 +14,7 @@ import os
 import re
 import json
 from pathlib import Path
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timezone, timedelta
 
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
@@ -478,6 +478,45 @@ def build_cronograma_rows(cronograma, all_absent):
                           quem=f"Todos da {ar['Equipe']} ({int(ar['n_ausentes'])}/{int(ar['tamanho_equipe'])})",
                           auto=True))
     return manual + auto
+
+_DIAS_CURTOS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"]
+
+
+def agrupar_cronograma_por_dia(rows):
+    """Agrupa as linhas de build_cronograma_rows por DIA (ou por período, quando o lançamento cobre vários dias),
+    em ordem cronológica. Cada grupo: titulo, n, motivos (curtos, sem repetir), auto_n, rows. A página mostra cada
+    grupo recolhido (<details>) para a tabela não virar uma parede de linhas."""
+    grupos, ordem = {}, []
+    for r in rows:
+        k = r["periodo"]
+        if k not in grupos:
+            grupos[k] = []
+            ordem.append(k)
+        grupos[k].append(r)
+
+    def chave(k):
+        d = parse_br_date(str(k)[:10])
+        d2 = parse_br_date(str(k)[-10:])
+        return (0, d, d2) if d else (1, date.max, date.max)
+
+    saida = []
+    for k in sorted(ordem, key=chave):
+        linhas = grupos[k]
+        d = parse_br_date(str(k)[:10])
+        if " a " in str(k):
+            titulo = str(k)
+        elif d:
+            titulo = f"{_DIAS_CURTOS[d.weekday()]} {k}"
+        else:
+            titulo = str(k)
+        motivos = []
+        for r in linhas:
+            m = "Equipe parada (auto)" if r.get("auto") else str(r["motivo"])
+            if m not in motivos:
+                motivos.append(m)
+        saida.append(dict(titulo=titulo, n=len(linhas), motivos=motivos, auto_n=sum(1 for r in linhas if r.get("auto")), rows=linhas))
+    return saida
+
 
 def build_kpi_geral(resumo):
     total_agentes = len(resumo)
@@ -1137,6 +1176,7 @@ def build_context(data):
         ausencias=aus_records,
         ausencias_agg=build_ausencias_agg(aus),
         cronograma_rows=_cronograma_rows_calc,
+        cronograma_dias=agrupar_cronograma_por_dia(_cronograma_rows_calc),
         ferias_atestado_rows=[r for r in _cronograma_rows_calc
                                if not r["auto"] and ("férias" in r["motivo"].lower() or "atestado" in r["motivo"].lower())],
         pendencias=records(pendencias.sort_values("% Pendência", ascending=False), PENDENCIA_COLS) if not pendencias.empty else [],
@@ -1371,7 +1411,8 @@ def main():
     ctx["extratos"] = build_extratos(ctx["ranking"], ctx["ranking_detalhe"],
                                      ctx["ranking_sem_normalizacao"], rotulo_extrato or _periodo_label(ctx["periodos"]))
     ctx["extratos"]["mes"] = _mes_contestavel(ctx)
-    ctx["transparencia_href"] = os.path.relpath(ROOT / "transparencia.html", OUT_PATH.parent).replace(os.sep, "/")
+    # "Como é calculado" agora é uma aba do álbum (transparencia.html só redireciona, para links antigos)
+    ctx["transparencia_href"] = os.path.relpath(ROOT / "album.html", OUT_PATH.parent).replace(os.sep, "/") + "#como-calcula"
     ctx["comparacao_semanal"] = build_comparacao_semanal(ctx["nav_semanas"], ctx["pagina_semana"])
     ctx["agente_href"] = os.path.relpath(ROOT / "agente.html", OUT_PATH.parent).replace(os.sep, "/")
     ctx["contestacao_href"] = os.path.relpath(ROOT / "contestacao.html", OUT_PATH.parent).replace(os.sep, "/")

@@ -139,7 +139,7 @@ with sync_playwright() as p:
     checar("sem dados mostra aviso e não quebra", "Ainda não há notas" in pe.inner_text("#palco") and not erre, str(erre))
 
     # ---- páginas estáticas no claro e no escuro
-    for f in ("agente.html?nome=Gilmar%20Bitencourt%20Luiz", "validar.html", "contestacao.html", "transparencia.html"):
+    for f in ("agente.html?nome=Gilmar%20Bitencourt%20Luiz", "validar.html", "contestacao.html", "album.html"):
         e = []; q = ctx.new_page(); q.on("pageerror", lambda x: e.append(str(x)))
         q.evaluate("1"); q.goto(U + f); q.wait_for_timeout(700)
         q.evaluate("localStorage.removeItem('sentinelaTema')"); q.reload(); q.wait_for_timeout(500)
