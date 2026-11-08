@@ -1212,7 +1212,9 @@ def build_context(data):
 
 def build_comparacao_semanal(nav, pagina_semana):
     """Nota média de cada equipe, semana a semana, dentro do mês (só na página do MÊS, com 2+
-    semanas). Semana em andamento fica marcada como parcial. None quando não se aplica."""
+    semanas). Inclui coluna final «Mês completo» com a média do ranking do mês (mesma fórmula:
+    soma das notas ÷ qtd agentes). Semana em andamento fica marcada como parcial.
+    None quando não se aplica."""
     if not nav or pagina_semana:
         return None
     try:
@@ -1238,8 +1240,32 @@ def build_comparacao_semanal(nav, pagina_semana):
             equipes.setdefault(eq, {})[idx] = round(sum(v) / len(v), 1)
     if len(colunas) < 2:
         return None
-    return {"mes": nav["mes"], "semanas": colunas,
-            "equipes": {eq: [vals.get(i) for i in range(len(colunas))] for eq, vals in sorted(equipes.items())}}
+
+    # Coluna «Mês completo»: ranking do mês (entrada do manifest com label == mes e tipo != semana)
+    media_mes = {}
+    e_mes = next((e for e in man if e.get("tipo") != "semana" and e.get("label") == nav["mes"]), None)
+    if e_mes:
+        cam_mes = ROOT / "data" / "historico" / e_mes["arquivo"]
+        if cam_mes.exists():
+            linhas_mes = [l for l in _ler_ranking_rapido(cam_mes) if l[1] and l[1] != EQUIPE_BLOQUEIO]
+            acc_mes = {}
+            for _, eq, pts, _c in linhas_mes:
+                acc_mes.setdefault(eq, []).append(pts)
+            media_mes = {eq: round(sum(v) / len(v), 1) for eq, v in acc_mes.items()}
+            if media_mes:
+                idx_mes = len(colunas)
+                mes_parcial = any(c.get("parcial") for c in colunas)
+                colunas.append({"label": "Mês (até agora)" if mes_parcial else "Mês completo",
+                                "periodo": nav["mes"], "parcial": mes_parcial})
+                for eq, media in media_mes.items():
+                    equipes.setdefault(eq, {})[idx_mes] = media
+
+    return {
+        "mes": nav["mes"],
+        "semanas": colunas,
+        "equipes": {eq: [vals.get(i) for i in range(len(colunas))] for eq, vals in sorted(equipes.items())},
+        "media_mes": media_mes,
+    }
 
 
 def carregar_periodos():
@@ -1414,6 +1440,10 @@ def main():
     # "Como é calculado" agora é uma aba do álbum (transparencia.html só redireciona, para links antigos)
     ctx["transparencia_href"] = os.path.relpath(ROOT / "album.html", OUT_PATH.parent).replace(os.sep, "/") + "#como-calcula"
     ctx["comparacao_semanal"] = build_comparacao_semanal(ctx["nav_semanas"], ctx["pagina_semana"])
+    cs = ctx["comparacao_semanal"]
+    if cs and cs.get("media_mes"):
+        for card in ctx.get("team_cards") or []:
+            card["nota_media_mes"] = cs["media_mes"].get(card["nome"])
     ctx["agente_href"] = os.path.relpath(ROOT / "agente.html", OUT_PATH.parent).replace(os.sep, "/")
     ctx["contestacao_href"] = os.path.relpath(ROOT / "contestacao.html", OUT_PATH.parent).replace(os.sep, "/")
     ctx["worker_url"] = _worker_url() if _mes_contestavel(ctx) else ""
