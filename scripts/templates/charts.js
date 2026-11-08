@@ -56,8 +56,19 @@ new Chart(document.getElementById('chartTeam'), {
     type: 'bar',
     data: { labels: rotulos,
       datasets: Object.keys(C.equipes).map((eq, i) => ({ label: eq, data: C.equipes[eq], borderRadius: 4,
-        backgroundColor: ctx => cores[i % cores.length] + (parcial[ctx.dataIndex] ? '77' : ''),
-        borderColor: cores[i % cores.length], borderWidth: ctx => parcial[ctx.dataIndex] ? 1.5 : 0, borderDash: [4, 3] })) },
+        backgroundColor: ctx => {
+          const last = ctx.dataIndex === rotulos.length - 1 && !parcial[ctx.dataIndex];
+          const base = cores[i % cores.length];
+          if (parcial[ctx.dataIndex]) return base + '77';
+          return base;  // mês completo e semanas fechadas: cor cheia
+        },
+        borderColor: cores[i % cores.length],
+        borderWidth: ctx => {
+          if (parcial[ctx.dataIndex]) return 1.5;
+          // destaca a coluna «Mês completo» (última)
+          return ctx.dataIndex === rotulos.length - 1 ? 2 : 0;
+        },
+        borderDash: [4, 3] })) },
     options: { responsive: true, maintainAspectRatio: false,
       scales: { y: { min: 0, max: 100 }, x: { grid: { display: false } } },
       plugins: { legend: { position: 'bottom' } } },
