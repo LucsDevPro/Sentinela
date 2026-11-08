@@ -79,6 +79,12 @@ checar("o link do álbum inclui o mês filtrado (não só id/nome)",
 cj = ler("assets/carta.js")
 checar("carta.js: o link do popup inclui o mês da cartinha (&mes=u.mes)",
        "agente.html?id=" in cj and "'&mes=' + encodeURIComponent(u.mes)" in cj)
+# Formato da borda: escudo de cantos cortados (clip-path) no CSS e o mesmo polígono no PNG
+cc = ler("assets/carta.css")
+checar("carta.css: o cartão e o anel da borda usam clip-path em polígono (cantos cortados)",
+       cc.count("clip-path: polygon(") >= 3 and "18px 18px 40px 40px" not in cc)
+checar("carta.js: o PNG desenha o mesmo polígono (FORMA), sem as elipses do canto arredondado",
+       "var FORMA = [[20, 0], [252, 0], [272, 20], [272, 366], [242, 392], [30, 392], [0, 366], [0, 20]]" in cj and "ctx.ellipse(x + w - a" not in cj)
 
 print()
 if falhas:

@@ -114,13 +114,20 @@
     var a = ang * Math.PI / 180, dx = Math.sin(a), dy = -Math.cos(a), L = Math.abs(w * dx) + Math.abs(h * dy), cx = x + w / 2, cy = y + h / 2;
     var g = ctx.createLinearGradient(cx - dx * L / 2, cy - dy * L / 2, cx + dx * L / 2, cy + dy * L / 2); g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
   }
-  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = quanto encolher os cantos (anel da borda); continuar = não reiniciar o caminho
-    d = d || 0; var a = 22 * S - d, bx = 46 * S - d, by = 34 * S - d;
-    if (!continuar) ctx.beginPath(); ctx.moveTo(x + a, y);
-    ctx.lineTo(x + w - a, y); ctx.ellipse(x + w - a, y + a, a, a, 0, 1.5 * Math.PI, 2 * Math.PI);
-    ctx.lineTo(x + w, y + h - by); ctx.ellipse(x + w - bx, y + h - by, bx, by, 0, 0, .5 * Math.PI);
-    ctx.lineTo(x + bx, y + h); ctx.ellipse(x + bx, y + h - by, bx, by, 0, .5 * Math.PI, Math.PI);
-    ctx.lineTo(x, y + a); ctx.ellipse(x + a, y + a, a, a, 0, Math.PI, 1.5 * Math.PI); ctx.closePath();
+  var FORMA = [[20, 0], [252, 0], [272, 20], [272, 366], [242, 392], [30, 392], [0, 366], [0, 20]]; // escudo no espaço 272x392 (igual ao clip-path do CSS)
+  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = recuo (quem chama já passa o retângulo encolhido em d); continuar = não reiniciar o caminho
+    d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d; var n = FORMA.length;
+    // cantos de baixo ancorados na base (altura fixa em px do cartão), como no CSS
+    var P = FORMA.map(function (p) { return [p[0] === 272 ? w : (p[0] > 136 ? w - (272 - p[0]) * S : p[0] * S), p[1] > 196 ? h - (392 - p[1]) * S : p[1] * S]; });
+    if (d) P = P.map(function (p, i) {
+      var a = P[(i + n - 1) % n], c = P[(i + 1) % n];
+      function nr(u, v) { var dx = v[0] - u[0], dy = v[1] - u[1], l = Math.hypot(dx, dy); return [-dy / l, dx / l]; }
+      var n1 = nr(a, p), n2 = nr(p, c), k = 1 / (1 + n1[0] * n2[0] + n1[1] * n2[1]);
+      return [p[0] + (n1[0] + n2[0]) * k * d, p[1] + (n1[1] + n2[1]) * k * d];
+    });
+    if (!continuar) ctx.beginPath(); ctx.moveTo(x + P[0][0], y + P[0][1]);
+    for (var i = 1; i < n; i++) ctx.lineTo(x + P[i][0], y + P[i][1]);
+    ctx.closePath();
   }
   function texto(ctx, txt, x, y, ls) { // letra a letra, para respeitar o espaçamento entre letras em qualquer navegador
     if (!ls) { ctx.fillText(txt, x, y); return; }

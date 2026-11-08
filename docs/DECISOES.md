@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 08/11/2026 — formato da borda da cartinha: escudo de cantos cortados
+- A cartinha deixa de ter cantos arredondados e passa a ter o formato de escudo (cantos cortados em diagonal: 20 px em cima, 30 × 26 px embaixo), com o anel metálico acompanhando o formato. Só muda o contorno: o interior, as cores por nível e a pontuação ficam iguais.
+- O recorte (`clip-path`) corta o `box-shadow`; por isso o brilho externo da Lendária e do Destaque passou para o contêiner (`filter: drop-shadow`). As demais cartas ficam sem a sombra externa.
+- `assets/carta.css` (polígono, anel, filete da Lendária) e `assets/carta.js` (`FORMA`/`pathCartao`, usado no PNG de download) têm que ficar iguais; `scripts/test_album.py` confere os dois.
+
 ## 08/11/2026 — ranking semanal inclui agente do mês que passou a semana sem lançar nada
 - Antes, o ranking de cada semana só tinha quem teve ao menos 1 visita naquela semana: quem ficou a semana inteira sem lançar sumia e inflava a média da equipe (ex.: Equipe 3 na semana 1: 90,5 sem a Alana; 80,4 com ela).
 - Agora a visão semanal inclui os agentes do mês sem nenhuma visita na semana, **só se** já trabalhavam antes do período, não são de equipe sob demanda (Bloqueio) e têm turno sem justificativa no cronograma. Quem está de férias/atestado/folga lançado não aparece.

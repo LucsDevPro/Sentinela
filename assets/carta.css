@@ -11,7 +11,8 @@
   min-height: 392px;
   padding: 16px 18px 14px;
   color: var(--tx);
-  border-radius: 18px 18px 40px 40px / 18px 18px 30px 30px;
+  border-radius: 0;
+  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
   background:
     linear-gradient(160deg, var(--c1) 0%, #E6C86A 38%, #D4A63A 68%, var(--c2) 100%);
   box-shadow:
@@ -195,13 +196,11 @@
   --bw: 13px;
 }
 
-/* Anel da borda (máscara) */
+/* Anel da borda: recorte em polígono (cantos cortados, estilo escudo); a espessura vem de --bw */
 .carta > .c-borda {
   position: absolute;
   inset: 0;
   z-index: 3;
-  padding: var(--bw);
-  border-radius: inherit;
   pointer-events: none;
   background: linear-gradient(
     135deg,
@@ -213,9 +212,7 @@
     var(--b2) 88%,
     var(--b3) 100%
   );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px, 20px 0px, calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), calc(0px + var(--bw) * 1.0000) calc(20px + var(--bw) * 0.4142), calc(0px + var(--bw) * 1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(30px + var(--bw) * 0.3730) calc(100% + var(--bw) * -1.0000), calc(100% - 30px + var(--bw) * -0.3730) calc(100% + var(--bw) * -1.0000), calc(100% + var(--bw) * -1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(100% + var(--bw) * -1.0000) calc(20px + var(--bw) * 0.4142), calc(100% - 20px + var(--bw) * -0.4142) calc(0px + var(--bw) * 1.0000), calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), 20px 0px);
 }
 
 /* Filete interno extra nas cartas altas (anel secundário) */
@@ -464,15 +461,14 @@ body.sem-foto .c-foto img {
 }
 
 .carta.b-100::before {
-  inset: 12px;
-  border: 1.5px solid rgba(200, 230, 255, 0.82);
-  border-radius: 9px 9px 30px 30px / 9px 9px 20px 20px;
-  background: none;
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  background: rgba(200, 230, 255, 0.82);
   -webkit-mask: none;
   mask: none;
-  box-shadow:
-    0 0 12px rgba(70, 170, 255, 0.5),
-    inset 0 0 14px rgba(70, 170, 255, 0.32);
+  clip-path: polygon(calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(100% - 20px + 12px * -0.4142) calc(0px + 12px * 1.0000), calc(100% + 12px * -1.0000) calc(20px + 12px * 0.4142), calc(100% + 12px * -1.0000) calc(100% - 26px + 12px * -0.4566), calc(100% - 30px + 12px * -0.3730) calc(100% + 12px * -1.0000), calc(30px + 12px * 0.3730) calc(100% + 12px * -1.0000), calc(0px + 12px * 1.0000) calc(100% - 26px + 12px * -0.4566), calc(0px + 12px * 1.0000) calc(20px + 12px * 0.4142), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(0px + 13.5px * 1.0000) calc(20px + 13.5px * 0.4142), calc(0px + 13.5px * 1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(30px + 13.5px * 0.3730) calc(100% + 13.5px * -1.0000), calc(100% - 30px + 13.5px * -0.3730) calc(100% + 13.5px * -1.0000), calc(100% + 13.5px * -1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(100% + 13.5px * -1.0000) calc(20px + 13.5px * 0.4142), calc(100% - 20px + 13.5px * -0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000));
+  box-shadow: none;
   opacity: 1;
 }
 
@@ -859,3 +855,7 @@ body.sem-foto .c-foto img {
   .carta[data-fx] { transition: none; }
 }
 @media print { .carta > .c-brilho, .carta > .c-glitter { display: none; } }
+
+/* Brilho externo das cartas de topo: o recorte em escudo corta o box-shadow, então o brilho vai no contêiner */
+*:has(> .carta.b-100) { filter: drop-shadow(0 0 14px rgba(48, 148, 255, 0.55)); }
+*:has(> .carta.b-top) { filter: drop-shadow(0 0 10px rgba(255, 190, 90, 0.4)); }
