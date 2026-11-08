@@ -71,6 +71,22 @@
   },
   {
     "tipo": "possiveis_ferias",
+    "id_agente": 125,
+    "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
+    "equipe": "Equipe 2",
+    "inicio": "28/10/2026",
+    "fim": "06/11/2026",
+    "duracao": 7,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "status": "pendente",
+    "motivo": null,
+    "confirmado_automaticamente": false,
+    "categoria_coletiva": null,
+    "detectado_em": "08/11/2026 04:59"
+  },
+  {
+    "tipo": "possiveis_ferias",
     "id_agente": 115,
     "nome_agente": "Cicero Isrrael Sanabria",
     "equipe": "Equipe 2",
@@ -193,6 +209,22 @@
   },
   {
     "tipo": "possiveis_ferias",
+    "id_agente": 3035,
+    "nome_agente": "Teonilda Florentino Vieira",
+    "equipe": "Equipe 2",
+    "inicio": "28/10/2026",
+    "fim": "06/11/2026",
+    "duracao": 7,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "status": "falta",
+    "motivo": "Falta (agente sem abono automático)",
+    "confirmado_automaticamente": true,
+    "categoria_coletiva": null,
+    "detectado_em": "08/11/2026 04:59"
+  },
+  {
+    "tipo": "possiveis_ferias",
     "id_agente": 2951,
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
@@ -259,13 +291,15 @@
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
     "inicio": "19/10/2026",
-    "fim": "30/10/2026",
-    "duracao": 10,
+    "fim": "06/11/2026",
+    "duracao": 14,
     "status": "falta",
     "motivo": "Falta (sem abono — decisão da coordenação)",
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "29/10/2026 01:15"
+    "detectado_em": "29/10/2026 01:15",
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada."
   },
   {
     "tipo": "possiveis_ferias",
@@ -332,6 +366,22 @@
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
     "detectado_em": "01/11/2026 21:09"
+  },
+  {
+    "tipo": "possiveis_ferias",
+    "id_agente": 3177,
+    "nome_agente": "Patricia Lanjer de Souza Domingues",
+    "equipe": "Equipe 3",
+    "inicio": "26/10/2026",
+    "fim": "06/11/2026",
+    "duracao": 9,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "status": "pendente",
+    "motivo": null,
+    "confirmado_automaticamente": false,
+    "categoria_coletiva": null,
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "possiveis_ferias",
@@ -471,7 +521,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -504,7 +554,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -537,7 +587,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -570,7 +620,40 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 1",
+    "agentes_envolvidos": [
+      30,
+      73,
+      79,
+      116,
+      470,
+      672,
+      1935,
+      3037,
+      3101
+    ],
+    "nomes_envolvidos": [
+      "Adriana de Jesus Saraiva",
+      "Ana Gabriela Silva Garcete",
+      "Carlos Alberto Albiero",
+      "Cris Milene Cardenas da Silva",
+      "Evelyn Santana Santos Oliveira",
+      "Gabriel Alan de Oliveira Martins",
+      "Raquel Ortiz dos Santos",
+      "Rozentina Matos de Oliveira",
+      "Wagner Tarlei Gomes"
+    ],
+    "inicio": "03/11/2026",
+    "fim": "03/11/2026",
+    "duracao": 1,
+    "status": "pendente",
+    "categoria_coletiva": null,
+    "confirmado_automaticamente": false,
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -609,7 +692,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -644,7 +727,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -677,7 +760,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -712,7 +795,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -745,7 +828,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -780,7 +863,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -819,7 +902,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -858,7 +941,42 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 2",
+    "agentes_envolvidos": [
+      81,
+      99,
+      115,
+      134,
+      142,
+      151,
+      465,
+      2030,
+      2917,
+      3127
+    ],
+    "nomes_envolvidos": [
+      "Bianca Afonso Narbaez",
+      "Cicero Isrrael Sanabria",
+      "Fabiana de Figueredo Vieira",
+      "Gilmar Bitencourt Luiz",
+      "Gisele Olimpia Torres",
+      "Mateus Falcao de Souza",
+      "Suely Aguiar Alves Luiz",
+      "Tania Maria Montania",
+      "Wesley de Souza Leal",
+      "William Anderson Chamorro Tavares"
+    ],
+    "inicio": "03/11/2026",
+    "fim": "03/11/2026",
+    "duracao": 1,
+    "status": "pendente",
+    "categoria_coletiva": null,
+    "confirmado_automaticamente": false,
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -887,7 +1005,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -914,7 +1032,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -945,7 +1063,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -976,7 +1094,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1007,7 +1125,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1036,7 +1154,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1067,7 +1185,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1098,7 +1216,38 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 3",
+    "agentes_envolvidos": [
+      113,
+      120,
+      1936,
+      1938,
+      2721,
+      2918,
+      3038,
+      3128
+    ],
+    "nomes_envolvidos": [
+      "Claine Luisa Figueiredo Torraca",
+      "Emidio Rainer Vilhalba",
+      "Geancarlos Ferreira Barrios",
+      "Marco Antonio Ayala de Matos Freitas",
+      "Miglidiane Maciel Ajala",
+      "Naime Cristina Freitas",
+      "Rosalina Beniel Vargas",
+      "Selba Ramona Afonso"
+    ],
+    "inicio": "03/11/2026",
+    "fim": "04/11/2026",
+    "duracao": 2,
+    "status": "pendente",
+    "categoria_coletiva": null,
+    "confirmado_automaticamente": false,
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1131,7 +1280,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1166,7 +1315,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1203,7 +1352,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1238,7 +1387,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1273,7 +1422,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1310,7 +1459,44 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "06/11/2026 10:33"
+    "detectado_em": "08/11/2026 04:59"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 4",
+    "agentes_envolvidos": [
+      80,
+      86,
+      110,
+      124,
+      149,
+      157,
+      161,
+      1942,
+      1943,
+      1996,
+      2789
+    ],
+    "nomes_envolvidos": [
+      "Anderson Jose de Santana",
+      "Gisele Lopes Justiniano",
+      "Juliana Patricia Goncalves",
+      "Kariele Jackeline Rodrigues Silva",
+      "Kátia Cilene Silveira Machado",
+      "Rafael Ramos Recalde",
+      "Ramona dos Santos Oliveira",
+      "Rozana Reis da Silva",
+      "Sara Eliane Talaveira de Oliveira",
+      "Silvina Regina de Souza Valiente",
+      "Walquiria Araujo Flores"
+    ],
+    "inicio": "03/11/2026",
+    "fim": "03/11/2026",
+    "duracao": 1,
+    "status": "pendente",
+    "categoria_coletiva": null,
+    "confirmado_automaticamente": false,
+    "detectado_em": "08/11/2026 04:59"
   },
   {
     "tipo": "possiveis_ferias",
