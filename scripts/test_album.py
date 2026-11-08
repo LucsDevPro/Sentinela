@@ -75,6 +75,10 @@ checar("agente.js sem mes continua usando o mês mais recente",
 # Setembro no álbum → evolução de setembro mesmo com dados posteriores: o link carrega mes=
 checar("o link do álbum inclui o mês filtrado (não só id/nome)",
        "encodeURIComponent(mes)" in aj)
+# O popup "Ver evolução do agente" (carta.js) também leva o mês da cartinha (u.mes), senão agente.js abre no mais recente
+cj = ler("assets/carta.js")
+checar("carta.js: o link do popup inclui o mês da cartinha (&mes=u.mes)",
+       "agente.html?id=" in cj and "'&mes=' + encodeURIComponent(u.mes)" in cj)
 
 print()
 if falhas:
