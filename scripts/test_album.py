@@ -61,6 +61,21 @@ checar("efeitos não vão para o papel", "@media print" in bloco and ".c-brilho"
 fx = ler("assets/carta_fx.js")
 checar("carta_fx.js respeita prefers-reduced-motion e só anima o que está visível", "prefers-reduced-motion" in fx and "IntersectionObserver" in fx and "'vivo'" in fx)
 
+
+# --- mês selecionado no álbum deve abrir a evolução naquele mês (não o mais recente)
+aj = ler("assets/album.js")
+checar("album.js passa &mes= na URL ao abrir agente.html",
+       "agente.html" in aj and "&mes=" in aj and "encodeURIComponent(mes)" in aj)
+ej = ler("assets/agente.js")
+checar("agente.js lê o parâmetro mes da URL", "get('mes')" in ej or 'get("mes")' in ej)
+checar("agente.js filtra o histórico até o mês escolhido",
+       "todosMeses" in ej and "slice(0, idxRef" in ej)
+checar("agente.js sem mes continua usando o mês mais recente",
+       "todosMeses.length - 1" in ej and "mesParam" in ej)
+# Setembro no álbum → evolução de setembro mesmo com dados posteriores: o link carrega mes=
+checar("o link do álbum inclui o mês filtrado (não só id/nome)",
+       "encodeURIComponent(mes)" in aj)
+
 print()
 if falhas:
     print(f"❌ {len(falhas)} falha(s): {falhas}")

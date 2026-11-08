@@ -3,6 +3,8 @@ const $ = id => document.getElementById(id);
 const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const f1 = n => n == null ? '—' : Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const norm = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const MESES_ORD = ['janeiro','fevereiro','marco','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const ordMes = l => { const p = norm(l).split('/'); return (parseInt(p[1], 10) || 0) * 20 + MESES_ORD.indexOf(p[0]); };
 $('apres').onchange = e => document.body.classList.toggle('modo-apresentacao', e.target.checked);
 $('semFoto').onchange = e => document.body.classList.toggle('sem-foto', e.target.checked);
 try { if (window.opener && window.opener.document.body.classList.contains('modo-apresentacao')) { $('apres').checked = true; document.body.classList.add('modo-apresentacao'); } } catch (e) {}
@@ -60,11 +62,26 @@ function desenhar() {
         .map(([k, x]) => `<a href="?${/^\d+$/.test(k) ? 'id=' + k : 'nome=' + encodeURIComponent(x.nome)}"><span class="nome">${esc(x.nome)}</span> <span class="mut">· ${esc(x.equipe)}</span></a>`).join(''); };
     $('b').oninput = lista; lista(); return;
   }
-  const ms = a.meses, ult = ms[ms.length - 1], sem = a.semanas;
-  document.title = 'Evolução — ' + a.nome;
+  // ?mes= define o mês de referência (ex.: link do álbum). Sem parâmetro → mês mais recente.
+  const todosMeses = (a.meses || []).slice().sort((p, q) => ordMes(p.mes) - ordMes(q.mes));
+  const mesParam = q.get('mes');
+  let idxRef = todosMeses.length - 1;
+  if (mesParam) {
+    const i = todosMeses.findIndex(m => m.mes === mesParam);
+    if (i >= 0) idxRef = i;
+  }
+  const ms = todosMeses.slice(0, idxRef + 1); // histórico até o mês escolhido (inclusive)
+  const ult = ms[ms.length - 1];
+  const sem = (a.semanas || []).filter(s => s.mes === (ult && ult.mes)).slice().sort((x, y) => x.n - y.n);
+  document.title = 'Evolução — ' + a.nome + (ult ? ' · ' + ult.mes : '');
   const media = ms.length ? ms.reduce((t, m) => t + (m.pontos || 0), 0) / ms.length : null;
   const trab = ult ? `${f1(ult.trab).replace(',0', '')} de ${f1(ult.esp).replace(',0', '')}` : '—';
-  let html = `<h1><svg class="ico" aria-hidden="true"><use href="#i-trend"/></svg> <span class="nome">${esc(a.nome)}</span></h1><div class="mut">${esc(a.equipe)} · atualizado em ${esc(D.gerado_em)}</div>`;
+  const qsAgente = idAgente && /^\d+$/.test(String(idAgente)) ? 'id=' + idAgente : 'nome=' + encodeURIComponent(a.nome);
+  const linkRecente = idxRef < todosMeses.length - 1
+    ? ` · <a href="agente.html?${qsAgente}">ver mês mais recente</a>`
+    : '';
+  const linkAlbum = ` · <a href="album.html?mes=${encodeURIComponent(ult ? ult.mes : '')}">álbum</a>`;
+  let html = `<h1><svg class="ico" aria-hidden="true"><use href="#i-trend"/></svg> <span class="nome">${esc(a.nome)}</span></h1><div class="mut">${esc(a.equipe)} · atualizado em ${esc(D.gerado_em)}${linkAlbum}${linkRecente}</div>`;
   html += carta(a, ms);
   if (ult) html += `<div class="card"><div class="kpis">
       <div class="kpi"><span>Nota em ${esc(ult.mes)}</span><strong>${f1(ult.pontos)}</strong></div>
@@ -74,7 +91,7 @@ function desenhar() {
   if (ms.length) html += `<div class="card"><h2>Nota por mês</h2><div class="grafico"><canvas id="gMes" role="img" aria-label="Nota mensal"></canvas></div></div>
     <div class="card"><h2>Dias trabalhados × esperados</h2><div class="grafico"><canvas id="gDias" role="img" aria-label="Dias trabalhados e esperados por mês"></canvas></div></div>`;
   else html += '<div class="card aviso">Este agente ainda não tem mês registrado.</div>';
-  if (sem.length >= 1) html += `<div class="card"><h2>Nota por semana (mês aberto)</h2><div class="grafico"><canvas id="gSem" role="img" aria-label="Nota semanal"></canvas></div>
+  if (sem.length >= 1) html += `<div class="card"><h2>Nota por semana (${esc(ult ? ult.mes : '')})</h2><div class="grafico"><canvas id="gSem" role="img" aria-label="Nota semanal"></canvas></div>
       <p class="mut">Semana parcial = ainda em andamento; a nota dela pode mudar até sexta.</p></div>`;
   html += linhaTempo(ms, sem);
   if (ult) {

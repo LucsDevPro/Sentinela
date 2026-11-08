@@ -52,7 +52,10 @@ else {
     lista.sort((p, q) => Carta.bruta(q.u) - Carta.bruta(p.u) || q.h - p.h || p.u.pos - q.u.pos || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
     lista.forEach((l, i) => { l.lugar = i + 1; });
     const vis = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)) && (!niv || Carta.medidas(l.ms, l.x.k).tier[1] === niv));
-    const slot = (l, cls) => `<a class="slot ${cls || ''}" href="agente.html?${/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)}" title="Ver evolução de ${esc(l.x.a.nome)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${Carta.html(l.x.a, l.ms, l.x.k)}</a>`;
+    const slot = (l, cls) => {
+      const qAg = (/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)) + '&mes=' + encodeURIComponent(mes);
+      return `<a class="slot ${cls || ''}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)} em ${esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${Carta.html(l.x.a, l.ms, l.x.k)}</a>`;
+    };
     // Pódio: só sem filtros (com filtro, o top 3 do mês pode nem estar na lista). No HTML a ordem é 1º, 2º, 3º; o CSS põe o 1º no meio.
     const pod = !eq && !bu && !niv && vis.length >= 3 ? vis.slice(0, 3) : [];
     $('podio').hidden = !pod.length;
