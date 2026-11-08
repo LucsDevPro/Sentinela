@@ -97,7 +97,7 @@ try:
     checar("fechar mês completo funciona", ok, msg)
     man = json.load(open("data/historico/manifest.json"))
     mes = [e for e in man if e["label"] == "Outubro/2026" and e.get("tipo") != "semana"][0]
-    semanas = [e for e in man if e.get("tipo") == "semana"]
+    semanas = [e for e in man if e.get("tipo") == "semana" and e.get("mes") == "Outubro/2026"]  # só as semanas do mês fechado (Novembro segue em cache)
     checar("mês e semanas viram manual (congelados)", mes["origem"] == "manual" and semanas and all(e["origem"] == "manual" for e in semanas))
     checar("cópia de segurança criada", any("antes-de-fechar" in f for f in os.listdir("data/historico/backup_congelado")))
     checar("mês aparece em meses_arquivados.json", any(i["mes"] == "Outubro/2026" for i in json.load(open("data/meses_arquivados.json"))))

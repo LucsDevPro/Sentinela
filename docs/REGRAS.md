@@ -26,12 +26,13 @@ Expediente: manhã 07–11h, tarde 13–17h (`HORA_EXPEDIENTE_*`).
 2. **Antes de descontar** confere o cronograma (`MOTIVOS_CRONOGRAMA`): Chuva, Folga, Meia folga, Ausência justificada (atestado),
    Meia ausência justificada, Reunião/Treinamento, Férias, Levantamento de Índice, Ovitrampa, Recuperação de Casas. Coberto = não desconta.
    Feriado nacional sem visita não conta.
-3. **Possível Evento** (sem desconto; a coordenação confirma o motivo), nesta ordem, no mesmo dia e turno:
-   - **Regra máxima:** `LIMITE_AGENTES_EVENTO_TURNO` (**22**) ou mais agentes, de qualquer equipe, sem lançamento = evento externo/interno;
-   - **abaixo do limite, regra da equipe:** **todos** os agentes ativos da equipe (2 ou mais) sem lançamento = chuva isolada ou reunião.
-     Ativo = não coberto pelo cronograma no turno;
-   - **senão:** Turno sem Lançamento (falta; desconta). `CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE` define se quem já está coberto por
-     chuva/reunião conta no limite.
+3. **Chuva automática / Possível Evento** (sem desconto), nesta ordem, no mesmo dia e turno:
+   - **Regra suprema (08/11/2026):** `LIMITE_AGENTES_EVENTO_TURNO` (**23**) ou mais agentes, de qualquer equipe, sem lançamento = **Chuva**,
+     confirmada automaticamente (sem validação manual, sem desconto; não depende de `EVENTO_COLETIVO_A_PARTIR_DE`). A contagem inclui quem já
+     está coberto por chuva/reunião no cronograma (`CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = True`); férias, folga e atestado não entram;
+   - **22 ou menos, regra da equipe:** **todos** os agentes ativos da equipe (2 ou mais) sem lançamento = Possível Evento (chuva isolada ou
+     reunião; sem desconto, a coordenação confirma o motivo). Ativo = não coberto pelo cronograma no turno;
+   - **senão:** Turno sem Lançamento (falta; desconta).
    Equipes sob demanda ficam fora. Vale para todos os períodos (`EVENTO_COLETIVO_A_PARTIR_DE = None`).
 4. Cada agente só é avaliado a partir da **própria** 1ª visita se começou dentro do período; quem já trabalhava antes é avaliado desde o 1º dia.
 5. Reverter um evento que foi falta: ajuste manual em `data/ajustes_ranking.json` (não existe, ainda, "forçar desconto").

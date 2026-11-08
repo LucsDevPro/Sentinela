@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Testes da regra de Turno sem Lançamento x Possível Evento Externo/Interno
-(coordenação, 02/11/2026; limite e ordem de decisão ajustados em 05/11/2026):
+(coordenação, 02/11/2026; limite e ordem de decisão ajustados em 05/11 e 08/11/2026):
   * ausência sem justificativa = "Turno sem Lançamento" (desconta pontos);
   * ANTES de descontar: cronograma (chuva, treinamento, atestado, férias, folga, reunião);
-  * LIMITE (22) ou mais agentes sem lançamento no mesmo turno => evento externo/interno (regra máxima);
-  * abaixo do limite, toda a equipe (agentes ativos) sem lançamento => chuva isolada ou reunião;
+  * LIMITE (23) ou mais agentes sem lançamento no mesmo turno => CHUVA automática (regra suprema, sem desconto);
+  * abaixo do limite, toda a equipe (agentes ativos) sem lançamento => possível evento, sem desconto;
   * senão é Turno sem Lançamento (falta);
   * detecções novas entram como "pendente" (não perdoam sozinhas).
 Uso: python3 scripts/test_turno_evento.py
@@ -92,7 +92,7 @@ def classes(regs, id_ag=None, dia=None, turno=None):
             and (turno is None or r["turno"] == turno)}
 
 
-EV, TSL = ce.CLASSIF_POSSIVEL_EVENTO, ce.CLASSIF_TURNO_SEM_LANCAMENTO
+EV, TSL, CHUVA = ce.CLASSIF_POSSIVEL_EVENTO, ce.CLASSIF_TURNO_SEM_LANCAMENTO, ce.CLASSIF_CHUVA_AUTOMATICA
 
 # --- padrão: ausência individual = Turno sem Lançamento ----------------------
 agentes = [(1, "A1", "Equipe 1", {("07/10/2026", "Manhã")}),
@@ -101,18 +101,19 @@ regs = rodar(agentes)
 checar("Padrão — ausência individual é Turno sem Lançamento", classes(regs, 1) == {TSL}, str(classes(regs, 1)))
 checar("Padrão — observação diz que desconta pontos", "Desconta pontos" in regs[0]["observacao"])
 
-# --- LIMITE (22) ou mais agentes no mesmo turno (equipes diferentes, ninguém é a equipe toda) --
+# --- LIMITE (23) ou mais agentes no mesmo turno (equipes diferentes, ninguém é a equipe toda) --
 LIM = ce.LIMITE_AGENTES_EVENTO_TURNO
-checar("o limite geral é 22 (regra da coordenação, 05/11/2026)", LIM == 22, str(LIM))
+checar("o limite geral é 23 (regra suprema da coordenação, 08/11/2026)", LIM == 23, str(LIM))
 
 
 def montar_n(n_ausentes, cobertos_chuva=0):
-    """2 equipes de 12 agentes; `n_ausentes` ausentes no turno (metade em cada), nunca a equipe toda.
+    """2 equipes de 13 agentes; `n_ausentes` ausentes no turno (metade em cada), nunca a equipe toda
+    (com 12 por equipe, 23 ausentes esvaziariam uma equipe inteira e acionariam a regra de equipe).
     `cobertos_chuva` dos ausentes ganham 'Chuva' no cronograma (devolve também a lista do cronograma)."""
     ag, cron, a_cobrir = [], [], cobertos_chuva
     metade = (n_ausentes // 2, n_ausentes - n_ausentes // 2)
     for (eq, base), n_eq in zip((("Equipe 1", 100), ("Equipe 2", 200)), metade):
-        for i in range(12):
+        for i in range(13):
             aus = {("07/10/2026", "Manhã")} if i < n_eq else set()
             ag.append((base + i, f"{eq}-{i}", eq, aus))
             if aus and a_cobrir > 0:
@@ -122,25 +123,28 @@ def montar_n(n_ausentes, cobertos_chuva=0):
 
 
 regs = rodar(montar_n(LIM)[0])
-checar(f"{LIM} agentes sem lançamento no mesmo turno => Possível Evento", classes(regs) == {EV}, str(classes(regs)))
-checar("Evento pelo limite — observação explica o gatilho e que é evento externo/interno",
-       f"{LIM} agentes" in regs[0]["observacao"] and "evento externo ou interno" in regs[0]["observacao"] and "Sem desconto" in regs[0]["observacao"], regs[0]["observacao"])
-checar(f"{LIM + 3} agentes (bem acima do limite) => Possível Evento", classes(rodar(montar_n(LIM + 3)[0])) == {EV})
+checar(f"{LIM} agentes sem lançamento no mesmo turno => CHUVA automática", classes(regs) == {CHUVA}, str(classes(regs)))
+checar("CHUVA automática — observação informa regra suprema e dispensa validação",
+       "confirmação automática" in regs[0]["observacao"] and "Sem desconto" in regs[0]["observacao"]
+       and "sem necessidade de validação manual" in regs[0]["observacao"], regs[0]["observacao"])
+checar(f"{LIM + 3} agentes (bem acima do limite) => CHUVA automática", classes(rodar(montar_n(LIM + 3)[0])) == {CHUVA})
 checar(f"{LIM - 1} agentes (abaixo do limite, ninguém é a equipe toda) => Turno sem Lançamento (falta)", classes(rodar(montar_n(LIM - 1)[0])) == {TSL})
-checar("20 agentes (limite antigo) => agora Turno sem Lançamento", classes(rodar(montar_n(20)[0])) == {TSL})
+checar("22 agentes (abaixo do limite) => Turno sem Lançamento", classes(rodar(montar_n(22)[0])) == {TSL})
 
-# --- cobertos por EVENTO (chuva) só contam no limite se a opção estiver ligada --------
-ag, cron = montar_n(LIM, cobertos_chuva=3)                        # 19 descobertos + 3 cobertos por chuva
-checar("Cobertos por chuva NÃO contam no limite (padrão) => os 19 descobertos são Turno sem Lançamento",
-       classes(rodar(ag, cron)) == {TSL}, str(classes(rodar(ag, cron))))
-ce.CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = True
+# --- a contagem total inclui quem já está coberto por chuva/reunião no cronograma ----
+ag, cron = montar_n(LIM, cobertos_chuva=3)                        # 20 descobertos + 3 cobertos por chuva
+checar("A contagem total inclui quem já está coberto por chuva no cronograma",
+       ce.CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE is True)
 regs = rodar(ag, cron)
-checar("Cobertos por chuva CONTAM no limite (opção ligada) => os descobertos viram Possível Evento", classes(regs) == {EV}, str(classes(regs)))
+checar("20 descobertos + 3 cobertos por chuva = 23 => CHUVA automática", classes(regs) == {CHUVA}, str(classes(regs)))
 checar("  — a observação informa quantos já estavam cobertos", "3 já cobertos por chuva/reunião" in regs[0]["observacao"], regs[0]["observacao"])
 ag_f = [x for x in ag]
 cron_ferias = [dict(c, motivo="Férias") for c in cron]
-checar("Férias (ausência individual) nunca contam no limite, mesmo com a opção ligada", classes(rodar(ag_f, cron_ferias)) == {TSL}, str(classes(rodar(ag_f, cron_ferias))))
+checar("Férias (ausência individual) nunca contam no limite", classes(rodar(ag_f, cron_ferias)) == {TSL}, str(classes(rodar(ag_f, cron_ferias))))
 ce.CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = False
+checar("Com a contagem total desligada, os mesmos 20 descobertos não atingem o limite",
+       classes(rodar(ag, cron)) == {TSL}, str(classes(rodar(ag, cron))))
+ce.CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = True
 
 # --- equipe inteira sem lançamento no turno ------------------------------------
 agentes = [(1, "C1", "Equipe 3", {("08/10/2026", "Tarde")}),
@@ -167,11 +171,14 @@ cron_trein = [{"alvo": "agente", "id_agente": 1, "motivo": "Reunião/Treinamento
 regs = rodar([(1, "T1", "Equipe 1", {("09/10/2026", "Manhã")}), (2, "T2", "Equipe 1", set()), (3, "T3", "Equipe 1", set())], cron_trein)
 checar("Cronograma — treinamento justifica o turno (sem registro)", classes(regs, 1) == set())
 
-# --- data de corte opcional (não mexe em período anterior) ------------------------
+# --- data de corte opcional: só limita a regra de equipe, não a regra suprema -------
 ce.EVENTO_COLETIVO_A_PARTIR_DE = d("09/10/2026")
-checar("Corte — dia anterior à data não vira evento", classes(rodar(montar_n(LIM)[0])) == {TSL})
+checar("Corte — 23+ continua CHUVA automática mesmo antes da data de corte", classes(rodar(montar_n(LIM)[0])) == {CHUVA})
+checar("Corte — equipe inteira antes da data de corte continua Turno sem Lançamento",
+       classes(rodar([(1, "C1", "Equipe 3", {("08/10/2026", "Tarde")}), (2, "C2", "Equipe 3", {("08/10/2026", "Tarde")})])) == {TSL})
 ce.EVENTO_COLETIVO_A_PARTIR_DE = d("07/10/2026")
-checar("Corte — dia na data (ou depois) vira evento", classes(rodar(montar_n(LIM)[0])) == {EV})
+checar("Corte — abaixo de 23, equipe inteira vira evento na data (ou depois)",
+       classes(rodar([(1, "C1", "Equipe 3", {("08/10/2026", "Tarde")}), (2, "C2", "Equipe 3", {("08/10/2026", "Tarde")})])) == {EV})
 ce.EVENTO_COLETIVO_A_PARTIR_DE = None
 
 # --- equipe sob demanda fica fora das duas regras -------------------------------
@@ -189,12 +196,17 @@ if os.path.exists("data/semanas/326.xlsx"):
                 dia_semana="", observacao="x", _fill="E8E8E8")
     regs_tsl = [dict(base, dia_fmt=f"0{i}/09/2026", turno="Manhã", classificacao=TSL) for i in (1, 2, 3)]
     regs_ev = [dict(r, classificacao=EV) for r in regs_tsl]
+    regs_chuva = [dict(r, classificacao=CHUVA) for r in regs_tsl]
     argumentos = (date(2026, 9, 30), None, date(2026, 9, 1))
     p_tsl, _ = ce._preparar_ranking(resultados, regs_tsl, *argumentos)
     p_ev, _ = ce._preparar_ranking(resultados, regs_ev, *argumentos)
+    p_chuva, _ = ce._preparar_ranking(resultados, regs_chuva, *argumentos)
     li = lambda p: next(x for x in p if x["nome_agente"] == res["nome_agente"])
     checar("Ranking — 3 turnos sem lançamento descontam (turnos_sem_trabalhar = 3)", li(p_tsl)["turnos_sem_trabalhar"] == 3, str(li(p_tsl)["turnos_sem_trabalhar"]))
     checar("Ranking — os mesmos 3 turnos como Possível Evento não descontam", li(p_ev)["turnos_sem_trabalhar"] == 0)
+    checar("Ranking — os mesmos 3 turnos como CHUVA automática não descontam",
+           li(p_chuva)["turnos_sem_trabalhar"] == 0 and li(p_chuva)["pontos"] == li(p_ev)["pontos"] and li(p_chuva)["pontos"] >= li(p_tsl)["pontos"],
+           f'{li(p_chuva)["turnos_sem_trabalhar"]} turnos, {li(p_chuva)["pontos"]} x {li(p_tsl)["pontos"]}')
     checar("Ranking — evento não rebaixa a pontuação", li(p_ev)["pontos"] >= li(p_tsl)["pontos"], f'{li(p_ev)["pontos"]} x {li(p_tsl)["pontos"]}')
 else:
     print("sem cache data/semanas/326.xlsx — teste de ranking pulado")

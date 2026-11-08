@@ -63,24 +63,25 @@ PRESENCA_MINIMA_FRACAO = 0.5
 # Lançamento" e desconta pontos. A EXCEÇÃO é o padrão coletivo: quando vários
 # agentes ficam sem lançamento no mesmo turno, é muito mais provável um evento
 # externo (chuva, falta de energia...) ou interno (reunião, capacitação) do
-# que dezenas de faltas individuais coincidentes. Aí o turno é classificado
-# automaticamente como "Possível Evento Externo ou Interno" — sem desconto —
-# pra coordenação confirmar o motivo no cronograma. ORDEM DE DECISÃO (regra da
-# coordenação, 05/11/2026): 1º o limite geral, 2º a regra da equipe, 3º a falta.
-#   1) LIMITE_AGENTES_EVENTO_TURNO (22) ou mais agentes (de qualquer equipe) sem
-#      lançamento no MESMO dia e turno = evento externo/interno — é a regra MÁXIMA;
-#   2) abaixo do limite, vale a regra da equipe: TODOS os agentes ativos da equipe
-#      (2 ou mais) sem lançamento no turno = chuva isolada ou reunião da equipe;
+# que dezenas de faltas individuais coincidentes. ORDEM DE DECISÃO (regra da
+# coordenação, 08/11/2026): cronograma individual/coletivo → limite supremo →
+# equipe inteira → falta.
+#   1) LIMITE_AGENTES_EVENTO_TURNO (23) ou mais agentes (de qualquer equipe) sem
+#      lançamento no MESMO dia e turno = CHUVA, confirmada automaticamente, sem
+#      validação manual e sem desconto — é a regra SUPREMA (vale mesmo antes da
+#      data de corte EVENTO_COLETIVO_A_PARTIR_DE);
+#   2) abaixo do limite (22 ou menos), vale a regra da equipe: TODOS os agentes
+#      ativos da equipe (2 ou mais) sem lançamento no turno = "Possível Evento
+#      Externo ou Interno" (sem desconto; a coordenação confirma o motivo);
 #   3) senão é Turno sem Lançamento (falta; desconta) — salvo o que o cronograma
 #      já explica (atestado, folga, férias...), conferido ANTES de tudo.
 # "Ativo" = não coberto pelo cronograma naquele turno. Equipes sob demanda
 # (EQUIPES_SEM_DETECCAO_AUTOMATICA, ex.: Bloqueio) não entram nas duas regras.
-LIMITE_AGENTES_EVENTO_TURNO = 22
-# Quem já está coberto no cronograma por um EVENTO COLETIVO (chuva, reunião/treinamento) e ficou sem
-# lançamento no turno entra na contagem do limite? False (padrão): só contam os não cobertos. True:
-# contam também — assim confirmar a chuva de uma equipe não tira o turno das outras do limite.
-# Férias, folga e atestado (ausências individuais) nunca entram na contagem.
-CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = False
+LIMITE_AGENTES_EVENTO_TURNO = 23
+# A contagem do limite inclui quem já está coberto no cronograma por um EVENTO COLETIVO (chuva,
+# reunião/treinamento) e ficou sem lançamento no turno — assim confirmar a chuva de uma equipe não
+# tira o turno das outras do limite. Férias, folga e atestado (ausências individuais) nunca entram.
+CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = True
 MOTIVOS_EVENTO_COLETIVO = ("Chuva", "Reunião/Treinamento")
 # Detecção automática (data/deteccoes_pendentes.json): a regra agora é "ausência
 # sem lançamento = Turno sem Lançamento (desconta)" até alguém verificar. Por
@@ -89,6 +90,8 @@ MOTIVOS_EVENTO_COLETIVO = ("Chuva", "Reunião/Treinamento")
 # viram férias/chuva quando a coordenação confirmar. Decisões já tomadas
 # (confirmada / falta) NÃO mudam. Ponha True pra voltar ao modo antigo.
 CONFIRMAR_FERIAS_AUTOMATICAMENTE = False
+# (A regra suprema de 23+ agentes é aplicada direto por turno em ausencias_ranking.py e NÃO depende
+# desta opção, que só controla as detecções automáticas gerais de paralisação.)
 CONFIRMAR_CHUVA_AUTOMATICAMENTE = False
 # Data a partir da qual a regra de Possível Evento vale. Valor atual: None = vale
 # pra TODOS os períodos (Julho/2026 em diante; Julho a Setembro reclassificam
@@ -97,6 +100,7 @@ CONFIRMAR_CHUVA_AUTOMATICAMENTE = False
 EVENTO_COLETIVO_A_PARTIR_DE = None   # vale para TODOS os períodos (Julho/2026 em diante); pra voltar a poupar os meses fechados: date(2026, 10, 4)
 CLASSIF_TURNO_SEM_LANCAMENTO = "Turno sem Lançamento"
 CLASSIF_POSSIVEL_EVENTO = "Possível Evento Externo ou Interno"
+CLASSIF_CHUVA_AUTOMATICA = "Chuva"   # regra suprema (LIMITE_AGENTES_EVENTO_TURNO): sem desconto, sem validação manual
 
 AVISO_AFASTAMENTO_FRACAO_MAX = 0.7
 AVISO_AFASTAMENTO_TURNOS_MIN = 4

@@ -139,8 +139,8 @@ Em todos os meses <b>não existe fator de normalização</b>: o mesmo peso vale 
 <p>Quando um agente fica um turno inteiro sem lançar nenhuma visita, o sistema decide <b>nesta ordem</b> (a primeira que se aplicar vale):</p>
 <ol>
 <li><b>Já está justificado no cronograma</b> (atestado, férias, folga, chuva, reunião…): não conta como falta.</li>
-<li><b>{C.LIMITE_AGENTES_EVENTO_TURNO} ou mais agentes</b>, de qualquer equipe, sem lançamento no mesmo dia e turno: é tratado como <b>evento externo ou interno</b> (queda de energia, chuva forte, reunião geral…). É a regra máxima: <b>não desconta pontos</b>.</li>
-<li><b>Menos que isso, mas a equipe inteira parou</b> (todos os agentes ativos da equipe, pelo menos 2): é tratado como <b>chuva isolada ou reunião da equipe</b>. Também <b>não desconta</b>.</li>
+<li><b>{C.LIMITE_AGENTES_EVENTO_TURNO} ou mais agentes</b>, de qualquer equipe, sem lançamento no mesmo dia e turno: é classificado automaticamente como <b>chuva</b>, sem precisar de validação manual. É a regra suprema: <b>não desconta pontos</b>. A contagem inclui quem já estava coberto por chuva ou reunião no cronograma; férias, folga e atestado não entram.</li>
+<li><b>Menos que isso, mas a equipe inteira parou</b> (todos os agentes ativos da equipe, pelo menos 2): é tratado como <b>possível chuva isolada ou reunião da equipe</b>. Também <b>não desconta</b>; a coordenação confirma o motivo no cronograma.</li>
 <li><b>Caso contrário, é falta</b> e desconta pontos (veja a tabela abaixo).</li>
 </ol>
 <p class="mut">Quem decide o motivo real de um evento é a coordenação, no cronograma. Agentes de equipes que trabalham sob demanda ({e(sob_demanda)}) não entram nessas duas regras coletivas.</p>

@@ -22,6 +22,7 @@ from .pontos import (
     AVISO_AFASTAMENTO_FRACAO_MAX,
     AVISO_AFASTAMENTO_PERIODO_MAX_DIAS,
     AVISO_AFASTAMENTO_TURNOS_MIN,
+    CLASSIF_CHUVA_AUTOMATICA,
     CLASSIF_POSSIVEL_EVENTO,
     CLASSIF_TURNO_SEM_LANCAMENTO,
     CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE,
@@ -207,9 +208,12 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
                     "_fill": "E8E8E8",
                 })
 
-    # Ausência COLETIVA no turno -> "Possível Evento Externo ou Interno" (sem desconto).
-    # Ver LIMITE_AGENTES_EVENTO_TURNO acima: 20+ agentes no mesmo turno, ou a
-    # equipe inteira (agentes ativos) sem lançamento naquele turno.
+    # Ausência COLETIVA no turno (ver LIMITE_AGENTES_EVENTO_TURNO em pontos.py), em ordem:
+    #   1) 23+ agentes sem lançamento no mesmo dia/turno = CHUVA automática (regra suprema,
+    #      sem desconto, sem validação manual; a contagem inclui quem já está coberto por
+    #      chuva/reunião no cronograma, se CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE);
+    #   2) abaixo disso, equipe inteira (agentes ativos) sem lançamento = Possível Evento (sem desconto);
+    #   3) senão continua Turno sem Lançamento.
     ausentes_equipe, ausentes_global = {}, {}
     for r in registros:
         if r["sob_demanda"]:
@@ -229,17 +233,25 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
         n_global = ausentes_global[kg] + n_cobertos
         muitos = n_global >= LIMITE_AGENTES_EVENTO_TURNO
         toda_equipe = n_ativos >= 2 and n_equipe >= n_ativos
-        if not (muitos or toda_equipe):
+        if muitos:
+            extra = f", {n_cobertos} já cobertos por chuva/reunião" if n_cobertos else ""
+            r["classificacao"] = CLASSIF_CHUVA_AUTOMATICA
+            r["observacao"] = (
+                f"{CLASSIF_CHUVA_AUTOMATICA} — confirmação automática pela regra suprema: "
+                f"{n_global} agentes sem lançamento neste dia/turno "
+                f"(limite de {LIMITE_AGENTES_EVENTO_TURNO}{extra}). "
+                "Sem desconto de pontos e sem necessidade de validação manual."
+            )
+            r["_fill"] = "D6E4F0"
+            continue
+        if not toda_equipe:
             continue
         if (EVENTO_COLETIVO_A_PARTIR_DE is not None
                 and datetime.strptime(r["dia_fmt"], "%d/%m/%Y").date() < EVENTO_COLETIVO_A_PARTIR_DE):
-            continue  # período anterior à regra: continua Turno sem Lançamento
-        motivos = []
-        if muitos:
-            extra = f", {n_cobertos} já cobertos por chuva/reunião" if n_cobertos else ""
-            motivos.append(f"{n_global} agentes sem lançamento neste turno (limite de {LIMITE_AGENTES_EVENTO_TURNO}{extra}) — possível evento externo ou interno")
-        elif toda_equipe:
-            motivos.append(f"toda a equipe ({n_equipe} de {n_ativos} agentes ativos) sem lançamento neste turno — possível chuva isolada ou reunião da equipe")
+            continue  # período anterior à regra de evento por equipe (a regra suprema não tem corte)
+        motivos = [
+            f"toda a equipe ({n_equipe} de {n_ativos} agentes ativos) sem lançamento neste turno — possível chuva isolada ou reunião da equipe"
+        ]
         r["classificacao"] = CLASSIF_POSSIVEL_EVENTO
         r["observacao"] = (f"{CLASSIF_POSSIVEL_EVENTO} — " + " e ".join(motivos) +
                            ". Sem desconto de pontos; confirme o motivo (chuva, reunião, capacitação, evento) no cronograma.")
@@ -527,12 +539,12 @@ def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronogram
     # diferentes podem ter o mesmo nome; contar por nome misturaria as
     # ausências de um com a pontuação do outro)
     turnos_por_dia = {}  # (id_agente, dia) -> nº de turnos sem lançamento
-    eventos_por_dia = {}  # (id_agente, dia_fmt) -> turnos classificados como possível evento (sem desconto)
+    eventos_por_dia = {}  # (id_agente, dia_fmt) -> turnos classificados como possível evento ou chuva automática (sem desconto)
     for r in regs_ausencias:
         id_ag = r.get("id_agente")
         if id_ag is None:
             continue
-        if r.get("classificacao") == CLASSIF_POSSIVEL_EVENTO:
+        if r.get("classificacao") in (CLASSIF_POSSIVEL_EVENTO, CLASSIF_CHUVA_AUTOMATICA):
             k_ev = (id_ag, r.get("dia_fmt"))
             eventos_por_dia[k_ev] = eventos_por_dia.get(k_ev, 0) + 1
             continue  # não é Turno sem Lançamento: não desconta

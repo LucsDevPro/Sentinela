@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 08/11/2026 — regra suprema: 23+ agentes sem lançamento = CHUVA automática
+- **23 ou mais agentes sem lançamento no mesmo dia e turno**, somando todas as equipes, são classificados automaticamente como **Chuva**. Não fica pendente e não exige validação manual; não há desconto de pontos.
+- A regra é prioritária e não depende da data de corte da regra de equipe. A contagem considera o total de agentes sem lançamento, inclusive os já cobertos por chuva/reunião no cronograma; férias, folga e ausência individual justificada não entram.
+- Com menos de 23, permanece a regra anterior: equipe inteira sem lançamento (2 ou mais agentes ativos) = "Possível Evento Externo ou Interno", sem desconto e sujeito à confirmação; caso contrário, "Turno sem Lançamento".
+- Implementação: `scripts/coleta/pontos.py` (`LIMITE_AGENTES_EVENTO_TURNO`, `CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE`, `CLASSIF_CHUVA_AUTOMATICA`) e `scripts/coleta/ausencias_ranking.py` (`_preparar_ausencias`). Testes: `scripts/test_turno_evento.py`.
+
 ## 06/11/2026 — álbum vivo, "Como é calculado" dentro do álbum, cronograma por dia recolhido
 - **"Como é calculado" virou a 2ª aba do álbum** (`album.html#como-calcula`). `gerar_transparencia.py` agora grava `assets/como_calcula.js` (o álbum carrega ao abrir a aba) e `transparencia.html` só redireciona
   (links antigos). O texto ganhou a seção **"3. Turno sem lançamento: falta ou evento?"** (ordem: cronograma → 22+ agentes = evento → equipe inteira = chuva isolada/reunião → falta) e a data de recálculo vem do `manifest.json`.
