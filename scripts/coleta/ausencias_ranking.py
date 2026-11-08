@@ -144,8 +144,17 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
     for res in resultados:
         df_ag = df_total[df_total["id_agente"] == res["id_agente"]]
         if df_ag.empty:
-            continue
-        dia_min_agente = df_ag["dia"].min()  # primeira visita do agente NESTE período
+            # Agente do mês sem NENHUMA visita neste período (visão semanal): só é avaliado se já
+            # trabalhava antes do período começar (1ª visita histórica anterior) — todos os dias
+            # úteis do período contam, e o que o cronograma não explica vira Turno sem Lançamento.
+            hist_vazio = primeira_visita.get(res["id_agente"])
+            sob_demanda_vazio = res["equipe"].lower() in {e.lower() for e in EQUIPES_SEM_DETECCAO_AUTOMATICA}
+            if (not res.get("sem_visita_no_periodo") or sob_demanda_vazio
+                    or hist_vazio is None or hist_vazio >= dia_min_periodo):
+                continue  # equipes sob demanda (Bloqueio) não têm dia esperado fixo: nunca entram vazias
+            dia_min_agente = dia_min_periodo
+        else:
+            dia_min_agente = df_ag["dia"].min()  # primeira visita do agente NESTE período
         # Quem já trabalhava ANTES do período começar é avaliado desde o 1º
         # dia do período (não desde a 1ª visita dele no período): dias sem
         # visita no começo do mês contam. Só quem de fato começou depois

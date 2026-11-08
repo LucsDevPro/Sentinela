@@ -108,7 +108,25 @@ def rodar_deteccao_completa(pasta_semanas=PASTA_SEMANAS):
     return _cronograma_efetivo(deteccoes)
 
 
-def consolidar_semanas(htmls, pasta_saida, lista_cronograma=None):
+def agentes_do_periodo(htmls):
+    """Lista (id_agente, nome, equipe) de todo agente com pelo menos uma visita em `htmls`.
+    Usada pela visão SEMANAL: quem trabalhou em outra semana do mês mas passou esta semana
+    inteira sem lançar nenhuma visita não aparece no cache da semana — e sumiria do ranking
+    semanal com a nota 100 que ele não merece (ver consolidar_semanas(agentes_extra=...))."""
+    vistos = {}
+    for h in sorted(set(htmls)):
+        df_h = _carregar_df_semana(_caminho_semana(h, ".xlsx"))
+        if df_h.empty:
+            continue
+        for id_ag, sub in df_h.groupby("id_agente"):
+            nome, equipe = sub["nome_agente"].iloc[0], sub["equipe"].iloc[0]
+            if str(nome).startswith("Agente_"):
+                nome = _cache_nomes_agentes().get(str(id_ag), {}).get("nome") or nome
+            vistos[id_ag] = (id_ag, nome, equipe)
+    return list(vistos.values())
+
+
+def consolidar_semanas(htmls, pasta_saida, lista_cronograma=None, agentes_extra=None):
     """Carrega o cache de cada semana em `htmls`, junta tudo e recalcula os
     resumos por agente (e por semana, no caso do Ponto Estratégico) em cima
     do conjunto combinado. Gera o Analise_Consolidada.xlsx com a MESMA
@@ -171,7 +189,24 @@ def consolidar_semanas(htmls, pasta_saida, lista_cronograma=None):
                 "periodo_semana": periodo, "resumo": resumo_semana,
             })
 
+    # Agentes do mês que NÃO lançaram nenhuma visita neste período (visão semanal): entram só no
+    # cálculo de ausências e do ranking (saida_excel), partindo dos 100 pontos e perdendo os
+    # turnos sem lançamento — as demais abas continuam só com quem teve visita.
+    agentes_sem_visita = []
+    ids_com_visita = {str(r["id_agente"]) for r in resultados}
+    for id_ag, nome, equipe in (agentes_extra or []):
+        if str(id_ag) in ids_com_visita:
+            continue
+        vazio = df_total.iloc[0:0].copy()
+        agentes_sem_visita.append({
+            "ok": True, "id_agente": id_ag, "nome_agente": nome, "equipe": equipe,
+            "resumo": resumo_agente(vazio), "df": vazio, "paginas_falhas": [],
+            "fechados_por_area": {}, "recusados_por_area": {}, "visitas_recusados_raw": [],
+            "sem_visita_no_periodo": True,
+        })
+
     caminho = salvar_excel_consolidado(resultados, df_total, pasta_saida,
-                                        semanas_ponto_estrategico, semanas_tratamento, lista_cronograma)
+                                        semanas_ponto_estrategico, semanas_tratamento, lista_cronograma,
+                                        agentes_sem_visita=agentes_sem_visita)
     log.info("🎉 Consolidado %s semana(s) (HTML %s-%s) em: %s", len(htmls), htmls[0], htmls[-1], caminho)
     return caminho

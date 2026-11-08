@@ -211,6 +211,26 @@ if os.path.exists("data/semanas/326.xlsx"):
 else:
     print("sem cache data/semanas/326.xlsx — teste de ranking pulado")
 
+# --- visão semanal: agente do mês SEM nenhuma visita na semana entra e é cobrado ----------------
+agentes = [(1, "S1", "Equipe 1", set()), (2, "S2", "Equipe 1", set())]
+df_s, res_s, hist_s = montar(agentes)
+def vazio(id_, equipe, hist=d("01/06/2026")):
+    hist_s[id_] = hist
+    return {"ok": True, "id_agente": id_, "nome_agente": f"Z{id_}", "equipe": equipe, "resumo": {},
+            "df": df_s.iloc[0:0].copy(), "sem_visita_no_periodo": True}
+regs_v = ce._preparar_ausencias(df_s, res_s + [vazio(900, "Equipe 1")], [], primeira_visita=hist_s)
+r900 = [r for r in regs_v if r["id_agente"] == 900]
+checar("Sem visita na semana — o agente do mês é avaliado (turnos sem lançamento)", len(r900) > 0 and {r["classificacao"] for r in r900} <= {TSL, EV, CHUVA}, str(len(r900)))
+checar("Sem visita na semana — sem a marca, o agente continua ignorado",
+       not [r for r in ce._preparar_ausencias(df_s, res_s + [dict(vazio(901, "Equipe 1"), sem_visita_no_periodo=False)], [], primeira_visita=hist_s) if r["id_agente"] == 901])
+checar("Sem visita na semana — equipe sob demanda (Bloqueio) nunca entra vazia",
+       not [r for r in ce._preparar_ausencias(df_s, res_s + [vazio(902, "Equipe Bloqueio")], [], primeira_visita=hist_s) if r["id_agente"] == 902])
+checar("Sem visita na semana — quem só começou depois do período não é cobrado",
+       not [r for r in ce._preparar_ausencias(df_s, res_s + [vazio(903, "Equipe 1", hist=d("30/12/2026"))], [], primeira_visita=hist_s) if r["id_agente"] == 903])
+cron_f = [{"alvo": "agente", "id_agente": 904, "motivo": "Férias", "inicio": "01/10/2026", "fim": "31/12/2026"}]
+checar("Sem visita na semana — férias no cronograma: sem registro (não aparece no ranking)",
+       not [r for r in ce._preparar_ausencias(df_s, res_s + [vazio(904, "Equipe 1")], cron_f, primeira_visita=hist_s) if r["id_agente"] == 904])
+
 # --- detecção nova entra como pendente (não perdoa sozinha) -----------------------
 def evento_ferias():
     return {"tipo": "possiveis_ferias", "id_agente": 999, "nome_agente": "Zé", "equipe": "Equipe 1",

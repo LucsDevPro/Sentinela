@@ -96,7 +96,7 @@ def exportar_todas_abas_csv(wb, pasta_saida):
 
 
 def salvar_excel_consolidado(resultados, df_total, pasta_saida, semanas_ponto_estrategico=None,
-                              semanas_tratamento=None, lista_cronograma=None):
+                              semanas_tratamento=None, lista_cronograma=None, agentes_sem_visita=None):
     os.makedirs(pasta_saida, exist_ok=True)
     caminho = os.path.join(pasta_saida, ARQUIVO_CONSOLIDADO)
     log.info("💾 Salvando %s", caminho)
@@ -197,7 +197,11 @@ def salvar_excel_consolidado(resultados, df_total, pasta_saida, semanas_ponto_es
     ws_aus = wb.create_sheet("Ausências")
     for col, (titulo, _) in enumerate(COLS_AUSENCIAS, 1):
         ws_aus.cell(row=2, column=col, value=titulo)
-    regs_aus = _preparar_ausencias(df_total, resultados, lista_cronograma)
+    # `agentes_sem_visita` (visão semanal): agentes do mês sem nenhuma visita neste período. Contam na
+    # detecção de ausências; só os que têm turno sem justificativa entram também no ranking.
+    regs_aus = _preparar_ausencias(df_total, list(resultados) + list(agentes_sem_visita or []), lista_cronograma)
+    ids_com_ausencia = {r.get("id_agente") for r in regs_aus}
+    resultados_ranking = list(resultados) + [a for a in (agentes_sem_visita or []) if a["id_agente"] in ids_com_ausencia]
     linha_final_aus = _escrever(ws_aus, 3, regs_aus, COLS_AUSENCIAS)
     ultima_linha_dados_aus = linha_final_aus - 1
     _estilizar(ws_aus, 2, cor_cab="4A4A4A",
@@ -282,7 +286,7 @@ def salvar_excel_consolidado(resultados, df_total, pasta_saida, semanas_ponto_es
     data_max_periodo = df_total["dia"].max() if not df_total.empty else None
     data_min_periodo = df_total["dia"].min() if not df_total.empty else None
     ranking_principal, ranking_detalhe = _preparar_ranking(
-        resultados, regs_aus, data_max_periodo, lista_cronograma, data_min_periodo)
+        resultados_ranking, regs_aus, data_max_periodo, lista_cronograma, data_min_periodo)
 
     ws_rk = wb.create_sheet("Ranking")
     for col, (titulo, _) in enumerate(COLS_RANKING, 1):

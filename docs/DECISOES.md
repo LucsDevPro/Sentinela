@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 08/11/2026 — ranking semanal inclui agente do mês que passou a semana sem lançar nada
+- Antes, o ranking de cada semana só tinha quem teve ao menos 1 visita naquela semana: quem ficou a semana inteira sem lançar sumia e inflava a média da equipe (ex.: Equipe 3 na semana 1: 90,5 sem a Alana; 80,4 com ela).
+- Agora a visão semanal inclui os agentes do mês sem nenhuma visita na semana, **só se** já trabalhavam antes do período, não são de equipe sob demanda (Bloqueio) e têm turno sem justificativa no cronograma. Quem está de férias/atestado/folga lançado não aparece.
+- A pontuação segue a regra do mês: parte de 100, desconta os turnos sem lançamento e aplica a presença mínima (50%); com 0 dia trabalhado a nota é 0.
+- Implementação: `agentes_do_periodo` e `agentes_extra` em `scripts/coleta/consolidacao.py`, `agentes_sem_visita` em `saida_excel.py`, `sem_visita_no_periodo` em `ausencias_ranking.py`. Testes: `scripts/test_turno_evento.py`.
+
 ## 08/11/2026 — regra suprema: 23+ agentes sem lançamento = CHUVA automática
 - **23 ou mais agentes sem lançamento no mesmo dia e turno**, somando todas as equipes, são classificados automaticamente como **Chuva**. Não fica pendente e não exige validação manual; não há desconto de pontos.
 - A regra é prioritária e não depende da data de corte da regra de equipe. A contagem considera o total de agentes sem lançamento, inclusive os já cobertos por chuva/reunião no cronograma; férias, folga e ausência individual justificada não entram.

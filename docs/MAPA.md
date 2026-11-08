@@ -290,21 +290,21 @@ Constantes: ARQUIVOS_CRITICOS@20
 - L234 `_preparar_fora_expediente(df_total)` — Monta a lista de visitas registradas fora do horário oficial de serviço
 - L270 `_preparar_almoco(df_total)` — Lista apenas as visitas registradas no horário de almoço (11h15-12h45, com to…
 
-## scripts/coleta/ausencias_ranking.py (661 linhas)
+## scripts/coleta/ausencias_ranking.py (670 linhas)
 
 - L50 `_primeira_visita_historica(pasta)` — {id_agente: date da PRIMEIRA visita em TODO o cache de semanas}.
 - L103 `_hoje_local()`
 - L113 `_preparar_ausencias(df_total, resultados, lista_cronograma, )` — Para cada agente, dia útil e turno (Manhã 7h-11h / Tarde 13h-17h) dentro
-- L266 `_preparar_cronograma(resultados, data_min, data_max, lista_cr)` — Lista, de forma unificada e ordenada por data, todo o cronograma de
-- L340 `_preparar_pendencias_resumo(resultados)` — Resumo de pendência por agente (abertos/fechados/recusados/total/% pendência),
-- L384 `_observacao_ranking(res, qtd_ausencias, dias_periodo, alvo_e)` — Texto da coluna Observação do ranking: avisa quando o agente parece ter
-- L411 `_carregar_ajustes_ranking(caminho)` — Ajustes MANUAIS de pontuação, lançados pelo gestor em
-- L455 `_ler_notas_ranking(caminho)` — {nome_agente: pontuação final} da tabela principal da aba Ranking de uma plan…
-- L479 `_media_historica_por_agente(data_min, manifest, pasta)` — {nome_agente: média das notas dos meses anteriores ao período que começa em `…
-- L506 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
-- L643 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
+- L275 `_preparar_cronograma(resultados, data_min, data_max, lista_cr)` — Lista, de forma unificada e ordenada por data, todo o cronograma de
+- L349 `_preparar_pendencias_resumo(resultados)` — Resumo de pendência por agente (abertos/fechados/recusados/total/% pendência),
+- L393 `_observacao_ranking(res, qtd_ausencias, dias_periodo, alvo_e)` — Texto da coluna Observação do ranking: avisa quando o agente parece ter
+- L420 `_carregar_ajustes_ranking(caminho)` — Ajustes MANUAIS de pontuação, lançados pelo gestor em
+- L464 `_ler_notas_ranking(caminho)` — {nome_agente: pontuação final} da tabela principal da aba Ranking de uma plan…
+- L488 `_media_historica_por_agente(data_min, manifest, pasta)` — {nome_agente: média das notas dos meses anteriores ao período que começa em `…
+- L515 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
+- L652 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
 
-Constantes: _CACHE_PRIMEIRA_VISITA@47, HOJE_OVERRIDE@101, CAMINHO_AJUSTES_RANKING@409, CAMINHO_MANIFEST_HISTORICO@450, PASTA_HISTORICO@451, _RE_LABEL_MES@452
+Constantes: _CACHE_PRIMEIRA_VISITA@47, HOJE_OVERRIDE@101, CAMINHO_AJUSTES_RANKING@418, CAMINHO_MANIFEST_HISTORICO@459, PASTA_HISTORICO@460, _RE_LABEL_MES@461
 
 ## scripts/coleta/auxiliares.py (128 linhas)
 
@@ -350,11 +350,12 @@ Constantes: _COLS_BOOL_SEMANA@43, _COLS_DATETIME_SEMANA@50, _CACHE_LEITURA@64, _
 
 Constantes: COLS_RESUMO@12, COLS_RANKING@44, COLS_RANKING_DETALHE@56, COLS_PONTO_ESTRATEGICO@67, COLS_AREA@72, COLS_DUPLICADAS@89, COLS_SUSPEITAS@102, COLS_NEGATIVAS@116, COLS_ACIMA_TETO_MEDIA@130, COLS_FORA_EXPEDIENTE@143, COLS_ALMOCO@157, COLS_AUSENCIAS@169, COLS_CRONOGRAMA@179, COLS_PENDENCIAS_RESUMO@186, COLS_RECUSADOS_DETALHE@196
 
-## scripts/coleta/consolidacao.py (177 linhas)
+## scripts/coleta/consolidacao.py (212 linhas)
 
 - L19 `_montar_df_total_e_resultados(htmls)` — Carrega o cache de cada semana em `htmls` e monta df_total + resultados
 - L95 `rodar_deteccao_completa(pasta_semanas)` — Roda a detecção de possíveis férias/paralisação coletiva em cima do
-- L111 `consolidar_semanas(htmls, pasta_saida, lista_cronograma)` — Carrega o cache de cada semana em `htmls`, junta tudo e recalcula os
+- L111 `agentes_do_periodo(htmls)` — Lista (id_agente, nome, equipe) de todo agente com pelo menos uma visita em `…
+- L129 `consolidar_semanas(htmls, pasta_saida, lista_cronograma, ag)` — Carrega o cache de cada semana em `htmls`, junta tudo e recalcula os
 
 ## scripts/coleta/deteccao.py (771 linhas)
 
@@ -390,7 +391,7 @@ Constantes: LIMITE_DIAS_UTEIS_FERIAS@64, LIMITE_DIAS_CORRIDOS_OCORRENCIA@69, TOL
 - L72 `_resumo_github(semanas, resumo_integridade, extras)` — Escreve o resultado da coleta no resumo da execução do GitHub Actions
 - L111 `main()`
 
-## scripts/coleta/historico.py (220 linhas)
+## scripts/coleta/historico.py (222 linhas)
 
 - L32 `atualizar_historico_do_cache(pasta_semanas, pasta_historico, pasta_sa)` — Reconstrói as entradas AUTOMÁTICAS de data/historico/ a partir do cache
 
@@ -426,12 +427,12 @@ Constantes: COLETAR_FECHADOS_RECUSADOS@15, PONTOS_INICIAIS@23, NOTA_MINIMA@24, N
 - L26 `processar(equipe, id_ag, session_base, cfg)`
 - L105 `processar_ponto_estrategico(id_ag, session_base, cfg_pe)` — Coleta as visitas de Ponto Estratégico de um agente (URL/id_atividade
 
-## scripts/coleta/saida_excel.py (337 linhas)
+## scripts/coleta/saida_excel.py (341 linhas)
 
 - L65 `_slugify_nome_arquivo(nome)` — Converte o título de uma aba (com espaços/acentos) num nome de arquivo seguro.
 - L72 `exportar_todas_abas_csv(wb, pasta_saida)` — Exporta CADA aba do workbook como um arquivo .csv separado (com os
 - L98 `salvar_excel_consolidado(resultados, df_total, pasta_saida, seman)`
-- L323 `_preparar_ponto_estrategico(semanas_todos_agentes)`
+- L327 `_preparar_ponto_estrategico(semanas_todos_agentes)`
 
 ## scripts/coleta/sessao.py (416 linhas)
 

@@ -24,7 +24,7 @@ from .parametros import (
     semanas_ja_coletadas,
 )
 from .ausencias_ranking import _hoje_local
-from .consolidacao import consolidar_semanas, rodar_deteccao_completa
+from .consolidacao import agentes_do_periodo, consolidar_semanas, rodar_deteccao_completa
 
 log = logging.getLogger("evisita")
 
@@ -144,7 +144,9 @@ def atualizar_historico_do_cache(pasta_semanas=PASTA_SEMANAS, pasta_historico="d
         if chave[0] == "mes-oficial":
             for h in (x for x in semanas_grupo if x >= PRIMEIRA_SEMANA_VISAO_SEMANAL):
                 nome_sem = f"semana_{h}.xlsx"
-                caminho_sem = consolidar_semanas([h], pasta_saida_tmp, lista_cronograma)
+                # Agentes do mês que passaram esta semana sem lançar nada entram no ranking semanal (100 − descontos).
+                caminho_sem = consolidar_semanas([h], pasta_saida_tmp, lista_cronograma,
+                                                 agentes_extra=agentes_do_periodo(semanas_grupo))
                 if not caminho_sem:
                     continue
                 shutil.copy2(caminho_sem, os.path.join(pasta_historico, nome_sem))
