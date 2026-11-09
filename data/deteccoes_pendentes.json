@@ -75,15 +75,15 @@
     "nome_agente": "Brauher Luiz Alvarenga Gonzalez",
     "equipe": "Equipe 2",
     "inicio": "28/10/2026",
-    "fim": "06/11/2026",
-    "duracao": 7,
+    "fim": "09/11/2026",
+    "duracao": 8,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "pendente",
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "possiveis_ferias",
@@ -213,8 +213,8 @@
     "nome_agente": "Teonilda Florentino Vieira",
     "equipe": "Equipe 2",
     "inicio": "28/10/2026",
-    "fim": "06/11/2026",
-    "duracao": 7,
+    "fim": "09/11/2026",
+    "duracao": 8,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "falta",
@@ -291,8 +291,8 @@
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
     "inicio": "19/10/2026",
-    "fim": "06/11/2026",
-    "duracao": 14,
+    "fim": "09/11/2026",
+    "duracao": 15,
     "status": "falta",
     "motivo": "Falta (sem abono — decisão da coordenação)",
     "confirmado_automaticamente": true,
@@ -373,15 +373,15 @@
     "nome_agente": "Patricia Lanjer de Souza Domingues",
     "equipe": "Equipe 3",
     "inicio": "26/10/2026",
-    "fim": "06/11/2026",
-    "duracao": 9,
+    "fim": "09/11/2026",
+    "duracao": 10,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "pendente",
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "possiveis_ferias",
@@ -521,7 +521,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -554,7 +554,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -587,7 +587,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -620,7 +620,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -653,7 +653,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -692,7 +692,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -727,7 +727,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -760,7 +760,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -795,7 +795,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -828,7 +828,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -863,7 +863,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -902,7 +902,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -941,7 +941,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -976,7 +976,42 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 2",
+    "agentes_envolvidos": [
+      81,
+      99,
+      115,
+      134,
+      142,
+      151,
+      465,
+      2030,
+      2917,
+      3127
+    ],
+    "nomes_envolvidos": [
+      "Bianca Afonso Narbaez",
+      "Cicero Isrrael Sanabria",
+      "Fabiana de Figueredo Vieira",
+      "Gilmar Bitencourt Luiz",
+      "Gisele Olimpia Torres",
+      "Mateus Falcao de Souza",
+      "Suely Aguiar Alves Luiz",
+      "Tania Maria Montania",
+      "Wesley de Souza Leal",
+      "William Anderson Chamorro Tavares"
+    ],
+    "inicio": "09/11/2026",
+    "fim": "09/11/2026",
+    "duracao": 1,
+    "status": "pendente",
+    "categoria_coletiva": null,
+    "confirmado_automaticamente": false,
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1005,7 +1040,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1032,7 +1067,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1063,7 +1098,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1094,7 +1129,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1125,7 +1160,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1154,7 +1189,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1185,7 +1220,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1216,7 +1251,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1247,7 +1282,38 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 3",
+    "agentes_envolvidos": [
+      113,
+      120,
+      1936,
+      1938,
+      2721,
+      2918,
+      3038,
+      3128
+    ],
+    "nomes_envolvidos": [
+      "Claine Luisa Figueiredo Torraca",
+      "Emidio Rainer Vilhalba",
+      "Geancarlos Ferreira Barrios",
+      "Marco Antonio Ayala de Matos Freitas",
+      "Miglidiane Maciel Ajala",
+      "Naime Cristina Freitas",
+      "Rosalina Beniel Vargas",
+      "Selba Ramona Afonso"
+    ],
+    "inicio": "09/11/2026",
+    "fim": "09/11/2026",
+    "duracao": 1,
+    "status": "pendente",
+    "categoria_coletiva": null,
+    "confirmado_automaticamente": false,
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1280,7 +1346,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1315,7 +1381,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1352,7 +1418,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1387,7 +1453,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1422,7 +1488,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1459,7 +1525,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1496,7 +1562,7 @@
     "status": "pendente",
     "categoria_coletiva": null,
     "confirmado_automaticamente": false,
-    "detectado_em": "08/11/2026 14:14"
+    "detectado_em": "09/11/2026 17:26"
   },
   {
     "tipo": "possiveis_ferias",
