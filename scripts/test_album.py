@@ -84,7 +84,15 @@ cc = ler("assets/carta.css")
 checar("carta.css: o cartão e o anel da borda usam clip-path em polígono (cantos cortados)",
        cc.count("clip-path: polygon(") >= 3 and "18px 18px 40px 40px" not in cc)
 checar("carta.js: o PNG desenha o mesmo polígono (FORMA), sem as elipses do canto arredondado",
-       "var FORMA = [[20, 0], [252, 0], [272, 20], [272, 366], [242, 392], [30, 392], [0, 366], [0, 20]]" in cj and "ctx.ellipse(x + w - a" not in cj)
+       "var FORMA = [[28, 0], [244, 0], [272, 28], [272, 366], [242, 392], [30, 392], [0, 366], [0, 28]]" in cj and "ctx.ellipse(x + w - a" not in cj)
+# Clique na cartinha abre a evolução do agente; "Melhor do ano" = média de todos os meses
+aj2 = ler("assets/album.js")
+checar("carta.js: clicar na cartinha abre a evolução do agente (link do álbum ou agente.html?id=&mes=)",
+       "return;   // no álbum a cartinha é um link" in cj and "location.href = 'agente.html?id='" in cj)
+checar("album.js: opção 'Melhor do ano' ordena pela média das notas de todos os meses",
+       "const ANO = 'Melhor do ano'" in aj2 and "notas.reduce((t, n) => t + n, 0) / notas.length" in aj2 and "q.u.pontos - p.u.pontos" in aj2)
+checar("album.js: 'Melhor do ano' exige no mínimo 2 meses", "const MIN_MESES_ANO = 2" in aj2 and "ms.length < MIN_MESES_ANO" in aj2)
+checar("album.js: no 'Melhor do ano' o link do agente não leva ?mes= (abre no mês mais recente)", "(doAno ? '' : '&mes=' + encodeURIComponent(mes))" in aj2)
 
 print()
 if falhas:

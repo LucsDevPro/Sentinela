@@ -42,7 +42,7 @@
     var dp = rec.length > 1 ? Math.sqrt(rec.reduce(function (t, v) { return t + Math.pow(v - mrec, 2); }, 0) / rec.length) : 0;
     var delta = ant && ant.pontos != null ? u.pontos - ant.pontos : null;
     var st = [['ASS', u.esp ? cl(u.trab / u.esp * 100) : 0], ['TUR', u.esp ? cl(100 - (u.turnos_sem || 0) / (u.esp * 2) * 100) : 0],
-      ['CON', cl(100 - 5 * dp)], ['EVO', delta == null ? 50 : cl(50 + 5 * delta)],
+      ['CON', u.con != null ? u.con : cl(100 - 5 * dp)], ['EVO', u.evo != null ? u.evo : delta == null ? 50 : cl(50 + 5 * delta)],
       ['POS', u.total > 1 ? cl((u.total - posicao(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]];
     // Escala única, pela nota ARREDONDADA (a que aparece no cartão): a cor do cartão e a borda seguem a mesma faixa.
     // LENDÁRIA (tempestade) = só o TOP 3 com nota 100 | 90-99 e demais 100 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
@@ -114,11 +114,11 @@
     var a = ang * Math.PI / 180, dx = Math.sin(a), dy = -Math.cos(a), L = Math.abs(w * dx) + Math.abs(h * dy), cx = x + w / 2, cy = y + h / 2;
     var g = ctx.createLinearGradient(cx - dx * L / 2, cy - dy * L / 2, cx + dx * L / 2, cy + dy * L / 2); g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
   }
-  var FORMA = [[20, 0], [252, 0], [272, 20], [272, 366], [242, 392], [30, 392], [0, 366], [0, 20]]; // escudo no espaço 272x392 (igual ao clip-path do CSS)
-  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = recuo (quem chama já passa o retângulo encolhido em d); continuar = não reiniciar o caminho
-    d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d; var n = FORMA.length;
-    // cantos de baixo ancorados na base (altura fixa em px do cartão), como no CSS
-    var P = FORMA.map(function (p) { return [p[0] === 272 ? w : (p[0] > 136 ? w - (272 - p[0]) * S : p[0] * S), p[1] > 196 ? h - (392 - p[1]) * S : p[1] * S]; });
+  var FORMA = [[28, 0], [244, 0], [272, 28], [272, 366], [242, 392], [30, 392], [0, 366], [0, 28]]; // escudo no espaço 272x392 (igual ao clip-path do CSS)
+  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = quanto recuar a forma (anel da borda); continuar = não reiniciar o caminho
+    d = d || 0; var n = FORMA.length, P = FORMA.map(function (p) { return [p[0] / 272 * w, p[1] === 392 ? h : (p[1] > 196 ? h - (392 - p[1]) * S / (S || 1) : p[1])]; });
+    // os cantos de baixo ficam ancorados na base (altura fixa em px do cartão), como no CSS
+    P = FORMA.map(function (p) { return [p[0] === 272 ? w : (p[0] > 136 ? w - (272 - p[0]) * S : p[0] * S), p[1] > 196 ? h - (392 - p[1]) * S : p[1] * S]; });
     if (d) P = P.map(function (p, i) {
       var a = P[(i + n - 1) % n], c = P[(i + 1) % n];
       function nr(u, v) { var dx = v[0] - u[0], dy = v[1] - u[1], l = Math.hypot(dx, dy); return [-dy / l, dx / l]; }
@@ -239,6 +239,7 @@
       var B = (parseFloat(cs.getPropertyValue('--bw')) || 5) * S, bc = [cs.getPropertyValue('--b1').trim(), cs.getPropertyValue('--b2').trim(), cs.getPropertyValue('--b3').trim()];
       var bg = gradCss(ctx, 135, X, Y, W, H, bc[0], bc[0]); bg.addColorStop(.25, bc[1]); bg.addColorStop(.5, bc[2]); bg.addColorStop(.75, bc[1]);
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore();
+      ctx.save(); ctx.beginPath(); pathCartao(ctx, X + B + 3 * S, Y + B + 3 * S, W - 2 * (B + 3 * S), H - 2 * (B + 3 * S), S, B + 3 * S, true); pathCartao(ctx, X + B + 4.5 * S, Y + B + 4.5 * S, W - 2 * (B + 4.5 * S), H - 2 * (B + 4.5 * S), S, B + 4.5 * S, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore(); // fio fino (igual ao CSS)
       if (is100) { // faíscas correndo pela borda (por cima do anel)
         ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         ARCOS.forEach(function (d) { var pa = new Path2D(d);
@@ -324,7 +325,16 @@
   document.addEventListener('mouseout', function (e) { if (fixo) return; if (cartaDe(e) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.c-pop'))) agendar(); });
   document.addEventListener('click', function (e) {
     var c = cartaDe(e);
-    if (c) { e.preventDefault(); if (fixo && atual === c) fechar(); else abrir(c, true); }   // clicar na cartinha fixa o detalhamento (no celular, é o toque)
+    if (c) {
+      var ln = c.closest('a[href]');
+      if (ln && /agente\.html/.test(ln.getAttribute('href') || '')) return;   // no álbum a cartinha é um link: o clique abre a evolução do agente direto
+      var reg = REG[c.getAttribute('data-cid')];
+      if (reg && reg.id != null && !/agente\.html$/.test(location.pathname)) {   // fora da página do agente, clicar leva à evolução do mês da cartinha
+        var um = reg.ms[reg.ms.length - 1];
+        e.preventDefault(); location.href = 'agente.html?id=' + encodeURIComponent(reg.id) + (um && um.mes ? '&mes=' + encodeURIComponent(um.mes) : ''); return;
+      }
+      e.preventDefault(); if (fixo && atual === c) fechar(); else abrir(c, true);   // na página do agente, clicar fixa o detalhamento (no celular, é o toque)
+    }
     else if (fixo && !(e.target.closest && e.target.closest('.c-pop'))) fechar();
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fechar(); });

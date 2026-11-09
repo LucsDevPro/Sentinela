@@ -12,7 +12,7 @@
   padding: 16px 18px 14px;
   color: var(--tx);
   border-radius: 0;
-  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
+  clip-path: polygon(28px 0px, calc(100% - 28px) 0px, 100% 28px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 28px);
   background:
     linear-gradient(160deg, var(--c1) 0%, #E6C86A 38%, #D4A63A 68%, var(--c2) 100%);
   box-shadow:
@@ -212,7 +212,7 @@
     var(--b2) 88%,
     var(--b3) 100%
   );
-  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px, 20px 0px, calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), calc(0px + var(--bw) * 1.0000) calc(20px + var(--bw) * 0.4142), calc(0px + var(--bw) * 1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(30px + var(--bw) * 0.3730) calc(100% + var(--bw) * -1.0000), calc(100% - 30px + var(--bw) * -0.3730) calc(100% + var(--bw) * -1.0000), calc(100% + var(--bw) * -1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(100% + var(--bw) * -1.0000) calc(20px + var(--bw) * 0.4142), calc(100% - 20px + var(--bw) * -0.4142) calc(0px + var(--bw) * 1.0000), calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), 20px 0px);
+  clip-path: polygon(28px 0px, calc(100% - 28px) 0px, 100% 28px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 28px, 28px 0px, calc(28px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), calc(0px + var(--bw) * 1.0000) calc(28px + var(--bw) * 0.4142), calc(0px + var(--bw) * 1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(30px + var(--bw) * 0.3730) calc(100% + var(--bw) * -1.0000), calc(100% - 30px + var(--bw) * -0.3730) calc(100% + var(--bw) * -1.0000), calc(100% + var(--bw) * -1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(100% + var(--bw) * -1.0000) calc(28px + var(--bw) * 0.4142), calc(100% - 28px + var(--bw) * -0.4142) calc(0px + var(--bw) * 1.0000), calc(28px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), 28px 0px, calc(28px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% - 28px + (var(--bw) + 3px) * -0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% + (var(--bw) + 3px) * -1.0000) calc(28px + (var(--bw) + 3px) * 0.4142), calc(100% + (var(--bw) + 3px) * -1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(100% - 30px + (var(--bw) + 3px) * -0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(30px + (var(--bw) + 3px) * 0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(0px + (var(--bw) + 3px) * 1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(0px + (var(--bw) + 3px) * 1.0000) calc(28px + (var(--bw) + 3px) * 0.4142), calc(28px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(28px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(28px + (var(--bw) + 4.5px) * 0.4142), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(30px + (var(--bw) + 4.5px) * 0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% - 30px + (var(--bw) + 4.5px) * -0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(28px + (var(--bw) + 4.5px) * 0.4142), calc(100% - 28px + (var(--bw) + 4.5px) * -0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(28px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(28px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000));
 }
 
 /* Filete interno extra nas cartas altas (anel secundário) */
@@ -311,9 +311,9 @@
 
 /* Foto — moldura de joia */
 .c-foto {
-  width: 112px;
-  height: 112px;
-  margin: -3px auto 7px;
+  width: 104px;
+  height: 104px;
+  margin: -3px auto 5px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -380,8 +380,8 @@ body.sem-foto .c-foto img {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-bottom: 1.5px solid var(--ln);
-  padding-bottom: 7px;
-  margin-bottom: 9px;
+  padding-bottom: 6px;
+  margin-bottom: 7px;
   line-height: 1.1;
 }
 
@@ -391,7 +391,7 @@ body.sem-foto .c-foto img {
   gap: 3px 16px;
   padding: 0 4px;
   border-bottom: 1.5px solid var(--ln);
-  padding-bottom: 9px;
+  padding-bottom: 7px;
 }
 
 .c-stats div {
@@ -419,7 +419,10 @@ body.sem-foto .c-foto img {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 9px;
+  margin-top: 7px;
+  padding: 0 3px; /* afasta o texto dos cantos cortados */
+  white-space: nowrap;
+  gap: 6px;
   font-family: "IBM Plex Sans", sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
@@ -467,7 +470,7 @@ body.sem-foto .c-foto img {
   background: rgba(200, 230, 255, 0.82);
   -webkit-mask: none;
   mask: none;
-  clip-path: polygon(calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(100% - 20px + 12px * -0.4142) calc(0px + 12px * 1.0000), calc(100% + 12px * -1.0000) calc(20px + 12px * 0.4142), calc(100% + 12px * -1.0000) calc(100% - 26px + 12px * -0.4566), calc(100% - 30px + 12px * -0.3730) calc(100% + 12px * -1.0000), calc(30px + 12px * 0.3730) calc(100% + 12px * -1.0000), calc(0px + 12px * 1.0000) calc(100% - 26px + 12px * -0.4566), calc(0px + 12px * 1.0000) calc(20px + 12px * 0.4142), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(0px + 13.5px * 1.0000) calc(20px + 13.5px * 0.4142), calc(0px + 13.5px * 1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(30px + 13.5px * 0.3730) calc(100% + 13.5px * -1.0000), calc(100% - 30px + 13.5px * -0.3730) calc(100% + 13.5px * -1.0000), calc(100% + 13.5px * -1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(100% + 13.5px * -1.0000) calc(20px + 13.5px * 0.4142), calc(100% - 20px + 13.5px * -0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000));
+  clip-path: polygon(calc(28px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(100% - 28px + 12px * -0.4142) calc(0px + 12px * 1.0000), calc(100% + 12px * -1.0000) calc(28px + 12px * 0.4142), calc(100% + 12px * -1.0000) calc(100% - 26px + 12px * -0.4566), calc(100% - 30px + 12px * -0.3730) calc(100% + 12px * -1.0000), calc(30px + 12px * 0.3730) calc(100% + 12px * -1.0000), calc(0px + 12px * 1.0000) calc(100% - 26px + 12px * -0.4566), calc(0px + 12px * 1.0000) calc(28px + 12px * 0.4142), calc(28px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(28px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(0px + 13.5px * 1.0000) calc(28px + 13.5px * 0.4142), calc(0px + 13.5px * 1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(30px + 13.5px * 0.3730) calc(100% + 13.5px * -1.0000), calc(100% - 30px + 13.5px * -0.3730) calc(100% + 13.5px * -1.0000), calc(100% + 13.5px * -1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(100% + 13.5px * -1.0000) calc(28px + 13.5px * 0.4142), calc(100% - 28px + 13.5px * -0.4142) calc(0px + 13.5px * 1.0000), calc(28px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(28px + 12px * 0.4142) calc(0px + 12px * 1.0000));
   box-shadow: none;
   opacity: 1;
 }
