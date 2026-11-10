@@ -47,37 +47,22 @@ new Chart(document.getElementById('chartTeam'), {
 })();
 
 {% if comparacao_semanal %}
-(function () {
+(function () {   // Nota média por equipe no MÊS INTEIRO (a visão semana a semana saiu: cada semana parte de 100 e escondia as perdas acumuladas)
   const C = {{ comparacao_semanal | tojson }};
   const cores = ['#1E9AD8', '#F7B500', '#19B8A3', '#FF5143', '#7C5CD6', '#5B6FA8'];
-  const rotulos = C.semanas.map(s => s.label + (s.parcial ? ' (parcial)' : ''));
-  const parcial = C.semanas.map(s => s.parcial);
+  const eqs = Object.keys(C.equipes), valores = eqs.map(eq => C.equipes[eq][C.equipes[eq].length - 1]);
   new Chart(document.getElementById('chartTeamSemanal'), {
     type: 'bar',
-    data: { labels: rotulos,
-      datasets: Object.keys(C.equipes).map((eq, i) => ({ label: eq, data: C.equipes[eq], borderRadius: 4,
-        backgroundColor: ctx => {
-          const last = ctx.dataIndex === rotulos.length - 1 && !parcial[ctx.dataIndex];
-          const base = cores[i % cores.length];
-          if (parcial[ctx.dataIndex]) return base + '77';
-          return base;  // mês completo e semanas fechadas: cor cheia
-        },
-        borderColor: cores[i % cores.length],
-        borderWidth: ctx => {
-          if (parcial[ctx.dataIndex]) return 1.5;
-          // destaca a coluna «Mês completo» (última)
-          return ctx.dataIndex === rotulos.length - 1 ? 2 : 0;
-        },
-        borderDash: [4, 3] })) },
-    options: { responsive: true, maintainAspectRatio: false,
+    data: { labels: eqs, datasets: [{ label: 'Nota média do mês', data: valores, borderRadius: 6, backgroundColor: eqs.map((e, i) => cores[i % cores.length]) }] },
+    options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 22 } },
       scales: { y: { min: 0, max: 100 }, x: { grid: { display: false } } },
-      plugins: { legend: { position: 'bottom' } } },
+      plugins: { legend: { display: false } } },
     plugins: [{ id: 'valoresNasBarras', afterDatasetsDraw(ch) {
-      const c = ch.ctx; c.save(); c.font = '600 11px "IBM Plex Sans", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'bottom';
+      const c = ch.ctx; c.save(); c.font = '700 14px "IBM Plex Sans", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'bottom';
       c.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#12233B';
       ch.data.datasets.forEach((ds, i) => ch.getDatasetMeta(i).data.forEach((b, j) => {
-        const v = ds.data[j]; if (v === null || v === undefined || b.width < 20) return;
-        c.fillText(String(v).replace('.', ','), b.x, b.y - 3);
+        const v = ds.data[j]; if (v === null || v === undefined) return;
+        c.fillText(String(v).replace('.', ','), b.x, b.y - 4);
       })); c.restore();
     } }]
   });

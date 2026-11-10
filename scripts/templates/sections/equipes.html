@@ -23,8 +23,8 @@
   </div>
   <div class="charts-grid">
     {% if comparacao_semanal %}
-    {{ chart_card("chartTeamSemanal", "Nota média por equipe, semana a semana (" ~ comparacao_semanal.mes ~ ")", wide=True,
-       note="média = soma das notas dos agentes ÷ quantidade de agentes. Cada semana parte de 100 (só as perdas da semana). A coluna «Mês completo» usa o ranking do mês inteiro (penalidades acumuladas) e costuma ser bem mais baixa. Semana parcial ainda está em andamento (barra mais clara) e pode mudar até sexta.") }}
+    {{ chart_card("chartTeamSemanal", "Nota média por equipe (" ~ comparacao_semanal.mes ~ ", mês completo)", wide=True,
+       note="média = soma das notas dos agentes do mês inteiro ÷ quantidade de agentes. É a mesma nota das cartinhas e do ranking do mês, com as perdas acumuladas. A visão semana a semana não é mais exibida porque cada semana recomeça de 100 e dava uma ideia mais alta do que a do mês.") }}
     {% endif %}
     {{ chart_card("chartTeamStack", "Agentes por Classificação em cada Equipe",
        note="conta quantos agentes de cada equipe caem em cada faixa de classificação (Normal/Atenção/Crítico), empilhados — mostra a composição da equipe, não o volume de visitas.") }}

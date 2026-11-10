@@ -50,17 +50,13 @@ if(mesAtual){
         options:opcoes({indexAxis:'y',scales:eixos({beginAtZero:true},{grid:{display:false},ticks:{color:cor('--text'),font:{size:18}}})}),plugins:[plugValores]});
     });
   }
-  var sems={};ag.forEach(function(a){a.semanas.filter(function(s){return s.mes===mesAtual;}).forEach(function(s){var k=s.n;sems[k]=sems[k]||{n:s.n,parcial:!!s.parcial,por:{}};sems[k].parcial=sems[k].parcial||!!s.parcial;var e=sems[k].por[a.equipe]=sems[k].por[a.equipe]||{s:0,c:0};e.s+=s.pontos;e.c++;});});
-  var sl=Object.keys(sems).map(function(k){return sems[k];}).sort(function(p,q){return p.n-q.n;});
-  if(sl.length){
-    var eqs={};sl.forEach(function(s){Object.keys(s.por).forEach(function(e){eqs[e]=1;});});var eql=Object.keys(eqs).sort();
-    slide('semanas','Equipes semana a semana',mesAtual+' · média da nota; semana parcial em tom mais claro',function(el){
-      new Chart(canvasEm(el),{type:'bar',data:{labels:sl.map(function(s){return 'Semana '+s.n+(s.parcial?' (parcial)':'');}),
-        datasets:eql.map(function(e,i){var c=PAL[i%PAL.length];return {label:e,backgroundColor:function(x){return sl[x.dataIndex].parcial?c+'88':c;},borderRadius:5,
-          data:sl.map(function(s){var p=s.por[e];return p?Math.round(p.s/p.c*10)/10:null;})};})},
-        options:opcoes({plugins:{legend:{display:true,position:'bottom',labels:{color:cor('--text2'),font:{size:18}}}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:18}}},{min:0,max:105})}),plugins:[plugValores]});
-    });
-  }
+  // Nota média por equipe no mês inteiro (a visão semana a semana saiu: cada semana recomeça de 100 e mostrava notas mais altas que as do mês)
+  var porEq={};ag.forEach(function(a){var v=nota(a,mesAtual);if(v===null)return;var e=porEq[a.equipe]=porEq[a.equipe]||{s:0,c:0};e.s+=v;e.c++;});
+  var eqNomes=Object.keys(porEq).sort();
+  if(eqNomes.length) slide('equipes-mes','Nota média por equipe',mesAtual+' · mês completo, mesma nota das cartinhas',function(el){
+    new Chart(canvasEm(el),{type:'bar',data:{labels:eqNomes,datasets:[{casas:1,data:eqNomes.map(function(e){return Math.round(porEq[e].s/porEq[e].c*10)/10;}),backgroundColor:eqNomes.map(function(e,i){return PAL[i%PAL.length];}),borderRadius:6}]},
+      options:opcoes({layout:{padding:{top:24}},plugins:{legend:{display:false}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:20}}},{min:0,max:100})}),plugins:[plugValores]});
+  });
 }
 if(listaMeses.length>1) slide('media','Média por mês','nota média de todos os agentes',function(el){
   var vals=listaMeses.map(function(m){var s=0,c=0;ag.forEach(function(a){var v=nota(a,m);if(v!==null){s+=v;c++;}});return c?Math.round(s/c*10)/10:null;});

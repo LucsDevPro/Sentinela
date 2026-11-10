@@ -101,6 +101,23 @@ checar("gerar_agentes.py: grava os totais de visitas por mês (panorama)", "def 
 checar("cabeçalho das páginas secundárias tem a mesma largura do conteúdo (álbum 1240, demais 860)",
        "header.topo .marca{max-width:1240px" in ler("assets/album.css") and "header.topo .marca{max-width:860px" in ler("assets/agente.css") and "header.topo .marca{max-width:860px" in ler("assets/comparar.css"))
 checar("cartinha: coroa e gema sobre a moldura (CSS) e desenhadas também no PNG", ".c-coroa" in cc and ".c-gema" in cc and "coroa no alto" in cj and "gema embaixo" in cj)
+# Dashboard: evento do LIRAa, alertas em uma linha, Ausências em painéis, gráfico só mensal, críticos com detalhes
+import json as _json
+crono = _json.loads(ler("data/cronograma_ausencias.json"))
+checar("cronograma: levantamento de índice (LIRAa) de 04/11 a 09/11/2026 para todos, sem falta",
+       any(c.get("alvo") == "todos" and c.get("motivo") == "Levantamento de Índice" and c.get("inicio") == "04/11/2026" and c.get("fim") == "09/11/2026" for c in crono))
+st = ler("scripts/style.css")
+checar("alertas: cartões sempre em uma única linha (grid-auto-flow: column) e rolagem só em tela estreita",
+       ".alert-grid { display: grid; grid-auto-flow: column;" in st and "@media (max-width: 860px) { .alert-grid" in st)
+au = ler("scripts/templates/sections/ausencias.html")
+checar("Ausências: seções viram painéis recolhíveis padronizados (só o gráfico abre por padrão)",
+       au.count('<details class="painel"') >= 5 and '<details class="painel" open>' in au and ".painel > summary" in st)
+cj2 = ler("scripts/templates/charts.js"); eq = ler("scripts/templates/sections/equipes.html")
+checar("equipes: nota média por equipe só do mês completo (sem a visão semana a semana)",
+       "mês completo" in eq and "C.semanas.map" not in cj2 and "C.equipes[eq][C.equipes[eq].length - 1]" in cj2)
+vg = ler("scripts/templates/sections/visao_geral.html")
+checar("visão geral: todos os agentes críticos aparecem, cada um com detalhes (details.critico-item)",
+       '<details class="critico-item">' in vg and "Mostrando os 5 piores" not in vg and "criticos=records(crit_sorted, RESUMO_COLS)" in ler("scripts/generate_dashboard.py"))
 
 print()
 if falhas:

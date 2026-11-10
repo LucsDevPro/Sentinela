@@ -477,5 +477,11 @@
     "motivo": "Reunião/Treinamento",
     "inicio": "05/10/2026",
     "fim": "30/10/2026"
+  },
+  {
+    "alvo": "todos",
+    "motivo": "Levantamento de Índice",
+    "inicio": "04/11/2026",
+    "fim": "09/11/2026"
   }
 ]

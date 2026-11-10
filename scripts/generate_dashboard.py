@@ -1160,7 +1160,7 @@ def build_context(data):
         alertas_totais=alertas_totais,
         n_ausencias=len(aus),
         n_allabsent_rows=sum(1 for rec in aus_records if rec["allabsent"]),
-        crit_count=len(crit_sorted), criticos=records(crit_sorted.head(5), RESUMO_COLS),
+        crit_count=len(crit_sorted), criticos=records(crit_sorted, RESUMO_COLS),
         resumo=records(resumo, RESUMO_COLS),
         resumo_semanal=resumo_semanal_recs,
         semanas_disponiveis=semanas_disponiveis,

@@ -1,5 +1,12 @@
 # Registro de decisões (mais recente primeiro)
 
+## 10/11/2026 — LIRAa, painéis, gráfico mensal e críticos com detalhes
+- **04/11 a 09/11/2026: levantamento de índice rápido (LIRAa)**, evento para todos os agentes. Registrado em `data/cronograma_ausencias.json` como «Levantamento de Índice» (alvo «todos»): ninguém recebe falta nem perde pontos nesses dias, e eles saem dos dias esperados. Vale na próxima coleta.
+- «Alertas e Irregularidades»: os 8 cartões ficam sempre numa única linha (tamanhos se ajustam à largura; abaixo de 860 px a linha rola de lado).
+- «Ausências»: tudo em painéis recolhíveis padronizados (Como ler, Férias/Atestado, Cronograma, Mapa de calor e agentes, Todos os registros); só o painel dos gráficos vem aberto. Ao imprimir, todos abrem.
+- «Nota média por equipe»: saiu a visão semana a semana (cada semana recomeça de 100 e dava notas mais altas que a do mês). Fica só a nota do mês completo, que é a mesma das cartinhas; a tela de reunião seguiu a mesma regra.
+- «Agentes em Situação Crítica»: mostra **todos** (não só 5); clicar em cada agente abre mais detalhes (dias, visitas/dia, mediana, alertas, fechados/recusados, % pendência, horas, custo).
+
 ## 09/11/2026 — tela de reunião com panorama, cabeçalhos alinhados e home em Novembro
 - Tela de reunião: novas telas com o **panorama geral** (total de imóveis trabalhados, visitas, dias de trabalho e nota média, mês a mês) e, para cada mês, o **panorama de visitas** (visitas, imóveis, dias, visitas por dia, tempo médio, áreas, agentes, nota média) e uma tela de **equipes e níveis**. Os totais saem das planilhas mensais (`ler_panorama` em `scripts/gerar_agentes.py`, chave `panorama` de `assets/agentes_dados.js`), sem a equipe sob demanda (Bloqueio); a soma de «imóveis trabalhados» bate com o número do cabeçalho do início. Só o mês mais recente aparece como «em andamento».
 - Cabeçalho das páginas secundárias (álbum, evolução, comparar, validar, contestação) agora tem a largura do conteúdo, com o logo na mesma coluna do texto e os botões juntos à direita.

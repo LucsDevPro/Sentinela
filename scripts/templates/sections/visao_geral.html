@@ -15,19 +15,29 @@
     {{ legend_chip("#6B7A8F", "% Pendência", "% Pendência = (Imóveis Fechados + Recusados) ÷ Total Geral") }}
   </div>
 
-  <h3 style="margin-bottom:14px;font-size:1.05rem;">Agentes em Situação Crítica ({{ crit_count }})</h3>
+  <h3 style="margin-bottom:6px;font-size:1.05rem;">Agentes em Situação Crítica ({{ crit_count }})</h3>
+  <p class="table-hint" style="margin-top:0">Todos os agentes críticos, do maior para o menor % de visitas rápidas. Clique em um agente para ver mais detalhes.</p>
+  {% macro det(rot, v, casas=0, suf="") -%}<div class="cd-item"><span class="cd-v">{% if v is number and v == v %}{{ v|br(casas) }}{{ suf }}{% elif v %}{{ v }}{% else %}—{% endif %}</span><span class="cd-l">{{ rot }}</span></div>{%- endmacro %}
   <div class="criticos-list">
     {% for r in criticos %}
-    <div class="critico-item">
-      <span class="ci-pct">{{ r.pct_rapidas|br(1) }}%</span>
-      <div class="ci-name">{{ r.agente }}</div>
-      <div class="ci-meta">{{ r.equipe }} · {{ r.abertos|br }} imóveis abertos · {{ r.rapidas|br }} rápidas · média {{ r.media_min|br(1) }} min</div>
-    </div>
+    <details class="critico-item">
+      <summary>
+        <span class="ci-pct">{{ r.pct_rapidas|br(1) }}%</span>
+        <span class="ci-name">{{ r.agente }}</span>
+        <span class="ci-meta">{{ r.equipe }} · {{ r.abertos|br }} imóveis abertos · {{ r.rapidas|br }} rápidas · média {{ r.media_min|br(1) }} min</span>
+        <span class="ci-mais">mais detalhes</span>
+      </summary>
+      <div class="ci-det">
+        {{ det("dias trabalhados", r.dias_trabalhados) }}{{ det("visitas por dia", r.visitas_dia, 1) }}{{ det("mediana (min)", r.mediana_min, 1) }}
+        {{ det("visitas longas", r.longas) }}{{ det("duplicadas", r.duplicadas) }}{{ det("em sequência suspeita", r.seq_suspeita) }}
+        {{ det("no horário de almoço", r.no_almoco) }}{{ det("fora do expediente", r.fora_expediente) }}{{ det("dias com meta", r.dias_meta) }}
+        {{ det("imóveis fechados", r.fechados) }}{{ det("imóveis recusados", r.recusados) }}{{ det("% pendência", r.pct_pendencia, 1, "%") }}
+        {{ det("horas úteis por dia", r.horas_uteis_dia, 1) }}{{ det("total geral", r.total_geral) }}{{ det("custo da hora útil (R$)", r.custo_hora, 2) }}
+      </div>
+      <a class="ci-link" href="#" onclick="goToSection('agentes');return false;">Ver na aba Agentes →</a>
+    </details>
     {% endfor %}
   </div>
-  {% if crit_count > 5 %}
-  <p class="table-hint">Mostrando os 5 piores. <a href="#" onclick="goToSection('agentes');return false;">Ver todos os {{ crit_count }} agentes críticos na aba Agentes →</a></p>
-  {% endif %}
 
   <div class="charts-grid">
     {{ chart_card("chartClass", "Distribuição por Classificação") }}
