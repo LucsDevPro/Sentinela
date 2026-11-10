@@ -74,3 +74,8 @@ main{max-width:1240px}
 @media (max-width:640px){.podio{gap:14px 14px}.podio .slot.p1{--e:.62;order:0}.podio::before{content:"";order:1;flex-basis:100%;height:0}.podio .slot.p2,.podio .slot.p3{--e:.5;order:2}.podio .slot.p3{order:3}}
 @media (max-width:480px){.album{grid-template-columns:repeat(2,1fr);gap:8px 4px}.slot{--e:.62}.barra select,.barra input{min-width:0;width:100%}.barra label{flex:1 0 45%}.abas button{padding:9px 10px;font-size:.92rem}}
 body.modo-apresentacao .nome{filter:blur(7px)}
+
+/* cabeçalho alinhado com o conteúdo da página (largura do main + respiro lateral) e os botões juntos à direita */
+header.topo{padding-left:0;padding-right:0}
+header.topo .marca{max-width:1240px;padding:0 16px}
+header.topo .tema-btn + a{margin-left:0}

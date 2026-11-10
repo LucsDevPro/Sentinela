@@ -103,7 +103,7 @@
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
       '<div class="c-nome nome"' + (curto.length > 20 ? ' style="font-size:1.05rem"' : curto.length > 15 ? ' style="font-size:1.08rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div style="--v:' + x[1] + '%"><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
-      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>';
+      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<svg class="c-coroa" viewBox="0 0 24 18" aria-hidden="true"><path d="M2 16 4 5l5 5 3-8 3 8 5-5 2 11z"/></svg>' : '') + (m.borda === 'b-80' || m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-gema" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>';
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
@@ -114,11 +114,11 @@
     var a = ang * Math.PI / 180, dx = Math.sin(a), dy = -Math.cos(a), L = Math.abs(w * dx) + Math.abs(h * dy), cx = x + w / 2, cy = y + h / 2;
     var g = ctx.createLinearGradient(cx - dx * L / 2, cy - dy * L / 2, cx + dx * L / 2, cy + dy * L / 2); g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
   }
-  var FORMA = [[28, 0], [244, 0], [272, 28], [272, 366], [242, 392], [30, 392], [0, 366], [0, 28]]; // escudo no espaço 272x392 (igual ao clip-path do CSS)
-  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = quanto recuar a forma (anel da borda); continuar = não reiniciar o caminho
-    d = d || 0; var n = FORMA.length, P = FORMA.map(function (p) { return [p[0] / 272 * w, p[1] === 392 ? h : (p[1] > 196 ? h - (392 - p[1]) * S / (S || 1) : p[1])]; });
-    // os cantos de baixo ficam ancorados na base (altura fixa em px do cartão), como no CSS
-    P = FORMA.map(function (p) { return [p[0] === 272 ? w : (p[0] > 136 ? w - (272 - p[0]) * S : p[0] * S), p[1] > 196 ? h - (392 - p[1]) * S : p[1] * S]; });
+  var FORMA = [[20, 0], [252, 0], [272, 20], [272, 366], [242, 392], [30, 392], [0, 366], [0, 20]]; // escudo no espaço 272x392 (igual ao clip-path do CSS)
+  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = recuo (quem chama já passa o retângulo encolhido em d); continuar = não reiniciar o caminho
+    d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d; var n = FORMA.length;
+    // cantos de baixo ancorados na base (altura fixa em px do cartão), como no CSS
+    var P = FORMA.map(function (p) { return [p[0] === 272 ? w : (p[0] > 136 ? w - (272 - p[0]) * S : p[0] * S), p[1] > 196 ? h - (392 - p[1]) * S : p[1] * S]; });
     if (d) P = P.map(function (p, i) {
       var a = P[(i + n - 1) % n], c = P[(i + 1) % n];
       function nr(u, v) { var dx = v[0] - u[0], dy = v[1] - u[1], l = Math.hypot(dx, dy); return [-dy / l, dx / l]; }
@@ -240,6 +240,19 @@
       var bg = gradCss(ctx, 135, X, Y, W, H, bc[0], bc[0]); bg.addColorStop(.25, bc[1]); bg.addColorStop(.5, bc[2]); bg.addColorStop(.75, bc[1]);
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore();
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X + B + 3 * S, Y + B + 3 * S, W - 2 * (B + 3 * S), H - 2 * (B + 3 * S), S, B + 3 * S, true); pathCartao(ctx, X + B + 4.5 * S, Y + B + 4.5 * S, W - 2 * (B + 4.5 * S), H - 2 * (B + 4.5 * S), S, B + 4.5 * S, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore(); // fio fino (igual ao CSS)
+      // bisel do anel (igual ao CSS): luz em cima, sombra embaixo
+      var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
+      ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
+      var alto = card.classList.contains('b-90') || card.classList.contains('b-top') || is100;
+      if (alto || card.classList.contains('b-80')) { // gema embaixo (igual ao CSS .c-gema)
+        var gx = X + W / 2, gy = Y + H - 2 * S, gg = ctx.createLinearGradient(0, gy - 17 * S, 0, gy); gg.addColorStop(0, bc[2]); gg.addColorStop(.55, bc[1]); gg.addColorStop(1, bc[0]);
+        ctx.save(); ctx.beginPath(); ctx.moveTo(gx - 20 * S, gy - 17 * S); ctx.lineTo(gx + 20 * S, gy - 17 * S); ctx.lineTo(gx, gy); ctx.closePath(); ctx.fillStyle = gg; ctx.fill(); ctx.restore();
+      }
+      if (alto) { // coroa no alto (igual ao CSS .c-coroa)
+        ctx.save(); ctx.translate(X + W / 2 - 18 * S, Y); ctx.scale(1.5 * S, 1.5 * S);
+        ctx.beginPath(); ctx.moveTo(2, 16); ctx.lineTo(4, 5); ctx.lineTo(9, 10); ctx.lineTo(12, 2); ctx.lineTo(15, 10); ctx.lineTo(20, 5); ctx.lineTo(22, 16); ctx.closePath();
+        ctx.shadowColor = 'rgba(255,236,160,.9)'; ctx.shadowBlur = 3 * S; ctx.fillStyle = '#FFD54A'; ctx.fill(); ctx.shadowBlur = 0; ctx.lineJoin = 'round'; ctx.lineWidth = 1.1 / 1.5; ctx.strokeStyle = '#6B4200'; ctx.stroke(); ctx.restore();
+      }
       if (is100) { // faíscas correndo pela borda (por cima do anel)
         ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         ARCOS.forEach(function (d) { var pa = new Path2D(d);

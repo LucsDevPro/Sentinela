@@ -43,3 +43,8 @@
   #toast{position:fixed;left:12px;right:12px;bottom:16px;max-width:520px;margin:auto;background:var(--tx);color:var(--bg);padding:12px 14px;border-radius:10px;display:none;z-index:9}
   table{width:100%;border-collapse:collapse;font-size:.9rem} td,th{border-bottom:1px solid var(--bd);padding:6px 4px;text-align:left;vertical-align:top}
   [hidden]{display:none!important}
+
+/* cabeçalho alinhado com o conteúdo da página (largura do main + respiro lateral) e os botões juntos à direita */
+header.topo{padding-left:0;padding-right:0}
+header.topo .marca{max-width:760px;padding:0 16px}
+header.topo .tema-btn + a{margin-left:0}

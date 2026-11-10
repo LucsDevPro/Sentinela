@@ -67,6 +67,57 @@ if(listaMeses.length>1) slide('media','Média por mês','nota média de todos os
   new Chart(canvasEm(el),{type:'line',data:{labels:listaMeses,datasets:[{data:vals,borderColor:PAL[0],backgroundColor:PAL[0],tension:.25,pointRadius:6,borderWidth:4}]},
     options:opcoes({scales:eixos({ticks:{color:cor('--text'),font:{size:18}},grid:{display:false}},{min:0,max:105})}),plugins:[{id:'v2',afterDatasetsDraw:function(ch){plugValores.afterDatasetsDraw(ch);}}]});
 });
+/* ---- panorama: totais de visitas, mês a mês e por equipe (dados de assets/agentes_dados.js → "panorama") ---- */
+var PANO=(window.AGENTES_DADOS&&window.AGENTES_DADOS.panorama)||{};
+var mesesPano=listaMeses.filter(function(m){return PANO[m];});
+function notasDo(m){return ag.map(function(a){return nota(a,m);}).filter(function(v){return v!==null;});}
+function mediaDo(m){var n=notasDo(m);return n.length?n.reduce(function(t,v){return t+v;},0)/n.length:null;}
+function andamento(m){return m===mesAtual&&!(PANO[m]&&PANO[m].fechado);}   // só o mês mais recente ainda está rodando
+function rotulo(m){return m+(andamento(m)?' (em andamento)':'');}
+function plugInt(){return {id:'valInt',afterDatasetsDraw:function(ch){var c=ch.ctx;c.save();c.font='700 18px "IBM Plex Sans",sans-serif';c.fillStyle=cor('--text');var h=ch.options.indexAxis==='y';
+  ch.data.datasets.forEach(function(ds,i){ch.getDatasetMeta(i).data.forEach(function(b,j){var v=ds.data[j];if(v==null)return;var t=br(v,ds.casas||0);
+    if(h){c.textAlign='left';c.textBaseline='middle';c.fillText(t,b.x+8,b.y);}else{c.textAlign='center';c.textBaseline='bottom';c.fillText(t,b.x,b.y-4);}});});c.restore();}};}
+function duas(el){var w=document.createElement('div');w.className='linha';el.appendChild(w);return w;}
+function tabela(cab,linhas,total){return '<table class="tab"><thead><tr>'+cab.map(function(c,i){return '<th'+(i?' class="n"':'')+'>'+c+'</th>';}).join('')+'</tr></thead><tbody>'+
+  linhas.map(function(l){return '<tr>'+l.map(function(c,i){return '<td'+(i?' class="n"':'')+'>'+c+'</td>';}).join('')+'</tr>';}).join('')+'</tbody>'+(total?'<tfoot><tr>'+total.map(function(c,i){return '<td'+(i?' class="n"':'')+'>'+c+'</td>';}).join('')+'</tr></tfoot>':'')+'</table>';}
+if(mesesPano.length){
+  slide('pano-total','Panorama geral','todos os meses: '+mesesPano[0]+' a '+mesesPano[mesesPano.length-1],function(el){
+    var t={im:0,vi:0,di:0,n:0,s:0};mesesPano.forEach(function(m){var p=PANO[m];t.im+=p.imoveis;t.vi+=p.visitas;t.di+=p.dias;notasDo(m).forEach(function(v){t.n++;t.s+=v;});});
+    el.insertAdjacentHTML('beforeend','<div class="cards fino">'+cartao(br(t.im),'imóveis trabalhados')+cartao(br(t.vi),'visitas (imóveis abertos)')+cartao(br(t.di),'dias de trabalho dos agentes')+cartao(t.n?br(t.s/t.n,1):'—','nota média de todos os meses')+'</div>');
+    var ls=mesesPano.map(function(m){var p=PANO[m],md=mediaDo(m);return [rotulo(m),br(p.agentes),br(p.visitas),br(p.imoveis),br(p.vis_dia,1),md===null?'—':br(md,1)];});
+    el.insertAdjacentHTML('beforeend','<div class="graf rolar">'+tabela(['Mês','Agentes','Visitas','Imóveis trabalhados','Visitas por dia','Nota média'],ls,['Total','',br(t.vi),br(t.im),t.di?br(t.vi/t.di,1):'—',t.n?br(t.s/t.n,1):'—'])+'</div>');
+  });
+  slide('pano-evolucao','Mês a mês','imóveis trabalhados e ritmo de visitas por dia de trabalho',function(el){
+    var w=duas(el),lab=mesesPano.map(function(m){return m.split('/')[0]+(andamento(m)?' *':'');});
+    new Chart(canvasEm(w),{type:'bar',data:{labels:lab,datasets:[{casas:0,data:mesesPano.map(function(m){return PANO[m].imoveis;}),backgroundColor:mesesPano.map(function(m){return andamento(m)?PAL[0]+'88':PAL[0];}),borderRadius:6}]},
+      options:opcoes({plugins:{legend:{display:false},title:{display:true,text:'Imóveis trabalhados',color:cor('--text'),font:{size:20}}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:16}}},{beginAtZero:true,ticks:{color:cor('--text2'),font:{size:16},callback:function(v){return br(v);}}})}),plugins:[plugInt()]});
+    new Chart(canvasEm(w),{type:'line',data:{labels:lab,datasets:[{casas:1,data:mesesPano.map(function(m){return PANO[m].vis_dia;}),borderColor:PAL[1],backgroundColor:PAL[1],tension:.25,pointRadius:6,borderWidth:4}]},
+      options:opcoes({layout:{padding:{left:24,top:8,right:12}},plugins:{legend:{display:false},title:{display:true,text:'Visitas por dia de trabalho',color:cor('--text'),font:{size:20}}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:16}}},{beginAtZero:true,ticks:{color:cor('--text2'),font:{size:16},callback:function(v){return br(v);}}})}),plugins:[plugInt()]});
+    if(mesesPano.some(andamento))el.insertAdjacentHTML('beforeend','<p class="nota">* mês em andamento: os números ainda crescem até o fechamento.</p>');
+  });
+  mesesPano.slice().reverse().forEach(function(m){
+    var p=PANO[m];
+    slide('pm-'+m+'-1','Panorama de '+m,andamento(m)?'mês em andamento':'mês completo',function(el){
+      var md=mediaDo(m);
+      el.insertAdjacentHTML('beforeend','<div class="cards oito">'+cartao(br(p.visitas),'visitas (imóveis abertos)')+cartao(br(p.imoveis),'imóveis trabalhados')+cartao(br(p.dias),'dias de trabalho')+cartao(br(p.vis_dia,1),'visitas por dia')+
+        cartao(br(p.tempo_min,1)+' min','tempo médio por visita')+cartao(br(p.areas),'áreas visitadas')+cartao(br(p.agentes),'agentes avaliados')+cartao(md===null?'—':br(md,1),'nota média do mês')+'</div>');
+      var al=p.alertas||{};
+      el.insertAdjacentHTML('beforeend','<p class="nota">Imóveis fechados: '+br(p.fechados)+' · recusados: '+br(p.recusados)+' · visitas duplicadas: '+br(al.duplicadas||0)+' · em sequência suspeita: '+br(al.suspeitas||0)+' · fora do expediente: '+br(al.fora||0)+'</p>');
+    });
+    slide('pm-'+m+'-2','Equipes e níveis de '+m,'visitas por equipe e agentes por nível',function(el){
+      var w=duas(el),eqs=Object.keys(p.equipes||{});
+      new Chart(canvasEm(w),{type:'bar',data:{labels:eqs,datasets:[{casas:0,data:eqs.map(function(e){return p.equipes[e].visitas;}),backgroundColor:eqs.map(function(e,i){return PAL[i%PAL.length];}),borderRadius:6}]},
+        options:opcoes({plugins:{legend:{display:false},title:{display:true,text:'Visitas por equipe',color:cor('--text'),font:{size:20}}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:18}}},{beginAtZero:true,ticks:{color:cor('--text2'),font:{size:16},callback:function(v){return br(v);}}})}),plugins:[plugInt()]});
+      var N=[['OURO 90+',90,1000,'#F7B500'],['PRATA 80-89',80,90,'#9DB2D0'],['BRONZE 70-79',70,80,'#C98A4B'],['AÇO 60-69',60,70,'#6F8F8A'],['FERRO <60',-1,60,'#8A8F98']];
+      var nv=notasDo(m).map(Math.round);
+      new Chart(canvasEm(w),{type:'bar',data:{labels:N.map(function(x){return x[0];}),datasets:[{casas:0,data:N.map(function(x){return nv.filter(function(v){return v>=x[1]&&v<x[2];}).length;}),backgroundColor:N.map(function(x){return x[3];}),borderRadius:6}]},
+        options:opcoes({plugins:{legend:{display:false},title:{display:true,text:'Agentes por nível',color:cor('--text'),font:{size:20}}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:15}}},{beginAtZero:true,ticks:{precision:0,color:cor('--text2'),font:{size:16}}})}),plugins:[plugInt()]});
+    });
+  });
+  // ordem das telas: panorama geral e mês a mês primeiro, depois o mês atual de sempre, e por último o panorama de cada mês (do mais recente ao mais antigo)
+  var ini=slides.filter(function(x){return x.id==='pano-total'||x.id==='pano-evolucao';}),fim=slides.filter(function(x){return /^pm-/.test(x.id);}),meio=slides.filter(function(x){return ini.indexOf(x)<0&&fim.indexOf(x)<0;});
+  slides.length=0;ini.concat(meio,fim).forEach(function(x){slides.push(x);});
+}
 if(!slides.length) slide('vazio','Sem dados ainda','',function(el){el.insertAdjacentHTML('beforeend','<p class="vazio">Ainda não há notas para mostrar.<br>Assim que o painel for atualizado, as telas aparecem aqui.</p>');});
 
 /* ---- palco ---- */

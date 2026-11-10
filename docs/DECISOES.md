@@ -1,12 +1,17 @@
 # Registro de decisões (mais recente primeiro)
 
+## 09/11/2026 — tela de reunião com panorama, cabeçalhos alinhados e home em Novembro
+- Tela de reunião: novas telas com o **panorama geral** (total de imóveis trabalhados, visitas, dias de trabalho e nota média, mês a mês) e, para cada mês, o **panorama de visitas** (visitas, imóveis, dias, visitas por dia, tempo médio, áreas, agentes, nota média) e uma tela de **equipes e níveis**. Os totais saem das planilhas mensais (`ler_panorama` em `scripts/gerar_agentes.py`, chave `panorama` de `assets/agentes_dados.js`), sem a equipe sob demanda (Bloqueio); a soma de «imóveis trabalhados» bate com o número do cabeçalho do início. Só o mês mais recente aparece como «em andamento».
+- Cabeçalho das páginas secundárias (álbum, evolução, comparar, validar, contestação) agora tem a largura do conteúdo, com o logo na mesma coluna do texto e os botões juntos à direita.
+- Início passa a ser **Novembro/2026** (`data/config_home.json`).
+
 ## 08/11/2026 — álbum: «Melhor do ano» e clique na cartinha abre a evolução
 - Novo item no filtro de mês do álbum, «Melhor do ano»: ranking pela **média das notas de todas as cartinhas mensais** do agente (julho até o mês mais recente, inclusive o mês aberto). Desempate: mais meses, depois nome. ASS e TUR somam o período inteiro; CON usa os 3 últimos meses; EVO é a variação do último mês; POS é a posição na média.
 - **Mínimo de 2 meses** (`MIN_MESES_ANO` em `assets/album.js`): quem tem só 1 cartinha mensal não aparece no «Melhor do ano». O rodapé da cartinha mostra quantos meses entraram na média.
 - Clicar numa cartinha do álbum agora abre direto a evolução do agente (no mês da cartinha; em «Melhor do ano», no mês mais recente). O detalhamento por passar o mouse continua; na página do agente, clicar ainda fixa o detalhamento.
 
 ## 08/11/2026 — formato da borda da cartinha: escudo de cantos cortados
-- A cartinha deixa de ter cantos arredondados e passa a ter o formato de escudo (cantos cortados em diagonal: 20 px em cima, 30 × 26 px embaixo), com o anel metálico acompanhando o formato. Só muda o contorno: o interior, as cores por nível e a pontuação ficam iguais.
+- A cartinha deixa de ter cantos arredondados e passa a ter o formato de escudo (cantos cortados em diagonal: 20 px em cima, 30 × 26 px embaixo), com o anel metálico acompanhando o formato, bisel de luz e sombra, brilhos nos cantos, fio fino interno, coroa (Ouro, Destaque, Lendária) e gema embaixo (Prata em diante), faixa de luz animada nos níveis altos; o PNG de download desenha o mesmo. Só muda o contorno: o interior, as cores por nível e a pontuação ficam iguais.
 - O recorte (`clip-path`) corta o `box-shadow`; por isso o brilho externo da Lendária e do Destaque passou para o contêiner (`filter: drop-shadow`). As demais cartas ficam sem a sombra externa.
 - `assets/carta.css` (polígono, anel, filete da Lendária) e `assets/carta.js` (`FORMA`/`pathCartao`, usado no PNG de download) têm que ficar iguais; `scripts/test_album.py` confere os dois.
 

@@ -60,3 +60,8 @@
   body.modo-apresentacao .nome{filter:blur(7px)}
   label.tg{display:flex;gap:6px;align-items:center;font-size:.85rem;color:var(--mut)}
   [hidden]{display:none!important}
+
+/* cabeçalho alinhado com o conteúdo da página (largura do main + respiro lateral) e os botões juntos à direita */
+header.topo{padding-left:0;padding-right:0}
+header.topo .marca{max-width:860px;padding:0 16px}
+header.topo .tema-btn + a{margin-left:0}

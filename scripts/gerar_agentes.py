@@ -55,6 +55,47 @@ def ler_planilha(caminho):
         wb.close()
 
 
+def ler_panorama(caminho):
+    """Totais do mês para a tela de reunião, somando os agentes das equipes avaliadas (sem a equipe sob demanda):
+    visitas (imóveis abertos), fechados, recusados, dias trabalhados, tempo médio, alertas e o resumo de cada equipe."""
+    import openpyxl
+    wb = openpyxl.load_workbook(caminho, read_only=True, data_only=True)
+    try:
+        if "Resumo Geral" not in wb.sheetnames:
+            return None
+        linhas = []
+        for r in wb["Resumo Geral"].iter_rows(min_row=3, values_only=True):
+            if r and r[1] and str(r[1]).startswith("Equipe") and r[1] != EQUIPE_BLOQUEIO and isinstance(r[3], (int, float)):
+                linhas.append(r)
+        if not linhas:
+            return None
+        n = lambda r, i: (r[i] if len(r) > i and isinstance(r[i], (int, float)) else 0)
+        soma = lambda i, rs=None: sum(n(r, i) for r in (rs if rs is not None else linhas))
+        visitas, dias = soma(3), soma(4)
+        tempo = sum(n(r, 3) * n(r, 6) for r in linhas) / visitas if visitas else 0     # média (min) ponderada pelas visitas
+        horas = [n(r, 21) for r in linhas if n(r, 21)]
+        areas = set()
+        if "Por Área" in wb.sheetnames:
+            for r in wb["Por Área"].iter_rows(min_row=3, values_only=True):
+                if r and r[2] and r[1] and str(r[1]).startswith("Equipe") and r[1] != EQUIPE_BLOQUEIO:
+                    areas.add(str(r[2]))
+        eq = {}
+        for r in linhas:
+            e = eq.setdefault(r[1], [])
+            e.append(r)
+        return {
+            "agentes": len(linhas), "visitas": int(visitas), "fechados": int(soma(17)), "recusados": int(soma(18)),
+            "imoveis": int(soma(19)), "dias": int(dias), "vis_dia": round(visitas / dias, 1) if dias else 0,
+            "tempo_min": round(tempo, 1), "horas_dia": round(sum(horas) / len(horas), 1) if horas else None,
+            "areas": len(areas), "rapidas": int(soma(8)), "longas": int(soma(10)),
+            "alertas": {"duplicadas": int(soma(13)), "suspeitas": int(soma(14)), "almoco": int(soma(15)), "fora": int(soma(16)), "negativas": int(soma(11))},
+            "equipes": {k: {"agentes": len(v), "visitas": int(soma(3, v)), "dias": int(soma(4, v)), "vis_dia": round(soma(3, v) / soma(4, v), 1) if soma(4, v) else 0,
+                            "fechados": int(soma(17, v)), "recusados": int(soma(18, v))} for k, v in sorted(eq.items())},
+        }
+    finally:
+        wb.close()
+
+
 _MESES_NUM = {"janeiro": 1, "fevereiro": 2, "marco": 3, "abril": 4, "maio": 5, "junho": 6, "julho": 7,
               "agosto": 8, "setembro": 9, "outubro": 10, "novembro": 11, "dezembro": 12}
 
@@ -133,7 +174,7 @@ def gerar(raiz=ROOT):
     meses_e = sorted((e for e in man if e.get("tipo") != "semana" and LABEL_MES_RE.match(str(e.get("label", "")))),
                      key=lambda e: e.get("semana_inicio", 0))
     sem_e = sorted((e for e in man if e.get("tipo") == "semana"), key=lambda e: (e.get("semana_inicio", 0)))
-    agentes = {}
+    agentes, panorama = {}, {}
     try:
         cron = json.loads((raiz / "data" / "cronograma_ausencias.json").read_text(encoding="utf-8"))
         if not isinstance(cron, list):
@@ -152,6 +193,10 @@ def gerar(raiz=ROOT):
         if not cam.exists():
             continue
         rank, det = ler_planilha(cam)
+        pano = ler_panorama(cam)
+        if pano:
+            pano["fechado"] = e["label"] in fechados
+            panorama[e["label"]] = pano
         for nome, r in rank.items():
             if r["equipe"] == EQUIPE_BLOQUEIO:
                 continue
@@ -179,7 +224,7 @@ def gerar(raiz=ROOT):
                 "mes": e.get("mes"), "n": e.get("numero_semana"), "periodo": e.get("periodo", ""), "parcial": bool(e.get("parcial")),
                 "pontos": _num(r["pontos"]), "trab": _num(r["trab"]), "esp": _num(r["esp"]),
                 "paradas": paradas_no_periodo(cron, r["equipe"], _faixa_semana(e.get("mes"), e.get("periodo")))})
-    return {"gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M"), "agentes": agentes}
+    return {"gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M"), "agentes": agentes, "panorama": panorama}
 
 
 def main():

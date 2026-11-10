@@ -32,3 +32,9 @@ h2 small{font-family:"IBM Plex Sans",sans-serif;font-weight:400;font-size:.5em;c
 .dots button{width:14px;height:14px;border-radius:50%;border:2px solid var(--mut);background:transparent;padding:0;cursor:pointer}
 .dots button.on{background:var(--pri);border-color:var(--pri)}
 .nota{color:var(--mut);font-size:.65em}
+.cards.fino{flex:none;grid-template-columns:repeat(4,1fr);gap:1.5vw}.cards.fino .card{padding:2vh 1vw}.cards.fino .card .v{font-size:3em}
+.cards.oito{grid-template-columns:repeat(4,1fr);gap:1.6vw;align-content:stretch}.cards.oito .card{display:flex;flex-direction:column;justify-content:center;padding:2vh 1vw}.cards.oito .card .v{font-size:3.2em}
+.linha{display:grid;grid-template-columns:1fr 1fr;gap:2vw;flex:1;min-height:0}.linha .graf{min-height:0}
+.rolar{overflow:auto}.tab{width:100%;border-collapse:collapse;font-size:.82em}.tab th,.tab td{padding:.55em .8em;border-bottom:1px solid var(--bd);text-align:left}.tab th{color:var(--mut);font-weight:700;font-size:.8em;text-transform:uppercase;letter-spacing:.03em}
+.tab .n{text-align:right;font-variant-numeric:tabular-nums}.tab tfoot td{font-weight:700;border-top:2px solid var(--bd);border-bottom:0;background:var(--soft)}
+@media (max-width:900px){.cards.fino,.cards.oito{grid-template-columns:repeat(2,1fr)}.linha{grid-template-columns:1fr}}

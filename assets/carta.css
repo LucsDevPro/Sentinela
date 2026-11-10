@@ -12,7 +12,7 @@
   padding: 16px 18px 14px;
   color: var(--tx);
   border-radius: 0;
-  clip-path: polygon(28px 0px, calc(100% - 28px) 0px, 100% 28px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 28px);
+  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
   background:
     linear-gradient(160deg, var(--c1) 0%, #E6C86A 38%, #D4A63A 68%, var(--c2) 100%);
   box-shadow:
@@ -202,7 +202,9 @@
   inset: 0;
   z-index: 3;
   pointer-events: none;
-  background: linear-gradient(
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 28%, rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.38) 100%),
+    linear-gradient(
     135deg,
     var(--b1) 0%,
     var(--b2) 18%,
@@ -212,34 +214,78 @@
     var(--b2) 88%,
     var(--b3) 100%
   );
-  clip-path: polygon(28px 0px, calc(100% - 28px) 0px, 100% 28px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 28px, 28px 0px, calc(28px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), calc(0px + var(--bw) * 1.0000) calc(28px + var(--bw) * 0.4142), calc(0px + var(--bw) * 1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(30px + var(--bw) * 0.3730) calc(100% + var(--bw) * -1.0000), calc(100% - 30px + var(--bw) * -0.3730) calc(100% + var(--bw) * -1.0000), calc(100% + var(--bw) * -1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(100% + var(--bw) * -1.0000) calc(28px + var(--bw) * 0.4142), calc(100% - 28px + var(--bw) * -0.4142) calc(0px + var(--bw) * 1.0000), calc(28px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), 28px 0px, calc(28px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% - 28px + (var(--bw) + 3px) * -0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% + (var(--bw) + 3px) * -1.0000) calc(28px + (var(--bw) + 3px) * 0.4142), calc(100% + (var(--bw) + 3px) * -1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(100% - 30px + (var(--bw) + 3px) * -0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(30px + (var(--bw) + 3px) * 0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(0px + (var(--bw) + 3px) * 1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(0px + (var(--bw) + 3px) * 1.0000) calc(28px + (var(--bw) + 3px) * 0.4142), calc(28px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(28px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(28px + (var(--bw) + 4.5px) * 0.4142), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(30px + (var(--bw) + 4.5px) * 0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% - 30px + (var(--bw) + 4.5px) * -0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(28px + (var(--bw) + 4.5px) * 0.4142), calc(100% - 28px + (var(--bw) + 4.5px) * -0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(28px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(28px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000));
+  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px, 20px 0px, calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), calc(0px + var(--bw) * 1.0000) calc(20px + var(--bw) * 0.4142), calc(0px + var(--bw) * 1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(30px + var(--bw) * 0.3730) calc(100% + var(--bw) * -1.0000), calc(100% - 30px + var(--bw) * -0.3730) calc(100% + var(--bw) * -1.0000), calc(100% + var(--bw) * -1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(100% + var(--bw) * -1.0000) calc(20px + var(--bw) * 0.4142), calc(100% - 20px + var(--bw) * -0.4142) calc(0px + var(--bw) * 1.0000), calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), 20px 0px, calc(20px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% - 20px + (var(--bw) + 3px) * -0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% + (var(--bw) + 3px) * -1.0000) calc(20px + (var(--bw) + 3px) * 0.4142), calc(100% + (var(--bw) + 3px) * -1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(100% - 30px + (var(--bw) + 3px) * -0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(30px + (var(--bw) + 3px) * 0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(0px + (var(--bw) + 3px) * 1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(0px + (var(--bw) + 3px) * 1.0000) calc(20px + (var(--bw) + 3px) * 0.4142), calc(20px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(20px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(20px + (var(--bw) + 4.5px) * 0.4142), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(30px + (var(--bw) + 4.5px) * 0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% - 30px + (var(--bw) + 4.5px) * -0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(20px + (var(--bw) + 4.5px) * 0.4142), calc(100% - 20px + (var(--bw) + 4.5px) * -0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(20px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(20px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000));
 }
 
 /* Filete interno extra nas cartas altas (anel secundário) */
+/* Brilhos nos cantos cortados da moldura (todos os níveis) */
+.carta > .c-borda::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20px 3px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0) 11px),
+    radial-gradient(circle at calc(100% - 20px) 3px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0) 11px),
+    radial-gradient(circle at 3px 20px, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 0) 10px),
+    radial-gradient(circle at calc(100% - 3px) 20px, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 0) 10px),
+    radial-gradient(circle at 30px calc(100% - 3px), rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 10px),
+    radial-gradient(circle at calc(100% - 30px) calc(100% - 3px), rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 10px);
+}
+
+/* Faixa de luz passando pela moldura (Ouro, Destaque e Lendária; poucas cartas, então o custo é baixo) */
 .carta.b-90 > .c-borda::after,
 .carta.b-top > .c-borda::after,
 .carta.b-100 > .c-borda::after {
   content: "";
   position: absolute;
-  inset: calc(var(--bw) + 2px);
-  border-radius: 14px 14px 34px 34px / 14px 14px 24px 24px;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0) 62%);
+  background-size: 260% 100%;
+  background-position: 160% 0;
+  mix-blend-mode: soft-light;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .carta.b-90 > .c-borda::after,
+  .carta.b-top > .c-borda::after,
+  .carta.b-100 > .c-borda::after { animation: c-varre 4.2s ease-in-out infinite; }
+}
+@keyframes c-varre { 0% { background-position: 160% 0; } 55%, 100% { background-position: -60% 0; } }
+
+/* Coroa (Ouro, Destaque, Lendária) e gema (Prata para cima) sobre a moldura, como nas cartas do FIFA Mobile */
+.c-coroa {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 21px);
+  width: 42px;
+  height: 27px;
+  z-index: 4;
+  fill: #FFD54A;
+  stroke: #6B4200;
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 3px rgba(255, 236, 160, 0.9)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5));
   pointer-events: none;
-  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.15);
+}
+.c-gema {
+  position: absolute;
+  left: calc(50% - 20px);
+  bottom: 2px;
+  width: 40px;
+  height: 17px;
+  z-index: 4;
+  background: linear-gradient(180deg, var(--b3), var(--b2) 55%, var(--b1));
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  pointer-events: none;
 }
 
-.carta.b-top > .c-borda::after {
-  border-color: rgba(255, 220, 120, 0.45);
-  box-shadow:
-    inset 0 0 10px rgba(255, 100, 200, 0.2),
-    0 0 6px rgba(64, 224, 255, 0.25);
-}
-
-.carta.b-100 > .c-borda::after {
-  border-color: rgba(180, 230, 255, 0.55);
-  box-shadow:
-    inset 0 0 12px rgba(80, 180, 255, 0.3),
-    0 0 8px rgba(80, 180, 255, 0.35);
+/* Textura de metal trabalhado na moldura dos níveis altos */
+.carta.b-90 > .c-borda,
+.carta.b-top > .c-borda,
+.carta.b-100 > .c-borda {
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0 1.5px, rgba(255, 255, 255, 0) 1.5px 6px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 28%, rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.38) 100%),
+    linear-gradient(135deg, var(--b1) 0%, var(--b2) 18%, var(--b3) 38%, var(--b2) 55%, var(--b1) 72%, var(--b2) 88%, var(--b3) 100%);
 }
 
 /* ===== Layout interno ===== */
@@ -470,7 +516,7 @@ body.sem-foto .c-foto img {
   background: rgba(200, 230, 255, 0.82);
   -webkit-mask: none;
   mask: none;
-  clip-path: polygon(calc(28px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(100% - 28px + 12px * -0.4142) calc(0px + 12px * 1.0000), calc(100% + 12px * -1.0000) calc(28px + 12px * 0.4142), calc(100% + 12px * -1.0000) calc(100% - 26px + 12px * -0.4566), calc(100% - 30px + 12px * -0.3730) calc(100% + 12px * -1.0000), calc(30px + 12px * 0.3730) calc(100% + 12px * -1.0000), calc(0px + 12px * 1.0000) calc(100% - 26px + 12px * -0.4566), calc(0px + 12px * 1.0000) calc(28px + 12px * 0.4142), calc(28px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(28px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(0px + 13.5px * 1.0000) calc(28px + 13.5px * 0.4142), calc(0px + 13.5px * 1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(30px + 13.5px * 0.3730) calc(100% + 13.5px * -1.0000), calc(100% - 30px + 13.5px * -0.3730) calc(100% + 13.5px * -1.0000), calc(100% + 13.5px * -1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(100% + 13.5px * -1.0000) calc(28px + 13.5px * 0.4142), calc(100% - 28px + 13.5px * -0.4142) calc(0px + 13.5px * 1.0000), calc(28px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(28px + 12px * 0.4142) calc(0px + 12px * 1.0000));
+  clip-path: polygon(calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(100% - 20px + 12px * -0.4142) calc(0px + 12px * 1.0000), calc(100% + 12px * -1.0000) calc(20px + 12px * 0.4142), calc(100% + 12px * -1.0000) calc(100% - 26px + 12px * -0.4566), calc(100% - 30px + 12px * -0.3730) calc(100% + 12px * -1.0000), calc(30px + 12px * 0.3730) calc(100% + 12px * -1.0000), calc(0px + 12px * 1.0000) calc(100% - 26px + 12px * -0.4566), calc(0px + 12px * 1.0000) calc(20px + 12px * 0.4142), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(0px + 13.5px * 1.0000) calc(20px + 13.5px * 0.4142), calc(0px + 13.5px * 1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(30px + 13.5px * 0.3730) calc(100% + 13.5px * -1.0000), calc(100% - 30px + 13.5px * -0.3730) calc(100% + 13.5px * -1.0000), calc(100% + 13.5px * -1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(100% + 13.5px * -1.0000) calc(20px + 13.5px * 0.4142), calc(100% - 20px + 13.5px * -0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000));
   box-shadow: none;
   opacity: 1;
 }
