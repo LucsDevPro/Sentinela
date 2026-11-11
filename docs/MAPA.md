@@ -269,6 +269,15 @@ Constantes: SEMANAS_A_FRENTE_AVISO@29
 
 Constantes: ARQUIVOS_CRITICOS@20
 
+## scripts/versionar_assets.py (76 linhas)
+
+- L22 `hash_arquivo(caminho)`
+- L27 `versionar_html(caminho, gravar)`
+- L45 `versionar_sw(gravar)`
+- L67 `main()`
+
+Constantes: RAIZ@18, REF@19
+
 ## scripts/xlsx_scan.py (82 linhas)
 
 - L8 `scan_tables(ws, max_col)`

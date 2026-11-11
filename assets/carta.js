@@ -97,13 +97,13 @@
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
     var tend = delta == null ? SV('minus') + ' sem mês anterior' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
     var extra100 = m.borda !== 'b-100' ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg>';
-    return '<div class="carta ' + tier[0] + ' ' + m.borda + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
+    return '<div class="c-conj ' + m.borda + '">' + ornSVG(m.borda, 'atras') + '<div class="carta ' + tier[0] + ' ' + m.borda + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
       '<div class="c-pos">' + esc(eq) + '<small>' + pos + 'º de ' + u.total + '</small></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
       '<div class="c-nome nome"' + (curto.length > 20 ? ' style="font-size:1.05rem"' : curto.length > 15 ? ' style="font-size:1.08rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div style="--v:' + x[1] + '%"><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
-      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<svg class="c-coroa" viewBox="0 0 24 18" aria-hidden="true"><path d="M2 16 4 5l5 5 3-8 3 8 5-5 2 11z"/></svg>' : '') + (m.borda === 'b-80' || m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-gema" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>';
+      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + ornSVG(m.borda, 'frente') + '</div>';
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
@@ -115,6 +115,70 @@
     var g = ctx.createLinearGradient(cx - dx * L / 2, cy - dy * L / 2, cx + dx * L / 2, cy + dy * L / 2); g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
   }
   var FORMA = [[20, 0], [252, 0], [272, 20], [272, 366], [242, 392], [30, 392], [0, 366], [0, 20]]; // escudo no espaço 272x392 (igual ao clip-path do CSS)
+  /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
+     As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
+     .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
+  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-top': ['#FFE5F6', '#FF5BC8', '#6B2BD9'], 'b-100': ['#E6F7FF', '#4FB0FF', '#1E47C8'] };
+  function ornPecas(borda) {
+    var atras = [], frente = [], n, i, lado, t;
+    function espelha(pts) { return pts.map(function (q) { return [272 - q[0], q[1]]; }); }
+    if (borda === 'b-80') { // prata: aletas nas laterais de baixo
+      var f = [[0, 205], [-13, 238], [-13, 330], [0, 362]]; atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
+      var f2 = [[0, 150], [-8, 172], [-8, 205], [0, 205]]; atras.push({ t: 'poly', pts: f2 }, { t: 'poly', pts: espelha(f2) });
+    }
+    if (borda === 'b-90') { // ouro: dois ramos de louro
+      for (lado = 0; lado < 2; lado++) {
+        n = 14;
+        for (i = 0; i < n; i++) {
+          t = 0.04 + 0.92 * i / (n - 1);
+          var x = (1 - t) * (1 - t) * 122 + 2 * (1 - t) * t * -16 + t * t * -15, y = (1 - t) * (1 - t) * 398 + 2 * (1 - t) * t * 396 + t * t * 170;
+          var dx = 2 * (1 - t) * (-16 - 122) + 2 * t * (-15 + 16), dy = 2 * (1 - t) * (396 - 398) + 2 * t * (170 - 396), ang = Math.atan2(dy, dx), dir = i % 2 ? 1 : -1;
+          var cx = x + Math.cos(ang + dir * Math.PI / 2) * 4, cy = y + Math.sin(ang + dir * Math.PI / 2) * 4;
+          if (lado) cx = 272 - cx;
+          atras.push({ t: 'leaf', cx: cx, cy: cy, rx: 15 - i * 0.32, ry: 5.6, rot: lado ? Math.PI - (ang + dir * 0.75) : ang + dir * 0.75 });
+        }
+      }
+    }
+    if (borda === 'b-top' || borda === 'b-100') { // destaque e lendária: cristais nas laterais e asas no alto
+      for (lado = 0; lado < 2; lado++) {
+        for (i = 0; i < 7; i++) {
+          var y0 = 74 + i * 42, h = 15 + (i % 2) * 8, c = [[0, y0 - 11], [-h, y0 - 16 - (i % 3) * 3], [0, y0 + 9]];
+          atras.push({ t: 'poly', pts: lado ? espelha(c) : c });
+          var c2 = [[0, y0 + 11], [-(h - 6), y0 + 5], [0, y0 + 24]]; atras.push({ t: 'poly', pts: lado ? espelha(c2) : c2 });
+        }
+        var asa = [[20, 0], [-6, -14], [-16, 14], [0, 20]]; atras.push({ t: 'poly', pts: lado ? espelha(asa) : asa });
+      }
+    }
+    if (borda === 'b-90' || borda === 'b-top' || borda === 'b-100') { // coroa grande saindo pelo alto
+      frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true });
+    }
+    if (ORN_PAL[borda]) frente.push({ t: 'poly', pts: [[116, 383], [156, 383], [147, 396], [136, 411], [125, 396]], gema: true }); // gema embaixo
+    return { atras: atras, frente: frente, pal: ORN_PAL[borda] };
+  }
+  function ornSVG(borda, camada) {
+    var o = ornPecas(borda), pecas = o[camada]; if (!pecas.length) return '';
+    var pal = o.pal, id = 'og-' + borda + '-' + camada, f2 = function (v) { return (Math.round(v * 10) / 10); };
+    var corpo = pecas.map(function (q) {
+      var fill = q.coroa ? '#FFD54A' : 'url(#' + id + ')', st = q.coroa ? '#6B4200' : pal[2], sw = q.coroa ? 1.4 : 0.9;
+      if (q.t === 'leaf') return '<ellipse cx="' + f2(q.cx) + '" cy="' + f2(q.cy) + '" rx="' + f2(q.rx) + '" ry="' + f2(q.ry) + '" transform="rotate(' + f2(q.rot * 180 / Math.PI) + ' ' + f2(q.cx) + ' ' + f2(q.cy) + ')" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '"/>';
+      return '<polygon points="' + q.pts.map(function (z) { return f2(z[0]) + ',' + f2(z[1]); }).join(' ') + '" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '" stroke-linejoin="round"' + (q.coroa ? ' class="c-orna-coroa"' : '') + '/>';
+    }).join('');
+    return '<svg class="c-orna c-orna-' + camada + '" viewBox="-30 -26 332 444" aria-hidden="true"><defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + pal[0] + '"/><stop offset=".5" stop-color="' + pal[1] + '"/><stop offset="1" stop-color="' + pal[2] + '"/></linearGradient></defs>' + corpo + '</svg>';
+  }
+  function ornCanvas(ctx, borda, camada, X, Y, S) {
+    var o = ornPecas(borda), pecas = o[camada], pal = o.pal; if (!pecas.length) return;
+    pecas.forEach(function (q) {
+      var yMin = 1e9, yMax = -1e9;
+      (q.t === 'leaf' ? [[0, q.cy - q.rx], [0, q.cy + q.rx]] : q.pts).forEach(function (z) { yMin = Math.min(yMin, z[1]); yMax = Math.max(yMax, z[1]); });
+      var g = ctx.createLinearGradient(0, Y + yMin * S, 0, Y + yMax * S); g.addColorStop(0, pal[0]); g.addColorStop(.5, pal[1]); g.addColorStop(1, pal[2]);
+      ctx.save(); ctx.fillStyle = q.coroa ? '#FFD54A' : g; ctx.strokeStyle = q.coroa ? '#6B4200' : pal[2]; ctx.lineWidth = (q.coroa ? 1.4 : 0.9) * S; ctx.lineJoin = 'round';
+      if (q.coroa || q.gema) { ctx.shadowColor = q.coroa ? 'rgba(255,236,160,.9)' : pal[1]; ctx.shadowBlur = 6 * S; }
+      ctx.beginPath();
+      if (q.t === 'leaf') ctx.ellipse(X + q.cx * S, Y + q.cy * S, q.rx * S, q.ry * S, q.rot, 0, 2 * Math.PI);
+      else { q.pts.forEach(function (z, k) { if (k) ctx.lineTo(X + z[0] * S, Y + z[1] * S); else ctx.moveTo(X + z[0] * S, Y + z[1] * S); }); ctx.closePath(); }
+      ctx.fill(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
+    });
+  }
   function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = recuo (quem chama já passa o retângulo encolhido em d); continuar = não reiniciar o caminho
     d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d; var n = FORMA.length;
     // cantos de baixo ancorados na base (altura fixa em px do cartão), como no CSS
@@ -135,11 +199,11 @@
   }
   function png(a, ms, opcoes) {
     opcoes = opcoes || {};
-    var S = 2, M = 20, host = document.createElement('div'), html0 = html(a, ms, opcoes.id, true);
+    var S = 2, M = 30, host = document.createElement('div'), html0 = html(a, ms, opcoes.id, true);
     if (!html0) return Promise.reject(new Error('sem nota'));
     host.style.cssText = 'position:fixed;left:-9999px;top:0;width:272px;pointer-events:none'; host.innerHTML = html0; document.body.appendChild(host);
-    var card = host.firstElementChild, tier = (card.className.match(/t-\w+/) || [''])[0];
-    var oculta = !!opcoes.ocultarNomes, is100 = card.classList.contains('b-100');
+    var card = host.querySelector('.carta'), tier = (card.className.match(/t-\w+/) || [''])[0];
+    var borda0 = (card.className.match(/b-(?:\d+|top)/) || [''])[0], oculta = !!opcoes.ocultarNomes, is100 = card.classList.contains('b-100');
     if (opcoes.ocultarFoto) { var im0 = card.querySelector('.c-foto img'); if (im0) im0.remove(); } // sem foto: ficam as iniciais
     var imgFoto = card.querySelector('.c-foto img'), pronto = Promise.all([document.fonts ? document.fonts.ready : 0, document.fonts ? document.fonts.load('700 20px "Barlow Semi Condensed"') : 0, document.fonts ? document.fonts.load('600 14px "IBM Plex Sans"') : 0, carregar('assets/logo_carta.png'), imgFoto && !opcoes.ocultarFoto ? carregar(imgFoto.getAttribute('src')).catch(function () { return null; }) : null]);
     return pronto.then(function (r) {
@@ -148,6 +212,7 @@
       var ctx = cv.getContext('2d'), cs = getComputedStyle(card), c1 = cs.getPropertyValue('--c1').trim(), c2 = cs.getPropertyValue('--c2').trim(), ln = cs.getPropertyValue('--ln').trim();
       var X = M * S, Y = M * S;
       ctx.fillStyle = '#EEF2F8'; ctx.fillRect(0, 0, cv.width, cv.height);
+      ornCanvas(ctx, borda0, 'atras', X, Y, S);   // louros / cristais / aletas atrás do cartão
       ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.30)'; ctx.shadowBlur = 28 * S; ctx.shadowOffsetY = 10 * S; pathCartao(ctx, X, Y, W, H, S); ctx.fillStyle = c2; ctx.fill(); ctx.restore();
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
@@ -243,16 +308,6 @@
       // bisel do anel (igual ao CSS): luz em cima, sombra embaixo
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
-      var alto = card.classList.contains('b-90') || card.classList.contains('b-top') || is100;
-      if (alto || card.classList.contains('b-80')) { // gema embaixo (igual ao CSS .c-gema)
-        var gx = X + W / 2, gy = Y + H - 2 * S, gg = ctx.createLinearGradient(0, gy - 17 * S, 0, gy); gg.addColorStop(0, bc[2]); gg.addColorStop(.55, bc[1]); gg.addColorStop(1, bc[0]);
-        ctx.save(); ctx.beginPath(); ctx.moveTo(gx - 20 * S, gy - 17 * S); ctx.lineTo(gx + 20 * S, gy - 17 * S); ctx.lineTo(gx, gy); ctx.closePath(); ctx.fillStyle = gg; ctx.fill(); ctx.restore();
-      }
-      if (alto) { // coroa no alto (igual ao CSS .c-coroa)
-        ctx.save(); ctx.translate(X + W / 2 - 18 * S, Y); ctx.scale(1.5 * S, 1.5 * S);
-        ctx.beginPath(); ctx.moveTo(2, 16); ctx.lineTo(4, 5); ctx.lineTo(9, 10); ctx.lineTo(12, 2); ctx.lineTo(15, 10); ctx.lineTo(20, 5); ctx.lineTo(22, 16); ctx.closePath();
-        ctx.shadowColor = 'rgba(255,236,160,.9)'; ctx.shadowBlur = 3 * S; ctx.fillStyle = '#FFD54A'; ctx.fill(); ctx.shadowBlur = 0; ctx.lineJoin = 'round'; ctx.lineWidth = 1.1 / 1.5; ctx.strokeStyle = '#6B4200'; ctx.stroke(); ctx.restore();
-      }
       if (is100) { // faíscas correndo pela borda (por cima do anel)
         ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         ARCOS.forEach(function (d) { var pa = new Path2D(d);
@@ -260,6 +315,7 @@
           ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1; ctx.stroke(pa); });
         ctx.restore();
       }
+      ornCanvas(ctx, borda0, 'frente', X, Y, S);   // coroa e gema por cima do cartão
       return new Promise(function (ok, erro) { try { cv.toBlob(function (bl) { bl ? ok(bl) : erro(new Error('falha ao gerar a imagem')); }, 'image/png'); } catch (e) { erro(e); } });
     }).then(function (bl) { host.remove(); return bl; }, function (e) { host.remove(); throw e; });
   }

@@ -65,12 +65,14 @@
     s.setProperty('--ry', ((px - 0.5) * 2 * MAX).toFixed(2) + 'deg');
     s.setProperty('--rx', ((0.5 - py) * 2 * MAX).toFixed(2) + 'deg');
     s.setProperty('--brilho', '1');
+    var w = ativa.parentElement; if (w && w.classList.contains('c-conj')) { w.style.setProperty('--ry', s.getPropertyValue('--ry')); w.style.setProperty('--rx', s.getPropertyValue('--rx')); }   // as peças da moldura acompanham a inclinação
   }
 
   function soltar(c) {
     if (!c) return;
     c.classList.remove('inclinando');
     c.style.removeProperty('--rx'); c.style.removeProperty('--ry'); c.style.removeProperty('--brilho');
+    var w = c.parentElement; if (w && w.classList.contains('c-conj')) { w.style.removeProperty('--rx'); w.style.removeProperty('--ry'); }
   }
 
   document.addEventListener('pointermove', function (e) {

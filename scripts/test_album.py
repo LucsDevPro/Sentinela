@@ -100,7 +100,10 @@ checar("projecao.js: tem o panorama geral, o mês a mês e o panorama de cada m�
 checar("gerar_agentes.py: grava os totais de visitas por mês (panorama)", "def ler_panorama" in ga and '"panorama": panorama' in ga)
 checar("cabeçalho das páginas secundárias tem a mesma largura do conteúdo (álbum 1240, demais 860)",
        "header.topo .marca{max-width:1240px" in ler("assets/album.css") and "header.topo .marca{max-width:860px" in ler("assets/agente.css") and "header.topo .marca{max-width:860px" in ler("assets/comparar.css"))
-checar("cartinha: coroa e gema sobre a moldura (CSS) e desenhadas também no PNG", ".c-coroa" in cc and ".c-gema" in cc and "coroa no alto" in cj and "gema embaixo" in cj)
+checar("moldura premium: peças fora do contorno (conjunto .c-conj, camadas atrás e na frente) na tela e no PNG",
+       ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "ornCanvas(ctx, borda0, 'atras'" in cj and "ornCanvas(ctx, borda0, 'frente'" in cj)
+checar("moldura premium: louros no Ouro, cristais e asas na Destaque/Lendária, aletas na Prata, coroa e gema", all(x in cj for x in ("lado = 0; lado < 2", "b-top' || borda === 'b-100", "borda === 'b-80'", "coroa: true", "gema: true")))
+checar("álbum: o conjunto (e não só o cartão) ocupa a vaga, para as peças acompanharem escala e inclinação", ".slot .c-conj" in ler("assets/album.css") and "c-conj" in ler("assets/carta_fx.js"))
 # Dashboard: evento do LIRAa, alertas em uma linha, Ausências em painéis, gráfico só mensal, críticos com detalhes
 import json as _json
 crono = _json.loads(ler("data/cronograma_ausencias.json"))

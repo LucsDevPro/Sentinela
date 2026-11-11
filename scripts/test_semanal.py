@@ -29,11 +29,11 @@ with tempfile.TemporaryDirectory() as tmp:
     hist = os.path.join(tmp, "historico")
     os.makedirs(hist)
     Path(hist, "semana_324.xlsx").write_bytes(b"x")
-    Path(hist, "semana_330.xlsx").write_bytes(b"x")
+    Path(hist, "semana_331.xlsx").write_bytes(b"x")
     antigo = [
         {"arquivo": "semanas_322-326.xlsx", "label": "Setembro/2026", "origem": "manual"},
         {"arquivo": "semana_324.xlsx", "tipo": "semana", "mes": "Setembro/2026", "origem": "cache", "semana_inicio": 324, "parcial": True},
-        {"arquivo": "semana_330.xlsx", "tipo": "semana", "mes": "Outubro/2026", "origem": "cache", "semana_inicio": 330, "parcial": True},
+        {"arquivo": "semana_331.xlsx", "tipo": "semana", "mes": "Novembro/2026", "origem": "cache", "semana_inicio": 331, "parcial": True},
     ]
     json.dump(antigo, open(os.path.join(hist, "manifest.json"), "w"))
     C.atualizar_historico_do_cache(pasta_semanas=os.path.join(tmp, "vazio"), pasta_historico=hist,
@@ -41,7 +41,7 @@ with tempfile.TemporaryDirectory() as tmp:
     novo = {e["arquivo"]: e for e in json.load(open(os.path.join(hist, "manifest.json")))}
     check(novo["semana_324.xlsx"]["origem"] == "manual" and novo["semana_324.xlsx"]["parcial"] is False,
           "Semana de mês arquivado (Setembro) é congelada: origem manual, sem 'parcial'")
-    check("semana_330.xlsx" not in novo, "Semana de mês aberto sem cache não vira manual")
+    check("semana_331.xlsx" not in novo, "Semana de mês aberto sem cache não vira manual")
 
 # --- barra de navegação ------------------------------------------------------------
 with tempfile.TemporaryDirectory() as tmp:

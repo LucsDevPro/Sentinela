@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 10/11/2026 — moldura premium das cartinhas, publicação mais segura e Outubro fechado
+- **Moldura premium (estilo FIFA Mobile):** além do escudo com bisel, brilhos e fio fino, as cartinhas ganham peças FORA do contorno: aletas de metal na Prata; ramos de louro, coroa grande e gema no Ouro; cristais nas laterais, asas nos cantos de cima, coroa e gema na Destaque e na Lendária. Ficam num conjunto `.c-conj` (camada atrás e camada na frente do cartão), porque o recorte em escudo cortaria qualquer peça que passasse do contorno. A mesma lista de peças (`ornPecas` em `assets/carta.js`) alimenta o SVG da tela e o PNG de download. As peças acompanham a inclinação e a escala (o `carta_fx.js` copia `--rx/--ry` para o conjunto; no álbum, a escala `--s` está no conjunto).
+- **Publicação:** a etapa do GitHub Pages tem limite de 8 min e, se travar, o workflow espera 1 min e tenta de novo; se as duas falharem, abre uma issue de aviso. Para só republicar sem coletar: Actions → Run workflow, desmarcando a coleta.
+- **Cache do navegador:** `scripts/versionar_assets.py` põe `?v=<hash>` em cada `assets/*.js|css` das páginas e renova o nome do cache do `sw.js` a cada publicação (passo «Versionar arquivos do site»).
+- **Outubro/2026 fechado** (checklist liberado; o item «dias sem trabalho a classificar» é conferido na página `validar.html`). Pode ser reaberto com `fechar_mes.py reabrir`. Os testes que supunham Outubro aberto passaram a recriá-lo na cópia de teste.
+
 ## 10/11/2026 — LIRAa, painéis, gráfico mensal e críticos com detalhes
 - **04/11 a 09/11/2026: levantamento de índice rápido (LIRAa)**, evento para todos os agentes. Registrado em `data/cronograma_ausencias.json` como «Levantamento de Índice» (alvo «todos»): ninguém recebe falta nem perde pontos nesses dias, e eles saem dos dias esperados. Vale na próxima coleta.
 - «Alertas e Irregularidades»: os 8 cartões ficam sempre numa única linha (tamanhos se ajustam à largura; abaixo de 860 px a linha rola de lado).

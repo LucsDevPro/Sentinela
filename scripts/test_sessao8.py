@@ -28,6 +28,9 @@ det = os.path.join(pasta, "d.json"); json.dump([], open(det, "w"))
 A = lambda **d: ad.aplicar(dict(quem="Maria", **d), c, n, det, a)
 lerj = lambda p: json.load(open(p))
 AJ = dict(acao="ajuste", id_agente=85, data="15/10/2026", pontos=2, motivo="Instabilidade do e-Visita")
+# Estado de quando o teste foi escrito: Outubro ainda aberto (hoje ele pode estar fechado de verdade, e o teste não deve depender disso)
+_carregar_real = mesarq.carregar
+mesarq.carregar = lambda *x, **k: [t for t in _carregar_real(*x, **k) if t[2] != "Outubro/2026"]
 
 # ---- ajuste de pontos
 ok, msg = A(**AJ)
@@ -56,12 +59,15 @@ ok, msg = A(**dict(P, motivo="Folga")); checar("motivo fora da lista é recusado
 ok, msg = A(**dict(P, inicio="01/09/2026", fim="05/09/2026")); checar("parada em mês fechado é recusada", not ok and "fechado" in msg, msg)
 ok, _ = A(**dict(P, acao="parada_remover")); checar("parada é reversível", ok and len(lerj(c)) == 1)
 
+mesarq.carregar = _carregar_real
 # ---- fechar mês (cópia do repositório)
 trab = tempfile.mkdtemp()
 for sub in ("data", "scripts"):
     shutil.copytree(os.path.join(RAIZ, sub), os.path.join(trab, sub), ignore=shutil.ignore_patterns("__pycache__", "csv"))
 cwd = os.getcwd(); os.chdir(trab)
 try:
+    if any(t[2] == "Outubro/2026" for t in mesarq.carregar()):   # na cópia, volta ao estado "Outubro aberto" que os testes abaixo usam
+        _ok, _m = fm.reabrir("Outubro/2026", "Outubro/2026", regenerar=False)
     ce.HOJE_OVERRIDE = _dt.date(2026, 10, 20)
     r = fm.checar("Outubro/2026")
     checar("mês em andamento: checklist bloqueia", not r["pronto"] and any(i["id"] == "semanas" and i["ok"] is False for i in r["itens"]))

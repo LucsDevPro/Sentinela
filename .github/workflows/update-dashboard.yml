@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
     inputs:
       rodar_coleta:
-        description: "Coletar dados novos no e-Visita antes de gerar o dashboard?"
+        description: "Coletar dados novos no e-Visita antes de gerar o dashboard? Desmarque para só regenerar as páginas e REPUBLICAR o site (rápido, sem e-Visita)."
         type: boolean
         default: true
       semana_html_id:
@@ -245,6 +245,11 @@ jobs:
           SENTINELA_PUBLISH_TOKEN: ${{ secrets.SENTINELA_PUBLISH_TOKEN }}
         run: python scripts/publicar_sugestoes.py
 
+      # Põe ?v=<hash do arquivo> em cada assets/*.js|css citado pelas páginas (e renova o cache do service worker): quando um
+      # arquivo muda, o navegador baixa o novo na hora em vez de usar a cópia antiga guardada por até 10 min.
+      - name: Versionar arquivos do site (renovar cache do navegador)
+        run: python scripts/versionar_assets.py
+
       # A coleta demora ~1h, então é comum outro commit (ex.: uma edição sua
       # direto no GitHub, tipo cronograma_ausencias.json ou
       # deteccoes_pendentes.json) cair na branch ENQUANTO esta execução
@@ -306,6 +311,7 @@ jobs:
 
   deploy:
     needs: build
+    timeout-minutes: 20
     # Publica mesmo se o job build terminou em falha só por causa dos ciclos
     # (o artefato do site já estava pronto), mas nunca sem artefato.
     if: ${{ !cancelled() && needs.build.outputs.artefato == 'true' }}
@@ -317,3 +323,46 @@ jobs:
       - name: Publicar no GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4.0.5
+        with:
+          timeout: 480000   # 8 min (o padrão de 10 já travou uma vez); se estourar, o job abaixo tenta de novo
+
+  # Segunda tentativa: o serviço do GitHub Pages às vezes fica "em andamento" sem concluir. O artefato do site continua
+  # disponível, então basta esperar um pouco e publicar de novo.
+  deploy-retry:
+    needs: [build, deploy]
+    if: ${{ !cancelled() && needs.deploy.result == 'failure' && needs.build.outputs.artefato == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Esperar um minuto antes de tentar de novo
+        run: sleep 60
+      - name: Publicar no GitHub Pages (2ª tentativa)
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5
+        with:
+          timeout: 480000
+
+  # Se as duas tentativas falharem, abre (ou atualiza) uma issue no repositório para o problema não passar despercebido.
+  avisar-falha:
+    needs: [deploy, deploy-retry]
+    if: ${{ always() && needs.deploy.result == 'failure' && needs.deploy-retry.result == 'failure' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - name: Abrir issue de aviso
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const titulo = '⚠️ A publicação do site falhou duas vezes';
+            const url = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const corpo = `A execução ${url} (commit ${context.sha.slice(0, 7)}) montou o site, mas o GitHub Pages não concluiu a publicação nas duas tentativas.\n\n**O que fazer:** abra a execução e clique em "Re-run failed jobs". Se continuar falhando, rode o workflow em Actions → "Run workflow" desmarcando a coleta (só republica, leva poucos minutos).`;
+            const { data: abertas } = await github.rest.issues.listForRepo({ ...context.repo, state: 'open', per_page: 50 });
+            const ja = abertas.find(i => i.title === titulo);
+            if (ja) await github.rest.issues.createComment({ ...context.repo, issue_number: ja.number, body: corpo });
+            else await github.rest.issues.create({ ...context.repo, title: titulo, body: corpo });

@@ -53,9 +53,10 @@ main{max-width:1240px}
 /* ===== Álbum: grade, pódio e cartas ===== */
 .album{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:14px 10px;margin:16px 0 40px;justify-items:center}
 .slot{--e:.7;position:relative;display:block;width:calc(272px*var(--e));height:calc(392px*var(--e));text-decoration:none;color:inherit;border-radius:20px;outline-offset:6px}
-.slot .carta{position:absolute;left:50%;top:50%;margin:-196px 0 0 -136px;height:392px;--s:var(--e)}
+.slot .c-conj{position:absolute;left:50%;top:50%;margin:-196px 0 0 -136px;height:392px;--s:var(--e)}
+.slot .carta{height:392px}
 .slot:hover,.slot:focus-visible{z-index:20}
-.slot:hover .carta,.slot:focus-visible .carta{--s:calc(var(--e)*1.06)}
+.slot:hover .c-conj,.slot:focus-visible .c-conj{--s:calc(var(--e)*1.06)}
 .slot .n{position:absolute;left:-4px;top:-6px;z-index:3;min-width:34px;padding:2px 8px;border-radius:999px;background:#050F20;color:#fff;font:700 .8rem "IBM Plex Sans",sans-serif;text-align:center;border:2px solid #F7B500}
 .slot .n.m1{background:linear-gradient(135deg,#FFF3B0,#F7B500 55%,#C98A00);color:#3A2600;border-color:#FFF3B0;box-shadow:0 0 12px rgba(247,181,0,.7)}
 .slot .n.m2{background:linear-gradient(135deg,#F7FAFD,#B8C6D6 55%,#7F93A8);color:#1B2A3C;border-color:#fff}

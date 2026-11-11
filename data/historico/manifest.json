@@ -38,12 +38,13 @@
   {
     "arquivo": "semanas_327-330.xlsx",
     "label": "Outubro/2026",
-    "origem": "cache",
+    "origem": "manual",
     "semana_inicio": 327,
     "semana_fim": 330,
     "semana_ano_inicio": 40,
     "semana_ano_fim": 43,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16",
+    "fechado_em": "11/11/2026 00:16"
   },
   {
     "arquivo": "semana_327.xlsx",
@@ -51,12 +52,13 @@
     "mes": "Outubro/2026",
     "label": "Outubro/2026 · Semana 1",
     "numero_semana": 1,
-    "origem": "cache",
+    "origem": "manual",
     "semana_inicio": 327,
     "semana_fim": 327,
     "periodo": "04/10 a 10/10",
     "parcial": false,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16",
+    "fechado_em": "11/11/2026 00:16"
   },
   {
     "arquivo": "semana_328.xlsx",
@@ -64,12 +66,13 @@
     "mes": "Outubro/2026",
     "label": "Outubro/2026 · Semana 2",
     "numero_semana": 2,
-    "origem": "cache",
+    "origem": "manual",
     "semana_inicio": 328,
     "semana_fim": 328,
     "periodo": "11/10 a 17/10",
     "parcial": false,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16",
+    "fechado_em": "11/11/2026 00:16"
   },
   {
     "arquivo": "semana_329.xlsx",
@@ -77,12 +80,13 @@
     "mes": "Outubro/2026",
     "label": "Outubro/2026 · Semana 3",
     "numero_semana": 3,
-    "origem": "cache",
+    "origem": "manual",
     "semana_inicio": 329,
     "semana_fim": 329,
     "periodo": "18/10 a 24/10",
     "parcial": false,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16",
+    "fechado_em": "11/11/2026 00:16"
   },
   {
     "arquivo": "semana_330.xlsx",
@@ -90,12 +94,13 @@
     "mes": "Outubro/2026",
     "label": "Outubro/2026 · Semana 4",
     "numero_semana": 4,
-    "origem": "cache",
+    "origem": "manual",
     "semana_inicio": 330,
     "semana_fim": 330,
     "periodo": "25/10 a 31/10",
     "parcial": false,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16",
+    "fechado_em": "11/11/2026 00:16"
   },
   {
     "arquivo": "semanas_331-334.xlsx",
@@ -105,7 +110,7 @@
     "semana_fim": 334,
     "semana_ano_inicio": 44,
     "semana_ano_fim": 45,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16"
   },
   {
     "arquivo": "semana_331.xlsx",
@@ -118,7 +123,7 @@
     "semana_fim": 331,
     "periodo": "01/11 a 07/11",
     "parcial": false,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16"
   },
   {
     "arquivo": "semana_332.xlsx",
@@ -131,6 +136,6 @@
     "semana_fim": 332,
     "periodo": "08/11 a 14/11",
     "parcial": true,
-    "gerado_em": "10/11/2026 15:33"
+    "gerado_em": "11/11/2026 00:16"
   }
 ]
