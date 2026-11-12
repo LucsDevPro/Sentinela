@@ -159,10 +159,10 @@ checar("Top 3: moldura mais fina (7px) nas cartas magenta e lendária",
        re.search(r"\.carta\.t-destaque\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None and
        re.search(r"\.carta\.b-100\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None)
 checar("Top 3: textos claros com contraste reforçado e reflexos premium",
-       cc.includes("color: #FFF9E8") && cc.includes("color: #FFF2C8") &&
-       cc.includes("color: #FFF4FC") && cc.includes("rgba(255,255,255,.24)"));
+       "color: #FFF9E8" in cc and "color: #FFF2C8" in cc and
+       "color: #FFF4FC" in cc and "rgba(255,255,255,.24)" in cc)
 checar("PNG: filete interno lendário reduzido para 7px",
-       cj.includes("X + 7 * S, Y + 7 * S") && !cj.includes("X + 13 * S, Y + 13 * S"));
+       "X + 7 * S, Y + 7 * S" in cj and "X + 13 * S, Y + 13 * S" not in cj)
 
 print()
 if falhas:
