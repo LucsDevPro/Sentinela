@@ -107,7 +107,7 @@
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF6C8', '#E8B820', '#A07010'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#8AA8A2', '#4E6E68', '#2A3E3A'], 't-ferro': ['#B0B0B0', '#686868', '#2E2E2E'], 't-destaque': ['#FFE8A0', '#F0B400', '#B07800'] };
+  var LOGO = { 'b-100': ['#FFF6C8', '#E8B820', '#A07010'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#8AA8A2', '#4E6E68', '#2A3E3A'], 't-ferro': ['#B0B0B0', '#686868', '#2E2E2E'], 't-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -139,16 +139,7 @@
         }
       }
     }
-    if (borda === 'b-top' || borda === 'b-100') { // destaque e lendária: cristais nas laterais e asas no alto
-      for (lado = 0; lado < 2; lado++) {
-        for (i = 0; i < 7; i++) {
-          var y0 = 74 + i * 42, h = 15 + (i % 2) * 8, c = [[0, y0 - 11], [-h, y0 - 16 - (i % 3) * 3], [0, y0 + 9]];
-          atras.push({ t: 'poly', pts: lado ? espelha(c) : c });
-          var c2 = [[0, y0 + 11], [-(h - 6), y0 + 5], [0, y0 + 24]]; atras.push({ t: 'poly', pts: lado ? espelha(c2) : c2 });
-        }
-        var asa = [[20, 0], [-6, -14], [-16, 14], [0, 20]]; atras.push({ t: 'poly', pts: lado ? espelha(asa) : asa });
-      }
-    }
+    /* Top 3: sem asas nem cristais laterais (poluíam o visual). Só coroa + gema. */
     if (borda === 'b-90' || borda === 'b-top' || borda === 'b-100') { // coroa grande saindo pelo alto
       frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true });
     }

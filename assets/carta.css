@@ -260,8 +260,8 @@
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
 .c-orna-atras { z-index: 0; }
 .c-orna-frente { z-index: 3; filter: drop-shadow(0 0 4px rgba(255, 236, 160, 0.7)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4)); }
-.c-conj.b-100 .c-orna-atras { filter: drop-shadow(0 0 6px rgba(220, 170, 50, 0.75)); }
-.c-conj.b-top .c-orna-atras { filter: drop-shadow(0 0 6px rgba(255, 100, 180, 0.75)); }
+.c-conj.b-100 .c-orna-atras { filter: drop-shadow(0 0 5px rgba(240, 190, 60, 0.6)); }
+.c-conj.b-top .c-orna-atras { filter: drop-shadow(0 0 5px rgba(255, 100, 180, 0.6)); }
 .c-conj.b-90 .c-orna-atras { filter: drop-shadow(0 0 5px rgba(255, 205, 80, 0.55)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
 
 /* Textura de metal trabalhado na moldura dos níveis altos */
@@ -474,49 +474,47 @@ body.sem-foto .c-foto img {
   }
 }
 
-/* ===== Lendária — Icon Mármore + Ouro (Top 3 × 100)
-   Inspiração: Icons clássicos FIFA (branco mármore, filetes dourados, glow quente). */
+/* ===== Lendária — Top 3 × 100: contraste alto (fundo claro do álbum)
+   Navy profundo + ouro. Diferente do OURO amarelo e do DESTAQUE holo. */
 
 .carta.b-100 {
-  --c1: #FBF8F0;
-  --c2: #E8DFC8;
-  --tx: #1A1408;
-  --ln: rgba(90, 60, 10, 0.28);
-  --logo: linear-gradient(170deg, #FFF6C8 0%, #E8B820 45%, #A07010 100%);
-  --b1: #8A6010;
-  --b2: #F0C830;
+  --c1: #0B1A3A;
+  --c2: #02060F;
+  --tx: #FFFFFF;
+  --ln: rgba(255, 220, 140, 0.45);
+  --logo: linear-gradient(170deg, #FFF6C8 0%, #F0C830 45%, #B8860B 100%);
+  --b1: #6B4A08;
+  --b2: #F5D060;
   --b3: #FFF8E0;
-  --bw: 14px;
+  --bw: 12px;
   background:
-    radial-gradient(ellipse 85% 50% at 50% 12%, rgba(255, 255, 255, 0.95) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 40% at 80% 70%, rgba(230, 200, 120, 0.25) 0%, transparent 50%),
-    linear-gradient(165deg, #FFFEF8 0%, #F5EED8 38%, #E8DCC0 72%, #D4C4A0 100%);
+    radial-gradient(ellipse 80% 45% at 50% 15%, rgba(255, 210, 100, 0.18) 0%, transparent 55%),
+    linear-gradient(165deg, #122650 0%, #0A1838 40%, #050C1C 75%, #02050C 100%);
   box-shadow:
-    0 0 0 1.5px rgba(200, 150, 40, 0.55),
-    0 0 28px rgba(230, 180, 50, 0.45),
-    0 0 56px rgba(200, 150, 40, 0.22),
-    0 18px 44px rgba(0, 0, 0, 0.32),
-    inset 0 2px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(120, 90, 30, 0.12);
+    0 0 0 2px rgba(240, 200, 80, 0.65),
+    0 0 24px rgba(240, 190, 60, 0.45),
+    0 0 48px rgba(200, 150, 40, 0.2),
+    0 16px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1.5px 0 rgba(255, 240, 180, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Filete interno dourado (anel Icon) */
+/* Anel fino dourado (não cobrir o miolo da carta) */
 .carta.b-100::before {
+  content: "";
+  position: absolute;
   inset: 0;
   border: 0;
   border-radius: 0;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 240, 180, 0.7) 0%,
-      rgba(220, 180, 80, 0.35) 35%,
-      rgba(255, 245, 200, 0.55) 100%
-    );
+  background: transparent;
+  box-shadow:
+    inset 0 0 0 3px rgba(245, 208, 96, 0.55),
+    inset 0 0 0 6px rgba(100, 70, 10, 0.35);
+  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
+  opacity: 1;
+  pointer-events: none;
   -webkit-mask: none;
   mask: none;
-  clip-path: polygon(calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(100% - 20px + 12px * -0.4142) calc(0px + 12px * 1.0000), calc(100% + 12px * -1.0000) calc(20px + 12px * 0.4142), calc(100% + 12px * -1.0000) calc(100% - 26px + 12px * -0.4566), calc(100% - 30px + 12px * -0.3730) calc(100% + 12px * -1.0000), calc(30px + 12px * 0.3730) calc(100% + 12px * -1.0000), calc(0px + 12px * 1.0000) calc(100% - 26px + 12px * -0.4566), calc(0px + 12px * 1.0000) calc(20px + 12px * 0.4142), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(0px + 13.5px * 1.0000) calc(20px + 13.5px * 0.4142), calc(0px + 13.5px * 1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(30px + 13.5px * 0.3730) calc(100% + 13.5px * -1.0000), calc(100% - 30px + 13.5px * -0.3730) calc(100% + 13.5px * -1.0000), calc(100% + 13.5px * -1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(100% + 13.5px * -1.0000) calc(20px + 13.5px * 0.4142), calc(100% - 20px + 13.5px * -0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000));
-  box-shadow: none;
-  opacity: 1;
 }
 
 .carta.b-100::after {
@@ -525,84 +523,82 @@ body.sem-foto .c-foto img {
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 250, 230, 0.2) 35%, transparent 58%),
-    radial-gradient(circle at 18% 80%, rgba(230, 200, 120, 0.18) 0%, transparent 42%);
+    radial-gradient(circle at 50% 28%, rgba(255, 220, 120, 0.22) 0%, transparent 50%);
+  opacity: 1;
+  pointer-events: none;
 }
 
 .carta.b-100 .c-ovr b {
-  background: linear-gradient(180deg, #FFF8D0 0%, #E8B820 48%, #A07010 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFE86A 45%, #E8B020 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
   filter:
-    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.8))
-    drop-shadow(0 0 8px rgba(220, 160, 30, 0.55));
+    drop-shadow(0 0 6px rgba(255, 200, 60, 0.7))
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.4));
 }
 
 .carta.b-100 .c-ovr span,
 .carta.b-100 .c-pos,
 .carta.b-100 .c-pos small {
-  color: rgba(60, 40, 10, 0.85);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  color: rgba(255, 230, 160, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
 }
 
 .carta.b-100 .c-nome {
   letter-spacing: 0.1em;
-  color: #1A1408;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-  border-bottom-color: rgba(160, 120, 30, 0.35);
+  color: #FFF8E0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  border-bottom-color: rgba(245, 208, 96, 0.4);
 }
 
 .carta.b-100 .c-foto {
-  background: rgba(255, 255, 255, 0.45);
-  border-color: rgba(180, 140, 40, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(245, 208, 96, 0.65);
   box-shadow:
-    0 0 0 3px rgba(255, 230, 150, 0.7),
-    0 0 0 6px rgba(200, 150, 40, 0.55),
-    0 0 28px rgba(220, 170, 50, 0.4),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.7);
+    0 0 0 3px rgba(245, 208, 96, 0.45),
+    0 0 0 6px rgba(20, 40, 80, 0.6),
+    0 0 24px rgba(240, 190, 60, 0.4),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.2);
 }
 
 .carta.b-100 .c-stats b {
-  color: #1A1408;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  color: #FFF8E0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .carta.b-100 .c-stats span {
-  opacity: 0.75;
-  color: #3A2A10;
+  opacity: 0.85;
+  color: rgba(255, 230, 160, 0.9);
 }
 
 .carta.b-100 .c-rodape {
-  opacity: 0.92;
-  color: rgba(50, 35, 10, 0.88);
+  opacity: 0.95;
+  color: rgba(255, 235, 180, 0.9);
 }
 
-/* Raios/arcos suaves em ouro (combinam com mármore) */
+/* Raios suaves em ouro (não azul) */
+.carta.b-100 .c-estrelas,
+.carta.b-100 .c-arcos {
+  opacity: 0.35;
+}
 .carta.b-100 .c-estrelas .rg {
-  stroke: rgba(220, 170, 50, 0.4);
-  filter: blur(2.8px);
+  stroke: rgba(240, 190, 60, 0.35);
+  filter: blur(2.5px);
 }
 .carta.b-100 .c-estrelas .ry {
   stroke: #FFE080;
-  filter: drop-shadow(0 0 4px rgba(230, 180, 50, 0.8));
+  filter: drop-shadow(0 0 3px rgba(240, 180, 50, 0.6));
 }
-.carta.b-100 .c-estrelas .rw {
-  stroke: #FFF8E0;
-}
+.carta.b-100 .c-estrelas .rw { stroke: #FFF8E0; }
 .carta.b-100 .c-arcos .ag {
-  stroke: rgba(200, 150, 40, 0.55);
-  stroke-width: 3.2;
-  filter: blur(1.6px);
+  stroke: rgba(240, 190, 60, 0.45);
+  stroke-width: 2.8;
+  filter: blur(1.4px);
 }
-.carta.b-100 .c-arcos .aw {
-  stroke: #FFF6C8;
-  stroke-width: 1;
-}
-.carta.b-100 .c-estrelas circle {
-  fill: #FFF6C8;
-}
+.carta.b-100 .c-arcos .aw { stroke: #FFF6C8; stroke-width: 1; }
+.carta.b-100 .c-estrelas circle { fill: #FFF6C8; }
 
 .c-estrelas,
 .c-arcos {
@@ -612,42 +608,29 @@ body.sem-foto .c-foto img {
   height: 100%;
   pointer-events: none;
 }
-
 .c-estrelas { z-index: 0; }
-.c-arcos   { z-index: 4; }
-
+.c-arcos { z-index: 4; }
 .c-estrelas path,
 .c-arcos path {
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
-/* fallback azul só se não for b-100 (mantido para compat; Lendária sobrescreve acima) */
 .c-estrelas .rg {
   stroke: rgba(48, 148, 255, 0.48);
   filter: blur(2.8px);
 }
-
 .c-estrelas .ry {
   stroke: #90D8FF;
   filter: drop-shadow(0 0 4px #48B8FF);
 }
-
-.c-estrelas .rw {
-  stroke: #fff;
-}
-
+.c-estrelas .rw { stroke: #fff; }
 .c-arcos .ag {
   stroke: rgba(110, 200, 255, 0.78);
   stroke-width: 3.2;
   filter: blur(1.6px);
 }
-
-.c-arcos .aw {
-  stroke: #fff;
-  stroke-width: 1;
-}
+.c-arcos .aw { stroke: #fff; stroke-width: 1; }
 
 @media (prefers-reduced-motion: no-preference) {
   .c-estrelas .rai {
@@ -659,36 +642,76 @@ body.sem-foto .c-foto img {
   .c-arcos {
     animation: c100-arco 2.6s steps(1, end) infinite;
   }
-  .carta.b-100::after {
-    animation: c100-clarao 3.4s steps(1, end) infinite;
-  }
 }
 
 @keyframes c100-raio {
-  0%   { opacity: 1; }
-  8%   { opacity: 0.16; }
-  13%  { opacity: 1; }
-  19%  { opacity: 0.38; }
-  24%  { opacity: 1; }
+  0% { opacity: 1; }
+  8% { opacity: 0.16; }
+  13% { opacity: 1; }
+  19% { opacity: 0.38; }
+  24% { opacity: 1; }
   100% { opacity: 1; }
 }
-
 @keyframes c100-arco {
-  0%   { opacity: 1; }
-  28%  { opacity: 0.28; }
-  35%  { opacity: 1; }
-  68%  { opacity: 0.52; }
-  74%  { opacity: 1; }
+  0% { opacity: 1; }
+  28% { opacity: 0.28; }
+  35% { opacity: 1; }
+  68% { opacity: 0.52; }
+  74% { opacity: 1; }
+}
+@keyframes c100-clarao {
+  0%, 100% { opacity: 1; }
+  8% { opacity: 0.42; }
+  13% { opacity: 1; }
 }
 
-@keyframes c100-clarao {
-  0%   { opacity: 1; }
-  8%   { opacity: 0.42; }
-  13%  { opacity: 1; }
-  19%  { opacity: 0.68; }
-  24%  { opacity: 1; }
-  100% { opacity: 1; }
+/* ===== DESTAQUE — Top 3 90–99: roxo/magenta (cor diferente do ouro e da lendária) ===== */
+.carta.t-destaque {
+  --logo: linear-gradient(170deg, #FFE0F0 0%, #FF6BCB 48%, #9B2BC7 100%);
+  --c1: #2A0A3C;
+  --c2: #0C0214;
+  --tx: #FFFFFF;
+  --ln: rgba(255, 180, 230, 0.4);
+  background:
+    radial-gradient(ellipse 75% 45% at 50% 18%, rgba(255, 100, 200, 0.2) 0%, transparent 55%),
+    linear-gradient(160deg, #3A1260 0%, #1A0830 50%, #0A0218 100%);
+  box-shadow:
+    0 0 0 2px rgba(255, 100, 200, 0.55),
+    0 0 22px rgba(255, 80, 180, 0.4),
+    0 16px 40px rgba(0, 0, 0, 0.38),
+    inset 0 1.5px 0 rgba(255, 200, 230, 0.3);
 }
+.carta.b-top {
+  --b1: #FFE066;
+  --b2: #FF4DB8;
+  --b3: #C44DFF;
+  --bw: 11px;
+  box-shadow:
+    0 0 0 1.5px rgba(255, 120, 200, 0.5),
+    0 0 24px rgba(255, 77, 184, 0.4),
+    0 0 40px rgba(160, 80, 255, 0.22),
+    0 16px 40px rgba(0, 0, 0, 0.36),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.35);
+}
+.carta.t-destaque .c-ovr b {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFB0E0 50%, #FF6BCB 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 6px rgba(255, 100, 200, 0.6));
+}
+.carta.t-destaque .c-nome {
+  color: #FFE8F5;
+  border-bottom-color: rgba(255, 150, 220, 0.35);
+}
+.carta.t-destaque .c-foto {
+  border-color: rgba(255, 150, 220, 0.55);
+  box-shadow:
+    0 0 0 3px rgba(255, 100, 200, 0.4),
+    0 0 20px rgba(200, 80, 255, 0.35);
+}
+
 
 /* ===== Popover de detalhamento ===== */
 
@@ -961,37 +984,16 @@ body.sem-foto .c-foto img {
 /* Brilho externo das cartas de topo: o recorte em escudo corta o box-shadow, então o brilho vai no contêiner */
 *:has(> .carta.b-100) {
   filter:
-    drop-shadow(0 0 10px rgba(220, 170, 50, 0.55))
-    drop-shadow(0 0 22px rgba(200, 150, 40, 0.3));
+    drop-shadow(0 0 12px rgba(240, 190, 60, 0.55))
+    drop-shadow(0 0 24px rgba(30, 60, 120, 0.35));
 }
 *:has(> .carta.b-top) {
   filter:
-    drop-shadow(0 0 12px rgba(255, 100, 180, 0.4))
-    drop-shadow(0 0 16px rgba(64, 224, 255, 0.25));
+    drop-shadow(0 0 12px rgba(255, 80, 180, 0.5))
+    drop-shadow(0 0 20px rgba(160, 60, 220, 0.3));
 }
 *:has(> .carta.b-90) {
   filter: drop-shadow(0 0 8px rgba(240, 180, 40, 0.32));
-}
-
-/* Soften lightning opacity on marble cards */
-.carta.b-100 .c-estrelas,
-.carta.b-100 .c-arcos {
-  opacity: 0.4;
-}
-
-/* ===== DESTAQUE / OURO refinements ===== */
-.carta.b-top {
-  --b1: #FFE066;
-  --b2: #FF4DB8;
-  --b3: #40E0FF;
-  --bw: 12px;
-  box-shadow:
-    0 0 0 1px rgba(255, 200, 120, 0.4),
-    0 0 26px rgba(255, 77, 184, 0.42),
-    0 0 44px rgba(64, 224, 255, 0.25),
-    0 16px 40px rgba(0, 0, 0, 0.36),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.4),
-    inset 0 0 0 1.5px rgba(255, 255, 255, 0.25);
 }
 
 .carta.b-90 {
