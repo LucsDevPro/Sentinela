@@ -1181,3 +1181,147 @@ body.sem-foto .c-foto img {
   }
 }
 
+
+
+/* ===================================================================
+   REFINAMENTO PREMIUM — carta, estatísticas, tiers e popover
+   Mantém os hooks visuais consumidos pelo JavaScript (--v, data-fx etc.).
+   =================================================================== */
+.carta {
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.carta > * { position: relative; z-index: 1; }
+.carta > .c-borda { z-index: 3; }
+.carta > .c-brilho,
+.carta > .c-glitter { z-index: 2; }
+.c-conj { overflow: visible; }
+
+.carta .c-nome {
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  margin: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.08em;
+}
+
+.c-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+.c-stats > div {
+  position: relative;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.c-stats > div > span {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+.c-stats > div > strong,
+.c-stats > div > b {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+.c-stats > div::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  bottom: auto;
+  height: 100%;
+  width: var(--v, 0%);
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  opacity: 1;
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+.c-stats .med strong,
+.c-stats .med b { color: #F7B500; }
+
+/* Sombras difusas nos tiers premium, sem apagar o desenho das molduras. */
+.carta.b-100 {
+  box-shadow:
+    0 0 35px rgba(247, 181, 0, 0.25),
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.carta.b-top {
+  box-shadow:
+    0 0 28px rgba(255, 99, 199, 0.2),
+    0 20px 50px rgba(0, 0, 0, 0.46),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+.carta.b-90 {
+  box-shadow:
+    0 0 24px rgba(247, 181, 0, 0.2),
+    0 18px 44px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+/* O wrapper não recorta o aumento; a transformação preserva a inclinação data-fx. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .carta[data-fx]:hover {
+    transform:
+      perspective(900px)
+      rotateX(var(--rx, 0deg))
+      rotateY(var(--ry, 0deg))
+      scale(calc(var(--s, 1) * 1.03))
+      translateY(-5px);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+  }
+  .carta:not([data-fx]):hover {
+    transform: scale(1.03) translateY(-5px);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+  }
+}
+
+.c-pop {
+  background: rgba(12, 30, 56, 0.92);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(224, 176, 0, 0.4);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+  border-radius: 16px;
+}
+
+@media (max-width: 640px) {
+  .c-stats { gap: 6px; }
+  .c-stats > div { padding: 7px 8px; }
+}
+@media (max-width: 480px) {
+  .c-stats > div > span { font-size: 0.66rem; }
+  .c-stats > div > strong,
+  .c-stats > div > b { font-size: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .carta[data-fx]:hover,
+  .carta:not([data-fx]):hover { transform: none; transition: none; }
+  .c-stats > div::after { transition: none; }
+}
