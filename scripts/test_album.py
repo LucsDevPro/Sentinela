@@ -124,7 +124,7 @@ checar("visão geral: todos os agentes críticos aparecem, cada um com detalhes 
 # Lendária: validar propriedades visuais reais do CSS, nunca comentários ou nomes de seção.
 # Pega o último bloco .carta.b-100, que é a definição visual final da carta.
 blocos_lendaria = re.findall(r"\.carta\.b-100\s*\{([^{}]*)\}", cc, re.S)
-lendaria_css = blocos_lendaria[-1] if blocos_lendaria else ""
+lendaria_css = next((b for b in reversed(blocos_lendaria) if "--c1:" in b and "--tx:" in b), "")
 def prop_css(bloco, nome):
     m = re.search(r"(?:^|[;\s])" + re.escape(nome) + r"\s*:\s*([^;]+)", bloco)
     return m.group(1).strip().lower() if m else ""
