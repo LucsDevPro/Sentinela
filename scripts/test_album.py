@@ -121,8 +121,28 @@ checar("equipes: nota média por equipe só do mês completo (sem a visão seman
 vg = ler("scripts/templates/sections/visao_geral.html")
 checar("visão geral: todos os agentes críticos aparecem, cada um com detalhes (details.critico-item)",
        '<details class="critico-item">' in vg and "Mostrando os 5 piores" not in vg and "criticos=records(crit_sorted, RESUMO_COLS)" in ler("scripts/generate_dashboard.py"))
-# Lendária «Icon Mármore + Ouro»: tela, peças da moldura e PNG no mesmo visual
-checar("Lendária em mármore e ouro no CSS (fundo claro, texto escuro, filete dourado)", "Icon Mármore + Ouro" in cc and "--tx: #1A1408" in cc)
+# Lendária: validar propriedades visuais reais do CSS, nunca comentários ou nomes de seção.
+# Pega o último bloco .carta.b-100, que é a definição visual final da carta.
+blocos_lendaria = re.findall(r"\.carta\.b-100\s*\{([^{}]*)\}", cc, re.S)
+lendaria_css = blocos_lendaria[-1] if blocos_lendaria else ""
+def prop_css(bloco, nome):
+    m = re.search(r"(?:^|[;\s])" + re.escape(nome) + r"\s*:\s*([^;]+)", bloco)
+    return m.group(1).strip().lower() if m else ""
+checar("Lendária: fundo marfim/mármore definido por cores claras reais",
+       prop_css(lendaria_css, "--c1") == "#fbf8f0" and
+       prop_css(lendaria_css, "--c2") == "#e8dfc8" and
+       "#fffeFA".lower() in prop_css(lendaria_css, "background"))
+checar("Lendária: tipografia escura definida por variável real",
+       prop_css(lendaria_css, "--tx") == "#1a1408")
+checar("Lendária: moldura com paleta dourada real",
+       prop_css(lendaria_css, "--b1") == "#8a6010" and
+       prop_css(lendaria_css, "--b2") == "#f0c830" and
+       prop_css(lendaria_css, "--b3") == "#fff8e0" and
+       prop_css(lendaria_css, "--bw") == "14px")
+checar("Lendária: filete interno dourado implementado por borda/sombra",
+       ".carta.b-100::before" in cc and
+       "inset 0 0 0 3px rgba(205, 165, 65, 0.62)" in cc and
+       "inset 0 0 0 6px rgba(130, 95, 20, 0.20)" in cc)
 checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
        "'b-100': ['#FFFBE6', '#F0C830', '#8A6010']" in cj and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
