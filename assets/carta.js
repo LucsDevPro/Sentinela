@@ -222,8 +222,8 @@
         });
         FAISCAS.forEach(function (f) { ctx.globalAlpha = f[3]; ctx.fillStyle = '#FFF6C8'; ctx.beginPath(); ctx.arc(f[0], f[1], f[2], 0, 2 * Math.PI); ctx.fill(); });
         ctx.restore();
-        // filete interno (::before do CSS: 13px para dentro)
-        ctx.save(); pathCartao(ctx, X + 13 * S, Y + 13 * S, W - 26 * S, H - 26 * S, S, 13 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = 'rgba(255,240,180,.85)'; ctx.shadowColor = 'rgba(220,170,50,.8)'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
+        // filete interno dourado mais fino (alinhado ao CSS: 7px para dentro)
+        ctx.save(); pathCartao(ctx, X + 7 * S, Y + 7 * S, W - 14 * S, H - 14 * S, S, 7 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = 'rgba(255,240,180,.85)'; ctx.shadowColor = 'rgba(220,170,50,.8)'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
       } else {
         // listras
         ctx.save(); ctx.translate(X + W / 2, Y + H / 2); ctx.rotate((115 - 90) * Math.PI / 180);

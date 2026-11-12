@@ -179,10 +179,10 @@
 
 /* Destaque / Top 3 90-99 — borda holográfica Ultimate */
 .carta.b-top {
-  --b1: #FFE066;
-  --b2: #FF4DB8;
-  --b3: #40E0FF;
-  --bw: 11px;
+  --b1: #FFE8A6;
+  --b2: #FF63C7;
+  --b3: #7DEBFF;
+  --bw: 7px;
   box-shadow:
     0 0 28px rgba(255, 77, 184, 0.42),
     0 0 48px rgba(64, 224, 255, 0.22),
@@ -193,7 +193,7 @@
 
 /* Lendária — moldura gelo/chrome Ultimate Prime */
 .carta.b-100 {
-  --bw: 13px;
+  --bw: 7px;
 }
 
 /* Anel da borda: recorte em polígono (cantos cortados, estilo escudo); a espessura vem de --bw */
@@ -485,7 +485,7 @@ body.sem-foto .c-foto img {
   --b1: #8A6010;
   --b2: #F0C830;
   --b3: #FFF8E0;
-  --bw: 14px;
+  --bw: 7px;
   background:
     radial-gradient(ellipse 80% 45% at 50% 15%, rgba(255, 210, 100, 0.18) 0%, transparent 55%),
     linear-gradient(165deg, #122650 0%, #0A1838 40%, #050C1C 75%, #02050C 100%);
@@ -538,7 +538,7 @@ body.sem-foto .c-foto img {
 }
 
 .carta.b-100 .c-ovr b {
-  background: linear-gradient(180deg, #8A6010 0%, #C18A18 48%, #6E4A08 100%);
+  background: linear-gradient(180deg, #FFFDF1 0%, #FFE28A 42%, #F2BC3F 72%, #FFF4C8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -551,14 +551,14 @@ body.sem-foto .c-foto img {
 .carta.b-100 .c-ovr span,
 .carta.b-100 .c-pos,
 .carta.b-100 .c-pos small {
-  color: #594313;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+  color: #FFF2C8;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72), 0 0 10px rgba(255, 214, 120, 0.22);
 }
 
 .carta.b-100 .c-nome {
   letter-spacing: 0.1em;
-  color: #241B0B;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  color: #FFF9E8;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.78), 0 0 12px rgba(255, 220, 130, 0.18);
   border-bottom-color: rgba(150, 110, 25, 0.38);
 }
 
@@ -573,18 +573,19 @@ body.sem-foto .c-foto img {
 }
 
 .carta.b-100 .c-stats b {
-  color: #241B0B;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  color: #FFF9E8;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.82), 0 0 8px rgba(255, 218, 120, 0.2);
 }
 
 .carta.b-100 .c-stats span {
   opacity: 0.88;
-  color: #594313;
+  color: #F6E6BA;
 }
 
 .carta.b-100 .c-rodape {
   opacity: 0.95;
-  color: #594313;
+  color: #F6E6BA;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
 }
 
 /* Raios e arcos em ouro suave */
@@ -678,7 +679,7 @@ body.sem-foto .c-foto img {
   --b1: #FFE066;
   --b2: #FF4DB8;
   --b3: #C44DFF;
-  --bw: 11px;
+  --bw: 7px;
   background:
     radial-gradient(ellipse 75% 45% at 50% 18%, rgba(255, 100, 200, 0.2) 0%, transparent 55%),
     linear-gradient(160deg, #3A1260 0%, #1A0830 50%, #0A0218 100%);
@@ -704,8 +705,9 @@ body.sem-foto .c-foto img {
   filter: drop-shadow(0 0 6px rgba(255, 100, 200, 0.6));
 }
 .carta.t-destaque .c-nome {
-  color: #FFE8F5;
-  border-bottom-color: rgba(255, 150, 220, 0.35);
+  color: #FFF8FD;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.72), 0 0 10px rgba(255, 120, 220, 0.32);
+  border-bottom-color: rgba(255, 190, 235, 0.52);
 }
 .carta.t-destaque .c-foto {
   border-color: rgba(255, 150, 220, 0.55);
@@ -714,6 +716,46 @@ body.sem-foto .c-foto img {
     0 0 20px rgba(200, 80, 255, 0.35);
 }
 
+
+
+.carta.t-destaque .c-ovr span,
+.carta.t-destaque .c-pos,
+.carta.t-destaque .c-pos small,
+.carta.t-destaque .c-stats b,
+.carta.t-destaque .c-stats span,
+.carta.t-destaque .c-rodape {
+  color: #FFF4FC;
+  opacity: 1;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.78);
+}
+.carta.t-destaque::after {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .92;
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(255,255,255,.24), transparent 42%),
+    linear-gradient(118deg, transparent 24%, rgba(255,255,255,.13) 39%, transparent 49%),
+    radial-gradient(ellipse at 85% 82%, rgba(92,220,255,.13), transparent 38%);
+}
+.carta.t-destaque .c-foto {
+  border-color: rgba(255, 220, 245, 0.82);
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.22),
+    0 0 0 5px rgba(255, 85, 195, 0.34),
+    0 0 24px rgba(220, 90, 255, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.carta.b-100 .c-nome,
+.carta.b-100 .c-ovr span,
+.carta.b-100 .c-pos,
+.carta.b-100 .c-pos small,
+.carta.b-100 .c-stats b,
+.carta.b-100 .c-stats span,
+.carta.b-100 .c-rodape {
+  opacity: 1;
+}
 
 /* ===== Popover de detalhamento ===== */
 
