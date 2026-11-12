@@ -12,16 +12,7 @@
   padding: 16px 18px 14px;
   color: var(--tx);
   border-radius: 0;
-  clip-path: polygon(
-    calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
-    calc(100% - 20px - var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
-    calc(100% - var(--bw) * 1) calc(20px + var(--bw) * 0.4142),
-    calc(100% - var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
-    calc(100% - 30px - var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
-    calc(30px + var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
-    calc(0px + var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
-    calc(0px + var(--bw) * 1) calc(20px + var(--bw) * 0.4142)
-  );
+  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
   background:
     linear-gradient(160deg, var(--c1) 0%, #E6C86A 38%, #D4A63A 68%, var(--c2) 100%);
   box-shadow:
@@ -518,7 +509,16 @@ body.sem-foto .c-foto img {
   box-shadow:
     inset 0 0 0 3px rgba(205, 165, 65, 0.62),
     inset 0 0 0 6px rgba(130, 95, 20, 0.20);
-  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
+  clip-path: polygon(
+    calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
+    calc(100% - 20px - var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
+    calc(100% - var(--bw) * 1) calc(20px + var(--bw) * 0.4142),
+    calc(100% - var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
+    calc(100% - 30px - var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
+    calc(30px + var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
+    calc(0px + var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
+    calc(0px + var(--bw) * 1) calc(20px + var(--bw) * 0.4142)
+  );
   opacity: 1;
   pointer-events: none;
   -webkit-mask: none;
