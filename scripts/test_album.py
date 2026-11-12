@@ -146,7 +146,7 @@ checar("Lendária: filete interno dourado implementado por borda/sombra",
 checar("Top 3 90–99: carta roxo/magenta e borda definida no seletor do tier",
        ".carta.t-destaque" in cc and
        "--c1: #2A0A3C" in cc and
-       "--b2: #FF4DB8" in cc and
+       "--b2: #FF63C7" in cc and
        ".carta.t-destaque .c-ovr b" in cc and
        "'t-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7']" in cj)
 checar("PNG do Top 3 usa brilho magenta, não o antigo verde ou dourado",
@@ -156,8 +156,8 @@ checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
 
 
 checar("Top 3: moldura mais fina (7px) nas cartas magenta e lendária",
-       /\.carta\.t-destaque\s*\{[^}]*--bw:\s*7px/s.test(cc) &&
-       /\.carta\.b-100\s*\{[^}]*--bw:\s*7px/s.test(cc));
+       re.search(r"\.carta\.t-destaque\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None and
+       re.search(r"\.carta\.b-100\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None)
 checar("Top 3: textos claros com contraste reforçado e reflexos premium",
        cc.includes("color: #FFF9E8") && cc.includes("color: #FFF2C8") &&
        cc.includes("color: #FFF4FC") && cc.includes("rgba(255,255,255,.24)"));
