@@ -474,32 +474,33 @@ body.sem-foto .c-foto img {
   }
 }
 
-/* ===== Lendária — Top 3 × 100: contraste alto (fundo claro do álbum)
-   Navy profundo + ouro. Diferente do OURO amarelo e do DESTAQUE holo. */
+/* ===== Lendária — Top 3 × 100: mármore claro e ouro =====
+   Acabamento marfim/mármore, tipografia escura e detalhes dourados. */
 
 .carta.b-100 {
-  --c1: #0B1A3A;
-  --c2: #02060F;
-  --tx: #FFFFFF;
-  --ln: rgba(255, 220, 140, 0.45);
-  --logo: linear-gradient(170deg, #FFF6C8 0%, #F0C830 45%, #B8860B 100%);
-  --b1: #6B4A08;
-  --b2: #F5D060;
+  --c1: #FBF8F0;
+  --c2: #E8DFC8;
+  --tx: #1A1408;
+  --ln: rgba(90, 60, 10, 0.28);
+  --logo: linear-gradient(170deg, #FFF6C8 0%, #F0C830 48%, #B8860B 100%);
+  --b1: #8A6010;
+  --b2: #F0C830;
   --b3: #FFF8E0;
-  --bw: 12px;
+  --bw: 14px;
   background:
-    radial-gradient(ellipse 80% 45% at 50% 15%, rgba(255, 210, 100, 0.18) 0%, transparent 55%),
-    linear-gradient(165deg, #122650 0%, #0A1838 40%, #050C1C 75%, #02050C 100%);
+    radial-gradient(ellipse 85% 48% at 50% 12%, rgba(255, 255, 255, 0.9) 0%, transparent 62%),
+    repeating-linear-gradient(125deg, rgba(160, 135, 90, 0.055) 0 2px, transparent 2px 13px),
+    linear-gradient(165deg, #FFFEFA 0%, #F5F0E5 42%, #E8DFC8 100%);
   box-shadow:
-    0 0 0 2px rgba(240, 200, 80, 0.65),
-    0 0 24px rgba(240, 190, 60, 0.45),
-    0 0 48px rgba(200, 150, 40, 0.2),
-    0 16px 40px rgba(0, 0, 0, 0.4),
-    inset 0 1.5px 0 rgba(255, 240, 180, 0.35),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    0 0 0 2px rgba(190, 145, 35, 0.62),
+    0 0 22px rgba(210, 170, 70, 0.28),
+    0 0 42px rgba(200, 160, 60, 0.14),
+    0 16px 40px rgba(0, 0, 0, 0.28),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.65);
 }
 
-/* Anel fino dourado (não cobrir o miolo da carta) */
+/* Filete interno dourado */
 .carta.b-100::before {
   content: "";
   position: absolute;
@@ -508,8 +509,8 @@ body.sem-foto .c-foto img {
   border-radius: 0;
   background: transparent;
   box-shadow:
-    inset 0 0 0 3px rgba(245, 208, 96, 0.55),
-    inset 0 0 0 6px rgba(100, 70, 10, 0.35);
+    inset 0 0 0 3px rgba(205, 165, 65, 0.62),
+    inset 0 0 0 6px rgba(130, 95, 20, 0.20);
   clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
   opacity: 1;
   pointer-events: none;
@@ -523,82 +524,83 @@ body.sem-foto .c-foto img {
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(circle at 50% 28%, rgba(255, 220, 120, 0.22) 0%, transparent 50%);
-  opacity: 1;
+    radial-gradient(circle at 50% 24%, rgba(255, 255, 255, 0.72) 0%, transparent 52%),
+    linear-gradient(125deg, transparent 35%, rgba(255, 255, 255, 0.16) 50%, transparent 65%);
+  opacity: 0.9;
   pointer-events: none;
 }
 
 .carta.b-100 .c-ovr b {
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFE86A 45%, #E8B020 100%);
+  background: linear-gradient(180deg, #8A6010 0%, #C18A18 48%, #6E4A08 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
   filter:
-    drop-shadow(0 0 6px rgba(255, 200, 60, 0.7))
-    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.4));
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.9))
+    drop-shadow(0 1px 2px rgba(120, 85, 15, 0.18));
 }
 
 .carta.b-100 .c-ovr span,
 .carta.b-100 .c-pos,
 .carta.b-100 .c-pos small {
-  color: rgba(255, 230, 160, 0.92);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  color: #594313;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .carta.b-100 .c-nome {
   letter-spacing: 0.1em;
-  color: #FFF8E0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  border-bottom-color: rgba(245, 208, 96, 0.4);
+  color: #241B0B;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+  border-bottom-color: rgba(150, 110, 25, 0.38);
 }
 
 .carta.b-100 .c-foto {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(245, 208, 96, 0.65);
+  background: rgba(255, 255, 255, 0.62);
+  border-color: rgba(190, 145, 35, 0.72);
   box-shadow:
-    0 0 0 3px rgba(245, 208, 96, 0.45),
-    0 0 0 6px rgba(20, 40, 80, 0.6),
-    0 0 24px rgba(240, 190, 60, 0.4),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.2);
+    0 0 0 3px rgba(225, 195, 115, 0.58),
+    0 0 0 6px rgba(255, 255, 255, 0.72),
+    0 5px 18px rgba(100, 75, 20, 0.18),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.95);
 }
 
 .carta.b-100 .c-stats b {
-  color: #FFF8E0;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  color: #241B0B;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .carta.b-100 .c-stats span {
-  opacity: 0.85;
-  color: rgba(255, 230, 160, 0.9);
+  opacity: 0.88;
+  color: #594313;
 }
 
 .carta.b-100 .c-rodape {
   opacity: 0.95;
-  color: rgba(255, 235, 180, 0.9);
+  color: #594313;
 }
 
-/* Raios suaves em ouro (não azul) */
+/* Raios e arcos em ouro suave */
 .carta.b-100 .c-estrelas,
 .carta.b-100 .c-arcos {
-  opacity: 0.35;
+  opacity: 0.28;
 }
 .carta.b-100 .c-estrelas .rg {
-  stroke: rgba(240, 190, 60, 0.35);
+  stroke: rgba(190, 145, 35, 0.32);
   filter: blur(2.5px);
 }
 .carta.b-100 .c-estrelas .ry {
-  stroke: #FFE080;
-  filter: drop-shadow(0 0 3px rgba(240, 180, 50, 0.6));
+  stroke: #C99A32;
+  filter: drop-shadow(0 0 3px rgba(210, 170, 70, 0.45));
 }
 .carta.b-100 .c-estrelas .rw { stroke: #FFF8E0; }
 .carta.b-100 .c-arcos .ag {
-  stroke: rgba(240, 190, 60, 0.45);
+  stroke: rgba(190, 145, 35, 0.42);
   stroke-width: 2.8;
   filter: blur(1.4px);
 }
-.carta.b-100 .c-arcos .aw { stroke: #FFF6C8; stroke-width: 1; }
-.carta.b-100 .c-estrelas circle { fill: #FFF6C8; }
+.carta.b-100 .c-arcos .aw { stroke: #B8860B; stroke-width: 1; }
+.carta.b-100 .c-estrelas circle { fill: #D8B45A; }
 
 .c-estrelas,
 .c-arcos {
@@ -984,8 +986,8 @@ body.sem-foto .c-foto img {
 /* Brilho externo das cartas de topo: o recorte em escudo corta o box-shadow, então o brilho vai no contêiner */
 *:has(> .carta.b-100) {
   filter:
-    drop-shadow(0 0 12px rgba(240, 190, 60, 0.55))
-    drop-shadow(0 0 24px rgba(30, 60, 120, 0.35));
+    drop-shadow(0 0 12px rgba(210, 170, 70, 0.42))
+    drop-shadow(0 0 24px rgba(180, 135, 35, 0.20));
 }
 *:has(> .carta.b-top) {
   filter:
