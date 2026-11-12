@@ -121,6 +121,10 @@ checar("equipes: nota média por equipe só do mês completo (sem a visão seman
 vg = ler("scripts/templates/sections/visao_geral.html")
 checar("visão geral: todos os agentes críticos aparecem, cada um com detalhes (details.critico-item)",
        '<details class="critico-item">' in vg and "Mostrando os 5 piores" not in vg and "criticos=records(crit_sorted, RESUMO_COLS)" in ler("scripts/generate_dashboard.py"))
+# Lendária «Icon Mármore + Ouro»: tela, peças da moldura e PNG no mesmo visual
+checar("Lendária em mármore e ouro no CSS (fundo claro, texto escuro, filete dourado)", "Icon Mármore + Ouro" in cc and "--tx: #1A1408" in cc)
+checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
+       "'b-100': ['#FFFBE6', '#F0C830', '#8A6010']" in cj and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
 print()
 if falhas:

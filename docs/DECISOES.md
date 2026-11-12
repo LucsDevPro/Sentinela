@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 11/11/2026 — Lendária «Icon Mármore + Ouro» e álbum mais espaçado
+- A Lendária (100 pontos, top 3) deixa a «tempestade azul» e passa a ser mármore branco com filetes dourados, texto escuro, brilho quente e raios suaves em ouro (opacidade .4). Destaque ganha brilho rosa/ciano e Ouro um halo dourado; no hover, números e foto da Lendária ganham brilho e a inclinação máxima sobe para 16° (Destaque e Lendária).
+- Álbum: grade e pódio com mais respiro (cartas maiores e mais espaço entre elas).
+- Para tela e PNG ficarem iguais, o desenho do PNG (`carta.js`) e as peças da moldura da Lendária (cristais, asas, gema) usam a mesma paleta branco-ouro do CSS.
+
 ## 10/11/2026 — moldura premium das cartinhas, publicação mais segura e Outubro fechado
 - **Moldura premium (estilo FIFA Mobile):** além do escudo com bisel, brilhos e fio fino, as cartinhas ganham peças FORA do contorno: aletas de metal na Prata; ramos de louro, coroa grande e gema no Ouro; cristais nas laterais, asas nos cantos de cima, coroa e gema na Destaque e na Lendária. Ficam num conjunto `.c-conj` (camada atrás e camada na frente do cartão), porque o recorte em escudo cortaria qualquer peça que passasse do contorno. A mesma lista de peças (`ornPecas` em `assets/carta.js`) alimenta o SVG da tela e o PNG de download. As peças acompanham a inclinação e a escala (o `carta_fx.js` copia `--rx/--ry` para o conjunto; no álbum, a escala `--s` está no conjunto).
 - **Publicação:** a etapa do GitHub Pages tem limite de 8 min e, se travar, o workflow espera 1 min e tenta de novo; se as duas falharem, abre uma issue de aviso. Para só republicar sem coletar: Actions → Run workflow, desmarcando a coleta.

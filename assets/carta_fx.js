@@ -59,11 +59,12 @@
     if (!r.width || !r.height) return;
     var px = Math.max(0, Math.min(1, (ultimo.clientX - r.left) / r.width));
     var py = Math.max(0, Math.min(1, (ultimo.clientY - r.top) / r.height));
+    var max = (ativa.classList.contains('b-100') || ativa.classList.contains('b-top')) ? 16 : MAX;
     var s = ativa.style;
     s.setProperty('--mx', (px * 100).toFixed(1) + '%');
     s.setProperty('--my', (py * 100).toFixed(1) + '%');
-    s.setProperty('--ry', ((px - 0.5) * 2 * MAX).toFixed(2) + 'deg');
-    s.setProperty('--rx', ((0.5 - py) * 2 * MAX).toFixed(2) + 'deg');
+    s.setProperty('--ry', ((px - 0.5) * 2 * max).toFixed(2) + 'deg');
+    s.setProperty('--rx', ((0.5 - py) * 2 * max).toFixed(2) + 'deg');
     s.setProperty('--brilho', '1');
     var w = ativa.parentElement; if (w && w.classList.contains('c-conj')) { w.style.setProperty('--ry', s.getPropertyValue('--ry')); w.style.setProperty('--rx', s.getPropertyValue('--rx')); }   // as peças da moldura acompanham a inclinação
   }

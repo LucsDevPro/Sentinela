@@ -51,8 +51,8 @@ main{max-width:1240px}
 .calc .destaque{background:var(--soft);border-left:4px solid var(--pri);border-radius:4px;padding:10px 14px}
 .calc .rolar{overflow-x:auto}.calc li{margin:4px 0}
 /* ===== Álbum: grade, pódio e cartas ===== */
-.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:14px 10px;margin:16px 0 40px;justify-items:center}
-.slot{--e:.7;position:relative;display:block;width:calc(272px*var(--e));height:calc(392px*var(--e));text-decoration:none;color:inherit;border-radius:20px;outline-offset:6px}
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:28px 22px;margin:20px 0 48px;justify-items:center}
+.slot{--e:.72;position:relative;display:block;width:calc(272px*var(--e));height:calc(392px*var(--e));text-decoration:none;color:inherit;border-radius:20px;outline-offset:8px}
 .slot .c-conj{position:absolute;left:50%;top:50%;margin:-196px 0 0 -136px;height:392px;--s:var(--e)}
 .slot .carta{height:392px}
 .slot:hover,.slot:focus-visible{z-index:20}
@@ -61,19 +61,19 @@ main{max-width:1240px}
 .slot .n.m1{background:linear-gradient(135deg,#FFF3B0,#F7B500 55%,#C98A00);color:#3A2600;border-color:#FFF3B0;box-shadow:0 0 12px rgba(247,181,0,.7)}
 .slot .n.m2{background:linear-gradient(135deg,#F7FAFD,#B8C6D6 55%,#7F93A8);color:#1B2A3C;border-color:#fff}
 .slot .n.m3{background:linear-gradient(135deg,#FFD9B0,#D08A48 55%,#8A4E1C);color:#2B1204;border-color:#FFD9B0}
-.podio{position:relative;display:flex;justify-content:center;align-items:flex-end;flex-wrap:wrap;gap:6px 22px;margin:10px 0 18px;padding:34px 8px 10px;border-radius:20px;overflow:hidden;
-  background:radial-gradient(ellipse at 50% 108%,rgba(247,181,0,.26),transparent 62%),linear-gradient(180deg,transparent,var(--soft))}
+.podio{position:relative;display:flex;justify-content:center;align-items:flex-end;flex-wrap:wrap;gap:12px 36px;margin:14px 0 28px;padding:40px 12px 16px;border-radius:20px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 108%,rgba(247,181,0,.22),transparent 62%),linear-gradient(180deg,transparent,var(--soft))}
 .podio::after{content:"";position:absolute;left:8%;right:8%;bottom:0;height:5px;border-radius:5px;background:linear-gradient(90deg,transparent,#F7B500,transparent)}
-.podio .slot.p1{--e:.94;order:2;isolation:isolate}
-.podio .slot.p2{--e:.8;order:1}
-.podio .slot.p3{--e:.8;order:3}
+.podio .slot.p1{--e:1.02;order:2;isolation:isolate;filter:drop-shadow(0 0 18px rgba(220,170,50,.45)) drop-shadow(0 0 28px rgba(200,150,40,.2))}
+.podio .slot.p2{--e:.84;order:1}
+.podio .slot.p3{--e:.84;order:3}
 .podio .slot.p1::before{content:"";position:absolute;left:50%;top:50%;width:190%;aspect-ratio:1;translate:-50% -50%;z-index:-1;pointer-events:none;
   background:conic-gradient(from var(--ang),transparent 0 8%,rgba(247,181,0,.34) 11%,transparent 15% 33%,rgba(247,181,0,.24) 36%,transparent 40% 58%,rgba(43,168,232,.24) 61%,transparent 65% 83%,rgba(247,181,0,.3) 86%,transparent 90%);
   -webkit-mask:radial-gradient(circle,#000 22%,transparent 62%);mask:radial-gradient(circle,#000 22%,transparent 62%);animation:podio-gira 22s linear infinite}
 @keyframes podio-gira{to{--ang:360deg}}
 @media (prefers-reduced-motion:reduce){.podio .slot.p1::before{animation:none}}
-@media (max-width:640px){.podio{gap:14px 14px}.podio .slot.p1{--e:.62;order:0}.podio::before{content:"";order:1;flex-basis:100%;height:0}.podio .slot.p2,.podio .slot.p3{--e:.5;order:2}.podio .slot.p3{order:3}}
-@media (max-width:480px){.album{grid-template-columns:repeat(2,1fr);gap:8px 4px}.slot{--e:.62}.barra select,.barra input{min-width:0;width:100%}.barra label{flex:1 0 45%}.abas button{padding:9px 10px;font-size:.92rem}}
+@media (max-width:640px){.podio{gap:18px 16px}.podio .slot.p1{--e:.68;order:0}.podio::before{content:"";order:1;flex-basis:100%;height:0}.podio .slot.p2,.podio .slot.p3{--e:.54;order:2}.podio .slot.p3{order:3}}
+@media (max-width:480px){.album{grid-template-columns:repeat(2,1fr);gap:16px 12px}.slot{--e:.64}.barra select,.barra input{min-width:0;width:100%}.barra label{flex:1 0 45%}.abas button{padding:9px 10px;font-size:.92rem}}
 body.modo-apresentacao .nome{filter:blur(7px)}
 
 /* cabeçalho alinhado com o conteúdo da página (largura do main + respiro lateral) e os botões juntos à direita */

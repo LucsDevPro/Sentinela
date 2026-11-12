@@ -107,7 +107,7 @@
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF6C8', '#FFD84A', '#E09800'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#8AA8A2', '#4E6E68', '#2A3E3A'], 't-ferro': ['#B0B0B0', '#686868', '#2E2E2E'], 't-destaque': ['#FFE8A0', '#F0B400', '#B07800'] };
+  var LOGO = { 'b-100': ['#FFF6C8', '#E8B820', '#A07010'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#8AA8A2', '#4E6E68', '#2A3E3A'], 't-ferro': ['#B0B0B0', '#686868', '#2E2E2E'], 't-destaque': ['#FFE8A0', '#F0B400', '#B07800'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -118,7 +118,7 @@
   /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
      As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-top': ['#FFE5F6', '#FF5BC8', '#6B2BD9'], 'b-100': ['#E6F7FF', '#4FB0FF', '#1E47C8'] };
+  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-top': ['#FFE5F6', '#FF5BC8', '#6B2BD9'], 'b-100': ['#FFFBE6', '#F0C830', '#8A6010'] };
   function ornPecas(borda) {
     var atras = [], frente = [], n, i, lado, t;
     function espelha(pts) { return pts.map(function (q) { return [272 - q[0], q[1]]; }); }
@@ -218,21 +218,21 @@
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
       var fr100 = is100 ? (function () { var b = card.querySelector('.c-foto').getBoundingClientRect(); return { cx: X + (b.left - cr.left + b.width / 2) * S, cy: Y + (b.top - cr.top + b.height / 2) * S }; })() : null;
       if (is100) {
-        // clarão azul atrás da foto (radial-gradient do ::after do CSS)
-        var cx0 = X + W * .5, cy0 = Y + H * .4, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .55, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);
-        g0.addColorStop(0, 'rgba(120,190,255,.6)'); g0.addColorStop(1, 'rgba(60,130,255,0)'); ctx.fillStyle = g0; ctx.fillRect(X, Y, W, H);
-        // raios: halo azul, miolo ciano e núcleo branco; a espessura de cada galho vem de r[1]
-        ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        // clarão branco-quente atrás da foto (radial-gradient do ::after do CSS)
+        var cx0 = X + W * .5, cy0 = Y + H * .28, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .58, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);
+        g0.addColorStop(0, 'rgba(255,255,255,.75)'); g0.addColorStop(.6, 'rgba(255,250,230,.2)'); g0.addColorStop(1, 'rgba(255,250,230,0)'); ctx.fillStyle = g0; ctx.fillRect(X, Y, W, H);
+        // raios suaves em ouro (halo dourado, miolo amarelo e núcleo claro; opacidade .4 como o CSS); a espessura de cada galho vem de r[1]
+        ctx.save(); ctx.globalAlpha = .4; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         RAIOS.forEach(function (r) {
           var pa = new Path2D(r[0]);
-          ctx.save(); ctx.strokeStyle = 'rgba(61,155,255,.55)'; ctx.lineWidth = 8 * r[1]; ctx.shadowColor = '#3D9BFF'; ctx.shadowBlur = 12 * S; ctx.stroke(pa); ctx.restore();
-          ctx.save(); ctx.strokeStyle = '#8FD8FF'; ctx.lineWidth = 2.8 * r[1]; ctx.shadowColor = '#59B8FF'; ctx.shadowBlur = 7 * S; ctx.stroke(pa); ctx.restore();
-          ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = Math.max(.6, 1.2 * r[1]); ctx.stroke(pa);
+          ctx.save(); ctx.strokeStyle = 'rgba(220,170,50,.55)'; ctx.lineWidth = 8 * r[1]; ctx.shadowColor = '#DCAA32'; ctx.shadowBlur = 12 * S; ctx.stroke(pa); ctx.restore();
+          ctx.save(); ctx.strokeStyle = '#FFE080'; ctx.lineWidth = 2.8 * r[1]; ctx.shadowColor = '#E6B432'; ctx.shadowBlur = 7 * S; ctx.stroke(pa); ctx.restore();
+          ctx.strokeStyle = '#FFF8E0'; ctx.lineWidth = Math.max(.6, 1.2 * r[1]); ctx.stroke(pa);
         });
-        FAISCAS.forEach(function (f) { ctx.globalAlpha = f[3]; ctx.fillStyle = '#CDEBFF'; ctx.beginPath(); ctx.arc(f[0], f[1], f[2], 0, 2 * Math.PI); ctx.fill(); });
+        FAISCAS.forEach(function (f) { ctx.globalAlpha = f[3]; ctx.fillStyle = '#FFF6C8'; ctx.beginPath(); ctx.arc(f[0], f[1], f[2], 0, 2 * Math.PI); ctx.fill(); });
         ctx.restore();
         // filete interno (::before do CSS: 13px para dentro)
-        ctx.save(); pathCartao(ctx, X + 13 * S, Y + 13 * S, W - 26 * S, H - 26 * S, S, 13 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = '#DDF2FF'; ctx.shadowColor = '#59B8FF'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
+        ctx.save(); pathCartao(ctx, X + 13 * S, Y + 13 * S, W - 26 * S, H - 26 * S, S, 13 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = 'rgba(255,240,180,.85)'; ctx.shadowColor = 'rgba(220,170,50,.8)'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
       } else {
         // listras
         ctx.save(); ctx.translate(X + W / 2, Y + H / 2); ctx.rotate((115 - 90) * Math.PI / 180);
@@ -249,8 +249,8 @@
       // foto (círculo)
       var f = card.querySelector('.c-foto'), fr = rel(f), fs = getComputedStyle(f), bw = parseFloat(fs.borderTopWidth) * S;
       if (is100) { // anel dourado externo + brilho (box-shadow do CSS)
-        ctx.save(); ctx.shadowColor = 'rgba(89,184,255,.85)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
-        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(190,230,255,.95)'; ctx.stroke(); ctx.restore();
+        ctx.save(); ctx.shadowColor = 'rgba(220,170,50,.7)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
+        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(232,196,96,.95)'; ctx.stroke(); ctx.restore();
       }
       ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 - bw / 2, 0, 2 * Math.PI); ctx.fillStyle = fs.backgroundColor; ctx.fill();
       var ft = r[4];
@@ -279,8 +279,8 @@
         ctx.font = ps.fontWeight + ' ' + (parseFloat(ps.fontSize) * S) + 'px ' + ps.fontFamily;
         ctx.fillStyle = ps.color; ctx.globalAlpha = parseFloat(ps.opacity); ctx.shadowColor = 'rgba(0,0,0,0)';
         if (is100 && pe.matches('.c-ovr b')) { // número com folha de ouro
-          var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFFFFF'); og.addColorStop(.55, '#FFE14D'); og.addColorStop(1, '#F5A300');
-          ctx.fillStyle = og; ctx.shadowColor = 'rgba(61,155,255,.9)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
+          var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFF8D0'); og.addColorStop(.48, '#E8B820'); og.addColorStop(1, '#A07010');
+          ctx.fillStyle = og; ctx.shadowColor = 'rgba(220,160,30,.6)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
         }
         var ls = ps.letterSpacing === 'normal' ? 0 : parseFloat(ps.letterSpacing) * S;
         texto(ctx, t, X + (b.left - cr.left) * S, Y + (b.top - cr.top + b.height / 2) * S, ls); ctx.globalAlpha = 1; ctx.shadowColor = 'rgba(0,0,0,0)'; ctx.shadowOffsetY = 0; ctx.shadowBlur = 0;
@@ -309,10 +309,10 @@
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
       if (is100) { // faíscas correndo pela borda (por cima do anel)
-        ctx.save(); ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ctx.save(); ctx.globalAlpha = .4; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         ARCOS.forEach(function (d) { var pa = new Path2D(d);
-          ctx.save(); ctx.strokeStyle = 'rgba(120,205,255,.85)'; ctx.lineWidth = 3.4; ctx.shadowColor = '#59B8FF'; ctx.shadowBlur = 8 * S; ctx.stroke(pa); ctx.restore();
-          ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1; ctx.stroke(pa); });
+          ctx.save(); ctx.strokeStyle = 'rgba(200,150,40,.55)'; ctx.lineWidth = 3.2; ctx.shadowColor = '#DCAA32'; ctx.shadowBlur = 8 * S; ctx.stroke(pa); ctx.restore();
+          ctx.strokeStyle = '#FFF6C8'; ctx.lineWidth = 1; ctx.stroke(pa); });
         ctx.restore();
       }
       ornCanvas(ctx, borda0, 'frente', X, Y, S);   // coroa e gema por cima do cartão

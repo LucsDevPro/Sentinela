@@ -260,7 +260,8 @@
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
 .c-orna-atras { z-index: 0; }
 .c-orna-frente { z-index: 3; filter: drop-shadow(0 0 4px rgba(255, 236, 160, 0.7)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4)); }
-.c-conj.b-100 .c-orna-atras, .c-conj.b-top .c-orna-atras { filter: drop-shadow(0 0 6px rgba(80, 170, 255, 0.85)); }
+.c-conj.b-100 .c-orna-atras { filter: drop-shadow(0 0 6px rgba(220, 170, 50, 0.75)); }
+.c-conj.b-top .c-orna-atras { filter: drop-shadow(0 0 6px rgba(255, 100, 180, 0.75)); }
 .c-conj.b-90 .c-orna-atras { filter: drop-shadow(0 0 5px rgba(255, 205, 80, 0.55)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
 
 /* Textura de metal trabalhado na moldura dos níveis altos */
@@ -473,32 +474,44 @@ body.sem-foto .c-foto img {
   }
 }
 
-/* ===== Lendária — Tempestade de luxo ===== */
+/* ===== Lendária — Icon Mármore + Ouro (Top 3 × 100)
+   Inspiração: Icons clássicos FIFA (branco mármore, filetes dourados, glow quente). */
 
 .carta.b-100 {
-  --c1: #0A2C74;
-  --c2: #01040C;
-  --tx: #FFFFFF;
-  --ln: rgba(160, 215, 255, 0.52);
-  --logo: linear-gradient(170deg, #FFF6C8 0%, #FFD84A 46%, #E09800 100%);
-  --b1: #061A4C;
-  --b2: #48A8FF;
-  --b3: #FFFFFF;
-  --bw: 13px;
-  background: linear-gradient(160deg, #0A2C74 0%, #061A48 46%, #01040C 100%);
+  --c1: #FBF8F0;
+  --c2: #E8DFC8;
+  --tx: #1A1408;
+  --ln: rgba(90, 60, 10, 0.28);
+  --logo: linear-gradient(170deg, #FFF6C8 0%, #E8B820 45%, #A07010 100%);
+  --b1: #8A6010;
+  --b2: #F0C830;
+  --b3: #FFF8E0;
+  --bw: 14px;
+  background:
+    radial-gradient(ellipse 85% 50% at 50% 12%, rgba(255, 255, 255, 0.95) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 40% at 80% 70%, rgba(230, 200, 120, 0.25) 0%, transparent 50%),
+    linear-gradient(165deg, #FFFEF8 0%, #F5EED8 38%, #E8DCC0 72%, #D4C4A0 100%);
   box-shadow:
-    0 0 28px rgba(48, 148, 255, 0.55),
-    0 0 56px rgba(48, 148, 255, 0.28),
-    0 16px 42px rgba(0, 0, 0, 0.46),
-    inset 0 1.5px 0 rgba(180, 220, 255, 0.28),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 0 0 1.5px rgba(200, 150, 40, 0.55),
+    0 0 28px rgba(230, 180, 50, 0.45),
+    0 0 56px rgba(200, 150, 40, 0.22),
+    0 18px 44px rgba(0, 0, 0, 0.32),
+    inset 0 2px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(120, 90, 30, 0.12);
 }
 
+/* Filete interno dourado (anel Icon) */
 .carta.b-100::before {
   inset: 0;
   border: 0;
   border-radius: 0;
-  background: rgba(200, 230, 255, 0.82);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 240, 180, 0.7) 0%,
+      rgba(220, 180, 80, 0.35) 35%,
+      rgba(255, 245, 200, 0.55) 100%
+    );
   -webkit-mask: none;
   mask: none;
   clip-path: polygon(calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(100% - 20px + 12px * -0.4142) calc(0px + 12px * 1.0000), calc(100% + 12px * -1.0000) calc(20px + 12px * 0.4142), calc(100% + 12px * -1.0000) calc(100% - 26px + 12px * -0.4566), calc(100% - 30px + 12px * -0.3730) calc(100% + 12px * -1.0000), calc(30px + 12px * 0.3730) calc(100% + 12px * -1.0000), calc(0px + 12px * 1.0000) calc(100% - 26px + 12px * -0.4566), calc(0px + 12px * 1.0000) calc(20px + 12px * 0.4142), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(0px + 13.5px * 1.0000) calc(20px + 13.5px * 0.4142), calc(0px + 13.5px * 1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(30px + 13.5px * 0.3730) calc(100% + 13.5px * -1.0000), calc(100% - 30px + 13.5px * -0.3730) calc(100% + 13.5px * -1.0000), calc(100% + 13.5px * -1.0000) calc(100% - 26px + 13.5px * -0.4566), calc(100% + 13.5px * -1.0000) calc(20px + 13.5px * 0.4142), calc(100% - 20px + 13.5px * -0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 13.5px * 0.4142) calc(0px + 13.5px * 1.0000), calc(20px + 12px * 0.4142) calc(0px + 12px * 1.0000));
@@ -511,30 +524,84 @@ body.sem-foto .c-foto img {
   top: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    circle at 50% 38%,
-    rgba(100, 180, 255, 0.52) 0%,
-    rgba(40, 120, 255, 0.16) 40%,
-    transparent 64%
-  );
+  background:
+    radial-gradient(circle at 50% 28%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 250, 230, 0.2) 35%, transparent 58%),
+    radial-gradient(circle at 18% 80%, rgba(230, 200, 120, 0.18) 0%, transparent 42%);
 }
 
 .carta.b-100 .c-ovr b {
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFE86A 50%, #F0A000 100%);
+  background: linear-gradient(180deg, #FFF8D0 0%, #E8B820 48%, #A07010 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  filter: drop-shadow(0 0 9px rgba(55, 155, 255, 0.85));
+  filter:
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.8))
+    drop-shadow(0 0 8px rgba(220, 160, 30, 0.55));
+}
+
+.carta.b-100 .c-ovr span,
+.carta.b-100 .c-pos,
+.carta.b-100 .c-pos small {
+  color: rgba(60, 40, 10, 0.85);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.carta.b-100 .c-nome {
+  letter-spacing: 0.1em;
+  color: #1A1408;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  border-bottom-color: rgba(160, 120, 30, 0.35);
 }
 
 .carta.b-100 .c-foto {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(180, 220, 255, 0.48);
+  background: rgba(255, 255, 255, 0.45);
+  border-color: rgba(180, 140, 40, 0.55);
   box-shadow:
-    0 0 0 5px rgba(180, 225, 255, 0.88),
-    0 0 30px rgba(65, 165, 255, 0.7),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.18);
+    0 0 0 3px rgba(255, 230, 150, 0.7),
+    0 0 0 6px rgba(200, 150, 40, 0.55),
+    0 0 28px rgba(220, 170, 50, 0.4),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.7);
+}
+
+.carta.b-100 .c-stats b {
+  color: #1A1408;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.carta.b-100 .c-stats span {
+  opacity: 0.75;
+  color: #3A2A10;
+}
+
+.carta.b-100 .c-rodape {
+  opacity: 0.92;
+  color: rgba(50, 35, 10, 0.88);
+}
+
+/* Raios/arcos suaves em ouro (combinam com mármore) */
+.carta.b-100 .c-estrelas .rg {
+  stroke: rgba(220, 170, 50, 0.4);
+  filter: blur(2.8px);
+}
+.carta.b-100 .c-estrelas .ry {
+  stroke: #FFE080;
+  filter: drop-shadow(0 0 4px rgba(230, 180, 50, 0.8));
+}
+.carta.b-100 .c-estrelas .rw {
+  stroke: #FFF8E0;
+}
+.carta.b-100 .c-arcos .ag {
+  stroke: rgba(200, 150, 40, 0.55);
+  stroke-width: 3.2;
+  filter: blur(1.6px);
+}
+.carta.b-100 .c-arcos .aw {
+  stroke: #FFF6C8;
+  stroke-width: 1;
+}
+.carta.b-100 .c-estrelas circle {
+  fill: #FFF6C8;
 }
 
 .c-estrelas,
@@ -556,6 +623,7 @@ body.sem-foto .c-foto img {
   stroke-linejoin: round;
 }
 
+/* fallback azul só se não for b-100 (mantido para compat; Lendária sobrescreve acima) */
 .c-estrelas .rg {
   stroke: rgba(48, 148, 255, 0.48);
   filter: blur(2.8px);
@@ -872,8 +940,8 @@ body.sem-foto .c-foto img {
     background: conic-gradient(from var(--ang), var(--b1), var(--b2), var(--b3), var(--b2), var(--b1), var(--b2), var(--b3), var(--b1));
     animation: c-gira-borda 8s linear infinite;
   }
-  .carta.vivo.b-top > .c-borda { animation-duration: 6s; }
-  .carta.vivo.b-100 > .c-borda { animation-duration: 5s; }
+  .carta.vivo.b-top > .c-borda { animation-duration: 5.2s; }
+  .carta.vivo.b-100 > .c-borda { animation-duration: 4.6s; }
   /* flutuar: só DESTAQUE e LENDÁRIA (começa depois da entrada) */
   .carta.vivo.b-top,
   .carta.vivo.b-100 { animation: c-flutua 5.5s ease-in-out infinite; animation-delay: calc(var(--atraso, 0ms) + 900ms); }
@@ -891,5 +959,179 @@ body.sem-foto .c-foto img {
 @media print { .carta > .c-brilho, .carta > .c-glitter { display: none; } }
 
 /* Brilho externo das cartas de topo: o recorte em escudo corta o box-shadow, então o brilho vai no contêiner */
-*:has(> .carta.b-100) { filter: drop-shadow(0 0 14px rgba(48, 148, 255, 0.55)); }
-*:has(> .carta.b-top) { filter: drop-shadow(0 0 10px rgba(255, 190, 90, 0.4)); }
+*:has(> .carta.b-100) {
+  filter:
+    drop-shadow(0 0 10px rgba(220, 170, 50, 0.55))
+    drop-shadow(0 0 22px rgba(200, 150, 40, 0.3));
+}
+*:has(> .carta.b-top) {
+  filter:
+    drop-shadow(0 0 12px rgba(255, 100, 180, 0.4))
+    drop-shadow(0 0 16px rgba(64, 224, 255, 0.25));
+}
+*:has(> .carta.b-90) {
+  filter: drop-shadow(0 0 8px rgba(240, 180, 40, 0.32));
+}
+
+/* Soften lightning opacity on marble cards */
+.carta.b-100 .c-estrelas,
+.carta.b-100 .c-arcos {
+  opacity: 0.4;
+}
+
+/* ===== DESTAQUE / OURO refinements ===== */
+.carta.b-top {
+  --b1: #FFE066;
+  --b2: #FF4DB8;
+  --b3: #40E0FF;
+  --bw: 12px;
+  box-shadow:
+    0 0 0 1px rgba(255, 200, 120, 0.4),
+    0 0 26px rgba(255, 77, 184, 0.42),
+    0 0 44px rgba(64, 224, 255, 0.25),
+    0 16px 40px rgba(0, 0, 0, 0.36),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.4),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.25);
+}
+
+.carta.b-90 {
+  --bw: 10px;
+  box-shadow:
+    0 0 18px rgba(240, 180, 40, 0.35),
+    0 16px 40px rgba(0, 0, 0, 0.34),
+    0 5px 14px rgba(0, 0, 0, 0.18),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+/* ===================================================================
+   HOVER PREMIUM — mármore + ouro / hierarquia Top 3
+   =================================================================== */
+
+@keyframes c-pulse-ouro {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.06); }
+}
+@keyframes c-pulse-halo {
+  0%, 100% { filter: brightness(1) saturate(1); }
+  50% { filter: brightness(1.05) saturate(1.12); }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .slot:hover .c-conj,
+  .slot:focus-visible .c-conj {
+    --s: calc(var(--e, 1) * 1.07);
+  }
+
+  .carta.b-90:hover > .c-borda,
+  .carta.b-90:focus-visible > .c-borda {
+    animation-duration: 3.2s !important;
+  }
+  .carta.b-90:hover > .c-glitter::before,
+  .carta.b-90:hover > .c-glitter::after {
+    animation-duration: 1.4s, 1.8s;
+  }
+
+  .carta.b-top:hover {
+    animation: c-flutua 5.5s ease-in-out infinite, c-pulse-halo 1.8s ease-in-out infinite;
+  }
+  .carta.b-top:hover > .c-borda {
+    animation-duration: 2.8s !important;
+  }
+  .carta.b-top:hover > .c-brilho::after {
+    opacity: 1;
+    mix-blend-mode: color-dodge;
+  }
+
+  .carta.b-100:hover {
+    animation: c-flutua 5.5s ease-in-out infinite, c-pulse-ouro 2s ease-in-out infinite;
+  }
+  .carta.b-100:hover > .c-borda {
+    animation-duration: 2.6s !important;
+  }
+  .carta.b-100:hover > .c-brilho::before {
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(255, 240, 180, 0.15) 30%,
+      rgba(255, 255, 255, 0.75) 50%,
+      rgba(255, 220, 100, 0.2) 70%,
+      transparent 100%
+    );
+    animation: c-varre-1 0.9s ease-out 1;
+  }
+  .carta.b-100:hover > .c-brilho::after {
+    opacity: 1;
+    background:
+      radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.7), rgba(255, 230, 150, 0.25) 28%, transparent 52%),
+      linear-gradient(115deg, transparent 25%, rgba(255, 220, 100, 0.28) 40%, rgba(255, 255, 255, 0.2) 55%, rgba(230, 180, 60, 0.22) 70%, transparent 82%);
+    background-size: 100% 100%, 280% 280%;
+    background-position: 0 0, var(--mx) var(--my);
+    mix-blend-mode: soft-light;
+  }
+  .carta.b-100:hover .c-ovr b {
+    filter:
+      drop-shadow(0 1px 0 rgba(255, 255, 255, 0.9))
+      drop-shadow(0 0 12px rgba(230, 170, 40, 0.75))
+      drop-shadow(0 0 22px rgba(255, 200, 60, 0.4));
+  }
+  .carta.b-100:hover .c-foto {
+    box-shadow:
+      0 0 0 3px rgba(255, 235, 160, 0.85),
+      0 0 0 7px rgba(210, 160, 40, 0.55),
+      0 0 36px rgba(230, 180, 50, 0.55),
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.75);
+    transition: box-shadow 0.35s ease;
+  }
+  .carta.b-100:hover > .c-glitter::before {
+    background-image:
+      radial-gradient(3px 3px at 14% 24%, #FFF8D0 0 30%, rgba(255, 220, 100, 0.5) 62%, transparent 100%),
+      radial-gradient(2.4px 2.4px at 83% 17%, #fff 0 30%, rgba(255, 230, 150, 0.45) 62%, transparent 100%),
+      radial-gradient(3px 3px at 90% 58%, #FFE080 0 30%, rgba(230, 170, 40, 0.4) 62%, transparent 100%),
+      radial-gradient(2.4px 2.4px at 9% 71%, #fff 0 30%, rgba(255, 240, 180, 0.4) 62%, transparent 100%),
+      radial-gradient(2.8px 2.8px at 52% 91%, #FFF0B0 0 30%, rgba(220, 160, 30, 0.45) 62%, transparent 100%);
+  }
+
+  .carta:hover .c-stats div::after {
+    opacity: 0.95;
+    height: 2.5px;
+    box-shadow: 0 0 6px currentColor;
+    transition: opacity 0.25s ease, height 0.25s ease, box-shadow 0.25s ease;
+  }
+  .carta:hover .c-nome {
+    letter-spacing: 0.11em;
+    transition: letter-spacing 0.35s ease;
+  }
+
+  .slot:hover:has(.carta.b-100) {
+    filter:
+      drop-shadow(0 0 14px rgba(220, 170, 50, 0.65))
+      drop-shadow(0 0 28px rgba(200, 150, 40, 0.35));
+  }
+  .slot:hover:has(.carta.b-top) {
+    filter:
+      drop-shadow(0 0 14px rgba(255, 100, 180, 0.5))
+      drop-shadow(0 0 22px rgba(64, 224, 255, 0.3));
+  }
+  .slot:hover:has(.carta.b-90) {
+    filter: drop-shadow(0 0 12px rgba(240, 180, 40, 0.45));
+  }
+
+  .c-conj:has(.carta.b-100:hover) .c-orna-frente {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(1.04);
+    transition: transform 0.25s ease;
+  }
+}
+
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .carta.b-100:active > .c-brilho::before {
+    animation: c-varre-1 0.85s ease-out 1;
+  }
+  .carta.b-100:active .c-ovr b {
+    filter:
+      drop-shadow(0 0 12px rgba(230, 170, 40, 0.8))
+      drop-shadow(0 0 20px rgba(255, 200, 60, 0.45));
+  }
+}
+
