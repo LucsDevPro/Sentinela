@@ -128,12 +128,12 @@ lendaria_css = next((b for b in reversed(blocos_lendaria) if "--c1:" in b and "-
 def prop_css(bloco, nome):
     m = re.search(r"(?:^|[;\s])" + re.escape(nome) + r"\s*:\s*([^;]+)", bloco)
     return m.group(1).strip().lower() if m else ""
-checar("Lendária: fundo marfim/mármore definido por cores claras reais",
-       prop_css(lendaria_css, "--c1") == "#fbf8f0" and
-       prop_css(lendaria_css, "--c2") == "#e8dfc8" and
-       "#fffeFA".lower() in prop_css(lendaria_css, "background"))
-checar("Lendária: tipografia escura definida por variável real",
-       prop_css(lendaria_css, "--tx") == "#1a1408")
+checar("Lendária: fundo navy profundo definido por cores reais",
+       prop_css(lendaria_css, "--c1") == "#0b1a3a" and
+       prop_css(lendaria_css, "--c2") == "#02060f" and
+       "#122650" in prop_css(lendaria_css, "background"))
+checar("Lendária: tipografia clara definida por variável real",
+       prop_css(lendaria_css, "--tx") == "#ffffff")
 checar("Lendária: moldura com paleta dourada real",
        prop_css(lendaria_css, "--b1") == "#8a6010" and
        prop_css(lendaria_css, "--b2") == "#f0c830" and
@@ -143,6 +143,14 @@ checar("Lendária: filete interno dourado implementado por borda/sombra",
        ".carta.b-100::before" in cc and
        "inset 0 0 0 3px rgba(205, 165, 65, 0.62)" in cc and
        "inset 0 0 0 6px rgba(130, 95, 20, 0.20)" in cc)
+checar("Top 3 90–99: carta roxo/magenta e borda definida no seletor do tier",
+       ".carta.t-destaque" in cc and
+       "--c1: #2A0A3C" in cc and
+       "--b2: #FF4DB8" in cc and
+       ".carta.t-destaque .c-ovr b" in cc and
+       "'t-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7']" in cj)
+checar("PNG do Top 3 usa brilho magenta, não o antigo verde ou dourado",
+       "rgba(255,120,210,.16)" in cj and "tier === 't-destaque' ? '#FF6BCB'" in cj)
 checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
        "'b-100': ['#FFFBE6', '#F0C830', '#8A6010']" in cj and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
