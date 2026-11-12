@@ -12,7 +12,16 @@
   padding: 16px 18px 14px;
   color: var(--tx);
   border-radius: 0;
-  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
+  clip-path: polygon(
+    calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
+    calc(100% - 20px - var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
+    calc(100% - var(--bw) * 1) calc(20px + var(--bw) * 0.4142),
+    calc(100% - var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
+    calc(100% - 30px - var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
+    calc(30px + var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
+    calc(0px + var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
+    calc(0px + var(--bw) * 1) calc(20px + var(--bw) * 0.4142)
+  );
   background:
     linear-gradient(160deg, var(--c1) 0%, #E6C86A 38%, #D4A63A 68%, var(--c2) 100%);
   box-shadow:
@@ -474,30 +483,28 @@ body.sem-foto .c-foto img {
   }
 }
 
-/* ===== Lendária — Top 3 × 100: Icon Mármore + Ouro =====
-   Acabamento marfim/mármore, tipografia escura e detalhes dourados. */
+/* ===== Lendária — Top 3 × 100: navy profundo + ouro ===== */
 
 .carta.b-100 {
-  --c1: #FBF8F0;
-  --c2: #E8DFC8;
-  --tx: #1A1408;
-  --ln: rgba(90, 60, 10, 0.28);
+  --c1: #0B1A3A;
+  --c2: #02060F;
+  --tx: #FFFFFF;
+  --ln: rgba(255, 220, 140, 0.45);
   --logo: linear-gradient(170deg, #FFF6C8 0%, #F0C830 48%, #B8860B 100%);
   --b1: #8A6010;
   --b2: #F0C830;
   --b3: #FFF8E0;
   --bw: 14px;
   background:
-    radial-gradient(ellipse 85% 48% at 50% 12%, rgba(255, 255, 255, 0.9) 0%, transparent 62%),
-    repeating-linear-gradient(125deg, rgba(160, 135, 90, 0.055) 0 2px, transparent 2px 13px),
-    linear-gradient(165deg, #FFFEFA 0%, #F5F0E5 42%, #E8DFC8 100%);
+    radial-gradient(ellipse 80% 45% at 50% 15%, rgba(255, 210, 100, 0.18) 0%, transparent 55%),
+    linear-gradient(165deg, #122650 0%, #0A1838 40%, #050C1C 75%, #02050C 100%);
   box-shadow:
-    0 0 0 2px rgba(190, 145, 35, 0.62),
-    0 0 22px rgba(210, 170, 70, 0.28),
-    0 0 42px rgba(200, 160, 60, 0.14),
-    0 16px 40px rgba(0, 0, 0, 0.28),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.95),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+    0 0 0 2px rgba(240, 200, 80, 0.65),
+    0 0 24px rgba(240, 190, 60, 0.45),
+    0 0 48px rgba(200, 150, 40, 0.2),
+    0 16px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1.5px 0 rgba(255, 240, 180, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 /* Filete interno dourado */
@@ -661,12 +668,6 @@ body.sem-foto .c-foto img {
   68% { opacity: 0.52; }
   74% { opacity: 1; }
 }
-@keyframes c100-clarao {
-  0%, 100% { opacity: 1; }
-  8% { opacity: 0.42; }
-  13% { opacity: 1; }
-}
-
 /* ===== DESTAQUE — Top 3 90–99: roxo/magenta (cor diferente do ouro e da lendária) ===== */
 .carta.t-destaque {
   --logo: linear-gradient(170deg, #FFE0F0 0%, #FF6BCB 48%, #9B2BC7 100%);
@@ -674,6 +675,10 @@ body.sem-foto .c-foto img {
   --c2: #0C0214;
   --tx: #FFFFFF;
   --ln: rgba(255, 180, 230, 0.4);
+  --b1: #FFE066;
+  --b2: #FF4DB8;
+  --b3: #C44DFF;
+  --bw: 11px;
   background:
     radial-gradient(ellipse 75% 45% at 50% 18%, rgba(255, 100, 200, 0.2) 0%, transparent 55%),
     linear-gradient(160deg, #3A1260 0%, #1A0830 50%, #0A0218 100%);
@@ -683,17 +688,12 @@ body.sem-foto .c-foto img {
     0 16px 40px rgba(0, 0, 0, 0.38),
     inset 0 1.5px 0 rgba(255, 200, 230, 0.3);
 }
-.carta.b-top {
-  --b1: #FFE066;
-  --b2: #FF4DB8;
-  --b3: #C44DFF;
-  --bw: 11px;
-  box-shadow:
-    0 0 0 1.5px rgba(255, 120, 200, 0.5),
-    0 0 24px rgba(255, 77, 184, 0.4),
-    0 0 40px rgba(160, 80, 255, 0.22),
-    0 16px 40px rgba(0, 0, 0, 0.36),
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.35);
+.carta.t-destaque::before {
+  background: repeating-linear-gradient(
+    120deg,
+    rgba(255, 120, 210, 0.12) 0 10px,
+    transparent 10px 26px
+  );
 }
 .carta.t-destaque .c-ovr b {
   background: linear-gradient(180deg, #FFFFFF 0%, #FFB0E0 50%, #FF6BCB 100%);
