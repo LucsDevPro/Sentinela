@@ -538,10 +538,13 @@
     "inicio": "14/09/2026",
     "fim": "14/09/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -571,10 +574,13 @@
     "inicio": "05/10/2026",
     "fim": "05/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -604,10 +610,13 @@
     "inicio": "09/10/2026",
     "fim": "09/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -637,10 +646,13 @@
     "inicio": "20/10/2026",
     "fim": "20/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -668,10 +680,13 @@
     "inicio": "03/11/2026",
     "fim": "03/11/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -707,10 +722,13 @@
     "inicio": "03/07/2026",
     "fim": "03/07/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -742,10 +760,13 @@
     "inicio": "03/08/2026",
     "fim": "03/08/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -775,10 +796,13 @@
     "inicio": "07/08/2026",
     "fim": "10/08/2026",
     "duracao": 2,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -810,10 +834,13 @@
     "inicio": "14/09/2026",
     "fim": "14/09/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -843,10 +870,13 @@
     "inicio": "22/09/2026",
     "fim": "22/09/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -878,10 +908,13 @@
     "inicio": "05/10/2026",
     "fim": "05/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -917,10 +950,13 @@
     "inicio": "09/10/2026",
     "fim": "09/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -956,10 +992,13 @@
     "inicio": "14/10/2026",
     "fim": "14/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -991,10 +1030,13 @@
     "inicio": "03/11/2026",
     "fim": "03/11/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1030,10 +1072,13 @@
     "inicio": "10/11/2026",
     "fim": "10/11/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1059,10 +1104,13 @@
     "inicio": "03/07/2026",
     "fim": "03/07/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1086,10 +1134,13 @@
     "inicio": "23/07/2026",
     "fim": "23/07/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1117,10 +1168,13 @@
     "inicio": "10/08/2026",
     "fim": "10/08/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1148,10 +1202,13 @@
     "inicio": "14/09/2026",
     "fim": "14/09/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1179,10 +1236,13 @@
     "inicio": "22/09/2026",
     "fim": "22/09/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1208,10 +1268,13 @@
     "inicio": "05/10/2026",
     "fim": "05/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1239,10 +1302,13 @@
     "inicio": "09/10/2026",
     "fim": "09/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1270,10 +1336,13 @@
     "inicio": "14/10/2026",
     "fim": "14/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1301,10 +1370,13 @@
     "inicio": "03/11/2026",
     "fim": "04/11/2026",
     "duracao": 2,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1334,10 +1406,13 @@
     "inicio": "02/07/2026",
     "fim": "03/07/2026",
     "duracao": 2,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1369,10 +1444,13 @@
     "inicio": "10/08/2026",
     "fim": "10/08/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1406,10 +1484,13 @@
     "inicio": "14/09/2026",
     "fim": "14/09/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1441,10 +1522,13 @@
     "inicio": "22/09/2026",
     "fim": "22/09/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1476,10 +1560,13 @@
     "inicio": "05/10/2026",
     "fim": "05/10/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1513,10 +1600,13 @@
     "inicio": "09/10/2026",
     "fim": "14/10/2026",
     "duracao": 3,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1550,10 +1640,13 @@
     "inicio": "03/11/2026",
     "fim": "03/11/2026",
     "duracao": 1,
-    "status": "pendente",
-    "categoria_coletiva": null,
-    "confirmado_automaticamente": false,
-    "detectado_em": "11/11/2026 00:15"
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "11/11/2026 00:15",
+    "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
+    "validada_em": "13/11/2026 19:04"
   },
   {
     "tipo": "possiveis_ferias",

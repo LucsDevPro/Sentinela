@@ -110,10 +110,10 @@ recalculado com o teto novo.
   contagem do limite (férias, folga e atestado nunca entram).
   Equipes sob demanda (Bloqueio) ficam fora das duas regras. A aba Ausências mostra a classificação no começo
   da Observação. Se o evento for de fato falta, lance um ajuste em `data/ajustes_ranking.json`.
-- **Detecção automática** (`data/deteccoes_pendentes.json`): detecções NOVAS de férias e de paralisação coletiva
-  entram como `pendente` e continuam contando como turno sem lançamento até a coordenação confirmar (antes,
-  entravam já confirmadas). Decisões antigas não mudam. Voltar ao modo antigo:
-  `CONFIRMAR_FERIAS_AUTOMATICAMENTE` / `CONFIRMAR_CHUVA_AUTOMATICAMENTE = True`.
+- **Detecção automática** (`data/deteccoes_pendentes.json`): detecções NOVAS de férias entram como `pendente` e continuam
+  contando como turno sem lançamento até a coordenação confirmar. Desde 13/11/2026 as de **paralisação coletiva** já nascem
+  `confirmada` como Chuva (`CONFIRMAR_CHUVA_AUTOMATICAMENTE = True`): a coordenação quer todas validadas. Decisões antigas não mudam.
+  Férias confirmadas sozinhas: `CONFIRMAR_FERIAS_AUTOMATICAMENTE = True`; paralisação de volta à validação manual: `CONFIRMAR_CHUVA_AUTOMATICAMENTE = False`.
 - **Desde quando vale:** `EVENTO_COLETIVO_A_PARTIR_DE = None` — vale para **todos os períodos**, inclusive os meses
   fechados (Julho a Setembro). Para poupar o passado de novo, use `date(2026, 10, 4)` (a semana de 04/10 abre Outubro).
 - **Painel de custos:** os dias esperados do custo real já descontam férias, atestado, folga e paralisações.

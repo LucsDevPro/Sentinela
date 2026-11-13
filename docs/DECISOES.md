@@ -1,5 +1,17 @@
 # Registro de decisões (mais recente primeiro)
 
+## 13/11/2026 — paralisações coletivas validadas automaticamente
+- **Pedido da coordenação:** todas as paralisações coletivas devem estar validadas, e as próximas também, sem passar por validação manual.
+- **Detecção nova:** `CONFIRMAR_CHUVA_AUTOMATICAMENTE = True` (`coleta/pontos.py`): a paralisação coletiva (equipe inteira sem lançamento no dia) nasce `confirmada`
+  como **Chuva**, com `confirmado_automaticamente`. Férias/atestado individuais continuam entrando `pendente` (`CONFIRMAR_FERIAS_AUTOMATICAMENTE = False`). Reverte a decisão de 02/11 só para paralisação coletiva.
+- **As 31 pendentes** em `data/deteccoes_pendentes.json` (Julho 4, Agosto 4, Setembro 7, Outubro 11, Novembro 5) foram validadas como Chuva
+  (`validada_por`/`decidido_via` = coordenação, 13/11/2026). Motivo trocável no `deteccao_editor.html` (Capacitação, Reunião...). As 2 férias pendentes não foram tocadas.
+- **Bug corrigido (a validação baixava notas):** a contagem dos 23 da regra suprema (`ausencias_ranking.py`, `_preparar_ausencias`) só reconhecia o motivo `"Chuva"`; a paralisação
+  confirmada entra no cronograma como `"Chuva (confirmada)"`, então saía da conta, turnos que eram Chuva caíam abaixo de 23 e viravam Turno sem Lançamento (desconto) e os dias esperados subiam.
+  Agora o sufixo `(confirmada)`/`(automático)` é ignorado na comparação. Simulado com `regenerar_mes.py todos`: Julho–Setembro idênticos; Outubro 2 notas sobem (até +4,0), nenhuma desce.
+- **Meses fechados:** a confirmação muda os cálculos de Julho a Outubro só quando o mês for regerado (`regenerar-mes.yml`, um mês por vez, em ordem). Só Outubro muda (2 agentes).
+- Teste: `test_turno_evento.py` (padrão novo + modo manual).
+
 ## 11/11/2026 — efeito de raio premium e correção do cartão que crescia
 - **Raio premium:** Lendária (raio dourado) e Destaque (magenta com ciano) disparam raios em rajadas, como trovoada: cada galho acende, apaga e acende de novo em tempos diferentes (ciclo de 5,6 s), com clarão suave sobre o cartão, faíscas piscando, arcos correndo pela moldura e o halo das peças de fora pulsando; no hover a tempestade acelera. Só com movimento permitido (`prefers-reduced-motion`); sem movimento, os raios ficam acesos e calmos. O PNG desenha o instante do golpe, com a paleta de cada nível (`raiosPNG`/`arcosPNG`).
 - **Correção:** a regra `.carta > * { position: relative }` do refinamento premium tirava as camadas de raios e arcos do posicionamento absoluto: elas empurravam o rodapé (o cartão chegava a 1100 px na página do agente) e ficavam cortadas no álbum, por isso o raio não aparecia. Agora são absolutas de novo.

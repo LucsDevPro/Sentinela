@@ -40,9 +40,10 @@ Expediente: manhã 07–11h, tarde 13–17h (`HORA_EXPEDIENTE_*`).
 ## Detecção automática (`data/deteccoes_pendentes.json`)
 - **Férias/atestado individual:** ≥ `LIMITE_DIAS_UTEIS_FERIAS` (**7**) dias úteis seguidos sem lançamento. Ocorrência máx. 30 dias corridos
   (`LIMITE_DIAS_CORRIDOS_OCORRENCIA`); excesso vira **falta**. Agentes em `data/agentes_sem_abono.json` entram como falta.
-- **Paralisação coletiva:** todos os agentes ativos da equipe sem lançamento no dia.
-- Detecções **novas entram `pendente`** (continuam descontando) até a coordenação confirmar; decisões antigas (`confirmada`/`falta`) não mudam.
-  Voltar ao modo antigo: `CONFIRMAR_FERIAS_AUTOMATICAMENTE` / `CONFIRMAR_CHUVA_AUTOMATICAMENTE = True`.
+- **Paralisação coletiva:** todos os agentes ativos da equipe sem lançamento no dia. **Desde 13/11/2026 nasce `confirmada` como Chuva,
+  sem validação manual** (`CONFIRMAR_CHUVA_AUTOMATICAMENTE = True`); a coordenação ainda pode trocar o motivo ou marcar falta no editor.
+- **Férias/atestado individual** novos entram `pendente` (continuam descontando) até a coordenação confirmar; decisões antigas (`confirmada`/`falta`) não mudam.
+  Confirmar férias sozinho: `CONFIRMAR_FERIAS_AUTOMATICAMENTE = True`. Exigir validação manual da paralisação de novo: `CONFIRMAR_CHUVA_AUTOMATICAMENTE = False`.
 - Períodos que se tocam em até 3 dias (`TOLERANCIA_DIAS_MESMO_EVENTO`) são o mesmo evento.
 
 ## Dias esperados e ranking

@@ -197,7 +197,11 @@ def _preparar_ausencias(df_total, resultados, lista_cronograma=None, primeira_vi
                 motivo = _obter_motivo_cronograma(res["id_agente"], res["equipe"], dia, lista_cronograma,
                                                   turno=turno_nome)
                 if motivo:
-                    if not sob_demanda and motivo in MOTIVOS_EVENTO_COLETIVO:
+                    # A paralisação coletiva confirmada entra no cronograma como "Chuva (confirmada)" /
+                    # "Chuva (automático)": sem tirar o sufixo ela não era contada nos 23 da regra suprema,
+                    # e turnos que eram Chuva viravam Turno sem Lançamento (descontava) ao validar o evento.
+                    motivo_base = motivo.replace(" (confirmada)", "").replace(" (automático)", "")
+                    if not sob_demanda and motivo_base in MOTIVOS_EVENTO_COLETIVO:
                         kc = (dia_fmt, turno_nome)
                         cobertos_evento[kc] = cobertos_evento.get(kc, 0) + 1
                     continue  # dia/turno já explicado (cronograma, ou detecção confirmada) — não é ausência a investigar

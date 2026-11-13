@@ -141,6 +141,21 @@ checar("  — a observação informa quantos já estavam cobertos", "3 já cober
 ag_f = [x for x in ag]
 cron_ferias = [dict(c, motivo="Férias") for c in cron]
 checar("Férias (ausência individual) nunca contam no limite", classes(rodar(ag_f, cron_ferias)) == {TSL}, str(classes(rodar(ag_f, cron_ferias))))
+# Paralisação coletiva VALIDADA entra no cronograma como "Chuva (confirmada)"/"Chuva (automático)":
+# validar o evento não pode tirar esses agentes da conta dos 23 (senão o turno virava falta e descontava).
+for sufixo in (" (confirmada)", " (automático)"):
+    cron_suf = [dict(c, motivo="Chuva" + sufixo) for c in cron]
+    regs_suf = rodar(ag, cron_suf)
+    checar(f'Chuva "{sufixo.strip()}" também conta nos 23 (validar o evento não vira desconto)',
+           classes(regs_suf) == {CHUVA}, str(classes(regs_suf)))
+cron_equipe_conf = [{"alvo": "equipe", "equipe": "Equipe 2", "motivo": "Chuva (confirmada)", "inicio": "07/10/2026", "fim": "07/10/2026"}]
+# Caso real (Outubro/2026): equipe inteira (13) coberta por paralisação validada + 10 de outra equipe sem lançamento = 23.
+aus_dia = {("07/10/2026", "Manhã")}
+ag_eq = [(100 + i, f"E1-{i}", "Equipe 1", aus_dia if i < 10 else set()) for i in range(13)] + \
+        [(200 + i, f"E2-{i}", "Equipe 2", aus_dia) for i in range(13)]
+regs_eq = rodar(ag_eq, cron_equipe_conf)
+checar("Equipe inteira coberta por Chuva (confirmada) conta nos 23 e o resto vira CHUVA, não desconto",
+       classes(regs_eq) == {CHUVA}, str(classes(regs_eq)))
 ce.CONTAR_COBERTOS_POR_EVENTO_NO_LIMITE = False
 checar("Com a contagem total desligada, os mesmos 20 descobertos não atingem o limite",
        classes(rodar(ag, cron)) == {TSL}, str(classes(rodar(ag, cron))))
@@ -252,11 +267,28 @@ def detectar(flag_ferias, flag_chuva):
         ce.CONFIRMAR_FERIAS_AUTOMATICAMENTE, ce.CONFIRMAR_CHUVA_AUTOMATICAMENTE = antes
 
 
+# Padrão atual (13/11/2026): paralisação coletiva nasce confirmada como Chuva (a coordenação quer
+# todas validadas); férias/atestado individuais continuam entrando pendentes.
+checar("Padrão — CONFIRMAR_CHUVA_AUTOMATICAMENTE ligado e CONFIRMAR_FERIAS_AUTOMATICAMENTE desligado",
+       ce.CONFIRMAR_CHUVA_AUTOMATICAMENTE is True and ce.CONFIRMAR_FERIAS_AUTOMATICAMENTE is False)
+fin_padrao = ce.atualizar_deteccoes_pendentes([evento_ferias(), evento_chuva()],
+                                              caminho=os.path.join(tempfile.mkdtemp(), "det_padrao.json"))
+fer_p = next(e for e in fin_padrao if e["tipo"] == "possiveis_ferias")
+chu_p = next(e for e in fin_padrao if e["tipo"] == "paralisacao_coletiva")
+checar("Padrão — paralisação coletiva nova já nasce confirmada como Chuva (sem validação manual)",
+       chu_p["status"] == "confirmada" and chu_p["categoria_coletiva"] == "Chuva" and chu_p["confirmado_automaticamente"], str(chu_p))
+checar("Padrão — férias individual continua entrando pendente", fer_p["status"] == "pendente" and not fer_p["confirmado_automaticamente"], str(fer_p["status"]))
+efetivo_p = ce._cronograma_efetivo(fin_padrao)
+checar("Padrão — paralisação confirmada entra no cronograma efetivo; férias pendente não",
+       any(e.get("alvo") == "equipe" and e.get("inicio") == "07/10/2026" for e in efetivo_p)
+       and not any(e.get("id_agente") == 999 for e in efetivo_p))
+
+# Modo manual (flags desligadas): tudo entra pendente até a coordenação confirmar.
 fin = detectar(False, False)
 fer = next(e for e in fin if e["tipo"] == "possiveis_ferias")
 chu = next(e for e in fin if e["tipo"] == "paralisacao_coletiva")
-checar("Padrão — férias detectada entra como pendente", fer["status"] == "pendente" and not fer["confirmado_automaticamente"], str(fer["status"]))
-checar("Padrão — paralisação coletiva entra como pendente (sem categoria Chuva)", chu["status"] == "pendente" and chu["categoria_coletiva"] is None, str(chu))
+checar("Modo manual — férias detectada entra como pendente", fer["status"] == "pendente" and not fer["confirmado_automaticamente"], str(fer["status"]))
+checar("Modo manual — paralisação coletiva entra como pendente (sem categoria Chuva)", chu["status"] == "pendente" and chu["categoria_coletiva"] is None, str(chu))
 efetivo = ce._cronograma_efetivo(fin)
 checar("Pendente não entra no cronograma efetivo (continua contando)", not any(e.get("id_agente") == 999 for e in efetivo) and
        not any(e.get("alvo") == "equipe" and e.get("inicio") == "07/10/2026" for e in efetivo))

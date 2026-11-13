@@ -304,10 +304,10 @@ os feriados cadastrados em `FERIADOS_NACIONAIS`, em `scripts/coleta/deteccao.py`
 verifica se **2 ou mais agentes da mesma equipe** pararam de lançar no
 mesmo período — nesse caso, em vez de registrar como férias, vira
 **"possível paralisação coletiva"** (🌧️ Chuva, 📚 Capacitação, 🏢
-Reunião/atividade coletiva, 📋 Outra atividade coletiva), que **fica
-pendente esperando você escolher o motivo** — o sistema não adivinha
-sozinho nesse caso, porque o padrão sugere outra coisa (chuva, reunião
-etc.), não o agente estar de férias.
+Reunião/atividade coletiva, 📋 Outra atividade coletiva). **Desde
+13/11/2026 ela já nasce confirmada como Chuva** (`CONFIRMAR_CHUVA_AUTOMATICAMENTE
+= True`), sem esperar validação: se o motivo for outro (capacitação,
+reunião...) ou se for falta, troque no `deteccao_editor.html`.
 
 **Se não for férias/atestado de verdade** (ex.: é uma falta mesmo, não
 justificada), abra **`deteccao_editor.html`**, cole o conteúdo de
@@ -317,8 +317,9 @@ normalmente (aparecem na Ausências, pesam na pontuação) — documentado como
 falta, não como uma detecção esquecida. Pra desfazer, é só clicar em
 "✅ Voltar a Férias" de novo.
 
-Pra paralisação coletiva, o fluxo continua igual: escolher o motivo e
-clicar em confirmar (ou "🚫 Marcar como falta", se não for nada disso).
+Pra paralisação coletiva, o editor serve só para CORRIGIR o que já veio
+confirmado: trocar o motivo ou clicar em "🚫 Marcar como falta" (se for
+exigir validação manual de novo, ponha `CONFIRMAR_CHUVA_AUTOMATICAMENTE = False`).
 
 Depois de decidir algo no editor, copie o JSON gerado e cole em
 `data/deteccoes_pendentes.json` no GitHub. A decisão fica salva pra sempre

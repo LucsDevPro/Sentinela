@@ -92,7 +92,12 @@ MOTIVOS_EVENTO_COLETIVO = ("Chuva", "Reunião/Treinamento")
 CONFIRMAR_FERIAS_AUTOMATICAMENTE = False
 # (A regra suprema de 23+ agentes é aplicada direto por turno em ausencias_ranking.py e NÃO depende
 # desta opção, que só controla as detecções automáticas gerais de paralisação.)
-CONFIRMAR_CHUVA_AUTOMATICAMENTE = False
+# Paralisação coletiva (equipe inteira sem lançamento no dia): desde 13/11/2026 a coordenação
+# quer TODAS validadas, então a detecção nova já nasce "confirmada" como Chuva, sem passar por
+# validação manual (ela ainda pode trocar o motivo ou marcar falta no deteccao_editor.html).
+# Vale só para paralisação coletiva; férias/atestado individuais seguem pendentes (flag acima).
+# Ponha False pra voltar a exigir confirmação manual.
+CONFIRMAR_CHUVA_AUTOMATICAMENTE = True
 # Data a partir da qual a regra de Possível Evento vale. Valor atual: None = vale
 # pra TODOS os períodos (Julho/2026 em diante; Julho a Setembro reclassificam
 # centenas de turnos e a média de pontos sobe 6 a 8 pontos por mês). Pra poupar os
