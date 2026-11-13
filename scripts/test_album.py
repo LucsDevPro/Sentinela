@@ -163,6 +163,15 @@ checar("Top 3: textos claros com contraste reforçado e reflexos premium",
        "color: #FFF4FC" in cc and "rgba(255,255,255,.24)" in cc)
 checar("PNG: filete interno lendário reduzido para 7px",
        "X + 7 * S, Y + 7 * S" in cj and "X + 13 * S, Y + 13 * S" not in cj)
+# Efeito de raio premium (Lendária em ouro, Destaque em magenta/ciano), na tela e no PNG
+checar("raio premium: disparos em rajada, clarão, faíscas e halo das peças pulsando (só com movimento permitido)",
+       "@keyframes c-golpe" in cc and ".c-flash" in cc and "@keyframes c-golpe-orna-ouro" in cc and "@keyframes c-faisca-pisca" in cc and ".carta.b-top .c-estrelas .rg" in cc and "prefers-reduced-motion: no-preference" in cc)
+checar("raio premium: Destaque também recebe raios, arcos e clarão (markup) e o PNG desenha os dois níveis com a própria paleta",
+       "m.borda !== 'b-100' && m.borda !== 'b-top'" in cj and 'class=\\"c-flash\\"' in cj and "function raiosPNG" in cj and "function arcosPNG" in cj and "PRAIO['b-top']" in cj)
+checar("raios, arcos e clarão são absolutos dentro do cartão (a regra `.carta > *` não pode pô-los no fluxo)",
+       ".carta > .c-estrelas,\n.carta > .c-arcos,\n.carta > .c-flash { position: absolute; }" in cc)
+checar("rodapé do cartão do 1º mês cabe no escudo (texto curto «1º mês», não «sem mês anterior»)", "' 1º mês'" in cj and "sem mês anterior" not in cj and "replace('1º mês'" in ler("assets/album.js"))
+checar("compactação: o conteúdo do cartão cabe nos 392 px (estatísticas, nome e foto menores que no refinamento)", ".carta .c-foto { width: 94px; height: 94px;" in cc and ".c-stats > div { padding: 4px 9px;" in cc)
 
 print()
 if falhas:

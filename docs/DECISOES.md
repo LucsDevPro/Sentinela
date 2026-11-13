@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 11/11/2026 — efeito de raio premium e correção do cartão que crescia
+- **Raio premium:** Lendária (raio dourado) e Destaque (magenta com ciano) disparam raios em rajadas, como trovoada: cada galho acende, apaga e acende de novo em tempos diferentes (ciclo de 5,6 s), com clarão suave sobre o cartão, faíscas piscando, arcos correndo pela moldura e o halo das peças de fora pulsando; no hover a tempestade acelera. Só com movimento permitido (`prefers-reduced-motion`); sem movimento, os raios ficam acesos e calmos. O PNG desenha o instante do golpe, com a paleta de cada nível (`raiosPNG`/`arcosPNG`).
+- **Correção:** a regra `.carta > * { position: relative }` do refinamento premium tirava as camadas de raios e arcos do posicionamento absoluto: elas empurravam o rodapé (o cartão chegava a 1100 px na página do agente) e ficavam cortadas no álbum, por isso o raio não aparecia. Agora são absolutas de novo.
+- **Compactação:** o conteúdo do cartão tinha ~470 px e o álbum/PNG têm 392 px fixos (rodapé cortado). Estatísticas, nome e foto ficaram menores; o rodapé inteiro cabe e sobram ~20 px. No primeiro mês de cada agente o texto é «1º mês» (antes «sem mês anterior», que estourava o rodapé em 7 cartinhas de Julho).
+
 ## 11/11/2026 — Lendária «Icon Mármore + Ouro» e álbum mais espaçado
 - A Lendária (100 pontos, top 3) deixa a «tempestade azul» e passa a ser mármore branco com filetes dourados, texto escuro, brilho quente e raios suaves em ouro (opacidade .4). Destaque ganha brilho rosa/ciano e Ouro um halo dourado; no hover, números e foto da Lendária ganham brilho e a inclinação máxima sobe para 16° (Destaque e Lendária).
 - Álbum: grade e pódio com mais respiro (cartas maiores e mais espaço entre elas).

@@ -895,6 +895,82 @@ body.sem-foto .c-foto img {
 }
 
 
+/* =====================================================================
+   EFEITO DE RAIO PREMIUM — Lendária (raio dourado) e Destaque (magenta e ciano)
+   Os raios ficam atrás dos textos (z-index 0) e "disparam" em rajadas: cada galho acende, apaga e acende de novo em momentos
+   diferentes, como uma trovoada; junto vêm um clarão no cartão, faíscas piscando, arcos correndo pela moldura e o halo das peças de fora
+   pulsando. Sem movimento (prefers-reduced-motion), ficam acesos de forma calma e estática.
+   ===================================================================== */
+.carta.b-100 .c-estrelas, .carta.b-100 .c-arcos,
+.carta.b-top .c-estrelas, .carta.b-top .c-arcos { opacity: 0.7; }
+
+/* Lendária: raio âmbar com halo dourado e fio branco */
+.carta.b-100 .c-estrelas .rg { stroke: rgba(255, 196, 60, 0.55); filter: blur(3px); }
+.carta.b-100 .c-estrelas .ry { stroke: #D79A12; filter: drop-shadow(0 0 4px rgba(255, 200, 70, 0.95)); }
+.carta.b-100 .c-estrelas .rw { stroke: #FFFBE8; }
+.carta.b-100 .c-estrelas circle { fill: #FFD25A; }
+.carta.b-100 .c-arcos .ag { stroke: rgba(255, 190, 50, 0.7); stroke-width: 3.4; filter: blur(1.4px); }
+.carta.b-100 .c-arcos .aw { stroke: #FFF6D0; stroke-width: 1.1; }
+
+/* Destaque: raio magenta com núcleo ciano e fio branco */
+.carta.b-top .c-estrelas .rg { stroke: rgba(255, 70, 190, 0.5); filter: blur(3px); }
+.carta.b-top .c-estrelas .ry { stroke: #FF63CE; filter: drop-shadow(0 0 4px rgba(64, 224, 255, 0.95)); }
+.carta.b-top .c-estrelas .rw { stroke: #E9FBFF; }
+.carta.b-top .c-estrelas circle { fill: #8FEFFF; }
+.carta.b-top .c-arcos .ag { stroke: rgba(64, 224, 255, 0.75); stroke-width: 3.4; filter: blur(1.4px); }
+.carta.b-top .c-arcos .aw { stroke: #FFFFFF; stroke-width: 1.1; }
+
+/* Clarão do relâmpago sobre o cartão */
+.c-flash { position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0; }
+.carta.b-100 .c-flash { background: radial-gradient(ellipse 85% 60% at 50% 30%, rgba(255, 240, 170, 0.95), rgba(255, 196, 60, 0.45) 45%, transparent 78%); }
+.carta.b-top .c-flash { background: radial-gradient(ellipse 85% 60% at 50% 30%, rgba(255, 190, 240, 0.9), rgba(120, 220, 255, 0.4) 45%, transparent 78%); }
+
+@keyframes c-golpe {
+  0%, 17%, 100% { opacity: 0.12; }
+  2% { opacity: 1; }
+  4% { opacity: 0.18; }
+  6% { opacity: 1; }
+  9% { opacity: 0.55; }
+  12% { opacity: 1; }
+  14% { opacity: 0.3; }
+}
+@keyframes c-golpe-clarao {
+  0%, 11%, 100% { opacity: 0; }
+  2% { opacity: 0.6; }
+  4% { opacity: 0.06; }
+  6% { opacity: 0.45; }
+}
+@keyframes c-faisca-pisca { 0%, 100% { opacity: 0.1; } 45% { opacity: 1; } }
+@keyframes c-golpe-orna-ouro {
+  0%, 14%, 100% { filter: drop-shadow(0 0 6px rgba(220, 170, 50, 0.75)); }
+  2%, 6% { filter: drop-shadow(0 0 20px rgba(255, 214, 80, 1)) drop-shadow(0 0 7px #FFFFFF); }
+}
+@keyframes c-golpe-orna-rosa {
+  0%, 14%, 100% { filter: drop-shadow(0 0 6px rgba(255, 100, 180, 0.7)); }
+  2%, 6% { filter: drop-shadow(0 0 20px rgba(64, 224, 255, 1)) drop-shadow(0 0 7px #FFFFFF); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .carta.b-100 .c-estrelas, .carta.b-100 .c-arcos,
+  .carta.b-top .c-estrelas, .carta.b-top .c-arcos { opacity: 1; }
+  .carta.b-100 .c-estrelas .rai, .carta.b-top .c-estrelas .rai { animation: c-golpe 5.6s linear infinite; }
+  .carta.b-100 .c-estrelas .rai:nth-child(3n), .carta.b-top .c-estrelas .rai:nth-child(3n) { animation-delay: 0.5s; }
+  .carta.b-100 .c-estrelas .rai:nth-child(4n), .carta.b-top .c-estrelas .rai:nth-child(4n) { animation-delay: 1.4s; }
+  .carta.b-100 .c-estrelas .rai:nth-child(5n), .carta.b-top .c-estrelas .rai:nth-child(5n) { animation-delay: 2.6s; }
+  .carta.b-100 .c-estrelas .rai:nth-child(7n), .carta.b-top .c-estrelas .rai:nth-child(7n) { animation-delay: 3.9s; }
+  .carta.b-100 .c-arcos, .carta.b-top .c-arcos { animation: c-golpe 5.6s linear 0.3s infinite; }
+  .carta.b-100 .c-flash, .carta.b-top .c-flash { animation: c-golpe-clarao 5.6s linear infinite; }
+  .carta.b-100 .c-estrelas circle, .carta.b-top .c-estrelas circle { animation: c-faisca-pisca 2.2s ease-in-out infinite; }
+  .carta.b-100 .c-estrelas circle:nth-of-type(3n), .carta.b-top .c-estrelas circle:nth-of-type(3n) { animation-delay: 0.7s; }
+  .carta.b-100 .c-estrelas circle:nth-of-type(4n), .carta.b-top .c-estrelas circle:nth-of-type(4n) { animation-delay: 1.5s; }
+  .c-conj.b-100 .c-orna-atras { animation: c-golpe-orna-ouro 5.6s linear infinite; }
+  .c-conj.b-top .c-orna-atras { animation: c-golpe-orna-rosa 5.6s linear infinite; }
+  /* no hover a tempestade acelera */
+  .carta.b-100:hover .c-estrelas .rai, .carta.b-top:hover .c-estrelas .rai { animation-duration: 2.4s; }
+  .carta.b-100:hover .c-flash, .carta.b-top:hover .c-flash { animation-duration: 2.4s; }
+}
+@media print { .c-flash { display: none; } }
+
 /* ===================================================================
    EFEITOS VIVOS (assets/carta_fx.js)
    O script liga em cada .carta: [data-fx]; --mx/--my/--rx/--ry/--brilho enquanto o ponteiro está sobre ela;
@@ -1196,6 +1272,13 @@ body.sem-foto .c-foto img {
 .carta > .c-borda { z-index: 3; }
 .carta > .c-brilho,
 .carta > .c-glitter { z-index: 2; }
+/* As camadas de raios, arcos e clarão flutuam sobre o cartão. Sem isto, a regra `.carta > *` acima as colocava no fluxo (position: relative): elas empurravam o rodapé e o cartão chegava a 1100 px de altura na página do agente, e no álbum ficavam cortadas fora do cartão. */
+.carta > .c-estrelas,
+.carta > .c-arcos,
+.carta > .c-flash { position: absolute; }
+.carta > .c-estrelas { z-index: 0; }
+.carta > .c-arcos { z-index: 4; }
+.carta > .c-flash { z-index: 5; }
 .c-conj { overflow: visible; }
 
 .carta .c-nome {
@@ -1325,3 +1408,12 @@ body.sem-foto .c-foto img {
   .carta:not([data-fx]):hover { transform: none; transition: none; }
   .c-stats > div::after { transition: none; }
 }
+
+/* Compactação: o refinamento premium deixou o conteúdo com ~470 px, e o álbum e o PNG têm 392 px fixos, então o rodapé ficava cortado.
+   Estatísticas, nome e foto voltam a caber no cartão com o rodapé inteiro dentro do escudo. */
+.carta .c-nome { padding: 6px 0; margin: 5px 0; }
+.carta .c-foto { width: 94px; height: 94px; margin-bottom: 4px; }
+.c-stats { gap: 5px; margin-top: 8px; padding-bottom: 6px; }
+.c-stats > div { padding: 4px 9px; line-height: 1.1; }
+.c-stats > div > span { font-size: 0.68rem; line-height: 1.1; }
+.c-stats > div > strong, .c-stats > div > b { font-size: 1.02rem; line-height: 1.1; }

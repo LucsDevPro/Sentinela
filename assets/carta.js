@@ -95,8 +95,8 @@
     var partes = String(a.nome).trim().split(/\s+/), curto = partes.length > 1 ? partes[0] + ' ' + partes[partes.length - 1] : partes[0];
     var ini = (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
-    var tend = delta == null ? SV('minus') + ' sem mês anterior' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
-    var extra100 = m.borda !== 'b-100' ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg>';
+    var tend = delta == null ? SV('minus') + ' 1º mês' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
+    var extra100 = (m.borda !== 'b-100' && m.borda !== 'b-top') ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
     return '<div class="c-conj ' + m.borda + '">' + ornSVG(m.borda, 'atras') + '<div class="carta ' + tier[0] + ' ' + m.borda + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
       '<div class="c-pos">' + esc(eq) + '<small>' + pos + 'º de ' + u.total + '</small></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
@@ -170,6 +170,29 @@
       ctx.fill(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
     });
   }
+  /* Raios no PNG: o instante do golpe (tudo aceso), com a paleta de cada nível. A espessura de cada galho vem de r[1]. */
+  var PRAIO = {
+    'b-100': { a: .95, halo: 'rgba(255,196,60,.55)', haloSh: '#FFC43C', miolo: '#D79A12', mioloSh: '#FFC846', fil: '#FFFBE8', fais: '#FFD25A', arco: 'rgba(255,190,50,.7)', arcoSh: '#FFBE32', arcoFil: '#FFF6D0' },
+    'b-top': { a: .95, halo: 'rgba(255,70,190,.5)', haloSh: '#FF46BE', miolo: '#FF63CE', mioloSh: '#40E0FF', fil: '#E9FBFF', fais: '#8FEFFF', arco: 'rgba(64,224,255,.75)', arcoSh: '#40E0FF', arcoFil: '#FFFFFF' }
+  };
+  function raiosPNG(ctx, X, Y, W, H, S, P) {
+    ctx.save(); ctx.globalAlpha = P.a; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    RAIOS.forEach(function (r) {
+      var pa = new Path2D(r[0]);
+      ctx.save(); ctx.strokeStyle = P.halo; ctx.lineWidth = 8 * r[1]; ctx.shadowColor = P.haloSh; ctx.shadowBlur = 12 * S; ctx.stroke(pa); ctx.restore();
+      ctx.save(); ctx.strokeStyle = P.miolo; ctx.lineWidth = 2.8 * r[1]; ctx.shadowColor = P.mioloSh; ctx.shadowBlur = 8 * S; ctx.stroke(pa); ctx.restore();
+      ctx.strokeStyle = P.fil; ctx.lineWidth = Math.max(.6, 1.2 * r[1]); ctx.stroke(pa);
+    });
+    FAISCAS.forEach(function (f) { ctx.globalAlpha = Math.min(1, f[3] + .25); ctx.fillStyle = P.fais; ctx.beginPath(); ctx.arc(f[0], f[1], f[2] * 1.3, 0, 2 * Math.PI); ctx.fill(); });
+    ctx.restore();
+  }
+  function arcosPNG(ctx, X, Y, W, H, S, P) {
+    ctx.save(); ctx.globalAlpha = P.a; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ARCOS.forEach(function (d) { var pa = new Path2D(d);
+      ctx.save(); ctx.strokeStyle = P.arco; ctx.lineWidth = 3.4; ctx.shadowColor = P.arcoSh; ctx.shadowBlur = 9 * S; ctx.stroke(pa); ctx.restore();
+      ctx.strokeStyle = P.arcoFil; ctx.lineWidth = 1.1; ctx.stroke(pa); });
+    ctx.restore();
+  }
   function pathCartao(ctx, x, y, w, h, S, d, continuar) { // d = recuo (quem chama já passa o retângulo encolhido em d); continuar = não reiniciar o caminho
     d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d; var n = FORMA.length;
     // cantos de baixo ancorados na base (altura fixa em px do cartão), como no CSS
@@ -194,7 +217,7 @@
     if (!html0) return Promise.reject(new Error('sem nota'));
     host.style.cssText = 'position:fixed;left:-9999px;top:0;width:272px;pointer-events:none'; host.innerHTML = html0; document.body.appendChild(host);
     var card = host.querySelector('.carta'), tier = (card.className.match(/t-\w+/) || [''])[0];
-    var borda0 = (card.className.match(/b-(?:\d+|top)/) || [''])[0], oculta = !!opcoes.ocultarNomes, is100 = card.classList.contains('b-100');
+    var borda0 = (card.className.match(/b-(?:\d+|top)/) || [''])[0], oculta = !!opcoes.ocultarNomes, is100 = card.classList.contains('b-100'), isTop = card.classList.contains('b-top');
     if (opcoes.ocultarFoto) { var im0 = card.querySelector('.c-foto img'); if (im0) im0.remove(); } // sem foto: ficam as iniciais
     var imgFoto = card.querySelector('.c-foto img'), pronto = Promise.all([document.fonts ? document.fonts.ready : 0, document.fonts ? document.fonts.load('700 20px "Barlow Semi Condensed"') : 0, document.fonts ? document.fonts.load('600 14px "IBM Plex Sans"') : 0, carregar('assets/logo_carta.png'), imgFoto && !opcoes.ocultarFoto ? carregar(imgFoto.getAttribute('src')).catch(function () { return null; }) : null]);
     return pronto.then(function (r) {
@@ -208,20 +231,12 @@
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
       var fr100 = is100 ? (function () { var b = card.querySelector('.c-foto').getBoundingClientRect(); return { cx: X + (b.left - cr.left + b.width / 2) * S, cy: Y + (b.top - cr.top + b.height / 2) * S }; })() : null;
+      if (isTop) raiosPNG(ctx, X, Y, W, H, S, PRAIO['b-top']);   // Destaque: raios magenta e ciano
       if (is100) {
         // clarão branco-quente atrás da foto (radial-gradient do ::after do CSS)
         var cx0 = X + W * .5, cy0 = Y + H * .28, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .58, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);
         g0.addColorStop(0, 'rgba(255,255,255,.75)'); g0.addColorStop(.6, 'rgba(255,250,230,.2)'); g0.addColorStop(1, 'rgba(255,250,230,0)'); ctx.fillStyle = g0; ctx.fillRect(X, Y, W, H);
-        // raios suaves em ouro (halo dourado, miolo amarelo e núcleo claro; opacidade .4 como o CSS); a espessura de cada galho vem de r[1]
-        ctx.save(); ctx.globalAlpha = .4; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        RAIOS.forEach(function (r) {
-          var pa = new Path2D(r[0]);
-          ctx.save(); ctx.strokeStyle = 'rgba(220,170,50,.55)'; ctx.lineWidth = 8 * r[1]; ctx.shadowColor = '#DCAA32'; ctx.shadowBlur = 12 * S; ctx.stroke(pa); ctx.restore();
-          ctx.save(); ctx.strokeStyle = '#FFE080'; ctx.lineWidth = 2.8 * r[1]; ctx.shadowColor = '#E6B432'; ctx.shadowBlur = 7 * S; ctx.stroke(pa); ctx.restore();
-          ctx.strokeStyle = '#FFF8E0'; ctx.lineWidth = Math.max(.6, 1.2 * r[1]); ctx.stroke(pa);
-        });
-        FAISCAS.forEach(function (f) { ctx.globalAlpha = f[3]; ctx.fillStyle = '#FFF6C8'; ctx.beginPath(); ctx.arc(f[0], f[1], f[2], 0, 2 * Math.PI); ctx.fill(); });
-        ctx.restore();
+        raiosPNG(ctx, X, Y, W, H, S, PRAIO['b-100']);   // raios dourados no instante do golpe (igual ao CSS)
         // filete interno dourado mais fino (alinhado ao CSS: 7px para dentro)
         ctx.save(); pathCartao(ctx, X + 7 * S, Y + 7 * S, W - 14 * S, H - 14 * S, S, 7 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = 'rgba(255,240,180,.85)'; ctx.shadowColor = 'rgba(220,170,50,.8)'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
       } else {
@@ -299,13 +314,7 @@
       // bisel do anel (igual ao CSS): luz em cima, sombra embaixo
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
-      if (is100) { // faíscas correndo pela borda (por cima do anel)
-        ctx.save(); ctx.globalAlpha = .4; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        ARCOS.forEach(function (d) { var pa = new Path2D(d);
-          ctx.save(); ctx.strokeStyle = 'rgba(200,150,40,.55)'; ctx.lineWidth = 3.2; ctx.shadowColor = '#DCAA32'; ctx.shadowBlur = 8 * S; ctx.stroke(pa); ctx.restore();
-          ctx.strokeStyle = '#FFF6C8'; ctx.lineWidth = 1; ctx.stroke(pa); });
-        ctx.restore();
-      }
+      if (is100 || isTop) arcosPNG(ctx, X, Y, W, H, S, PRAIO[is100 ? 'b-100' : 'b-top']);   // faíscas correndo pela borda (por cima do anel)
       ornCanvas(ctx, borda0, 'frente', X, Y, S);   // coroa e gema por cima do cartão
       return new Promise(function (ok, erro) { try { cv.toBlob(function (bl) { bl ? ok(bl) : erro(new Error('falha ao gerar a imagem')); }, 'image/png'); } catch (e) { erro(e); } });
     }).then(function (bl) { host.remove(); return bl; }, function (e) { host.remove(); throw e; });
