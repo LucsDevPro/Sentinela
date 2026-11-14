@@ -555,3 +555,32 @@ tbody tr:hover{background:rgba(68,147,203,.09)}
 .badge,.tag,.pill{border-radius:999px}
 @media(max-width:760px){.container{padding-left:14px;padding-right:14px}header{margin-bottom:18px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Tema claro original preservado como padrão; Ultra Night permanece no tema escuro opcional. */
+:root{
+  --navy-deep:#050F20;--navy:#14447F;--navy2:#1B5CA8;
+  --bg:#EDF1F7;--card:#fff;--bg-soft:#F3F6FB;--bg-raise:#E7EEF7;
+  --border:#D3DDEA;--border-soft:#E5EBF3;--border-strong:#AFC0D6;
+  --text:#12233B;--text2:#455879;--text3:#5A6D8C;--h:#0B2A52;
+  --stripe:rgba(11,42,82,.035);--hover:rgba(30,154,216,.1);--grid:rgba(69,88,121,.16);
+  --sticky-even:#F6F9FC;--sticky-hover:#E6F0FA;--sticky-crit:#FCE9E6;--sticky-warn:#FFF3D9;
+  --shadow-sm:0 1px 2px rgba(18,35,59,.06);--shadow:0 8px 24px rgba(18,35,59,.08);--shadow-lg:0 10px 30px -8px rgba(18,35,59,.22);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --navy-deep:#050d19;--navy:#102b4a;--navy2:#1b5688;
+  --bg:#050d18;--card:#0b192a;--bg-soft:#10233a;--bg-raise:#17314d;
+  --border:rgba(148,177,211,.2);--border-soft:rgba(148,177,211,.12);--border-strong:rgba(148,177,211,.34);
+  --text:#edf4ff;--text2:#a8bad1;--text3:#8197b4;--h:#f4f7fc;
+  --stripe:rgba(255,255,255,.025);--hover:rgba(63,161,222,.12);--grid:rgba(168,186,209,.16);
+  --sticky-even:#0e2034;--sticky-hover:#17314b;--sticky-crit:#2a1a28;--sticky-warn:#2a2619;
+  --shadow-sm:0 4px 14px rgba(0,0,0,.16);--shadow:0 8px 24px rgba(0,0,0,.18);--shadow-lg:0 20px 54px rgba(0,0,0,.32);
+  color-scheme:dark;
+}
+body{background:radial-gradient(ellipse at 50% -18%,rgba(33,105,167,.08),transparent 46%),var(--bg)}
+.kpi,.kpi-card{background:linear-gradient(145deg,#fff,#f4f7fb)}
+.chart-card,.section-card,.card{background:linear-gradient(150deg,#fff,#f8fafd)}
+:root[data-theme="dark"] body{background:radial-gradient(ellipse at 50% -18%,rgba(33,105,167,.2),transparent 46%),var(--bg)}
+:root[data-theme="dark"] .kpi,:root[data-theme="dark"] .kpi-card{background:linear-gradient(145deg,rgba(20,43,68,.96),rgba(12,27,45,.98))}
+:root[data-theme="dark"] .chart-card,:root[data-theme="dark"] .section-card,:root[data-theme="dark"] .card{background:linear-gradient(150deg,rgba(17,35,56,.98),rgba(11,25,42,.98))}
