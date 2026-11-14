@@ -141,7 +141,7 @@ header h1 span { color: #2BA8E8; font-weight: 600; }
 /* ---------- Navegação semanal ---------- */
 .week-nav { display: flex; gap: 8px; flex-wrap: nowrap; align-items: stretch; margin-bottom: 14px; overflow-x: auto; scrollbar-width: thin; }
 .week-nav-titulo { flex: 0 0 auto; white-space: nowrap; align-self: center; font-family: var(--f-num); font-weight: 700; font-size: 1.05rem; color: var(--h); margin-right: 6px; }
-.week-chip { flex: 1 1 auto; white-space: nowrap; display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border);
+.week-chip { flex: 0 0 auto; white-space: nowrap; display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border);
   background: var(--card); color: var(--text2); text-decoration: none; font-size: 0.84rem; line-height: 1.25; }
 .week-chip small { font-size: 0.72rem; opacity: 0.85; }
 .week-chip:hover { color: var(--h); background: var(--bg-raise); border-color: var(--border-strong); }

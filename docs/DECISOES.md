@@ -1,5 +1,12 @@
 # Registro de decisões (mais recente primeiro)
 
+## 14/11/2026 (2) — álbum de cartinhas remodelado, tema claro de verdade e semanas compactas
+- **Bug do tema:** `album.html` nascia com visual noturno mesmo no tema claro (5 camadas de CSS empilhadas em `assets/album.css` + `ultra-enterprise.css` por cima; `--tx` ficava claro sobre fundo claro).
+  `album.css` foi reescrito em UMA camada (claro por padrão, `[data-theme="dark"]` opcional, tudo por variável) e o `album.html` não carrega mais o `ultra-enterprise.css`.
+- **Página remodelada:** título + subtítulo, abas com sublinhado amarelo (igual ao dashboard), filtros (Mês/Equipe/Nível/Buscar) e interruptores (apresentação, ocultar fotos) em um painel só, explicação recolhida em "Como ler o álbum",
+  atalhos por nível com contagem (clicar preenche o filtro "Nível"; contam só o que passou por equipe e busca), pódio e grade. Cabeçalho segue azul-marinho nos dois temas, alinhado a 1240 px.
+- **Celular:** grade de 2 colunas com a carta em escala 0,58 (0,62 de 400 a 480 px); a caixa `.c-conj` tem 272 px cheios mesmo reduzida por transform, então a grade corta o excesso lateral só em ≤ 480 px (`overflow-x: clip`).
+- **Dashboard:** os botões das semanas (`.week-chip`) voltam ao tamanho compacto (não esticam para preencher a linha); a linha continua sem quebrar.
 ## 14/11/2026 — design: menu em linha única, gráficos institucionais e "Por Área" recolhida
 - **Menu em uma linha, em qualquer resolução** (`style.css`, `ultra-enterprise.css`, `base.html`): as 11 abas ficam sempre em uma linha só; o tamanho da letra acompanha a largura da caixa (`cqw`, container query),
   então o menu encolhe junto com a tela. Abaixo de 1100 px somem os trechos opcionais (`.tab-opc`: "& Irregularidades", "& Produtividade", "(média dos meses)"); em telas muito estreitas o menu rola de lado, sem quebrar.

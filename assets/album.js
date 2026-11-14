@@ -33,6 +33,8 @@ $('abaCalc').onclick = () => mostrar('calc', true);
 window.addEventListener('hashchange', () => mostrar(location.hash === '#como-calcula' ? 'calc' : 'cartas', false));
 mostrar(location.hash === '#como-calcula' ? 'calc' : 'cartas', false);
 
+const NIVEIS = ['LENDÁRIA', 'DESTAQUE', 'OURO', 'PRATA', 'BRONZE', 'AÇO', 'FERRO'];
+const COR_NIVEL = { 'LENDÁRIA': '#8A5CF6', 'DESTAQUE': '#EC4899', 'OURO': '#E0A400', 'PRATA': '#9AA9BA', 'BRONZE': '#C47A3A', 'AÇO': '#64748B', 'FERRO': '#4B5563' };
 const MIN_MESES_ANO = 2;   // mínimo de cartinhas mensais para entrar no «Melhor do ano»
 const ANO = 'Melhor do ano';   // opção do filtro: ranking pela média de todas as cartinhas (todos os meses)
 const D = window.AGENTES_DADOS, ag = D && D.agentes ? Object.entries(D.agentes).map(([k, a]) => ({ k, a })) : [];
@@ -64,7 +66,14 @@ else {
     if (!doAno) lista.forEach(l => { l.h = hist(l); });
     if (!doAno) lista.sort((p, q) => Carta.bruta(q.u) - Carta.bruta(p.u) || q.h - p.h || p.u.pos - q.u.pos || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
     if (!doAno) lista.forEach((l, i) => { l.lugar = i + 1; });
-    const vis = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)) && (!niv || Carta.medidas(l.ms, l.x.k).tier[1] === niv));
+    lista.forEach(l => { l.nivel = Carta.medidas(l.ms, l.x.k).tier[1]; });
+    const base = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)));   // equipe + busca; o nível entra depois
+    const vis = base.filter(l => !niv || l.nivel === niv);
+    // atalhos por nível, com a contagem do que está filtrado por equipe/busca (clicar preenche o filtro "Nível")
+    $('niveis').innerHTML = [['', 'Todos']].concat(NIVEIS.map(n => [n, n])).map(([v, rot]) => {
+      const q = v ? base.filter(l => l.nivel === v).length : base.length;
+      return (v && !q && v !== niv) ? '' : `<button type="button" class="nv" data-nivel="${esc(v)}" aria-pressed="${v === niv}" style="--cor:${COR_NIVEL[v] || 'var(--mut)'}"><i></i>${esc(rot)} <b>${q}</b></button>`;
+    }).join('');
     const slot = (l, cls) => {
       const qAg = (/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)) + (doAno ? '' : '&mes=' + encodeURIComponent(mes));
       return `<a class="slot ${cls || ''}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)}${doAno ? '' : ' em ' + esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}</a>`;
@@ -78,6 +87,7 @@ else {
     $('resumo').textContent = vis.length ? (doAno ? `${vis.length} cartinha(s) de ${lista.length}: média de todos os meses (só quem tem ${MIN_MESES_ANO} meses ou mais).` : `${vis.length} cartinha(s) de ${lista.length} em ${mes}.`) : 'Nenhuma cartinha com esses filtros.';
   };
   ['fMes', 'fEq', 'fNivel'].forEach(i => $(i).onchange = desenhar); $('fBusca').oninput = desenhar;
+  $('niveis').onclick = e => { const b = e.target.closest('.nv'); if (!b) return; $('fNivel').value = b.dataset.nivel; desenhar(); };
   desenhar();
 }
 document.addEventListener('sentinela:tema', () => {});
