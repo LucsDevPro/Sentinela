@@ -521,3 +521,37 @@ body.extrato-aberto { overflow: hidden; }
 #ausencias .kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 @media (max-width: 760px) { #ausencias .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ci-det { grid-template-columns: repeat(2, 1fr); } }
 @media print { .painel > summary::before { display: none; } }
+
+
+/* SENTINELA ULTRA — sistema visual do dashboard. Apenas apresentação; sem alterar dados ou cálculos. */
+:root{
+  --navy-deep:#050d19;--navy:#102b4a;--navy2:#1b5688;
+  --bg:#081321;--card:#0e1d30;--bg-soft:#12263d;--bg-raise:#18324e;
+  --border:rgba(148,177,211,.2);--border-soft:rgba(148,177,211,.12);--border-strong:rgba(148,177,211,.34);
+  --text:#edf4ff;--text2:#a8bad1;--text3:#8197b4;--h:#f4f7fc;
+  --stripe:rgba(255,255,255,.025);--hover:rgba(63,161,222,.12);--grid:rgba(168,186,209,.16);
+  --shadow-sm:0 4px 14px rgba(0,0,0,.16);--shadow:0 8px 24px rgba(0,0,0,.18);--shadow-lg:0 20px 54px rgba(0,0,0,.32);
+  --radius:14px;--radius-sm:10px;color-scheme:dark;
+}
+:root[data-theme="dark"]{--bg:#050d18;--card:#0b192a;--bg-soft:#10233a;--bg-raise:#17314d;--border:rgba(148,177,211,.2);--border-soft:rgba(148,177,211,.12);--text:#edf4ff;--text2:#a8bad1;--text3:#8197b4;color-scheme:dark}
+html{background:var(--bg)}
+body{background:radial-gradient(ellipse at 50% -18%,rgba(33,105,167,.2),transparent 46%),var(--bg);color:var(--text)}
+.container{max-width:1680px}
+header{background:rgba(4,12,23,.94);border-bottom:1px solid rgba(232,184,79,.2);box-shadow:0 12px 36px rgba(0,0,0,.18)}
+header::after{height:2px;background:linear-gradient(90deg,#e8b84f 0 150px,#e45c55 150px 188px,#39b9a6 188px 220px,transparent 220px)}
+header h1{letter-spacing:.12em}
+.header-meta{color:#9db2cc}
+.hbtn,.hnav a,.header-actions button{border-radius:10px;transition:background .2s,border-color .2s,transform .2s}
+.hbtn:hover,.hnav a:hover{transform:translateY(-1px);border-color:rgba(232,184,79,.45)}
+.panel,.painel,.chart-card,.kpi,.kpi-card,.section-card,.card{border-radius:16px;border-color:var(--border);box-shadow:var(--shadow-sm)}
+.kpi,.kpi-card{background:linear-gradient(145deg,rgba(20,43,68,.96),rgba(12,27,45,.98));}
+.chart-card,.section-card,.card{background:linear-gradient(150deg,rgba(17,35,56,.98),rgba(11,25,42,.98))}
+h2,h3,.section-title{letter-spacing:-.015em}
+button,select,input,textarea{accent-color:#e8b84f}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #e8b84f;outline-offset:3px}
+table{border-color:var(--border)}
+thead th{background:#132943;color:#eaf2ff}
+tbody tr:hover{background:rgba(68,147,203,.09)}
+.badge,.tag,.pill{border-radius:999px}
+@media(max-width:760px){.container{padding-left:14px;padding-right:14px}header{margin-bottom:18px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
