@@ -65,3 +65,69 @@
 header.topo{padding-left:0;padding-right:0}
 header.topo .marca{max-width:860px;padding:0 16px}
 header.topo .tema-btn + a{margin-left:0}
+
+
+
+/* SENTINELA ULTRA ENTERPRISE — perfil individual (somente apresentação) */
+:root{
+ --radius:18px;--shadow-card:0 14px 36px rgba(15,38,68,.08);
+}
+body{
+ background:radial-gradient(ellipse 90% 40% at 50% 0%,rgba(42,105,165,.09),transparent 70%),var(--bg);
+}
+main{max-width:1180px;padding:clamp(16px,3vw,38px)}
+header.topo{position:sticky;top:0;z-index:100;background:rgba(5,15,32,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 8px 28px rgba(0,0,0,.16)}
+header.topo .marca{max-width:1180px;min-height:52px}
+header.topo img{height:38px;border-radius:8px}
+header.topo b{font-size:1.3rem;letter-spacing:.12em}
+main>h1{font-size:clamp(1.8rem,3.5vw,2.7rem);font-weight:800;letter-spacing:-.035em;margin:12px 0 4px}
+main>.mut{font-size:.82rem;margin-bottom:18px}
+.card{
+ background:linear-gradient(145deg,#fff,#f8fafd);border:1px solid var(--bd);border-radius:18px;
+ padding:clamp(16px,2.2vw,24px);margin:16px 0;box-shadow:var(--shadow-card)
+}
+.card h2{font-size:1.08rem;font-weight:800;margin-bottom:14px;letter-spacing:-.015em}
+.carta-wrap{gap:clamp(22px,4vw,42px);align-items:center;padding:12px 0 20px}
+.carta-info{min-width:260px;background:linear-gradient(145deg,#fff,#f5f8fc);border:1px solid var(--bd);border-radius:18px;padding:20px;box-shadow:var(--shadow-card)}
+.carta-info h2{font-size:1.18rem}
+.carta-info table{border:0;border-radius:0}
+.carta-info table td{padding:7px 10px 7px 0;border-bottom:1px solid var(--bd)}
+.carta-info table tr:last-child td{border-bottom:0}
+.acoes{gap:9px}
+.bt-img{border-radius:11px;box-shadow:0 4px 12px rgba(15,38,68,.08);transition:transform .18s,box-shadow .18s}
+.bt-img:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(15,38,68,.14)}
+.kpis{gap:12px}
+.kpi{border:1px solid var(--bd);border-top:3px solid var(--serie);border-radius:14px;padding:15px;background:linear-gradient(145deg,#fff,#f6f9fd)}
+.kpi span{font-size:.68rem;letter-spacing:.07em}
+.kpi strong{font-family:"Barlow Semi Condensed",sans-serif;font-size:1.75rem;font-weight:800}
+.grafico{height:300px;padding:12px 4px 2px}
+.tl{border-left:3px solid color-mix(in srgb,var(--serie) 35%,var(--bd));padding-left:20px}
+.tl>li{padding-bottom:20px}
+.tl>li::before{left:-29px;width:14px;height:14px;box-shadow:0 0 0 5px color-mix(in srgb,var(--serie) 10%,transparent)}
+.tl .quando{font-size:.94rem}
+.chip{padding:5px 10px;border-radius:999px}
+#b,#lista a{border-radius:11px}
+#b{border:1px solid var(--bd);box-shadow:0 4px 14px rgba(15,38,68,.05)}
+#lista{margin-top:10px;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:var(--card)}
+#lista a{padding:13px 16px;border-bottom:1px solid var(--bd);transition:background .16s}
+#lista a:hover{background:var(--soft)}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .carta-info{background:linear-gradient(145deg,#10243b,#0b192a);border-color:var(--bd)}
+:root[data-theme="dark"] .kpi{background:linear-gradient(145deg,#142d49,#0b1b2d)}
+@media(max-width:700px){
+ .carta-wrap{justify-content:center}
+ .carta-info{width:100%;min-width:0}
+ .grafico{height:250px}
+}
+@media(max-width:480px){
+ main{padding:12px}
+ header.topo .marca{gap:8px}
+ header.topo img{height:27px}
+ header.topo b{font-size:1rem}
+ header.topo a{font-size:.72rem}
+ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .kpi{padding:12px}
+ .kpi strong{font-size:1.45rem}
+ .grafico{height:220px}
+}
+@media(prefers-reduced-motion:reduce){.bt-img,#lista a{transition:none}}
+

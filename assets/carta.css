@@ -1626,3 +1626,20 @@ body.sem-foto .c-foto img {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
+
+
+
+/* ULTRA ENTERPRISE — interação 3D sutil nas cartas; preserva estrutura e níveis */
+.c-conj{transform-style:preserve-3d;transition:transform .28s cubic-bezier(.2,.75,.25,1),filter .28s ease}
+.c-conj:hover{filter:drop-shadow(0 18px 26px rgba(0,0,0,.28))}
+.carta{backface-visibility:hidden;transform:translateZ(0);transition:filter .25s ease,box-shadow .25s ease}
+.carta.b-90,.carta.b-top,.carta.b-100{will-change:filter}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .c-conj:hover .carta{filter:saturate(1.07) brightness(1.025)}
+ .c-conj.b-top:hover,.c-conj.b-100:hover{filter:drop-shadow(0 0 24px rgba(232,184,79,.28)) drop-shadow(0 18px 30px rgba(0,0,0,.32))}
+}
+@media(prefers-reduced-motion:reduce){
+ .c-conj,.carta{transition:none!important;transform:none!important}
+ .carta.b-90,.carta.b-top,.carta.b-100{will-change:auto}
+}
+
