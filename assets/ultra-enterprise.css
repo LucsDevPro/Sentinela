@@ -1,0 +1,102 @@
+/* SENTINELA ULTRA — expansão visual empresarial
+   Camada estritamente visual. Não contém regras, dados ou cálculos.
+*/
+:root {
+  --ultra-gold:#d8ad55; --ultra-gold-hi:#f2d58a; --ultra-navy:#071525;
+  --ultra-ink:#10243c; --ultra-line:rgba(126,158,198,.22);
+  --ultra-glass:rgba(255,255,255,.76);
+}
+:root[data-theme="dark"] {
+  --ultra-glass:rgba(11,26,44,.82);
+  --ultra-line:rgba(142,176,219,.2);
+}
+:where(button,a,select,input,summary,[role="tab"]):focus-visible {
+  outline:3px solid var(--ultra-gold-hi)!important; outline-offset:3px!important;
+}
+:where(button,a,select,input) { transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease; }
+:where(input,select,textarea,button) { font:inherit; }
+@media (prefers-reduced-motion:reduce) {
+  :where(*, *::before, *::after) { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; animation-iteration-count:1!important; }
+}
+/* Dashboard */
+body:has(.container) { background-image:radial-gradient(ellipse at 12% 0%,rgba(43,110,177,.075),transparent 38%); }
+header:not(.topo) { box-shadow:0 12px 34px rgba(4,15,31,.16); }
+.container { max-width:1760px; }
+.header-brand img { border-radius:10px!important; box-shadow:0 4px 18px rgba(0,0,0,.2); }
+header h1 { letter-spacing:.075em!important; }
+.hbtn,.print-btn { border-radius:10px!important; box-shadow:0 5px 14px rgba(0,0,0,.12); }
+.hbtn:hover,.print-btn:hover { transform:translateY(-1px); box-shadow:0 8px 20px rgba(0,0,0,.2); }
+.nav-tabs { gap:6px!important; border-bottom-color:var(--border-strong)!important; }
+.nav-tab { border-radius:10px 10px 0 0!important; padding:13px 18px 11px!important; }
+.nav-tab.active { background:linear-gradient(180deg,rgba(247,181,0,.12),transparent)!important; }
+.kpi-grid { gap:16px!important; }
+.kpi { border-radius:15px!important; padding:19px 21px!important; box-shadow:0 8px 24px rgba(14,35,62,.07)!important; overflow:hidden; }
+.kpi::after { content:""; position:absolute; width:110px; height:110px; right:-44px; top:-54px; border-radius:50%; background:currentColor; opacity:.035; pointer-events:none; }
+.kpi-label { letter-spacing:.055em; text-transform:uppercase; font-size:.72rem!important; }
+.kpi-value { font-size:clamp(2rem,3vw,2.8rem)!important; letter-spacing:-.035em!important; }
+.charts-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))!important; gap:18px!important; }
+.chart-card,.table-section,.team-card { border-radius:15px!important; box-shadow:0 8px 28px rgba(14,35,62,.065)!important; }
+.chart-card { padding:20px!important; }
+.table-section { padding:19px 20px!important; }
+.table-wrap { border-radius:10px!important; }
+table.data-table th { padding:10px 12px!important; letter-spacing:.025em; }
+table.data-table td { padding:7px 12px!important; }
+.team-card { padding:20px!important; }
+.week-chip { border-radius:10px!important; min-height:48px!important; }
+.week-chip.ativa { box-shadow:inset 0 -3px 0 var(--blue),0 5px 14px rgba(20,70,120,.08)!important; }
+/* Álbum e cartinhas */
+body:has(.album) main { max-width:1560px!important; }
+body:has(.album) h1 { font-size:clamp(1.6rem,2.6vw,2.25rem)!important; margin:16px 0 12px!important; }
+body:has(.album) .mut { max-width:1050px; }
+.album { grid-template-columns:repeat(auto-fill,minmax(250px,1fr))!important; gap:42px 28px!important; }
+.slot { filter:drop-shadow(0 10px 16px rgba(4,14,28,.12)); }
+.slot:hover { transform:translateY(-5px); }
+.slot .c-conj { transform:translateZ(0); }
+.carta { border-radius:8px!important; }
+.carta.b-90,.carta.b-top,.carta.b-100 { filter:saturate(1.08) contrast(1.025); }
+.carta.b-100 { --b1:#6c5520; --b2:#e8d49a; --b3:#fff8dc; }
+.podio { min-height:520px; align-items:flex-end; border:1px solid rgba(216,173,85,.22)!important; }
+.podio .slot.p1 { transform:translateY(-12px); }
+.podio .slot.p2,.podio .slot.p3 { transform:translateY(12px); }
+/* Perfil do agente */
+body:has(#conteudo) main { max-width:1320px!important; }
+#conteudo > .carta-wrap { align-items:center!important; gap:clamp(24px,4vw,54px)!important; padding:clamp(18px,3vw,34px)!important; border:1px solid var(--ultra-line); border-radius:22px; background:var(--ultra-glass); box-shadow:0 18px 48px rgba(0,0,0,.09); }
+#conteudo .carta-info { min-width:min(100%,320px)!important; }
+#conteudo .carta-info h2 { font-size:clamp(1.35rem,2.2vw,2rem)!important; }
+#conteudo .card,#conteudo .kpi,#conteudo .table-section { border-radius:16px!important; box-shadow:0 8px 26px rgba(0,0,0,.07); }
+#conteudo .grafico { height:clamp(260px,32vw,380px)!important; }
+#conteudo table { border-radius:10px; overflow:hidden; }
+#conteudo .tl { border-left-color:var(--ultra-gold)!important; }
+#conteudo .tl > li::before { border-color:var(--ultra-gold)!important; }
+#conteudo .bt-img { border-radius:12px!important; min-height:46px!important; }
+@media(max-width:900px) {
+  .container { padding-inline:18px; }
+  .charts-grid { grid-template-columns:1fr!important; }
+  .kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr))!important; }
+  #conteudo > .carta-wrap { align-items:flex-start!important; }
+}
+@media(max-width:600px) {
+  .container { padding-inline:12px; }
+  .header-brand { flex-wrap:wrap; }
+  .header-actions { width:100%; }
+  .hnav { grid-template-columns:repeat(2,minmax(0,1fr))!important; }
+  .hbtn { min-width:0; white-space:normal; }
+  .kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:9px!important; }
+  .kpi { padding:13px!important; }
+  .kpi-value { font-size:1.75rem!important; }
+  .table-section { padding:12px!important; }
+  body:has(.album) main { padding:12px!important; }
+  .album { grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:18px 4px!important; }
+  .slot { --e:.58!important; padding-inline:0!important; }
+  .podio { min-height:0; padding:38px 6px 14px!important; }
+  #conteudo > .carta-wrap { padding:14px!important; justify-content:center; }
+  #conteudo .carta-info { width:100%; }
+  #conteudo .grafico { height:250px!important; }
+}
+@media(max-width:380px) {
+  .album { grid-template-columns:1fr!important; }
+  .slot { --e:.72!important; }
+}
+@media print {
+  .kpi,.chart-card,.table-section,.team-card { box-shadow:none!important; }
+}
