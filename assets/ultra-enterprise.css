@@ -167,3 +167,184 @@ table.data-table thead th { position:sticky; top:0; z-index:2; }
   .kpi-grid { grid-template-columns:1fr 1fr !important; gap:9px !important; }
   .kpi-grid > .kpi { min-height:104px; }
 }
+
+
+/* ==========================================================================
+   ULTRA EDITION — camada de impacto visual
+   Overrides exclusivamente visuais. Manter regras e componentes funcionais.
+   ========================================================================== */
+:root {
+  --ultra-bg:#eef2f8;
+  --ultra-panel:#ffffff;
+  --ultra-text:#10243c;
+  --ultra-muted:#667b96;
+  --ultra-gold:#c99a3c;
+  --ultra-gold-light:#f0d48b;
+  --ultra-navy:#071a31;
+  --ultra-navy-2:#102d50;
+}
+body:has(.kpi-grid) {
+  background-color:var(--ultra-bg)!important;
+  background-image:
+    radial-gradient(ellipse at 8% 0%,rgba(201,154,60,.13),transparent 28%),
+    radial-gradient(ellipse at 100% 18%,rgba(27,91,145,.10),transparent 30%),
+    linear-gradient(180deg,#f5f7fb 0%,#eaf0f7 100%)!important;
+}
+body:has(.kpi-grid) > header {
+  position:relative;
+  background:linear-gradient(112deg,#061426 0%,#0b2340 55%,#17395c 100%)!important;
+  border-bottom:3px solid var(--ultra-gold)!important;
+  color:#f7f9fc!important;
+  box-shadow:0 14px 38px rgba(4,18,36,.24)!important;
+}
+body:has(.kpi-grid) > header::after {
+  content:"";
+  position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(240,212,139,.8),transparent);
+}
+body:has(.kpi-grid) > header .header-meta { color:#b8c7d9!important; }
+body:has(.kpi-grid) > header h1 { color:#fff!important; font-weight:850!important; letter-spacing:.13em!important; }
+body:has(.kpi-grid) > header h1 span { color:var(--ultra-gold-light)!important; }
+body:has(.kpi-grid) > header .hbtn {
+  color:#eef4fb!important;background:rgba(255,255,255,.075)!important;
+  border:1px solid rgba(230,204,145,.25)!important;
+}
+body:has(.kpi-grid) > header .hbtn:hover {
+  color:#fff!important;background:rgba(201,154,60,.2)!important;
+  border-color:rgba(240,212,139,.65)!important;
+}
+body:has(.kpi-grid) .container { max-width:1840px!important; }
+body:has(.kpi-grid) .week-nav {
+  margin:22px 0 18px!important;padding:14px 16px!important;
+  border:1px solid rgba(30,60,95,.12)!important;border-radius:16px!important;
+  background:rgba(255,255,255,.78)!important;
+  box-shadow:0 8px 24px rgba(15,39,68,.055)!important;
+  backdrop-filter:blur(12px);
+}
+body:has(.kpi-grid) .week-nav-titulo { color:#183858!important;font-weight:800!important; }
+body:has(.kpi-grid) .week-chip {
+  border:1px solid rgba(30,60,95,.13)!important;border-radius:10px!important;
+  background:linear-gradient(180deg,#fff,#f3f6fa)!important;
+  color:#29435f!important;font-weight:750!important;
+}
+body:has(.kpi-grid) .week-chip.ativa {
+  color:#fff!important;background:linear-gradient(135deg,#102b4b,#1c4c78)!important;
+  border-color:var(--ultra-gold)!important;
+  box-shadow:inset 0 -3px 0 var(--ultra-gold),0 7px 18px rgba(12,43,75,.2)!important;
+}
+body:has(.kpi-grid) .nav-tabs {
+  border-bottom:1px solid rgba(20,52,84,.18)!important;
+  gap:8px!important;margin:22px 0!important;
+}
+body:has(.kpi-grid) .nav-tab {
+  color:#526984!important;border:1px solid transparent!important;
+  border-radius:11px 11px 0 0!important;font-weight:750!important;
+  padding:13px 19px!important;
+}
+body:has(.kpi-grid) .nav-tab.active {
+  color:#102d4d!important;background:linear-gradient(180deg,rgba(201,154,60,.18),rgba(255,255,255,.7))!important;
+  border:1px solid rgba(201,154,60,.35)!important;border-bottom-color:#eef2f8!important;
+}
+body:has(.kpi-grid) .section { margin:28px 0!important; }
+body:has(.kpi-grid) .kpi-grid { gap:17px!important; }
+body:has(.kpi-grid) .kpi-grid > .kpi {
+  min-height:148px!important;padding:22px 23px!important;
+  border:1px solid rgba(25,57,91,.12)!important;border-radius:17px!important;
+  background:linear-gradient(145deg,#fff 0%,#f7f9fc 100%)!important;
+  box-shadow:0 12px 28px rgba(13,35,62,.085),inset 0 1px 0 #fff!important;
+}
+body:has(.kpi-grid) .kpi-grid > .kpi::before { width:5px!important;background:linear-gradient(180deg,#f1d58e,#bd8c32)!important; }
+body:has(.kpi-grid) .kpi-grid .kpi-label { color:#667b94!important;font-size:.7rem!important;font-weight:850!important;letter-spacing:.12em!important; }
+body:has(.kpi-grid) .kpi-grid .kpi-value { color:#102b49!important;font-size:clamp(2.1rem,3vw,3rem)!important;font-weight:900!important;letter-spacing:-.055em!important; }
+body:has(.kpi-grid) .kpi-grid .kpi-sub { color:#71839a!important;font-size:.78rem!important; }
+body:has(.kpi-grid) .charts-grid { gap:20px!important; }
+body:has(.kpi-grid) .chart-card,
+body:has(.kpi-grid) .table-section,
+body:has(.kpi-grid) .team-card {
+  border:1px solid rgba(25,57,91,.12)!important;border-radius:17px!important;
+  background:rgba(255,255,255,.94)!important;
+  box-shadow:0 12px 30px rgba(13,35,62,.07)!important;
+}
+body:has(.kpi-grid) .chart-card { padding:23px!important; }
+body:has(.kpi-grid) .chart-card h3,
+body:has(.kpi-grid) .table-section h3 { color:#183957!important;font-weight:850!important;letter-spacing:-.025em!important; }
+body:has(.kpi-grid) .table-section { padding:22px!important; }
+body:has(.kpi-grid) .table-wrap { border:1px solid #dce5ef!important;border-radius:12px!important; }
+body:has(.kpi-grid) table.data-table thead th {
+  color:#eaf1f8!important;background:linear-gradient(100deg,#102b49,#1b4268)!important;
+  border-color:rgba(255,255,255,.1)!important;font-weight:800!important;
+}
+body:has(.kpi-grid) table.data-table tbody tr:hover { background:#f1f6fb!important; }
+body:has(.kpi-grid) .team-card { padding:22px!important; }
+body:has(.kpi-grid) .team-name { color:#153858!important;font-weight:850!important; }
+body:has(.kpi-grid) .alert-card { border:1px solid rgba(25,57,91,.12)!important;border-radius:15px!important;box-shadow:0 8px 22px rgba(13,35,62,.06)!important; }
+body:has(.kpi-grid) .criticos-list .critico-item { border-radius:12px!important; }
+:root[data-theme="dark"] body:has(.kpi-grid) {
+  background:linear-gradient(145deg,#071426,#0a1d34 58%,#102944)!important;
+}
+:root[data-theme="dark"] body:has(.kpi-grid) > header {
+  background:linear-gradient(112deg,#030b16,#081b30 60%,#102b48)!important;
+}
+:root[data-theme="dark"] body:has(.kpi-grid) .week-nav,
+:root[data-theme="dark"] body:has(.kpi-grid) .chart-card,
+:root[data-theme="dark"] body:has(.kpi-grid) .table-section,
+:root[data-theme="dark"] body:has(.kpi-grid) .team-card {
+  background:rgba(13,31,52,.96)!important;border-color:rgba(150,180,215,.17)!important;
+}
+:root[data-theme="dark"] body:has(.kpi-grid) .nav-tab.active { color:#f4d995!important;background:rgba(201,154,60,.14)!important; }
+:root[data-theme="dark"] body:has(.kpi-grid) .chart-card h3,
+:root[data-theme="dark"] body:has(.kpi-grid) .table-section h3,
+:root[data-theme="dark"] body:has(.kpi-grid) .team-name { color:#e7eff9!important; }
+:root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid > .kpi { background:linear-gradient(145deg,#122b47,#0b2038)!important;border-color:rgba(150,180,215,.18)!important; }
+:root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid .kpi-value { color:#f3f7fc!important; }
+:root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid .kpi-label,
+:root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid .kpi-sub { color:#9fb4ce!important; }
+
+/* Álbum: identidade colecionável, fundo editorial e molduras premium. */
+body:has(.album) {
+  background:
+    radial-gradient(ellipse at 50% -10%,rgba(201,154,60,.2),transparent 36%),
+    linear-gradient(145deg,#07172b,#102b49 58%,#071629)!important;
+  color:#eaf0f8!important;
+}
+body:has(.album) .topo {
+  background:linear-gradient(110deg,#061426,#102b49 65%,#1a3c5d)!important;
+  border-bottom:2px solid var(--ultra-gold)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.3)!important;
+}
+body:has(.album) .marca { color:#fff!important;font-weight:900!important;letter-spacing:.12em!important; }
+body:has(.album) .marca span { color:var(--ultra-gold-light)!important; }
+body:has(.album) .abas { border-bottom-color:rgba(240,212,139,.25)!important; }
+body:has(.album) .abas button,
+body:has(.album) .tg {
+  color:#eaf0f8!important;background:rgba(255,255,255,.07)!important;
+  border:1px solid rgba(240,212,139,.2)!important;border-radius:10px!important;
+}
+body:has(.album) .abas button.ativa,
+body:has(.album) .tg.ativo { background:linear-gradient(135deg,#a97926,#e2bd68)!important;color:#111f30!important; }
+body:has(.album) .painel { color:#eaf0f8!important;background:rgba(255,255,255,.055)!important;border:1px solid rgba(240,212,139,.16)!important;border-radius:18px!important;box-shadow:0 14px 36px rgba(0,0,0,.18)!important; }
+body:has(.album) .mut { color:#afc0d4!important; }
+body:has(.album) .podio {
+  background:radial-gradient(ellipse at 50% 100%,rgba(201,154,60,.18),transparent 60%),rgba(255,255,255,.035)!important;
+  border:1px solid rgba(240,212,139,.28)!important;border-radius:22px!important;
+}
+body:has(.album) .slot { filter:drop-shadow(0 18px 24px rgba(0,0,0,.42))!important; }
+body:has(.album) .slot:hover { filter:drop-shadow(0 24px 30px rgba(0,0,0,.5))!important; }
+body:has(.album) .carta { box-shadow:0 12px 30px rgba(0,0,0,.32)!important; }
+
+/* Perfil: painel de identidade com contraste premium. */
+body:has(#conteudo) {
+  background:radial-gradient(ellipse at 10% 0%,rgba(201,154,60,.15),transparent 35%),linear-gradient(145deg,#eef2f8,#e7edf5)!important;
+}
+body:has(#conteudo) .topo {
+  background:linear-gradient(110deg,#061426,#102b49 65%,#1a3c5d)!important;
+  border-bottom:2px solid var(--ultra-gold)!important;box-shadow:0 12px 32px rgba(0,0,0,.22)!important;
+}
+body:has(#conteudo) .marca { color:#fff!important;letter-spacing:.1em!important; }
+body:has(#conteudo) .marca span { color:var(--ultra-gold-light)!important; }
+body:has(#conteudo) .tg { border-radius:10px!important;border:1px solid rgba(201,154,60,.35)!important; }
+@media(max-width:700px) {
+  body:has(.kpi-grid) .kpi-grid > .kpi { min-height:116px!important;padding:14px!important; }
+  body:has(.kpi-grid) .kpi-grid .kpi-value { font-size:clamp(1.5rem,6vw,2.1rem)!important; }
+  body:has(.kpi-grid) .week-nav { overflow-x:auto; }
+}
