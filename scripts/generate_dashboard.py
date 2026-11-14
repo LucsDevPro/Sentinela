@@ -1458,6 +1458,7 @@ def main():
         chart_dst.write_bytes(chart_src.read_bytes())
     ctx["chartjs_href"] = os.path.relpath(chart_dst, OUT_PATH.parent).replace(os.sep, "/")
     ctx["fontes_href"] = os.path.relpath(assets_dir / "fontes.css", OUT_PATH.parent).replace(os.sep, "/")
+    ctx["ultra_href"] = os.path.relpath(assets_dir / "ultra-enterprise.css", OUT_PATH.parent).replace(os.sep, "/")
     ctx["tema_href"] = os.path.relpath(assets_dir / "tema.js", OUT_PATH.parent).replace(os.sep, "/")
     ctx["projecao_href"] = os.path.relpath(ROOT / "projecao.html", OUT_PATH.parent).replace(os.sep, "/")
     ctx["album_href"] = os.path.relpath(ROOT / "album.html", OUT_PATH.parent).replace(os.sep, "/")
