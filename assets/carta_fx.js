@@ -7,7 +7,7 @@
 (function () {
   'use strict';
   var REDUZ = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var MAX = 13;                 // inclinação máxima (graus)
+  var MAX = 14;                 // inclinação máxima (graus)
   var io = null, fila = 0, filaT = 0, ativa = null, ultimo = null, raf = 0;
 
   function contar(carta) {
@@ -59,7 +59,7 @@
     if (!r.width || !r.height) return;
     var px = Math.max(0, Math.min(1, (ultimo.clientX - r.left) / r.width));
     var py = Math.max(0, Math.min(1, (ultimo.clientY - r.top) / r.height));
-    var max = (ativa.classList.contains('b-100') || ativa.classList.contains('b-top')) ? 16 : MAX;
+    var max = (ativa.classList.contains('b-100') || ativa.classList.contains('b-top')) ? 17 : (ativa.classList.contains('b-90') ? 15 : MAX);
     var s = ativa.style;
     s.setProperty('--mx', (px * 100).toFixed(1) + '%');
     s.setProperty('--my', (py * 100).toFixed(1) + '%');
