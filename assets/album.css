@@ -173,3 +173,51 @@ header.topo::after { z-index: 1; pointer-events: none; }
   .podio .slot.p1::before { animation: none; }
   .barra select, .barra input[type="search"] { transition: none; }
 }
+
+
+/* SENTINELA ULTRA — direção visual do álbum (camada exclusivamente visual) */
+:root{
+  --bg:#07111f;--card:#0d1b2d;--tx:#edf4ff;--mut:#9aacc5;--bd:rgba(151,180,218,.18);
+  --soft:#10233a;--pri:#e8b84f;--pri-tx:#111827;--info:#77c9ff;
+}
+:root[data-theme="dark"]{--bg:#050d18;--card:#0b192a;--tx:#edf4ff;--mut:#91a6c2;--bd:rgba(151,180,218,.2);--soft:#10233a}
+html{background:radial-gradient(ellipse at 50% -18%,rgba(35,100,166,.24),transparent 48%),var(--bg)}
+body{background:transparent;letter-spacing:.005em}
+main{max-width:1320px;padding:clamp(16px,3vw,34px)}
+header.topo{background:rgba(4,12,23,.9);border-bottom-color:rgba(232,184,79,.24);box-shadow:0 12px 38px rgba(0,0,0,.18)}
+header.topo .marca{max-width:1320px;min-height:48px}
+header.topo b{letter-spacing:.12em;font-size:1.28rem}
+header.topo b i{color:#e8b84f}
+h1{font-size:clamp(1.7rem,3vw,2.45rem);letter-spacing:-.025em;margin:14px 0 8px}
+.abas{display:flex;gap:8px;border-bottom:1px solid var(--bd);margin:20px 0 18px}
+.abas button{border:1px solid transparent;border-radius:12px 12px 0 0;padding:12px 18px;background:transparent;color:var(--mut);font-weight:750;transition:.2s ease}
+.abas button[aria-selected="true"]{color:var(--tx);background:linear-gradient(180deg,rgba(232,184,79,.15),rgba(232,184,79,.035));border-color:rgba(232,184,79,.3);border-bottom-color:var(--bg);box-shadow:inset 0 2px #e8b84f}
+.mut{line-height:1.7;max-width:920px}
+.tg{display:inline-flex;align-items:center;gap:9px;padding:9px 13px;margin:5px 8px 8px 0;border:1px solid var(--bd);border-radius:999px;background:rgba(255,255,255,.035);color:var(--mut);font-size:.84rem}
+.barra{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;padding:18px;background:linear-gradient(145deg,rgba(18,38,62,.96),rgba(9,24,41,.96));border-color:rgba(133,167,207,.2);box-shadow:0 18px 48px rgba(0,0,0,.18)}
+.barra label{color:#a9bdd7;letter-spacing:.07em;font-size:.7rem}
+.barra select,.barra input[type=search]{background:#071525;border-color:rgba(151,180,218,.25);color:#f1f6ff;border-radius:11px}
+.barra select:hover,.barra input[type=search]:hover{border-color:rgba(232,184,79,.6)}
+#resumo{font-size:.84rem;margin:12px 2px 18px;color:var(--mut)}
+.album{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:28px 22px;align-items:start}
+.slot{padding:12px 8px 10px;border-radius:20px;transition:background .25s ease,transform .25s ease}
+.slot:hover{background:rgba(127,169,219,.07)}
+.slot .n{box-shadow:0 5px 16px rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.22)}
+.podio{padding:54px 18px 24px;border-color:rgba(232,184,79,.2);background:radial-gradient(ellipse at 50% 100%,rgba(232,184,79,.17),transparent 52%),linear-gradient(145deg,rgba(16,35,58,.92),rgba(7,18,31,.96));box-shadow:inset 0 1px rgba(255,255,255,.06),0 24px 60px rgba(0,0,0,.2)}
+.podio::after{height:2px;background:linear-gradient(90deg,transparent,#e8b84f,rgba(119,201,255,.7),#e8b84f,transparent)}
+.podio .slot.p1{filter:drop-shadow(0 14px 28px rgba(232,184,79,.2))}
+@media(max-width:700px){.album{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:20px 10px}.podio{padding-top:44px}}
+@media(max-width:480px){main{padding:12px}.barra{grid-template-columns:1fr 1fr;padding:12px}.album{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 6px}.slot{padding:8px 2px}.abas button{flex:1;padding:10px 8px}.mut{font-size:.84rem}}
+@media(prefers-reduced-motion:reduce){.abas button,.slot{transition:none}}
+
+
+/* Tema claro permanece como padrão; o botão existente continua alternando para o Ultra Night. */
+:root{--bg:#eef2f8;--card:#fff;--tx:#14243a;--mut:#526783;--bd:#d5deea;--soft:#f3f6fb;--pri:#b88419;--info:#176ba8;color-scheme:light}
+:root[data-theme="dark"]{--bg:#050d18;--card:#0b192a;--tx:#edf4ff;--mut:#91a6c2;--bd:rgba(151,180,218,.2);--soft:#10233a;--pri:#e8b84f;--info:#77c9ff;color-scheme:dark}
+html{background:radial-gradient(ellipse at 50% -18%,rgba(35,100,166,.12),transparent 48%),var(--bg)}
+.barra{background:linear-gradient(145deg,#fff,#f4f7fb);border-color:var(--bd)}
+.barra label{color:var(--mut)}
+.barra select,.barra input[type=search]{background:var(--card);border-color:var(--bd);color:var(--tx)}
+:root[data-theme="dark"] .barra{background:linear-gradient(145deg,rgba(18,38,62,.96),rgba(9,24,41,.96));border-color:rgba(133,167,207,.2)}
+:root[data-theme="dark"] .barra label{color:#a9bdd7}
+:root[data-theme="dark"] .barra select,:root[data-theme="dark"] .barra input[type=search]{background:#071525;border-color:rgba(151,180,218,.25);color:#f1f6ff}
