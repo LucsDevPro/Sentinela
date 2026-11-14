@@ -7,9 +7,9 @@
     "semana_fim": 317,
     "semana_ano_inicio": 26,
     "semana_ano_fim": 30,
-    "gerado_em": "06/11/2026 10:33",
+    "gerado_em": "14/11/2026 02:46",
     "parcial": false,
-    "reaberto_em": "06/11/2026"
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semanas_318-321.xlsx",
@@ -19,9 +19,9 @@
     "semana_fim": 321,
     "semana_ano_inicio": 31,
     "semana_ano_fim": 34,
-    "gerado_em": "06/11/2026 10:34",
+    "gerado_em": "14/11/2026 02:46",
     "parcial": false,
-    "reaberto_em": "06/11/2026"
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semanas_322-326.xlsx",
@@ -31,9 +31,9 @@
     "semana_fim": 326,
     "semana_ano_inicio": 35,
     "semana_ano_fim": 39,
-    "gerado_em": "06/11/2026 10:34",
+    "gerado_em": "14/11/2026 02:46",
     "parcial": false,
-    "reaberto_em": "06/11/2026"
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semanas_327-330.xlsx",
@@ -43,8 +43,9 @@
     "semana_fim": 330,
     "semana_ano_inicio": 40,
     "semana_ano_fim": 43,
-    "gerado_em": "11/11/2026 00:16",
-    "fechado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:46",
+    "parcial": false,
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semana_327.xlsx",
@@ -57,8 +58,8 @@
     "semana_fim": 327,
     "periodo": "04/10 a 10/10",
     "parcial": false,
-    "gerado_em": "11/11/2026 00:16",
-    "fechado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:46",
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semana_328.xlsx",
@@ -71,8 +72,8 @@
     "semana_fim": 328,
     "periodo": "11/10 a 17/10",
     "parcial": false,
-    "gerado_em": "11/11/2026 00:16",
-    "fechado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:46",
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semana_329.xlsx",
@@ -85,8 +86,8 @@
     "semana_fim": 329,
     "periodo": "18/10 a 24/10",
     "parcial": false,
-    "gerado_em": "11/11/2026 00:16",
-    "fechado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:47",
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semana_330.xlsx",
@@ -99,8 +100,8 @@
     "semana_fim": 330,
     "periodo": "25/10 a 31/10",
     "parcial": false,
-    "gerado_em": "11/11/2026 00:16",
-    "fechado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:47",
+    "reaberto_em": "14/11/2026"
   },
   {
     "arquivo": "semanas_331-334.xlsx",
@@ -110,7 +111,7 @@
     "semana_fim": 334,
     "semana_ano_inicio": 44,
     "semana_ano_fim": 45,
-    "gerado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:47"
   },
   {
     "arquivo": "semana_331.xlsx",
@@ -123,7 +124,7 @@
     "semana_fim": 331,
     "periodo": "01/11 a 07/11",
     "parcial": false,
-    "gerado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:47"
   },
   {
     "arquivo": "semana_332.xlsx",
@@ -136,6 +137,6 @@
     "semana_fim": 332,
     "periodo": "08/11 a 14/11",
     "parcial": true,
-    "gerado_em": "11/11/2026 00:16"
+    "gerado_em": "14/11/2026 02:47"
   }
 ]
