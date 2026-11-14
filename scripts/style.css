@@ -584,3 +584,112 @@ body{background:radial-gradient(ellipse at 50% -18%,rgba(33,105,167,.08),transpa
 :root[data-theme="dark"] body{background:radial-gradient(ellipse at 50% -18%,rgba(33,105,167,.2),transparent 46%),var(--bg)}
 :root[data-theme="dark"] .kpi,:root[data-theme="dark"] .kpi-card{background:linear-gradient(145deg,rgba(20,43,68,.96),rgba(12,27,45,.98))}
 :root[data-theme="dark"] .chart-card,:root[data-theme="dark"] .section-card,:root[data-theme="dark"] .card{background:linear-gradient(150deg,rgba(17,35,56,.98),rgba(11,25,42,.98))}
+
+
+
+/* =====================================================================
+   SENTINELA ULTRA ENTERPRISE — camada visual 2026
+   Escopo: apresentação do dashboard; não altera dados, cálculos ou eventos.
+   ===================================================================== */
+:root{
+  --radius:16px;--radius-sm:11px;
+  --shadow-sm:0 5px 18px rgba(20,45,78,.07);
+  --shadow:0 12px 32px rgba(20,45,78,.09);
+  --shadow-lg:0 24px 64px rgba(10,28,52,.18);
+}
+body{line-height:1.58}
+.container{max-width:1760px;padding-left:clamp(16px,2.5vw,38px);padding-right:clamp(16px,2.5vw,38px)}
+header{padding:20px 0 22px;margin-bottom:22px}
+header .container{gap:18px}
+.header-brand{gap:18px}
+.header-brand img{height:48px;border-radius:10px;padding:5px 11px;box-shadow:0 5px 18px rgba(0,0,0,.16)}
+header h1{font-size:clamp(1.55rem,2vw,2rem);letter-spacing:.14em}
+.header-meta{font-size:.8rem;letter-spacing:.015em}
+.header-actions{gap:9px}
+.hnav{grid-template-columns:repeat(4,minmax(132px,1fr));gap:8px}
+.hbtn{min-height:42px;height:auto;padding:0 13px;border-radius:11px;font-size:.78rem;border-color:rgba(111,155,209,.5);box-shadow:0 3px 10px rgba(0,0,0,.1)}
+.hbtn:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(0,0,0,.18)}
+.hopt{height:42px;border-radius:11px;background:rgba(255,255,255,.035)}
+.period-select{height:42px!important;border-radius:11px!important}
+.nav-tabs{
+  position:sticky;top:0;z-index:80;display:flex;gap:5px;flex-wrap:nowrap;overflow-x:auto;
+  margin:0 0 24px;padding:9px 10px;background:color-mix(in srgb,var(--card) 92%,transparent);
+  border:1px solid var(--border);border-radius:15px;box-shadow:var(--shadow-sm);
+  backdrop-filter:blur(14px);scrollbar-width:thin
+}
+.nav-tab{flex:0 0 auto;padding:10px 15px;border:0;border-radius:10px;margin:0;font-size:.81rem;white-space:nowrap}
+.nav-tab:hover{background:var(--bg-raise)}
+.nav-tab.active{background:linear-gradient(135deg,rgba(20,68,127,.11),rgba(247,181,0,.12));border:1px solid rgba(184,132,25,.24);box-shadow:inset 0 -2px #c18b20;color:var(--h)}
+.kpi-grid{gap:15px;margin-bottom:25px}
+.kpi,.kpi-card{
+  border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:17px;
+  padding:19px 21px;background:linear-gradient(145deg,#fff,#f7f9fc);
+  box-shadow:var(--shadow-sm);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease
+}
+.kpi:hover,.kpi-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--border-strong)}
+.kpi-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.075em;font-weight:750}
+.kpi-value{font-size:clamp(2rem,3vw,2.65rem);letter-spacing:-.035em}
+.kpi-sub{font-size:.75rem;line-height:1.45}
+.kpi.blue{border-top-color:#347fbd}.kpi.cyan{border-top-color:#20a9b8}.kpi.green{border-top-color:#20a56a}
+.kpi.yellow{border-top-color:#d99c19}.kpi.red{border-top-color:#d94e4e}.kpi.orange{border-top-color:#d87928}
+.hover-legend{gap:10px 18px;margin:0 0 22px;padding:12px 15px;background:var(--card);border:1px solid var(--border);border-radius:13px}
+.legend-chip{font-size:.75rem}
+.charts-grid{gap:16px}
+.chart-card,.section-card,.panel,.painel{
+  border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow-sm);overflow:hidden
+}
+.chart-card{padding:19px 20px;background:linear-gradient(145deg,#fff,#f8fafd)}
+.chart-card h3,.chart-card h4{font-size:.94rem;font-weight:750;letter-spacing:.005em}
+.section h2,.section h3{font-weight:750}
+.section{animation:ultra-section-in .24s ease both}
+@keyframes ultra-section-in{from{opacity:.65;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+table{border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid var(--border);border-radius:12px}
+thead th{padding:11px 12px;font-size:.7rem;letter-spacing:.055em;text-transform:uppercase}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--border-soft)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:var(--stripe)}
+tbody tr:hover{background:var(--hover)}
+input,select,textarea{border-radius:10px}
+button,.hbtn,.nav-tab{transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+.week-chip{border-radius:11px;padding:9px 14px;box-shadow:var(--shadow-sm)}
+.week-chip.ativa{box-shadow:inset 0 -3px var(--blue),var(--shadow-sm)}
+.critico-item{border-radius:13px;overflow:hidden;margin-bottom:8px;box-shadow:var(--shadow-sm)}
+footer{padding:24px 16px;color:var(--text3);text-align:center;font-size:.75rem}
+:root[data-theme="dark"] .nav-tabs{background:rgba(8,22,38,.9);border-color:var(--border)}
+:root[data-theme="dark"] .kpi,:root[data-theme="dark"] .kpi-card{background:linear-gradient(145deg,#122a45,#0b1b2d)}
+:root[data-theme="dark"] .chart-card,:root[data-theme="dark"] .section-card,:root[data-theme="dark"] .card{background:linear-gradient(145deg,#10243b,#0b192a)}
+:root[data-theme="dark"] thead th{background:#17314e;color:#edf4ff}
+@media(max-width:1100px){
+ .header-actions{align-items:stretch}
+ .hnav{grid-template-columns:repeat(2,minmax(130px,1fr))}
+ .hopts{margin-left:0}
+}
+@media(max-width:760px){
+ header{padding:15px 0 18px}
+ .header-brand img{height:40px}
+ .header-actions{display:grid;grid-template-columns:1fr;gap:9px}
+ .hnav{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .hnav .hbtn{white-space:normal;text-align:center;min-height:44px}
+ .htools,.hopts{display:flex;flex-wrap:wrap}
+ .nav-tabs{top:0;margin-left:-2px;margin-right:-2px;padding:7px}
+ .nav-tab{padding:10px 12px}
+ .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .kpi,.kpi-card{padding:14px 13px}
+ .kpi-value{font-size:1.9rem}
+ .charts-grid{grid-template-columns:1fr}
+}
+@media(max-width:420px){
+ .container{padding-left:11px;padding-right:11px}
+ header h1{font-size:1.3rem}
+ .header-meta{font-size:.7rem}
+ .hnav{grid-template-columns:1fr 1fr}
+ .hbtn{font-size:.7rem;padding:0 7px}
+ .kpi-grid{gap:8px}
+ .kpi-label{font-size:.65rem}
+ .kpi-value{font-size:1.65rem}
+ .kpi-sub{font-size:.68rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .section,.kpi,.kpi-card,.hbtn,.nav-tab{animation:none!important;transition:none!important}
+}
+
