@@ -1094,6 +1094,12 @@ body.sem-foto .c-foto img {
   .carta.entra.b-100 { animation: c-entra 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) backwards, c-flutua 5.5s ease-in-out infinite; animation-delay: var(--atraso, 0ms), calc(var(--atraso, 0ms) + 900ms); }
   /* barras dos atributos */
   .carta.vivo .c-stats div::after { transform-origin: left; animation: c-barra 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; animation-delay: calc(var(--atraso, 0ms) + 250ms); }
+  /* holografia Relíquia: animação também protegida pela preferência de movimento */
+  .carta.vivo.b-90 > .c-borda,
+  .carta.vivo.b-top > .c-borda,
+  .carta.vivo.b-100 > .c-borda { animation: rel-hologira 8s linear infinite; }
+  .carta.vivo.b-top > .c-borda { animation-duration: 6.5s; }
+  .carta.vivo.b-100 > .c-borda { animation-duration: 5.8s; }
 }
 @media (prefers-reduced-motion: reduce) {
   .carta > .c-glitter::before, .carta > .c-glitter::after { opacity: 0.6; }
@@ -1593,15 +1599,6 @@ body.sem-foto .c-foto img {
   background-blend-mode: normal, soft-light;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .carta.vivo.b-90 > .c-borda,
-  .carta.vivo.b-top > .c-borda,
-  .carta.vivo.b-100 > .c-borda {
-    animation: rel-hologira 8s linear infinite;
-  }
-  .carta.vivo.b-top > .c-borda { animation-duration: 6.5s; }
-  .carta.vivo.b-100 > .c-borda { animation-duration: 5.8s; }
-}
 @keyframes rel-hologira {
   to { filter: hue-rotate(12deg) brightness(1.05); }
 }
