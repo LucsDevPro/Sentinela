@@ -1,5 +1,16 @@
 # Registro de decisões (mais recente primeiro)
 
+## 14/11/2026 — design: menu em linha única, gráficos institucionais e "Por Área" recolhida
+- **Menu em uma linha, em qualquer resolução** (`style.css`, `ultra-enterprise.css`, `base.html`): as 11 abas ficam sempre em uma linha só; o tamanho da letra acompanha a largura da caixa (`cqw`, container query),
+  então o menu encolhe junto com a tela. Abaixo de 1100 px somem os trechos opcionais (`.tab-opc`: "& Irregularidades", "& Produtividade", "(média dos meses)"); em telas muito estreitas o menu rola de lado, sem quebrar.
+  Barra de botões do cabeçalho: os 4 botões dividem a largura e, abaixo de ~1260 px, viram só o ícone (o `title` mostra o nome). Mesma regra na navegação semanal, no comparar de meses, no editor de detecções e na tela de projeção.
+- **Gráficos institucionais** (`assets/tema.js` → `window.SENT_GRAF`, `templates/charts.js`): cada série declara um **papel** (`serie1/serie2/serie3/neutro`) ou um estado (`bom/atencao/critico`) e a cor é escolhida pelo tema.
+  Séries = azul, laranja e verde-água, validadas (daltonismo ΔE ≥ 9; visão normal ≥ 26) nos dois temas; estado usa a mesma régua dos emblemas. Barras finas (≤ 24 px) com ponta arredondada, grade discreta sem linha de eixo,
+  legenda com marcador, tooltip escuro em pt-BR, valor escrito só onde ajuda e total no centro da rosca. Barras de uma única série nominal usam a mesma cor (a cor não repete o que o comprimento já diz).
+  Borda de "respiro" entre segmentos precisa existir já na criação (o Chart.js não anima de indefinido para cor).
+- **Aba "Por Área" recolhida:** uma linha por área; "ver mais" abre as estatísticas da área e a tabela dos agentes que trabalharam nela. Totais da área (`generate_dashboard.build_areas_agrupadas`): somas, % refeitos sobre os totais,
+  tempo médio ponderado pelos imóveis abertos; a mediana fica só por agente (mediana de medianas não é mediana). Buscar um agente abre sozinha as áreas em que ele trabalhou. Faixas de alerta espelhadas de `parametros.py`; teste: `test_areas_agrupadas.py`.
+
 ## 13/11/2026 — paralisações coletivas validadas automaticamente
 - **Pedido da coordenação:** todas as paralisações coletivas devem estar validadas, e as próximas também, sem passar por validação manual.
 - **Detecção nova:** `CONFIRMAR_CHUVA_AUTOMATICAMENTE = True` (`coleta/pontos.py`): a paralisação coletiva (equipe inteira sem lançamento no dia) nasce `confirmada`

@@ -37,71 +37,75 @@ Constantes: _MODULOS@50
 
 Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 
-## scripts/generate_dashboard.py (1496 linhas)
+## scripts/generate_dashboard.py (1566 linhas)
 
-- L50 `carregar_outras_atividades()` — Lê data/outras_atividades.json (equipes/atividades fora do e-Visita,
-- L102 `resolver_home_xlsx()`
-- L131 `sem_bloqueio(df)`
-- L136 `somente_bloqueio(df)`
-- L143 `br(v, decimals)` — Formata número no padrão pt-BR. Tolerante a valor ausente/indefinido
-- L156 `class_key(text)`
-- L164 `badge(text)`
-- L169 `row_class(text)`
-- L173 `rank_class_key(text)` — Classificação do ranking tem 4 faixas (Excelente/Bom/Atenção/Crítico),
-- L185 `rank_badge(text)`
-- L189 `id_link(v)`
-- L197 `parse_custo(v)`
-- L206 `parse_br_date(s)`
-- L212 `n(v)` — Converte numpy/pandas scalar para tipo nativo Python (uso em dados p/ JSON).
-- L289 `cap_first(v)` — Primeira letra maiúscula, sem mexer no resto do texto (não usa
-- L301 `ranking_sem_nan(rows)` — Célula vazia da coluna Observação chega como NaN (que o Jinja trataria
-- L310 `records(df, colmap)`
-- L322 `primeira_tabela(path, aba, subset)` — Lê a primeira tabela de uma aba com segurança: se a aba não existir
-- L341 `load_all(path)`
-- L431 `compute_all_absent(ausencias, resumo)` — Turnos em que TODA UMA EQUIPE ficou sem nenhuma visita registrada
-- L444 `build_cronograma_rows(cronograma, all_absent)` — Junta o cronograma manual (data/cronograma_ausencias.json — chuva,
-- L485 `agrupar_cronograma_por_dia(rows)` — Agrupa as linhas de build_cronograma_rows por DIA (ou por período, quando o l…
-- L521 `build_kpi_geral(resumo)`
-- L537 `_ler_tabela_rapida(path, aba, colunas)` — Primeira tabela de uma aba (modo somente-leitura, bem mais rápido que carregar
-- L560 `_num(v)`
-- L568 `_ler_presenca(path)` — {agente: (dias_trabalhados, dias_esperados)} da aba Ranking. Nos períodos
-- L581 `_meses_historico()` — [(label, caminho)] dos meses fechados, do mais antigo pro mais recente.
-- L599 `_presenca_da_pagina()` — Presença da página que está sendo gerada. Página de um mês (ou de uma semana):
-- L621 `_preparar_custos(d, presenca)` — Acrescenta ao DataFrame (já com _hu/_ht/_hs/_dias/_vd) a presença e o custo r…
-- L649 `_custos_base(resumo)`
-- L664 `adicionar_custo_real(resumo)` — Põe a coluna CustoReal no resumo (usada pelo gráfico de custos).
-- L675 `_custo_ritmo_agregado(d)` — Folha ÷ horas úteis do mês de todos juntos (só dias trabalhados). A média
-- L683 `_custo_real_agregado(d)`
-- L688 `_custo_visita_agregado(d)`
-- L693 `build_kpi_custos(resumo)`
-- L719 `_faixa_custo(v)`
-- L725 `_faixa_presenca(pct)`
-- L729 `build_custos_rows(resumo)` — Linhas da tabela de custos: as colunas da planilha + presença, aproveitamento,
-- L760 `build_custos_equipes(resumo)` — Uma linha por equipe, com o mesmo cálculo dos números gerais.
-- L779 `build_custos_mensais()` — Custo real da hora útil de cada agente MÊS A MÊS + média dos meses.
-- L824 `build_ausencias_agg(aus)`
-- L856 `build_team_cards(resumo, teams)`
-- L882 `_classe_por_pontos(p)`
-- L891 `_ler_ranking_rapido(path)` — Lê só a tabela principal da aba Ranking de uma planilha (modo
-- L918 `_sparkline(valores, w, h)` — Mini-gráfico (SVG inline) da pontuação mês a mês, escala fixa 0–100 pra
-- L933 `build_media_mensal()`
-- L976 `_worker_url()`
-- L982 `_mes_contestavel(ctx)` — Mês ("Outubro/2026") ao qual a página se refere, se estiver ABERTO (contestaç…
-- L1011 `_ids_por_nome()`
-- L1018 `build_extratos(ranking_rows, detalhe_rows, sem_normaliz)` — Dados do "Extrato por agente" (folha de uma página com a conta da
-- L1043 `_periodo_label(periodos)`
-- L1053 `build_kpi_ranking(ranking)`
-- L1066 `build_chart_data(data)`
-- L1119 `build_context(data)`
-- L1213 `build_comparacao_semanal(nav, pagina_semana)` — Nota média de cada equipe, semana a semana, dentro do mês (só na página do MÊ…
-- L1269 `carregar_periodos()` — Monta a lista de opções do seletor de período no cabeçalho:
-- L1319 `carregar_nav_semanas()` — Barra "Semana 1 | Semana 2 | ... | Mês completo" do mês vigente.
-- L1380 `enxugar_html(html)` — Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
-- L1392 `periodo_em_andamento(semana_fim_html, hoje)` — Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= …
-- L1401 `_selo_periodo(ctx)` — 'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão …
-- L1415 `main()`
+- L56 `carregar_outras_atividades()` — Lê data/outras_atividades.json (equipes/atividades fora do e-Visita,
+- L108 `resolver_home_xlsx()`
+- L137 `sem_bloqueio(df)`
+- L142 `somente_bloqueio(df)`
+- L149 `br(v, decimals)` — Formata número no padrão pt-BR. Tolerante a valor ausente/indefinido
+- L162 `class_key(text)`
+- L170 `badge(text)`
+- L175 `row_class(text)`
+- L179 `rank_class_key(text)` — Classificação do ranking tem 4 faixas (Excelente/Bom/Atenção/Crítico),
+- L191 `rank_badge(text)`
+- L195 `id_link(v)`
+- L203 `parse_custo(v)`
+- L212 `parse_br_date(s)`
+- L218 `n(v)` — Converte numpy/pandas scalar para tipo nativo Python (uso em dados p/ JSON).
+- L295 `cap_first(v)` — Primeira letra maiúscula, sem mexer no resto do texto (não usa
+- L307 `ranking_sem_nan(rows)` — Célula vazia da coluna Observação chega como NaN (que o Jinja trataria
+- L316 `records(df, colmap)`
+- L326 `_num_seguro(v, padrao)` — Número seguro: None, texto e NaN viram `padrao` (células vazias da planilha c…
+- L335 `_chave_natural(txt)` — Ordena '2', '10', 'A3' do jeito humano (2 antes de 10), para a lista de quart…
+- L340 `_alerta_por_pct_rapidas(pct)` — Mesma régua de scripts/coleta/calculos.py::_classificar, só que devolvendo o …
+- L349 `build_areas_agrupadas(area_records)` — Junta as linhas agente×área (aba 'Por Área' da planilha) em UMA linha por ÁRE…
+- L389 `primeira_tabela(path, aba, subset)` — Lê a primeira tabela de uma aba com segurança: se a aba não existir
+- L408 `load_all(path)`
+- L498 `compute_all_absent(ausencias, resumo)` — Turnos em que TODA UMA EQUIPE ficou sem nenhuma visita registrada
+- L511 `build_cronograma_rows(cronograma, all_absent)` — Junta o cronograma manual (data/cronograma_ausencias.json — chuva,
+- L552 `agrupar_cronograma_por_dia(rows)` — Agrupa as linhas de build_cronograma_rows por DIA (ou por período, quando o l…
+- L588 `build_kpi_geral(resumo)`
+- L604 `_ler_tabela_rapida(path, aba, colunas)` — Primeira tabela de uma aba (modo somente-leitura, bem mais rápido que carregar
+- L627 `_num(v)`
+- L635 `_ler_presenca(path)` — {agente: (dias_trabalhados, dias_esperados)} da aba Ranking. Nos períodos
+- L648 `_meses_historico()` — [(label, caminho)] dos meses fechados, do mais antigo pro mais recente.
+- L666 `_presenca_da_pagina()` — Presença da página que está sendo gerada. Página de um mês (ou de uma semana):
+- L688 `_preparar_custos(d, presenca)` — Acrescenta ao DataFrame (já com _hu/_ht/_hs/_dias/_vd) a presença e o custo r…
+- L716 `_custos_base(resumo)`
+- L731 `adicionar_custo_real(resumo)` — Põe a coluna CustoReal no resumo (usada pelo gráfico de custos).
+- L742 `_custo_ritmo_agregado(d)` — Folha ÷ horas úteis do mês de todos juntos (só dias trabalhados). A média
+- L750 `_custo_real_agregado(d)`
+- L755 `_custo_visita_agregado(d)`
+- L760 `build_kpi_custos(resumo)`
+- L786 `_faixa_custo(v)`
+- L792 `_faixa_presenca(pct)`
+- L796 `build_custos_rows(resumo)` — Linhas da tabela de custos: as colunas da planilha + presença, aproveitamento,
+- L827 `build_custos_equipes(resumo)` — Uma linha por equipe, com o mesmo cálculo dos números gerais.
+- L846 `build_custos_mensais()` — Custo real da hora útil de cada agente MÊS A MÊS + média dos meses.
+- L891 `build_ausencias_agg(aus)`
+- L923 `build_team_cards(resumo, teams)`
+- L949 `_classe_por_pontos(p)`
+- L958 `_ler_ranking_rapido(path)` — Lê só a tabela principal da aba Ranking de uma planilha (modo
+- L985 `_sparkline(valores, w, h)` — Mini-gráfico (SVG inline) da pontuação mês a mês, escala fixa 0–100 pra
+- L1000 `build_media_mensal()`
+- L1043 `_worker_url()`
+- L1049 `_mes_contestavel(ctx)` — Mês ("Outubro/2026") ao qual a página se refere, se estiver ABERTO (contestaç…
+- L1078 `_ids_por_nome()`
+- L1085 `build_extratos(ranking_rows, detalhe_rows, sem_normaliz)` — Dados do "Extrato por agente" (folha de uma página com a conta da
+- L1110 `_periodo_label(periodos)`
+- L1120 `build_kpi_ranking(ranking)`
+- L1133 `build_chart_data(data)`
+- L1186 `build_context(data)`
+- L1282 `build_comparacao_semanal(nav, pagina_semana)` — Nota média de cada equipe, semana a semana, dentro do mês (só na página do MÊ…
+- L1338 `carregar_periodos()` — Monta a lista de opções do seletor de período no cabeçalho:
+- L1388 `carregar_nav_semanas()` — Barra "Semana 1 | Semana 2 | ... | Mês completo" do mês vigente.
+- L1449 `enxugar_html(html)` — Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
+- L1461 `periodo_em_andamento(semana_fim_html, hoje)` — Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= …
+- L1470 `_selo_periodo(ctx)` — 'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão …
+- L1484 `main()`
 
-Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, SCRIPTS_DIR@88, CONFIG_HOME_PATH@98, ACUMULADO_XLSX@99, HOME_XLSX@116, XLSX_PATH@118, OUT_PATH@119, SALARIO_MENSAL@121, EVISITA_URL@122, DIA_ORDER@123, EQUIPE_BLOQUEIO@129, RESUMO_COLS@227, AREA_COLS@241, ALERT_COLS@248, AUSENCIA_COLS@255, PENDENCIA_COLS@259, PE_COLS@263, RESUMO_SEMANAL_COLS@272, RANKING_COLS@273, RANKING_DET_COLS@280, _NAO_PADRONIZAR_TEXTO@299, _DIAS_CURTOS@482, _PRESENCA_CACHE@596, TEAM_COLORS@854, LABEL_MES_RE@880, _BLOCOS_LITERAIS_RE@1376, _ESPACOS_RE@1378
+Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, PCT_RAPIDAS_OK_ATE@52, PCT_RAPIDAS_ATENCAO_ATE@53, SCRIPTS_DIR@94, CONFIG_HOME_PATH@104, ACUMULADO_XLSX@105, HOME_XLSX@122, XLSX_PATH@124, OUT_PATH@125, SALARIO_MENSAL@127, EVISITA_URL@128, DIA_ORDER@129, EQUIPE_BLOQUEIO@135, RESUMO_COLS@233, AREA_COLS@247, ALERT_COLS@254, AUSENCIA_COLS@261, PENDENCIA_COLS@265, PE_COLS@269, RESUMO_SEMANAL_COLS@278, RANKING_COLS@279, RANKING_DET_COLS@286, _NAO_PADRONIZAR_TEXTO@305, _DIAS_CURTOS@549, _PRESENCA_CACHE@663, TEAM_COLORS@921, LABEL_MES_RE@947, _BLOCOS_LITERAIS_RE@1445, _ESPACOS_RE@1447
 
 ## scripts/gerar_agentes.py (239 linhas)
 

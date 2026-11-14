@@ -61,23 +61,62 @@ if (document.getElementById('filterSemana')) {
 function showAlert(id) {
   carregarAlertas().then(() => { const el = document.getElementById('alert-' + id); if (el) el.scrollIntoView({ behavior: 'smooth' }); });
 }
-/* ===== Filtro aba Área ===== */
+/* ===== Aba Por Área: uma linha recolhida por área ("ver mais" abre agentes e estatísticas) =====
+   Filtro por área, busca por agente (abre sozinha as áreas em que o agente trabalhou), ordenação e abrir/recolher todas. */
 function applyAreaFilters() {
+  const lista = document.getElementById('listaAreas');
   const areaSel = document.getElementById('filterAreaArea');
   const nameSel = document.getElementById('filterAreaName');
-  if (!areaSel || !nameSel) return;
+  if (!lista || !areaSel || !nameSel) return;
   const ar = areaSel.value;
-  const name = nameSel.value.toLowerCase();
-  document.querySelectorAll('#tableAreas tbody tr').forEach(tr => {
-    const matchArea = !ar || tr.dataset.area === ar;
-    const matchName = !name || tr.cells[0].textContent.toLowerCase().includes(name);
-    tr.style.display = (matchArea && matchName) ? '' : 'none';
+  const name = nameSel.value.trim().toLowerCase();
+  let visiveis = 0;
+  lista.querySelectorAll('.area-item').forEach(item => {
+    let achou = 0;
+    item.querySelectorAll('tbody tr').forEach(tr => {
+      const ok = !name || tr.cells[0].textContent.toLowerCase().includes(name);
+      tr.style.display = ok ? '' : 'none';
+      if (ok) achou++;
+    });
+    const mostrar = (!ar || item.dataset.area === ar) && (!name || achou > 0);
+    item.style.display = mostrar ? '' : 'none';
+    if (mostrar) visiveis++;
+    if (name && mostrar) {                      // buscando um agente: abre a área para mostrar onde ele trabalhou
+      if (!item.open) { item.open = true; item.dataset.abertoPorBusca = '1'; }
+    } else if (item.dataset.abertoPorBusca) {   // limpou a busca: fecha só o que a própria busca abriu
+      item.open = false; delete item.dataset.abertoPorBusca;
+    }
+  });
+  const cont = document.getElementById('areasContagem'); if (cont) cont.textContent = visiveis.toLocaleString('pt-BR');
+  const vazio = document.getElementById('areasVazio'); if (vazio) vazio.hidden = visiveis > 0;
+}
+function ordenarAreas() {
+  const lista = document.getElementById('listaAreas');
+  const sel = document.getElementById('sortAreaBy');
+  if (!lista || !sel) return;
+  const chaves = { pct_rapidas: 'pct', pendencia: 'pend', abertos: 'abertos', tempo: 'tempo', agentes: 'agentes' };
+  const itens = Array.from(lista.querySelectorAll('.area-item'));
+  const campo = chaves[sel.value];
+  itens.sort((a, b) => {
+    if (!campo) return a.dataset.area.localeCompare(b.dataset.area, 'pt-BR', { numeric: true });
+    const d = parseFloat(b.dataset[campo]) - parseFloat(a.dataset[campo]);     // maior primeiro
+    return d || a.dataset.area.localeCompare(b.dataset.area, 'pt-BR', { numeric: true });
+  });
+  itens.forEach(i => lista.appendChild(i));
+}
+function abrirAreas(abrir) {
+  document.querySelectorAll('#listaAreas .area-item').forEach(item => {
+    if (item.style.display !== 'none') { item.open = abrir; delete item.dataset.abertoPorBusca; }
   });
 }
-const filterAreaAreaEl = document.getElementById('filterAreaArea');
-const filterAreaNameEl = document.getElementById('filterAreaName');
-if (filterAreaAreaEl) filterAreaAreaEl.addEventListener('change', applyAreaFilters);
-if (filterAreaNameEl) filterAreaNameEl.addEventListener('input', applyAreaFilters);
+(function () {
+  const ligar = (id, evento, fn) => { const el = document.getElementById(id); if (el) el.addEventListener(evento, fn); };
+  ligar('filterAreaArea', 'change', applyAreaFilters);
+  ligar('filterAreaName', 'input', applyAreaFilters);
+  ligar('sortAreaBy', 'change', ordenarAreas);
+  ligar('areasAbrirTodas', 'click', () => abrirAreas(true));
+  ligar('areasFecharTodas', 'click', () => abrirAreas(false));
+})();
 
 /* ===== Ordenação estilo Excel (clique no cabeçalho) ===== */
 function parseCellValue(text) {

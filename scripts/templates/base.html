@@ -28,10 +28,10 @@
       </select>
       {% endif %}
       <nav class="hnav" aria-label="Outras páginas">
-        <a class="hbtn" href="{{ transparencia_href }}"><span class="btn-ico" aria-hidden="true">📖</span><span>Como é calculado</span></a>
-        <a class="hbtn" href="{{ projecao_href }}"><span class="btn-ico" aria-hidden="true">📺</span><span>Tela de reunião</span></a>
-        <a class="hbtn" href="{{ comparar_href }}"><span class="btn-ico" aria-hidden="true">🔁</span><span>Comparar meses</span></a>
-        <a class="hbtn" href="{{ album_href }}"><span class="btn-ico" aria-hidden="true">🃏</span><span>Álbum de cartinhas</span></a>
+        <a class="hbtn" href="{{ transparencia_href }}" title="Como é calculado" aria-label="Como é calculado"><span class="btn-ico" aria-hidden="true">📖</span><span>Como é calculado</span></a>
+        <a class="hbtn" href="{{ projecao_href }}" title="Tela de reunião" aria-label="Tela de reunião"><span class="btn-ico" aria-hidden="true">📺</span><span>Tela de reunião</span></a>
+        <a class="hbtn" href="{{ comparar_href }}" title="Comparar meses" aria-label="Comparar meses"><span class="btn-ico" aria-hidden="true">🔁</span><span>Comparar meses</span></a>
+        <a class="hbtn" href="{{ album_href }}" title="Álbum de cartinhas" aria-label="Álbum de cartinhas"><span class="btn-ico" aria-hidden="true">🃏</span><span>Álbum de cartinhas</span></a>
       </nav>
       <div class="htools">
         <button type="button" class="hbtn hbtn-ico" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg><span class="tema-txt sr-only">Tema escuro</span></button>
@@ -55,22 +55,24 @@
   <div class="week-banner">Você está vendo apenas a <b>Semana {{ pagina_semana.numero }}</b> de {{ pagina_semana.mes }} ({{ pagina_semana.periodo }}){% if pagina_semana.parcial %} — <b>semana parcial</b>, ainda em andamento{% endif %}. As regras do ranking são as mesmas do mês, aplicadas só a estes dias.</div>
   {% endif %}
   {% endif %}
+  <div class="nav-tabs-wrap">
   <div class="nav-tabs">
     <button class="nav-tab active" data-section="visao-geral">Visão Geral</button>
     <button class="nav-tab" data-section="agentes">Agentes</button>
     <button class="nav-tab" data-section="equipes">Equipes</button>
     <button class="nav-tab" data-section="areas">Por Área</button>
-    <button class="nav-tab" data-section="alertas">Alertas & Irregularidades</button>
+    <button class="nav-tab" data-section="alertas" title="Alertas & Irregularidades">Alertas<span class="tab-opc"> & Irregularidades</span></button>
     <button class="nav-tab" data-section="ausencias">Ausências</button>
     <button class="nav-tab" data-section="pendencias">Pendências</button>
     {% if acumulado_so_media %}
-    <button class="nav-tab" data-section="media-mensal">🏆 Ranking (média dos meses)</button>
+    <button class="nav-tab" data-section="media-mensal" title="Ranking (média dos meses)">🏆 Ranking<span class="tab-opc"> (média dos meses)</span></button>
     {% else %}
     <button class="nav-tab" data-section="ranking">Ranking</button>
     <button class="nav-tab" data-section="media-mensal">Média Mensal</button>
     {% endif %}
     <button class="nav-tab" data-section="ponto-estrategico">Ponto Estratégico</button>
-    <button class="nav-tab" data-section="custos">Custos & Produtividade</button>
+    <button class="nav-tab" data-section="custos" title="Custos & Produtividade">Custos<span class="tab-opc"> & Produtividade</span></button>
+  </div>
   </div>
 
   {% include "sections/visao_geral.html" %}

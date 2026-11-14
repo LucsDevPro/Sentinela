@@ -81,7 +81,8 @@
     display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
     background: var(--navy); color: #fff; border-radius: 50%; font-size: 0.72rem; font-weight: 700; margin-right: 8px;
   }
-  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tabs { display: flex; flex-wrap: nowrap; gap: 8px; margin-bottom: 16px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 4px; }
+  .tabs .tab-btn { flex: 0 0 auto; white-space: nowrap; }
   .tab-btn { background: var(--bg-soft); color: var(--text2); border: 1px solid var(--border); }
   .tab-btn.active { background: var(--navy); color: #fff; }
   .nota-revisao { font-size: 0.76rem; color: #A15A00; margin-top: 4px; }

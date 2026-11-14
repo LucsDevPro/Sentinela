@@ -1,36 +1,50 @@
+/* Gráficos do dashboard. Cores, tooltip, grade, legenda e os plugins `valores` e `centro` vêm de assets/tema.js (window.SENT_GRAF):
+   aqui só se diz o PAPEL de cada série (serie1/serie2/serie3/neutro) ou o estado de cada barra (bom/atencao/critico). */
+const G = window.SENT_GRAF;
 if (window.aplicarTemaGraficos) window.aplicarTemaGraficos();
-Chart.defaults.font.family = "'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
-Chart.defaults.plugins.tooltip.backgroundColor = '#02070f';
-Chart.defaults.plugins.tooltip.borderColor = '#2C568F';
-Chart.defaults.plugins.tooltip.borderWidth = 1;
 
-function classColor(cls) {
-  return cls.includes('CRÍTICO') ? '#E4572E' : cls.includes('ATENÇÃO') ? '#F2B01E' : '#12B76A';
-}
+function papelClasse(cls) { return cls.includes('CRÍTICO') ? 'critico' : cls.includes('ATENÇÃO') ? 'atencao' : 'bom'; }
+// `respiro: true` = 2 px da cor do fundo entre segmentos. A borda precisa existir JÁ na criação: o Chart.js não anima de "indefinido" para uma cor.
+function respiro(ds) { return ds.respiro ? Object.assign({ borderColor: G.superficie(), borderWidth: 2 }, ds) : ds; }
+function serie(papel, extra) { return respiro(Object.assign({ papel: papel, backgroundColor: G.cor(papel) }, extra || {})); }
+function porEstado(papeis, extra) { return respiro(Object.assign({ papeis: papeis, backgroundColor: papeis.map(G.cor) }, extra || {})); }
 
 // Gráficos de barra horizontal com 1 barra por agente precisam de altura
 // proporcional à quantidade de agentes, senão as barras ficam espremidas
 // e sobrepostas. Chama isso ANTES de criar o Chart.
 function sizeForAgents(canvasId, count) {
   const el = document.getElementById(canvasId);
-  if (el) el.parentElement.style.height = Math.max(260, count * 15 + 30) + 'px';
+  if (el) el.parentElement.style.height = Math.max(260, count * 17 + 34) + 'px';
+}
+// Barra horizontal por agente: nome à esquerda, valor na ponta, sem legenda (o título do cartão já diz o que é)
+function opcoesAgentes(extra) {
+  const o = { indexAxis: 'y', responsive: true, maintainAspectRatio: false, layout: { padding: { right: 64 } },
+    scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } },
+    plugins: { legend: { display: false }, valores: { ativo: true, posicao: 'ponta', tamanho: 10 } } };
+  return Object.assign(o, extra || {});
 }
 
-new Chart(document.getElementById('chartClass'), {
-  type: 'doughnut',
-  data: { labels: ['🟢 Normal', '🟡 Atenção', '🔴 Crítico'],
-    datasets: [{ data: {{ chart_data.class_counts | tojson }}, backgroundColor: ['#12B76A', '#F2B01E', '#E4572E'], borderWidth: 0 }] },
-  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
-});
+(function () {   // Distribuição por classificação: rosca fina com o total de agentes no centro
+  const c = {{ chart_data.class_counts | tojson }};
+  new Chart(document.getElementById('chartClass'), {
+    type: 'doughnut',
+    data: { labels: ['Normal', 'Atenção', 'Crítico'],
+      datasets: [porEstado(['bom', 'atencao', 'critico'], { data: c, respiro: true, hoverOffset: 4 })] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '68%',
+      plugins: { legend: { position: 'bottom' }, centro: { valor: c.reduce((a, b) => a + b, 0), rotulo: 'agentes' } } }
+  });
+})();
 
 new Chart(document.getElementById('chartTeam'), {
   type: 'bar',
   data: { labels: {{ chart_data.teams | tojson }},
     datasets: [
-      { label: 'Imóveis Abertos', data: {{ chart_data.team_abertos | tojson }}, backgroundColor: '#1080D6', borderRadius: 6 },
-      { label: 'Visitas Rápidas', data: {{ chart_data.team_rapidas | tojson }}, backgroundColor: '#E4572E', borderRadius: 6 }
+      serie('serie1', { label: 'Imóveis abertos', data: {{ chart_data.team_abertos | tojson }} }),
+      serie('serie2', { label: 'Visitas rápidas', data: {{ chart_data.team_rapidas | tojson }} })
     ] },
-  options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }, plugins: { legend: { position: 'bottom' } } }
+  options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 20 } },
+    scales: { y: { beginAtZero: true } },
+    plugins: { legend: { position: 'bottom' }, valores: { ativo: true, posicao: 'ponta' } } }
 });
 
 (function(){
@@ -39,59 +53,49 @@ new Chart(document.getElementById('chartTeam'), {
   new Chart(document.getElementById('chartPct'), {
     type: 'bar',
     data: { labels: d.map(a => a.label),
-      datasets: [{ label: '% Rápidas', data: d.map(a => a.v), backgroundColor: d.map(a => classColor(a.cls)), borderRadius: 4, barThickness: 12 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 9 } } } },
-      plugins: { legend: { display: false } } }
+      datasets: [porEstado(d.map(a => papelClasse(a.cls)), { label: '% de visitas rápidas', data: d.map(a => a.v), sufixo: '%', casas: 1 })] },
+    options: opcoesAgentes()
   });
 })();
 
 {% if comparacao_semanal %}
 (function () {   // Nota média por equipe no MÊS INTEIRO (a visão semana a semana saiu: cada semana parte de 100 e escondia as perdas acumuladas)
   const C = {{ comparacao_semanal | tojson }};
-  const cores = ['#1E9AD8', '#F7B500', '#19B8A3', '#FF5143', '#7C5CD6', '#5B6FA8'];
   const eqs = Object.keys(C.equipes), valores = eqs.map(eq => C.equipes[eq][C.equipes[eq].length - 1]);
   new Chart(document.getElementById('chartTeamSemanal'), {
     type: 'bar',
-    data: { labels: eqs, datasets: [{ label: 'Nota média do mês', data: valores, borderRadius: 6, backgroundColor: eqs.map((e, i) => cores[i % cores.length]) }] },
-    options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 22 } },
-      scales: { y: { min: 0, max: 100 }, x: { grid: { display: false } } },
-      plugins: { legend: { display: false } } },
-    plugins: [{ id: 'valoresNasBarras', afterDatasetsDraw(ch) {
-      const c = ch.ctx; c.save(); c.font = '700 14px "IBM Plex Sans", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'bottom';
-      c.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#12233B';
-      ch.data.datasets.forEach((ds, i) => ch.getDatasetMeta(i).data.forEach((b, j) => {
-        const v = ds.data[j]; if (v === null || v === undefined) return;
-        c.fillText(String(v).replace('.', ','), b.x, b.y - 4);
-      })); c.restore();
-    } }]
+    data: { labels: eqs, datasets: [serie('serie1', { label: 'Nota média do mês', data: valores, casas: 1 })] },
+    options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 26 } },
+      scales: { y: { min: 0, max: 100 } },
+      plugins: { legend: { display: false }, valores: { ativo: true, posicao: 'ponta', tamanho: 13 } } }
   });
 })();
 {% endif %}
+
 new Chart(document.getElementById('chartTeamStack'), {
   type: 'bar',
   data: { labels: {{ chart_data.teams | tojson }},
     datasets: [
-      { label: 'Normal', data: {{ chart_data.team_stack.normal | tojson }}, backgroundColor: '#12B76A', borderRadius: 4 },
-      { label: 'Atenção', data: {{ chart_data.team_stack.atencao | tojson }}, backgroundColor: '#F2B01E', borderRadius: 4 },
-      { label: 'Crítico', data: {{ chart_data.team_stack.critico | tojson }}, backgroundColor: '#E4572E', borderRadius: 4 }
+      serie('bom', { label: 'Normal', data: {{ chart_data.team_stack.normal | tojson }}, respiro: true, borderRadius: 0, borderSkipped: false }),
+      serie('atencao', { label: 'Atenção', data: {{ chart_data.team_stack.atencao | tojson }}, respiro: true, borderRadius: 0, borderSkipped: false }),
+      serie('critico', { label: 'Crítico', data: {{ chart_data.team_stack.critico | tojson }}, respiro: true, borderRadius: 0, borderSkipped: false })
     ] },
   options: { responsive: true, maintainAspectRatio: false,
-    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 2 } } },
-    plugins: { legend: { position: 'bottom' } } }
+    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } },
+    plugins: { legend: { position: 'bottom' }, valores: { ativo: true, posicao: 'dentro', omitirZero: true } } }
 });
 
 new Chart(document.getElementById('chartTeamStatus'), {
   type: 'bar',
   data: { labels: {{ chart_data.teams | tojson }},
     datasets: [
-      { label: 'Abertos', data: {{ chart_data.team_status.abertos | tojson }}, backgroundColor: '#1080D6', borderRadius: 4 },
-      { label: 'Fechados', data: {{ chart_data.team_status.fechados | tojson }}, backgroundColor: '#F2994A', borderRadius: 4 },
-      { label: 'Recusados', data: {{ chart_data.team_status.recusados | tojson }}, backgroundColor: '#E4572E', borderRadius: 4 }
+      serie('serie1', { label: 'Abertos', data: {{ chart_data.team_status.abertos | tojson }}, respiro: true, borderRadius: 0, borderSkipped: false }),
+      serie('neutro', { label: 'Fechados', data: {{ chart_data.team_status.fechados | tojson }}, respiro: true, borderRadius: 0, borderSkipped: false }),
+      serie('serie2', { label: 'Recusados', data: {{ chart_data.team_status.recusados | tojson }}, respiro: true, borderRadius: 0, borderSkipped: false })
     ] },
   options: { responsive: true, maintainAspectRatio: false,
-    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true } },
-    plugins: { legend: { position: 'bottom' } } }
+    scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } },
+    plugins: { legend: { position: 'bottom' }, valores: { ativo: true, posicao: 'dentro', omitirZero: true } } }
 });
 
 (function(){
@@ -100,11 +104,10 @@ new Chart(document.getElementById('chartTeamStatus'), {
   new Chart(document.getElementById('chartCusto'), {
     type: 'bar',
     data: { labels: d.map(a => a.label),
-      datasets: [{ label: 'Custo real da hora útil (R$)', data: d.map(a => a.v),
-        backgroundColor: d.map(a => a.v > {{ custo_faixa_alto }} ? '#E4572E' : a.v > {{ custo_faixa_medio }} ? '#F2B01E' : '#12B76A'), borderRadius: 4, barThickness: 12 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x: { beginAtZero: true, max: {{ custo_grafico_max }} }, y: { grid: { display: false }, ticks: { font: { size: 9 } } } },
-      plugins: { legend: { display: false } } }
+      datasets: [porEstado(d.map(a => a.v > {{ custo_faixa_alto }} ? 'critico' : a.v > {{ custo_faixa_medio }} ? 'atencao' : 'bom'),
+        { label: 'Custo real da hora útil', data: d.map(a => a.v), prefixo: 'R$ ', casas: 2 })] },
+    options: opcoesAgentes({ layout: { padding: { right: 84 } },
+      scales: { x: { beginAtZero: true, max: {{ custo_grafico_max }} }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } } })
   });
 })();
 
@@ -114,11 +117,9 @@ new Chart(document.getElementById('chartTeamStatus'), {
   new Chart(document.getElementById('chartHoras'), {
     type: 'bar',
     data: { labels: d.map(a => a.label),
-      datasets: [{ label: 'Horas Úteis/Dia', data: d.map(a => a.v),
-        backgroundColor: d.map(a => a.v < {{ horas_uteis_baixo }} ? '#E4572E' : a.v < {{ horas_uteis_alto }} ? '#F2B01E' : '#12B76A'), borderRadius: 4, barThickness: 9 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 8 } } } },
-      plugins: { legend: { display: false } } }
+      datasets: [porEstado(d.map(a => a.v < {{ horas_uteis_baixo }} ? 'critico' : a.v < {{ horas_uteis_alto }} ? 'atencao' : 'bom'),
+        { label: 'Horas úteis por dia', data: d.map(a => a.v), sufixo: ' h', casas: 1 })] },
+    options: opcoesAgentes()
   });
 })();
 
@@ -127,10 +128,8 @@ new Chart(document.getElementById('chartTeamStatus'), {
   sizeForAgents('chartHorasTrabDia', d.length);
   new Chart(document.getElementById('chartHorasTrabDia'), {
     type: 'bar',
-    data: { labels: d.map(a => a.label), datasets: [{ label: 'Horas Trabalhadas/Dia', data: d.map(a => a.v), backgroundColor: '#6B62D6', borderRadius: 4, barThickness: 9 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 8 } } } },
-      plugins: { legend: { display: false } } }
+    data: { labels: d.map(a => a.label), datasets: [serie('serie1', { label: 'Horas trabalhadas por dia', data: d.map(a => a.v), sufixo: ' h', casas: 1 })] },
+    options: opcoesAgentes()
   });
 })();
 
@@ -139,24 +138,21 @@ new Chart(document.getElementById('chartTeamStatus'), {
   sizeForAgents('chartHorasTrabSemana', d.length);
   new Chart(document.getElementById('chartHorasTrabSemana'), {
     type: 'bar',
-    data: { labels: d.map(a => a.label), datasets: [{ label: 'Horas Trabalhadas/Semana', data: d.map(a => a.v), backgroundColor: '#29AEE0', borderRadius: 4, barThickness: 9 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 8 } } } },
-      plugins: { legend: { display: false } } }
+    data: { labels: d.map(a => a.label), datasets: [serie('serie1', { label: 'Horas trabalhadas por semana', data: d.map(a => a.v), sufixo: ' h', casas: 1 })] },
+    options: opcoesAgentes()
   });
 })();
 
 {% if chart_data.pend_top15 %}
-new Chart(document.getElementById('chartPendTop'), {
-  type: 'bar',
-  data: { labels: {{ chart_data.pend_top15 | map(attribute="label") | list | tojson }},
-    datasets: [{ label: '% Pendência', data: {{ chart_data.pend_top15 | map(attribute="pct") | list | tojson }},
-      backgroundColor: {{ chart_data.pend_top15 | map(attribute="pct") | list | tojson }}.map(p => p > 40 ? '#E4572E' : p > 25 ? '#F2B01E' : '#12B76A'),
-      borderRadius: 4, barThickness: 16 }] },
-  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-    scales: { x: { beginAtZero: true }, y: { grid: { display: false } } },
-    plugins: { legend: { display: false } } }
-});
+(function(){
+  const p = {{ chart_data.pend_top15 | map(attribute="pct") | list | tojson }};
+  new Chart(document.getElementById('chartPendTop'), {
+    type: 'bar',
+    data: { labels: {{ chart_data.pend_top15 | map(attribute="label") | list | tojson }},
+      datasets: [porEstado(p.map(v => v > 40 ? 'critico' : v > 25 ? 'atencao' : 'bom'), { label: '% de pendência', data: p, sufixo: '%', casas: 1 })] },
+    options: opcoesAgentes({ scales: { x: { beginAtZero: true }, y: { grid: { display: false } } } })
+  });
+})();
 {% endif %}
 
 {% if chart_data.ranking_chart and not acumulado_so_media %}
@@ -166,11 +162,8 @@ new Chart(document.getElementById('chartPendTop'), {
   new Chart(document.getElementById('chartRanking'), {
     type: 'bar',
     data: { labels: d.map(x => x.label),
-      datasets: [{ label: 'Pontuação Final', data: d.map(x => x.v),
-        backgroundColor: d.map(x => x.color), borderRadius: 4, barThickness: 12 }] },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 9 } } } },
-      plugins: { legend: { display: false } } }
+      datasets: [{ label: 'Pontuação final', data: d.map(x => x.v), backgroundColor: d.map(x => x.color), casas: 1 }] },
+    options: opcoesAgentes()
   });
 })();
 {% endif %}
@@ -181,12 +174,12 @@ new Chart(document.getElementById('chartPendTop'), {
   new Chart(document.getElementById('chartPeTrend'), {
     data: { labels: peTrend.map(p => 'Semana ' + p.semana),
       datasets: [
-        { type: 'bar', label: 'Imóveis Abertos', data: peTrend.map(p => p.abertos), backgroundColor: '#29AEE0', borderRadius: 4, yAxisID: 'y' },
-        { type: 'line', label: 'Visitas/Dia', data: peTrend.map(p => p.visitas_dia), borderColor: '#E4572E', backgroundColor: '#E4572E', tension: 0.3, yAxisID: 'y1' }
+        serie('serie1', { type: 'bar', label: 'Imóveis abertos', data: peTrend.map(p => p.abertos), yAxisID: 'y', order: 2 }),
+        serie('serie2', { type: 'line', label: 'Visitas por dia', data: peTrend.map(p => p.visitas_dia), casas: 1, yAxisID: 'y1', order: 1, pointBorderColor: G.superficie() })
       ] },
-    options: { responsive: true, maintainAspectRatio: false,
-      scales: { y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Imóveis Abertos' } },
-                y1: { beginAtZero: true, position: 'right', grid: { display: false }, title: { display: true, text: 'Visitas/Dia' } } },
+    options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+      scales: { y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Imóveis abertos' } },
+                y1: { beginAtZero: true, position: 'right', grid: { display: false }, title: { display: true, text: 'Visitas por dia' } } },
       plugins: { legend: { position: 'bottom' } } }
   });
 })();
@@ -196,10 +189,8 @@ new Chart(document.getElementById('chartPendTop'), {
 new Chart(document.getElementById('chartAusTop'), {
   type: 'bar',
   data: { labels: {{ ausencias_agg.top15 | map(attribute=0) | list | tojson }},
-    datasets: [{ label: 'Ausências', data: {{ ausencias_agg.top15 | map(attribute=1) | list | tojson }}, backgroundColor: '#E4572E', borderRadius: 4, barThickness: 14 }] },
-  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-    scales: { x: { beginAtZero: true }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } },
-    plugins: { legend: { display: false } } }
+    datasets: [serie('serie1', { label: 'Ausências', data: {{ ausencias_agg.top15 | map(attribute=1) | list | tojson }} })] },
+  options: opcoesAgentes({ scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } } })
 });
 {% endif %}
 

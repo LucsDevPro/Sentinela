@@ -37,7 +37,7 @@
   .ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
   .ctl label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;font-weight:700;color:var(--mut);text-transform:uppercase}
   select{min-height:46px;padding:8px 10px;font-size:1rem;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);min-width:160px}
-  .abas{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+  .abas{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;margin:10px 0;padding-bottom:4px}.abas button{flex:0 0 auto;white-space:nowrap}
   .abas button{min-height:44px;padding:8px 14px;border-radius:999px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;font-weight:600;cursor:pointer}
   .abas button[aria-pressed="true"]{background:var(--pri);color:var(--pri-tx);border-color:var(--pri)}
   .eq h2{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}

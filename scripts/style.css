@@ -58,11 +58,24 @@ header h1 span { color: #2BA8E8; font-weight: 600; }
 /* Ferramentas do cabeçalho: tudo na mesma linha, com a MESMA altura (--hbtn-h). Os 4 botões de texto
    têm a mesma largura; tema e imprimir são quadrados só com o símbolo. */
 :root { --hbtn-h: 36px; }
-.header-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; }
-.header-actions .period-select { box-sizing: border-box; height: var(--hbtn-h); width: 210px; padding: 0 10px; border-radius: 6px; }
-.hnav { display: grid; grid-template-columns: repeat(4, 150px); gap: 8px; }
+.header-actions { container-type: inline-size; container-name: acoes; display: flex; align-items: center; flex-wrap: nowrap; gap: 8px 10px; }
+.header-actions > * { flex: 0 0 auto; }
+.header-actions .period-select { box-sizing: border-box; height: var(--hbtn-h); flex: 0 1 210px; width: 210px; min-width: 130px; padding: 0 10px; border-radius: 6px; }
+/* Os 4 botões de texto dividem a largura em partes iguais e encolhem junto com a tela; quando o texto não cabe mais, vira só o ícone
+   (ver @container acoes mais abaixo). Nunca quebra de linha. */
+.hnav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; flex: 0 1 690px; min-width: 0; }   /* 690 px = 4 botões de ~165 px: cabe "Álbum de cartinhas" inteiro */
+.hnav .hbtn { min-width: 0; padding: 0 8px; }
+.hnav .hbtn > span:not(.btn-ico) { overflow: hidden; text-overflow: ellipsis; }
 .htools { display: flex; gap: 8px; }
 .hopts { display: flex; gap: 8px; margin-left: auto; }
+@container acoes (max-width: 1259px) {   /* abaixo disso o texto não cabe inteiro: só o ícone (o title mostra o nome) */
+  .hnav { flex: 0 0 auto; grid-template-columns: repeat(4, var(--hbtn-h)); }
+  .hnav .hbtn { padding: 0; }
+  .hnav .hbtn > span:not(.btn-ico) { display: none; }
+}
+@container acoes (max-width: 900px) {
+  .hopt { padding: 0 9px; gap: 5px; font-size: 0.72rem; }
+}
 .hbtn { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: var(--hbtn-h); padding: 0 10px;
   background: var(--navy); color: #fff; border: 1px solid #6F9BD1; border-radius: 6px; font-family: inherit; font-size: 0.78rem; font-weight: 600; line-height: 1;
   text-decoration: none; white-space: nowrap; cursor: pointer; transition: background .15s, border-color .15s; }
@@ -104,20 +117,31 @@ header h1 span { color: #2BA8E8; font-weight: 600; }
 :root[data-theme="dark"] .period-select:hover { background: #102848; border-color: var(--blue); }
 :root[data-theme="dark"] .period-select option { background: #0C1F3A; color: #E6EDF7; }
 
-/* ---------- Abas: sublinhado amarelo na ativa ---------- */
-.nav-tabs { display: flex; gap: 0; flex-wrap: wrap; margin-bottom: 26px; border-bottom: 1px solid var(--border); }
+/* ---------- Abas: sublinhado amarelo na ativa ----------
+   SEMPRE em uma linha só. O tamanho da letra acompanha a largura disponível (cqw = 1% da largura da caixa .nav-tabs-wrap), então o menu
+   inteiro encolhe junto com a tela em vez de quebrar. Abaixo de 1100 px os trechos opcionais ("& Irregularidades", "& Produtividade",
+   "(média dos meses)") somem e a letra volta a crescer; só em telas muito estreitas o menu rola para o lado. */
+.nav-tabs-wrap { container-type: inline-size; container-name: abas; }
+.nav-tabs { font-size: clamp(10px, 1vw, 14px); font-size: clamp(10px, 1.03cqw, 14px);   /* medido: as 11 abas somam ~89 em, então 1.03cqw ocupa ~92% da largura */
+  display: flex; flex-wrap: nowrap; gap: 0.15em; margin-bottom: 26px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
+  box-shadow: inset 0 -1px 0 var(--border); }
+.nav-tabs::-webkit-scrollbar { display: none; }
 .nav-tab {
-  padding: 11px 16px 10px; cursor: pointer; font-weight: 600; font-size: 0.85rem; font-family: inherit;
+  flex: 0 0 auto; white-space: nowrap; padding: 0.85em 0.8em 0.75em; cursor: pointer; font-weight: 600; font-size: 1em; font-family: inherit;
   color: var(--text2); transition: color .15s, background .15s; border: none; background: transparent;
-  border-bottom: 3px solid transparent; margin-bottom: -1px;
+  border-bottom: 3px solid transparent;
 }
 .nav-tab:hover { color: var(--h); background: var(--bg-soft); }
 .nav-tab.active { color: var(--h); border-bottom-color: var(--yellow); }
+@container abas (max-width: 1100px) {
+  .nav-tabs { font-size: clamp(10px, 1.28cqw, 14px); }   /* rótulos curtos: ~73 em, 1.28cqw ocupa ~93% */
+  .tab-opc { display: none; }
+}
 
 /* ---------- Navegação semanal ---------- */
-.week-nav { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; margin-bottom: 14px; }
-.week-nav-titulo { align-self: center; font-family: var(--f-num); font-weight: 700; font-size: 1.05rem; color: var(--h); margin-right: 6px; }
-.week-chip { display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border);
+.week-nav { display: flex; gap: 8px; flex-wrap: nowrap; align-items: stretch; margin-bottom: 14px; overflow-x: auto; scrollbar-width: thin; }
+.week-nav-titulo { flex: 0 0 auto; white-space: nowrap; align-self: center; font-family: var(--f-num); font-weight: 700; font-size: 1.05rem; color: var(--h); margin-right: 6px; }
+.week-chip { flex: 1 1 auto; white-space: nowrap; display: flex; flex-direction: column; justify-content: center; min-height: 44px; padding: 6px 14px; border-radius: 4px; border: 1px solid var(--border);
   background: var(--card); color: var(--text2); text-decoration: none; font-size: 0.84rem; line-height: 1.25; }
 .week-chip small { font-size: 0.72rem; opacity: 0.85; }
 .week-chip:hover { color: var(--h); background: var(--bg-raise); border-color: var(--border-strong); }
@@ -173,6 +197,37 @@ header h1 span { color: #2BA8E8; font-weight: 600; }
 .ci-pct { float: right; font-family: var(--f-num); font-weight: 700; color: var(--bad-tx); font-size: 1.3rem; }
 .ci-name { font-weight: 600; font-size: 0.88rem; color: var(--h); margin-bottom: 2px; }
 .ci-meta { font-size: 0.74rem; color: var(--text2); }
+
+/* ---------- Aba "Por Área": uma linha recolhida por área; "ver mais" abre estatísticas + agentes ---------- */
+.areas-lista { display: flex; flex-direction: column; gap: 8px; }
+.area-item { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: var(--radius); }
+.area-item.cls-atencao { border-left-color: var(--yellow); }
+.area-item.cls-critico { border-left-color: var(--red); }
+.area-item[open] { border-color: var(--border-strong); border-left-width: 4px; box-shadow: var(--shadow); }
+.area-item[open].cls-atencao { border-left-color: var(--yellow); }
+.area-item[open].cls-critico { border-left-color: var(--red); }
+.area-item[open]:not(.cls-atencao):not(.cls-critico) { border-left-color: var(--green); }
+.area-item > summary { display: flex; align-items: center; gap: 8px 14px; padding: 11px 16px; cursor: pointer; list-style: none; border-radius: var(--radius); }
+.area-item > summary::-webkit-details-marker { display: none; }
+.area-item > summary:hover { background: var(--hover); }
+.ai-nome { flex: 1 1 auto; min-width: 0; font-weight: 600; font-size: 0.9rem; color: var(--h); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ai-meta { flex: 0 0 auto; font-size: 0.74rem; color: var(--text2); white-space: nowrap; }
+.ai-mais { flex: 0 0 auto; min-width: 74px; text-align: right; font-size: 0.74rem; font-weight: 600; color: var(--blue, #1E9AD8); white-space: nowrap; }
+.ai-mais::after { content: " ▾"; }
+.area-item[open] .ai-mais::after { content: " ▴"; }
+.ai-mais .t-menos, .area-item[open] .ai-mais .t-mais { display: none; }
+.area-item[open] .ai-mais .t-menos { display: inline; }
+.ai-corpo { border-top: 1px solid var(--border-soft); padding: 14px 16px 16px; }
+.ai-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px 14px; margin-bottom: 12px; }
+.ai-quart { font-size: 0.74rem; color: var(--text2); margin: 0 0 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.ai-quart b { color: var(--text); }
+@media (max-width: 720px) { .area-item > summary { padding: 10px 12px; } .ai-meta { display: none; } .ai-corpo { padding: 12px; } }
+@media print {
+  .area-item { break-inside: avoid; box-shadow: none; }
+  .ai-mais { display: none; }
+  .area-item > summary { padding: 4px 8px; }
+  .ai-corpo { padding: 4px 8px 8px; }
+}
 
 /* ---------- Equipes ---------- */
 .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 28px; }
@@ -312,21 +367,22 @@ footer { text-align: center; padding: 32px; color: var(--text3); font-size: 0.76
 .heat-cell span { display: block; font-family: var(--f-txt); font-size: 0.62rem; font-weight: 400; opacity: .9; margin-top: 2px; }
 
 @media (max-width: 720px) {
+  /* balões da legenda: ancorados na barra inteira (e não em cada item) para não alargar a página no celular */
+  .hover-legend { position: relative; }
+  .legend-chip { position: static; }
+  .legend-tip { left: 0; right: 0; white-space: normal; }
+  .legend-tip::after { display: none; }
   .container { padding: 0 14px; }
   .charts-grid { grid-template-columns: 1fr; }
-  .nav-tabs { overflow-x: auto; flex-wrap: nowrap; }
-  .nav-tab { white-space: nowrap; }
   /* Celular: cabeçalho enxuto e fora do topo fixo (senão ocupa meia tela) */
   header { position: static; padding: 10px 0 14px; margin-bottom: 16px; }
   header h1 { font-size: 1.25rem; }
   .header-brand { gap: 10px; } .header-brand img { height: 34px; }
   .header-brand .header-meta { display: none; }
-  .header-actions { gap: 8px; }
-  .header-actions .period-select { width: 100%; }
-  .hnav { grid-template-columns: 1fr 1fr; width: 100%; }
-  .hopts { margin-left: 0; flex-wrap: wrap; }
+  .header-actions { gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: thin; }   /* celular: a barra rola de lado, não quebra */
+  .header-actions .period-select { flex: 0 0 150px; width: 150px; }
+  .hopts { margin-left: 0; }
   .kpi-value { font-size: 2rem; }
-  .week-nav-titulo { width: 100%; }
 }
 
 @media print {

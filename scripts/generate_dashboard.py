@@ -46,6 +46,12 @@ HORAS_UTEIS_ALTO = 2.5      # h/dia em visita: a partir daqui = verde
 CUSTO_GRAFICO_MAX = 300      # R$/h: o gráfico de custo corta as barras aqui (quem passa disso aparece com barra cheia)
 OUTRAS_ATIVIDADES_PATH = ROOT / "data" / "outras_atividades.json"
 
+# Faixas do alerta por % de visitas rápidas. Precisam bater com PCT_RAPIDAS_OK_ATE / PCT_RAPIDAS_ATENCAO_ATE de
+# scripts/coleta/parametros.py (o gerador não importa o pacote `coleta`; o teste test_areas_agrupadas.py confere os dois).
+# Usadas só na aba "Por Área", que soma vários agentes numa linha por área e precisa reclassificar o total.
+PCT_RAPIDAS_OK_ATE = 10
+PCT_RAPIDAS_ATENCAO_ATE = 20
+
 
 def carregar_outras_atividades():
     """Lê data/outras_atividades.json (equipes/atividades fora do e-Visita,
@@ -316,6 +322,67 @@ def records(df, colmap):
             if k not in _NAO_PADRONIZAR_TEXTO:
                 row[k] = cap_first(v)
     return rows
+
+def _num_seguro(v, padrao=0.0):
+    """Número seguro: None, texto e NaN viram `padrao` (células vazias da planilha chegam como NaN)."""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return padrao
+    return padrao if f != f else f
+
+
+def _chave_natural(txt):
+    """Ordena '2', '10', 'A3' do jeito humano (2 antes de 10), para a lista de quarteirões."""
+    return [int(p) if p.isdigit() else p.lower() for p in re.split(r"(\d+)", str(txt))]
+
+
+def _alerta_por_pct_rapidas(pct):
+    """Mesma régua de scripts/coleta/calculos.py::_classificar, só que devolvendo o texto do alerta."""
+    if pct <= PCT_RAPIDAS_OK_ATE:
+        return "🟢 NORMAL"
+    if pct <= PCT_RAPIDAS_ATENCAO_ATE:
+        return "🟡 ATENÇÃO"
+    return "🔴 CRÍTICO"
+
+
+def build_areas_agrupadas(area_records):
+    """Junta as linhas agente×área (aba 'Por Área' da planilha) em UMA linha por ÁREA, para a aba "Por Área"
+    do dashboard: a área aparece recolhida e, ao abrir, mostra os agentes que trabalharam nela e os números.
+
+    - Somas: imóveis abertos, rápidas, fechados, recusados.
+    - % rápidas e % pendência são refeitos sobre os totais (nunca média de percentuais).
+    - Tempo médio = média dos agentes ponderada pelos imóveis abertos de cada um (é o tempo médio real da área).
+    - Quarteirões = união dos quarteirões de todos os agentes (sem repetir).
+    - Mediana não entra no total da área: a mediana de várias medianas não é a mediana de verdade; fica só por agente.
+    - Agentes de cada área: do que mais abriu imóveis para o que menos abriu.
+    Devolve as áreas do maior para o menor % de rápidas (ordem que a aba já usava)."""
+    por_area = {}
+    for r in area_records:
+        por_area.setdefault(r.get("area") or "—", []).append(r)
+
+    grupos = []
+    for nome, linhas in por_area.items():
+        abertos = sum(_num_seguro(l.get("abertos")) for l in linhas)
+        rapidas = sum(_num_seguro(l.get("rapidas")) for l in linhas)
+        fechados = sum(_num_seguro(l.get("fechados")) for l in linhas)
+        recusados = sum(_num_seguro(l.get("recusados")) for l in linhas)
+        peso_total = sum(_num_seguro(l.get("abertos")) for l in linhas if l.get("tempo_medio") is not None and _num_seguro(l.get("tempo_medio"), -1) >= 0)
+        tempo = (sum(_num_seguro(l.get("tempo_medio")) * _num_seguro(l.get("abertos")) for l in linhas if _num_seguro(l.get("tempo_medio"), -1) >= 0) / peso_total) if peso_total else 0.0
+        quarteiroes = {q.strip() for l in linhas for q in str(l.get("quarteiroes_lista") or "").split(",")
+                       if q.strip() and q.strip().lower() != "nan"}
+        pct_rapidas = rapidas / abertos * 100 if abertos else 0.0
+        total = abertos + fechados + recusados
+        pct_pendencia = (fechados + recusados) / total * 100 if total else 0.0
+        grupos.append(dict(
+            area=nome, n_agentes=len(linhas), abertos=abertos, tempo_medio=tempo,
+            qtd_quarteiroes=len(quarteiroes), quarteiroes_lista=", ".join(sorted(quarteiroes, key=_chave_natural)),
+            rapidas=rapidas, pct_rapidas=pct_rapidas, fechados=fechados, recusados=recusados,
+            pct_pendencia=pct_pendencia, alerta=_alerta_por_pct_rapidas(pct_rapidas),
+            agentes=sorted(linhas, key=lambda l: (-_num_seguro(l.get("abertos")), str(l.get("agente") or ""))),
+        ))
+    grupos.sort(key=lambda g: (-g["pct_rapidas"], str(g["area"])))
+    return grupos
 
 # ==================================================== carrega abas ====
 
@@ -1149,6 +1216,7 @@ def build_context(data):
         resumo_semanal_recs, semanas_disponiveis = [], []
 
     _cronograma_rows_calc = build_cronograma_rows(data["cronograma"], all_absent)
+    area_recs = records(area.sort_values("% Rápidas", ascending=False), AREA_COLS)
 
     return dict(
         title="S E N T I N E L A - HUB",
@@ -1165,7 +1233,8 @@ def build_context(data):
         resumo_semanal=resumo_semanal_recs,
         semanas_disponiveis=semanas_disponiveis,
         outras_atividades=carregar_outras_atividades(),
-        area=records(area.sort_values("% Rápidas", ascending=False), AREA_COLS),
+        area=area_recs,
+        areas_grupos=build_areas_agrupadas(area_recs),
         areas_unicas=sorted(area["Área"].unique()),
         dup=records(data["dup"], ALERT_COLS), susp=records(data["susp"], ALERT_COLS),
         neg=records(data["neg"], ALERT_COLS), fora=records(data["fora"], ALERT_COLS),

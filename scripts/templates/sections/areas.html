@@ -1,30 +1,65 @@
+{#- Uma linha por ÁREA, recolhida. "ver mais" abre as estatísticas da área e a tabela dos agentes que trabalharam nela.
+    Os dados agrupados vêm de generate_dashboard.py::build_areas_agrupadas (areas_grupos). -#}
+{% macro stat(rot, valor) -%}<div class="cd-item"><span class="cd-v">{{ valor }}</span><span class="cd-l">{{ rot }}</span></div>{%- endmacro %}
 <div class="section" id="areas">
   <div class="table-section">
-    <h3>📍 Análise por Área ({{ area|length|br }} áreas)</h3>
-    <p class="table-hint">Clique no cabeçalho de qualquer coluna para ordenar (clique de novo para inverter). Ordenado por % Rápidas por padrão. Passe o mouse sobre "Quarteirões" para ver a lista completa.</p>
+    <h3>📍 Análise por Área (<span id="areasContagem">{{ areas_grupos|length|br }}</span> áreas)</h3>
+    <p class="table-hint">Cada área começa recolhida. Clique em <b>ver mais</b> para abrir os agentes que trabalharam nela e as estatísticas. A busca por agente abre sozinha as áreas em que ele trabalhou.</p>
     <div class="filters">
-      <select id="filterAreaArea"><option value="">Todas as áreas</option>{% for a in areas_unicas %}<option>{{ a }}</option>{% endfor %}</select>
-      <input type="text" id="filterAreaName" placeholder="Buscar agente...">
+      <select id="filterAreaArea" aria-label="Filtrar por área"><option value="">Todas as áreas</option>{% for a in areas_unicas %}<option>{{ a }}</option>{% endfor %}</select>
+      <input type="text" id="filterAreaName" placeholder="Buscar agente..." aria-label="Buscar agente">
+      <select id="sortAreaBy" aria-label="Ordenar as áreas">
+        <option value="pct_rapidas">Ordenar: maior % de rápidas</option>
+        <option value="pendencia">Ordenar: maior % de pendência</option>
+        <option value="abertos">Ordenar: mais imóveis abertos</option>
+        <option value="tempo">Ordenar: maior tempo médio</option>
+        <option value="agentes">Ordenar: mais agentes</option>
+        <option value="nome">Ordenar: nome da área (A–Z)</option>
+      </select>
+      <button type="button" class="print-btn" id="areasAbrirTodas">Abrir todas</button>
+      <button type="button" class="print-btn" id="areasFecharTodas">Recolher todas</button>
     </div>
-    <div class="table-wrap">
-      <table class="data-table sortable" id="tableAreas">
-        <thead><tr>
-          <th>Agente</th><th>Equipe</th><th>Área</th><th>Imóveis Abertos</th><th>Tempo Médio</th><th>Mediana</th>
-          <th>Quarteirões</th><th>Rápidas</th><th>% Rápidas</th><th>Fechados</th><th>Recusados</th><th>% Pendência</th><th>Alerta</th>
-        </tr></thead>
-        <tbody>
-          {% for r in area %}
-          <tr class="{{ r.alerta|row_class }}" data-area="{{ r.area }}">
-            <td class="agent-name">{{ r.agente }}</td><td>{{ r.equipe }}</td><td>{{ r.area }}</td>
-            <td class="num">{{ r.abertos|br }}</td><td class="num">{{ r.tempo_medio|br(1) }}</td><td class="num">{{ r.mediana|br }}</td>
-            <td class="num" title="{{ r.quarteiroes_lista or '' }}">{{ r.qtd_quarteiroes|br }}</td>
-            <td class="num">{{ r.rapidas|br }}</td><td class="num pct">{{ r.pct_rapidas|br(1) }}%</td>
-            <td class="num">{{ r.fechados|br }}</td><td class="num">{{ r.recusados|br }}</td><td class="num pct">{{ r.pct_pendencia|br(1) }}%</td>
-            <td>{{ r.alerta|badge }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div class="areas-lista" id="listaAreas">
+      {% for g in areas_grupos %}
+      <details class="area-item cls-{{ g.alerta|class_key }}" data-area="{{ g.area }}" data-pct="{{ g.pct_rapidas|round(2) }}"
+               data-pend="{{ g.pct_pendencia|round(2) }}" data-abertos="{{ g.abertos|int }}" data-tempo="{{ g.tempo_medio|round(2) }}" data-agentes="{{ g.n_agentes }}">
+        <summary>
+          <span class="ai-nome" title="{{ g.area }}">{{ g.area }}</span>
+          <span class="ai-meta">{{ g.n_agentes|br }} {{ "agente" if g.n_agentes == 1 else "agentes" }}</span>
+          {{ g.alerta|badge }}
+          <span class="ai-mais"><span class="t-mais">ver mais</span><span class="t-menos">ver menos</span></span>
+        </summary>
+        <div class="ai-corpo">
+          <div class="ai-stats">
+            {{ stat("imóveis abertos", g.abertos|br) }}{{ stat("tempo médio (min)", g.tempo_medio|br(1)) }}{{ stat("quarteirões", g.qtd_quarteiroes|br) }}
+            {{ stat("visitas rápidas", g.rapidas|br) }}{{ stat("% rápidas", g.pct_rapidas|br(1) ~ "%") }}{{ stat("imóveis fechados", g.fechados|br) }}
+            {{ stat("imóveis recusados", g.recusados|br) }}{{ stat("% pendência", g.pct_pendencia|br(1) ~ "%") }}{{ stat("agentes que trabalharam", g.n_agentes|br) }}
+          </div>
+          {% if g.quarteiroes_lista %}<p class="ai-quart"><b>Quarteirões:</b> {{ g.quarteiroes_lista }}</p>{% endif %}
+          <div class="table-wrap">
+            <table class="data-table compact area-tabela">
+              <thead><tr>
+                <th>Agente</th><th>Equipe</th><th>Imóveis Abertos</th><th>Tempo Médio</th><th>Mediana</th><th>Quarteirões</th>
+                <th>Rápidas</th><th>% Rápidas</th><th>Fechados</th><th>Recusados</th><th>% Pendência</th><th>Alerta</th>
+              </tr></thead>
+              <tbody>
+                {% for r in g.agentes %}
+                <tr class="{{ r.alerta|row_class }}">
+                  <td class="agent-name">{{ r.agente }}</td><td>{{ r.equipe }}</td>
+                  <td class="num">{{ r.abertos|br }}</td><td class="num">{{ r.tempo_medio|br(1) }}</td><td class="num">{{ r.mediana|br }}</td>
+                  <td class="num" title="{{ r.quarteiroes_lista or '' }}">{{ r.qtd_quarteiroes|br }}</td>
+                  <td class="num">{{ r.rapidas|br }}</td><td class="num pct">{{ r.pct_rapidas|br(1) }}%</td>
+                  <td class="num">{{ r.fechados|br }}</td><td class="num">{{ r.recusados|br }}</td><td class="num pct">{{ r.pct_pendencia|br(1) }}%</td>
+                  <td>{{ r.alerta|badge }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+      {% endfor %}
     </div>
+    <p class="table-hint" id="areasVazio" hidden>Nenhuma área encontrada com esse filtro.</p>
   </div>
 </div>
