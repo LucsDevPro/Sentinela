@@ -100,3 +100,70 @@ body:has(#conteudo) main { max-width:1320px!important; }
 @media print {
   .kpi,.chart-card,.table-section,.team-card { box-shadow:none!important; }
 }
+
+
+/* Correção de integração: seletores reais do dashboard (macros.html). */
+body:has(.kpi-grid) {
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(40,105,170,.10), transparent 38%),
+    var(--bg, #eef2f8);
+}
+.kpi-grid { gap: clamp(12px,1.4vw,20px) !important; }
+.kpi-grid > .kpi {
+  position: relative;
+  min-height: 126px;
+  padding: clamp(16px,1.6vw,24px) !important;
+  border: 1px solid var(--ultra-line);
+  border-radius: 18px !important;
+  background: linear-gradient(145deg,rgba(255,255,255,.98),rgba(244,248,253,.94));
+  box-shadow: 0 12px 30px rgba(13,35,62,.09) !important;
+  overflow: hidden;
+}
+.kpi-grid > .kpi::before {
+  content:"";
+  position:absolute; inset:0 auto 0 0; width:4px;
+  background:linear-gradient(180deg,var(--ultra-gold-hi),var(--ultra-gold));
+}
+.kpi-grid .kpi-label {
+  color:#60738d; font-size:.72rem; font-weight:800;
+  letter-spacing:.09em; text-transform:uppercase;
+}
+.kpi-grid .kpi-value {
+  margin:8px 0 4px; color:#10243c;
+  font-size:clamp(1.8rem,2.6vw,2.65rem);
+  line-height:1.08; font-weight:850; letter-spacing:-.045em;
+  font-variant-numeric:tabular-nums;
+}
+.kpi-grid .kpi-sub { color:#71829a; font-size:.78rem; line-height:1.45; }
+.charts-grid { gap:18px !important; }
+.chart-card,.table-section,.team-card {
+  border:1px solid var(--ultra-line) !important;
+  border-radius:18px !important;
+  background:var(--ultra-glass);
+  box-shadow:0 12px 34px rgba(13,35,62,.075) !important;
+}
+.chart-card { padding:clamp(16px,1.8vw,24px) !important; }
+.chart-card h3,.table-section h3 { letter-spacing:-.015em; }
+.chart-wrap { border-radius:12px; }
+.table-section { padding:clamp(14px,1.7vw,22px) !important; }
+.table-wrap { border:1px solid var(--ultra-line); border-radius:12px; }
+table.data-table thead th { position:sticky; top:0; z-index:2; }
+.team-grid { gap:16px !important; }
+.team-card { padding:20px !important; }
+.critico-item { border-radius:12px; }
+:root[data-theme="dark"] .kpi-grid > .kpi {
+  background:linear-gradient(145deg,rgba(17,39,64,.98),rgba(8,24,42,.98));
+  border-color:rgba(142,176,219,.2);
+}
+:root[data-theme="dark"] .kpi-grid .kpi-label,
+:root[data-theme="dark"] .kpi-grid .kpi-sub { color:#9db2ce; }
+:root[data-theme="dark"] .kpi-grid .kpi-value { color:#f1f6ff; }
+@media(max-width:700px) {
+  .kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .kpi-grid > .kpi { min-height:112px; padding:14px !important; }
+  .kpi-grid .kpi-value { font-size:clamp(1.45rem,6vw,2rem); }
+}
+@media(max-width:420px) {
+  .kpi-grid { grid-template-columns:1fr 1fr !important; gap:9px !important; }
+  .kpi-grid > .kpi { min-height:104px; }
+}
