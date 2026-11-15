@@ -41,8 +41,10 @@ with sync_playwright() as p:
     cls = pg.get_attribute(".carta", "class")
     esperado = "t-destaque" if (ult["pos"] <= 3 and ult["pontos"] >= 90 and round(ult["pontos"]) < 100) else "" if ult["pontos"] >= 90 else "t-prata" if ult["pontos"] >= 75 else "t-bronze"
     checar("nível do cartão segue a nota", (esperado in cls) if esperado else not re.search(r"t-(prata|bronze|destaque)", cls), cls)
-    r0 = round(ult["pontos"]); b_esp = "b-100" if r0 >= 100 else "b-90" if r0 >= 90 else "b-80" if r0 >= 80 else "b-70" if r0 >= 70 else "b-60" if r0 >= 60 else "b-0"
-    checar("borda do cartão segue a faixa da nota", b_esp in cls.split(), cls)
+    # mesma regra de assets/carta.js: top 3 com 100 = b-100 (LENDÁRIA); top 3 com 90-99 = b-top (DESTAQUE); demais 90+ = b-90 (OURO, inclusive quem tem 100 fora do top 3)
+    r0 = round(ult["pontos"]); top3 = ult["pos"] <= 3
+    b_esp = "b-100" if r0 >= 100 and top3 else "b-top" if 90 <= r0 < 100 and top3 else "b-90" if r0 >= 90 else "b-80" if r0 >= 80 else "b-70" if r0 >= 70 else "b-60" if r0 >= 60 else "b-0"
+    checar("borda do cartão segue a faixa da nota (b-100 só no top 3)", b_esp in cls.split(), f"esperado {b_esp}, veio: {cls}")
     checar("tem texto alternativo", "Cartão de" in pg.get_attribute(".carta", "aria-label"))
     n_li = pg.locator(".tl > li").count()
     checar("linha do tempo tem um item por mês", n_li == len(alvo["meses"]), f"{n_li} x {len(alvo['meses'])}")
@@ -100,18 +102,25 @@ with sync_playwright() as p:
     # ---------- álbum
     al = ctx.new_page(); ea = []; al.on("pageerror", lambda e: ea.append(str(e)))
     al.goto(U + "album.html"); al.wait_for_timeout(900)
+    checar("álbum abre em «Melhor do ano»", al.input_value("#fMes") == "Melhor do ano")
+    fundo, texto = al.evaluate("[getComputedStyle(document.documentElement).backgroundColor, getComputedStyle(document.body).color]")
+    canal = lambda c: [int(x) for x in re.findall(r"\d+", c)[:3]]
+    checar("álbum: tema claro por padrão (fundo claro, texto escuro)", sum(canal(fundo)) / 3 > 200 and sum(canal(texto)) / 3 < 90, f"{fundo} / {texto}")
+    al.select_option("#fMes", al.eval_on_selector_all("#fMes option", "o=>o.map(x=>x.value)")[1]); al.wait_for_timeout(1800)   # mês mais recente; espera a animação de entrada das cartas (nota conta de 0 ao valor e a carta cresce)
     mes = al.input_value("#fMes")
     do_mes = sorted([m for a in D.values() for m in a["meses"] if m["mes"] == mes and m["pontos"] is not None], key=lambda m: -m["pontos"])
     checar("álbum tem uma cartinha por agente do mês", al.locator(".slot").count() == len(do_mes), f"{al.locator('.slot').count()} x {len(do_mes)}")
     notas = [int(x) for x in al.eval_on_selector_all(".slot .c-ovr b", "e=>e.map(x=>x.textContent)")]
     checar("cartinhas ordenadas da maior nota para a menor", notas == sorted(notas, reverse=True), str(notas[:8]))
     checar("primeira cartinha é o 1º lugar", al.inner_text(".slot .n").strip() == "1º")
-    pequena = al.evaluate("document.querySelector('.slot .carta').getBoundingClientRect().width")
-    al.hover(".slot:nth-child(3)"); al.wait_for_timeout(450)
-    grande = al.evaluate("document.querySelector('.slot:nth-child(3) .carta').getBoundingClientRect().width")
-    checar("passar o mouse amplia a cartinha", grande > pequena * 1.3, f"{pequena:.0f} -> {grande:.0f}")
+    larg = lambda: al.evaluate("document.querySelector('#album .slot:nth-child(3) .carta').getBoundingClientRect().width")
+    # a largura medida NÃO serve para o hover: a carta também inclina em 3D (carta_fx.js) e a inclinação encolhe o retângulo. Confere a escala do CSS (--s = e*1.06).
+    escala = lambda: al.evaluate("getComputedStyle(document.querySelector('#album .slot:nth-child(3) .c-conj')).getPropertyValue('--s').replace(/\\s/g,'')")
+    pequena, repouso = larg(), escala()
+    al.hover("#album .slot:nth-child(3)"); al.wait_for_timeout(450)
+    checar("passar o mouse destaca a cartinha (escala do hover ativa)", escala() != repouso and "1.06" in escala(), f"repouso {repouso} -> hover {escala()}")
     al.mouse.move(0, 0); al.wait_for_timeout(400)
-    checar("ao tirar o mouse volta ao tamanho do álbum", abs(al.evaluate("document.querySelector('.slot:nth-child(3) .carta').getBoundingClientRect().width") - pequena) < 2)
+    checar("ao tirar o mouse volta ao tamanho do álbum", abs(larg() - pequena) < 2)
     al.keyboard.press("Tab")
     eq1 = al.eval_on_selector_all("#fEq option", "o=>o.map(x=>x.value)")[1]
     al.select_option("#fEq", eq1); al.wait_for_timeout(250)
@@ -122,7 +131,15 @@ with sync_playwright() as p:
     checar("sem resultado mostra aviso", "Nenhuma cartinha" in al.inner_text("#resumo"))
     al.fill("#fBusca", ""); al.select_option("#fNivel", "OURO"); al.wait_for_timeout(250)
     checar("filtro por nível", all("OURO" in t for t in al.eval_on_selector_all(".slot .c-rodape span:first-child", "e=>e.map(x=>x.textContent)")))
-    al.select_option("#fNivel", ""); al.check("#apres")
+    al.select_option("#fNivel", "")
+    n_todos = al.locator(".slot").count(); chips = al.locator("#niveis .nv").count()
+    checar("atalhos por nível: «Todos» mostra o total do mês", chips >= 2 and al.inner_text("#niveis .nv[data-nivel='']").split()[-1] == str(n_todos), al.inner_text("#niveis"))
+    ouro = al.locator("#niveis .nv[data-nivel='OURO']")
+    if ouro.count():
+        n_ouro = int(ouro.inner_text().split()[-1]); ouro.click(); al.wait_for_timeout(250)
+        checar("atalho de nível preenche o filtro e mostra só esse nível", al.input_value("#fNivel") == "OURO" and al.locator(".slot").count() == n_ouro and ouro.get_attribute("aria-pressed") == "true", f"{al.input_value('#fNivel')} {al.locator('.slot').count()} x {n_ouro}")
+        al.click("#niveis .nv[data-nivel='']"); al.wait_for_timeout(250)
+    al.check("#apres")
     checar("modo apresentação borra nomes do álbum", al.evaluate("getComputedStyle(document.querySelector('.slot .c-nome')).filter") != "none")
     checar("clique na cartinha leva para a página do agente", "agente.html" in al.get_attribute(".slot", "href"))
     al.set_viewport_size({"width": 360, "height": 800}); al.wait_for_timeout(300)

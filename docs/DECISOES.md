@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 14/11/2026 (3) — impressão no tema escuro e testes de navegador ajustados
+- **Bug:** imprimindo com o tema escuro, o texto dos KPIs saía claro (regra do tema escuro em `ultra-enterprise.css` vencia a de impressão). Agora o `@media print` fica no FIM do arquivo e força texto escuro/fundo branco.
+- `agente.css`: `.kpi{position:relative}` evita estouro horizontal no celular (o `::after` ancorava na página).
+- `test_visual_navegador.py` copia `album.html` e aceita o fundo claro atual (`rgb(238,242,248)`); `test_sessao10_navegador.py` segue o álbum novo (mês/tema padrão, chips de nível, escala no hover).
+
 ## 14/11/2026 (2) — álbum de cartinhas remodelado, tema claro de verdade e semanas compactas
 - **Bug do tema:** `album.html` nascia com visual noturno mesmo no tema claro (5 camadas de CSS empilhadas em `assets/album.css` + `ultra-enterprise.css` por cima; `--tx` ficava claro sobre fundo claro).
   `album.css` foi reescrito em UMA camada (claro por padrão, `[data-theme="dark"]` opcional, tudo por variável) e o `album.html` não carrega mais o `ultra-enterprise.css`.

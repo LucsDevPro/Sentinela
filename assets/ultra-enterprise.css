@@ -346,3 +346,12 @@ body:has(#conteudo) .tg { border-radius:10px!important;border:1px solid rgba(201
   body:has(.kpi-grid) .kpi-grid .kpi-value { font-size:clamp(1.5rem,6vw,2.1rem)!important; }
   body:has(.kpi-grid) .week-nav { overflow-x:auto; }
 }
+
+/* Impressão por último: precisa vencer as regras do tema escuro acima. */
+@media print {
+  /* Papel é sempre branco: no tema escuro o texto dos KPIs não pode sair claro (ficava invisível). */
+  :root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid > .kpi { background:#fff!important; }
+  :root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid .kpi-value { color:#1a2b42!important; }
+  :root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid .kpi-label,
+  :root[data-theme="dark"] body:has(.kpi-grid) .kpi-grid .kpi-sub { color:#46597a!important; }
+}

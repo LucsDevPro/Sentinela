@@ -13,7 +13,7 @@ def checar(nome, cond, det=""):
 trab = tempfile.mkdtemp()
 for sub in ("data", "scripts", "assets"):
     shutil.copytree(os.path.join(RAIZ, sub), os.path.join(trab, sub), ignore=shutil.ignore_patterns("__pycache__", "csv"))
-for f in ("agente.html", "contestacao.html", "validar.html", "projecao.html"):
+for f in ("agente.html", "contestacao.html", "validar.html", "projecao.html", "album.html"):
     shutil.copy(os.path.join(RAIZ, f), trab)
 os.makedirs(os.path.join(trab, "partes"))
 env = dict(os.environ, EVISITA_CPF="0", EVISITA_SENHA="t")
@@ -59,7 +59,7 @@ with sync_playwright() as p:
     pg.goto(U + "index.html"); pg.wait_for_timeout(1200)
     checar("abre no tema claro", pg.evaluate("document.documentElement.getAttribute('data-theme')") is None)
     bg = pg.evaluate("getComputedStyle(document.body).backgroundColor")
-    checar("fundo claro por padrão", bg == "rgb(237, 241, 247)", bg)
+    checar("fundo claro por padrão", bg in ("rgb(237, 241, 247)", "rgb(238, 242, 248)"), bg)
     pg.click("[data-tema-btn]"); pg.wait_for_timeout(400)
     checar("botão muda para escuro", pg.evaluate("document.documentElement.getAttribute('data-theme')") == "dark")
     checar("texto do botão muda", "claro" in pg.inner_text("[data-tema-btn]").lower())
@@ -143,9 +143,11 @@ with sync_playwright() as p:
         e = []; q = ctx.new_page(); q.on("pageerror", lambda x: e.append(str(x)))
         q.evaluate("1"); q.goto(U + f); q.wait_for_timeout(700)
         q.evaluate("localStorage.removeItem('sentinelaTema')"); q.reload(); q.wait_for_timeout(500)
-        b1 = q.evaluate("getComputedStyle(document.body).backgroundColor")
+        # fundo pode estar no <body> ou, se ele é transparente, no <html>
+        fundo_js = "(()=>{const c=getComputedStyle(document.body).backgroundColor;return c==='rgba(0, 0, 0, 0)'?getComputedStyle(document.documentElement).backgroundColor:c})()"
+        b1 = q.evaluate(fundo_js)
         q.click("[data-tema-btn]"); q.wait_for_timeout(300)
-        b2 = q.evaluate("getComputedStyle(document.body).backgroundColor")
+        b2 = q.evaluate(fundo_js)
         q.evaluate("localStorage.removeItem('sentinelaTema')")
         checar(f"{f.split('?')[0]}: claro por padrão e escuro no botão", b1 != b2 and b1 in ("rgb(238, 242, 248)", "rgb(237, 241, 247)"), f"{b1} {b2}")
         sobra = q.evaluate("document.documentElement.scrollWidth > innerWidth + 1")
