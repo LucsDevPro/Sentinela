@@ -138,6 +138,36 @@ with sync_playwright() as p:
     pe.goto(U + "projecao_vazia.html"); pe.wait_for_timeout(800)
     checar("sem dados mostra aviso e não quebra", "Ainda não há notas" in pe.inner_text("#palco") and not erre, str(erre))
 
+    # ---- álbum: baixar a cartinha, imprimir e abrir o modo reunião
+    al = ctx.new_page(); ea = []; al.on("pageerror", lambda x: ea.append(str(x)))
+    al.goto(U + "album.html"); al.wait_for_timeout(1500)
+    al.select_option("#fMes", index=1); al.wait_for_timeout(1500)
+    sl = al.locator("#album .slot").nth(1); sl.hover(); al.wait_for_timeout(300)
+    checar("álbum: cada cartinha tem botões de baixar e WhatsApp", sl.locator("button[data-acao]").count() == 2)
+    with al.expect_download(timeout=20000) as dl:
+        sl.locator("button[data-acao=baixar]").click()
+    checar("álbum: botão baixa a imagem PNG da cartinha", dl.value.suggested_filename.startswith("cartinha-") and dl.value.suggested_filename.endswith(".png"), dl.value.suggested_filename)
+    checar("álbum: baixar não abre a página do agente", "album.html" in al.url)
+    al.emulate_media(media="print"); al.wait_for_timeout(200)
+    checar("álbum (impressão): filtros e botões somem, cartinhas ficam", al.evaluate("getComputedStyle(document.querySelector('.controles')).display") == "none" and al.locator("#album .slot").count() > 3)
+    checar("álbum (impressão): botões de compartilhar escondidos", al.evaluate("getComputedStyle(document.querySelector('.acoes')).display") == "none")
+    al.emulate_media(media="screen")
+    al.click("#bReuniao"); al.wait_for_timeout(1500)
+    checar("álbum: «Modo reunião» abre a projeção nas cartinhas", al.url.endswith("#cartinhas") and al.evaluate("PROJECAO.modo()") == "cartas", al.url)
+    checar("álbum: sem erros de script", not ea, str(ea))
+    # ---- projeção em modo cartinhas
+    al.evaluate("PROJECAO.pausa(true)"); al.keyboard.press("ArrowRight"); al.wait_for_timeout(900)
+    checar("reunião: uma cartinha por tela (intro + top 10)", al.evaluate("PROJECAO.total") == 11 and al.locator("#palco .carta").count() == 1)
+    txt = al.inner_text("#palco")
+    checar("reunião: nomes ocultos por padrão (nome e iniciais trocados)", "Agente 1" in txt and not al.evaluate("!!document.querySelector('#palco .c-foto img')") and re.search(r"[A-Z][a-z]+ [A-Z][a-z]+", al.inner_text("#palco .carta").title().replace("Agente 1", "")) is None, txt[:120])
+    al.keyboard.press("n"); al.wait_for_timeout(700)
+    checar("reunião: tecla N mostra o nome", "Agente 1" not in al.inner_text("#palco .cp-nome"))
+    al.keyboard.press("ArrowRight"); al.wait_for_timeout(700)
+    checar("reunião: seta avança para a próxima cartinha", "2º de" in al.inner_text("#palco"))
+    al.keyboard.press("c"); al.wait_for_timeout(700)
+    checar("reunião: tecla C volta aos painéis", al.evaluate("PROJECAO.modo()") == "paineis" and al.locator("#palco .carta").count() == 0)
+    al.close()
+
     # ---- páginas estáticas no claro e no escuro
     for f in ("agente.html?nome=Gilmar%20Bitencourt%20Luiz", "validar.html", "contestacao.html", "album.html"):
         e = []; q = ctx.new_page(); q.on("pageerror", lambda x: e.append(str(x)))

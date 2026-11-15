@@ -32,6 +32,8 @@
       <div class="opcoes">
         <label class="tg"><input type="checkbox" id="apres"> <span>Modo apresentação (ocultar nomes)</span></label>
         <label class="tg"><input type="checkbox" id="semFoto"> <span>Ocultar fotos</span></label>
+        <button type="button" class="bt-acao" id="bImprimir" title="Imprimir as cartinhas que estão na tela (respeita mês, equipe, nível e busca)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg> Imprimir cartinhas</button>
+        <button type="button" class="bt-acao" id="bReuniao" title="Passar as cartinhas uma a uma em tela cheia, com os nomes ocultáveis"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10H4zM8 20h8M12 15v5"/></svg> Modo reunião</button>
       </div>
     </div>
     <details class="ajuda">
@@ -40,6 +42,7 @@
     </details>
     <div class="niveis" id="niveis" role="group" aria-label="Atalhos por nível"></div>
     <p class="mut" id="resumo" aria-live="polite"></p>
+    <p class="aviso-img" id="msgImg" role="status" aria-live="polite" hidden></p>
     <div class="podio" id="podio" hidden></div>
     <div class="album" id="album"></div>
   </section>

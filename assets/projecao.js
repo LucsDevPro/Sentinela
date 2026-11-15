@@ -119,7 +119,71 @@ if(!slides.length) slide('vazio','Sem dados ainda','',function(el){el.insertAdja
 /* ---- palco ---- */
 var palco=document.getElementById('palco'),dots=document.getElementById('dots'),barra=document.getElementById('barra');
 var atual=-1,pausado=false,seg=15,t0=0,raf=null;
-slides.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Tela '+(i+1)+': '+s.titulo);b.onclick=function(){ir(i);};dots.appendChild(b);});
+var slidesPaineis=slides.slice();   // as telas de gráficos de sempre; o modo «cartinhas» troca o conteúdo de `slides`
+function montarDots(){dots.innerHTML='';slides.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Tela '+(i+1)+': '+s.titulo);b.onclick=function(){ir(i);};dots.appendChild(b);});}
+montarDots();
+
+/* ---- modo cartinhas: uma cartinha por tela, em tamanho grande, na ordem do álbum (maior nota primeiro) ---- */
+var modo='paineis', qtdCartas=10;   // 10 = só o top 10; 0 = todas
+var mesCartas=(function(){var q=new URLSearchParams(location.search).get('mes');return (q&&listaMeses.indexOf(q)>=0)?q:mesAtual;})();
+function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function listaCartas(mes){
+  var L=[];
+  ag.forEach(function(a){var ms=a.meses.slice().sort(function(p,q){return ordMes(p.mes)-ordMes(q.mes);});
+    var i=ms.map(function(m){return m.mes;}).indexOf(mes);if(i<0||ms[i].pontos==null)return;
+    var ant=ms.slice(0,i).map(function(m){return m.pontos;}).filter(function(n){return n!=null;});
+    L.push({a:a,ms:ms.slice(0,i+1),u:ms[i],h:ant.length?ant.reduce(function(t,n){return t+n;},0)/ant.length:-1});});
+  // mesma ordem do álbum: nota bruta, depois a média dos meses anteriores, depois a posição oficial
+  L.sort(function(p,q){return Carta.bruta(q.u)-Carta.bruta(p.u)||q.h-p.h||(p.u.pos||0)-(q.u.pos||0)||p.a.nome.localeCompare(q.a.nome,'pt-BR');});
+  return L;
+}
+function listaPts(titulo,itens,cls){
+  if(!itens||!itens.length)return '';
+  return '<div class="cp-bloco"><h3>'+titulo+'</h3><ul>'+itens.slice(0,3).map(function(x){return '<li><span>'+esc(x.c)+'</span><b class="'+cls+'">'+(x.p>0?'+':'')+br(x.p,1)+'</b></li>';}).join('')+'</ul></div>';
+}
+function slidesDasCartas(){
+  var out=[];
+  if(!window.Carta||!mesCartas)return out;
+  var L=listaCartas(mesCartas),N=L.length,lim=qtdCartas>0?Math.min(qtdCartas,N):N;
+  if(!N)return out;
+  out.push({id:'cartas-intro',titulo:'Cartinhas de '+mesCartas,sub:'',montar:function(el){
+    el.insertAdjacentHTML('beforeend','<div class="cards">'+cartao(br(N),'cartinhas no mês')+cartao(lim<N?('Top '+lim):'Todas','que vão passar, da maior nota para a menor')+'</div><p class="nota">Setas ← → mudam de cartinha · N mostra ou oculta nomes e fotos · barra de espaço pausa.</p>');}});
+  L.slice(0,lim).forEach(function(l,i){
+    out.push({id:'carta-'+(i+1),titulo:'Cartinhas de '+mesCartas,sub:(i+1)+'º de '+N,montar:function(el){
+      var u=l.u,rot=mostrarNomes?l.a.nome:('Agente '+(i+1));
+      el.insertAdjacentHTML('beforeend','<div class="cartela"><div class="cslot" id="cslot">'+Carta.html({nome:l.a.nome,equipe:l.a.equipe},l.ms,l.a.k,true)+'</div>'+
+        '<div class="cpainel"><div class="cp-nome">'+esc(rot)+'</div><div class="cp-eq">'+esc(l.a.equipe)+' · '+(i+1)+'º de '+N+'</div>'+
+        '<div class="cp-nota"><b>'+br(u.pontos,1)+'</b><span>nota do mês</span></div>'+listaPts('O que mais deu pontos',u.ganhos,'pos')+listaPts('O que mais tirou pontos',u.perdas,'neg')+'</div></div>');
+      var carta=el.querySelector('.carta');
+      if(!mostrarNomes&&carta){   // nome e foto só aparecem com «Nomes: visíveis»: aqui o texto é trocado (não só borrado)
+        var cn=carta.querySelector('.c-nome');if(cn)cn.textContent='Agente '+(i+1);
+        var ini=carta.querySelector('.c-foto .nome');if(ini)ini.textContent=String(i+1);
+        var im=carta.querySelector('.c-foto img');if(im)im.remove();
+        carta.setAttribute('aria-label','Cartinha do Agente '+(i+1)+': nota '+br(u.pontos,1));
+      }
+      ajustarCarta(el);
+    }});
+  });
+  return out;
+}
+// a cartinha ocupa a altura que sobra na tela (escala --e, a mesma conta do álbum: caixa de 272×392 px)
+function ajustarCarta(el){
+  var slot=el.querySelector('.cslot');if(!slot)return;
+  var h=el.querySelector('h2'),disp=el.clientHeight-(h?h.offsetHeight:0)-24,larg=el.clientWidth*0.46;
+  var e=Math.max(.5,Math.min(2.1,(disp-60)/392,(larg-60)/272));
+  slot.style.setProperty('--e',e.toFixed(3));
+}
+function trocarModo(m){
+  modo=m;slides.length=0;
+  (m==='cartas'?slidesDasCartas():[]).forEach(function(x){slides.push(x);});
+  if(!slides.length){modo='paineis';slidesPaineis.forEach(function(x){slides.push(x);});}
+  document.getElementById('bModo').querySelector('span').textContent=modo==='cartas'?'Painéis':'Cartinhas';
+  document.getElementById('qtd').hidden=modo!=='cartas';
+  document.body.classList.toggle('modo-cartas',modo==='cartas');
+  if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+(modo==='cartas'?'#cartinhas':''));
+  montarDots();if(window.PROJECAO)window.PROJECAO.total=slides.length;
+  ir(0);
+}
 function desenhar(){
   charts.forEach(function(c){c.destroy();});charts=[];
   var s=slides[atual];palco.innerHTML='';
@@ -141,15 +205,19 @@ document.getElementById('bPausa').onclick=function(){pausa(!pausado);};
 document.getElementById('vel').onchange=function(){seg=parseInt(this.value,10);t0=performance.now();};
 function nomes(){mostrarNomes=!mostrarNomes;document.querySelector('#bNomes span').textContent='Nomes: '+(mostrarNomes?'visíveis':'ocultos');desenhar();}
 document.getElementById('bNomes').onclick=nomes;
+document.getElementById('bModo').onclick=function(){trocarModo(modo==='cartas'?'paineis':'cartas');};
+document.getElementById('qtd').onchange=function(){qtdCartas=parseInt(this.value,10);if(modo==='cartas')trocarModo('cartas');};
+window.addEventListener('resize',function(){var el=palco.querySelector('.slide');if(el&&modo==='cartas')ajustarCarta(el);});
 function tela(){if(document.fullscreenElement)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();}
 document.getElementById('bTela').onclick=tela;
 document.addEventListener('keydown',function(e){
   if(e.target&&/SELECT|INPUT/.test(e.target.tagName))return;
   if(e.key==='ArrowRight')avanca();else if(e.key==='ArrowLeft')volta();else if(e.key===' '){e.preventDefault();pausa(!pausado);}
-  else if(e.key==='f'||e.key==='F')tela();else if(e.key==='n'||e.key==='N')nomes();
+  else if(e.key==='f'||e.key==='F')tela();else if(e.key==='n'||e.key==='N')nomes();else if(e.key==='c'||e.key==='C')trocarModo(modo==='cartas'?'paineis':'cartas');
 });
 document.addEventListener('sentinela:tema',function(){if(window.aplicarTemaGraficos)window.aplicarTemaGraficos();desenhar();});
-window.PROJECAO={ir:ir,pausa:pausa,total:slides.length,ids:slides.map(function(s){return s.id;}),atual:function(){return atual;},pausado:function(){return pausado;}};
+window.PROJECAO={modo:function(){return modo;},trocarModo:trocarModo,ir:ir,pausa:pausa,total:slides.length,ids:slides.map(function(s){return s.id;}),atual:function(){return atual;},pausado:function(){return pausado;}};
 if(window.aplicarTemaGraficos)window.aplicarTemaGraficos();
-ir(0);raf=requestAnimationFrame(tick);
+if(location.hash==='#cartinhas')trocarModo('cartas');else ir(0);
+raf=requestAnimationFrame(tick);
 })();

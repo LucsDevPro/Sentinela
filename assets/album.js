@@ -45,6 +45,27 @@ else {
   const q0 = new URLSearchParams(location.search).get('mes'); if (q0 && (q0 === ANO || meses.includes(q0))) $('fMes').value = q0;
   const eqs = [...new Set(ag.map(x => x.a.equipe).filter(Boolean))].sort((p, q) => p.localeCompare(q, 'pt-BR', { numeric: true }));
   $('fEq').insertAdjacentHTML('beforeend', eqs.map(e => `<option>${esc(e)}</option>`).join(''));
+  // ---- Compartilhar: baixar a cartinha como imagem ou mandar pelo WhatsApp (a imagem é gerada por Carta.enviar, a mesma de agente.html)
+  let visAtual = [];
+  const IC_BAIXAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>';
+  const IC_ZAP = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-4l-5 4v-4H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z"/></svg>';
+  const acoes = i => `<span class="acoes"><button type="button" data-acao="baixar" data-i="${i}" title="Baixar a cartinha como imagem" aria-label="Baixar a cartinha como imagem">${IC_BAIXAR}</button><button type="button" data-acao="whatsapp" data-i="${i}" title="Enviar a cartinha pelo WhatsApp" aria-label="Enviar a cartinha pelo WhatsApp">${IC_ZAP}</button></span>`;
+  const aviso = t => { const m = $('msgImg'); m.textContent = t; m.hidden = !t; clearTimeout(aviso.t); if (t) aviso.t = setTimeout(() => { m.hidden = true; }, 9000); };
+  const compartilhar = e => {
+    const b = e.target.closest('button[data-acao]'); if (!b) return;
+    e.preventDefault(); e.stopPropagation();   // o botão fica dentro do link da cartinha: não abrir a página do agente
+    const l = visAtual[+b.dataset.i]; if (!l) return;
+    b.disabled = true; aviso('Preparando a imagem…');
+    Carta.enviar(l.x.a, l.ms, b.dataset.acao, { id: l.x.k, ocultarNomes: document.body.classList.contains('modo-apresentacao'), ocultarFoto: document.body.classList.contains('sem-foto') })
+      .then(aviso, () => aviso('Não consegui gerar a imagem aqui. Abra a página pelo endereço do site (não pelo arquivo no computador) e tente de novo.'))
+      .then(() => { b.disabled = false; });
+  };
+  ['album', 'podio'].forEach(id => $(id).addEventListener('click', compartilhar));
+  // botões em cima do link: Enter/Espaço no botão não pode acionar o link também
+  ['album', 'podio'].forEach(id => $(id).addEventListener('keydown', e => { if (e.target.closest && e.target.closest('button[data-acao]') && (e.key === 'Enter' || e.key === ' ')) e.stopPropagation(); }, true));
+  $('bImprimir').onclick = () => window.print();
+  // «Modo reunião»: abre a tela de projeção direto nas cartinhas do mês escolhido (o «Melhor do ano» abre no mês mais recente)
+  $('bReuniao').onclick = () => { const m = $('fMes').value; location.href = 'projecao.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : '') + '#cartinhas'; };
   const desenhar = () => {
     const mes = $('fMes').value, eq = $('fEq').value, niv = $('fNivel').value, bu = norm($('fBusca').value);
     const lista = [], doAno = mes === ANO;
@@ -69,6 +90,7 @@ else {
     lista.forEach(l => { l.nivel = Carta.medidas(l.ms, l.x.k).tier[1]; });
     const base = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)));   // equipe + busca; o nível entra depois
     const vis = base.filter(l => !niv || l.nivel === niv);
+    visAtual = vis;
     // atalhos por nível, com a contagem do que está filtrado por equipe/busca (clicar preenche o filtro "Nível")
     $('niveis').innerHTML = [['', 'Todos']].concat(NIVEIS.map(n => [n, n])).map(([v, rot]) => {
       const q = v ? base.filter(l => l.nivel === v).length : base.length;
@@ -76,7 +98,7 @@ else {
     }).join('');
     const slot = (l, cls) => {
       const qAg = (/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)) + (doAno ? '' : '&mes=' + encodeURIComponent(mes));
-      return `<a class="slot ${cls || ''}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)}${doAno ? '' : ' em ' + esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}</a>`;
+      return `<a class="slot ${cls || ''}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)}${doAno ? '' : ' em ' + esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}${acoes(vis.indexOf(l))}</a>`;
     };
     // Pódio: só sem filtros (com filtro, o top 3 do mês pode nem estar na lista). No HTML a ordem é 1º, 2º, 3º; o CSS põe o 1º no meio.
     const pod = !eq && !bu && !niv && vis.length >= 3 ? vis.slice(0, 3) : [];

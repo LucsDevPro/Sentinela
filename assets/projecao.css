@@ -41,3 +41,19 @@ h2 small{font-family:"IBM Plex Sans",sans-serif;font-weight:400;font-size:.5em;c
 .rolar{overflow:auto}.tab{width:100%;border-collapse:collapse;font-size:.82em}.tab th,.tab td{padding:.55em .8em;border-bottom:1px solid var(--bd);text-align:left}.tab th{color:var(--mut);font-weight:700;font-size:.8em;text-transform:uppercase;letter-spacing:.03em}
 .tab .n{text-align:right;font-variant-numeric:tabular-nums}.tab tfoot td{font-weight:700;border-top:2px solid var(--bd);border-bottom:0;background:var(--soft)}
 @media (max-width:900px){.cards.fino,.cards.oito{grid-template-columns:repeat(2,1fr)}.linha{grid-template-columns:1fr}}
+
+/* ---- modo cartinhas: a cartinha à esquerda (mesma caixa do álbum, escala --e) e os números à direita ---- */
+.cartela{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:5vw}
+.cslot{--e:1;position:relative;flex:none;width:calc(272px*var(--e) + 70px);height:calc(392px*var(--e) + 90px)}
+.cslot .c-conj{position:absolute;left:50%;top:50%;margin:-196px 0 0 -136px;height:392px;--s:var(--e)}
+.cslot .carta{height:392px}
+.cpainel{flex:0 1 30em;min-width:0;display:flex;flex-direction:column;gap:1.4vh}
+.cp-nome{font-family:"Barlow Semi Condensed",system-ui,sans-serif;font-weight:700;font-size:2.4em;line-height:1.1;color:var(--tx)}
+.cp-eq{color:var(--mut);font-size:.9em}
+.cp-nota{display:flex;align-items:baseline;gap:.5em}.cp-nota b{font-family:"Barlow Semi Condensed",sans-serif;font-size:4.6em;line-height:1;color:var(--tx);font-variant-numeric:tabular-nums}.cp-nota span{color:var(--mut)}
+.cp-bloco h3{margin:.4em 0 .2em;font-size:.8em;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.cp-bloco ul{list-style:none;margin:0;padding:0}.cp-bloco li{display:flex;justify-content:space-between;gap:1em;padding:.35em 0;border-bottom:1px solid var(--bd);font-size:.8em}
+.cp-bloco b.pos{color:var(--ok)}.cp-bloco b.neg{color:var(--bad)}
+@media (max-width:900px){.cartela{flex-direction:column;overflow:auto}.cpainel{flex:none}}
+[hidden]{display:none!important}
+

@@ -147,4 +147,34 @@ body.modo-apresentacao .nome{filter:blur(7px)}
   .abas button{padding:10px 12px;font-size:.92rem}
   .niveis{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:-12px;padding-right:12px}.niveis::-webkit-scrollbar{display:none}.nv{flex:0 0 auto}}
 @media (min-width:400px) and (max-width:480px){.slot{--e:.62}}
-@media print{header.topo,.abas,.controles,.ajuda,.niveis{display:none!important}body{background:#fff}.slot{filter:none}}
+
+/* ---- Compartilhar (baixar / WhatsApp) em cada cartinha, imprimir e modo reunião ---- */
+.bt-acao{display:inline-flex;align-items:center;gap:8px;margin-left:auto;padding:7px 14px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:600 .84rem "IBM Plex Sans",sans-serif;cursor:pointer}
+.opcoes .bt-acao + .bt-acao{margin-left:0}
+.bt-acao:hover,.bt-acao:focus-visible{border-color:var(--pri);outline:none}
+.bt-acao .ico,.acoes .ico{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.aviso-img{margin:6px 0 0;padding:8px 12px;border:1px solid var(--bd);border-left:4px solid var(--pri);border-radius:8px;background:var(--card);font-size:.88rem}
+.acoes{position:absolute;right:2px;bottom:6px;z-index:6;display:flex;gap:6px;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
+.slot:hover .acoes,.slot:focus-within .acoes{opacity:1;transform:none}
+.acoes button{width:34px;height:34px;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:#050F20;color:#fff;cursor:pointer;box-shadow:0 4px 10px rgba(4,14,28,.35)}
+.acoes button:hover,.acoes button:focus-visible{background:#F7B500;color:#1a1200;outline:none}
+.acoes button:disabled{opacity:.55;cursor:progress}
+@media (hover:none){.acoes{opacity:1;transform:none}}   /* no toque não existe "passar o mouse": os botões ficam sempre à vista */
+@media (max-width:480px){.bt-acao{margin-left:0}}
+
+/* ---- Impressão: só as cartinhas, em folha branca, 3 por linha na A4 (a cor das cartas é mantida) ---- */
+@page{size:A4 portrait;margin:10mm}
+@media print{
+  header.topo,.abas,.controles,.ajuda,.niveis,.hero,.acoes,.aviso-img,#painelCalc,.bt-acao,footer{display:none!important}
+  html,body{background:#fff!important}
+  main{padding:0!important;max-width:none!important}
+  #resumo{color:#333;margin:0 0 4mm}
+  .podio,.album{display:block!important;font-size:0;margin:0}   /* inline-block em vez de grade: o Chrome só respeita «não quebrar a cartinha entre páginas» assim */
+  .podio[hidden]{display:none!important}
+  .podio{background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+  .podio::before,.podio::after{display:none!important}
+  .slot,.podio .slot.p1,.podio .slot.p2,.podio .slot.p3{--e:.62;order:0!important;transform:none!important;filter:none!important;display:inline-block!important;vertical-align:top;width:33.2%!important;margin:0!important;padding:6mm 0 2mm;box-sizing:content-box;break-inside:avoid;page-break-inside:avoid}
+  .podio .slot::before,.podio .slot::after{display:none!important}
+  .slot .carta,.slot .carta *{animation:none!important;opacity:1!important}
+  .slot,.slot *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}

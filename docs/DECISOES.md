@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 14/11/2026 (4) — álbum: compartilhar/imprimir cartinhas e modo reunião
+- `album.html`: cada cartinha ganha botões **baixar imagem** e **WhatsApp** (reusam `Carta.enviar`, a mesma imagem de `agente.html`; respeitam «ocultar nomes/fotos»). Botão **Imprimir cartinhas** (A4, 3 por linha, fundo branco, só o que está filtrado na tela; usa `inline-block` porque o Chrome ignora «não quebrar» em grade).
+- `projecao.html`: **modo cartinhas** (botão «Cartinhas» ou tecla C; `projecao.html?mes=Mês/AAAA#cartinhas`): uma cartinha grande por tela, do 1º para o último (Top 10/20/Todas), com o que mais deu e tirou pontos. Com nomes ocultos (padrão) o texto do nome, as iniciais e a foto são TROCADOS por «Agente N», não só borrados. Tecla N mostra os nomes.
+- Teste: `test_visual_navegador.py` (blocos «álbum» e «reunião»).
+
 ## 14/11/2026 (3) — impressão no tema escuro e testes de navegador ajustados
 - **Bug:** imprimindo com o tema escuro, o texto dos KPIs saía claro (regra do tema escuro em `ultra-enterprise.css` vencia a de impressão). Agora o `@media print` fica no FIM do arquivo e força texto escuro/fundo branco.
 - `agente.css`: `.kpi{position:relative}` evita estouro horizontal no celular (o `::after` ancorava na página).
