@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 15/11/2026 (6) — «Melhor do ano»: o detalhe abria o mês mais recente
+- Bug: no álbum «Melhor do ano» o agente aparecia em 1º, mas o link (e o «Ver evolução» do popup) abria `agente.html` sem o mês certo e a página caía em novembro (4º). Agora o link leva `mes=Melhor do ano` e a página mostra a mesma cartinha e a mesma posição (ex.: «1º de 43»), com «Por que esta nota?» explicando a média de cada mês (e link para a conta de cada mês).
+- A conta do ano passou a morar em `Carta.anual` (`carta.js`), usada pelo álbum e por `agente.js`: uma só fonte, para os dois nunca divergirem.
+
 ## 15/11/2026 (5) — álbum: botões só no hover; WhatsApp no computador mostra a cartinha pronta
 - Baixar/WhatsApp ficam invisíveis e aparecem ao passar o mouse (ou foco por teclado) na cartinha; em telas de toque ficam sempre à vista.
 - «WhatsApp» no computador só abria o site, sem a imagem (o WhatsApp Web não aceita imagem por link). Agora abre uma janela (`<dialog class="c-envio">`, `carta.js::painelEnvio`) com a imagem pronta e os caminhos que funcionam: **Copiar e abrir o WhatsApp Web** (cola com Ctrl+V), **arrastar** a imagem para a conversa, **Compartilhar…** (se o sistema permitir) e **Baixar**. No celular continua a lista de compartilhar com o arquivo.

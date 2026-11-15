@@ -69,17 +69,9 @@ else {
   const desenhar = () => {
     const mes = $('fMes').value, eq = $('fEq').value, niv = $('fNivel').value, bu = norm($('fBusca').value);
     const lista = [], doAno = mes === ANO;
-    const cl99 = v => Math.max(0, Math.min(99, Math.round(v)));
     if (doAno) {
-      // Melhor do ano: média das notas de TODAS as cartinhas mensais do agente (jul → mês mais recente). Os demais números do cartão seguem a mesma conta de cada mês, somando o período.
-      ag.forEach(x => { const ms = (x.a.meses || []).filter(m => m.pontos != null).sort((p, q) => ordMes(p.mes) - ordMes(q.mes)); if (ms.length < MIN_MESES_ANO) return;
-        const soma = c => ms.reduce((t, m) => t + (m[c] || 0), 0), notas = ms.map(m => m.pontos), media = Math.round(notas.reduce((t, n) => t + n, 0) / notas.length * 10) / 10;
-        const rec = notas.slice(-3), mr = rec.reduce((t, n) => t + n, 0) / rec.length, dp = rec.length > 1 ? Math.sqrt(rec.reduce((t, n) => t + (n - mr) ** 2, 0) / rec.length) : 0;
-        const evo = notas.length > 1 ? cl99(50 + 5 * (notas[notas.length - 1] - notas[notas.length - 2])) : 50;
-        const u = { mes: 'Média', pontos: media, trab: soma('trab'), esp: soma('esp'), turnos_sem: soma('turnos_sem'), con: cl99(100 - 5 * dp), evo, pos: 0, total: 0, n: ms.length };
-        lista.push({ x, ms: [u], u }); });
-      lista.sort((p, q) => q.u.pontos - p.u.pontos || q.u.n - p.u.n || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
-      lista.forEach((l, i) => { l.lugar = i + 1; l.u.pos = i + 1; l.u.total = lista.length; });
+      // Melhor do ano: média das notas de TODAS as cartinhas mensais do agente (a conta mora em Carta.anual, a mesma usada por agente.html)
+      Carta.anual(ag, MIN_MESES_ANO).forEach(l => lista.push(l));
     } else ag.forEach(x => { const ms = (x.a.meses || []).slice().sort((p, q) => ordMes(p.mes) - ordMes(q.mes)); const i = ms.findIndex(m => m.mes === mes);
       if (i < 0 || ms[i].pontos == null) return; lista.push({ x, ms: ms.slice(0, i + 1), u: ms[i] }); });
     // desempate: média das notas dos meses ANTERIORES ao mês mostrado (a mesma da tabela "Média Mensal por Agente"); sem histórico fica atrás
@@ -97,8 +89,8 @@ else {
       return (v && !q && v !== niv) ? '' : `<button type="button" class="nv" data-nivel="${esc(v)}" aria-pressed="${v === niv}" style="--cor:${COR_NIVEL[v] || 'var(--mut)'}"><i></i>${esc(rot)} <b>${q}</b></button>`;
     }).join('');
     const slot = (l, cls) => {
-      const qAg = (/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)) + (doAno ? '' : '&mes=' + encodeURIComponent(mes));
-      return `<a class="slot ${cls || ''}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)}${doAno ? '' : ' em ' + esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}${acoes(vis.indexOf(l))}</a>`;
+      const qAg = (/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)) + '&mes=' + encodeURIComponent(mes);
+      return `<a class="slot ${cls || ''}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)} · ${esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}${acoes(vis.indexOf(l))}</a>`;
     };
     // Pódio: só sem filtros (com filtro, o top 3 do mês pode nem estar na lista). No HTML a ordem é 1º, 2º, 3º; o CSS põe o 1º no meio.
     const pod = !eq && !bu && !niv && vis.length >= 3 ? vis.slice(0, 3) : [];

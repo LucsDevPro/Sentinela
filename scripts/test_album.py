@@ -69,7 +69,7 @@ checar("album.js passa &mes= na URL ao abrir agente.html",
 ej = ler("assets/agente.js")
 checar("agente.js lê o parâmetro mes da URL", "get('mes')" in ej or 'get("mes")' in ej)
 checar("agente.js filtra o histórico até o mês escolhido",
-       "todosMeses" in ej and "slice(0, idxRef" in ej)
+       "todosMeses" in ej and "slice(0, anoL ? todosMeses.length : idxRef" in ej)
 checar("agente.js sem mes continua usando o mês mais recente",
        "todosMeses.length - 1" in ej and "mesParam" in ej)
 # Setembro no álbum → evolução de setembro mesmo com dados posteriores: o link carrega mes=
@@ -78,7 +78,7 @@ checar("o link do álbum inclui o mês filtrado (não só id/nome)",
 # O popup "Ver evolução do agente" (carta.js) também leva o mês da cartinha (u.mes), senão agente.js abre no mais recente
 cj = ler("assets/carta.js")
 checar("carta.js: o link do popup inclui o mês da cartinha (&mes=u.mes)",
-       "agente.html?id=" in cj and "'&mes=' + encodeURIComponent(u.mes)" in cj)
+       "agente.html?id=" in cj and "'&mes=' + encodeURIComponent(mesNoLink(u.mes))" in cj)
 # Formato da borda: escudo de cantos cortados (clip-path) no CSS e o mesmo polígono no PNG
 cc = ler("assets/carta.css")
 checar("carta.css: o cartão e o anel da borda usam clip-path em polígono (cantos cortados)",
@@ -90,9 +90,10 @@ aj2 = ler("assets/album.js")
 checar("carta.js: clicar na cartinha abre a evolução do agente (link do álbum ou agente.html?id=&mes=)",
        "return;   // no álbum a cartinha é um link" in cj and "location.href = 'agente.html?id='" in cj)
 checar("album.js: opção 'Melhor do ano' ordena pela média das notas de todos os meses",
-       "const ANO = 'Melhor do ano'" in aj2 and "notas.reduce((t, n) => t + n, 0) / notas.length" in aj2 and "q.u.pontos - p.u.pontos" in aj2)
-checar("album.js: 'Melhor do ano' exige no mínimo 2 meses", "const MIN_MESES_ANO = 2" in aj2 and "ms.length < MIN_MESES_ANO" in aj2)
-checar("album.js: no 'Melhor do ano' o link do agente não leva ?mes= (abre no mês mais recente)", "(doAno ? '' : '&mes=' + encodeURIComponent(mes))" in aj2)
+       "const ANO = 'Melhor do ano'" in aj2 and "Carta.anual(ag, MIN_MESES_ANO)" in aj2 and "notas.reduce(function (t, n) { return t + n; }, 0) / notas.length" in cj and "q.u.pontos - p.u.pontos" in cj)
+checar("album.js: 'Melhor do ano' exige no mínimo 2 meses", "const MIN_MESES_ANO = 2" in aj2 and "ms.length < minMeses" in cj)
+checar("album.js: no 'Melhor do ano' o link do agente leva mes=Melhor do ano (e agente.js usa a mesma conta, Carta.anual)",
+       "'&mes=' + encodeURIComponent(mes)" in aj2 and "(doAno ? '' : '&mes=" not in aj2 and "Carta.anual(" in ej and "Carta.ROTULO_ANO" in ej)
 # Tela de reunião: panorama de visitas; cabeçalhos alinhados; home no mês mais recente
 pj = ler("assets/projecao.js"); ga = ler("scripts/gerar_agentes.py")
 checar("projecao.js: tem o panorama geral, o mês a mês e o panorama de cada mês",

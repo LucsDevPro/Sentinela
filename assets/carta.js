@@ -382,6 +382,31 @@
     document.body.appendChild(d); if (d.showModal) d.showModal(); else d.setAttribute('open', '');
     return 'Cartinha pronta: use a janela que abriu para enviar pelo WhatsApp.';
   }
+
+  /* «Melhor do ano»: ranking pela média de TODAS as cartinhas mensais do agente. É UMA conta só, usada pelo álbum e por agente.html
+     (antes ficava dentro do álbum e a página do agente caía no mês mais recente). `ags` = [{k, a}]; devolve [{x, ms:[u], u, lugar}] já ordenado. */
+  var MESES_ORD = ['janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+  function ordMes(l) { var p = String(l || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim().split('/'); return (parseInt(p[1], 10) || 0) * 20 + MESES_ORD.indexOf(p[0]); }
+  var ROTULO_ANO = 'Melhor do ano';
+  function anual(ags, minMeses) {
+    var cl = function (v) { return Math.max(0, Math.min(99, Math.round(v))); }, lista = [];
+    ags.forEach(function (x) {
+      var ms = (x.a.meses || []).filter(function (m) { return m.pontos != null; }).sort(function (p, q) { return ordMes(p.mes) - ordMes(q.mes); });
+      if (ms.length < minMeses) return;
+      var soma = function (c) { return ms.reduce(function (t, m) { return t + (m[c] || 0); }, 0); }, notas = ms.map(function (m) { return m.pontos; });
+      var media = Math.round(notas.reduce(function (t, n) { return t + n; }, 0) / notas.length * 10) / 10;
+      var rec = notas.slice(-3), mr = rec.reduce(function (t, n) { return t + n; }, 0) / rec.length;
+      var dp = rec.length > 1 ? Math.sqrt(rec.reduce(function (t, n) { return t + Math.pow(n - mr, 2); }, 0) / rec.length) : 0;
+      var evo = notas.length > 1 ? cl(50 + 5 * (notas[notas.length - 1] - notas[notas.length - 2])) : 50;
+      var u = { mes: 'Média', pontos: media, trab: soma('trab'), esp: soma('esp'), turnos_sem: soma('turnos_sem'), con: cl(100 - 5 * dp), evo: evo, pos: 0, total: 0, n: ms.length };
+      lista.push({ x: x, ms: [u], u: u, meses: ms });
+    });
+    lista.sort(function (p, q) { return q.u.pontos - p.u.pontos || q.u.n - p.u.n || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'); });
+    lista.forEach(function (l, i) { l.lugar = i + 1; l.u.pos = i + 1; l.u.total = lista.length; });
+    return lista;
+  }
+  // a cartinha do ano tem u.mes = 'Média' (rótulo do cartão); nos links o mês é «Melhor do ano»
+  function mesNoLink(m) { return m === 'Média' ? ROTULO_ANO : m; }
   function nomeArquivo(a, ms) {
     var u = ms[ms.length - 1], t = String(a.nome).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return 'cartinha-' + t + '-' + String(u.mes).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.png';
@@ -425,7 +450,7 @@
     var obs = total == null ? '' : total > 100.05 ? ' <small>(a nota é limitada a 100)</small>' : (total < -0.05 ? ' <small>(a nota mínima é 0)</small>' : (Math.abs(total - nota) > 0.15 ? ' <small>(com ajustes do período, ex.: presença mínima)</small>' : ''));
     var ant = ms.slice(0, -1).map(function (m) { return m.pontos; }).filter(function (v) { return v != null; });
     var mh = ant.length ? ant.reduce(function (t, v) { return t + v; }, 0) / ant.length : null;
-    var link = reg.id != null && !/agente\.html$/.test(location.pathname) ? '<a class="c-pop-link" href="agente.html?id=' + encodeURIComponent(reg.id) + '&mes=' + encodeURIComponent(u.mes) + '">Ver evolução do agente →</a>' : '';
+    var link = reg.id != null && !/agente\.html$/.test(location.pathname) ? '<a class="c-pop-link" href="agente.html?id=' + encodeURIComponent(reg.id) + '&mes=' + encodeURIComponent(mesNoLink(u.mes)) + '">Ver evolução do agente →</a>' : '';
     return '<div class="c-pop-topo"><div><b class="nome">' + esc(a.nome) + '</b><span>' + esc(u.mes) + ' · ' + posicao(u, reg.id) + 'º de ' + u.total + '</span></div><button type="button" data-fechar aria-label="Fechar">×</button></div>' +
       '<table><thead><tr><th>Critério</th><th class="n">Qtd</th><th class="n">Peso</th><th class="n">Pontos</th></tr></thead><tbody>' +
       '<tr class="base"><td>Pontos iniciais</td><td></td><td></td><td class="n">100,0</td></tr>' + linhas + '</tbody>' +
@@ -466,7 +491,7 @@
       var reg = REG[c.getAttribute('data-cid')];
       if (reg && reg.id != null && !/agente\.html$/.test(location.pathname)) {   // fora da página do agente, clicar leva à evolução do mês da cartinha
         var um = reg.ms[reg.ms.length - 1];
-        e.preventDefault(); location.href = 'agente.html?id=' + encodeURIComponent(reg.id) + (um && um.mes ? '&mes=' + encodeURIComponent(um.mes) : ''); return;
+        e.preventDefault(); location.href = 'agente.html?id=' + encodeURIComponent(reg.id) + (um && um.mes ? '&mes=' + encodeURIComponent(mesNoLink(um.mes)) : ''); return;
       }
       e.preventDefault(); if (fixo && atual === c) fechar(); else abrir(c, true);   // na página do agente, clicar fixa o detalhamento (no celular, é o toque)
     }
@@ -474,5 +499,5 @@
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fechar(); });
   window.addEventListener('scroll', function () { if (!fixo) fechar(); }, true);
-  window.Carta = { html: html, medidas: medidas, bruta: bruta, posicao: posicao, NOMES: NOMES, png: png, enviar: enviar, nomeArquivo: nomeArquivo };
+  window.Carta = { anual: anual, ROTULO_ANO: ROTULO_ANO, html: html, medidas: medidas, bruta: bruta, posicao: posicao, NOMES: NOMES, png: png, enviar: enviar, nomeArquivo: nomeArquivo };
 })();

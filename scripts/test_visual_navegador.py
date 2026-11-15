@@ -181,6 +181,18 @@ with sync_playwright() as p:
     checar("reunião: tecla C volta aos painéis", al.evaluate("PROJECAO.modo()") == "paineis" and al.locator("#palco .carta").count() == 0)
     al.close()
 
+    # ---- «Melhor do ano»: o detalhe abre o MESMO ranking anual (antes caía no mês mais recente e o agente mudava de posição)
+    an = ctx.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
+    an.goto(U + "album.html?mes=Melhor%20do%20ano"); an.wait_for_timeout(1800)
+    lugar = an.evaluate("document.querySelector('#podio .slot.p1 .n').textContent.trim()")
+    href = an.evaluate("document.querySelector('#podio .slot.p1').getAttribute('href')")
+    checar("melhor do ano: o link da cartinha leva o mês «Melhor do ano»", "mes=Melhor%20do%20ano" in href, href)
+    an.click("#podio .slot.p1"); an.wait_for_timeout(1800)
+    pos = an.evaluate("[...document.querySelectorAll('.kpi')].map(k=>k.innerText.replace(/\\n/g,' ')).find(t=>/POSIÇÃO NO ANO/i.test(t))||''")
+    checar("melhor do ano: página do agente mostra a mesma posição do álbum", pos and pos.upper().startswith("POSIÇÃO NO ANO " + lugar.upper()) if False else bool(pos) and (" " + lugar + " de ") in pos, f"{lugar} / {pos}")
+    checar("melhor do ano: explica a média dos meses e lista cada mês", an.evaluate("!!document.querySelector('#detalhamento') && /média das notas/i.test(document.querySelector('#detalhamento').innerText) && document.querySelectorAll('#detalhamento tbody tr').length >= 2"))
+    checar("melhor do ano: sem erros de script", not ean, str(ean)); an.close()
+
     # ---- agente.html: «Por que esta nota?» com a conta inteira e os turnos descontados
     ag = ctx.new_page(); eg = []; ag.on("pageerror", lambda x: eg.append(str(x)))
     ag.goto(U + "agente.html"); ag.wait_for_timeout(500)

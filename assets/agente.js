@@ -94,6 +94,19 @@ function porque(a, ult) {
     <p class="mut">Dúvida ou discordância? Procure a coordenação ou abra um pedido em <a href="contestacao.html">Contestação</a>, levando esta página. A conta completa está em <a href="album.html#como-calcula">Como o ranking é calculado</a>.</p>
     <p class="no-print"><button type="button" class="bt-det" id="bImprimirDet">Imprimir este detalhamento</button></p></div>`;
 }
+
+// «Por que esta nota?» no Melhor do ano: a nota é a média das notas mensais. Mostra cada mês (com link para a conta completa dele).
+function porqueAno(a, l) {
+  const qs = idAgente && /^\d+$/.test(String(idAgente)) ? 'id=' + idAgente : 'nome=' + encodeURIComponent(a.nome);
+  const linhas = l.meses.map(m => `<tr><td><b>${esc(m.mes)}</b></td><td class="n">${f1(m.pontos)}</td><td class="n mut">${m.pos}º de ${m.total}</td><td class="n"><a href="agente.html?${qs}&mes=${encodeURIComponent(m.mes)}">ver a conta do mês</a></td></tr>`).join('');
+  const soma = l.meses.reduce((t, m) => t + m.pontos, 0);
+  return `<div class="card" id="detalhamento"><h2>Por que esta nota? — <span class="nome">${esc(a.nome)}</span> · Melhor do ano</h2>
+    <p>A nota do <b>Melhor do ano</b> é a <b>média das notas de todos os meses</b> do agente (${l.meses.length} ${l.meses.length === 1 ? 'mês' : 'meses'}): ${l.meses.map(m => f1(m.pontos)).join(' + ')} = ${f1(soma)} ÷ ${l.meses.length} = <b>${f1(l.u.pontos)}</b>. Só entra quem tem pelo menos 2 meses. A posição <b>${l.u.pos}º de ${l.u.total}</b> é neste ranking anual; o ranking de cada mês é outro e pode ser diferente.</p>
+    <div class="tabela-rolagem"><table class="porque"><thead><tr><th>Mês</th><th class="n">Nota</th><th class="n">Posição no mês</th><th class="n"></th></tr></thead><tbody>${linhas}</tbody>
+      <tfoot><tr class="final"><td>Média (nota do ano)</td><td class="n">${f1(l.u.pontos)}</td><td class="n">${l.u.pos}º de ${l.u.total}</td><td></td></tr></tfoot></table></div>
+    <p class="mut">Dúvida ou discordância? Procure a coordenação ou abra um pedido em <a href="contestacao.html">Contestação</a>. A conta de cada critério está na página de cada mês (link acima).</p>
+    <p class="no-print"><button type="button" class="bt-det" id="bImprimirDet">Imprimir este detalhamento</button></p></div>`;
+}
 function carta(a, ms) {
   const c = Carta.html(a, ms, idAgente); if (!c) return '';
   const m = Carta.medidas(ms);
@@ -144,33 +157,37 @@ function desenhar() {
     const i = todosMeses.findIndex(m => m.mes === mesParam);
     if (i >= 0) idxRef = i;
   }
-  const ms = todosMeses.slice(0, idxRef + 1); // histórico até o mês escolhido (inclusive)
+  // ?mes=Melhor do ano: a mesma cartinha e a mesma posição do álbum (média de todos os meses), não o mês mais recente
+  const anoL = mesParam === Carta.ROTULO_ANO ? Carta.anual(Object.entries(D.agentes).map(([k, x]) => ({ k, a: x })), 2).find(l => l.x.k === idAgente) : null;
+  const msHist = todosMeses.slice(0, anoL ? todosMeses.length : idxRef + 1);   // histórico mensal (gráficos e linha do tempo)
+  const ms = anoL ? anoL.ms : msHist;   // o que a cartinha mostra: o ano (1 cartão «Média») ou o histórico até o mês escolhido
   const ult = ms[ms.length - 1];
-  const sem = (a.semanas || []).filter(s => s.mes === (ult && ult.mes)).slice().sort((x, y) => x.n - y.n);
-  document.title = 'Evolução — ' + a.nome + (ult ? ' · ' + ult.mes : '');
-  const media = ms.length ? ms.reduce((t, m) => t + (m.pontos || 0), 0) / ms.length : null;
+  const rotMes = anoL ? Carta.ROTULO_ANO : (ult && ult.mes);
+  const sem = anoL ? [] : (a.semanas || []).filter(s => s.mes === (ult && ult.mes)).slice().sort((x, y) => x.n - y.n);
+  document.title = 'Evolução — ' + a.nome + (ult ? ' · ' + rotMes : '');
+  const media = msHist.length ? msHist.reduce((t, m) => t + (m.pontos || 0), 0) / msHist.length : null;
   const trab = ult ? `${f1(ult.trab).replace(',0', '')} de ${f1(ult.esp).replace(',0', '')}` : '—';
   const qsAgente = idAgente && /^\d+$/.test(String(idAgente)) ? 'id=' + idAgente : 'nome=' + encodeURIComponent(a.nome);
-  const linkRecente = idxRef < todosMeses.length - 1
+  const linkRecente = (anoL || idxRef < todosMeses.length - 1)
     ? ` · <a href="agente.html?${qsAgente}">ver mês mais recente</a>`
     : '';
-  const linkAlbum = ` · <a href="album.html?mes=${encodeURIComponent(ult ? ult.mes : '')}">álbum</a>`;
+  const linkAlbum = ` · <a href="album.html?mes=${encodeURIComponent(rotMes || '')}">álbum</a>`;
   let html = `<h1><svg class="ico" aria-hidden="true"><use href="#i-trend"/></svg> <span class="nome">${esc(a.nome)}</span></h1><div class="mut">${esc(a.equipe)} · atualizado em ${esc(D.gerado_em)}${linkAlbum}${linkRecente}</div>`;
   html += carta(a, ms);
   if (ult) html += `<div class="card"><div class="kpis">
-      <div class="kpi"><span>Nota em ${esc(ult.mes)}</span><strong>${f1(ult.pontos)}</strong></div>
-      <div class="kpi"><span>Posição</span><strong>${ult.pos}º de ${ult.total}</strong></div>
+      <div class="kpi"><span>${anoL ? 'Nota (média do ano)' : 'Nota em ' + esc(ult.mes)}</span><strong>${f1(ult.pontos)}</strong></div>
+      <div class="kpi"><span>${anoL ? 'Posição no ano' : 'Posição'}</span><strong>${ult.pos}º de ${ult.total}</strong></div>
       <div class="kpi"><span>Média dos meses</span><strong>${f1(media)}</strong></div>
       <div class="kpi"><span>Dias trabalhados</span><strong>${trab}</strong></div></div></div>`;
-  const detHtml = ult ? porque(a, ult) : '';
+  const detHtml = ult ? (anoL ? porqueAno(a, anoL) : porque(a, ult)) : '';
   html += detHtml;   // a explicação da nota logo abaixo dos indicadores: é a primeira coisa que o agente pergunta
-  if (ms.length) html += `<div class="card"><h2>Nota por mês</h2><div class="grafico"><canvas id="gMes" role="img" aria-label="Nota mensal"></canvas></div></div>
+  if (msHist.length) html += `<div class="card"><h2>Nota por mês</h2><div class="grafico"><canvas id="gMes" role="img" aria-label="Nota mensal"></canvas></div></div>
     <div class="card"><h2>Dias trabalhados × esperados</h2><div class="grafico"><canvas id="gDias" role="img" aria-label="Dias trabalhados e esperados por mês"></canvas></div></div>`;
   else html += '<div class="card aviso">Este agente ainda não tem mês registrado.</div>';
   if (sem.length >= 1) html += `<div class="card"><h2>Nota por semana (${esc(ult ? ult.mes : '')})</h2><div class="grafico"><canvas id="gSem" role="img" aria-label="Nota semanal"></canvas></div>
       <p class="mut">Semana parcial = ainda em andamento; a nota dela pode mudar até sexta.</p></div>`;
-  html += linhaTempo(ms, sem);
-  if (ult) {
+  html += linhaTempo(msHist, sem);
+  if (ult && !anoL) {
     if (!detHtml) {
       const li = (arr, cls) => arr.length ? arr.map(x => `<tr><td>${esc(x.c)}</td><td class="n ${cls}">${x.p > 0 ? '+' : ''}${f1(x.p)}</td></tr>`).join('') : '<tr><td class="mut" colspan="2">Nenhum.</td></tr>';
       html += `<div class="card"><h2>O que mais tirou pontos em ${esc(ult.mes)}</h2><table>${li(ult.perdas, 'neg')}</table></div>
@@ -188,11 +205,11 @@ function desenhar() {
   const bd = $('bImprimirDet'); if (bd) bd.onclick = () => { document.body.classList.add('so-det'); window.print(); };
   window.addEventListener('afterprint', () => document.body.classList.remove('so-det'));
   const cor = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || '#888';
-  if (ms.length && window.Chart) {
-    new Chart($('gMes'), { type: 'line', data: { labels: ms.map(m => m.mes.replace('/20', '/')), datasets: [{ label: 'Nota', data: ms.map(m => m.pontos), borderColor: cor('--serie'), backgroundColor: cor('--serie'), tension: .25 }] },
+  if (msHist.length && window.Chart) {
+    new Chart($('gMes'), { type: 'line', data: { labels: msHist.map(m => m.mes.replace('/20', '/')), datasets: [{ label: 'Nota', data: msHist.map(m => m.pontos), borderColor: cor('--serie'), backgroundColor: cor('--serie'), tension: .25 }] },
       options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { display: false } } } });
-    new Chart($('gDias'), { type: 'bar', data: { labels: ms.map(m => m.mes.replace('/20', '/')), datasets: [
-      { label: 'Trabalhados', data: ms.map(m => m.trab), backgroundColor: cor('--serie') }, { label: 'Esperados', data: ms.map(m => m.esp), backgroundColor: cor('--mut') }] },
+    new Chart($('gDias'), { type: 'bar', data: { labels: msHist.map(m => m.mes.replace('/20', '/')), datasets: [
+      { label: 'Trabalhados', data: msHist.map(m => m.trab), backgroundColor: cor('--serie') }, { label: 'Esperados', data: msHist.map(m => m.esp), backgroundColor: cor('--mut') }] },
       options: { responsive: true, maintainAspectRatio: false } });
   }
   if (sem.length && window.Chart) {
