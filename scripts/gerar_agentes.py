@@ -55,6 +55,40 @@ def ler_planilha(caminho):
         wb.close()
 
 
+def _abrev_turno(t):
+    return "M" if str(t).strip().lower().startswith("man") else "T"
+
+
+def ler_evidencias(caminho):
+    """Provas por agente (chave = nome em minúsculas) para o «Por que esta nota?» de agente.html. Só o que já é público na planilha:
+    turnos sem lançamento (descontam) e turnos justificados (chuva etc., não descontam), com dia e turno, e as visitas em sequência
+    suspeita (hora, ID da visita, área e quarteirão — SEM logradouro/número do imóvel, que é endereço de morador).
+    {nome: {"sem": [[dia, dia_semana, "M"|"T"]], "just": {motivo: [[dia, "M"|"T"]]}, "susp": {cadeia: [[hora, id, area, quarteirao]]}}}"""
+    import openpyxl
+    wb = openpyxl.load_workbook(caminho, read_only=True, data_only=True)
+    ev = {}
+    try:
+        if "Ausências" in wb.sheetnames:
+            for vals in wb["Ausências"].iter_rows(min_row=3, values_only=True):
+                if not vals or len(vals) < 7 or not vals[1] or not vals[3]:
+                    continue
+                e = ev.setdefault(str(vals[1]).strip().lower(), {})
+                obs, turno, dia = str(vals[6] or ""), _abrev_turno(vals[5]), str(vals[3])[:5]
+                if obs.startswith("Turno sem Lançamento"):
+                    e.setdefault("sem", []).append([dia, str(vals[4] or "")[:3], turno])
+                else:   # chuva, reunião, treinamento…: o motivo é o texto antes do « — » (sem diagnóstico nenhum)
+                    e.setdefault("just", {}).setdefault(obs.split(" — ")[0].strip() or "Justificado", []).append([dia, turno])
+        if "Visitas Suspeitas" in wb.sheetnames:
+            for vals in wb["Visitas Suspeitas"].iter_rows(min_row=3, values_only=True):
+                if not vals or len(vals) < 9 or not vals[0] or vals[3] is None:
+                    continue
+                ev.setdefault(str(vals[0]).strip().lower(), {}).setdefault("susp", {}).setdefault(str(vals[2]), []).append(
+                    [str(vals[8])[:16], str(vals[3]), str(vals[4] or ""), str(vals[5] or "")])
+    finally:
+        wb.close()
+    return ev
+
+
 def ler_panorama(caminho):
     """Totais do mês para a tela de reunião, somando os agentes das equipes avaliadas (sem a equipe sob demanda):
     visitas (imóveis abertos), fechados, recusados, dias trabalhados, tempo médio, alertas e o resumo de cada equipe."""
@@ -194,6 +228,7 @@ def gerar(raiz=ROOT):
             continue
         rank, det = ler_planilha(cam)
         pano = ler_panorama(cam)
+        evid = ler_evidencias(cam)
         if pano:
             pano["fechado"] = e["label"] in fechados
             panorama[e["label"]] = pano
@@ -211,7 +246,8 @@ def gerar(raiz=ROOT):
                 # TODOS os critérios do mês ([critério, quantidade, peso efetivo, pontos]) — alimentam o detalhamento
                 # que aparece ao passar o mouse/clicar na cartinha (mesma tabela "Detalhamento — Critérios Aplicados").
                 "detalhe": [[x[0], x[2], x[3], round(x[1], 1)] for x in sorted(itens, key=lambda x: x[1])],
-                "paradas": paradas_no_periodo(cron, r["equipe"], _faixa_mes(e["label"]))})
+                "paradas": paradas_no_periodo(cron, r["equipe"], _faixa_mes(e["label"])),
+                **({"ev": evid[nome.strip().lower()]} if evid.get(nome.strip().lower()) else {})})
     for e in sem_e:
         cam = raiz / "data" / "historico" / e["arquivo"]
         if not cam.exists():

@@ -36,5 +36,13 @@ checar("dados públicos sem palavras de saúde", not any(w in txt for w in ("ate
 for n in ("compare", "arrow-up", "arrow-down", "minus", "timeline", "cone"):
     checar(f"ícone '{n}' existe", n in icones.ICONES)
 checar("🔁 vira ícone de comparar", "#i-compare" in icones.iconizar("<b>🔁 Comparar</b>"))
+# provas do «Por que esta nota?»: só dia/turno e dados da visita SEM endereço de morador
+import glob
+arq = sorted(glob.glob(os.path.join(RAIZ, "data", "historico", "semanas_*.xlsx")))[-1]
+ev = G.ler_evidencias(arq)
+txt = json.dumps(ev, ensure_ascii=False)
+checar("evidências: lê turnos sem lançamento com dia, dia da semana e turno M/T", any(e.get("sem") and e["sem"][0][2] in ("M", "T") for e in ev.values()))
+checar("evidências: chuva etc. vai como justificado, não como desconto", all("Turno sem Lançamento" not in k for e in ev.values() for k in e.get("just", {})))
+checar("evidências: sem logradouro nem número de imóvel (endereço de morador)", not any(w in txt for w in ("Rua ", "Avenida", "Av. ")))
 print("\n" + ("TUDO CERTO" if not FALHAS else f"{len(FALHAS)} FALHA(S): {FALHAS}"))
 sys.exit(1 if FALHAS else 0)

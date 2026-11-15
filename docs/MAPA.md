@@ -107,20 +107,22 @@ Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 
 Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, PCT_RAPIDAS_OK_ATE@52, PCT_RAPIDAS_ATENCAO_ATE@53, SCRIPTS_DIR@94, CONFIG_HOME_PATH@104, ACUMULADO_XLSX@105, HOME_XLSX@122, XLSX_PATH@124, OUT_PATH@125, SALARIO_MENSAL@127, EVISITA_URL@128, DIA_ORDER@129, EQUIPE_BLOQUEIO@135, RESUMO_COLS@233, AREA_COLS@247, ALERT_COLS@254, AUSENCIA_COLS@261, PENDENCIA_COLS@265, PE_COLS@269, RESUMO_SEMANAL_COLS@278, RANKING_COLS@279, RANKING_DET_COLS@286, _NAO_PADRONIZAR_TEXTO@305, _DIAS_CURTOS@549, _PRESENCA_CACHE@663, TEAM_COLORS@921, LABEL_MES_RE@947, _BLOCOS_LITERAIS_RE@1445, _ESPACOS_RE@1447
 
-## scripts/gerar_agentes.py (239 linhas)
+## scripts/gerar_agentes.py (275 linhas)
 
 - L20 `_chave(nome)`
 - L25 `ler_planilha(caminho)` — ({agente: {equipe, pos, trab, esp, turnos_sem, pontos, cls}}, {agente: [(crit…
-- L58 `ler_panorama(caminho)` — Totais do mês para a tela de reunião, somando os agentes das equipes avaliada…
-- L103 `_d(txt)`
-- L110 `_faixa_mes(label)` — 'Outubro/2026' -> (1/10/2026, 31/10/2026) ou None.
-- L121 `_faixa_semana(mes, periodo)` — ('Outubro/2026', '04/10 a 10/10') -> (4/10/2026, 10/10/2026) ou None.
-- L135 `paradas_no_periodo(cron, equipe, faixa)` — Paradas (já públicas no cronograma) que valem para a equipe e encostam no per…
-- L154 `_num(x)`
-- L161 `gerar(raiz)`
-- L230 `main()`
+- L58 `_abrev_turno(t)`
+- L62 `ler_evidencias(caminho)` — Provas por agente (chave = nome em minúsculas) para o «Por que esta nota?» de…
+- L92 `ler_panorama(caminho)` — Totais do mês para a tela de reunião, somando os agentes das equipes avaliada…
+- L137 `_d(txt)`
+- L144 `_faixa_mes(label)` — 'Outubro/2026' -> (1/10/2026, 31/10/2026) ou None.
+- L155 `_faixa_semana(mes, periodo)` — ('Outubro/2026', '04/10 a 10/10') -> (4/10/2026, 10/10/2026) ou None.
+- L169 `paradas_no_periodo(cron, equipe, faixa)` — Paradas (já públicas no cronograma) que valem para a equipe e encostam no per…
+- L188 `_num(x)`
+- L195 `gerar(raiz)`
+- L266 `main()`
 
-Constantes: ROOT@12, EQUIPE_BLOQUEIO@16, LABEL_MES_RE@17, _MESES_NUM@99
+Constantes: ROOT@12, EQUIPE_BLOQUEIO@16, LABEL_MES_RE@17, _MESES_NUM@133
 
 ## scripts/gerar_form_atestado.py (126 linhas)
 

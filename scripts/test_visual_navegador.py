@@ -176,6 +176,22 @@ with sync_playwright() as p:
     checar("reunião: tecla C volta aos painéis", al.evaluate("PROJECAO.modo()") == "paineis" and al.locator("#palco .carta").count() == 0)
     al.close()
 
+    # ---- agente.html: «Por que esta nota?» com a conta inteira e os turnos descontados
+    ag = ctx.new_page(); eg = []; ag.on("pageerror", lambda x: eg.append(str(x)))
+    ag.goto(U + "agente.html"); ag.wait_for_timeout(500)
+    alvo_ag = ag.evaluate("""()=>{for(const [k,a] of Object.entries(AGENTES_DADOS.agentes)){const m=a.meses.slice().pop();if(m&&m.ev&&m.ev.sem&&m.ev.sem.length&&m.detalhe)return {k, dia:m.ev.sem[0][0], n:m.ev.sem.length}}return null}""")
+    checar("dados do agente trazem os turnos descontados (ev.sem)", alvo_ag is not None, "nenhum agente com turno sem lançamento no último mês")
+    ag.goto(U + "agente.html?id=" + (alvo_ag["k"] if alvo_ag else "0")); ag.wait_for_timeout(1500)
+    det = ag.evaluate("""(DIA)=>{const d=document.querySelector('#detalhamento');if(!d)return null;const t=d.innerText;
+      const linhas=[...d.querySelectorAll('table.porque tbody tr')].length;
+      return {linhas, turnos:/Turnos descontados \\(\\d+ em \\d+ dia/.test(t), dias:t.includes(DIA), final:!!d.querySelector('tr.final'), antes:d.compareDocumentPosition(document.querySelector('#gMes'))&Node.DOCUMENT_POSITION_FOLLOWING?true:false}}""", alvo_ag["dia"] if alvo_ag else "")
+    checar("agente: «Por que esta nota?» lista todos os critérios (não só 3)", det and det["linhas"] >= 6, str(det))
+    checar("agente: mostra os dias e turnos descontados", det and det["turnos"] and det["dias"], str(det))
+    checar("agente: detalhamento vem antes dos gráficos e tem nota final", det and det["final"] and det["antes"], str(det))
+    ag.set_viewport_size({"width": 360, "height": 800}); ag.wait_for_timeout(300)
+    checar("agente: sem rolagem lateral no celular com o detalhamento", not ag.evaluate("document.documentElement.scrollWidth>innerWidth"))
+    checar("agente: sem erros de script", not eg, str(eg)); ag.close()
+
     # ---- páginas estáticas no claro e no escuro
     for f in ("agente.html?nome=Gilmar%20Bitencourt%20Luiz", "validar.html", "contestacao.html", "album.html"):
         e = []; q = ctx.new_page(); q.on("pageerror", lambda x: e.append(str(x)))

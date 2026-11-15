@@ -65,3 +65,28 @@
 header.topo{padding-left:0;padding-right:0}
 header.topo .marca{max-width:860px;padding:0 16px}
 header.topo .tema-btn + a{margin-left:0}
+
+/* ---- «Por que esta nota?» ---- */
+#detalhamento h3{margin:18px 0 6px;font-size:.95rem}
+#detalhamento .kpis-porque{margin-bottom:10px}
+.tabela-rolagem{overflow-x:auto}
+table.porque{width:100%;border-collapse:collapse;font-size:.9rem}
+table.porque th{text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);border-bottom:2px solid var(--bd);padding:6px 8px}
+table.porque td{padding:8px;border-bottom:1px solid var(--bd);vertical-align:top}
+table.porque .n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.porque td small{display:block;margin-top:2px;color:var(--mut);font-size:.78rem;line-height:1.35}
+table.porque tr.base td{background:color-mix(in srgb,var(--bd) 30%,transparent)}
+table.porque tfoot td{border-bottom:0;font-weight:600}
+table.porque tr.final td{font-size:1.05rem;border-top:2px solid var(--tx)}
+.aviso-presenca{margin:6px 0 12px;padding:10px 12px;border-left:4px solid var(--bad);background:color-mix(in srgb,var(--bad) 9%,transparent);border-radius:6px}
+ul.dias{margin:4px 0 8px;padding-left:18px}ul.dias li{margin:2px 0}
+.bt-det{padding:8px 14px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);font:600 .85rem "IBM Plex Sans",sans-serif;cursor:pointer}
+.bt-det:hover{border-color:var(--pri)}
+@media print{
+  header.topo,.tg,.no-print,.carta-wrap,.card:not(#detalhamento),.msg-img{display:none!important}
+  body.so-det #conteudo>*:not(#detalhamento),body.so-det #conteudo>.mut{display:none!important}
+  html,body{background:#fff!important;color:#111!important}
+  #detalhamento{box-shadow:none!important;border:0!important}
+  table.porque,table.porque *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+

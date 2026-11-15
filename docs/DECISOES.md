@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 15/11/2026 (4) — «Por que esta nota?» na página do agente
+- `agente.html` ganhou, logo abaixo dos indicadores, a conta inteira do mês: 100 pontos iniciais → cada critério (qtd × peso = pontos, com saldo corrido e explicação em português) → ajuste de presença → nota final; resumo (descontos, bônus, presença), **turnos descontados por dia/turno**, **justificados** (chuva, cronograma) e **visitas em sequência suspeita**. Botão «Imprimir este detalhamento» (folha só com ele). Para quando o agente questionar a nota.
+- Dados novos em `agentes_dados.js` (`gerar_agentes.py::ler_evidencias`, campo `ev` por mês): só o que já é público na planilha. **Sem** logradouro/número do imóvel (endereço de morador) e sem motivo de saúde (justificados mostram só o rótulo do cronograma, ex. «Chuva»).
+- Testes: `test_sessao10.py` (evidências) e `test_visual_navegador.py` (bloco «agente»).
+
 ## 15/11/2026 (3) — nível ELITE: valorizar quem tirou 100 fora do pódio
 - Antes só o top 3 com 100 se destacava (LENDÁRIA); os demais com 100 saíam iguais a quem tem 90-99 (OURO). Agora nota 100 fora do pódio = **ELITE**: cartão de ouro com halo dourado, brilho sempre aceso e selo «100» (`.n100`, `.c-selo100` em `carta.css`; regra em `carta.js::medidas`). 90-99 segue OURO; pódio segue LENDÁRIA/DESTAQUE. Filtro de nível do álbum ganhou «ELITE».
 

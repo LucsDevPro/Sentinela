@@ -20,6 +20,80 @@ function achar(D, q) {
 }
 if (window.aplicarTemaGraficos) aplicarTemaGraficos(); Chart.defaults.font.family = "'IBM Plex Sans', system-ui, sans-serif";
 const SV = (n, c) => `<svg class="ico${c ? ' ' + c : ''}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+
+// ---- «Por que esta nota?»: a conta inteira do mês, critério a critério, com os dias e turnos de cada desconto (para quando o agente questionar) ----
+const fnum = n => Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 2 });
+const sg = n => (n > 0 ? '+' : n < 0 ? '−' : '') + f1(Math.abs(n));
+const AJUDA = [
+  [/^Turno sem lançamento/, 'Turno de dia útil sem nenhuma visita registrada e sem justificativa no cronograma (chuva, folga, atestado, reunião, férias…). Os dias e turnos estão listados abaixo.'],
+  [/^Dia inteiro sem lançamento/, 'Manhã e tarde do mesmo dia sem lançamento: além dos dois turnos, perde um adicional por dia inteiro.'],
+  [/^Início manhã/, 'Primeira visita da manhã registrada depois das 08h30 (−0,3 por dia).'],
+  [/^Fim manhã/, 'Última visita da manhã registrada antes das 10h00 (parou cedo demais).'],
+  [/^Início tarde/, 'Primeira visita da tarde registrada depois das 14h30.'],
+  [/^Fim tarde/, 'Última visita da tarde registrada antes das 16h00 (parou cedo demais).'],
+  [/^Visita rápida/, 'Visita com menos de 3 minutos de duração.'],
+  [/^Visita duplicada/, 'Mesmo imóvel lançado mais de uma vez.'],
+  [/sequência suspeita/, 'Visitas lançadas com menos de 50 segundos de diferença uma da outra (lista abaixo).'],
+  [/^Visita fora do expediente/, 'Visita lançada fora do expediente (manhã 07–11h, tarde 13–17h) ou em fim de semana.'],
+  [/^Dia sem bater a meta/, 'Dia trabalhado com menos visitas que a meta diária da equipe.'],
+  [/^Dia com meta/, 'Dia trabalhado com a meta diária batida.'],
+  [/^Bônus não concedido/, 'O bônus só vale com presença mínima no período.'],
+  [/^Bônus/, 'Bônus único do período.'],
+  [/^Presença abaixo do mínimo/, 'Ajuste final: a nota inteira é multiplicada por um fator quando os dias trabalhados ficam abaixo do mínimo exigido.']
+];
+const ajuda = c => (AJUDA.find(([r]) => r.test(c)) || [0, ''])[1];
+const TURNO = { M: 'manhã', T: 'tarde' };
+function porque(a, ult) {
+  const det = (ult.detalhe || []).map(x => ({ c: x[0], q: x[1], w: x[2], p: x[3] }));
+  if (!det.length) return '';
+  const ehAjuste = x => /^Presença abaixo do mínimo/.test(x.c);
+  const corpo = det.filter(x => !ehAjuste(x)), ajuste = det.filter(ehAjuste);
+  const desc = corpo.filter(x => x.p < 0).sort((x, y) => x.p - y.p), bon = corpo.filter(x => x.p > 0), neutros = corpo.filter(x => x.p === 0);
+  const somaDesc = desc.reduce((t, x) => t + x.p, 0), somaBon = bon.reduce((t, x) => t + x.p, 0), somaAj = ajuste.reduce((t, x) => t + x.p, 0);
+  let saldo = 100;
+  const linha = (x, aj) => { saldo += x.p;
+    return `<tr><td><b>${esc(x.c)}</b><small>${esc(ajuda(x.c))}</small></td><td class="n mut">${aj ? '—' : fnum(x.q) + ' × ' + fnum(x.w)}</td><td class="n ${x.p < 0 ? 'neg' : x.p > 0 ? 'pos' : 'mut'}">${x.p === 0 ? '0,0' : sg(x.p)}</td><td class="n mut">${f1(Math.max(0, saldo))}</td></tr>`; };
+  const corpoTab = desc.map(x => linha(x)).join('') + bon.map(x => linha(x)).join('') + neutros.map(x => linha(x)).join('') + ajuste.map(x => linha(x, true)).join('');
+  const total = 100 + somaDesc + somaBon + somaAj, nota = Math.round(ult.pontos * 10) / 10;
+  const obs = total > 100.05 ? ' (a nota é limitada a 100)' : total < -0.05 ? ' (a nota mínima é 0)' : Math.abs(total - nota) > 0.15 ? ' (com ajustes do período)' : '';
+  const pct = ult.esp ? Math.round(ult.trab / ult.esp * 100) : null;
+  const ev = ult.ev || {};
+  // turnos sem lançamento (descontam), agrupados por dia
+  let blocoTurnos = '';
+  if (ev.sem && ev.sem.length) {
+    const dias = {}; ev.sem.forEach(([d, w, t]) => { (dias[d] = dias[d] || { w, t: [] }).t.push(t); });
+    const lista = Object.entries(dias).sort((x, y) => x[0].split('/').reverse().join('').localeCompare(y[0].split('/').reverse().join('')))
+      .map(([d, o]) => `<li><b>${esc(o.w)} ${esc(d)}</b> — ${o.t.length > 1 ? 'manhã e tarde <em>(dia inteiro)</em>' : TURNO[o.t[0]]}</li>`).join('');
+    blocoTurnos = `<h3>Turnos descontados (${ev.sem.length} em ${Object.keys(dias).length} dia${Object.keys(dias).length > 1 ? 's' : ''})</h3><ul class="dias">${lista}</ul>
+      <p class="mut">Sem nenhuma visita registrada no turno e sem justificativa no cronograma. Se havia motivo (folga, atestado, reunião, chuva…), a coordenação registra no cronograma e o ranking é refeito.</p>`;
+  }
+  let blocoJust = '';
+  const just = Object.entries(ev.just || {});
+  if (just.length || (ult.paradas && ult.paradas.length)) {
+    const j1 = just.map(([m, it]) => `<li><b>${esc(m)}</b> — ${it.map(([d, t]) => esc(d) + ' (' + TURNO[t] + ')').join(', ')}</li>`).join('');
+    const j2 = (ult.paradas || []).map(p => `<li><b>${esc(p.motivo)}</b> — ${fnum(p.dias)} dia${p.dias === 1 ? '' : 's'}</li>`).join('');
+    blocoJust = `<h3>Não descontaram (justificados)</h3><ul class="dias">${j1}${j2}</ul>`;
+  }
+  let blocoSusp = '';
+  const susp = Object.entries(ev.susp || {});
+  if (susp.length) {
+    blocoSusp = `<h3>Visitas em sequência suspeita</h3>` + susp.map(([c, it]) => `<p class="mut">Sequência ${esc(c)}: ${it.length} visitas começando com menos de 50 segundos de diferença</p><ul class="dias">${it.map(([h, id, ar, q]) => `<li><b>${esc(h)}</b> · visita ${esc(id)} · ${esc(ar)}${q ? ' · ' + esc(q) : ''}</li>`).join('')}</ul>`).join('');
+  }
+  const motivoBaixa = ajuste.length ? `<p class="aviso-presenca"><b>Principal efeito:</b> ${esc(ajuste[0].c.replace(/\s*—.*$/, ''))}. Por isso a nota inteira foi multiplicada (${sg(somaAj)}).</p>` : '';
+  return `<div class="card" id="detalhamento"><h2>Por que esta nota? — <span class="nome">${esc(a.nome)}</span> · ${esc(ult.mes)}</h2>
+    <div class="kpis kpis-porque">
+      <div class="kpi"><span>Nota do mês</span><strong>${f1(ult.pontos)}</strong></div>
+      <div class="kpi"><span>Descontos</span><strong class="neg">${somaDesc ? sg(somaDesc) : '0,0'}</strong></div>
+      <div class="kpi"><span>Bônus e metas</span><strong class="pos">${somaBon ? sg(somaBon) : '0,0'}</strong></div>
+      <div class="kpi"><span>Presença</span><strong>${f1(ult.trab).replace(',0', '')} de ${f1(ult.esp).replace(',0', '')}${pct == null ? '' : ' (' + pct + '%)'}</strong></div></div>
+    ${motivoBaixa}
+    <div class="tabela-rolagem"><table class="porque"><thead><tr><th>Critério</th><th class="n">Qtd × peso</th><th class="n">Pontos</th><th class="n">Saldo</th></tr></thead><tbody>
+      <tr class="base"><td><b>Pontos iniciais</b><small>Todo agente começa o mês com 100.</small></td><td></td><td></td><td class="n mut">100,0</td></tr>${corpoTab}</tbody>
+      <tfoot><tr><td colspan="3">Total (100 + critérios)</td><td class="n">${f1(total)}</td></tr><tr class="final"><td colspan="3">Nota final${esc(obs)}</td><td class="n">${f1(ult.pontos)}</td></tr></tfoot></table></div>
+    ${blocoTurnos}${blocoJust}${blocoSusp}
+    <p class="mut">Dúvida ou discordância? Procure a coordenação ou abra um pedido em <a href="contestacao.html">Contestação</a>, levando esta página. A conta completa está em <a href="album.html#como-calcula">Como o ranking é calculado</a>.</p>
+    <p class="no-print"><button type="button" class="bt-det" id="bImprimirDet">Imprimir este detalhamento</button></p></div>`;
+}
 function carta(a, ms) {
   const c = Carta.html(a, ms, idAgente); if (!c) return '';
   const m = Carta.medidas(ms);
@@ -88,6 +162,8 @@ function desenhar() {
       <div class="kpi"><span>Posição</span><strong>${ult.pos}º de ${ult.total}</strong></div>
       <div class="kpi"><span>Média dos meses</span><strong>${f1(media)}</strong></div>
       <div class="kpi"><span>Dias trabalhados</span><strong>${trab}</strong></div></div></div>`;
+  const detHtml = ult ? porque(a, ult) : '';
+  html += detHtml;   // a explicação da nota logo abaixo dos indicadores: é a primeira coisa que o agente pergunta
   if (ms.length) html += `<div class="card"><h2>Nota por mês</h2><div class="grafico"><canvas id="gMes" role="img" aria-label="Nota mensal"></canvas></div></div>
     <div class="card"><h2>Dias trabalhados × esperados</h2><div class="grafico"><canvas id="gDias" role="img" aria-label="Dias trabalhados e esperados por mês"></canvas></div></div>`;
   else html += '<div class="card aviso">Este agente ainda não tem mês registrado.</div>';
@@ -95,9 +171,11 @@ function desenhar() {
       <p class="mut">Semana parcial = ainda em andamento; a nota dela pode mudar até sexta.</p></div>`;
   html += linhaTempo(ms, sem);
   if (ult) {
-    const li = (arr, cls) => arr.length ? arr.map(x => `<tr><td>${esc(x.c)}</td><td class="n ${cls}">${x.p > 0 ? '+' : ''}${f1(x.p)}</td></tr>`).join('') : '<tr><td class="mut" colspan="2">Nenhum.</td></tr>';
-    html += `<div class="card"><h2>O que mais tirou pontos em ${esc(ult.mes)}</h2><table>${li(ult.perdas, 'neg')}</table></div>
-      <div class="card"><h2>O que mais deu pontos</h2><table>${li(ult.ganhos, 'pos')}</table></div>`;
+    if (!detHtml) {
+      const li = (arr, cls) => arr.length ? arr.map(x => `<tr><td>${esc(x.c)}</td><td class="n ${cls}">${x.p > 0 ? '+' : ''}${f1(x.p)}</td></tr>`).join('') : '<tr><td class="mut" colspan="2">Nenhum.</td></tr>';
+      html += `<div class="card"><h2>O que mais tirou pontos em ${esc(ult.mes)}</h2><table>${li(ult.perdas, 'neg')}</table></div>
+        <div class="card"><h2>O que mais deu pontos</h2><table>${li(ult.ganhos, 'pos')}</table></div>`;
+    }
   }
   html += `<p class="mut">Só dados públicos do ranking, sem informações de saúde. A conta completa está no Extrato do dashboard e em <a href="album.html#como-calcula">Como o ranking é calculado</a>.</p>`;
   alvo.innerHTML = html;
@@ -107,6 +185,8 @@ function desenhar() {
       .then(t => { msg.textContent = t; }, () => { msg.textContent = 'Não consegui gerar a imagem aqui. Abra a página pelo endereço do site (não pelo arquivo no computador) e tente de novo.'; })
       .then(() => { b.disabled = false; }); }; };
   ligar('bBaixar', 'baixar'); ligar('bZap', 'whatsapp');
+  const bd = $('bImprimirDet'); if (bd) bd.onclick = () => { document.body.classList.add('so-det'); window.print(); };
+  window.addEventListener('afterprint', () => document.body.classList.remove('so-det'));
   const cor = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || '#888';
   if (ms.length && window.Chart) {
     new Chart($('gMes'), { type: 'line', data: { labels: ms.map(m => m.mes.replace('/20', '/')), datasets: [{ label: 'Nota', data: ms.map(m => m.pontos), borderColor: cor('--serie'), backgroundColor: cor('--serie'), tension: .25 }] },
