@@ -1626,3 +1626,6 @@ body.sem-foto .c-foto img {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
+
+/* Captura para PNG (carta.js: pngDom): tudo parado, para a imagem sair sempre igual */
+.c-captura, .c-captura *, .c-captura *::before, .c-captura *::after { animation: none !important; transition: none !important; }

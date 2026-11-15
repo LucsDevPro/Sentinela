@@ -91,8 +91,8 @@ select:focus,input[type=search]:focus{border-color:var(--pri);box-shadow:0 0 0 3
 #resumo{margin:10px 2px 18px;font-size:.84rem}
 
 /* ===== Pódio e grade de cartas ===== */
-.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:36px 26px;margin:22px 0 48px;justify-items:center;align-items:start}
-.slot{--e:.72;position:relative;display:block;width:calc(272px*var(--e));height:calc(392px*var(--e));text-decoration:none;color:inherit;border-radius:20px;outline-offset:8px;filter:drop-shadow(0 10px 16px rgba(4,14,28,.16));transition:transform .25s ease}
+.album{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:36px 26px;padding-bottom:20px;margin:22px 0 48px;justify-items:center;align-items:start}
+.slot{--e:.72;margin-bottom:46px;position:relative;display:block;width:calc(272px*var(--e));height:calc(392px*var(--e));text-decoration:none;color:inherit;border-radius:20px;outline-offset:8px;filter:drop-shadow(0 10px 16px rgba(4,14,28,.16));transition:transform .25s ease}
 .slot .c-conj{position:absolute;left:50%;top:50%;margin:-196px 0 0 -136px;height:392px;--s:var(--e)}
 .slot .carta{height:392px}
 .slot:hover,.slot:focus-visible{z-index:20;transform:translateY(-4px)}
@@ -105,7 +105,7 @@ select:focus,input[type=search]:focus{border-color:var(--pri);box-shadow:0 0 0 3
 .podio{position:relative;display:flex;justify-content:center;align-items:flex-end;flex-wrap:wrap;gap:12px 40px;margin:18px 0 34px;padding:58px 18px 26px;border:1px solid var(--bd);border-radius:24px;overflow:hidden;box-shadow:var(--sombra);
   background:radial-gradient(ellipse at 50% 112%,rgba(247,181,0,.2),transparent 60%),linear-gradient(180deg,var(--card),var(--soft))}
 .podio::after{content:"";position:absolute;left:8%;right:8%;bottom:0;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#F7B500,transparent)}
-.podio .slot.p1{--e:1.02;order:2;isolation:isolate;margin-bottom:10px;transform:translateY(-8px);filter:drop-shadow(0 0 20px rgba(220,170,50,.45)) drop-shadow(0 0 34px rgba(200,150,40,.2))}
+.podio .slot.p1{--e:1.02;order:2;isolation:isolate;margin-bottom:46px;transform:translateY(-8px);filter:drop-shadow(0 0 20px rgba(220,170,50,.45)) drop-shadow(0 0 34px rgba(200,150,40,.2))}
 .podio .slot.p2{--e:.84;order:1;transform:translateY(10px)}
 .podio .slot.p3{--e:.84;order:3;transform:translateY(10px)}
 .podio .slot.p1:hover{transform:translateY(-12px)}
@@ -154,12 +154,11 @@ body.modo-apresentacao .nome{filter:blur(7px)}
 .bt-acao:hover,.bt-acao:focus-visible{border-color:var(--pri);outline:none}
 .bt-acao .ico,.acoes .ico{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .aviso-img{margin:6px 0 0;padding:8px 12px;border:1px solid var(--bd);border-left:4px solid var(--pri);border-radius:8px;background:var(--card);font-size:.88rem}
-.acoes{position:absolute;right:2px;bottom:6px;z-index:6;display:flex;gap:6px;opacity:0;transform:translateY(4px);transition:opacity .15s,transform .15s}
-.slot:hover .acoes,.slot:focus-within .acoes{opacity:1;transform:none}
-.acoes button{width:34px;height:34px;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:#050F20;color:#fff;cursor:pointer;box-shadow:0 4px 10px rgba(4,14,28,.35)}
-.acoes button:hover,.acoes button:focus-visible{background:#F7B500;color:#1a1200;outline:none}
+.acoes{position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);z-index:6;display:flex;gap:6px;white-space:nowrap}   /* embaixo da cartinha, não por cima */
+.acoes button{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 11px;border:1px solid var(--bd);border-radius:999px;background:var(--card);color:var(--tx);font:600 .74rem "IBM Plex Sans",sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(4,14,28,.12)}
+.acoes button:hover,.acoes button:focus-visible{border-color:var(--pri);color:var(--pri);outline:none}
 .acoes button:disabled{opacity:.55;cursor:progress}
-@media (hover:none){.acoes{opacity:1;transform:none}}   /* no toque não existe "passar o mouse": os botões ficam sempre à vista */
+.acoes .ico{width:1.1em;height:1.1em}
 @media (max-width:480px){.bt-acao{margin-left:0}}
 
 /* ---- Impressão: só as cartinhas, em folha branca, 3 por linha na A4 (a cor das cartas é mantida) ---- */

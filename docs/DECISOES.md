@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 15/11/2026 — PNG da cartinha fiel, botões embaixo, WhatsApp Web
+- Botões Baixar/WhatsApp ficam **embaixo** da cartinha (antes cobriam o cartão).
+- O PNG agora é gerado do HTML da própria cartinha (`html-to-image`, MIT, em `assets/html-to-image.js`, carregada só no 1º uso), com animações paradas (`.c-captura`). Se falhar, cai no desenho antigo em canvas (`pngCanvas`). Ícones `<use>` são copiados para dentro do SVG antes da captura.
+- WhatsApp: **computador** abre `web.whatsapp.com` (janela aberta no clique) e deixa a imagem copiada para colar (Ctrl+V); se a cópia não for permitida, baixa a imagem. **Celular** usa a lista de compartilhar com o arquivo. Não testado em iPhone/Safari real.
+
 ## 14/11/2026 (4) — álbum: compartilhar/imprimir cartinhas e modo reunião
 - `album.html`: cada cartinha ganha botões **baixar imagem** e **WhatsApp** (reusam `Carta.enviar`, a mesma imagem de `agente.html`; respeitam «ocultar nomes/fotos»). Botão **Imprimir cartinhas** (A4, 3 por linha, fundo branco, só o que está filtrado na tela; usa `inline-block` porque o Chrome ignora «não quebrar» em grade).
 - `projecao.html`: **modo cartinhas** (botão «Cartinhas» ou tecla C; `projecao.html?mes=Mês/AAAA#cartinhas`): uma cartinha grande por tela, do 1º para o último (Top 10/20/Todas), com o que mais deu e tirou pontos. Com nomes ocultos (padrão) o texto do nome, as iniciais e a foto são TROCADOS por «Agente N», não só borrados. Tecla N mostra os nomes.

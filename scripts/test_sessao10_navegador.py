@@ -164,7 +164,7 @@ with sync_playwright() as p:
       const bm = await createImageBitmap(bl), c = document.createElement('canvas'); c.width = bm.width; c.height = bm.height; const x = c.getContext('2d'); x.drawImage(bm, 0, 0);
       const g = (a, b) => Array.from(x.getImageData(a, b, 1, 1).data); return { canto: g(3, 3), centro: g(Math.round(bm.width * .5), Math.round(bm.height * .5)), n: g(Math.round(bm.width * .5), Math.round(bm.height * .5) - 120) }; }""")
     checar("fora da carta o fundo é claro; dentro, a cor da carta", px["canto"][0] > 220 and px["centro"][2] < 200, str(px))
-    im.evaluate("""() => { window.__chamadas = []; Object.defineProperty(navigator, 'canShare', { value: () => true, configurable: true });
+    im.evaluate("""() => { window.__chamadas = []; Object.defineProperty(navigator, 'userAgent', { value: 'Mozilla/5.0 (Linux; Android 14) Mobile', configurable: true }); Object.defineProperty(navigator, 'canShare', { value: () => true, configurable: true });
       Object.defineProperty(navigator, 'share', { value: async d => { window.__chamadas.push({ n: d.files.length, tipo: d.files[0].type, nome: d.files[0].name, texto: d.text }); }, configurable: true }); }""")
     im.click("#bZap"); im.wait_for_timeout(1500)
     ch = im.evaluate("window.__chamadas")
@@ -173,14 +173,14 @@ with sync_playwright() as p:
     im.check("#apres"); im.click("#bZap"); im.wait_for_timeout(1500)
     ch = im.evaluate("window.__chamadas")
     checar("modo apresentação: texto do envio não leva o nome", len(ch) == 2 and alvo["nome"] not in ch[1]["texto"], str(ch[-1]))
-    im.evaluate("() => { Object.defineProperty(navigator, 'canShare', { value: undefined, configurable: true }); }")
+    im.evaluate("() => { Object.defineProperty(navigator, 'canShare', { value: undefined, configurable: true }); Object.defineProperty(navigator, 'userAgent', { value: 'Mozilla/5.0 (Windows NT 10.0) Chrome/120', configurable: true }); }")
     im.uncheck("#apres")
-    ctx.route("https://wa.me/**", lambda r: r.fulfill(status=200, content_type="text/html", body="ok"))
+    ctx.route("https://web.whatsapp.com/**", lambda r: r.fulfill(status=200, content_type="text/html", body="ok"))
     with im.expect_popup() as pop:
-        with im.expect_download() as dl2:
-            im.click("#bZap")
-    pop.value.wait_for_load_state()
-    checar("computador: baixa a imagem e abre o WhatsApp com o texto", "wa.me" in pop.value.url and "text=" in pop.value.url and dl2.value.suggested_filename.endswith(".png"), pop.value.url[:60])
+        im.click("#bZap")
+    pop.value.wait_for_load_state(); im.wait_for_timeout(1200)
+    checar("computador: abre o WhatsApp Web com o texto", "web.whatsapp.com/send" in pop.value.url and "text=" in pop.value.url, pop.value.url[:70])
+    checar("computador: avisa como colar/anexar a imagem", "WhatsApp Web" in im.inner_text("#msgImg"), im.inner_text("#msgImg"))
     checar("imagem: sem erros de script", not ei, str(ei))
     cr = ctx.new_page(); cr.goto(U + "agente.html" + q); cr.wait_for_timeout(500)
     checar("logo do cartão carrega (máscara)", cr.evaluate("getComputedStyle(document.querySelector('.c-logo i')).webkitMaskImage || getComputedStyle(document.querySelector('.c-logo i')).maskImage").find("logo_carta.png") > 0)

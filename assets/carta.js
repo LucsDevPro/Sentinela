@@ -211,7 +211,7 @@
     if (!ls) { ctx.fillText(txt, x, y); return; }
     for (var i = 0; i < txt.length; i++) { ctx.fillText(txt[i], x, y); x += ctx.measureText(txt[i]).width + ls; }
   }
-  function png(a, ms, opcoes) {
+  function pngCanvas(a, ms, opcoes) {   // plano B: redesenha a cartinha em canvas (menos fiel). O principal é pngDom.
     opcoes = opcoes || {};
     var S = 2, M = 30, host = document.createElement('div'), html0 = html(a, ms, opcoes.id, true);
     if (!html0) return Promise.reject(new Error('sem nota'));
@@ -319,6 +319,39 @@
       return new Promise(function (ok, erro) { try { cv.toBlob(function (bl) { bl ? ok(bl) : erro(new Error('falha ao gerar a imagem')); }, 'image/png'); } catch (e) { erro(e); } });
     }).then(function (bl) { host.remove(); return bl; }, function (e) { host.remove(); throw e; });
   }
+
+  /* PNG fiel: o navegador desenha a própria cartinha (HTML+CSS, com campos, brilhos e raios) e a biblioteca html-to-image a converte em imagem.
+     Fica fora da tela, com as animações paradas (assets/carta.css: .c-captura). Se algo falhar (ex.: navegador sem suporte), cai no desenho em canvas. */
+  var LIB = null;
+  function carregarLib() {
+    if (window.htmlToImage) return Promise.resolve();
+    return LIB || (LIB = new Promise(function (ok, erro) { var sc = document.createElement('script'); sc.src = 'assets/html-to-image.js'; sc.onload = ok; sc.onerror = function () { LIB = null; erro(new Error('biblioteca de imagem indisponível')); }; document.head.appendChild(sc); }));
+  }
+  function pngDom(a, ms, opcoes) {
+    var host = document.createElement('div'), html0 = html(a, ms, opcoes.id, true);
+    if (!html0) return Promise.reject(new Error('sem nota'));
+    // `fora` some da tela; `host` (o que vira imagem) fica em posição normal dentro dele, senão a imagem sai deslocada e em branco
+    var fora = document.createElement('div'); fora.style.cssText = 'position:fixed;left:-9999px;top:0;pointer-events:none';
+    host.className = 'c-captura'; host.style.cssText = 'width:332px;display:flow-root;background:#EEF2F8'; host.innerHTML = html0; fora.appendChild(host); document.body.appendChild(fora);
+    // ícones <use href="#i-..."> dependem dos símbolos da página: dentro da imagem eles somem, então o desenho é copiado para dentro do <svg>
+    Array.prototype.forEach.call(host.querySelectorAll('svg use'), function (u) {
+      var id = (u.getAttribute('href') || u.getAttribute('xlink:href') || '').replace('#', ''), sym = id && document.getElementById(id), sv = u.parentNode;
+      if (sym && sv) { sv.setAttribute('viewBox', sym.getAttribute('viewBox') || '0 0 24 24'); sv.innerHTML = sym.innerHTML; }
+    });
+    if (opcoes.ocultarFoto) { var im = host.querySelector('.c-foto img'); if (im) im.remove(); }
+    if (opcoes.ocultarNomes) Array.prototype.forEach.call(host.querySelectorAll('.nome'), function (n) { n.textContent = n.textContent.replace(/[^\s]/g, '•'); });
+    var fotos = Array.prototype.slice.call(host.querySelectorAll('img')).map(function (i) { return i.complete ? 0 : new Promise(function (r) { i.onload = i.onerror = r; }); });
+    return carregarLib().then(function () {
+      return Promise.all([document.fonts ? document.fonts.ready : 0, document.fonts ? document.fonts.load('700 20px "Barlow Semi Condensed"') : 0, document.fonts ? document.fonts.load('600 14px "IBM Plex Sans"') : 0].concat(fotos));
+    }).then(function () {
+      var o = { pixelRatio: 2, backgroundColor: '#EEF2F8', cacheBust: false };
+      return window.htmlToImage.toBlob(host, o).then(function () { return window.htmlToImage.toBlob(host, o); });   // 2ª passada: a 1ª às vezes sai sem fontes/imagens (Safari)
+    }).then(function (bl) { if (!bl || bl.size < 4000) throw new Error('imagem vazia'); fora.remove(); return bl; }, function (e) { fora.remove(); throw e; });
+  }
+  function png(a, ms, opcoes) {
+    opcoes = opcoes || {};
+    return pngDom(a, ms, opcoes).catch(function () { return pngCanvas(a, ms, opcoes); });
+  }
   function nomeArquivo(a, ms) {
     var u = ms[ms.length - 1], t = String(a.nome).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return 'cartinha-' + t + '-' + String(u.mes).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.png';
@@ -328,17 +361,26 @@
     opcoes = opcoes || {};
     var u = ms[ms.length - 1], nome = opcoes.ocultarNomes ? 'Minha cartinha' : 'Cartinha de ' + a.nome;
     var texto = nome + ' — nota ' + f1(u.pontos) + ' em ' + u.mes + ' (Sentinela, Prefeitura de Ponta Porã)';
+    var celular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
+    // no computador a janela do WhatsApp Web é aberta AGORA (ainda dentro do clique); a imagem demora e, depois dela, o navegador bloquearia o pop-up
+    var janela = (modo === 'whatsapp' && !celular) ? window.open('', '_blank') : null;
     return png(a, ms, opcoes).then(function (bl) {
       var arq = new File([bl], nomeArquivo(a, ms), { type: 'image/png' });
       var baixar = function () { var l = document.createElement('a'); l.href = URL.createObjectURL(bl); l.download = arq.name; document.body.appendChild(l); l.click(); setTimeout(function () { URL.revokeObjectURL(l.href); l.remove(); }, 800); };
       if (modo === 'baixar') { baixar(); return 'Imagem baixada. Procure em “Downloads”.'; }
-      if (navigator.canShare && navigator.canShare({ files: [arq] }) && navigator.share) {
+      // Celular: abre a lista de compartilhar já com a imagem. Computador: abre o WhatsApp Web e deixa a imagem copiada (é só colar com Ctrl+V na conversa).
+      if (celular && navigator.canShare && navigator.canShare({ files: [arq] }) && navigator.share) {
         return navigator.share({ files: [arq], title: nome, text: texto }).then(function () { return 'Pronto! Escolha o WhatsApp na lista que abriu.'; },
           function (e) { return e && e.name === 'AbortError' ? 'Envio cancelado.' : (baixar(), 'Não consegui abrir o compartilhamento; a imagem foi baixada. Anexe no WhatsApp.'); });
       }
-      baixar(); window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank', 'noopener');
-      return 'Baixei a imagem e abri o WhatsApp. Anexe a imagem na conversa (clipe ou +).';
-    });
+      var url = (celular ? 'https://wa.me/?text=' : 'https://web.whatsapp.com/send?text=') + encodeURIComponent(texto);
+      if (janela) janela.location.href = url; else window.open(url, '_blank', 'noopener');
+      var copiar = (navigator.clipboard && window.ClipboardItem) ? navigator.clipboard.write([new ClipboardItem({ 'image/png': bl })]).then(function () { return true; }, function () { return false; }) : Promise.resolve(false);
+      return copiar.then(function (copiou) {
+        if (copiou) return 'Abri o WhatsApp Web. A imagem está copiada: escolha a conversa e cole com Ctrl+V (⌘+V no Mac).';
+        baixar(); return 'Abri o WhatsApp Web e baixei a imagem. Na conversa, use o clipe (+) e anexe a imagem baixada.';
+      });
+    }, function (e) { if (janela) janela.close(); throw e; });
   }
 
   /* ---- Detalhamento ao passar o mouse / clicar na cartinha ----
