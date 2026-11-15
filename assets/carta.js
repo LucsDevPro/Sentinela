@@ -45,13 +45,14 @@
       ['CON', u.con != null ? u.con : cl(100 - 5 * dp)], ['EVO', u.evo != null ? u.evo : delta == null ? 50 : cl(50 + 5 * delta)],
       ['POS', u.total > 1 ? cl((u.total - posicao(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]];
     // Escala única, pela nota ARREDONDADA (a que aparece no cartão): a cor do cartão e a borda seguem a mesma faixa.
-    // LENDÁRIA (tempestade) = só o TOP 3 com nota 100 | 90-99 e demais 100 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
+    // LENDÁRIA (tempestade) = só o TOP 3 com nota 100 | demais 100 = ELITE (ouro + selo 100 + brilho) | 90-99 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
     // Top 3 do mês com 90-99 (quando há menos de 3 agentes com 100) ganha o cartão de ouro com borda holográfica ("DESTAQUE").
     // A posição vem de posicao() (para quem está no teto, ordenada pela nota bruta).
     var r = Math.round(u.pontos), pos3 = posicao(u, id) <= 3, lend = r >= 100 && pos3, top3 = r >= 90 && r < 100 && pos3;
-    var tier = lend ? ['', 'LENDÁRIA'] : top3 ? ['', 'DESTAQUE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
+    var elite = r >= 100 && !pos3;   // tirou 100 mas ficou fora do pódio: não pode parecer um 90 qualquer
+    var tier = lend ? ['', 'LENDÁRIA'] : top3 ? ['', 'DESTAQUE'] : elite ? ['', 'ELITE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
     var borda = lend ? 'b-100' : top3 ? 'b-top' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
-    return { u: u, delta: delta, st: st, tier: tier, borda: borda };
+    return { u: u, delta: delta, st: st, tier: tier, borda: borda, elite: elite };
   }
   /* Cartinha 100: estrelas [x, y, raio] no espaço 272x392 do cartão (usadas no HTML e no PNG) */
   var ESTRELA = 'M0-1Q.15-.15 1 0Q.15.15 0 1Q-.15.15-1 0Q-.15-.15 0-1Z';
@@ -97,13 +98,13 @@
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
     var tend = delta == null ? SV('minus') + ' 1º mês' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
     var extra100 = (m.borda !== 'b-100' && m.borda !== 'b-top') ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
-    return '<div class="c-conj ' + m.borda + '">' + ornSVG(m.borda, 'atras') + '<div class="carta ' + tier[0] + ' ' + m.borda + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
+    return '<div class="c-conj ' + m.borda + (m.elite ? ' n100' : '') + '">' + ornSVG(m.borda, 'atras') + '<div class="carta ' + tier[0] + ' ' + m.borda + (m.elite ? ' n100' : '') + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
       '<div class="c-pos">' + esc(eq) + '<small>' + pos + 'º de ' + u.total + '</small></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
       '<div class="c-nome nome"' + (curto.length > 20 ? ' style="font-size:1.05rem"' : curto.length > 15 ? ' style="font-size:1.08rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div style="--v:' + x[1] + '%"><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
-      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + ornSVG(m.borda, 'frente') + '</div>';
+      (m.elite ? '<div class="c-selo100" aria-hidden="true"><small>★</small>100</div>' : '') + '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + ornSVG(m.borda, 'frente') + '</div>';
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */

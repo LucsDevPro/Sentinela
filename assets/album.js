@@ -33,8 +33,8 @@ $('abaCalc').onclick = () => mostrar('calc', true);
 window.addEventListener('hashchange', () => mostrar(location.hash === '#como-calcula' ? 'calc' : 'cartas', false));
 mostrar(location.hash === '#como-calcula' ? 'calc' : 'cartas', false);
 
-const NIVEIS = ['LENDÁRIA', 'DESTAQUE', 'OURO', 'PRATA', 'BRONZE', 'AÇO', 'FERRO'];
-const COR_NIVEL = { 'LENDÁRIA': '#8A5CF6', 'DESTAQUE': '#EC4899', 'OURO': '#E0A400', 'PRATA': '#9AA9BA', 'BRONZE': '#C47A3A', 'AÇO': '#64748B', 'FERRO': '#4B5563' };
+const NIVEIS = ['LENDÁRIA', 'DESTAQUE', 'ELITE', 'OURO', 'PRATA', 'BRONZE', 'AÇO', 'FERRO'];
+const COR_NIVEL = { 'LENDÁRIA': '#8A5CF6', 'DESTAQUE': '#EC4899', 'ELITE': '#F2C230', 'OURO': '#E0A400', 'PRATA': '#9AA9BA', 'BRONZE': '#C47A3A', 'AÇO': '#64748B', 'FERRO': '#4B5563' };
 const MIN_MESES_ANO = 2;   // mínimo de cartinhas mensais para entrar no «Melhor do ano»
 const ANO = 'Melhor do ano';   // opção do filtro: ranking pela média de todas as cartinhas (todos os meses)
 const D = window.AGENTES_DADOS, ag = D && D.agentes ? Object.entries(D.agentes).map(([k, a]) => ({ k, a })) : [];

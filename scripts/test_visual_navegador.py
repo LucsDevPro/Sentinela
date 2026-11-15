@@ -149,6 +149,11 @@ with sync_playwright() as p:
     checar("álbum: botão baixa a imagem PNG da cartinha", dl.value.suggested_filename.startswith("cartinha-") and dl.value.suggested_filename.endswith(".png"), dl.value.suggested_filename)
     checar("álbum: baixar não abre a página do agente", "album.html" in al.url)
     checar("álbum: botões ficam EMBAIXO da cartinha (não cobrem)", al.evaluate("(()=>{const s=document.querySelector('#album .slot'),c=s.querySelector('.carta').getBoundingClientRect(),a=s.querySelector('.acoes').getBoundingClientRect();return a.top>=c.bottom-4})()"))
+    el = al.evaluate("""()=>{const c=[...document.querySelectorAll('#album .carta, #podio .carta')];
+      const cem=c.filter(x=>x.querySelector('.c-ovr b').textContent.trim()==='100'), el=cem.filter(x=>!x.classList.contains('b-100'));
+      return {cem:cem.length, el:el.length, ok:el.every(x=>x.classList.contains('n100')&&x.querySelector('.c-selo100')&&/ELITE/.test(x.querySelector('.c-rodape').textContent)),
+              semSelo:c.filter(x=>!x.classList.contains('n100')).every(x=>!x.querySelector('.c-selo100'))}}""")
+    checar("álbum: quem tirou 100 fora do pódio é ELITE com selo 100 (e só eles)", el["el"] >= 1 and el["ok"] and el["semSelo"], str(el))
     bits = al.evaluate("fetch('assets/html-to-image.js').then(r=>r.ok)")
     checar("álbum: biblioteca do PNG fiel está no site", bits)
     al.emulate_media(media="print"); al.wait_for_timeout(200)
