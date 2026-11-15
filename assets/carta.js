@@ -122,20 +122,22 @@
   function ornPecas(borda) {
     var atras = [], frente = [], n, i, lado, t;
     function espelha(pts) { return pts.map(function (q) { return [272 - q[0], q[1]]; }); }
-    if (borda === 'b-80') { // prata: aletas nas laterais de baixo
-      var f = [[0, 205], [-13, 238], [-13, 330], [0, 362]]; atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
-      var f2 = [[0, 150], [-8, 172], [-8, 205], [0, 205]]; atras.push({ t: 'poly', pts: f2 }, { t: 'poly', pts: espelha(f2) });
+    if (borda === 'b-80') { // prata: uma aleta de cada lado, colada na lateral reta do escudo (x=0, y 202→356) e com as pontas em 45°
+      var f = [[0, 200], [-12, 214], [-12, 344], [0, 358]]; atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
     }
-    if (borda === 'b-90') { // ouro: dois ramos de louro
+    if (borda === 'b-90') { // ouro: dois ramos de louro que ACOMPANHAM o contorno do escudo (a ~8 px de fora), da gema até a altura do ombro
+      /* haste = caminho paralelo à borda: fundo reto → canto chanfrado (30×26) → lateral reta. Folhas amostradas por distância ao longo dela. */
+      var haste = [[112, 400], [60, 400], [34, 400], [22, 394], [4, 376], [-8, 362], [-8, 300], [-8, 230], [-8, 176]], seg = [], tot = 0;
+      for (i = 1; i < haste.length; i++) { var sl = Math.hypot(haste[i][0] - haste[i - 1][0], haste[i][1] - haste[i - 1][1]); seg.push(sl); tot += sl; }
+      n = 17;
       for (lado = 0; lado < 2; lado++) {
-        n = 14;
         for (i = 0; i < n; i++) {
-          t = 0.04 + 0.92 * i / (n - 1);
-          var x = (1 - t) * (1 - t) * 122 + 2 * (1 - t) * t * -16 + t * t * -15, y = (1 - t) * (1 - t) * 398 + 2 * (1 - t) * t * 396 + t * t * 170;
-          var dx = 2 * (1 - t) * (-16 - 122) + 2 * t * (-15 + 16), dy = 2 * (1 - t) * (396 - 398) + 2 * t * (170 - 396), ang = Math.atan2(dy, dx), dir = i % 2 ? 1 : -1;
-          var cx = x + Math.cos(ang + dir * Math.PI / 2) * 4, cy = y + Math.sin(ang + dir * Math.PI / 2) * 4;
+          var d = tot * (0.03 + 0.94 * i / (n - 1)), k = 0; while (k < seg.length - 1 && d > seg[k]) { d -= seg[k]; k++; }
+          var u = seg[k] ? d / seg[k] : 0, ax = haste[k][0], ay = haste[k][1], bx = haste[k + 1][0], by = haste[k + 1][1];
+          var x = ax + (bx - ax) * u, y = ay + (by - ay) * u, ang = Math.atan2(by - ay, bx - ax), dir = i % 2 ? 1 : -1;
+          var cx = x + Math.cos(ang + dir * Math.PI / 2) * 3.2, cy = y + Math.sin(ang + dir * Math.PI / 2) * 3.2;
           if (lado) cx = 272 - cx;
-          atras.push({ t: 'leaf', cx: cx, cy: cy, rx: 15 - i * 0.32, ry: 5.6, rot: lado ? Math.PI - (ang + dir * 0.75) : ang + dir * 0.75 });
+          atras.push({ t: 'leaf', cx: cx, cy: cy, rx: 14 - i * 0.3, ry: 5.2, rot: lado ? Math.PI - (ang + dir * 0.7) : ang + dir * 0.7 });
         }
       }
     }

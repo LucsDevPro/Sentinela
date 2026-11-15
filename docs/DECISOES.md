@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 15/11/2026 (2) — moldura das cartinhas alinhada ao contorno
+- Louros do Ouro: a haste agora é um caminho paralelo ao escudo (fundo reto → chanfro 30×26 → lateral), a ~8 px de fora, em vez de uma curva solta a 15 px. Aletas da Prata: uma peça por lado, colada na lateral reta (y 200→358), com pontas em 45° (antes eram dois degraus soltos). Coroa e gema seguem centradas em x=136. A mesma lista de peças alimenta a tela e o PNG de canvas (`ornPecas` em `carta.js`).
+
 ## 15/11/2026 — PNG da cartinha fiel, botões embaixo, WhatsApp Web
 - Botões Baixar/WhatsApp ficam **embaixo** da cartinha (antes cobriam o cartão).
 - O PNG agora é gerado do HTML da própria cartinha (`html-to-image`, MIT, em `assets/html-to-image.js`, carregada só no 1º uso), com animações paradas (`.c-captura`). Se falhar, cai no desenho antigo em canvas (`pngCanvas`). Ícones `<use>` são copiados para dentro do SVG antes da captura.
