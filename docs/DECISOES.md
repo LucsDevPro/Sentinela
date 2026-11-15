@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 15/11/2026 (5) — álbum: botões só no hover; WhatsApp no computador mostra a cartinha pronta
+- Baixar/WhatsApp ficam invisíveis e aparecem ao passar o mouse (ou foco por teclado) na cartinha; em telas de toque ficam sempre à vista.
+- «WhatsApp» no computador só abria o site, sem a imagem (o WhatsApp Web não aceita imagem por link). Agora abre uma janela (`<dialog class="c-envio">`, `carta.js::painelEnvio`) com a imagem pronta e os caminhos que funcionam: **Copiar e abrir o WhatsApp Web** (cola com Ctrl+V), **arrastar** a imagem para a conversa, **Compartilhar…** (se o sistema permitir) e **Baixar**. No celular continua a lista de compartilhar com o arquivo.
+
 ## 15/11/2026 (4) — «Por que esta nota?» na página do agente
 - `agente.html` ganhou, logo abaixo dos indicadores, a conta inteira do mês: 100 pontos iniciais → cada critério (qtd × peso = pontos, com saldo corrido e explicação em português) → ajuste de presença → nota final; resumo (descontos, bônus, presença), **turnos descontados por dia/turno**, **justificados** (chuva, cronograma) e **visitas em sequência suspeita**. Botão «Imprimir este detalhamento» (folha só com ele). Para quando o agente questionar a nota.
 - Dados novos em `agentes_dados.js` (`gerar_agentes.py::ler_evidencias`, campo `ev` por mês): só o que já é público na planilha. **Sem** logradouro/número do imóvel (endereço de morador) e sem motivo de saúde (justificados mostram só o rótulo do cronograma, ex. «Chuva»).

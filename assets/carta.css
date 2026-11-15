@@ -1640,3 +1640,15 @@ body.sem-foto .c-foto img {
   box-shadow: 0 0 0 1.5px #8A5A00, 0 3px 7px rgba(0, 0, 0, 0.45), inset 0 -2px 3px rgba(120, 70, 0, 0.35); }
 .carta .c-selo100 small { display: block; font-size: 9px; line-height: 1; margin-bottom: 1px; }
 
+/* ---- Janela «cartinha pronta» (carta.js: painelEnvio) ---- */
+dialog.c-envio{border:1px solid var(--bd,#cfd8e6);border-radius:14px;padding:0;max-width:min(92vw,420px);background:var(--card,#fff);color:var(--tx,#1a2b42);box-shadow:0 20px 50px rgba(4,14,28,.4)}
+dialog.c-envio::backdrop{background:rgba(5,15,32,.55)}
+dialog.c-envio form{display:flex;flex-direction:column;gap:12px;padding:18px}
+dialog.c-envio h2{margin:0;font-size:1.05rem}
+dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:10px;background:#EEF2F8;cursor:grab}
+.c-envio-dica,.c-envio-st{margin:0;font-size:.85rem;line-height:1.4}.c-envio-st{min-height:1.2em;font-weight:600;color:var(--ok,#15803d)}
+.c-envio-bt{display:flex;flex-wrap:wrap;gap:8px}
+.c-envio-bt button{flex:1 1 auto;padding:9px 12px;border:1px solid var(--bd,#cfd8e6);border-radius:8px;background:transparent;color:inherit;font:600 .85rem "IBM Plex Sans",sans-serif;cursor:pointer}
+.c-envio-bt button.prim{background:#128C7E;border-color:#128C7E;color:#fff;flex-basis:100%}
+.c-envio-bt button:hover,.c-envio-bt button:focus-visible{outline:2px solid #F7B500;outline-offset:1px}
+

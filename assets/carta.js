@@ -355,6 +355,33 @@
     opcoes = opcoes || {};
     return pngDom(a, ms, opcoes).catch(function () { return pngCanvas(a, ms, opcoes); });
   }
+
+  /* Computador: o WhatsApp Web não aceita imagem por link, então a cartinha pronta aparece numa janela com os caminhos que funcionam:
+     copiar + abrir o WhatsApp Web (colar com Ctrl+V), arrastar a própria imagem para a conversa, compartilhar pelo sistema ou baixar. */
+  function painelEnvio(bl, arq, texto, titulo) {
+    var url = URL.createObjectURL(bl), d = document.createElement('dialog'); d.className = 'c-envio';
+    var pode = !!(navigator.canShare && navigator.share && navigator.canShare({ files: [arq] }));
+    d.innerHTML = '<form method="dialog"><h2>' + esc(titulo) + ' — pronta para enviar</h2>' +
+      '<img src="' + url + '" alt="Imagem da cartinha" draggable="true">' +
+      '<p class="c-envio-dica">Clique em <b>Copiar e abrir o WhatsApp Web</b>, escolha a conversa e cole com <b>Ctrl+V</b> (⌘+V no Mac). Também dá para <b>arrastar a imagem</b> acima para dentro da conversa.</p>' +
+      '<p class="c-envio-st" role="status" aria-live="polite"></p>' +
+      '<div class="c-envio-bt"><button type="button" class="prim" data-a="zap">Copiar e abrir o WhatsApp Web</button>' + (pode ? '<button type="button" data-a="share">Compartilhar…</button>' : '') +
+      '<button type="button" data-a="baixar">Baixar imagem</button><button value="fechar">Fechar</button></div></form>';
+    var st = d.querySelector('.c-envio-st'), dica = function (t) { st.textContent = t; };
+    d.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-a]'); if (!b) return;
+      if (b.dataset.a === 'baixar') { var l = document.createElement('a'); l.href = url; l.download = arq.name; document.body.appendChild(l); l.click(); l.remove(); dica('Imagem baixada. Anexe-a na conversa (clipe ➜ Fotos e vídeos).'); }
+      else if (b.dataset.a === 'share') { navigator.share({ files: [arq], title: titulo, text: texto }).then(function () { dica('Pronto!'); }, function (er) { dica(er && er.name === 'AbortError' ? '' : 'Não consegui abrir o compartilhamento. Use copiar ou baixar.'); }); }
+      else {   // o clique é um gesto do usuário: pode copiar para a área de transferência e abrir a aba sem bloqueio
+        window.open('https://web.whatsapp.com/send?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+        var ok = (navigator.clipboard && window.ClipboardItem) ? navigator.clipboard.write([new ClipboardItem({ 'image/png': bl })]).then(function () { return true; }, function () { return false; }) : Promise.resolve(false);
+        ok.then(function (c) { dica(c ? 'Imagem copiada! No WhatsApp Web, abra a conversa e cole com Ctrl+V.' : 'Não consegui copiar. Arraste a imagem para a conversa ou baixe e anexe.'); });
+      }
+    });
+    d.addEventListener('close', function () { URL.revokeObjectURL(url); d.remove(); });
+    document.body.appendChild(d); if (d.showModal) d.showModal(); else d.setAttribute('open', '');
+    return 'Cartinha pronta: use a janela que abriu para enviar pelo WhatsApp.';
+  }
   function nomeArquivo(a, ms) {
     var u = ms[ms.length - 1], t = String(a.nome).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return 'cartinha-' + t + '-' + String(u.mes).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.png';
@@ -365,8 +392,6 @@
     var u = ms[ms.length - 1], nome = opcoes.ocultarNomes ? 'Minha cartinha' : 'Cartinha de ' + a.nome;
     var texto = nome + ' — nota ' + f1(u.pontos) + ' em ' + u.mes + ' (Sentinela, Prefeitura de Ponta Porã)';
     var celular = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
-    // no computador a janela do WhatsApp Web é aberta AGORA (ainda dentro do clique); a imagem demora e, depois dela, o navegador bloquearia o pop-up
-    var janela = (modo === 'whatsapp' && !celular) ? window.open('', '_blank') : null;
     return png(a, ms, opcoes).then(function (bl) {
       var arq = new File([bl], nomeArquivo(a, ms), { type: 'image/png' });
       var baixar = function () { var l = document.createElement('a'); l.href = URL.createObjectURL(bl); l.download = arq.name; document.body.appendChild(l); l.click(); setTimeout(function () { URL.revokeObjectURL(l.href); l.remove(); }, 800); };
@@ -376,14 +401,10 @@
         return navigator.share({ files: [arq], title: nome, text: texto }).then(function () { return 'Pronto! Escolha o WhatsApp na lista que abriu.'; },
           function (e) { return e && e.name === 'AbortError' ? 'Envio cancelado.' : (baixar(), 'Não consegui abrir o compartilhamento; a imagem foi baixada. Anexe no WhatsApp.'); });
       }
-      var url = (celular ? 'https://wa.me/?text=' : 'https://web.whatsapp.com/send?text=') + encodeURIComponent(texto);
-      if (janela) janela.location.href = url; else window.open(url, '_blank', 'noopener');
-      var copiar = (navigator.clipboard && window.ClipboardItem) ? navigator.clipboard.write([new ClipboardItem({ 'image/png': bl })]).then(function () { return true; }, function () { return false; }) : Promise.resolve(false);
-      return copiar.then(function (copiou) {
-        if (copiou) return 'Abri o WhatsApp Web. A imagem está copiada: escolha a conversa e cole com Ctrl+V (⌘+V no Mac).';
-        baixar(); return 'Abri o WhatsApp Web e baixei a imagem. Na conversa, use o clipe (+) e anexe a imagem baixada.';
-      });
-    }, function (e) { if (janela) janela.close(); throw e; });
+      if (!celular) return painelEnvio(bl, arq, texto, nome);   // computador: mostra a cartinha pronta (copiar / arrastar / compartilhar / abrir o WhatsApp Web)
+      window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank', 'noopener'); baixar();
+      return 'Abri o WhatsApp e baixei a imagem. Anexe a imagem baixada na conversa.';
+    });
   }
 
   /* ---- Detalhamento ao passar o mouse / clicar na cartinha ----

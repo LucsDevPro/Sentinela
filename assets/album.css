@@ -154,7 +154,9 @@ body.modo-apresentacao .nome{filter:blur(7px)}
 .bt-acao:hover,.bt-acao:focus-visible{border-color:var(--pri);outline:none}
 .bt-acao .ico,.acoes .ico{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .aviso-img{margin:6px 0 0;padding:8px 12px;border:1px solid var(--bd);border-left:4px solid var(--pri);border-radius:8px;background:var(--card);font-size:.88rem}
-.acoes{position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);z-index:6;display:flex;gap:6px;white-space:nowrap}   /* embaixo da cartinha, não por cima */
+.acoes{position:absolute;left:50%;bottom:-40px;transform:translateX(-50%);z-index:6;display:flex;gap:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}   /* embaixo da cartinha, não por cima; só aparece ao passar o mouse */
+.slot:hover .acoes,.slot:focus-within .acoes{opacity:1;pointer-events:auto}
+@media (hover:none){.acoes{opacity:1;pointer-events:auto}}   /* no toque não existe «passar o mouse» */
 .acoes button{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 11px;border:1px solid var(--bd);border-radius:999px;background:var(--card);color:var(--tx);font:600 .74rem "IBM Plex Sans",sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(4,14,28,.12)}
 .acoes button:hover,.acoes button:focus-visible{border-color:var(--pri);color:var(--pri);outline:none}
 .acoes button:disabled{opacity:.55;cursor:progress}

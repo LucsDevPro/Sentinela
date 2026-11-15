@@ -142,7 +142,12 @@ with sync_playwright() as p:
     al = ctx.new_page(); ea = []; al.on("pageerror", lambda x: ea.append(str(x)))
     al.goto(U + "album.html"); al.wait_for_timeout(1500)
     al.select_option("#fMes", index=1); al.wait_for_timeout(1500)
-    sl = al.locator("#album .slot").nth(1); sl.hover(); al.wait_for_timeout(300)
+    sl = al.locator("#album .slot").nth(1)
+    checar("álbum: botões de compartilhar ficam invisíveis sem o mouse", al.evaluate("getComputedStyle(document.querySelector('#album .acoes')).opacity") == "0")
+    sl.hover()
+    try: al.wait_for_function("getComputedStyle(document.querySelectorAll('#album .acoes')[1]).opacity==='1'", timeout=5000); vis = True
+    except Exception: vis = False
+    checar("álbum: botões aparecem ao passar o mouse na cartinha", vis)
     checar("álbum: cada cartinha tem botões de baixar e WhatsApp", sl.locator("button[data-acao]").count() == 2)
     with al.expect_download(timeout=20000) as dl:
         sl.locator("button[data-acao=baixar]").click()
