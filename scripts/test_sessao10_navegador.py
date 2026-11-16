@@ -110,6 +110,8 @@ with sync_playwright() as p:
     mes = al.input_value("#fMes")
     do_mes = sorted([m for a in D.values() for m in a["meses"] if m["mes"] == mes and m["pontos"] is not None], key=lambda m: -m["pontos"])
     checar("álbum tem uma cartinha por agente do mês", al.locator(".slot").count() == len(do_mes), f"{al.locator('.slot').count()} x {len(do_mes)}")
+    try: al.wait_for_function("(()=>{const n=[...document.querySelectorAll('.slot .c-ovr b')].map(x=>+x.textContent);return n.length>0&&n.every((v,i)=>!i||n[i-1]>=v)})()", timeout=6000)   # a nota termina de contar
+    except Exception: pass
     notas = [int(x) for x in al.eval_on_selector_all(".slot .c-ovr b", "e=>e.map(x=>x.textContent)")]
     checar("cartinhas ordenadas da maior nota para a menor", notas == sorted(notas, reverse=True), str(notas[:8]))
     checar("primeira cartinha é o 1º lugar", al.inner_text(".slot .n").strip() == "1º")
@@ -166,17 +168,23 @@ with sync_playwright() as p:
     checar("fora da carta o fundo é claro; dentro, a cor da carta", px["canto"][0] > 220 and px["centro"][2] < 200, str(px))
     im.evaluate("""() => { window.__chamadas = []; Object.defineProperty(navigator, 'userAgent', { value: 'Mozilla/5.0 (Linux; Android 14) Mobile', configurable: true }); Object.defineProperty(navigator, 'canShare', { value: () => true, configurable: true });
       Object.defineProperty(navigator, 'share', { value: async d => { window.__chamadas.push({ n: d.files.length, tipo: d.files[0].type, nome: d.files[0].name, texto: d.text }); }, configurable: true }); }""")
-    im.click("#bZap"); im.wait_for_timeout(1500)
+    im.click("#bZap")
+    try: im.wait_for_function("window.__chamadas.length >= 1", timeout=8000)
+    except Exception: pass
     ch = im.evaluate("window.__chamadas")
     checar("WhatsApp: compartilha o arquivo PNG pelo celular", len(ch) == 1 and ch[0]["n"] == 1 and ch[0]["tipo"] == "image/png", str(ch))
     checar("texto do envio traz nome, nota e mês", alvo["nome"] in ch[0]["texto"] and "nota" in ch[0]["texto"] and ult["mes"] in ch[0]["texto"], ch[0]["texto"])
-    im.check("#apres"); im.click("#bZap"); im.wait_for_timeout(1500)
+    im.check("#apres"); im.click("#bZap")
+    try: im.wait_for_function("window.__chamadas.length >= 2", timeout=8000)
+    except Exception: pass
     ch = im.evaluate("window.__chamadas")
     checar("modo apresentação: texto do envio não leva o nome", len(ch) == 2 and alvo["nome"] not in ch[1]["texto"], str(ch[-1]))
     im.evaluate("() => { Object.defineProperty(navigator, 'canShare', { value: undefined, configurable: true }); Object.defineProperty(navigator, 'userAgent', { value: 'Mozilla/5.0 (Windows NT 10.0) Chrome/120', configurable: true }); }")
     im.uncheck("#apres")
     ctx.route("https://web.whatsapp.com/**", lambda r: r.fulfill(status=200, content_type="text/html", body="ok"))
-    im.click("#bZap"); im.wait_for_timeout(1800)
+    im.click("#bZap")
+    try: im.wait_for_selector("dialog.c-envio[open] img", timeout=8000); im.wait_for_timeout(300)
+    except Exception: pass
     checar("computador: mostra a cartinha pronta numa janela, com a imagem", im.locator("dialog.c-envio[open] img").count() == 1 and im.evaluate("document.querySelector('dialog.c-envio img').naturalWidth") > 300)
     with im.expect_popup() as pop:
         im.click("dialog.c-envio button[data-a=zap]")

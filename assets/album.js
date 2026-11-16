@@ -49,7 +49,7 @@ else {
   { const qs = new URLSearchParams(location.search), e0 = qs.get('eq'), n0 = qs.get('nivel');
     if (e0 && eqs.includes(e0)) $('fEq').value = e0; if (n0) $('fNivel').value = n0; if (qs.get('q')) $('fBusca').value = qs.get('q'); }
   // ---- Compartilhar: baixar a cartinha como imagem ou mandar pelo WhatsApp (a imagem é gerada por Carta.enviar, a mesma de agente.html)
-  let visAtual = [];
+  let visAtual = [], mesAnim = null; const confeteVisto = new Set();
   const IC_BAIXAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>';
   const IC_ZAP = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-4l-5 4v-4H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z"/></svg>';
   const acoes = i => `<span class="acoes"><button type="button" data-acao="baixar" data-i="${i}" title="Baixar a cartinha como imagem" aria-label="Baixar a cartinha como imagem">${IC_BAIXAR}<span>Baixar</span></button><button type="button" data-acao="whatsapp" data-i="${i}" title="Enviar pelo WhatsApp (no computador abre o WhatsApp Web)" aria-label="Enviar a cartinha pelo WhatsApp">${IC_ZAP}<span>WhatsApp</span></button></span>`;
@@ -95,9 +95,11 @@ else {
       const q = v ? base.filter(l => l.nivel === v).length : base.length;
       return (v && !q && v !== niv) ? '' : `<button type="button" class="nv" data-nivel="${esc(v)}" aria-pressed="${v === niv}" style="--cor:${COR_NIVEL[v] || 'var(--mut)'}"><i></i>${esc(rot)} <b>${q}</b></button>`;
     }).join('');
+    const reduz = !!(window.CartaFX && CartaFX.reduz), antes = new Map();   // posições de antes, para as cartas deslizarem até o novo lugar
+    if (!reduz && mesAnim === mes) document.querySelectorAll('#podio .slot[data-k], #album .slot[data-k]').forEach(el => antes.set(el.dataset.k, el.getBoundingClientRect()));
     const slot = (l, cls) => {
       const qAg = (/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)) + '&mes=' + encodeURIComponent(mes);
-      return `<a class="slot ${cls || ''}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)} · ${esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}${acoes(vis.indexOf(l))}</a>`;
+      return `<a class="slot ${cls || ''}" data-k="${esc(l.x.k)}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)} · ${esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}${acoes(vis.indexOf(l))}</a>`;
     };
     // Pódio: só sem filtros (com filtro, o top 3 do mês pode nem estar na lista). No HTML a ordem é 1º, 2º, 3º; o CSS põe o 1º no meio.
     const pod = !eq && !bu && !niv && vis.length >= 3 ? vis.slice(0, 3) : [];
@@ -105,6 +107,19 @@ else {
     $('podio').innerHTML = pod.map((l, i) => slot(l, 'p' + (i + 1))).join('');
     [['p1', '650ms'], ['p2', '200ms'], ['p3', '0ms']].forEach(([c, t]) => $('podio').querySelectorAll('.slot.' + c + ' .carta').forEach(el => el.style.setProperty('--atraso', t)));
     $('album').innerHTML = vis.slice(pod.length).map(l => slot(l)).join('');
+    if (antes.size) document.querySelectorAll('#podio .slot[data-k], #album .slot[data-k]').forEach(el => {
+      const o = antes.get(el.dataset.k); if (!o || !el.animate) return;
+      const c = el.querySelector('.carta'); if (c) { c.setAttribute('data-visto', '1'); const b = c.querySelector('.c-ovr b'); if (b) b.setAttribute('data-contou', '1'); }   // quem já estava na tela não entra de novo
+      const r = el.getBoundingClientRect(), dx = o.left - r.left, dy = o.top - r.top;
+      if (Math.abs(dx) + Math.abs(dy) > 2) el.animate({ translate: [dx + 'px ' + dy + 'px', '0px 0px'] }, { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    });
+    if (!reduz && pod.length && mesAnim !== mes && window.CartaFX) {   // confete no pódio, uma vez por mês neste aparelho
+      let jaViu = false, chave = 'sentinela:confete:' + mes;
+      try { jaViu = !!localStorage.getItem(chave); if (!jaViu) localStorage.setItem(chave, '1'); } catch (e) { jaViu = confeteVisto.has(mes); }
+      confeteVisto.add(mes);
+      if (!jaViu) setTimeout(() => { const p = $('podio'); if (p && !p.hidden) CartaFX.confete(p, 70); }, 900);
+    }
+    mesAnim = mes;
     $('resumo').textContent = vis.length ? (doAno ? `${vis.length} cartinha(s) de ${lista.length}: média de todos os meses (só quem tem ${MIN_MESES_ANO} meses ou mais).` : `${vis.length} cartinha(s) de ${lista.length} em ${mes}.`) : 'Nenhuma cartinha com esses filtros.';
   };
   ['fMes', 'fEq', 'fNivel'].forEach(i => $(i).onchange = desenhar); $('fBusca').oninput = desenhar;

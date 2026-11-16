@@ -1652,3 +1652,44 @@ dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:1
 .c-envio-bt button.prim{background:#128C7E;border-color:#128C7E;color:#fff;flex-basis:100%}
 .c-envio-bt button:hover,.c-envio-bt button:focus-visible{outline:2px solid #F7B500;outline-offset:1px}
 
+
+/* ======================================================================
+   EFEITOS EXTRAS (assets/carta_fx.js) — esqueleto da foto, aura por nível, revelação e confete.
+   Tudo só com movimento permitido; na captura do PNG e na impressão nada disso aparece.
+   ====================================================================== */
+.c-foto.carregando { position: relative; }
+.c-foto.carregando::after { content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: linear-gradient(100deg, rgba(255,255,255,0) 20%, rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 80%) 0 0 / 220% 100%, rgba(110,110,110,.3); }
+@keyframes c-esqueleto { from { background-position: 120% 0, 0 0; } to { background-position: -120% 0, 0 0; } }
+@media (prefers-reduced-motion: no-preference) { .c-foto.carregando::after { animation: c-esqueleto 1.15s linear infinite; } }
+
+/* aura atrás da cartinha (o contorno recorta sombra, então ela mora no conjunto, atrás da carta) */
+.c-conj.b-100::before, .c-conj.b-top::before, .c-conj.b-90::before { content: ""; position: absolute; inset: -22px -26px; z-index: 0; pointer-events: none; border-radius: 50%; opacity: var(--aura, .55); }
+.c-conj.b-100::before { background: radial-gradient(closest-side, rgba(255,200,70,.75), rgba(255,170,40,.25) 60%, transparent 80%); }
+.c-conj.b-top::before { background: radial-gradient(closest-side, rgba(255,90,200,.65), rgba(70,220,255,.28) 62%, transparent 80%); }
+.c-conj.b-90::before { background: radial-gradient(closest-side, rgba(255,205,80,.5), transparent 76%); --aura: .4; }
+@keyframes c-aura { from { transform: scale(.94); opacity: calc(var(--aura, .55) * .75); } to { transform: scale(1.06); opacity: var(--aura, .55); } }
+@keyframes c-selo { 0%, 100% { transform: scale(1); filter: none; } 50% { transform: scale(1.09); filter: drop-shadow(0 0 5px rgba(255,220,100,.95)); } }
+@keyframes c-metal { 0% { background-position: 170% 0; } 60%, 100% { background-position: -70% 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .c-conj:has(.carta.vivo).b-100::before, .c-conj:has(.carta.vivo).b-top::before, .c-conj:has(.carta.vivo).b-90::before { animation: c-aura 3.4s ease-in-out infinite alternate; }
+  .carta.vivo .c-selo100 { animation: c-selo 2.4s ease-in-out infinite; }
+  /* prata, bronze e aço: um reflexo de metal passa devagar (ferro não tem efeito, de propósito) */
+  .carta.vivo.t-prata > .c-brilho::before, .carta.vivo.t-bronze > .c-brilho::before, .carta.vivo.t-aco > .c-brilho::before { animation: c-varre 11s ease-in-out infinite; animation-delay: var(--atraso, 0ms); }
+}
+
+/* revelação (carta_fx.js: CartaFX.revelar): capa do pacote que vira, flash e partículas */
+.c-pacote { position: absolute; inset: 0; z-index: 8; margin: 0; pointer-events: none; display: grid; place-items: center; text-align: center;
+  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
+  background: linear-gradient(155deg, #16365F 0%, #0B2040 55%, #07142B 100%); color: #F7B500; font: 700 22px "Barlow Semi Condensed", system-ui, sans-serif; letter-spacing: .22em;
+  box-shadow: inset 0 0 0 3px rgba(247,181,0,.55), inset 0 0 40px rgba(43,168,232,.25); }
+.c-pacote::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.25) 50%, transparent 65%); }
+.c-pacote small { display: block; font-size: 11px; letter-spacing: .3em; color: #9DB2D0; margin-top: 6px; }
+.c-particulas { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 9; pointer-events: none; overflow: visible; }
+.c-particulas i { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 2px; }
+.c-confete { position: absolute; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
+.c-confete i { position: absolute; top: -14px; width: 8px; height: 13px; border-radius: 2px; }
+.c-captura .c-conj::before, .c-captura .c-pacote, .c-captura .c-particulas { display: none !important; }
+.c-captura .c-foto::after { display: none !important; }
+@media print { .c-conj::before, .c-foto::after, .c-confete, .c-pacote, .c-particulas { display: none !important; } }
+.c-conj.c-oculta > :not(.c-pacote) { visibility: hidden; }

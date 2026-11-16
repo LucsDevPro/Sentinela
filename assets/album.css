@@ -187,3 +187,11 @@ body.modo-apresentacao .nome{filter:blur(7px)}
 .bt-acao:disabled{opacity:.55;cursor:progress}
 @media print{#bZip,#bLimpar{display:none!important}}
 
+
+/* Tema escuro: as auras e o pódio ganham mais luz para os efeitos aparecerem sobre o fundo azul-escuro */
+:root[data-theme="dark"] .c-conj.b-100,:root[data-theme="dark"] .c-conj.b-top{--aura:.9}
+:root[data-theme="dark"] .c-conj.b-90{--aura:.6}
+:root[data-theme="dark"] .podio{background:radial-gradient(ellipse 70% 60% at 50% 100%,rgba(247,181,0,.2),transparent 70%),radial-gradient(ellipse 50% 40% at 50% 0,rgba(43,168,232,.14),transparent 70%),var(--card)}
+:root[data-theme="dark"] .slot:hover .carta,:root[data-theme="dark"] .slot:focus-visible .carta{filter:brightness(1.06)}
+@media (prefers-reduced-motion:reduce){.slot{transition:none}}
+.podio[hidden]{display:none}

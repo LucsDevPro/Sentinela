@@ -1,5 +1,15 @@
 # Registro de decisões (mais recente primeiro)
 
+## 15/11/2026 (8) — efeitos extras nas cartinhas
+- Já existiam (carta_fx.js): inclinação 3D e brilho que seguem o ponteiro, entrada em cascata, nota contando, coroa/raios no pódio. Foram **somados**:
+- **Revelação na tela de reunião** (`CartaFX.revelar`): a cartinha chega num pacote «SENTINELA» que treme, vira e solta partículas (mais para lendária/destaque/ouro). Dura ~1,3 s.
+- **Aura por nível** atrás da cartinha (lendária dourada, destaque rosa/ciano, ouro discreta) e reflexo lento de metal em prata/bronze/aço; ferro fica sem efeito de propósito; selo «100» da ELITE pulsa.
+- **Esqueleto da foto** (shimmer cinza) até a imagem carregar.
+- **Álbum:** ao filtrar, as cartinhas que ficam deslizam até o novo lugar (WAAPI, propriedade `translate`) e não «entram» de novo; **confete** no pódio na primeira abertura de cada mês neste aparelho (localStorage).
+- **Tema escuro:** auras e pódio com mais luz. Corrigido o pódio vazio que aparecia com filtro (`[hidden]` perdia para `display:flex`).
+- Regras: tudo só sem «reduzir movimento»; aura, pacote, partículas, esqueleto e confete somem na captura do PNG (`.c-captura`) e na impressão; aura sem `filter: blur` (pesava em 100 cartas).
+- Não feito de propósito: item 4 (tendência/mini gráfico na carta).
+
 ## 15/11/2026 (7) — álbum: baixar todas (.zip), contagem por equipe e filtros na URL
 - Busca por nome e filtro de equipe **já existiam**; foram melhorados: equipes mostram quantas cartinhas têm («Equipe 3 (10)»), botão «Limpar filtros» e os filtros (`eq`, `nivel`, `q`, `mes`) vão para a URL, então o link filtrado pode ser enviado.
 - «Baixar todas (N) .zip»: gera o PNG de cada cartinha filtrada com o mesmo `Carta.png` da cartinha (modo `rapido`: uma passada só, por lote) e empacota em `assets/zip.js` (ZIP sem compressão, PNG já é comprimido; nomes em UTF-8). Uma pasta por equipe, para a coordenação repassar. Com «Modo apresentação» os nomes saem do arquivo (`NN-agente-N.png`).

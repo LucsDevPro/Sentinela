@@ -54,7 +54,7 @@ checar("transparencia.html só redireciona para a aba do álbum", "album.html#co
 cj = ler("assets/carta.js")
 checar("carta.js gera as camadas de brilho e faíscas e o --v dos atributos", "c-brilho" in cj and "c-glitter" in cj and "--v:" in cj)
 css = ler("assets/carta.css")
-bloco = css[css.index("EFEITOS VIVOS"):]
+bloco = css[css.index("EFEITOS VIVOS"):css.index("EFEITOS EXTRAS")]
 checar("efeitos animados só dentro de prefers-reduced-motion: no-preference", bloco.count("@media (prefers-reduced-motion: no-preference)") == 1 and "animation:" not in bloco[:bloco.index("@media (prefers-reduced-motion: no-preference)")].replace("animation: none", "").split("@keyframes")[0])
 checar("há versão para menos movimento", "@media (prefers-reduced-motion: reduce)" in bloco)
 checar("efeitos não vão para o papel", "@media print" in bloco and ".c-brilho" in bloco[bloco.index("@media print"):])

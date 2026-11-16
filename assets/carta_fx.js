@@ -43,7 +43,65 @@
     });
   }
 
+
+  /* ---- esqueleto da foto: shimmer cinza até a imagem carregar ---- */
+  function esqueleto(raiz) {
+    Array.prototype.forEach.call((raiz || document).querySelectorAll('.c-foto.tem-foto:not([data-esq])'), function (f) {
+      f.setAttribute('data-esq', '');
+      var im = f.querySelector('img');
+      if (!im || im.complete || REDUZ) return;
+      f.classList.add('carregando');
+      var fim = function () { f.classList.remove('carregando'); };
+      im.addEventListener('load', fim, { once: true }); im.addEventListener('error', fim, { once: true });
+    });
+  }
+
+  /* ---- partículas e confete (WAAPI: nada fica no DOM depois) ---- */
+  var COR = { 'b-100': ['#FFD25A', '#FFF6C8', '#F0B020'], 'b-top': ['#FF63CE', '#40E0FF', '#FFFFFF'], 'b-90': ['#FFD25A', '#FFF3B0'] };
+  function particulas(ancora, borda, n) {
+    var cores = COR[borda]; if (!cores || REDUZ || !ancora.animate) return;
+    var wrap = document.createElement('div'); wrap.className = 'c-particulas';
+    for (var i = 0; i < n; i++) {
+      var p = document.createElement('i'), ang = Math.random() * Math.PI * 2, d = 150 + Math.random() * 190;
+      p.style.background = cores[i % cores.length]; wrap.appendChild(p);
+      p.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: 'translate(' + Math.cos(ang) * d + 'px,' + Math.sin(ang) * d + 'px) scale(.2) rotate(' + (Math.random() * 540) + 'deg)', opacity: 0 }],
+        { duration: 900 + Math.random() * 700, easing: 'cubic-bezier(.1,.7,.3,1)', fill: 'forwards' });
+    }
+    ancora.appendChild(wrap); setTimeout(function () { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 1800);
+  }
+  function confete(alvo, n) {
+    if (REDUZ || !alvo || !alvo.animate) return;
+    var cores = ['#F7B500', '#FF63CE', '#40E0FF', '#FFFFFF', '#19B8A3'], wrap = document.createElement('div'); wrap.className = 'c-confete';
+    for (var i = 0; i < (n || 60); i++) {
+      var p = document.createElement('i'), x = Math.random() * 100, dx = (Math.random() - .5) * 120, t = 2000 + Math.random() * 1800;
+      p.style.left = x + '%'; p.style.background = cores[i % cores.length]; wrap.appendChild(p);
+      p.animate([{ transform: 'translate(0,0) rotate(0)', opacity: 1 }, { transform: 'translate(' + dx + 'px,' + (alvo.clientHeight + 30) + 'px) rotate(' + (360 + Math.random() * 540) + 'deg)', opacity: .9 }],
+        { duration: t, delay: Math.random() * 500, easing: 'cubic-bezier(.3,.1,.6,1)', fill: 'both' });
+    }
+    alvo.appendChild(wrap); setTimeout(function () { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 4600);
+  }
+
+  /* ---- revelação (modo reunião): a carta chega num pacote que treme, vira e solta um clarão ---- */
+  function revelar(carta) {
+    if (REDUZ || !carta || !carta.animate) return;
+    var conj = carta.closest('.c-conj') || carta, pai = conj.parentNode, borda = (carta.className.match(/b-(?:\d+|top)/) || [''])[0];
+    var capa = document.createElement('div'); capa.className = 'c-pacote'; capa.innerHTML = '<div>SENTINELA<small>CARTINHA</small></div>';
+    conj.classList.add('c-oculta'); conj.appendChild(capa);   // a capa mora dentro do conjunto: herda a escala e cobre só a carta
+    var persp = 'perspective(900px) ';
+    var treme = capa.animate([{ transform: persp + 'rotate(0)' }, { transform: persp + 'rotate(-2.5deg)' }, { transform: persp + 'rotate(2.5deg)' }, { transform: persp + 'rotate(-2deg)' }, { transform: persp + 'rotate(0)' }], { duration: 520, easing: 'ease-in-out' });
+    treme.onfinish = function () {
+      var vira = capa.animate([{ transform: persp + 'rotateY(0)' }, { transform: persp + 'rotateY(90deg)' }], { duration: 170, easing: 'ease-in', fill: 'forwards' });
+      vira.onfinish = function () {
+        if (capa.parentNode) capa.parentNode.removeChild(capa);
+        conj.classList.remove('c-oculta');
+        carta.animate([{ transform: persp + 'rotateY(-90deg)', filter: 'brightness(2.4)' }, { transform: persp + 'rotateY(0)', filter: 'brightness(1.6)', offset: .6 }, { transform: persp + 'rotateY(0)', filter: 'brightness(1)' }], { duration: 520, easing: 'cubic-bezier(.2,.9,.3,1)' });
+        particulas(pai, borda, borda === 'b-100' || borda === 'b-top' ? 34 : 18);
+      };
+    };
+  }
+
   function ligar(raiz) {
+    esqueleto(raiz);
     var lista = (raiz || document).querySelectorAll('.carta:not([data-fx])');
     Array.prototype.forEach.call(lista, function (c) {
       c.setAttribute('data-fx', '');
@@ -105,5 +163,5 @@
     pendente = true;
     requestAnimationFrame(function () { pendente = false; ligar(); });
   }).observe(document.documentElement, { childList: true, subtree: true });
-  window.CartaFX = { ligar: ligar };
+  window.CartaFX = { ligar: ligar, revelar: revelar, confete: confete, reduz: REDUZ };
 })();

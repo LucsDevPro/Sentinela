@@ -162,6 +162,7 @@ function slidesDasCartas(){
         carta.setAttribute('aria-label','Cartinha do Agente '+(i+1)+': nota '+br(u.pontos,1));
       }
       ajustarCarta(el);
+      if(window.CartaFX&&carta)CartaFX.revelar(carta);   // o pacote vira e a cartinha aparece
     }});
   });
   return out;
