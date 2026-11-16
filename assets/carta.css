@@ -1654,7 +1654,7 @@ dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:1
 
 
 /* ======================================================================
-   EFEITOS EXTRAS (assets/carta_fx.js) — esqueleto da foto, aura por nível, revelação e confete.
+   EFEITOS EXTRAS (assets/carta_fx.js) — esqueleto da foto, aura por nível, revelação e raios.
    Tudo só com movimento permitido; na captura do PNG e na impressão nada disso aparece.
    ====================================================================== */
 .c-foto.carregando { position: relative; }
@@ -1687,11 +1687,16 @@ dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:1
 .c-pacote small { display: block; font-size: 11px; letter-spacing: .3em; color: #9DB2D0; margin-top: 6px; }
 .c-particulas { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 9; pointer-events: none; overflow: visible; }
 .c-particulas i { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 2px; }
-.c-confete { position: absolute; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
-.c-confete i { position: absolute; top: -14px; width: 8px; height: 13px; border-radius: 2px; }
+.c-raios { position: absolute; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; }
+.c-raio { position: absolute; inset: 0; opacity: 0; mix-blend-mode: screen; filter: drop-shadow(0 0 6px var(--rc, #9FD4FF)) drop-shadow(0 0 22px var(--rc, #9FD4FF)); }
+.c-raio path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.c-raio .g { stroke: var(--rc, #9FD4FF); stroke-width: 11; opacity: .55; }
+.c-raio .n { stroke: #fff; stroke-width: 3.4; }
+.c-raio .r { stroke: #fff; stroke-width: 1.7; opacity: .9; }
+.c-raio-flash { position: absolute; inset: 0; opacity: 0; background: radial-gradient(circle at 50% 25%, rgba(215,230,255,.6), rgba(150,180,255,.14) 60%, transparent 82%); }
 .c-captura .c-conj::before, .c-captura .c-pacote, .c-captura .c-particulas { display: none !important; }
 .c-captura .c-foto::after { display: none !important; }
-@media print { .c-conj::before, .c-foto::after, .c-confete, .c-pacote, .c-particulas { display: none !important; } }
+@media print { .c-conj::before, .c-foto::after, .c-raios, .c-pacote, .c-particulas { display: none !important; } }
 .c-conj.c-oculta > :not(.c-pacote) { visibility: hidden; }
 
 dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#050F20;object-fit:contain}

@@ -1,6 +1,6 @@
 /* Sons da abertura de pacote (reunião), sintetizados na hora com Web Audio: não há arquivo de áudio nenhum.
    Começa DESLIGADO (a pessoa liga no botão «Som» do pacote ou na tecla S); a escolha fica guardada neste aparelho.
-   Som.tocar('rasgar' | 'giro' | 'suspense' | 'ding' | 'bronze' | 'prata' | 'ouro' | 'fanfarra' | 'confete', duracaoMs?) */
+   Som.tocar('rasgar' | 'giro' | 'suspense' | 'ding' | 'bronze' | 'prata' | 'ouro' | 'fanfarra' | 'trovao', duracaoMs?) */
 (function () {
   'use strict';
   var KEY = 'sentinela:som', ctx = null, mestre = null, on = false;
@@ -54,7 +54,10 @@
       [['C5', 0], ['E5', 0.16], ['G5', 0.32], ['C6', 0.5]].forEach(function (n) { tom('square', NOTA[n[0]], 0, t + n[1], 0.45, 0.16); tom('triangle', NOTA[n[0]] / 2, 0, t + n[1], 0.45, 0.2); });
       acorde(t + 0.75, ['C5', 'E5', 'G5', 'C6'], 'sawtooth', 1.6, 0.12); sopro(t + 0.75, 1.2, 'highpass', 3000, 9000, 0.3);
     },
-    confete: function (t) { for (var i = 0; i < 7; i++) sopro(t + i * 0.06, 0.18, 'highpass', 5000 + i * 300, 9000, 0.12); }
+    trovao: function (t) {   // estalo seco do raio + trovoada grave que rola
+      sopro(t, 0.22, 'highpass', 2500, 9000, 0.6); tom('sine', 70, 30, t, 0.5, 0.7);
+      sopro(t + 0.12, 1.9, 'lowpass', 520, 70, 0.75); sopro(t + 0.7, 1.4, 'lowpass', 380, 60, 0.5); tom('sine', 48, 28, t + 0.2, 1.5, 0.5);
+    }
   };
 
   window.Som = {

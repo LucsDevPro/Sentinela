@@ -206,10 +206,10 @@ with sync_playwright() as p:
     checar("álbum: «Limpar filtros» zera equipe e busca", zp.evaluate("document.getElementById('fEq').value===''&&document.getElementById('fBusca').value===''&&document.getElementById('bLimpar').hidden"))
     checar("álbum: zip sem erros de script", not ez, str(ez)); zp.close()
 
-    # ---- efeitos extras: confete no pódio, cartas deslizam ao filtrar, aura por nível, pacote na reunião, tudo some com «reduzir movimento»
+    # ---- efeitos extras: raios no pódio, cartas deslizam ao filtrar, aura por nível, pacote na reunião, tudo some com «reduzir movimento»
     fx = ctx.new_page(); efx = []; fx.on("pageerror", lambda x: efx.append(str(x)))
     fx.goto(U + "album.html"); fx.evaluate("localStorage.clear()"); fx.reload(); fx.wait_for_timeout(1500)
-    checar("efeitos: confete cai no pódio na primeira vez do mês", fx.evaluate("document.querySelectorAll('#podio .c-confete').length") == 1)
+    checar("efeitos: raios caem no pódio na primeira vez do mês", fx.evaluate("document.querySelectorAll('#podio .c-raios .c-raio').length") >= 3)
     checar("efeitos: lendária tem aura atrás da carta", fx.evaluate("getComputedStyle(document.querySelector('.c-conj.b-100'),'::before').content") not in ("none", "normal"))
     fx.select_option("#fEq", "Equipe 3"); fx.wait_for_timeout(120)
     checar("efeitos: ao filtrar, as cartas que ficam deslizam até o novo lugar", fx.evaluate("document.getAnimations().filter(a=>a.effect.getKeyframes()[0].translate).length") > 0)
@@ -221,7 +221,7 @@ with sync_playwright() as p:
     checar("efeitos: sem erros de script", not efx, str(efx)); fx.close()
     ctx_r = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 900}); rp = ctx_r.new_page()
     rp.goto(U + "album.html"); rp.wait_for_timeout(1200)
-    checar("efeitos: com «reduzir movimento» não há confete nem pacote", rp.locator(".c-confete").count() == 0)
+    checar("efeitos: com «reduzir movimento» não há raios nem pacote", rp.locator(".c-raios").count() == 0)
     rp.goto(U + "projecao.html#cartinhas"); rp.wait_for_timeout(300); rp.keyboard.press("ArrowRight"); rp.wait_for_timeout(200)
     checar("efeitos: com «reduzir movimento» a reunião mostra a carta direto", rp.locator("#palco .c-pacote").count() == 0 and rp.locator("#palco .carta").count() == 1)
     ctx_r.close()
@@ -282,6 +282,19 @@ with sync_playwright() as p:
     pz.click(".pk-barra [data-b=auto]"); pz.wait_for_function("document.querySelector('.pk-fim')", timeout=30000)
     checar("pacote: modo automático revela tudo sozinho até o fim", pz.locator(".pk-fim").count() == 1)
     checar("pacote: sem erros (som/automático/pular)", not epz, str(epz)); ctr2.close()
+    # com animação de verdade: pula até o 5º e vai até o 1º lugar; os raios caem no pódio e nada trava
+    ctx3 = nav.new_context(viewport={"width": 1280, "height": 800}); an = ctx3.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
+    an.goto(U + "projecao.html#pacote"); an.wait_for_timeout(600); an.select_option(".pk-barra select[data-b=pular]", "5")
+    an.keyboard.press("Enter"); an.wait_for_function("getComputedStyle(document.querySelector('.pk-pacote')).display==='none'", timeout=20000)
+    visto_raio = False; rank = ""
+    for _ in range(9):
+        an.keyboard.press("Enter"); an.wait_for_timeout(400)
+        try: an.wait_for_function("(()=>{const i=document.querySelector('.pk-info');return i&&i.style.opacity==='1'&&document.querySelector('.pk-cont').textContent.indexOf('faltam')<0})()", timeout=25000)
+        except Exception: break
+        rank = an.evaluate("document.querySelector('.pk-rank').textContent"); visto_raio = visto_raio or an.locator(".c-raio").count() > 0
+        if rank == "1º": break
+        an.wait_for_timeout(1500)   # deixa a revelação terminar de vez (o Enter durante ela é ignorado)
+    checar("pacote (com animação): chega ao 1º lugar sem travar e os raios caem no pódio", rank == "1º" and visto_raio and not ean, f"{rank} raio={visto_raio} {ean}"); ctx3.close()
     vd = ctx.new_page(); evd = []; vd.on("pageerror", lambda x: evd.append(str(x)))
     vd.goto(U + "album.html"); vd.wait_for_timeout(1500)
     checar("álbum: cada cartinha tem o botão «Vídeo»", vd.locator("button[data-acao=video]").count() >= 3)

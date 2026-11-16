@@ -95,7 +95,7 @@
       if (REDUZ || !palco.animate) return; var k = []; for (var i = 0; i < 9; i++) k.push({ transform: 'translate(' + ((Math.random() - 0.5) * forca) + 'px,' + ((Math.random() - 0.5) * forca) + 'px)' }); k.push({ transform: 'none' });
       palco.animate(k, { duration: 520, easing: 'ease-out' });
     }
-    function confete(n) { if (window.CartaFX && CartaFX.confete) CartaFX.confete(palco, n); }
+    function relampagos(n, cor) { if (window.CartaFX && CartaFX.raios) CartaFX.raios(palco, n, cor); }
 
     // ---- 1) abrir: o pacote treme, o topo é rasgado, a luz sai e as cartas voam girando até a fileira ----
     async function abrir() {
@@ -127,14 +127,14 @@
 
     // ---- 2) revelar uma: ela sai da fileira, gira até o centro, vira e aparece com efeitos proporcionais à posição ----
     var foco = null;
-    function eBig() { return Math.max(0.5, Math.min(1.75, ((H - folga - 70) * 0.94) / 392, (W * 0.4) / 272)); }
+    function eBig() { return Math.max(0.5, Math.min(1.75, ((H - folga - 118) * 0.94) / 392, (W * 0.4) / 272)); }
     async function revelar() {
       ocupado = true; atual++;
       var idx = ordem[atual], it = itens[idx], sl = slots[idx], rk = it.rank, top = rk <= 3 ? rk : 0, cores = NIVEL[top];
       texto('', 'Revelando ' + (atual + 1) + ' de ' + N + ' · faltam ' + (N - atual - 1));
       palco.setAttribute('data-nv', top ? 'r' + top : 'n');
       var eb = eBig();
-      foco = div('pk-foco'); foco.style.paddingBottom = folga + 'px'; foco.style.paddingTop = (top ? 70 : 36) + 'px';
+      foco = div('pk-foco'); foco.style.paddingBottom = folga + 'px'; foco.style.paddingTop = (top ? 118 : 44) + 'px';
       var gr = div('pk-grande'); gr.style.setProperty('--e', eb.toFixed(3));
       var info = div('pk-info', '<div class="pk-rank">' + rk + 'º</div><div class="pk-nome">' + esc(it.rot) + '</div><div class="pk-eq">' + esc(it.eq || '') + '</div><div class="pk-nota"><b>' + esc(it.nota) + '</b><span>nota do mês</span></div>' + (cfg.video ? '<button type="button" class="pk-video">🎬 Vídeo de 5 s para o WhatsApp</button><div class="pk-vst" role="status" aria-live="polite"></div>' : ''));
       var bv = info.querySelector('.pk-video');
@@ -163,14 +163,14 @@
       if (carta) carta.setAttribute('data-visto', '1'); if (nb) nb.setAttribute('data-contou', '1');
       if (it.prep) it.prep(gr, it);
       gr.style.opacity = '1';
-      if (window.Som) { Som.tocar(top ? ['', 'ouro', 'prata', 'bronze'][top] : 'ding'); if (top) Som.tocar('confete'); }
+      if (window.Som) { Som.tocar(top ? ['', 'ouro', 'prata', 'bronze'][top] : 'ding'); if (top) Som.tocar('trovao'); }
       flash(top === 1 ? '#FFF2B8' : top === 2 ? '#DDEBFF' : top === 3 ? '#FFD9B0' : '#FFFFFF', top ? 0.95 : 0.55);
       if (top) treme(top === 1 ? 34 : top === 2 ? 22 : 14);
       var n0 = top ? [0, 3, 3, 2][4 - top] : 1;
       onda(gr, cores[0], 0); if (top) { onda(gr, cores[1], 160); onda(gr, cores[0], 320); }
       if (top === 1) { onda(gr, cores[3], 480); onda(gr, '#fff', 640); }
       chuva(gr, cores, top === 1 ? 96 : top === 2 ? 64 : top === 3 ? 48 : 26, top ? 260 + (4 - top) * 40 : 190);
-      if (top) { palco.classList.add('destaque'); confete(top === 1 ? 180 : top === 2 ? 110 : 70); }
+      if (top) { palco.classList.add('destaque'); relampagos(top === 1 ? 9 : top === 2 ? 6 : 4, top === 1 ? '#FFE08A' : top === 2 ? '#BFE0FF' : '#FFB070'); }
       var vira = anima(gr, [{ transform: 'perspective(1000px) rotateY(-90deg) scale(.9)', filter: 'brightness(2.8)' }, { transform: 'perspective(1000px) rotateY(0) scale(1.06)', filter: 'brightness(1.7)', offset: 0.6 }, { transform: 'perspective(1000px) rotateY(0) scale(1)', filter: 'brightness(1)' }], 700, { easing: 'cubic-bezier(.2,.9,.3,1)' }, null);
       await esp(250);
       anima(info, [{ opacity: 0, transform: 'translateX(40px)' }, { opacity: 1, transform: 'none' }], 520, null, { opacity: '1' });
@@ -202,7 +202,7 @@
       ocupado = true; fase = 'fim'; palco.setAttribute('data-nv', 'n');
       var t = div('pk-fim', 'Parabéns a todos que chegaram ao 100! 🎉'); palco.appendChild(t);
       anima(t, [{ opacity: 0, transform: 'translate(-50%,-30px) scale(.8)' }, { opacity: 1, transform: 'translate(-50%,0) scale(1)' }], 700, null, { opacity: '1' });
-      flash('#FFF2B8', 0.5); confete(160); if (window.Som) Som.tocar('fanfarra'); onda(t, NIVEL[1][0], 0);
+      flash('#FFF2B8', 0.5); relampagos(8, '#FFE08A'); if (window.Som) { Som.tocar('fanfarra'); Som.tocar('trovao'); } onda(t, NIVEL[1][0], 0);
       texto('R: ver de novo', N + ' cartinhas 100'); ocupado = false;
     }
 

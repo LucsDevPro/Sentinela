@@ -1,16 +1,16 @@
 /* Vídeo de 5 segundos da cartinha animada, para mandar no WhatsApp (principalmente top 3).
    A cartinha é a MESMA imagem do botão «Baixar» (Carta.png, com fundo transparente); aqui só se anima em volta dela num <canvas> 720×1280 (vertical)
-   e se grava com MediaRecorder: pacote que gira e se revela, clarão, ondas, partículas, confete, brilho passando, estrelinhas, faixa «3º LUGAR» e o nome.
+   e se grava com MediaRecorder: pacote que gira e se revela, clarão, ondas, partículas, raios e relâmpagos, brilho passando, estrelinhas, faixa «3º LUGAR» e o nome.
    Os efeitos crescem com a posição (1º ouro > 2º prata > 3º bronze > demais). MP4 quando o navegador grava MP4 (o que o WhatsApp aceita em qualquer aparelho); senão WebM.
    CartaVideo.enviar(a, ms, opcoes) → abre a janela de envio e devolve uma frase. CartaVideo.gerar(...) → Promise<Blob>. */
 (function () {
   'use strict';
   var W = 720, H = 1280, FPS = 30, DUR = 5, T_REV = 1.15;
   var TIER = {
-    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: 'CAMPEÃO', conf: 130, part: 96, ondas: 4 },
-    2: { a: '#DDE8F8', b: '#FFFFFF', c: '#8FA9CF', bg: ['#11213d', '#070f1f'], rot: '2º LUGAR', conf: 80, part: 64, ondas: 3 },
-    3: { a: '#E8A060', b: '#FFE2C4', c: '#B8662A', bg: ['#2a1608', '#120a04'], rot: '3º LUGAR', conf: 52, part: 46, ondas: 2 },
-    0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, conf: 0, part: 26, ondas: 1 }
+    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: 'CAMPEÃO', raios: 9, part: 96, ondas: 4 },
+    2: { a: '#DDE8F8', b: '#FFFFFF', c: '#8FA9CF', bg: ['#11213d', '#070f1f'], rot: '2º LUGAR', raios: 6, part: 64, ondas: 3 },
+    3: { a: '#E8A060', b: '#FFE2C4', c: '#B8662A', bg: ['#2a1608', '#120a04'], rot: '3º LUGAR', raios: 4, part: 46, ondas: 2 },
+    0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, raios: 0, part: 26, ondas: 1 }
   };
   function mulberry(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -24,7 +24,13 @@
     var S = { img: img, info: info, T: T, part: [], conf: [], estr: [], sc: document.createElement('canvas') };
     S.sc.width = img.width; S.sc.height = img.height;
     for (i = 0; i < T.part; i++) { var a = R() * 6.2832; S.part.push({ dx: Math.cos(a), dy: Math.sin(a), v: 260 + R() * 620, vida: 0.9 + R() * 0.9, c: cor[i % 4], r: 3 + R() * 5 }); }
-    for (i = 0; i < T.conf; i++) S.conf.push({ x: R() * W, atraso: R() * 0.9, v: 260 + R() * 320, dx: (R() - 0.5) * 140, w: 9 + R() * 8, h: 14 + R() * 10, c: ['#F7B500', '#FF63CE', '#40E0FF', '#FFFFFF', '#19B8A3'][i % 5], rot: R() * 6, rv: (R() - 0.5) * 12 });
+    S.raios = [];   // relâmpagos: caminho irregular do topo até perto da carta, com ramificações; o 1º cai junto com a revelação
+    function caminho(x0, y0, x1, y1, amp, seg) { var p = [[x0, y0]]; for (var k = 1; k < seg; k++) { var u = k / seg; p.push([x0 + (x1 - x0) * u + (R() - 0.5) * amp, y0 + (y1 - y0) * u + (R() - 0.5) * amp * 0.35]); } p.push([x1, y1]); return p; }
+    for (i = 0; i < T.raios; i++) {
+      var xr = i === 0 ? 150 + R() * 420 : 40 + R() * 640, pr = caminho(xr, -20, xr + (R() - 0.5) * 140, 420 + R() * 620, 70, 12), rm = [];
+      for (var q = 0; q < 3; q++) { var m = pr[2 + Math.floor(R() * 8)], dr = R() < 0.5 ? -1 : 1; rm.push(caminho(m[0], m[1], m[0] + dr * (50 + R() * 120), m[1] + 70 + R() * 150, 30, 5)); }
+      S.raios.push({ ts: T_REV + 0.05 + i * (3.3 / Math.max(1, T.raios)) + (i ? R() * 0.2 : 0), pr: pr, rm: rm });
+    }
     var nEst = info.lugar <= 3 ? 34 : 16;
     for (i = 0; i < nEst; i++) { var an = R() * 6.2832, rd = 280 + R() * 230; S.estr.push({ x: 360 + Math.cos(an) * rd * 0.82, y: 640 + Math.sin(an) * rd * 1.18, f: R() * 6.2832, v: 2 + R() * 3, s: 10 + R() * 18 }); }
     return S;
@@ -89,10 +95,17 @@
       // clarão
       if (tr < 0.45) { ctx.fillStyle = rgba(top ? T.b : '#FFFFFF', 0.95 * (1 - tr / 0.45)); ctx.fillRect(0, 0, W, H); }
     }
-    // confete (só no pódio)
-    for (var j = 0; j < S.conf.length; j++) {
-      var c = S.conf[j], tc = tr - c.atraso; if (tc < 0) continue;
-      ctx.save(); ctx.translate(c.x + c.dx * tc + Math.sin(tc * 3 + j) * 18, -24 + tc * c.v); ctx.rotate(c.rot + c.rv * tc); ctx.fillStyle = c.c; ctx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h); ctx.restore();
+    // raios (só no pódio): três traços (brilho largo, médio e núcleo branco) que piscam, mais um clarão azulado no instante da queda
+    for (var j = 0; j < S.raios.length; j++) {
+      var rb = S.raios[j], ru = (t - rb.ts) / 0.45; if (ru < 0 || ru > 1) continue;
+      var fa = ru < 0.15 ? 1 : ru < 0.3 ? 0.25 : ru < 0.45 ? 1 : ru < 0.6 ? 0.5 : (1 - ru) / 0.4 * 0.5;
+      if (ru < 0.12) { ctx.fillStyle = 'rgba(215,230,255,' + (0.3 * (j === 0 ? 1.4 : 1)) + ')'; ctx.fillRect(0, 0, W, H); }
+      ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = T.a; ctx.shadowBlur = 36; var trs = [rb.pr].concat(rb.rm);
+      [[22, rgba(T.a, 0.22 * fa)], [9, rgba(T.a, 0.6 * fa)], [3.6, 'rgba(255,255,255,' + fa + ')']].forEach(function (cfg) {
+        ctx.lineWidth = cfg[0]; ctx.strokeStyle = cfg[1];
+        trs.forEach(function (pp, ix) { ctx.lineWidth = ix ? cfg[0] * 0.5 : cfg[0]; ctx.beginPath(); ctx.moveTo(pp[0][0], pp[0][1]); for (var z = 1; z < pp.length; z++) ctx.lineTo(pp[z][0], pp[z][1]); ctx.stroke(); });
+      });
+      ctx.restore();
     }
     // faixa, nome e rodapé
     ctx.textAlign = 'center'; ctx.shadowBlur = 0;

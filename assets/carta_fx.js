@@ -56,7 +56,7 @@
     });
   }
 
-  /* ---- partículas e confete (WAAPI: nada fica no DOM depois) ---- */
+  /* ---- partículas (WAAPI: nada fica no DOM depois) ---- */
   var COR = { 'b-100': ['#FFD25A', '#FFF6C8', '#F0B020'], 'b-top': ['#FF63CE', '#40E0FF', '#FFFFFF'], 'b-90': ['#FFD25A', '#FFF3B0'] };
   function particulas(ancora, borda, n) {
     var cores = COR[borda]; if (!cores || REDUZ || !ancora.animate) return;
@@ -69,16 +69,29 @@
     }
     ancora.appendChild(wrap); setTimeout(function () { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 1800);
   }
-  function confete(alvo, n) {
+  /* raios: relâmpagos irregulares (com ramificações) caem do topo, com clarão azulado, em sequência; WAAPI, nada fica no DOM depois */
+  function caminho(x0, y0, x1, y1, amp, seg) {
+    var p = [[x0, y0]], i; for (i = 1; i < seg; i++) { var t = i / seg; p.push([x0 + (x1 - x0) * t + (Math.random() - 0.5) * amp, y0 + (y1 - y0) * t + (Math.random() - 0.5) * amp * 0.35]); }
+    p.push([x1, y1]); return p;
+  }
+  function dpath(p) { return 'M' + p.map(function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join(' L'); }
+  function raios(alvo, n, cor) {
     if (REDUZ || !alvo || !alvo.animate) return;
-    var cores = ['#F7B500', '#FF63CE', '#40E0FF', '#FFFFFF', '#19B8A3'], wrap = document.createElement('div'); wrap.className = 'c-confete';
-    for (var i = 0; i < (n || 60); i++) {
-      var p = document.createElement('i'), x = Math.random() * 100, dx = (Math.random() - .5) * 120, t = 2000 + Math.random() * 1800;
-      p.style.left = x + '%'; p.style.background = cores[i % cores.length]; wrap.appendChild(p);
-      p.animate([{ transform: 'translate(0,0) rotate(0)', opacity: 1 }, { transform: 'translate(' + dx + 'px,' + (alvo.clientHeight + 30) + 'px) rotate(' + (360 + Math.random() * 540) + 'deg)', opacity: .9 }],
-        { duration: t, delay: Math.random() * 500, easing: 'cubic-bezier(.3,.1,.6,1)', fill: 'both' });
+    var w = alvo.clientWidth || 800, h = alvo.clientHeight || 600, cx = cor || '#9FD4FF', wrap = document.createElement('div'); wrap.className = 'c-raios';
+    for (var i = 0; i < (n || 6); i++) {
+      var x0 = w * (0.08 + Math.random() * 0.84), y1 = h * (0.45 + Math.random() * 0.5), x1 = x0 + (Math.random() - 0.5) * w * 0.18, main = caminho(x0, -10, x1, y1, w * 0.07, 12), d = dpath(main), ramos = '';
+      for (var r = 0; r < 3; r++) {
+        var m = main[2 + Math.floor(Math.random() * 8)], dir = Math.random() < 0.5 ? -1 : 1;
+        ramos += '<path class="r" d="' + dpath(caminho(m[0], m[1], m[0] + dir * (40 + Math.random() * 110), m[1] + 60 + Math.random() * 130, 26, 5)) + '"/>';
+      }
+      var sv = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); sv.setAttribute('class', 'c-raio'); sv.setAttribute('width', w); sv.setAttribute('height', h); sv.setAttribute('viewBox', '0 0 ' + w + ' ' + h); sv.style.setProperty('--rc', cx);
+      sv.innerHTML = '<path class="g" d="' + d + '"/><path class="n" d="' + d + '"/>' + ramos;
+      var fl = document.createElement('div'); fl.className = 'c-raio-flash'; wrap.appendChild(fl); wrap.appendChild(sv);
+      var at = 120 + i * (1500 / (n || 6)) + Math.random() * 220;
+      sv.animate([{ opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 0.25, offset: 0.25 }, { opacity: 1, offset: 0.4 }, { opacity: 0.5, offset: 0.65 }, { opacity: 0 }], { duration: 480, delay: at, fill: 'both' });
+      fl.animate([{ opacity: 0 }, { opacity: 0.9, offset: 0.1 }, { opacity: 0.15, offset: 0.3 }, { opacity: 0.6, offset: 0.4 }, { opacity: 0 }], { duration: 480, delay: at, fill: 'both' });
     }
-    alvo.appendChild(wrap); setTimeout(function () { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 4600);
+    alvo.appendChild(wrap); setTimeout(function () { if (wrap.parentNode) wrap.parentNode.removeChild(wrap); }, 3200);
   }
 
   /* ---- revelação (modo reunião): a carta chega num pacote que treme, vira e solta um clarão ---- */
@@ -163,5 +176,5 @@
     pendente = true;
     requestAnimationFrame(function () { pendente = false; ligar(); });
   }).observe(document.documentElement, { childList: true, subtree: true });
-  window.CartaFX = { ligar: ligar, revelar: revelar, confete: confete, reduz: REDUZ };
+  window.CartaFX = { ligar: ligar, revelar: revelar, raios: raios, reduz: REDUZ };
 })();

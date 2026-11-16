@@ -49,7 +49,7 @@ else {
   { const qs = new URLSearchParams(location.search), e0 = qs.get('eq'), n0 = qs.get('nivel');
     if (e0 && eqs.includes(e0)) $('fEq').value = e0; if (n0) $('fNivel').value = n0; if (qs.get('q')) $('fBusca').value = qs.get('q'); }
   // ---- Compartilhar: baixar a cartinha como imagem ou mandar pelo WhatsApp (a imagem é gerada por Carta.enviar, a mesma de agente.html)
-  let visAtual = [], mesAnim = null; const confeteVisto = new Set();
+  let visAtual = [], mesAnim = null; const raiosVistos = new Set();
   const IC_BAIXAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>';
   const IC_ZAP = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-4l-5 4v-4H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z"/></svg>';
   const IC_VIDEO = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></svg>';
@@ -115,11 +115,11 @@ else {
       const r = el.getBoundingClientRect(), dx = o.left - r.left, dy = o.top - r.top;
       if (Math.abs(dx) + Math.abs(dy) > 2) el.animate({ translate: [dx + 'px ' + dy + 'px', '0px 0px'] }, { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
     });
-    if (!reduz && pod.length && mesAnim !== mes && window.CartaFX) {   // confete no pódio, uma vez por mês neste aparelho
-      let jaViu = false, chave = 'sentinela:confete:' + mes;
-      try { jaViu = !!localStorage.getItem(chave); if (!jaViu) localStorage.setItem(chave, '1'); } catch (e) { jaViu = confeteVisto.has(mes); }
-      confeteVisto.add(mes);
-      if (!jaViu) setTimeout(() => { const p = $('podio'); if (p && !p.hidden) CartaFX.confete(p, 70); }, 900);
+    if (!reduz && pod.length && mesAnim !== mes && window.CartaFX) {   // raios e trovão no pódio, uma vez por mês neste aparelho
+      let jaViu = false, chave = 'sentinela:raios:' + mes;
+      try { jaViu = !!localStorage.getItem(chave); if (!jaViu) localStorage.setItem(chave, '1'); } catch (e) { jaViu = raiosVistos.has(mes); }
+      raiosVistos.add(mes);
+      if (!jaViu) setTimeout(() => { const p = $('podio'); if (p && !p.hidden) CartaFX.raios(p, 4, '#BFE0FF'); }, 900);
     }
     mesAnim = mes;
     $('resumo').textContent = vis.length ? (doAno ? `${vis.length} cartinha(s) de ${lista.length}: média de todos os meses (só quem tem ${MIN_MESES_ANO} meses ou mais).` : `${vis.length} cartinha(s) de ${lista.length} em ${mes}.`) : 'Nenhuma cartinha com esses filtros.';

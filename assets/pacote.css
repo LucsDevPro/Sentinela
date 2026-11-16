@@ -50,7 +50,7 @@
 .pk-nome{font:700 2.3em/1.1 "Barlow Semi Condensed",system-ui,sans-serif;margin-top:.1em}
 .pk-eq{opacity:.75;margin-top:.2em}
 .pk-nota{display:flex;align-items:baseline;gap:.5em;margin-top:.6em}.pk-nota b{font:700 3.6em/1 "Barlow Semi Condensed",sans-serif;color:#fff}.pk-nota span{opacity:.7}
-.pk-faixa{position:absolute;left:50%;top:1.5%;translate:0 0;transform:translateX(-50%);z-index:6;white-space:nowrap;font:700 clamp(20px,3.2vw,46px)/1 "Barlow Semi Condensed",system-ui,sans-serif;letter-spacing:.12em;color:#fff;padding:.25em .8em;border-radius:.4em;
+.pk-faixa{position:absolute;left:50%;top:54px;translate:0 0;transform:translateX(-50%);z-index:6;white-space:nowrap;font:700 clamp(20px,3.2vw,46px)/1 "Barlow Semi Condensed",system-ui,sans-serif;letter-spacing:.12em;color:#fff;padding:.25em .8em;border-radius:.4em;
   background:linear-gradient(90deg,transparent,rgba(0,0,0,.55),transparent);text-shadow:0 0 22px var(--cor),0 2px 0 rgba(0,0,0,.6)}
 .pk-faixa i{font-style:normal;margin-right:.35em}.pk-faixa.r1{color:#FFE08A}.pk-faixa.r2{color:#E6EEF9}.pk-faixa.r3{color:#F2B27A}
 .pk-flash{position:absolute;inset:0;z-index:7;pointer-events:none}

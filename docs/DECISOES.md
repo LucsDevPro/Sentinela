@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (2) — raios e trovão no lugar do confete
+- O confete saiu de tudo (álbum, pacote e vídeo). No lugar: **relâmpagos** irregulares com ramificações, clarão azulado e **trovão** (som `trovao`, quando o som está ligado). `CartaFX.raios(alvo, n, cor)` no palco/álbum; no vídeo são desenhados no canvas (3 traços: brilho largo, médio e núcleo branco). Quantidade cresce do 3º (4) ao 2º (6) e ao 1º (9); o final da revelação solta 8. Seguem as regras dos outros efeitos: nada com «reduzir movimento», nada no PNG nem na impressão.
+
 ## 16/11/2026 (1) — pacote: som, automático, pular, controle remoto; vídeo de 5 s da cartinha
 - **Som** (`assets/som.js`): sintetizado com Web Audio (nenhum arquivo): rasgo, giro, suspense que sobe, «ding», acorde de bronze/prata/ouro e fanfarra final. Começa **desligado**; botão «Som» na barra do pacote ou tecla S; a escolha fica no aparelho (`sentinela:som`).
 - **Automático** (botão/tecla A): revela sozinho, ~3,2 s por carta e ~7 s nas do pódio. **Pular até o 10º/5º** (select): as de trás abrem de uma vez e a revelação começa nesse lugar.
