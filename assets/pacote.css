@@ -58,5 +58,6 @@
 .pk-dica{position:absolute;left:18px;top:14px;z-index:8;color:#9DB2D0;font-size:clamp(12px,1.1vw,18px);pointer-events:none}
 .pk-cont{position:absolute;right:18px;top:14px;z-index:8;color:#F7C94A;font:600 clamp(12px,1.1vw,18px) "IBM Plex Sans",sans-serif;pointer-events:none}
 .pk-fim{position:absolute;left:50%;top:7%;z-index:8;white-space:nowrap;font:700 clamp(22px,3.2vw,52px) "Barlow Semi Condensed",system-ui,sans-serif;color:#FFE08A;text-shadow:0 0 24px rgba(247,181,0,.7)}
+@media (max-width:700px){.pk-dica{max-width:58%;font-size:11px}.pk-cont{max-width:38%;text-align:right;font-size:11px}}
 @media (max-width:900px){.pk-foco{flex-direction:column}.pk-info{flex:none;text-align:center}}
 @media print{.pk-palco{display:none}}

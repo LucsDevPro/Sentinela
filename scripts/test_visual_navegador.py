@@ -260,6 +260,14 @@ with sync_playwright() as p:
         checar("apresentação: as cartinhas seguem o mesmo mês", outro in ms.evaluate("document.querySelector('.slide h2').textContent"))
     checar("apresentação: sem erros de script", not ems, str(ems)); ms.close()
 
+    # ---- cabeçalho da reunião se ajusta à resolução: sem rolagem lateral e todos os comandos à vista
+    hp = ctx.new_page()
+    for w, h in ((1920, 1080), (1366, 768), (1024, 700), (768, 900), (390, 800)):
+        hp.set_viewport_size({"width": w, "height": h}); hp.goto(U + "projecao.html#pacote"); hp.wait_for_timeout(400)
+        r = hp.evaluate("(()=>{const h=document.querySelector('header'),d=document.documentElement,b=[...h.querySelectorAll('.bt:not([hidden])')];return {ov:h.scrollWidth>h.clientWidth+1||d.scrollWidth>d.clientWidth+1,fora:b.filter(x=>{const q=x.getBoundingClientRect();return q.right>innerWidth+1||q.left<-1}).length,n:b.length}})()")
+        checar(f"reunião {w}px: cabeçalho sem rolagem e com todos os comandos à vista", not r["ov"] and r["fora"] == 0 and r["n"] >= 6, str(r))
+    hp.close()
+
     # ---- «Melhor do ano»: o detalhe abre o MESMO ranking anual (antes caía no mês mais recente e o agente mudava de posição)
     an = ctx.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
     an.goto(U + "album.html?mes=Melhor%20do%20ano"); an.wait_for_timeout(1800)
