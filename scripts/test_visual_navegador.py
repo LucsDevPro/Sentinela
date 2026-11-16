@@ -248,6 +248,18 @@ with sync_playwright() as p:
     checar("pacote: no fim mostra os parabéns e as cartas ficam à mostra", rk.locator(".pk-fim").count() == 1 and rk.locator(".pk-slot.aberta").count() == n100)
     checar("pacote: com «reduzir movimento» não há pacote voando nem erros", not erk, str(erk)); ctr.close()
 
+    # ---- apresentação de cada mês: o seletor troca o mês do pacote e das cartinhas
+    ms = ctx.new_page(); ems = []; ms.on("pageerror", lambda x: ems.append(str(x)))
+    ms.goto(U + "projecao.html#pacote"); ms.wait_for_timeout(700)
+    meses = ms.eval_on_selector_all("#mesApres option", "o=>o.map(x=>x.value)")
+    checar("apresentação: seletor de mês aparece com todos os meses (mais recente primeiro)", len(meses) >= 2 and not ms.evaluate("document.getElementById('mesApres').hidden"), str(meses))
+    if len(meses) >= 2:
+        outro = meses[1]; ms.select_option("#mesApres", outro); ms.wait_for_timeout(600)
+        checar("apresentação: ao trocar o mês o pacote é refeito para esse mês", ms.evaluate("document.querySelector('.pk-mes').textContent") == outro and f"mes={outro.replace('/', '%2F')}" in ms.url, ms.url)
+        ms.evaluate("PROJECAO.trocarModo('cartas')"); ms.wait_for_timeout(300)
+        checar("apresentação: as cartinhas seguem o mesmo mês", outro in ms.evaluate("document.querySelector('.slide h2').textContent"))
+    checar("apresentação: sem erros de script", not ems, str(ems)); ms.close()
+
     # ---- «Melhor do ano»: o detalhe abre o MESMO ranking anual (antes caía no mês mais recente e o agente mudava de posição)
     an = ctx.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
     an.goto(U + "album.html?mes=Melhor%20do%20ano"); an.wait_for_timeout(1800)

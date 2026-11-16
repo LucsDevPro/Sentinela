@@ -195,6 +195,9 @@ function trocarModo(m){
   if(!slides.length){modo='paineis';slidesPaineis.forEach(function(x){slides.push(x);});}
   document.getElementById('bModo').querySelector('span').textContent=modo!=='paineis'?'Painéis':'Cartinhas';
   document.getElementById('qtd').hidden=modo!=='cartas';
+  var sm=document.getElementById('mesApres');sm.hidden=modo==='paineis';
+  if(!sm.options.length){listaMeses.slice().reverse().forEach(function(m){var o=document.createElement('option');o.value=m;o.textContent=m;sm.appendChild(o);});}
+  sm.value=mesCartas;
   document.body.classList.toggle('modo-cartas',modo==='cartas');document.body.classList.toggle('modo-pacote',modo==='pacote');
   if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+(modo==='cartas'?'#cartinhas':modo==='pacote'?'#pacote':''));
   montarDots();if(window.PROJECAO)window.PROJECAO.total=slides.length;
@@ -222,6 +225,7 @@ document.getElementById('vel').onchange=function(){seg=parseInt(this.value,10);t
 function nomes(){mostrarNomes=!mostrarNomes;document.querySelector('#bNomes span').textContent='Nomes: '+(mostrarNomes?'visíveis':'ocultos');desenhar();}
 document.getElementById('bNomes').onclick=nomes;
 document.getElementById('bModo').onclick=function(){trocarModo(modo==='paineis'?'cartas':'paineis');};
+document.getElementById('mesApres').onchange=function(){mesCartas=this.value;var u=new URLSearchParams(location.search);u.set('mes',mesCartas);if(history.replaceState)history.replaceState(null,'','?'+u.toString()+location.hash);if(modo!=='paineis')trocarModo(modo);};
 document.getElementById('bPacote').onclick=function(){trocarModo(modo==='pacote'?'paineis':'pacote');};
 document.getElementById('qtd').onchange=function(){qtdCartas=parseInt(this.value,10);if(modo==='cartas')trocarModo('cartas');};
 window.addEventListener('resize',function(){var el=palco.querySelector('.slide');if(el&&modo==='cartas')ajustarCarta(el);});

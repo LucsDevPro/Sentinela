@@ -4,6 +4,7 @@
 - Novo modo na tela de reunião (`assets/pacote.js/.css`, ligado em `projecao.js`): um pacote «SENTINELA» fechado; ao clicar/Enter o topo é rasgado (clarão), as cartinhas saem **girando** e pousam de costas numa fileira. Só entram **quem tirou 100** (nota arredondada ≥ 100; com menos de 3, o top 3 entra mesmo assim).
 - Cada Enter/clique/→ revela uma, **de trás pra frente**: a carta voa da fileira ao centro, vira e aparece; o efeito cresce até o pódio — 3º (bronze), 2º (prata, ondas), 1º (ouro: suspense, tela escurecida, raios girando, tremor, ondas, confete, faixa «CAMPEÃO»). Depois cada uma volta à fileira, de frente. No fim: parabéns + confete. R recomeça, P/C/Painéis saem.
 - Respeita «Nomes: ocultos» (Agente N, sem foto) pela mesma `anonCarta` do modo cartinhas; a tela **não** avança sozinha (slide `manual`); com «reduzir movimento» tudo acontece sem animação.
+- Cada mês tem a sua apresentação: seletor «mês» no cabeçalho (aparece em Cartinhas e Pacote), mantém `?mes=` na URL e vale para os dois modos; meses com poucos 100 mostram ao menos o top 3.
 - Cartas reais só são montadas ao revelar (a fileira usa versos): leve mesmo com muitos 100.
 
 ## 15/11/2026 (8) — efeitos extras nas cartinhas
