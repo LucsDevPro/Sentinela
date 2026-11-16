@@ -52,14 +52,16 @@ else {
   let visAtual = [], mesAnim = null; const confeteVisto = new Set();
   const IC_BAIXAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>';
   const IC_ZAP = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-4l-5 4v-4H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3Z"/></svg>';
-  const acoes = i => `<span class="acoes"><button type="button" data-acao="baixar" data-i="${i}" title="Baixar a cartinha como imagem" aria-label="Baixar a cartinha como imagem">${IC_BAIXAR}<span>Baixar</span></button><button type="button" data-acao="whatsapp" data-i="${i}" title="Enviar pelo WhatsApp (no computador abre o WhatsApp Web)" aria-label="Enviar a cartinha pelo WhatsApp">${IC_ZAP}<span>WhatsApp</span></button></span>`;
+  const IC_VIDEO = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></svg>';
+  const acoes = i => `<span class="acoes"><button type="button" data-acao="baixar" data-i="${i}" title="Baixar a cartinha como imagem" aria-label="Baixar a cartinha como imagem">${IC_BAIXAR}<span>Baixar</span></button><button type="button" data-acao="whatsapp" data-i="${i}" title="Enviar pelo WhatsApp (no computador abre o WhatsApp Web)" aria-label="Enviar a cartinha pelo WhatsApp">${IC_ZAP}<span>WhatsApp</span></button><button type="button" data-acao="video" data-i="${i}" title="Gerar um vídeo animado de 5 segundos para o WhatsApp" aria-label="Gerar vídeo animado da cartinha">${IC_VIDEO}<span>Vídeo</span></button></span>`;
   const aviso = t => { const m = $('msgImg'); m.textContent = t; m.hidden = !t; clearTimeout(aviso.t); if (t) aviso.t = setTimeout(() => { m.hidden = true; }, 9000); };
   const compartilhar = e => {
     const b = e.target.closest('button[data-acao]'); if (!b) return;
     e.preventDefault(); e.stopPropagation();   // o botão fica dentro do link da cartinha: não abrir a página do agente
     const l = visAtual[+b.dataset.i]; if (!l) return;
-    b.disabled = true; aviso('Preparando a imagem…');
-    Carta.enviar(l.x.a, l.ms, b.dataset.acao, { id: l.x.k, ocultarNomes: document.body.classList.contains('modo-apresentacao'), ocultarFoto: document.body.classList.contains('sem-foto') })
+    b.disabled = true; aviso(b.dataset.acao === 'video' ? 'Gerando o vídeo de 5 segundos… mantenha esta aba aberta.' : 'Preparando a imagem…');
+    const envia = b.dataset.acao === 'video' ? (a, ms, m, o) => CartaVideo.enviar(a, ms, o) : Carta.enviar;
+    envia(l.x.a, l.ms, b.dataset.acao, { lugar: l.lugar, id: l.x.k, ocultarNomes: document.body.classList.contains('modo-apresentacao'), ocultarFoto: document.body.classList.contains('sem-foto') })
       .then(aviso, () => aviso('Não consegui gerar a imagem aqui. Abra a página pelo endereço do site (não pelo arquivo no computador) e tente de novo.'))
       .then(() => { b.disabled = false; });
   };

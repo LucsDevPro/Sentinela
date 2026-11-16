@@ -1693,3 +1693,5 @@ dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:1
 .c-captura .c-foto::after { display: none !important; }
 @media print { .c-conj::before, .c-foto::after, .c-confete, .c-pacote, .c-particulas { display: none !important; } }
 .c-conj.c-oculta > :not(.c-pacote) { visibility: hidden; }
+
+dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#050F20;object-fit:contain}

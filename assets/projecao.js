@@ -160,7 +160,8 @@ function slidesDoPacote(){
   var itens=c100.map(function(x){var l=x.l,i=x.i;return {rank:i+1,rot:mostrarNomes?l.a.nome:('Agente '+(i+1)),eq:l.a.equipe,nota:br(l.u.pontos,1),
     mk:function(){return Carta.html({nome:l.a.nome,equipe:l.a.equipe},l.ms,l.a.k,true);},
     prep:function(raiz){anonCarta(raiz,i,l.u);}};});
-  return [{id:'pacote',titulo:'Pacote de cartinhas',sub:mesCartas,manual:true,montar:function(el){pacoteCtl=Pacote.iniciar(el,itens,{mes:mesCartas});}}];
+  var fazVideo=window.CartaVideo&&CartaVideo.suportado()?function(it){var l=c100.filter(function(x){return x.i+1===it.rank;})[0].l;return CartaVideo.enviar(l.a,l.ms,{lugar:it.rank,id:l.a.k,ocultarNomes:!mostrarNomes,ocultarFoto:!mostrarNomes});}:null;
+  return [{id:'pacote',titulo:'Pacote de cartinhas',sub:mesCartas,manual:true,montar:function(el){pacoteCtl=Pacote.iniciar(el,itens,{mes:mesCartas,video:fazVideo});}}];
 }
 function slidesDasCartas(){
   var out=[];
@@ -234,7 +235,10 @@ document.getElementById('bTela').onclick=tela;
 document.addEventListener('keydown',function(e){
   if(e.target&&/SELECT|INPUT/.test(e.target.tagName))return;
   if(modo==='pacote'&&pacoteCtl){   // no pacote a tela não passa sozinha: cada tecla abre/revela a próxima
-    if(e.key==='ArrowRight'||e.key==='Enter'||e.key===' '){e.preventDefault();pacoteCtl.passo();return;}
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key==='PageDown'||e.key==='Enter'||e.key===' '||e.key==='.'){e.preventDefault();pacoteCtl.passo();return;}   // inclui as teclas dos controles remotos de apresentação
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();return;}
+    if(e.key==='s'||e.key==='S'){pacoteCtl.alternarSom();return;}
+    if(e.key==='a'||e.key==='A'){pacoteCtl.alternarAuto();return;}
     if(e.key==='ArrowLeft')return;
     if((e.key==='r'||e.key==='R')&&!pacoteCtl.ocupado()){ir(0);return;}
     if(e.key==='p'||e.key==='P'){trocarModo('paineis');return;}

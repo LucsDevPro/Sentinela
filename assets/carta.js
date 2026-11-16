@@ -335,7 +335,7 @@
     if (!html0) return Promise.reject(new Error('sem nota'));
     // `fora` some da tela; `host` (o que vira imagem) fica em posição normal dentro dele, senão a imagem sai deslocada e em branco
     var fora = document.createElement('div'); fora.style.cssText = 'position:fixed;left:-9999px;top:0;pointer-events:none';
-    host.className = 'c-captura'; host.style.cssText = 'width:332px;display:flow-root;background:#EEF2F8'; host.innerHTML = html0; fora.appendChild(host); document.body.appendChild(fora);
+    host.className = 'c-captura'; host.style.cssText = 'width:332px;display:flow-root;background:' + (opcoes.transparente ? 'transparent' : '#EEF2F8'); host.innerHTML = html0; fora.appendChild(host); document.body.appendChild(fora);
     // ícones <use href="#i-..."> dependem dos símbolos da página: dentro da imagem eles somem, então o desenho é copiado para dentro do <svg>
     Array.prototype.forEach.call(host.querySelectorAll('svg use'), function (u) {
       var id = (u.getAttribute('href') || u.getAttribute('xlink:href') || '').replace('#', ''), sym = id && document.getElementById(id), sv = u.parentNode;
@@ -347,7 +347,7 @@
     return carregarLib().then(function () {
       return Promise.all([document.fonts ? document.fonts.ready : 0, document.fonts ? document.fonts.load('700 20px "Barlow Semi Condensed"') : 0, document.fonts ? document.fonts.load('600 14px "IBM Plex Sans"') : 0].concat(fotos));
     }).then(function () {
-      var o = { pixelRatio: 2, backgroundColor: '#EEF2F8', cacheBust: false };
+      var o = { pixelRatio: 2, cacheBust: false }; if (!opcoes.transparente) o.backgroundColor = '#EEF2F8';   // transparente: usada pelo vídeo, que desenha a cartinha sobre o próprio fundo
       if (opcoes.rapido) return window.htmlToImage.toBlob(host, o);   // lote (zip): a 1ª cartinha já aqueceu fontes e imagens
       return window.htmlToImage.toBlob(host, o).then(function () { return window.htmlToImage.toBlob(host, o); });   // 2ª passada: a 1ª às vezes sai sem fontes/imagens (Safari)
     }).then(function (bl) { if (!bl || bl.size < 4000) throw new Error('imagem vazia'); fora.remove(); return bl; }, function (e) { fora.remove(); throw e; });

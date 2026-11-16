@@ -55,6 +55,25 @@
     palco.appendChild(fundo); palco.appendChild(raios); palco.appendChild(pacote); palco.appendChild(fileira); palco.appendChild(dica); palco.appendChild(contador);
     function texto(d, c) { dica.textContent = d; contador.textContent = c || ''; }
     texto('Clique ou tecle Enter para abrir o pacote', N + ' cartinhas com nota 100');
+
+    // ---- barra de controles: som, automático, pular até o Nº e «Próxima» (toque / controle remoto) ----
+    var auto = false, pularAte = 0, timer = null;
+    var barra = div('pk-barra'), opts = '<option value="0">Revelar todas</option>' + [10, 5].filter(function (v) { return v < N; }).map(function (v) { return '<option value="' + v + '">Pular até o ' + v + 'º</option>'; }).join('');
+    barra.innerHTML = '<button type="button" data-b="som" title="Liga/desliga os sons (tecla S)"></button><button type="button" data-b="auto" title="Revela sozinho, uma por uma (tecla A)"></button>' +
+      (N > 5 ? '<select data-b="pular" aria-label="Quantas revelar" title="Revelar só as melhores: as demais aparecem de uma vez">' + opts + '</select>' : '') +
+      '<button type="button" data-b="prox" class="pk-prox" title="Próxima (Enter, espaço, PageDown ou clique no palco)">Próxima ▶</button>';
+    palco.appendChild(barra);
+    function rotulos() {
+      barra.querySelector('[data-b=som]').textContent = (window.Som && Som.ligado()) ? '🔊 Som ligado' : '🔇 Som desligado';
+      barra.querySelector('[data-b=auto]').textContent = auto ? '⏸ Automático: ligado' : '▶ Automático: desligado';
+      barra.querySelector('[data-b=auto]').classList.toggle('on', auto); barra.querySelector('[data-b=som]').classList.toggle('on', !!(window.Som && Som.ligado()));
+    }
+    function alternarSom() { if (window.Som) Som.alternar(); rotulos(); }
+    function agendar(ms) { clearTimeout(timer); if (auto && fase !== 'fim') timer = setTimeout(function () { passo(); }, REDUZ ? 400 : ms); }
+    function alternarAuto() { auto = !auto; rotulos(); clearTimeout(timer); if (auto && !ocupado) agendar(900); }
+    barra.addEventListener('click', function (e) { e.stopPropagation(); var b = e.target.closest('button[data-b]'); if (!b) return; if (b.dataset.b === 'som') alternarSom(); else if (b.dataset.b === 'auto') alternarAuto(); else if (b.dataset.b === 'prox') passo(); });
+    barra.addEventListener('change', function (e) { if (e.target.dataset.b === 'pular') pularAte = parseInt(e.target.value, 10) || 0; });
+    rotulos();
     folga = fileira.offsetHeight + 34;
 
     // ---- efeitos ----
@@ -84,11 +103,12 @@
       var topo = pacote.querySelector('.pk-topo'), corpo = pacote.querySelector('.pk-corpo'), fenda = pacote.querySelector('.pk-fenda');
       await anima(pacote, [{ transform: 'rotate(0)' }, { transform: 'rotate(-3deg) scale(1.01)' }, { transform: 'rotate(3deg) scale(1.02)' }, { transform: 'rotate(-4deg) scale(1.03)' }, { transform: 'rotate(4deg) scale(1.04)' }, { transform: 'rotate(0) scale(1.05)' }], 900, { easing: 'ease-in-out' }, { transform: 'scale(1.05)' });
       var pc = centro(pacote, palco); fenda.style.opacity = '1';
-      flash('#FFF6D0', 0.9); treme(18);
+      flash('#FFF6D0', 0.9); treme(18); if (window.Som) Som.tocar('rasgar');
       var rasga = anima(topo, [{ transform: 'none', opacity: 1 }, { transform: 'translate(10%,-22%) rotate(16deg)', opacity: 1, offset: 0.45 }, { transform: 'translate(46%,-120%) rotate(52deg)', opacity: 0 }], 900, { easing: 'cubic-bezier(.3,.1,.5,1)' }, { opacity: '0' });
       chuva(pacote, NIVEL[1], 46, ph * 0.9);
       await esp(250);
       // as cartas saem do rasgo girando (cada uma com um pequeno atraso) e pousam na fileira
+      if (window.Som) Som.tocar('giro', 1500);
       var voos = slots.map(function (sl, i) {
         var c = centro(sl.g, palco), dx = pc.x - c.x, dy = pc.y - ph * 0.28 - c.y;
         return anima(sl.g, [
@@ -101,7 +121,7 @@
       anima(raios, [{ opacity: 0 }, { opacity: 0.8 }], 800, { delay: 200 }, { opacity: '0.8' });
       await Promise.all(voos); pacote.style.display = 'none';
       anima(raios, [{ opacity: 0.8 }, { opacity: 0 }], 700, null, { opacity: '0' });
-      fase = 'pronto'; ocupado = false; atual = -1;
+      fase = 'pronto'; ocupado = false; atual = -1; agendar(1500);
       texto('Enter / clique: revelar a próxima · R: recomeçar', 'Revelando de trás pra frente: ' + N + ' cartinhas');
     }
 
@@ -116,7 +136,9 @@
       var eb = eBig();
       foco = div('pk-foco'); foco.style.paddingBottom = folga + 'px'; foco.style.paddingTop = (top ? 70 : 36) + 'px';
       var gr = div('pk-grande'); gr.style.setProperty('--e', eb.toFixed(3));
-      var info = div('pk-info', '<div class="pk-rank">' + rk + 'º</div><div class="pk-nome">' + esc(it.rot) + '</div><div class="pk-eq">' + esc(it.eq || '') + '</div><div class="pk-nota"><b>' + esc(it.nota) + '</b><span>nota do mês</span></div>');
+      var info = div('pk-info', '<div class="pk-rank">' + rk + 'º</div><div class="pk-nome">' + esc(it.rot) + '</div><div class="pk-eq">' + esc(it.eq || '') + '</div><div class="pk-nota"><b>' + esc(it.nota) + '</b><span>nota do mês</span></div>' + (cfg.video ? '<button type="button" class="pk-video">🎬 Vídeo de 5 s para o WhatsApp</button><div class="pk-vst" role="status" aria-live="polite"></div>' : ''));
+      var bv = info.querySelector('.pk-video');
+      if (bv) bv.addEventListener('click', function (e) { e.stopPropagation(); var st = info.querySelector('.pk-vst'); bv.disabled = true; st.textContent = 'Gerando o vídeo (5 s)…'; Promise.resolve(cfg.video(it)).then(function (m) { st.textContent = m || ''; }, function () { st.textContent = 'Não consegui gerar o vídeo neste navegador.'; }).then(function () { bv.disabled = false; }); });
       foco.appendChild(gr); foco.appendChild(info); palco.appendChild(foco);
       gr.style.opacity = '0'; info.style.opacity = '0';
       if (top) { var fx = div('pk-faixa r' + top, '<i>' + FAIXA[top][0] + '</i>' + FAIXA[top][1]); foco.appendChild(fx); fx.style.opacity = '0'; foco._fx = fx; }
@@ -125,11 +147,11 @@
       palco.appendChild(voo);
       var a = centro(gr, palco), b = centro(sl.g, palco), k = b.w / (272 * eb);
       voo.style.left = (a.x - 136 * eb) + 'px'; voo.style.top = (a.y - 196 * eb) + 'px';
-      sl.g.style.opacity = '0.12';
+      sl.g.style.opacity = '0.12'; if (window.Som) Som.tocar('giro', top ? 1300 : 900);
       var dx = b.x - a.x, dy = b.y - a.y;
       await anima(voo, [{ transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + k + ') rotateY(0deg)' }, { transform: 'translate(' + dx * 0.4 + 'px,' + (dy * 0.4 - 90) + 'px) scale(' + (k + (1 - k) * 0.6) + ') rotateY(540deg)', offset: 0.55 }, { transform: 'translate(0,0) scale(1) rotateY(1080deg)' }], top ? 1300 : 900, { easing: 'cubic-bezier(.3,.7,.3,1)' }, { transform: 'none' });
       if (top) {
-        var gl = '0 0 ' + (40 + top * 10) + 'px ' + cores[0];
+        var gl = '0 0 ' + (40 + top * 10) + 'px ' + cores[0]; if (window.Som) Som.tocar('suspense', 1200 + (4 - top) * 300);
         await anima(voo, [{ transform: 'translate(0,0) scale(1)', filter: 'brightness(1)' }, { transform: 'translate(-10px,0) scale(1.03)', filter: 'brightness(1.3)' }, { transform: 'translate(10px,0) scale(1.06)', filter: 'brightness(1.6)' }, { transform: 'translate(-12px,0) scale(1.08)', filter: 'brightness(2)' }, { transform: 'translate(0,0) scale(1.1)', filter: 'brightness(2.6)' }], 1200 + (4 - top) * 300, { easing: 'ease-in' }, null);
         voo.style.boxShadow = gl;
         if (top === 1) { palco.classList.add('escuro'); await esp(350); }
@@ -141,6 +163,7 @@
       if (carta) carta.setAttribute('data-visto', '1'); if (nb) nb.setAttribute('data-contou', '1');
       if (it.prep) it.prep(gr, it);
       gr.style.opacity = '1';
+      if (window.Som) { Som.tocar(top ? ['', 'ouro', 'prata', 'bronze'][top] : 'ding'); if (top) Som.tocar('confete'); }
       flash(top === 1 ? '#FFF2B8' : top === 2 ? '#DDEBFF' : top === 3 ? '#FFD9B0' : '#FFFFFF', top ? 0.95 : 0.55);
       if (top) treme(top === 1 ? 34 : top === 2 ? 22 : 14);
       var n0 = top ? [0, 3, 3, 2][4 - top] : 1;
@@ -155,6 +178,7 @@
       await vira;
       fase = atual >= N - 1 ? 'ultima' : 'revelada'; ocupado = false;
       texto(atual >= N - 1 ? 'Enter / clique: guardar e encerrar' : 'Enter / clique: próxima cartinha · R: recomeçar', 'Revelando ' + (atual + 1) + ' de ' + N);
+      agendar(top ? 7000 : 3200);
     }
 
     // ---- 3) guardar: a carta grande volta para o lugar na fileira e vira de frente (fica à mostra) ----
@@ -178,19 +202,31 @@
       ocupado = true; fase = 'fim'; palco.setAttribute('data-nv', 'n');
       var t = div('pk-fim', 'Parabéns a todos que chegaram ao 100! 🎉'); palco.appendChild(t);
       anima(t, [{ opacity: 0, transform: 'translate(-50%,-30px) scale(.8)' }, { opacity: 1, transform: 'translate(-50%,0) scale(1)' }], 700, null, { opacity: '1' });
-      flash('#FFF2B8', 0.5); confete(160); onda(t, NIVEL[1][0], 0);
+      flash('#FFF2B8', 0.5); confete(160); if (window.Som) Som.tocar('fanfarra'); onda(t, NIVEL[1][0], 0);
       texto('R: ver de novo', N + ' cartinhas 100'); ocupado = false;
     }
 
+    function mostrarFace(sl, it) {   // abre a cartinha na fileira sem animação (usado em «Pular até o Nº»)
+      var face = sl.g.querySelector('.pk-b'); face.className = 'pk-f pk-b pk-mini'; face.innerHTML = it.mk();
+      var c = face.querySelector('.carta'), nb = face.querySelector('.c-ovr b'); if (c) c.setAttribute('data-visto', '1'); if (nb) nb.setAttribute('data-contou', '1');
+      if (it.prep) it.prep(face, it); sl.g.style.opacity = '1'; sl.g.style.transform = 'rotateY(180deg)'; sl.s.classList.add('aberta');
+    }
+    function pularInicio() {
+      if (!pularAte || atual !== -1) return;
+      var k = 0; ordem.forEach(function (idx) { if (itens[idx].rank > pularAte) { mostrarFace(slots[idx], itens[idx]); k++; } });
+      if (k < N) atual = k - 1;
+    }
     async function passo() {
+      if (window.Som) Som.preparar();
+      clearTimeout(timer);
       if (ocupado) return;
       if (fase === 'fechado') return abrir();
-      if (fase === 'pronto') return revelar();
+      if (fase === 'pronto') { pularInicio(); return revelar(); }
       if (fase === 'revelada') { await guardar(); return revelar(); }
       if (fase === 'ultima') { await guardar(); return fim(); }
     }
     palco.addEventListener('click', function () { passo(); });
-    return { passo: passo, fase: function () { return fase; }, ocupado: function () { return ocupado; }, total: N };
+    return { passo: passo, alternarSom: alternarSom, alternarAuto: alternarAuto, auto: function () { return auto; }, fase: function () { return fase; }, ocupado: function () { return ocupado; }, total: N };
   }
   window.Pacote = { iniciar: iniciar };
 })();

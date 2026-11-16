@@ -1,5 +1,12 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (1) — pacote: som, automático, pular, controle remoto; vídeo de 5 s da cartinha
+- **Som** (`assets/som.js`): sintetizado com Web Audio (nenhum arquivo): rasgo, giro, suspense que sobe, «ding», acorde de bronze/prata/ouro e fanfarra final. Começa **desligado**; botão «Som» na barra do pacote ou tecla S; a escolha fica no aparelho (`sentinela:som`).
+- **Automático** (botão/tecla A): revela sozinho, ~3,2 s por carta e ~7 s nas do pódio. **Pular até o 10º/5º** (select): as de trás abrem de uma vez e a revelação começa nesse lugar.
+- **Controle remoto:** PageDown, ↓, → , Enter, espaço e «.» avançam; PageUp/↑/← não fazem nada; botão «Próxima ▶» (grande no toque). Clique no palco também avança.
+- **Vídeo de 5 s** (`assets/video.js`, `CartaVideo`): usa a MESMA imagem do botão Baixar (`Carta.png` com `transparente:true`) e anima em volta num canvas 720×1280: pacote que gira, clarão, ondas, partículas, confete, brilho passando, estrelinhas, faixa «CAMPEÃO/2º/3º LUGAR», nome e rodapé. Efeitos crescem do 3º ao 1º; demais posições têm versão leve. Gravado em tempo real com MediaRecorder: **MP4/H.264** quando o navegador grava (é o que o WhatsApp aceita em qualquer aparelho), senão WebM com aviso. Botão «Vídeo» em cada cartinha do álbum e na ficha do pacote; janela de envio (compartilhar / baixar / abrir WhatsApp Web). A aba precisa ficar aberta durante os 5 s.
+- Álbum: os 3 botões viram só ícone abaixo de 1500 px (não cabiam no cartão).
+
 ## 15/11/2026 (9) — reunião: «Abrir pacote» (tecla P, `#pacote`)
 - Novo modo na tela de reunião (`assets/pacote.js/.css`, ligado em `projecao.js`): um pacote «SENTINELA» fechado; ao clicar/Enter o topo é rasgado (clarão), as cartinhas saem **girando** e pousam de costas numa fileira. Só entram **quem tirou 100** (nota arredondada ≥ 100; com menos de 3, o top 3 entra mesmo assim).
 - Cada Enter/clique/→ revela uma, **de trás pra frente**: a carta voa da fileira ao centro, vira e aparece; o efeito cresce até o pódio — 3º (bronze), 2º (prata, ondas), 1º (ouro: suspense, tela escurecida, raios girando, tremor, ondas, confete, faixa «CAMPEÃO»). Depois cada uma volta à fileira, de frente. No fim: parabéns + confete. R recomeça, P/C/Painéis saem.

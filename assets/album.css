@@ -195,3 +195,6 @@ body.modo-apresentacao .nome{filter:blur(7px)}
 :root[data-theme="dark"] .slot:hover .carta,:root[data-theme="dark"] .slot:focus-visible .carta{filter:brightness(1.06)}
 @media (prefers-reduced-motion:reduce){.slot{transition:none}}
 .podio[hidden]{display:none}
+
+/* três botões por cartinha (baixar, WhatsApp, vídeo): só com ícone quando o espaço é curto; o nome fica no title/aria-label */
+@media (max-width:1500px){.acoes button span{display:none}.acoes button{padding:0 11px}}

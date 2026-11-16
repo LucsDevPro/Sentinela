@@ -148,7 +148,7 @@ with sync_playwright() as p:
     try: al.wait_for_function("getComputedStyle(document.querySelectorAll('#album .acoes')[1]).opacity==='1'", timeout=5000); vis = True
     except Exception: vis = False
     checar("álbum: botões aparecem ao passar o mouse na cartinha", vis)
-    checar("álbum: cada cartinha tem botões de baixar e WhatsApp", sl.locator("button[data-acao]").count() == 2)
+    checar("álbum: cada cartinha tem botões de baixar, WhatsApp e vídeo", sl.locator("button[data-acao]").count() == 3)
     with al.expect_download(timeout=20000) as dl:
         sl.locator("button[data-acao=baixar]").click()
     checar("álbum: botão baixa a imagem PNG da cartinha", dl.value.suggested_filename.startswith("cartinha-") and dl.value.suggested_filename.endswith(".png"), dl.value.suggested_filename)
@@ -267,6 +267,35 @@ with sync_playwright() as p:
         r = hp.evaluate("(()=>{const h=document.querySelector('header'),d=document.documentElement,b=[...h.querySelectorAll('.bt:not([hidden])')];return {ov:h.scrollWidth>h.clientWidth+1||d.scrollWidth>d.clientWidth+1,fora:b.filter(x=>{const q=x.getBoundingClientRect();return q.right>innerWidth+1||q.left<-1}).length,n:b.length}})()")
         checar(f"reunião {w}px: cabeçalho sem rolagem e com todos os comandos à vista", not r["ov"] and r["fora"] == 0 and r["n"] >= 6, str(r))
     hp.close()
+
+    # ---- pacote: som, automático, pular até o Nº, controle remoto (PageDown) e vídeo de 5 s
+    ctr2 = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); pz = ctr2.new_page(); epz = []; pz.on("pageerror", lambda x: epz.append(str(x)))
+    pz.goto(U + "projecao.html#pacote"); pz.wait_for_timeout(600)
+    checar("pacote: barra tem Som, Automático, Pular e Próxima", pz.locator(".pk-barra button[data-b=som]").count() == 1 and pz.locator(".pk-barra button[data-b=auto]").count() == 1 and pz.locator(".pk-barra select[data-b=pular]").count() == 1 and pz.locator(".pk-barra .pk-prox").count() == 1)
+    checar("pacote: som começa desligado e a tecla S alterna", "desligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "ligado" in pz.inner_text(".pk-barra [data-b=som]") and "desligado" not in pz.inner_text(".pk-barra [data-b=som]"))
+    pz.keyboard.press("s"); pz.select_option(".pk-barra select[data-b=pular]", "10")
+    pz.keyboard.press("PageDown"); pz.wait_for_timeout(150)
+    checar("pacote: PageDown (controle remoto) abre o pacote", pz.locator(".pk-slot").count() == n100 and pz.evaluate("getComputedStyle(document.querySelector('.pk-pacote')).display") == "none")
+    pz.click(".pk-barra .pk-prox"); pz.wait_for_timeout(200)
+    checar("pacote: «Pular até o 10º» abre de uma vez as de trás e começa no 10º", pz.evaluate("document.querySelector('.pk-rank').textContent") == "10º" and pz.locator(".pk-slot.aberta").count() == n100 - 10, pz.evaluate("document.querySelector('.pk-rank').textContent"))
+    checar("pacote: botão do vídeo de 5 s aparece na ficha", pz.locator(".pk-video").count() == 1)
+    pz.click(".pk-barra [data-b=auto]"); pz.wait_for_function("document.querySelector('.pk-fim')", timeout=30000)
+    checar("pacote: modo automático revela tudo sozinho até o fim", pz.locator(".pk-fim").count() == 1)
+    checar("pacote: sem erros (som/automático/pular)", not epz, str(epz)); ctr2.close()
+    vd = ctx.new_page(); evd = []; vd.on("pageerror", lambda x: evd.append(str(x)))
+    vd.goto(U + "album.html"); vd.wait_for_timeout(1500)
+    checar("álbum: cada cartinha tem o botão «Vídeo»", vd.locator("button[data-acao=video]").count() >= 3)
+    if vd.evaluate("CartaVideo.suportado()"):
+        import base64, subprocess, tempfile, os
+        r = vd.evaluate("""async()=>{const A=Object.values(AGENTES_DADOS.agentes)[0];const ms=A.meses.slice(-1);const bl=await CartaVideo.gerar(A,ms,{lugar:1});
+          const b=new Uint8Array(await bl.arrayBuffer());let s='';for(let i=0;i<b.length;i+=32768)s+=String.fromCharCode.apply(null,b.subarray(i,i+32768));return {tipo:bl.type,tam:bl.size,b64:btoa(s)}}""")
+        checar("vídeo: gerado como MP4/WebM de verdade", r["tipo"].startswith("video/") and r["tam"] > 20000, f'{r["tipo"]} {r["tam"]}')
+        arq = os.path.join(tempfile.mkdtemp(), "v." + ("mp4" if "mp4" in r["tipo"] else "webm")); open(arq, "wb").write(base64.b64decode(r["b64"]))
+        try:
+            dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", arq], capture_output=True, text=True, timeout=30).stdout.strip() or 0)
+            checar("vídeo: dura cerca de 5 segundos", 4.4 <= dur <= 5.8, str(dur))
+        except FileNotFoundError: pass
+    checar("vídeo: sem erros de script", not evd, str(evd)); vd.close()
 
     # ---- «Melhor do ano»: o detalhe abre o MESMO ranking anual (antes caía no mês mais recente e o agente mudava de posição)
     an = ctx.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
