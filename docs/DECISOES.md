@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 15/11/2026 (7) — álbum: baixar todas (.zip), contagem por equipe e filtros na URL
+- Busca por nome e filtro de equipe **já existiam**; foram melhorados: equipes mostram quantas cartinhas têm («Equipe 3 (10)»), botão «Limpar filtros» e os filtros (`eq`, `nivel`, `q`, `mes`) vão para a URL, então o link filtrado pode ser enviado.
+- «Baixar todas (N) .zip»: gera o PNG de cada cartinha filtrada com o mesmo `Carta.png` da cartinha (modo `rapido`: uma passada só, por lote) e empacota em `assets/zip.js` (ZIP sem compressão, PNG já é comprimido; nomes em UTF-8). Uma pasta por equipe, para a coordenação repassar. Com «Modo apresentação» os nomes saem do arquivo (`NN-agente-N.png`).
+- Confirma antes de lotes com mais de 40 cartinhas (~1,3 s cada; mais lento no celular); mostra progresso e permite cancelar; falhas são listadas ao final.
+
 ## 15/11/2026 (6) — «Melhor do ano»: o detalhe abria o mês mais recente
 - Bug: no álbum «Melhor do ano» o agente aparecia em 1º, mas o link (e o «Ver evolução» do popup) abria `agente.html` sem o mês certo e a página caía em novembro (4º). Agora o link leva `mes=Melhor do ano` e a página mostra a mesma cartinha e a mesma posição (ex.: «1º de 43»), com «Por que esta nota?» explicando a média de cada mês (e link para a conta de cada mês).
 - A conta do ano passou a morar em `Carta.anual` (`carta.js`), usada pelo álbum e por `agente.js`: uma só fonte, para os dois nunca divergirem.

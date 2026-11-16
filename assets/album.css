@@ -179,3 +179,11 @@ body.modo-apresentacao .nome{filter:blur(7px)}
   .slot .carta,.slot .carta *{animation:none!important;opacity:1!important}
   .slot,.slot *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+
+/* Limpar filtros / cancelar */
+.bt-limpar{align-self:end;padding:8px 12px;border:1px solid var(--bd);border-radius:8px;background:transparent;color:var(--pri);font:600 .84rem "IBM Plex Sans",sans-serif;cursor:pointer}
+.bt-limpar:hover,.bt-limpar:focus-visible{border-color:var(--pri);outline:none}
+.bt-limpar[hidden]{display:none}
+.bt-acao:disabled{opacity:.55;cursor:progress}
+@media print{#bZip,#bLimpar{display:none!important}}
+

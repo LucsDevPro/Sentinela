@@ -181,6 +181,31 @@ with sync_playwright() as p:
     checar("reunião: tecla C volta aos painéis", al.evaluate("PROJECAO.modo()") == "paineis" and al.locator("#palco .carta").count() == 0)
     al.close()
 
+    # ---- álbum: filtros na URL, contagem por equipe, «Limpar filtros» e .zip com pastas por equipe
+    zp = ctx.new_page(); ez = []; zp.on("pageerror", lambda x: ez.append(str(x)))
+    zp.goto(U + "album.html?eq=Equipe%203"); zp.wait_for_timeout(1800)
+    checar("álbum: ?eq= na URL já filtra a equipe", zp.evaluate("document.getElementById('fEq').value") == "Equipe 3")
+    checar("álbum: equipes mostram a contagem «Equipe 3 (N)»", zp.evaluate("[...document.querySelectorAll('#fEq option')].some(o=>/^Equipe 3 \\(\\d+\\)$/.test(o.textContent.trim()))"))
+    checar("álbum: «Limpar filtros» aparece com filtro ativo", zp.evaluate("!document.getElementById('bLimpar').hidden"))
+    nome = zp.evaluate("document.querySelector('.carta .c-nome')?.textContent.trim().split(/\\s+/)[0]||''")
+    if nome:
+        zp.fill("#fBusca", nome); zp.wait_for_timeout(500)
+    n = zp.evaluate("(document.getElementById('bZip').textContent.match(/\\((\\d+)\\)/)||[0,0])[1]")
+    checar("álbum: botão do .zip mostra a quantidade filtrada", int(n) >= 1, str(n))
+    try:
+        with zp.expect_download(timeout=90000) as dl: zp.click("#bZip")
+        import zipfile
+        caminho = dl.value.path(); z = zipfile.ZipFile(caminho)
+        nomes = z.namelist()
+        checar("zip: íntegro e com uma imagem por cartinha", z.testzip() is None and len(nomes) == int(n), f"{len(nomes)} x {n}")
+        checar("zip: pasta por equipe e arquivos PNG", all(x.startswith("Equipe 3/") and x.endswith(".png") for x in nomes), str(nomes[:2]))
+        checar("zip: imagens são PNG de verdade", all(z.read(x)[:8] == b"\x89PNG\r\n\x1a\n" for x in nomes))
+    except Exception as e:
+        checar("zip: download concluído", False, str(e))
+    zp.click("#bLimpar"); zp.wait_for_timeout(400)
+    checar("álbum: «Limpar filtros» zera equipe e busca", zp.evaluate("document.getElementById('fEq').value===''&&document.getElementById('fBusca').value===''&&document.getElementById('bLimpar').hidden"))
+    checar("álbum: zip sem erros de script", not ez, str(ez)); zp.close()
+
     # ---- «Melhor do ano»: o detalhe abre o MESMO ranking anual (antes caía no mês mais recente e o agente mudava de posição)
     an = ctx.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
     an.goto(U + "album.html?mes=Melhor%20do%20ano"); an.wait_for_timeout(1800)

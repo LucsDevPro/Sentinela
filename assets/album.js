@@ -44,7 +44,10 @@ else {
   $('fMes').innerHTML = `<option value="${ANO}">${ANO} (média de todos os meses)</option>` + meses.slice().reverse().map(m => `<option>${esc(m)}</option>`).join('');
   const q0 = new URLSearchParams(location.search).get('mes'); if (q0 && (q0 === ANO || meses.includes(q0))) $('fMes').value = q0;
   const eqs = [...new Set(ag.map(x => x.a.equipe).filter(Boolean))].sort((p, q) => p.localeCompare(q, 'pt-BR', { numeric: true }));
-  $('fEq').insertAdjacentHTML('beforeend', eqs.map(e => `<option>${esc(e)}</option>`).join(''));
+  $('fEq').insertAdjacentHTML('beforeend', eqs.map(e => `<option value="${esc(e)}">${esc(e)}</option>`).join(''));
+  // filtros que vêm no endereço (?eq=Equipe 3&q=ana&nivel=OURO): dá para mandar o link do álbum de uma equipe
+  { const qs = new URLSearchParams(location.search), e0 = qs.get('eq'), n0 = qs.get('nivel');
+    if (e0 && eqs.includes(e0)) $('fEq').value = e0; if (n0) $('fNivel').value = n0; if (qs.get('q')) $('fBusca').value = qs.get('q'); }
   // ---- Compartilhar: baixar a cartinha como imagem ou mandar pelo WhatsApp (a imagem é gerada por Carta.enviar, a mesma de agente.html)
   let visAtual = [];
   const IC_BAIXAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>';
@@ -80,9 +83,13 @@ else {
     if (!doAno) lista.sort((p, q) => Carta.bruta(q.u) - Carta.bruta(p.u) || q.h - p.h || p.u.pos - q.u.pos || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'));
     if (!doAno) lista.forEach((l, i) => { l.lugar = i + 1; });
     lista.forEach(l => { l.nivel = Carta.medidas(l.ms, l.x.k).tier[1]; });
+    // rótulo de cada equipe com quantas cartinhas ela tem NESTE mês (antes de filtrar), para achar a equipe certa sem abrir uma a uma
+    [...$('fEq').options].forEach(o => { if (o.value) o.textContent = `${o.value} (${lista.filter(l => l.x.a.equipe === o.value).length})`; });
+    $('bLimpar').hidden = !(eq || niv || bu);
+    try { const u = new URLSearchParams(location.search); [['eq', eq], ['nivel', niv], ['q', $('fBusca').value.trim()]].forEach(([k, v]) => v ? u.set(k, v) : u.delete(k)); u.set('mes', mes); history.replaceState(null, '', '?' + u.toString() + location.hash); } catch (e) {}
     const base = lista.filter(l => (!eq || l.x.a.equipe === eq) && (!bu || norm(l.x.a.nome).includes(bu)));   // equipe + busca; o nível entra depois
     const vis = base.filter(l => !niv || l.nivel === niv);
-    visAtual = vis;
+    visAtual = vis; $('bZip').querySelector('span').textContent = vis.length ? `Baixar todas (${vis.length}) .zip` : 'Baixar todas (.zip)'; $('bZip').disabled = !vis.length;
     // atalhos por nível, com a contagem do que está filtrado por equipe/busca (clicar preenche o filtro "Nível")
     $('niveis').innerHTML = [['', 'Todos']].concat(NIVEIS.map(n => [n, n])).map(([v, rot]) => {
       const q = v ? base.filter(l => l.nivel === v).length : base.length;
@@ -101,6 +108,40 @@ else {
     $('resumo').textContent = vis.length ? (doAno ? `${vis.length} cartinha(s) de ${lista.length}: média de todos os meses (só quem tem ${MIN_MESES_ANO} meses ou mais).` : `${vis.length} cartinha(s) de ${lista.length} em ${mes}.`) : 'Nenhuma cartinha com esses filtros.';
   };
   ['fMes', 'fEq', 'fNivel'].forEach(i => $(i).onchange = desenhar); $('fBusca').oninput = desenhar;
+  $('bLimpar').onclick = () => { $('fEq').value = ''; $('fNivel').value = ''; $('fBusca').value = ''; desenhar(); };
+
+  // ---- Baixar todas: um .zip com a imagem de cada cartinha que está na tela, numa pasta por equipe, na ordem do ranking ----
+  let zipCancelado = false;
+  const semAcento = t => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const seguro = t => semAcento(t).replace(/[^A-Za-z0-9 ._-]+/g, '').trim() || 'sem-equipe';
+  $('bZip').onclick = async () => {
+    const itens = visAtual.slice(), n = itens.length, anon = document.body.classList.contains('modo-apresentacao'), btn = $('bZip');
+    if (!n) return;
+    if (n > 40 && !confirm(`Gerar ${n} imagens pode levar alguns minutos (principalmente no celular). Continuar?`)) return;
+    const msg = $('msgImg'); clearTimeout(aviso.t); zipCancelado = false; btn.disabled = true;
+    const mostra = (t, cancelar) => { msg.hidden = false; msg.innerHTML = esc(t) + (cancelar ? ' <button type="button" class="bt-limpar" id="bCancelaZip">Cancelar</button>' : ''); const c = $('bCancelaZip'); if (c) c.onclick = () => { zipCancelado = true; }; };
+    const arquivos = [], falhas = [];
+    try {
+      for (let i = 0; i < n; i++) {
+        if (zipCancelado) { mostra('Geração cancelada.'); return; }
+        mostra(`Gerando imagens: ${i + 1} de ${n}…`, true);
+        const l = itens[i];
+        try {
+          const bl = await Carta.png(l.x.a, l.ms, { id: l.x.k, ocultarNomes: anon, ocultarFoto: anon || document.body.classList.contains('sem-foto'), rapido: i > 0 });
+          const nome = String(l.lugar).padStart(2, '0') + '-' + (anon ? 'agente-' + l.lugar : Carta.nomeArquivo(l.x.a, l.ms).replace(/\.png$/, '')) + '.png';
+          arquivos.push({ nome: seguro(l.x.a.equipe || '') + '/' + nome, dados: bl });
+        } catch (e) { falhas.push(l.x.a.nome); }
+        await new Promise(r => setTimeout(r, 0));   // devolve o controle ao navegador (a tela não congela)
+      }
+      if (!arquivos.length) { mostra('Não consegui gerar as imagens aqui. Abra a página pelo endereço do site (não pelo arquivo no computador) e tente de novo.'); return; }
+      mostra('Montando o arquivo .zip…');
+      const zip = await ZipSimples.criar(arquivos);
+      const f = [$('fMes').value, $('fEq').value].filter(Boolean).map(seguro).join('-').replace(/\s+/g, '-').toLowerCase();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(zip); a.download = `cartinhas-${f || 'todas'}.zip`; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+      mostra(`Pronto: ${arquivos.length} imagens no .zip (pastas por equipe)${falhas.length ? '. Não consegui gerar: ' + falhas.join(', ') : ''}.`);
+    } catch (e) { mostra('Não consegui montar o .zip. Tente de novo.'); } finally { btn.disabled = !visAtual.length; }
+  };
   $('niveis').onclick = e => { const b = e.target.closest('.nv'); if (!b) return; $('fNivel').value = b.dataset.nivel; desenhar(); };
   desenhar();
 }

@@ -348,6 +348,7 @@
       return Promise.all([document.fonts ? document.fonts.ready : 0, document.fonts ? document.fonts.load('700 20px "Barlow Semi Condensed"') : 0, document.fonts ? document.fonts.load('600 14px "IBM Plex Sans"') : 0].concat(fotos));
     }).then(function () {
       var o = { pixelRatio: 2, backgroundColor: '#EEF2F8', cacheBust: false };
+      if (opcoes.rapido) return window.htmlToImage.toBlob(host, o);   // lote (zip): a 1ª cartinha já aqueceu fontes e imagens
       return window.htmlToImage.toBlob(host, o).then(function () { return window.htmlToImage.toBlob(host, o); });   // 2ª passada: a 1ª às vezes sai sem fontes/imagens (Safari)
     }).then(function (bl) { if (!bl || bl.size < 4000) throw new Error('imagem vazia'); fora.remove(); return bl; }, function (e) { fora.remove(); throw e; });
   }
