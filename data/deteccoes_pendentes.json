@@ -103,7 +103,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "15/11/2026 14:46"
+    "detectado_em": "16/11/2026 17:00"
   },
   {
     "tipo": "possiveis_ferias",
@@ -331,8 +331,8 @@
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
     "inicio": "19/10/2026",
-    "fim": "13/11/2026",
-    "duracao": 19,
+    "fim": "16/11/2026",
+    "duracao": 20,
     "status": "falta",
     "motivo": "Falta (sem abono — decisão da coordenação)",
     "confirmado_automaticamente": true,
@@ -421,7 +421,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "15/11/2026 14:46"
+    "detectado_em": "16/11/2026 17:00"
   },
   {
     "tipo": "possiveis_ferias",
@@ -471,7 +471,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "15/11/2026 14:46"
+    "detectado_em": "16/11/2026 17:00"
   },
   {
     "tipo": "possiveis_ferias",
@@ -721,6 +721,41 @@
     "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
     "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
     "validada_em": "13/11/2026 19:04"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 1",
+    "agentes_envolvidos": [
+      30,
+      73,
+      79,
+      85,
+      116,
+      470,
+      672,
+      1935,
+      3037,
+      3101
+    ],
+    "nomes_envolvidos": [
+      "Adriana de Jesus Saraiva",
+      "Adriano Ricardo Thiel",
+      "Ana Gabriela Silva Garcete",
+      "Carlos Alberto Albiero",
+      "Cris Milene Cardenas da Silva",
+      "Evelyn Santana Santos Oliveira",
+      "Gabriel Alan de Oliveira Martins",
+      "Raquel Ortiz dos Santos",
+      "Rozentina Matos de Oliveira",
+      "Wagner Tarlei Gomes"
+    ],
+    "inicio": "16/11/2026",
+    "fim": "16/11/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "16/11/2026 17:00"
   },
   {
     "tipo": "paralisacao_coletiva",
@@ -1071,6 +1106,43 @@
     "decidido_via": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
     "validada_por": "coordenação (todas as paralisações coletivas validadas, 13/11/2026)",
     "validada_em": "13/11/2026 19:04"
+  },
+  {
+    "tipo": "paralisacao_coletiva",
+    "equipe": "Equipe 2",
+    "agentes_envolvidos": [
+      81,
+      99,
+      115,
+      125,
+      134,
+      142,
+      465,
+      2030,
+      2917,
+      3035,
+      3127
+    ],
+    "nomes_envolvidos": [
+      "Bianca Afonso Narbaez",
+      "Brauher Luiz Alvarenga Gonzalez",
+      "Cicero Isrrael Sanabria",
+      "Fabiana de Figueredo Vieira",
+      "Gisele Olimpia Torres",
+      "Mateus Falcao de Souza",
+      "Suely Aguiar Alves Luiz",
+      "Tania Maria Montania",
+      "Teonilda Florentino Vieira",
+      "Wesley de Souza Leal",
+      "William Anderson Chamorro Tavares"
+    ],
+    "inicio": "16/11/2026",
+    "fim": "16/11/2026",
+    "duracao": 1,
+    "status": "confirmada",
+    "categoria_coletiva": "Chuva",
+    "confirmado_automaticamente": true,
+    "detectado_em": "16/11/2026 17:00"
   },
   {
     "tipo": "paralisacao_coletiva",
