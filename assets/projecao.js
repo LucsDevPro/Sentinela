@@ -141,6 +141,27 @@ function listaPts(titulo,itens,cls){
   if(!itens||!itens.length)return '';
   return '<div class="cp-bloco"><h3>'+titulo+'</h3><ul>'+itens.slice(0,3).map(function(x){return '<li><span>'+esc(x.c)+'</span><b class="'+cls+'">'+(x.p>0?'+':'')+br(x.p,1)+'</b></li>';}).join('')+'</ul></div>';
 }
+// «Nomes: ocultos»: o texto é trocado (não só borrado) por «Agente N» e pelo número, e a foto sai
+function anonCarta(raiz,i,u){
+  var carta=raiz.querySelector('.carta');
+  if(mostrarNomes||!carta)return;
+  var cn=carta.querySelector('.c-nome');if(cn)cn.textContent='Agente '+(i+1);
+  var ini=carta.querySelector('.c-foto .nome');if(ini)ini.textContent=String(i+1);
+  var im=carta.querySelector('.c-foto img');if(im)im.remove();
+  carta.setAttribute('aria-label','Cartinha do Agente '+(i+1)+': nota '+br(u.pontos,1));
+}
+/* ---- modo pacote (tecla P): só quem fez 100, revelado de trás pra frente até o 1º lugar (assets/pacote.js) ---- */
+var pacoteCtl=null;
+function slidesDoPacote(){
+  if(!window.Carta||!window.Pacote||!mesCartas)return [];
+  var L=listaCartas(mesCartas);if(!L.length)return [];
+  var c100=[];L.forEach(function(l,i){if(Math.round(l.u.pontos)>=100)c100.push({l:l,i:i});});
+  if(c100.length<3)c100=L.slice(0,3).map(function(l,i){return {l:l,i:i};});   // com menos de 3 notas 100, o pódio (top 3) aparece mesmo assim
+  var itens=c100.map(function(x){var l=x.l,i=x.i;return {rank:i+1,rot:mostrarNomes?l.a.nome:('Agente '+(i+1)),eq:l.a.equipe,nota:br(l.u.pontos,1),
+    mk:function(){return Carta.html({nome:l.a.nome,equipe:l.a.equipe},l.ms,l.a.k,true);},
+    prep:function(raiz){anonCarta(raiz,i,l.u);}};});
+  return [{id:'pacote',titulo:'Pacote de cartinhas',sub:mesCartas,manual:true,montar:function(el){pacoteCtl=Pacote.iniciar(el,itens,{mes:mesCartas});}}];
+}
 function slidesDasCartas(){
   var out=[];
   if(!window.Carta||!mesCartas)return out;
@@ -154,13 +175,7 @@ function slidesDasCartas(){
       el.insertAdjacentHTML('beforeend','<div class="cartela"><div class="cslot" id="cslot">'+Carta.html({nome:l.a.nome,equipe:l.a.equipe},l.ms,l.a.k,true)+'</div>'+
         '<div class="cpainel"><div class="cp-nome">'+esc(rot)+'</div><div class="cp-eq">'+esc(l.a.equipe)+' · '+(i+1)+'º de '+N+'</div>'+
         '<div class="cp-nota"><b>'+br(u.pontos,1)+'</b><span>nota do mês</span></div>'+listaPts('O que mais deu pontos',u.ganhos,'pos')+listaPts('O que mais tirou pontos',u.perdas,'neg')+'</div></div>');
-      var carta=el.querySelector('.carta');
-      if(!mostrarNomes&&carta){   // nome e foto só aparecem com «Nomes: visíveis»: aqui o texto é trocado (não só borrado)
-        var cn=carta.querySelector('.c-nome');if(cn)cn.textContent='Agente '+(i+1);
-        var ini=carta.querySelector('.c-foto .nome');if(ini)ini.textContent=String(i+1);
-        var im=carta.querySelector('.c-foto img');if(im)im.remove();
-        carta.setAttribute('aria-label','Cartinha do Agente '+(i+1)+': nota '+br(u.pontos,1));
-      }
+      var carta=el.querySelector('.carta');anonCarta(el,i,u);
       ajustarCarta(el);
       if(window.CartaFX&&carta)CartaFX.revelar(carta);   // o pacote vira e a cartinha aparece
     }});
@@ -176,12 +191,12 @@ function ajustarCarta(el){
 }
 function trocarModo(m){
   modo=m;slides.length=0;
-  (m==='cartas'?slidesDasCartas():[]).forEach(function(x){slides.push(x);});
+  (m==='cartas'?slidesDasCartas():m==='pacote'?slidesDoPacote():[]).forEach(function(x){slides.push(x);});
   if(!slides.length){modo='paineis';slidesPaineis.forEach(function(x){slides.push(x);});}
-  document.getElementById('bModo').querySelector('span').textContent=modo==='cartas'?'Painéis':'Cartinhas';
+  document.getElementById('bModo').querySelector('span').textContent=modo!=='paineis'?'Painéis':'Cartinhas';
   document.getElementById('qtd').hidden=modo!=='cartas';
-  document.body.classList.toggle('modo-cartas',modo==='cartas');
-  if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+(modo==='cartas'?'#cartinhas':''));
+  document.body.classList.toggle('modo-cartas',modo==='cartas');document.body.classList.toggle('modo-pacote',modo==='pacote');
+  if(history.replaceState)history.replaceState(null,'',location.pathname+location.search+(modo==='cartas'?'#cartinhas':modo==='pacote'?'#pacote':''));
   montarDots();if(window.PROJECAO)window.PROJECAO.total=slides.length;
   ir(0);
 }
@@ -198,7 +213,7 @@ function desenhar(){
 function ir(i){atual=(i+slides.length)%slides.length;t0=performance.now();desenhar();}
 function volta(){ir(atual-1);} function avanca(){ir(atual+1);}
 function tick(t){
-  if(!pausado&&slides.length>1){var p=(t-t0)/(seg*1000);barra.style.width=Math.min(100,p*100)+'%';if(p>=1)avanca();}
+  if(!pausado&&slides.length>1&&!(slides[atual]&&slides[atual].manual)){var p=(t-t0)/(seg*1000);barra.style.width=Math.min(100,p*100)+'%';if(p>=1)avanca();}
   raf=requestAnimationFrame(tick);
 }
 function pausa(v){pausado=v;var b=document.getElementById('bPausa');b.querySelector('span').textContent=v?'Continuar':'Pausar';b.querySelector('use').setAttribute('href',v?'#i-play':'#i-pause');if(!v)t0=performance.now()-(parseFloat(barra.style.width)||0)/100*seg*1000;}
@@ -206,19 +221,27 @@ document.getElementById('bPausa').onclick=function(){pausa(!pausado);};
 document.getElementById('vel').onchange=function(){seg=parseInt(this.value,10);t0=performance.now();};
 function nomes(){mostrarNomes=!mostrarNomes;document.querySelector('#bNomes span').textContent='Nomes: '+(mostrarNomes?'visíveis':'ocultos');desenhar();}
 document.getElementById('bNomes').onclick=nomes;
-document.getElementById('bModo').onclick=function(){trocarModo(modo==='cartas'?'paineis':'cartas');};
+document.getElementById('bModo').onclick=function(){trocarModo(modo==='paineis'?'cartas':'paineis');};
+document.getElementById('bPacote').onclick=function(){trocarModo(modo==='pacote'?'paineis':'pacote');};
 document.getElementById('qtd').onchange=function(){qtdCartas=parseInt(this.value,10);if(modo==='cartas')trocarModo('cartas');};
 window.addEventListener('resize',function(){var el=palco.querySelector('.slide');if(el&&modo==='cartas')ajustarCarta(el);});
 function tela(){if(document.fullscreenElement)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();}
 document.getElementById('bTela').onclick=tela;
 document.addEventListener('keydown',function(e){
   if(e.target&&/SELECT|INPUT/.test(e.target.tagName))return;
+  if(modo==='pacote'&&pacoteCtl){   // no pacote a tela não passa sozinha: cada tecla abre/revela a próxima
+    if(e.key==='ArrowRight'||e.key==='Enter'||e.key===' '){e.preventDefault();pacoteCtl.passo();return;}
+    if(e.key==='ArrowLeft')return;
+    if((e.key==='r'||e.key==='R')&&!pacoteCtl.ocupado()){ir(0);return;}
+    if(e.key==='p'||e.key==='P'){trocarModo('paineis');return;}
+  }
+  if(e.key==='p'||e.key==='P'){trocarModo('pacote');return;}
   if(e.key==='ArrowRight')avanca();else if(e.key==='ArrowLeft')volta();else if(e.key===' '){e.preventDefault();pausa(!pausado);}
-  else if(e.key==='f'||e.key==='F')tela();else if(e.key==='n'||e.key==='N')nomes();else if(e.key==='c'||e.key==='C')trocarModo(modo==='cartas'?'paineis':'cartas');
+  else if(e.key==='f'||e.key==='F')tela();else if(e.key==='n'||e.key==='N')nomes();else if(e.key==='c'||e.key==='C')trocarModo(modo==='paineis'?'cartas':'paineis');
 });
 document.addEventListener('sentinela:tema',function(){if(window.aplicarTemaGraficos)window.aplicarTemaGraficos();desenhar();});
 window.PROJECAO={modo:function(){return modo;},trocarModo:trocarModo,ir:ir,pausa:pausa,total:slides.length,ids:slides.map(function(s){return s.id;}),atual:function(){return atual;},pausado:function(){return pausado;}};
 if(window.aplicarTemaGraficos)window.aplicarTemaGraficos();
-if(location.hash==='#cartinhas')trocarModo('cartas');else ir(0);
+if(location.hash==='#pacote')trocarModo('pacote');else if(location.hash==='#cartinhas')trocarModo('cartas');else ir(0);
 raf=requestAnimationFrame(tick);
 })();

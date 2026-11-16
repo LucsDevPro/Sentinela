@@ -226,6 +226,28 @@ with sync_playwright() as p:
     checar("efeitos: com «reduzir movimento» a reunião mostra a carta direto", rp.locator("#palco .c-pacote").count() == 0 and rp.locator("#palco .carta").count() == 1)
     ctx_r.close()
 
+    # ---- reunião: abrir pacote (só quem fez 100, revelado de trás pra frente até o 1º lugar)
+    pk = ctx.new_page(); epk = []; pk.on("pageerror", lambda x: epk.append(str(x)))
+    pk.goto(U + "projecao.html#pacote"); pk.wait_for_timeout(800)
+    n100 = pk.locator(".pk-slot").count()
+    esperado = pk.evaluate("(()=>{const D=Object.values(AGENTES_DADOS.agentes);const mes=document.querySelector('.slide h2 small').textContent;return D.filter(a=>a.meses.some(m=>m.mes===mes&&Math.round(m.pontos)>=100)).length})()")
+    checar("pacote: começa fechado, com tantas cartas quantos agentes com 100", pk.locator(".pk-pacote").count() == 1 and n100 == max(esperado, 3), f"{n100} x {esperado}")
+    checar("pacote: a tela não passa sozinha (modo manual)", pk.evaluate("PROJECAO.modo()") == "pacote")
+    pk.keyboard.press("Enter"); pk.wait_for_function("getComputedStyle(document.querySelector('.pk-pacote')).display==='none'", timeout=15000)
+    pk.keyboard.press("Enter"); pk.wait_for_function(f"document.querySelector('.pk-cont').textContent==='Revelando 1 de {n100}'", timeout=15000)
+    checar("pacote: revela primeiro a ÚLTIMA colocada, sem nome (Agente N)", pk.evaluate("document.querySelector('.pk-rank').textContent") == f"{n100}º" and "Agente" in pk.evaluate("document.querySelector('.pk-nome').textContent") and pk.locator(".pk-grande .carta").count() == 1)
+    checar("pacote: sem erros de script (versão com animação)", not epk, str(epk)); pk.close()
+    ctr = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); rk = ctr.new_page(); erk = []; rk.on("pageerror", lambda x: erk.append(str(x)))
+    rk.goto(U + "projecao.html#pacote"); rk.wait_for_timeout(600); ranks = []
+    for i in range(n100 + 2):
+        rk.keyboard.press("Enter"); rk.wait_for_timeout(120)
+        r = rk.evaluate("document.querySelector('.pk-rank')?.textContent||''")
+        if r and (not ranks or ranks[-1] != r): ranks.append(r)
+    seq = [int(x.replace("º", "")) for x in ranks]
+    checar("pacote: revelação vai do último até o 1º lugar, em ordem", seq == sorted(seq, reverse=True) and seq[-1] == 1 and seq[-3:] == [3, 2, 1], str(seq))
+    checar("pacote: no fim mostra os parabéns e as cartas ficam à mostra", rk.locator(".pk-fim").count() == 1 and rk.locator(".pk-slot.aberta").count() == n100)
+    checar("pacote: com «reduzir movimento» não há pacote voando nem erros", not erk, str(erk)); ctr.close()
+
     # ---- «Melhor do ano»: o detalhe abre o MESMO ranking anual (antes caía no mês mais recente e o agente mudava de posição)
     an = ctx.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
     an.goto(U + "album.html?mes=Melhor%20do%20ano"); an.wait_for_timeout(1800)
