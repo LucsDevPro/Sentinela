@@ -307,6 +307,8 @@ with sync_playwright() as p:
         try:
             dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", arq], capture_output=True, text=True, timeout=30).stdout.strip() or 0)
             checar("vídeo: dura cerca de 5 segundos", 4.4 <= dur <= 5.8, str(dur))
+            trilhas = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", arq], capture_output=True, text=True, timeout=30).stdout.split()
+            checar("vídeo: tem imagem e trilha de áudio (trovão e fanfarra)", "video" in trilhas and "audio" in trilhas, str(trilhas))
         except FileNotFoundError: pass
     checar("vídeo: sem erros de script", not evd, str(evd)); vd.close()
 

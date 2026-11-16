@@ -1700,3 +1700,6 @@ dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:1
 .c-conj.c-oculta > :not(.c-pacote) { visibility: hidden; }
 
 dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#050F20;object-fit:contain}
+
+.c-raio.forte .g { stroke-width: 24; opacity: .7; }
+.c-raio.forte .n { stroke-width: 8; }

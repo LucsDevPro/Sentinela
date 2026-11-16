@@ -1,13 +1,13 @@
 /* Vídeo de 5 segundos da cartinha animada, para mandar no WhatsApp (principalmente top 3).
    A cartinha é a MESMA imagem do botão «Baixar» (Carta.png, com fundo transparente); aqui só se anima em volta dela num <canvas> 720×1280 (vertical)
-   e se grava com MediaRecorder: pacote que gira e se revela, clarão, ondas, partículas, raios e relâmpagos, brilho passando, estrelinhas, faixa «3º LUGAR» e o nome.
+   e se grava com MediaRecorder (imagem + trilha sonora sintetizada: giro, suspense, trovões e fanfarra): pacote que gira e se revela, clarão, ondas, partículas, raios e relâmpagos, brilho passando, estrelinhas, faixa «3º LUGAR» e o nome.
    Os efeitos crescem com a posição (1º ouro > 2º prata > 3º bronze > demais). MP4 quando o navegador grava MP4 (o que o WhatsApp aceita em qualquer aparelho); senão WebM.
    CartaVideo.enviar(a, ms, opcoes) → abre a janela de envio e devolve uma frase. CartaVideo.gerar(...) → Promise<Blob>. */
 (function () {
   'use strict';
   var W = 720, H = 1280, FPS = 30, DUR = 5, T_REV = 1.15;
   var TIER = {
-    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: 'CAMPEÃO', raios: 9, part: 96, ondas: 4 },
+    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: 'CAMPEÃO', raios: 14, part: 150, ondas: 7 },
     2: { a: '#DDE8F8', b: '#FFFFFF', c: '#8FA9CF', bg: ['#11213d', '#070f1f'], rot: '2º LUGAR', raios: 6, part: 64, ondas: 3 },
     3: { a: '#E8A060', b: '#FFE2C4', c: '#B8662A', bg: ['#2a1608', '#120a04'], rot: '3º LUGAR', raios: 4, part: 46, ondas: 2 },
     0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, raios: 0, part: 26, ondas: 1 }
@@ -64,7 +64,13 @@
   function quadro(ctx, t, S) {
     var T = S.T, info = S.info, img = S.img, top = info.lugar <= 3;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+    var abalo = info.lugar === 1 && t >= T_REV && t < T_REV + 0.7 ? (1 - (t - T_REV) / 0.7) * 18 : 0;   // 1º lugar: a tela treme com a revelação
+    ctx.save(); if (abalo) ctx.translate(Math.sin(t * 90) * abalo, Math.cos(t * 77) * abalo);
     fundo(ctx, t, S);
+    if (info.lugar === 1 && t > 0.3) {   // holofote dourado vindo do alto, pulsando
+      var hb = ease((t - 0.3) / 0.8) * (0.8 + 0.2 * Math.sin(t * 5)), hg = ctx.createLinearGradient(0, 0, 0, 900); hg.addColorStop(0, rgba(T.b, 0.5 * hb)); hg.addColorStop(1, rgba(T.a, 0));
+      ctx.fillStyle = hg; ctx.beginPath(); ctx.moveTo(250, 0); ctx.lineTo(470, 0); ctx.lineTo(760, 900); ctx.lineTo(-40, 900); ctx.closePath(); ctx.fill();
+    }
     var tr = t - T_REV, k = 0.9 * (W / 664) * 0.99;   // a imagem da cartinha (664 px de largura) ocupa quase toda a largura
     // 1) pacote que gira e se aproxima, até virar a carta no clarão
     var p = ease(t / T_REV), ang = (1 - p) * -Math.PI * 3, cx = Math.cos(ang), sc = 0.55 + 0.45 * p, y = 640 - Math.sin(Math.PI * p) * 140;
@@ -93,7 +99,8 @@
       // ondas de choque
       for (i = 0; i < T.ondas; i++) { var o = tr - i * 0.14; if (o < 0 || o > 0.9) continue; ctx.lineWidth = 10 * (1 - o / 0.9) + 1; ctx.strokeStyle = rgba(i % 2 ? T.b : T.a, 1 - o / 0.9); ctx.beginPath(); ctx.arc(360, 640, 60 + o * 900, 0, 6.2832); ctx.stroke(); }
       // clarão
-      if (tr < 0.45) { ctx.fillStyle = rgba(top ? T.b : '#FFFFFF', 0.95 * (1 - tr / 0.45)); ctx.fillRect(0, 0, W, H); }
+      if (tr < 0.45) { ctx.fillStyle = rgba(info.lugar === 1 ? '#FFFFFF' : top ? T.b : '#FFFFFF', 0.95 * (1 - tr / 0.45)); ctx.fillRect(0, 0, W, H); }
+      if (info.lugar === 1 && tr > 0.17 && tr < 0.6) { ctx.fillStyle = rgba('#FFD25A', 0.7 * (1 - (tr - 0.17) / 0.43)); ctx.fillRect(0, 0, W, H); }   // segundo clarão, dourado
     }
     // raios (só no pódio): três traços (brilho largo, médio e núcleo branco) que piscam, mais um clarão azulado no instante da queda
     for (var j = 0; j < S.raios.length; j++) {
@@ -111,9 +118,12 @@
     ctx.textAlign = 'center'; ctx.shadowBlur = 0;
     var rot2 = T.rot || (info.lugar + 'º LUGAR'), bp = ease((t - 1.3) / 0.5);
     if (bp > 0) {
-      ctx.save(); ctx.globalAlpha = bp; ctx.translate(360, 118); ctx.scale(1 + (1 - bp) * 1.6, 1 + (1 - bp) * 1.6);
-      ctx.font = '700 ' + (top ? 92 : 70) + 'px "Barlow Semi Condensed", system-ui, sans-serif'; ctx.shadowColor = rgba(T.a, 0.9); ctx.shadowBlur = 30;
-      var gg = ctx.createLinearGradient(0, -70, 0, 20); gg.addColorStop(0, T.b); gg.addColorStop(1, T.a); ctx.fillStyle = gg; ctx.fillText(rot2, 0, 0); ctx.restore();
+      var pul = info.lugar === 1 ? 1 + 0.035 * Math.sin(t * 7) : 1;
+      ctx.save(); ctx.globalAlpha = bp; ctx.translate(360, 118); ctx.scale((1 + (1 - bp) * 1.6) * pul, (1 + (1 - bp) * 1.6) * pul);
+      ctx.font = '700 ' + (info.lugar === 1 ? 112 : top ? 92 : 70) + 'px "Barlow Semi Condensed", system-ui, sans-serif'; ctx.shadowColor = rgba(T.a, 0.9); ctx.shadowBlur = 30;
+      var gg = ctx.createLinearGradient(0, -70, 0, 20); gg.addColorStop(0, T.b); gg.addColorStop(1, T.a); ctx.fillStyle = gg; ctx.fillText(rot2, 0, 0);
+      if (info.lugar === 1) { var sw = ((t * 0.7) % 1.6 - 0.3) * 520 - 260, gs = ctx.createLinearGradient(sw - 70, 0, sw + 70, 0); gs.addColorStop(0, 'rgba(255,255,255,0)'); gs.addColorStop(0.5, 'rgba(255,255,255,.95)'); gs.addColorStop(1, 'rgba(255,255,255,0)'); ctx.globalCompositeOperation = 'source-atop'; ctx.fillStyle = gs; ctx.fillText(rot2, 0, 0); ctx.globalCompositeOperation = 'source-over'; }
+      ctx.restore();
     }
     var np = ease((t - 1.7) / 0.5);
     if (np > 0) {
@@ -127,12 +137,12 @@
     }
     var fp = ease((t - 2.2) / 0.6);
     if (fp > 0) { ctx.save(); ctx.globalAlpha = 0.75 * fp; ctx.fillStyle = '#9DB2D0'; ctx.font = '600 24px "IBM Plex Sans", system-ui, sans-serif'; ctx.fillText('SENTINELA · Prefeitura de Ponta Porã', 360, 1236); ctx.restore(); }
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = 1; ctx.restore();
   }
 
   function escolherMime() {
     if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return null;
-    var c = ['video/mp4;codecs=avc1.42E01E', 'video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+    var c = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4;codecs=avc1,mp4a.40.2', 'video/mp4;codecs=avc1.42E01E', 'video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
     for (var i = 0; i < c.length; i++) if (MediaRecorder.isTypeSupported(c[i])) return c[i];
     return null;
   }
@@ -141,16 +151,27 @@
   }
   function fontes() { return document.fonts ? Promise.all([document.fonts.load('700 60px "Barlow Semi Condensed"'), document.fonts.load('600 30px "IBM Plex Sans"')]).catch(function () {}) : Promise.resolve(); }
 
+  /* trilha sonora do vídeo (agendada na hora da gravação, sincronizada com os quadros): giro, suspense, batida da revelação, trovão a cada raio, fanfarra no 1º */
+  function sonsDoVideo(S) {
+    var l = S.info.lugar, L = [['giro', 0.05, 1050]];
+    if (l <= 3) L.push(['suspense', 0.1, 1000]);
+    L.push([l === 1 ? 'ouro' : l === 2 ? 'prata' : l === 3 ? 'bronze' : 'ding', T_REV]);
+    S.raios.forEach(function (r) { L.push(['trovao', r.ts]); });
+    if (l === 1) L.push(['fanfarra', 2.0]);
+    return L;
+  }
+
   /* grava o quadro a quadro em tempo real (5 s) */
   function gravar(S) {
     return new Promise(function (ok, no) {
       var mime = escolherMime(); if (!mime) return no(new Error('sem MediaRecorder'));
       var c = document.createElement('canvas'); c.width = W; c.height = H; var ctx = c.getContext('2d'); quadro(ctx, 0, S);
-      var rec, partes = [];
-      try { rec = new MediaRecorder(c.captureStream(FPS), { mimeType: mime, videoBitsPerSecond: 5000000 }); } catch (e) { return no(e); }
+      var rec, partes = [], au = window.Som && Som.paraGravacao ? Som.paraGravacao() : null, fluxo = c.captureStream(FPS);
+      if (au) { au.stream.getAudioTracks().forEach(function (tr) { fluxo.addTrack(tr); }); au.iniciar(); sonsDoVideo(S).forEach(function (x) { au.tocar(x[0], x[1], x[2]); }); }
+      try { rec = new MediaRecorder(fluxo, { mimeType: mime, videoBitsPerSecond: 5000000 }); } catch (e) { return no(e); }
       rec.ondataavailable = function (e) { if (e.data && e.data.size) partes.push(e.data); };
       rec.onerror = function (e) { no(e.error || new Error('gravação')); };
-      rec.onstop = function () { var b = new Blob(partes, { type: mime.split(';')[0] }); b.size > 2000 ? ok(b) : no(new Error('vídeo vazio')); };
+      rec.onstop = function () { if (au) setTimeout(au.fechar, 300); var b = new Blob(partes, { type: mime.split(';')[0] }); b.size > 2000 ? ok(b) : no(new Error('vídeo vazio')); };
       var ini = performance.now(), id;
       rec.start(250);
       id = setInterval(function () {

@@ -75,16 +75,16 @@
     p.push([x1, y1]); return p;
   }
   function dpath(p) { return 'M' + p.map(function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join(' L'); }
-  function raios(alvo, n, cor) {
+  function raios(alvo, n, cor, opt) {   // opt = {x, y, n}: os primeiros `opt.n` raios caem DIRETO naquele ponto (mais grossos)
     if (REDUZ || !alvo || !alvo.animate) return;
     var w = alvo.clientWidth || 800, h = alvo.clientHeight || 600, cx = cor || '#9FD4FF', wrap = document.createElement('div'); wrap.className = 'c-raios';
     for (var i = 0; i < (n || 6); i++) {
-      var x0 = w * (0.08 + Math.random() * 0.84), y1 = h * (0.45 + Math.random() * 0.5), x1 = x0 + (Math.random() - 0.5) * w * 0.18, main = caminho(x0, -10, x1, y1, w * 0.07, 12), d = dpath(main), ramos = '';
+      var forte = !!(opt && opt.x != null && i < (opt.n || 1)), x0 = forte ? opt.x + (Math.random() - 0.5) * 70 : w * (0.08 + Math.random() * 0.84), y1 = forte ? opt.y : h * (0.45 + Math.random() * 0.5), x1 = forte ? opt.x + (Math.random() - 0.5) * 24 : x0 + (Math.random() - 0.5) * w * 0.18, main = caminho(x0, -10, x1, y1, w * 0.07, 12), d = dpath(main), ramos = '';
       for (var r = 0; r < 3; r++) {
         var m = main[2 + Math.floor(Math.random() * 8)], dir = Math.random() < 0.5 ? -1 : 1;
         ramos += '<path class="r" d="' + dpath(caminho(m[0], m[1], m[0] + dir * (40 + Math.random() * 110), m[1] + 60 + Math.random() * 130, 26, 5)) + '"/>';
       }
-      var sv = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); sv.setAttribute('class', 'c-raio'); sv.setAttribute('width', w); sv.setAttribute('height', h); sv.setAttribute('viewBox', '0 0 ' + w + ' ' + h); sv.style.setProperty('--rc', cx);
+      var sv = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); sv.setAttribute('class', 'c-raio' + (forte ? ' forte' : '')); sv.setAttribute('width', w); sv.setAttribute('height', h); sv.setAttribute('viewBox', '0 0 ' + w + ' ' + h); sv.style.setProperty('--rc', cx);
       sv.innerHTML = '<path class="g" d="' + d + '"/><path class="n" d="' + d + '"/>' + ramos;
       var fl = document.createElement('div'); fl.className = 'c-raio-flash'; wrap.appendChild(fl); wrap.appendChild(sv);
       var at = 120 + i * (1500 / (n || 6)) + Math.random() * 220;

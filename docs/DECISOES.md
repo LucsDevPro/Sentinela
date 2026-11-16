@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (3) — 1º lugar com muito mais destaque + áudio no vídeo
+- **Pacote, 1º lugar:** suspense maior (≈2,7 s) com holofote dourado, tela escura, coração batendo (`batida`) e a tela tremendo; na revelação clarão branco + dourado, tremor forte, 8 ondas, 190 partículas, 14 raios + 4 raios que caem DIRETO na carta (`CartaFX.raios(..., {x, y, n})`), dois trovões e a fanfarra, coroa 👑 que cai e quica no topo da carta, faixa «CAMPEÃO · 1º LUGAR» com brilho correndo, raios do fundo mais rápidos e **tempestade contínua** (3 raios + trovão a cada 3 s) enquanto ela está na tela. A carta grande usa mais espaço (o 1º pode cobrir um pouco da fileira).
+- **Vídeo:** o 1º ganha 14 raios, 7 ondas, 150 partículas, tremor, clarão duplo, holofote dourado e a faixa «CAMPEÃO» maior, pulsando e com brilho passando. Agora o vídeo tem **trilha sonora** (`Som.paraGravacao`): giro, suspense, batida da revelação, um trovão por raio e fanfarra no 1º; vale mesmo com o som da reunião desligado. Prefere MP4 com AAC (WhatsApp/iPhone); sem isso cai para o que o navegador gravar.
+
 ## 16/11/2026 (2) — raios e trovão no lugar do confete
 - O confete saiu de tudo (álbum, pacote e vídeo). No lugar: **relâmpagos** irregulares com ramificações, clarão azulado e **trovão** (som `trovao`, quando o som está ligado). `CartaFX.raios(alvo, n, cor)` no palco/álbum; no vídeo são desenhados no canvas (3 traços: brilho largo, médio e núcleo branco). Quantidade cresce do 3º (4) ao 2º (6) e ao 1º (9); o final da revelação solta 8. Seguem as regras dos outros efeitos: nada com «reduzir movimento», nada no PNG nem na impressão.
 

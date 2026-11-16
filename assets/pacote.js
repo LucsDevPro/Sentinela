@@ -126,15 +126,15 @@
     }
 
     // ---- 2) revelar uma: ela sai da fileira, gira até o centro, vira e aparece com efeitos proporcionais à posição ----
-    var foco = null;
-    function eBig() { return Math.max(0.5, Math.min(1.75, ((H - folga - 118) * 0.94) / 392, (W * 0.4) / 272)); }
+    var foco = null, tempestade = null;
+    function eBig() { return Math.max(0.5, Math.min(1.75, ((H - folga * 0.55 - 112) * 0.96) / 392, (W * 0.4) / 272)); }
     async function revelar() {
       ocupado = true; atual++;
       var idx = ordem[atual], it = itens[idx], sl = slots[idx], rk = it.rank, top = rk <= 3 ? rk : 0, cores = NIVEL[top];
       texto('', 'Revelando ' + (atual + 1) + ' de ' + N + ' · faltam ' + (N - atual - 1));
       palco.setAttribute('data-nv', top ? 'r' + top : 'n');
       var eb = eBig();
-      foco = div('pk-foco'); foco.style.paddingBottom = folga + 'px'; foco.style.paddingTop = (top ? 118 : 44) + 'px';
+      foco = div('pk-foco'); foco.style.paddingBottom = Math.round(folga * 0.55) + 'px'; foco.style.paddingTop = (top ? 108 : 44) + 'px';
       var gr = div('pk-grande'); gr.style.setProperty('--e', eb.toFixed(3));
       var info = div('pk-info', '<div class="pk-rank">' + rk + 'º</div><div class="pk-nome">' + esc(it.rot) + '</div><div class="pk-eq">' + esc(it.eq || '') + '</div><div class="pk-nota"><b>' + esc(it.nota) + '</b><span>nota do mês</span></div>' + (cfg.video ? '<button type="button" class="pk-video">🎬 Vídeo de 5 s para o WhatsApp</button><div class="pk-vst" role="status" aria-live="polite"></div>' : ''));
       var bv = info.querySelector('.pk-video');
@@ -151,10 +151,14 @@
       var dx = b.x - a.x, dy = b.y - a.y;
       await anima(voo, [{ transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + k + ') rotateY(0deg)' }, { transform: 'translate(' + dx * 0.4 + 'px,' + (dy * 0.4 - 90) + 'px) scale(' + (k + (1 - k) * 0.6) + ') rotateY(540deg)', offset: 0.55 }, { transform: 'translate(0,0) scale(1) rotateY(1080deg)' }], top ? 1300 : 900, { easing: 'cubic-bezier(.3,.7,.3,1)' }, { transform: 'none' });
       if (top) {
-        var gl = '0 0 ' + (40 + top * 10) + 'px ' + cores[0]; if (window.Som) Som.tocar('suspense', 1200 + (4 - top) * 300);
-        await anima(voo, [{ transform: 'translate(0,0) scale(1)', filter: 'brightness(1)' }, { transform: 'translate(-10px,0) scale(1.03)', filter: 'brightness(1.3)' }, { transform: 'translate(10px,0) scale(1.06)', filter: 'brightness(1.6)' }, { transform: 'translate(-12px,0) scale(1.08)', filter: 'brightness(2)' }, { transform: 'translate(0,0) scale(1.1)', filter: 'brightness(2.6)' }], 1200 + (4 - top) * 300, { easing: 'ease-in' }, null);
+        var gl = '0 0 ' + (40 + top * 10) + 'px ' + cores[0]; if (window.Som) Som.tocar('suspense', top === 1 ? 2600 : 1200 + (4 - top) * 300);
+        if (top === 1) {   // suspense maior: holofote dourado, escuro, e o «coração» batendo com a tela tremendo
+          palco.classList.add('escuro'); var hf = div('pk-holofote'); hf.style.left = (a.x - 150 * eb) + 'px'; hf.style.width = (300 * eb) + 'px'; foco.appendChild(hf); anima(hf, [{ opacity: 0 }, { opacity: 1 }], 900, null, { opacity: '1' });
+          [350, 950, 1550, 2050].forEach(function (ms) { setTimeout(function () { treme(10); if (window.Som) Som.tocar('batida'); }, ms); });
+        }
+        await anima(voo, [{ transform: 'translate(0,0) scale(1)', filter: 'brightness(1)' }, { transform: 'translate(-10px,0) scale(1.03)', filter: 'brightness(1.3)' }, { transform: 'translate(10px,0) scale(1.06)', filter: 'brightness(1.6)' }, { transform: 'translate(-12px,0) scale(1.08)', filter: 'brightness(2)' }, { transform: 'translate(0,0) scale(1.1)', filter: 'brightness(2.6)' }], top === 1 ? 2700 : 1200 + (4 - top) * 300, { easing: 'ease-in' }, null);
         voo.style.boxShadow = gl;
-        if (top === 1) { palco.classList.add('escuro'); await esp(350); }
+        if (top === 1) await esp(300);
       }
       await anima(voo, [{ transform: 'rotateY(0)' }, { transform: 'rotateY(90deg)' }], 160, { easing: 'ease-in' }, null);
       voo.remove();
@@ -163,14 +167,21 @@
       if (carta) carta.setAttribute('data-visto', '1'); if (nb) nb.setAttribute('data-contou', '1');
       if (it.prep) it.prep(gr, it);
       gr.style.opacity = '1';
-      if (window.Som) { Som.tocar(top ? ['', 'ouro', 'prata', 'bronze'][top] : 'ding'); if (top) Som.tocar('trovao'); }
-      flash(top === 1 ? '#FFF2B8' : top === 2 ? '#DDEBFF' : top === 3 ? '#FFD9B0' : '#FFFFFF', top ? 0.95 : 0.55);
-      if (top) treme(top === 1 ? 34 : top === 2 ? 22 : 14);
+      if (window.Som) { Som.tocar(top ? ['', 'ouro', 'prata', 'bronze'][top] : 'ding'); if (top) Som.tocar('trovao'); if (top === 1) { setTimeout(function () { Som.tocar('trovao'); }, 450); setTimeout(function () { Som.tocar('fanfarra'); }, 900); } }
+      flash(top === 1 ? '#FFFFFF' : top === 2 ? '#DDEBFF' : top === 3 ? '#FFD9B0' : '#FFFFFF', top ? 1 : 0.55);
+      if (top === 1) setTimeout(function () { flash('#FFD25A', 0.85); }, 170);
+      if (top) treme(top === 1 ? 70 : top === 2 ? 22 : 14);
       var n0 = top ? [0, 3, 3, 2][4 - top] : 1;
       onda(gr, cores[0], 0); if (top) { onda(gr, cores[1], 160); onda(gr, cores[0], 320); }
-      if (top === 1) { onda(gr, cores[3], 480); onda(gr, '#fff', 640); }
-      chuva(gr, cores, top === 1 ? 96 : top === 2 ? 64 : top === 3 ? 48 : 26, top ? 260 + (4 - top) * 40 : 190);
-      if (top) { palco.classList.add('destaque'); relampagos(top === 1 ? 9 : top === 2 ? 6 : 4, top === 1 ? '#FFE08A' : top === 2 ? '#BFE0FF' : '#FFB070'); }
+      if (top === 1) { onda(gr, cores[3], 480); onda(gr, '#fff', 640); for (var oi = 0; oi < 5; oi++) onda(gr, oi % 2 ? '#fff' : cores[0], 800 + oi * 220); }
+      chuva(gr, cores, top === 1 ? 190 : top === 2 ? 64 : top === 3 ? 48 : 26, top === 1 ? 380 : top ? 260 + (4 - top) * 40 : 190);
+      if (top === 1) {   // coroa que cai do alto e quica no topo da carta + tempestade que continua enquanto ela está na tela
+        var co = div('pk-coroa', '👑'); co.style.fontSize = (88 * eb) + 'px'; gr.appendChild(co);
+        anima(co, [{ transform: 'translate(-50%,-420px) scale(2.4) rotate(-25deg)', opacity: 0 }, { transform: 'translate(-50%,0) scale(1.1) rotate(4deg)', opacity: 1, offset: 0.55 }, { transform: 'translate(-50%,-26px) scale(1) rotate(-3deg)', offset: 0.75 }, { transform: 'translate(-50%,0) scale(1) rotate(0)' }], 1100, { delay: 250, easing: 'cubic-bezier(.3,.7,.4,1)' }, { opacity: '1', transform: 'translate(-50%,0)' });
+        var cc = centro(gr, palco); if (window.CartaFX && CartaFX.raios) CartaFX.raios(palco, 4, '#FFFFFF', { x: cc.x, y: cc.y - 40 * eb, n: 4 });
+        tempestade = setInterval(function () { relampagos(3, '#FFE08A'); if (window.Som) Som.tocar('trovao'); }, 3000);
+      }
+      if (top) { palco.classList.add('destaque'); relampagos(top === 1 ? 14 : top === 2 ? 6 : 4, top === 1 ? '#FFE08A' : top === 2 ? '#BFE0FF' : '#FFB070'); }
       var vira = anima(gr, [{ transform: 'perspective(1000px) rotateY(-90deg) scale(.9)', filter: 'brightness(2.8)' }, { transform: 'perspective(1000px) rotateY(0) scale(1.06)', filter: 'brightness(1.7)', offset: 0.6 }, { transform: 'perspective(1000px) rotateY(0) scale(1)', filter: 'brightness(1)' }], 700, { easing: 'cubic-bezier(.2,.9,.3,1)' }, null);
       await esp(250);
       anima(info, [{ opacity: 0, transform: 'translateX(40px)' }, { opacity: 1, transform: 'none' }], 520, null, { opacity: '1' });
@@ -183,7 +194,7 @@
 
     // ---- 3) guardar: a carta grande volta para o lugar na fileira e vira de frente (fica à mostra) ----
     async function guardar() {
-      ocupado = true; var idx = ordem[atual], it = itens[idx], sl = slots[idx], gr = foco.querySelector('.pk-grande');
+      ocupado = true; clearInterval(tempestade); var idx = ordem[atual], it = itens[idx], sl = slots[idx], gr = foco.querySelector('.pk-grande');
       var a = centro(gr, palco), b = centro(sl.g, palco), k = b.w / a.w;
       palco.classList.remove('destaque', 'escuro'); palco.setAttribute('data-nv', 'n');
       anima(foco.querySelector('.pk-info'), [{ opacity: 1 }, { opacity: 0 }], 300, null, { opacity: '0' });

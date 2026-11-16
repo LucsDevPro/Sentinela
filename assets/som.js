@@ -1,6 +1,6 @@
 /* Sons da abertura de pacote (reunião), sintetizados na hora com Web Audio: não há arquivo de áudio nenhum.
    Começa DESLIGADO (a pessoa liga no botão «Som» do pacote ou na tecla S); a escolha fica guardada neste aparelho.
-   Som.tocar('rasgar' | 'giro' | 'suspense' | 'ding' | 'bronze' | 'prata' | 'ouro' | 'fanfarra' | 'trovao', duracaoMs?) */
+   Som.tocar('rasgar' | 'giro' | 'suspense' | 'ding' | 'bronze' | 'prata' | 'ouro' | 'fanfarra' | 'trovao' | 'batida', duracaoMs?) */
 (function () {
   'use strict';
   var KEY = 'sentinela:som', ctx = null, mestre = null, on = false;
@@ -54,13 +54,21 @@
       [['C5', 0], ['E5', 0.16], ['G5', 0.32], ['C6', 0.5]].forEach(function (n) { tom('square', NOTA[n[0]], 0, t + n[1], 0.45, 0.16); tom('triangle', NOTA[n[0]] / 2, 0, t + n[1], 0.45, 0.2); });
       acorde(t + 0.75, ['C5', 'E5', 'G5', 'C6'], 'sawtooth', 1.6, 0.12); sopro(t + 0.75, 1.2, 'highpass', 3000, 9000, 0.3);
     },
+    batida: function (t) { tom('sine', 72, 34, t, 0.32, 0.9); tom('sine', 60, 30, t + 0.16, 0.3, 0.6); },   // coração do suspense do 1º lugar
     trovao: function (t) {   // estalo seco do raio + trovoada grave que rola
       sopro(t, 0.22, 'highpass', 2500, 9000, 0.6); tom('sine', 70, 30, t, 0.5, 0.7);
       sopro(t + 0.12, 1.9, 'lowpass', 520, 70, 0.75); sopro(t + 0.7, 1.4, 'lowpass', 380, 60, 0.5); tom('sine', 48, 28, t + 0.2, 1.5, 0.5);
     }
   };
 
+  function com(c, m, fn) { var pc = ctx, pm = mestre; ctx = c; mestre = m; try { fn(); } finally { ctx = pc; mestre = pm; } }
   window.Som = {
+    /* trilha para o vídeo: um AudioContext à parte, ligado a um MediaStream que o gravador do vídeo junta à imagem. Funciona mesmo com o som da reunião desligado. */
+    paraGravacao: function () {
+      var C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
+      var c = new C(), dest = c.createMediaStreamDestination(), g = c.createGain(); g.gain.value = 0.85; g.connect(dest);
+      return { stream: dest.stream, iniciar: function () { try { if (c.resume) c.resume(); } catch (e) {} }, tocar: function (nome, t, ms) { if (SONS[nome]) com(c, g, function () { SONS[nome](c.currentTime + 0.05 + (t || 0), ms); }); }, fechar: function () { try { c.close(); } catch (e) {} } };
+    },
     ligado: function () { return on; },
     ligar: function (v) { on = !!v; try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {} if (on) { ac(); this.tocar('ding'); } return on; },
     alternar: function () { return this.ligar(!on); },
