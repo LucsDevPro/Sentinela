@@ -238,6 +238,7 @@ document.addEventListener('keydown',function(e){
     if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key==='PageDown'||e.key==='Enter'||e.key===' '||e.key==='.'){e.preventDefault();pacoteCtl.passo();return;}   // inclui as teclas dos controles remotos de apresentação
     if(e.key==='ArrowLeft'||e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();return;}
     if(e.key==='s'||e.key==='S'){pacoteCtl.alternarSom();return;}
+    if(e.key==='m'||e.key==='M'){pacoteCtl.alternarAnim();return;}
     if(e.key==='a'||e.key==='A'){pacoteCtl.alternarAuto();return;}
     if(e.key==='ArrowLeft')return;
     if((e.key==='r'||e.key==='R')&&!pacoteCtl.ocupado()){ir(0);return;}

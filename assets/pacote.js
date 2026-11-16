@@ -5,7 +5,10 @@
    Entrada: Pacote.iniciar(el, itens, { mes }) → { passo(), fase(), ocupado() }.  Sem nada disso quando o sistema pede menos movimento (sem animação, só o resultado). */
 (function () {
   'use strict';
-  var REDUZ = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  /* REDUZ = sem animação. Vem do sistema (prefers-reduced-motion) ou da escolha da pessoa no botão «Animações» (carta_fx.js → Movimento). */
+  var REDUZ = false;
+  function atualizaReduz() { REDUZ = window.Movimento ? Movimento.reduz() : !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); return REDUZ; }
+  atualizaReduz();
   var NIVEL = { 1: ['#FFD25A', '#FFF6C8', '#F0B020', '#FF9A1F'], 2: ['#E6EEF9', '#9FB6D6', '#FFFFFF', '#6CC4F2'], 3: ['#E8A060', '#FFD0A0', '#B8662A', '#FFE9CF'], 0: ['#FFD25A', '#FFF3B0', '#6CC4F2'] };
   var FAIXA = { 1: ['🥇', 'CAMPEÃO · 1º LUGAR'], 2: ['🥈', '2º LUGAR'], 3: ['🥉', '3º LUGAR'] };
 
@@ -31,50 +34,63 @@
 
   function iniciar(el, itens, cfg) {
     cfg = cfg || {};
-    var N = itens.length, palco = div('pk-palco'), fase = 'fechado', ocupado = false, atual = -1, folga = 0;
+    var N = itens.length, palco = div('pk-palco'), fase = 'fechado', ocupado = false, atual = -1;
+    atualizaReduz(); palco.classList.toggle('mov', !REDUZ);
     var ordem = itens.map(function (_, i) { return i; }).reverse();   // revela do último para o primeiro
     el.appendChild(palco);
     var W = palco.clientWidth || 1000, H = palco.clientHeight || 600;
+    /* blocos em coluna: cabeça (dica · controles · contador) / cena (pacote e carta grande) / fileira. Nada fica um em cima do outro: cada bloco tem o seu espaço. */
+    var cabeca = div('pk-cabeca'), cena = div('pk-cena');
+    palco.appendChild(cabeca); palco.appendChild(cena);
 
     // ---- fileira de cartinhas (de costas) embaixo; linhas conforme a quantidade ----
     var linhas = N <= 9 ? 1 : N <= 20 ? 2 : 3, porLinha = Math.ceil(N / linhas);
-    var eLin = Math.max(0.12, Math.min(0.32, ((H * 0.3) / linhas - 12) / 392, (W * 0.94 / porLinha - 10) / 272));
-    var fileira = div('pk-fileira'); fileira.style.setProperty('--e', eLin.toFixed(3)); fileira.style.width = Math.min(W * 0.96, porLinha * (272 * eLin + 8) + 4) + 'px'; fileira.style.left = '50%'; fileira.style.right = 'auto'; fileira.style.transform = 'translateX(-50%)';
+    var eLin = Math.max(0.07, Math.min(0.32, ((H * 0.28) / linhas - 12) / 392, (W * 0.94 / porLinha - 9) / 272));
+    var fileira = div('pk-fileira'); fileira.style.setProperty('--e', eLin.toFixed(3)); fileira.style.width = Math.min(W * 0.96, porLinha * (272 * eLin + 8) + 4) + 'px'; 
     var slots = itens.map(function (it, i) {
       var s = div('pk-slot'), g = div('pk-giro', '<div class="pk-f pk-a">' + VERSO + '</div><div class="pk-f pk-b">' + VERSO + '</div>');
       s.appendChild(g); s.setAttribute('data-pos', String(i)); fileira.appendChild(s); g.style.opacity = '0'; return { s: s, g: g };
     });
-    var pw0, ph = Math.min(H * 0.66, W * 0.46 * 1.55), pw = ph * 0.62; pw0 = pw;
+    palco.appendChild(fileira);
+    var dica = div('pk-dica', ''), contador = div('pk-cont', ''), barra = div('pk-barra');
+    cabeca.appendChild(dica); cabeca.appendChild(barra); cabeca.appendChild(contador);
+    var CW = cena.clientWidth || W, CH = cena.clientHeight || H * 0.6;
+    var ph = Math.max(120, Math.min(CH * 0.94, CW * 0.8 * 1.6)), pw = ph * 0.62;
     var pacote = div('pk-pacote'); pacote.style.cssText = 'width:' + pw + 'px;height:' + ph + 'px;margin:' + (-ph / 2) + 'px 0 0 ' + (-pw / 2) + 'px;font-size:' + (pw / 11) + 'px';
     var arte = '<div class="pk-arte"><i class="pk-crimpe"></i><div class="pk-logo">SENTINELA</div><div class="pk-sub">CARTINHAS</div><div class="pk-mes">' + esc(cfg.mes || '') + '</div><div class="pk-num"><b>' + N + '</b><span>cartas 100</span></div><i class="pk-crimpe b"></i><i class="pk-holo"></i></div>';
     var yR = 14;
     pacote.innerHTML = '<div class="pk-corpo" style="clip-path:' + poli(zig(yR).concat([['100%', '100%'], ['0%', '100%']])) + '">' + arte + '</div>' +
       '<div class="pk-topo" style="clip-path:' + poli([['0%', '0%'], ['100%', '0%']].concat(zig(yR, true))) + '">' + arte + '</div><i class="pk-fenda" style="top:' + yR + '%"></i>';
-    var dica = div('pk-dica', ''), contador = div('pk-cont', '');
     var raios = div('pk-raios'), fundo = div('pk-fundo');
-    palco.appendChild(fundo); palco.appendChild(raios); palco.appendChild(pacote); palco.appendChild(fileira); palco.appendChild(dica); palco.appendChild(contador);
+    palco.insertBefore(raios, palco.firstChild); palco.insertBefore(fundo, palco.firstChild); cena.appendChild(pacote);
     function texto(d, c) { dica.textContent = d; contador.textContent = c || ''; }
     texto('Clique ou tecle Enter para abrir o pacote', N + ' cartinhas com nota 100');
 
     // ---- barra de controles: som, automático, pular até o Nº e «Próxima» (toque / controle remoto) ----
     var auto = false, pularAte = 0, timer = null;
-    var barra = div('pk-barra'), opts = '<option value="0">Revelar todas</option>' + [10, 5].filter(function (v) { return v < N; }).map(function (v) { return '<option value="' + v + '">Pular até o ' + v + 'º</option>'; }).join('');
-    barra.innerHTML = '<button type="button" data-b="som" title="Liga/desliga os sons (tecla S)"></button><button type="button" data-b="auto" title="Revela sozinho, uma por uma (tecla A)"></button>' +
+    var opts = '<option value="0">Revelar todas</option>' + [10, 5].filter(function (v) { return v < N; }).map(function (v) { return '<option value="' + v + '">Pular até o ' + v + 'º</option>'; }).join('');
+    barra.innerHTML = '<button type="button" data-b="som" title="Liga/desliga os sons (tecla S)"></button><button type="button" data-b="auto" title="Revela sozinho, uma por uma (tecla A)"></button><button type="button" data-b="anim" title="Liga/desliga as animações e efeitos (tecla M). Fica guardado neste navegador."></button>' +
       (N > 5 ? '<select data-b="pular" aria-label="Quantas revelar" title="Revelar só as melhores: as demais aparecem de uma vez">' + opts + '</select>' : '') +
       '<button type="button" data-b="prox" class="pk-prox" title="Próxima (Enter, espaço, PageDown ou clique no palco)">Próxima ▶</button>';
-    palco.appendChild(barra);
+    var aviso = div('pk-aviso', '<span>As animações estão <b>desligadas</b> porque este computador pede «menos movimento» <small class="pk-aviso-det">(no Windows: Configurações › Acessibilidade › Efeitos visuais › Efeitos de animação)</small>. </span><button type="button" data-b="anim-on">Ativar animações</button>');
+    palco.insertBefore(aviso, cena);
+    aviso.addEventListener('click', function (e) { e.stopPropagation(); if (e.target.closest('button')) alternarAnim(); });
+    function alternarAnim() {
+      if (window.Movimento) Movimento.definir(REDUZ); atualizaReduz(); palco.classList.toggle('mov', !REDUZ); rotulos();
+    }
     function rotulos() {
       barra.querySelector('[data-b=som]').textContent = (window.Som && Som.ligado()) ? '🔊 Som ligado' : '🔇 Som desligado';
       barra.querySelector('[data-b=auto]').textContent = auto ? '⏸ Automático: ligado' : '▶ Automático: desligado';
+      barra.querySelector('[data-b=anim]').textContent = REDUZ ? '✨ Animações: desligadas' : '✨ Animações: ligadas'; barra.querySelector('[data-b=anim]').classList.toggle('on', !REDUZ);
+      aviso.hidden = !(REDUZ && window.Movimento && Movimento.sistema() && Movimento.forcado() == null);
       barra.querySelector('[data-b=auto]').classList.toggle('on', auto); barra.querySelector('[data-b=som]').classList.toggle('on', !!(window.Som && Som.ligado()));
     }
     function alternarSom() { if (window.Som) Som.alternar(); rotulos(); }
     function agendar(ms) { clearTimeout(timer); if (auto && fase !== 'fim') timer = setTimeout(function () { passo(); }, REDUZ ? 400 : ms); }
     function alternarAuto() { auto = !auto; rotulos(); clearTimeout(timer); if (auto && !ocupado) agendar(900); }
-    barra.addEventListener('click', function (e) { e.stopPropagation(); var b = e.target.closest('button[data-b]'); if (!b) return; if (b.dataset.b === 'som') alternarSom(); else if (b.dataset.b === 'auto') alternarAuto(); else if (b.dataset.b === 'prox') passo(); });
+    barra.addEventListener('click', function (e) { e.stopPropagation(); var b = e.target.closest('button[data-b]'); if (!b) return; if (b.dataset.b === 'som') alternarSom(); else if (b.dataset.b === 'auto') alternarAuto(); else if (b.dataset.b === 'prox') passo(); else if (b.dataset.b === 'anim' || b.dataset.b === 'anim-on') alternarAnim(); });
     barra.addEventListener('change', function (e) { if (e.target.dataset.b === 'pular') pularAte = parseInt(e.target.value, 10) || 0; });
     rotulos();
-    folga = fileira.offsetHeight + 34;
 
     // ---- efeitos ----
     function flash(cor, op) { var f = div('pk-flash'); f.style.background = cor || '#fff'; palco.appendChild(f); return anima(f, [{ opacity: 0 }, { opacity: op || 0.85, offset: 0.25 }, { opacity: 0 }], 700, null, null).then(function () { f.remove(); }); }
@@ -127,21 +143,26 @@
 
     // ---- 2) revelar uma: ela sai da fileira, gira até o centro, vira e aparece com efeitos proporcionais à posição ----
     var foco = null, tempestade = null;
-    function eBig() { return Math.max(0.5, Math.min(1.75, ((H - folga * 0.55 - 112) * 0.96) / 392, (W * 0.4) / 272)); }
     async function revelar() {
       ocupado = true; atual++;
       var idx = ordem[atual], it = itens[idx], sl = slots[idx], rk = it.rank, top = rk <= 3 ? rk : 0, cores = NIVEL[top];
       texto('', 'Revelando ' + (atual + 1) + ' de ' + N + ' · faltam ' + (N - atual - 1));
       palco.setAttribute('data-nv', top ? 'r' + top : 'n');
-      var eb = eBig();
-      foco = div('pk-foco'); foco.style.paddingBottom = Math.round(folga * 0.55) + 'px'; foco.style.paddingTop = (top ? 108 : 44) + 'px';
-      var gr = div('pk-grande'); gr.style.setProperty('--e', eb.toFixed(3));
+      foco = div('pk-foco'); var gr = div('pk-grande'), linha = div('pk-linha');
       var info = div('pk-info', '<div class="pk-rank">' + rk + 'º</div><div class="pk-nome">' + esc(it.rot) + '</div><div class="pk-eq">' + esc(it.eq || '') + '</div><div class="pk-nota"><b>' + esc(it.nota) + '</b><span>nota do mês</span></div>' + (cfg.video ? '<button type="button" class="pk-video">🎬 Vídeo de 5 s para o WhatsApp</button><div class="pk-vst" role="status" aria-live="polite"></div>' : ''));
       var bv = info.querySelector('.pk-video');
       if (bv) bv.addEventListener('click', function (e) { e.stopPropagation(); var st = info.querySelector('.pk-vst'); bv.disabled = true; st.textContent = 'Gerando o vídeo (5 s)…'; Promise.resolve(cfg.video(it)).then(function (m) { st.textContent = m || ''; }, function () { st.textContent = 'Não consegui gerar o vídeo neste navegador.'; }).then(function () { bv.disabled = false; }); });
-      foco.appendChild(gr); foco.appendChild(info); palco.appendChild(foco);
-      gr.style.opacity = '0'; info.style.opacity = '0';
       if (top) { var fx = div('pk-faixa r' + top, '<i>' + FAIXA[top][0] + '</i>' + FAIXA[top][1]); foco.appendChild(fx); fx.style.opacity = '0'; foco._fx = fx; }
+      linha.appendChild(gr); linha.appendChild(info); foco.appendChild(linha); cena.appendChild(foco);
+      gr.style.opacity = '0'; info.style.opacity = '0';
+      // tamanhos tirados do espaço que sobrou de verdade (resolução, janela, fileira): carta e texto cabem sempre, sem passar dos controles
+      var cw = cena.clientWidth, ch = cena.clientHeight, fh = foco._fx ? (Math.min(cw / 20, ch * 0.09, 54) | 0) : 0;
+      if (foco._fx) { foco._fx.style.fontSize = Math.max(15, fh) + 'px'; }
+      var lw = linha.clientWidth, lh = linha.clientHeight, estreito = lw < 640 || lw < lh * 0.95, extra = top === 1 ? 70 : 0;
+      var eb = estreito ? Math.min(((lh * 0.6) - extra) / 392, (lw * 0.78) / 272, 1.3) : Math.min((lh * 0.96 - extra) / 392, (lw * 0.42) / 272, 1.75);
+      eb = Math.max(0.3, eb); gr.style.setProperty('--e', eb.toFixed(3));
+      foco.classList.toggle('estreito', estreito);
+      info.style.fontSize = Math.max(11, Math.min(estreito ? lh * 0.4 / 12 : lh / 17, (estreito ? lw : lw - 272 * eb - 40) / 15, 26)).toFixed(1) + 'px';
       // voo: o verso sai do lugar da fileira e vai para o centro, girando; no 1º/2º/3º há suspense antes de virar
       var voo = div('pk-voo', VERSO); voo.style.cssText = 'width:' + (272 * eb) + 'px;height:' + (392 * eb) + 'px;--e:' + eb;
       palco.appendChild(voo);
@@ -153,7 +174,7 @@
       if (top) {
         var gl = '0 0 ' + (40 + top * 10) + 'px ' + cores[0]; if (window.Som) Som.tocar('suspense', top === 1 ? 2600 : 1200 + (4 - top) * 300);
         if (top === 1) {   // suspense maior: holofote dourado, escuro, e o «coração» batendo com a tela tremendo
-          palco.classList.add('escuro'); var hf = div('pk-holofote'); hf.style.left = (a.x - 150 * eb) + 'px'; hf.style.width = (300 * eb) + 'px'; foco.appendChild(hf); anima(hf, [{ opacity: 0 }, { opacity: 1 }], 900, null, { opacity: '1' });
+          palco.classList.add('escuro'); var hf = div('pk-holofote'); hf.style.left = (centro(gr, cena).x - 150 * eb) + 'px'; hf.style.width = (300 * eb) + 'px'; cena.appendChild(hf); anima(hf, [{ opacity: 0 }, { opacity: 1 }], 900, null, { opacity: '1' });
           [350, 950, 1550, 2050].forEach(function (ms) { setTimeout(function () { treme(10); if (window.Som) Som.tocar('batida'); }, ms); });
         }
         await anima(voo, [{ transform: 'translate(0,0) scale(1)', filter: 'brightness(1)' }, { transform: 'translate(-10px,0) scale(1.03)', filter: 'brightness(1.3)' }, { transform: 'translate(10px,0) scale(1.06)', filter: 'brightness(1.6)' }, { transform: 'translate(-12px,0) scale(1.08)', filter: 'brightness(2)' }, { transform: 'translate(0,0) scale(1.1)', filter: 'brightness(2.6)' }], top === 1 ? 2700 : 1200 + (4 - top) * 300, { easing: 'ease-in' }, null);
@@ -185,7 +206,7 @@
       var vira = anima(gr, [{ transform: 'perspective(1000px) rotateY(-90deg) scale(.9)', filter: 'brightness(2.8)' }, { transform: 'perspective(1000px) rotateY(0) scale(1.06)', filter: 'brightness(1.7)', offset: 0.6 }, { transform: 'perspective(1000px) rotateY(0) scale(1)', filter: 'brightness(1)' }], 700, { easing: 'cubic-bezier(.2,.9,.3,1)' }, null);
       await esp(250);
       anima(info, [{ opacity: 0, transform: 'translateX(40px)' }, { opacity: 1, transform: 'none' }], 520, null, { opacity: '1' });
-      if (foco._fx) anima(foco._fx, [{ opacity: 0, transform: 'translateX(-50%) scale(2.6)' }, { opacity: 1, transform: 'translateX(-50%) scale(1)', offset: 0.55 }, { opacity: 1, transform: 'translateX(-50%) scale(1.06)' }, { opacity: 1, transform: 'translateX(-50%) scale(1)' }], 900, { easing: 'cubic-bezier(.2,.9,.3,1.2)' }, { opacity: '1' });
+      if (foco._fx) anima(foco._fx, [{ opacity: 0, transform: 'scale(2.6)' }, { opacity: 1, transform: 'scale(1)', offset: 0.55 }, { opacity: 1, transform: 'scale(1.06)' }, { opacity: 1, transform: 'scale(1)' }], 900, { easing: 'cubic-bezier(.2,.9,.3,1.2)' }, { opacity: '1' });
       await vira;
       fase = atual >= N - 1 ? 'ultima' : 'revelada'; ocupado = false;
       texto(atual >= N - 1 ? 'Enter / clique: guardar e encerrar' : 'Enter / clique: próxima cartinha · R: recomeçar', 'Revelando ' + (atual + 1) + ' de ' + N);
@@ -211,8 +232,8 @@
 
     async function fim() {
       ocupado = true; fase = 'fim'; palco.setAttribute('data-nv', 'n');
-      var t = div('pk-fim', 'Parabéns a todos que chegaram ao 100! 🎉'); palco.appendChild(t);
-      anima(t, [{ opacity: 0, transform: 'translate(-50%,-30px) scale(.8)' }, { opacity: 1, transform: 'translate(-50%,0) scale(1)' }], 700, null, { opacity: '1' });
+      var t = div('pk-fim', 'Parabéns a todos que chegaram ao 100! 🎉'); cena.appendChild(t);
+      anima(t, [{ opacity: 0, transform: 'translateY(-30px) scale(.8)' }, { opacity: 1, transform: 'none' }], 700, null, { opacity: '1' });
       flash('#FFF2B8', 0.5); relampagos(8, '#FFE08A'); if (window.Som) { Som.tocar('fanfarra'); Som.tocar('trovao'); } onda(t, NIVEL[1][0], 0);
       texto('R: ver de novo', N + ' cartinhas 100'); ocupado = false;
     }
@@ -237,7 +258,7 @@
       if (fase === 'ultima') { await guardar(); return fim(); }
     }
     palco.addEventListener('click', function () { passo(); });
-    return { passo: passo, alternarSom: alternarSom, alternarAuto: alternarAuto, auto: function () { return auto; }, fase: function () { return fase; }, ocupado: function () { return ocupado; }, total: N };
+    return { passo: passo, alternarAnim: alternarAnim, alternarSom: alternarSom, alternarAuto: alternarAuto, auto: function () { return auto; }, fase: function () { return fase; }, ocupado: function () { return ocupado; }, total: N };
   }
   window.Pacote = { iniciar: iniciar };
 })();

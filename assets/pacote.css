@@ -1,16 +1,23 @@
 /* Abertura de pacote (assets/pacote.js) — palco escuro nos dois temas, para os efeitos brilharem */
-.pk-palco{--cor:#F7B500;position:relative;flex:1;min-height:0;overflow:hidden;border-radius:18px;perspective:1400px;cursor:pointer;user-select:none;
+.pk-palco{--cor:#F7B500;position:relative;display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;border-radius:18px;perspective:1400px;cursor:pointer;user-select:none;
   background:radial-gradient(ellipse 80% 70% at 50% 40%,#10294d 0%,#0a1b36 55%,#050e20 100%);box-shadow:inset 0 0 0 1px rgba(247,181,0,.25),0 14px 40px rgba(4,14,28,.35)}
 .pk-palco[data-nv=r1]{--cor:#FFD25A}.pk-palco[data-nv=r2]{--cor:#BFD3EE}.pk-palco[data-nv=r3]{--cor:#E8A060}
 .pk-fundo{position:absolute;inset:0;pointer-events:none;transition:opacity .6s,background .6s;opacity:0;background:radial-gradient(circle at 36% 44%,color-mix(in srgb,var(--cor) 38%,transparent),transparent 58%)}
 .pk-palco.destaque .pk-fundo{opacity:1}.pk-palco.escuro::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 36% 44%,transparent 28%,rgba(0,0,0,.72) 100%);pointer-events:none;z-index:1}
 .pk-raios{position:absolute;left:36%;top:44%;width:240%;aspect-ratio:1;translate:-50% -50%;pointer-events:none;opacity:0;
   background:repeating-conic-gradient(from 0deg,rgba(255,226,140,.28) 0 6deg,transparent 6deg 18deg);-webkit-mask:radial-gradient(circle,#000 8%,transparent 55%);mask:radial-gradient(circle,#000 8%,transparent 55%)}
-@media (prefers-reduced-motion:no-preference){.pk-raios{animation:pk-gira 26s linear infinite}.pk-palco.destaque .pk-fundo{animation:pk-pulsa 2.2s ease-in-out infinite alternate}}
+/* animações contínuas: ligadas pela classe .mov (o JS decide: sistema + botão «Animações»), não mais só pelo media query */
+.pk-palco.mov .pk-raios{animation:pk-gira 26s linear infinite}.pk-palco.mov.destaque .pk-fundo{animation:pk-pulsa 2.2s ease-in-out infinite alternate}
 @keyframes pk-gira{to{rotate:360deg}}@keyframes pk-pulsa{from{filter:brightness(.85)}to{filter:brightness(1.25)}}
 .pk-palco.destaque .pk-raios{opacity:.9!important}
 
 /* o pacote */
+/* cabeça / cena / fileira */
+.pk-cabeca{position:relative;flex:none;z-index:9;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;padding:10px 16px}
+.pk-cena{position:relative;flex:1 1 0;min-height:0;min-width:0}
+.pk-aviso{position:relative;flex:none;z-index:9;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 12px;margin:0 16px;padding:8px 14px;border-radius:12px;background:rgba(247,181,0,.14);border:1px solid rgba(247,181,0,.55);color:#FFE9A8;font:500 clamp(12px,1vw,16px)/1.35 "IBM Plex Sans",system-ui,sans-serif;text-align:center}
+.pk-aviso[hidden]{display:none}
+.pk-aviso button{font:700 1em "IBM Plex Sans",system-ui,sans-serif;color:#1a1200;background:#F7B500;border:0;border-radius:999px;padding:.45em 1.2em;cursor:pointer}
 .pk-pacote{position:absolute;left:50%;top:50%;z-index:3;transform-origin:50% 60%;filter:drop-shadow(0 20px 28px rgba(0,0,0,.55))}
 .pk-corpo,.pk-topo{position:absolute;inset:0}
 .pk-arte{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35em;text-align:center;color:#FFF3C4;font-family:"Barlow Semi Condensed",system-ui,sans-serif;overflow:hidden;
@@ -18,7 +25,7 @@
 .pk-arte::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px),linear-gradient(180deg,rgba(247,181,0,.28),transparent 18%,transparent 82%,rgba(247,181,0,.28))}
 .pk-crimpe{position:absolute;left:0;right:0;top:0;height:9%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.28) 0 2px,rgba(0,0,0,.22) 2px 6px)}.pk-crimpe.b{top:auto;bottom:0}
 .pk-holo{position:absolute;inset:-20%;background:linear-gradient(110deg,transparent 38%,rgba(255,255,255,.35) 50%,transparent 62%);mix-blend-mode:overlay;translate:-60% 0}
-@media (prefers-reduced-motion:no-preference){.pk-holo{animation:pk-brilho 3.2s ease-in-out infinite}.pk-pacote{animation:pk-flutua 3.6s ease-in-out infinite}}
+.pk-palco.mov .pk-holo{animation:pk-brilho 3.2s ease-in-out infinite}.pk-palco.mov .pk-pacote{animation:pk-flutua 3.6s ease-in-out infinite}
 @keyframes pk-brilho{0%{translate:-60% 0}60%,100%{translate:60% 0}}@keyframes pk-flutua{0%,100%{translate:0 0}50%{translate:0 -8px}}
 .pk-logo{position:relative;font-weight:700;font-size:1.65em;letter-spacing:.08em;color:#F7B500;text-shadow:0 2px 0 #6B4A00,0 0 18px rgba(247,181,0,.55)}
 .pk-sub{position:relative;font-size:.95em;letter-spacing:.42em;color:#9DD6F4}
@@ -28,7 +35,7 @@
 .pk-fenda{position:absolute;left:-4%;right:-4%;height:3px;margin-top:-1px;background:#fff;box-shadow:0 0 28px 12px rgba(255,228,140,.95),0 0 80px 30px rgba(255,190,60,.6);opacity:0;pointer-events:none}
 
 /* fileira de cartinhas */
-.pk-fileira{position:absolute;left:2%;right:2%;bottom:1.5%;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 8px;pointer-events:none}
+.pk-fileira{position:relative;flex:none;align-self:center;max-width:98%;margin:0 0 1.2% 0;z-index:2;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 8px;pointer-events:none}
 .pk-slot{position:relative;width:calc(272px*var(--e));height:calc(392px*var(--e));perspective:900px}
 .pk-giro{position:absolute;inset:0;transform-style:preserve-3d}
 .pk-f{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
@@ -39,37 +46,38 @@
 .pk-mini .c-conj::before{display:none}.pk-slot.aberta{filter:drop-shadow(0 0 3px rgba(247,181,0,.35))}
 
 /* reveal */
-.pk-foco{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;gap:5vw;padding:2%;pointer-events:none}
+.pk-foco{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;gap:1.2%;padding:0 2% 1%;pointer-events:none}
+.pk-linha{flex:1 1 0;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;gap:4%}
+.pk-foco.estreito .pk-linha{flex-direction:column;gap:2%}
 .pk-grande{--e:1;position:relative;flex:none;width:calc(272px*var(--e));height:calc(392px*var(--e))}
 .pk-grande .c-conj{position:absolute;left:50%;top:50%;margin:-196px 0 0 -136px;height:392px;--s:var(--e)}.pk-grande .carta{height:392px}
 .pk-grande .c-particulas,.pk-grande .pk-onda{left:50%;top:50%}
 .pk-voo{position:absolute;z-index:5;perspective:900px;border-radius:14px;pointer-events:none}
 .pk-voo .pk-esc{transform:scale(var(--e))}
-.pk-info{flex:0 1 26em;min-width:0;color:#F2F6FF;font-size:clamp(14px,1.5vw,24px)}
+.pk-info{flex:0 1 22em;min-width:0;color:#F2F6FF;font-size:18px}
+.pk-foco.estreito .pk-info{flex:none;text-align:center;max-width:100%}.pk-foco.estreito .pk-nota{justify-content:center;margin-top:.2em}.pk-foco.estreito .pk-rank{font-size:2.6em}.pk-foco.estreito .pk-nome{font-size:1.7em}.pk-foco.estreito .pk-nota b{font-size:2.4em}.pk-foco.estreito .pk-eq{margin-top:0}.pk-foco.estreito .pk-video{margin-top:.5em}
 .pk-rank{font:700 4.6em/1 "Barlow Semi Condensed",system-ui,sans-serif;color:var(--cor);text-shadow:0 0 24px color-mix(in srgb,var(--cor) 60%,transparent)}
 .pk-nome{font:700 2.3em/1.1 "Barlow Semi Condensed",system-ui,sans-serif;margin-top:.1em}
 .pk-eq{opacity:.75;margin-top:.2em}
 .pk-nota{display:flex;align-items:baseline;gap:.5em;margin-top:.6em}.pk-nota b{font:700 3.6em/1 "Barlow Semi Condensed",sans-serif;color:#fff}.pk-nota span{opacity:.7}
-.pk-faixa{position:absolute;left:50%;top:54px;translate:0 0;transform:translateX(-50%);z-index:6;white-space:nowrap;font:700 clamp(20px,3.2vw,46px)/1 "Barlow Semi Condensed",system-ui,sans-serif;letter-spacing:.12em;color:#fff;padding:.25em .8em;border-radius:.4em;
+.pk-faixa{position:relative;flex:none;z-index:6;white-space:nowrap;max-width:100%;font:700 28px/1 "Barlow Semi Condensed",system-ui,sans-serif;letter-spacing:.12em;color:#fff;padding:.25em .8em;border-radius:.4em;
   background:linear-gradient(90deg,transparent,rgba(0,0,0,.55),transparent);text-shadow:0 0 22px var(--cor),0 2px 0 rgba(0,0,0,.6)}
 .pk-faixa i{font-style:normal;margin-right:.35em}.pk-faixa.r1{color:#FFE08A}.pk-faixa.r2{color:#E6EEF9}.pk-faixa.r3{color:#F2B27A}
 .pk-flash{position:absolute;inset:0;z-index:7;pointer-events:none}
 .pk-onda{position:absolute;width:150px;aspect-ratio:1;border:5px solid #fff;border-radius:50%;pointer-events:none;z-index:6}
-.pk-dica{position:absolute;left:18px;top:14px;z-index:8;color:#9DB2D0;font-size:clamp(12px,1.1vw,18px);pointer-events:none}
-.pk-cont{position:absolute;right:18px;top:14px;z-index:8;color:#F7C94A;font:600 clamp(12px,1.1vw,18px) "IBM Plex Sans",sans-serif;pointer-events:none}
-.pk-fim{position:absolute;left:50%;top:7%;z-index:8;white-space:nowrap;font:700 clamp(22px,3.2vw,52px) "Barlow Semi Condensed",system-ui,sans-serif;color:#FFE08A;text-shadow:0 0 24px rgba(247,181,0,.7)}
-@media (max-width:700px){.pk-dica{max-width:58%;font-size:11px}.pk-cont{max-width:38%;text-align:right;font-size:11px}}
-@media (max-width:900px){.pk-foco{flex-direction:column}.pk-info{flex:none;text-align:center}}
+.pk-dica{flex:1 1 12em;min-width:0;color:#9DB2D0;font-size:clamp(12px,1.1vw,18px);pointer-events:none}
+.pk-cont{flex:1 1 12em;min-width:0;text-align:right;color:#F7C94A;font:600 clamp(12px,1.1vw,18px) "IBM Plex Sans",sans-serif;pointer-events:none}
+.pk-fim{position:absolute;left:50%;top:7%;translate:-50% 0;z-index:8;white-space:nowrap;font:700 clamp(22px,3.2vw,52px) "Barlow Semi Condensed",system-ui,sans-serif;color:#FFE08A;text-shadow:0 0 24px rgba(247,181,0,.7)}
+@media (max-width:700px){.pk-palco{min-height:780px}.pk-aviso-det{display:none}.pk-aviso{margin:0 10px;padding:6px 10px}.pk-cabeca{padding:8px 10px}.pk-dica,.pk-cont{flex:1 1 100%;text-align:center;font-size:11px}}
 @media print{.pk-palco{display:none}}
 
 /* controles do pacote */
-.pk-barra{position:absolute;left:50%;top:10px;translate:-50% 0;z-index:9;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:70%}
+.pk-barra{flex:0 1 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
 .pk-barra button,.pk-barra select{font:600 clamp(11px,.95vw,15px) "IBM Plex Sans",system-ui,sans-serif;color:#E8EEFA;background:rgba(8,22,46,.75);border:1px solid rgba(157,178,208,.45);border-radius:999px;padding:.4em .9em;cursor:pointer;backdrop-filter:blur(4px)}
 .pk-barra button.on{border-color:#F7B500;color:#FFE08A}
 .pk-barra .pk-prox{background:#F7B500;border-color:#F7B500;color:#1a1200}
 .pk-barra button:hover,.pk-barra select:hover{border-color:#F7B500}
 @media (hover:none),(max-width:700px){.pk-barra .pk-prox{font-size:16px;padding:.6em 1.4em}}
-@media (max-width:900px){.pk-barra{top:40px;max-width:96%}}
 .pk-video{pointer-events:auto;margin-top:1.1em;font:600 .75em "IBM Plex Sans",system-ui,sans-serif;color:#1a1200;background:linear-gradient(180deg,#FFD25A,#F7B500);border:0;border-radius:999px;padding:.7em 1.3em;cursor:pointer;box-shadow:0 6px 18px rgba(247,181,0,.35)}
 .pk-video:disabled{opacity:.6;cursor:progress}.pk-vst{pointer-events:none;margin-top:.5em;font-size:.7em;color:#9DB2D0;min-height:1.2em}
 
@@ -78,7 +86,7 @@
 .pk-coroa{position:absolute;left:50%;top:-.85em;line-height:1;z-index:5;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5)) drop-shadow(0 0 18px rgba(255,210,90,.9));opacity:0;pointer-events:none}
 .pk-faixa.r1{font-size:clamp(24px,3.6vw,54px);letter-spacing:.14em;background:linear-gradient(90deg,transparent,rgba(0,0,0,.65),transparent)}
 .pk-faixa.r1{color:transparent;background-image:linear-gradient(100deg,#FFD25A 20%,#FFFFFF 40%,#FFD25A 60%),linear-gradient(90deg,transparent,rgba(0,0,0,.65),transparent);background-size:250% 100%,100% 100%;-webkit-background-clip:text,border-box;background-clip:text,border-box;text-shadow:none;filter:drop-shadow(0 0 16px rgba(255,200,70,.9))}
-@media (prefers-reduced-motion:no-preference){.pk-faixa.r1{animation:pk-brilho-faixa 2.4s linear infinite}.pk-palco[data-nv=r1].destaque .pk-raios{animation-duration:11s}}
+.pk-palco.mov .pk-faixa.r1{animation:pk-brilho-faixa 2.4s linear infinite}.pk-palco.mov[data-nv=r1].destaque .pk-raios{animation-duration:11s}
 @keyframes pk-brilho-faixa{from{background-position:130% 0,0 0}to{background-position:-130% 0,0 0}}
 .pk-palco[data-nv=r1].destaque .pk-fundo{background:radial-gradient(circle at 36% 44%,rgba(255,210,90,.6),transparent 62%)}
 .pk-palco[data-nv=r1] .pk-grande{filter:drop-shadow(0 0 34px rgba(255,200,70,.75))}

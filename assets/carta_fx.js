@@ -6,7 +6,16 @@
    Funciona sozinho: observa o DOM e liga as cartas que aparecerem depois (filtros do álbum, agente.html). */
 (function () {
   'use strict';
-  var REDUZ = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  /* «Movimento»: o sistema pode pedir menos movimento (Windows: Efeitos de animação desligados; muito comum em área de trabalho remota
+     e em computador de repartição). Na apresentação (pacote) a pessoa pode ligar as animações de propósito: fica guardado neste navegador. */
+  var SIST = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), PREF = 'sentinela:animacoes', forca = null;
+  try { forca = localStorage.getItem(PREF); } catch (e) {}
+  function reduz() { return forca === '1' ? false : forca === '0' ? true : SIST; }
+  window.Movimento = {
+    reduz: reduz, sistema: function () { return SIST; }, forcado: function () { return forca; },
+    definir: function (v) { forca = v == null ? null : v ? '1' : '0'; try { if (forca == null) localStorage.removeItem(PREF); else localStorage.setItem(PREF, forca); } catch (e) {} document.documentElement.classList.toggle('mov-forcado', forca === '1'); }
+  };
+  if (forca === '1') document.documentElement.classList.add('mov-forcado');
   var MAX = 14;                 // inclinação máxima (graus)
   var io = null, fila = 0, filaT = 0, ativa = null, ultimo = null, raf = 0;
 
@@ -33,7 +42,7 @@
       c.classList.add('vivo');
       if (c.getAttribute('data-visto')) return;
       c.setAttribute('data-visto', '1');
-      if (REDUZ) return;
+      if (reduz()) return;
       if (!c.style.getPropertyValue('--atraso')) {        // cartas que aparecem juntas entram uma após a outra
         c.style.setProperty('--atraso', Math.min(fila * 55, 700) + 'ms');
         fila++; clearTimeout(filaT); filaT = setTimeout(function () { fila = 0; }, 150);
@@ -49,7 +58,7 @@
     Array.prototype.forEach.call((raiz || document).querySelectorAll('.c-foto.tem-foto:not([data-esq])'), function (f) {
       f.setAttribute('data-esq', '');
       var im = f.querySelector('img');
-      if (!im || im.complete || REDUZ) return;
+      if (!im || im.complete || reduz()) return;
       f.classList.add('carregando');
       var fim = function () { f.classList.remove('carregando'); };
       im.addEventListener('load', fim, { once: true }); im.addEventListener('error', fim, { once: true });
@@ -59,7 +68,7 @@
   /* ---- partículas (WAAPI: nada fica no DOM depois) ---- */
   var COR = { 'b-100': ['#FFD25A', '#FFF6C8', '#F0B020'], 'b-top': ['#FF63CE', '#40E0FF', '#FFFFFF'], 'b-90': ['#FFD25A', '#FFF3B0'] };
   function particulas(ancora, borda, n) {
-    var cores = COR[borda]; if (!cores || REDUZ || !ancora.animate) return;
+    var cores = COR[borda]; if (!cores || reduz() || !ancora.animate) return;
     var wrap = document.createElement('div'); wrap.className = 'c-particulas';
     for (var i = 0; i < n; i++) {
       var p = document.createElement('i'), ang = Math.random() * Math.PI * 2, d = 150 + Math.random() * 190;
@@ -76,7 +85,7 @@
   }
   function dpath(p) { return 'M' + p.map(function (q) { return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join(' L'); }
   function raios(alvo, n, cor, opt) {   // opt = {x, y, n}: os primeiros `opt.n` raios caem DIRETO naquele ponto (mais grossos)
-    if (REDUZ || !alvo || !alvo.animate) return;
+    if (reduz() || !alvo || !alvo.animate) return;
     var w = alvo.clientWidth || 800, h = alvo.clientHeight || 600, cx = cor || '#9FD4FF', wrap = document.createElement('div'); wrap.className = 'c-raios';
     for (var i = 0; i < (n || 6); i++) {
       var forte = !!(opt && opt.x != null && i < (opt.n || 1)), x0 = forte ? opt.x + (Math.random() - 0.5) * 70 : w * (0.08 + Math.random() * 0.84), y1 = forte ? opt.y : h * (0.45 + Math.random() * 0.5), x1 = forte ? opt.x + (Math.random() - 0.5) * 24 : x0 + (Math.random() - 0.5) * w * 0.18, main = caminho(x0, -10, x1, y1, w * 0.07, 12), d = dpath(main), ramos = '';
@@ -96,7 +105,7 @@
 
   /* ---- revelação (modo reunião): a carta chega num pacote que treme, vira e solta um clarão ---- */
   function revelar(carta) {
-    if (REDUZ || !carta || !carta.animate) return;
+    if (reduz() || !carta || !carta.animate) return;
     var conj = carta.closest('.c-conj') || carta, pai = conj.parentNode, borda = (carta.className.match(/b-(?:\d+|top)/) || [''])[0];
     var capa = document.createElement('div'); capa.className = 'c-pacote'; capa.innerHTML = '<div>SENTINELA<small>CARTINHA</small></div>';
     conj.classList.add('c-oculta'); conj.appendChild(capa);   // a capa mora dentro do conjunto: herda a escala e cobre só a carta
@@ -148,7 +157,7 @@
   }
 
   document.addEventListener('pointermove', function (e) {
-    if (REDUZ || e.pointerType === 'touch') return;
+    if (reduz() || e.pointerType === 'touch') return;
     var c = e.target && e.target.closest ? e.target.closest('.carta[data-fx]') : null;
     if (c !== ativa) { soltar(ativa); ativa = c; if (c) c.classList.add('inclinando'); }
     if (!c) return;
@@ -158,7 +167,7 @@
   document.documentElement.addEventListener('pointerleave', function () { soltar(ativa); ativa = null; });
 
   document.addEventListener('pointerdown', function (e) {     // toque: um clarão rápido onde o dedo encostou
-    if (REDUZ || e.pointerType !== 'touch') return;
+    if (reduz() || e.pointerType !== 'touch') return;
     var c = e.target && e.target.closest ? e.target.closest('.carta[data-fx]') : null;
     if (!c) return;
     var r = (c.closest('.slot') || c.parentElement || c).getBoundingClientRect();
@@ -176,5 +185,5 @@
     pendente = true;
     requestAnimationFrame(function () { pendente = false; ligar(); });
   }).observe(document.documentElement, { childList: true, subtree: true });
-  window.CartaFX = { ligar: ligar, revelar: revelar, raios: raios, reduz: REDUZ };
+  window.CartaFX = { ligar: ligar, revelar: revelar, raios: raios, reduz: SIST };
 })();

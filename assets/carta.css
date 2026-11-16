@@ -1442,7 +1442,8 @@ body.sem-foto .c-foto img {
 .carta.b-90{box-shadow:0 0 0 1px rgba(255,218,112,.58),0 0 26px rgba(247,181,0,.22),0 22px 48px rgba(0,0,0,.46)}
 .c-pop{border-color:rgba(232,184,79,.55);box-shadow:0 28px 80px rgba(0,0,0,.68),inset 0 1px rgba(255,255,255,.08)}
 @media(hover:hover) and (prefers-reduced-motion:no-preference){.carta[data-fx]:hover{filter:saturate(1.08) brightness(1.035)}}
-@media(prefers-reduced-motion:reduce){.carta{transform:none!important}}
+/* Sem movimento: nada de inclinação, MAS a escala --s (tamanho no álbum, na fileira e na carta grande do pacote) tem que continuar valendo; com «transform:none» as cartas ficavam em tamanho cheio e se sobrepunham. Se a pessoa ligou as animações (html.mov-forcado), vale o desenho normal. */
+@media(prefers-reduced-motion:reduce){:root:not(.mov-forcado) .carta{transform:scale(var(--s,1))!important}}
 
 /* =====================================================================
    SENTINELA RELÍQUIA v2 — elevação sobre Ultra (nov/2026)

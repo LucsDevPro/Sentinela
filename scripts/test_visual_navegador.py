@@ -295,6 +295,32 @@ with sync_playwright() as p:
         if rank == "1º": break
         an.wait_for_timeout(1500)   # deixa a revelação terminar de vez (o Enter durante ela é ignorado)
     checar("pacote (com animação): chega ao 1º lugar sem travar e os raios caem no pódio", rank == "1º" and visto_raio and not ean, f"{rank} raio={visto_raio} {ean}"); ctx3.close()
+    # layout do pacote: texto/banner/carta nunca passam por cima dos controles e cabem na cena, em várias resoluções
+    # (computador do serviço costuma ter «reduzir movimento» ligado: aí as cartas perdiam a escala e ficavam gigantes)
+    for (w, h) in [(1920, 1080), (1366, 768), (1024, 700), (390, 780)]:
+        cl = nav.new_context(reduced_motion="reduce", viewport={"width": w, "height": h}); lp = cl.new_page(); elp = []; lp.on("pageerror", lambda x: elp.append(str(x)))
+        lp.goto(U + "projecao.html#pacote"); lp.wait_for_timeout(600); lp.select_option(".pk-barra select[data-b=pular]", "5")
+        for _ in range(10):
+            lp.keyboard.press("Enter"); lp.wait_for_timeout(350)
+            if lp.evaluate("(document.querySelector('.pk-rank')||{}).textContent") == "1º": break
+        lp.wait_for_timeout(300)
+        est = lp.evaluate("""()=>{const q=s=>document.querySelector(s),r=e=>e&&e.getBoundingClientRect(),cab=r(q('.pk-cabeca')),cena=r(q('.pk-cena')),o=[];
+          for(const s of ['.pk-grande','.pk-info','.pk-faixa','.pk-video']){const e=r(q(s));if(e&&(e.top<cab.bottom-1||e.bottom>cena.bottom+1||e.left<cena.left-1||e.right>cena.right+1))o.push(s)}
+          const g=r(q('.pk-grande .carta')),m=r(q('.pk-slot .carta'));if(g.width>272.5||m.width>100)o.push('escala:'+Math.round(g.width)+'/'+Math.round(m.width));return o}""")
+        checar(f"pacote: no 1º lugar nada passa por cima dos controles nem sai da cena ({w}x{h})", not est and not elp, f"{est} {elp}"); cl.close()
+    # animações: com «reduzir movimento» aparece o aviso; um clique em «Ativar animações» liga e fica guardado neste navegador
+    ca = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); ap = ca.new_page(); eap = []; ap.on("pageerror", lambda x: eap.append(str(x)))
+    ap.goto(U + "projecao.html#pacote"); ap.wait_for_timeout(600)
+    checar("animações: com «reduzir movimento» o aviso aparece e o botão diz «desligadas»", ap.locator(".pk-aviso").is_visible() and "desligadas" in ap.inner_text(".pk-barra [data-b=anim]"))
+    ap.click(".pk-aviso button"); ap.wait_for_timeout(200)
+    checar("animações: «Ativar animações» liga, esconde o aviso e liga os efeitos contínuos", not ap.locator(".pk-aviso").is_visible() and "ligadas" in ap.inner_text(".pk-barra [data-b=anim]") and ap.evaluate("document.querySelector('.pk-palco').classList.contains('mov')"))
+    ap.reload(); ap.wait_for_timeout(700)
+    checar("animações: a escolha fica guardada (depois de recarregar continua ligada)", "ligadas" in ap.inner_text(".pk-barra [data-b=anim]") and not ap.locator(".pk-aviso").is_visible())
+    ap.keyboard.press("Enter"); ap.wait_for_timeout(500)
+    checar("animações: ligadas à força, o pacote realmente anima (não pula direto)", ap.evaluate("getComputedStyle(document.querySelector('.pk-pacote')).display") != "none" and ap.evaluate("document.getAnimations().length") > 0, str(ap.evaluate("document.getAnimations().length")))
+    ap.keyboard.press("m"); ap.wait_for_timeout(200)
+    checar("animações: a tecla M desliga de novo", "desligadas" in ap.inner_text(".pk-barra [data-b=anim]") and not ap.evaluate("document.querySelector('.pk-palco').classList.contains('mov')"))
+    checar("animações: sem erros de script", not eap, str(eap)); ca.close()
     vd = ctx.new_page(); evd = []; vd.on("pageerror", lambda x: evd.append(str(x)))
     vd.goto(U + "album.html"); vd.wait_for_timeout(1500)
     checar("álbum: cada cartinha tem o botão «Vídeo»", vd.locator("button[data-acao=video]").count() >= 3)
