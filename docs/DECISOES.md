@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (5) — trilha sonora em clima de abertura de campeonato
+- `som.js` ganhou «orquestra» sintetizada: tímpanos (`timpano`, `rufar` que acelera), metais (`metal`), coro (`coro`) e prato. `bronze`/`prata`/`ouro`, `suspense` e `fanfarra` foram refeitos (subida de metais, pancada de tímpanos, acorde de Ré maior com coro e prato). Melodias originais, só o clima lembra estádio; não reproduz nenhum hino real. Compressor no fim da cadeia contra estouro. O vídeo usa os mesmos sons (sem a fanfarra extra, que passava dos 5 s).
+
 ## 16/11/2026 (4) — pacote sem sobreposição + animações no computador do serviço
 - **Causa do «não anima / bagunçado» no serviço:** o computador pedia «reduzir movimento» (comum em Windows com efeitos desligados, área de trabalho remota). O `carta.css` tinha `@media (prefers-reduced-motion:reduce){.carta{transform:none!important}}`, que também apagava a **escala** `--s`: cartas do álbum, da fileira e a carta grande do pacote ficavam em tamanho cheio e se sobrepunham. Agora o modo reduzido mantém `transform:scale(var(--s,1))`.
 - **Animações:** `Movimento` (em `carta_fx.js`) = sistema + escolha da pessoa (`localStorage sentinela:animacoes`). No pacote, botão «✨ Animações» (tecla **M**) e um aviso amarelo com «Ativar animações» quando o sistema pede menos movimento. Respeita o sistema por padrão; um clique liga e fica guardado. Animações contínuas do `pacote.css` usam a classe `.mov` no palco, não mais o media query.

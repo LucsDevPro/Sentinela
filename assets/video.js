@@ -157,7 +157,6 @@
     if (l <= 3) L.push(['suspense', 0.1, 1000]);
     L.push([l === 1 ? 'ouro' : l === 2 ? 'prata' : l === 3 ? 'bronze' : 'ding', T_REV]);
     S.raios.forEach(function (r) { L.push(['trovao', r.ts]); });
-    if (l === 1) L.push(['fanfarra', 2.0]);
     return L;
   }
 
