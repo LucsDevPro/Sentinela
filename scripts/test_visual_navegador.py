@@ -226,12 +226,12 @@ with sync_playwright() as p:
     checar("efeitos: com «reduzir movimento» a reunião mostra a carta direto", rp.locator("#palco .c-pacote").count() == 0 and rp.locator("#palco .carta").count() == 1)
     ctx_r.close()
 
-    # ---- reunião: abrir pacote (só quem fez 100, revelado de trás pra frente até o 1º lugar)
+    # ---- reunião: abrir pacote (só o top 5, revelado de trás pra frente até o 1º lugar)
     pk = ctx.new_page(); epk = []; pk.on("pageerror", lambda x: epk.append(str(x)))
     pk.goto(U + "projecao.html#pacote"); pk.wait_for_timeout(800)
     n100 = pk.locator(".pk-slot").count()
-    esperado = pk.evaluate("(()=>{const D=Object.values(AGENTES_DADOS.agentes);const mes=document.querySelector('.slide h2 small').textContent;return D.filter(a=>a.meses.some(m=>m.mes===mes&&Math.round(m.pontos)>=100)).length})()")
-    checar("pacote: começa fechado, com tantas cartas quantos agentes com 100", pk.locator(".pk-pacote").count() == 1 and n100 == max(esperado, 3), f"{n100} x {esperado}")
+    esperado = 5
+    checar("pacote: começa fechado, só com o top 5", pk.locator(".pk-pacote").count() == 1 and n100 == esperado, f"{n100} x {esperado}")
     checar("pacote: a tela não passa sozinha (modo manual)", pk.evaluate("PROJECAO.modo()") == "pacote")
     pk.keyboard.press("Enter"); pk.wait_for_function("getComputedStyle(document.querySelector('.pk-pacote')).display==='none'", timeout=15000)
     pk.keyboard.press("Enter"); pk.wait_for_function(f"document.querySelector('.pk-cont').textContent==='Revelando 1 de {n100}'", timeout=15000)
@@ -271,20 +271,20 @@ with sync_playwright() as p:
     # ---- pacote: som, automático, pular até o Nº, controle remoto (PageDown) e vídeo de 5 s
     ctr2 = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); pz = ctr2.new_page(); epz = []; pz.on("pageerror", lambda x: epz.append(str(x)))
     pz.goto(U + "projecao.html#pacote"); pz.wait_for_timeout(600)
-    checar("pacote: barra tem Som, Automático, Pular e Próxima", pz.locator(".pk-barra button[data-b=som]").count() == 1 and pz.locator(".pk-barra button[data-b=auto]").count() == 1 and pz.locator(".pk-barra select[data-b=pular]").count() == 1 and pz.locator(".pk-barra .pk-prox").count() == 1)
+    checar("pacote: barra tem Som, Automático e Próxima (sem «pular», são só 5)", pz.locator(".pk-barra button[data-b=som]").count() == 1 and pz.locator(".pk-barra button[data-b=auto]").count() == 1 and pz.locator(".pk-barra select[data-b=pular]").count() == 0 and pz.locator(".pk-barra .pk-prox").count() == 1)
     checar("pacote: som começa desligado e a tecla S alterna", "desligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "ligado" in pz.inner_text(".pk-barra [data-b=som]") and "desligado" not in pz.inner_text(".pk-barra [data-b=som]"))
-    pz.keyboard.press("s"); pz.select_option(".pk-barra select[data-b=pular]", "10")
+    pz.keyboard.press("s")
     pz.keyboard.press("PageDown"); pz.wait_for_timeout(150)
     checar("pacote: PageDown (controle remoto) abre o pacote", pz.locator(".pk-slot").count() == n100 and pz.evaluate("getComputedStyle(document.querySelector('.pk-pacote')).display") == "none")
     pz.click(".pk-barra .pk-prox"); pz.wait_for_timeout(200)
-    checar("pacote: «Pular até o 10º» abre de uma vez as de trás e começa no 10º", pz.evaluate("document.querySelector('.pk-rank').textContent") == "10º" and pz.locator(".pk-slot.aberta").count() == n100 - 10, pz.evaluate("document.querySelector('.pk-rank').textContent"))
+    checar("pacote: começa no 5º lugar e a faixa «Campeão» não existe", pz.evaluate("document.querySelector('.pk-rank').textContent") == "5º" and 'CAMPE' not in pz.evaluate("document.querySelector('.pk-palco').innerText.toUpperCase()"))
     checar("pacote: botão do vídeo de 5 s aparece na ficha", pz.locator(".pk-video").count() == 1)
     pz.click(".pk-barra [data-b=auto]"); pz.wait_for_function("document.querySelector('.pk-fim')", timeout=30000)
     checar("pacote: modo automático revela tudo sozinho até o fim", pz.locator(".pk-fim").count() == 1)
     checar("pacote: sem erros (som/automático/pular)", not epz, str(epz)); ctr2.close()
     # com animação de verdade: pula até o 5º e vai até o 1º lugar; os raios caem no pódio e nada trava
     ctx3 = nav.new_context(viewport={"width": 1280, "height": 800}); an = ctx3.new_page(); ean = []; an.on("pageerror", lambda x: ean.append(str(x)))
-    an.goto(U + "projecao.html#pacote"); an.wait_for_timeout(600); an.select_option(".pk-barra select[data-b=pular]", "5")
+    an.goto(U + "projecao.html#pacote"); an.wait_for_timeout(600)
     an.keyboard.press("Enter"); an.wait_for_function("getComputedStyle(document.querySelector('.pk-pacote')).display==='none'", timeout=20000)
     visto_raio = False; rank = ""
     for _ in range(9):
@@ -299,14 +299,14 @@ with sync_playwright() as p:
     # (computador do serviço costuma ter «reduzir movimento» ligado: aí as cartas perdiam a escala e ficavam gigantes)
     for (w, h) in [(1920, 1080), (1366, 768), (1024, 700), (390, 780)]:
         cl = nav.new_context(reduced_motion="reduce", viewport={"width": w, "height": h}); lp = cl.new_page(); elp = []; lp.on("pageerror", lambda x: elp.append(str(x)))
-        lp.goto(U + "projecao.html#pacote"); lp.wait_for_timeout(600); lp.select_option(".pk-barra select[data-b=pular]", "5")
+        lp.goto(U + "projecao.html#pacote"); lp.wait_for_timeout(600)
         for _ in range(10):
             lp.keyboard.press("Enter"); lp.wait_for_timeout(350)
             if lp.evaluate("(document.querySelector('.pk-rank')||{}).textContent") == "1º": break
         lp.wait_for_timeout(300)
         est = lp.evaluate("""()=>{const q=s=>document.querySelector(s),r=e=>e&&e.getBoundingClientRect(),cab=r(q('.pk-cabeca')),cena=r(q('.pk-cena')),o=[];
           for(const s of ['.pk-grande','.pk-info','.pk-faixa','.pk-video']){const e=r(q(s));if(e&&(e.top<cab.bottom-1||e.bottom>cena.bottom+1||e.left<cena.left-1||e.right>cena.right+1))o.push(s)}
-          const g=r(q('.pk-grande .carta')),m=r(q('.pk-slot .carta'));if(g.width>272.5||m.width>100)o.push('escala:'+Math.round(g.width)+'/'+Math.round(m.width));return o}""")
+          const g=r(q('.pk-grande .carta')),m=r(q('.pk-slot .carta'));const e=parseFloat(getComputedStyle(q('.pk-grande')).getPropertyValue('--e')),f=parseFloat(getComputedStyle(q('.pk-fileira')).getPropertyValue('--e'));if(Math.abs(g.width-272*e)>272*e*0.08||Math.abs(m.width-272*f)>272*f*0.15)o.push('escala:'+Math.round(g.width)+'/'+Math.round(m.width));return o}""")
         checar(f"pacote: no 1º lugar nada passa por cima dos controles nem sai da cena ({w}x{h})", not est and not elp, f"{est} {elp}"); cl.close()
     # animações: com «reduzir movimento» aparece o aviso; um clique em «Ativar animações» liga e fica guardado neste navegador
     ca = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); ap = ca.new_page(); eap = []; ap.on("pageerror", lambda x: eap.append(str(x)))

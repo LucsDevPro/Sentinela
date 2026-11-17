@@ -7,7 +7,7 @@
   'use strict';
   var W = 720, H = 1280, FPS = 30, DUR = 5, T_REV = 1.15;
   var TIER = {
-    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: 'CAMPEÃO', raios: 14, part: 150, ondas: 7 },
+    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: '1º LUGAR', raios: 14, part: 150, ondas: 7 },
     2: { a: '#DDE8F8', b: '#FFFFFF', c: '#8FA9CF', bg: ['#11213d', '#070f1f'], rot: '2º LUGAR', raios: 6, part: 64, ondas: 3 },
     3: { a: '#E8A060', b: '#FFE2C4', c: '#B8662A', bg: ['#2a1608', '#120a04'], rot: '3º LUGAR', raios: 4, part: 46, ondas: 2 },
     0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, raios: 0, part: 26, ondas: 1 }

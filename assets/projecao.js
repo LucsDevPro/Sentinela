@@ -152,11 +152,11 @@ function anonCarta(raiz,i,u){
 }
 /* ---- modo pacote (tecla P): só quem fez 100, revelado de trás pra frente até o 1º lugar (assets/pacote.js) ---- */
 var pacoteCtl=null;
+var PACOTE_TOP=5;   // quantas cartinhas entram no pacote da reunião
 function slidesDoPacote(){
   if(!window.Carta||!window.Pacote||!mesCartas)return [];
   var L=listaCartas(mesCartas);if(!L.length)return [];
-  var c100=[];L.forEach(function(l,i){if(Math.round(l.u.pontos)>=100)c100.push({l:l,i:i});});
-  if(c100.length<3)c100=L.slice(0,3).map(function(l,i){return {l:l,i:i};});   // com menos de 3 notas 100, o pódio (top 3) aparece mesmo assim
+  var c100=L.slice(0,PACOTE_TOP).map(function(l,i){return {l:l,i:i};});   // só o top 5 do mês (decisão da coordenação: tela curta e foco em quem é destaque)
   var itens=c100.map(function(x){var l=x.l,i=x.i;return {rank:i+1,rot:mostrarNomes?l.a.nome:('Agente '+(i+1)),eq:l.a.equipe,nota:br(l.u.pontos,1),
     mk:function(){return Carta.html({nome:l.a.nome,equipe:l.a.equipe},l.ms,l.a.k,true);},
     prep:function(raiz){anonCarta(raiz,i,l.u);}};});

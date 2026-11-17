@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (6) — pacote só com o top 5, sem «Campeão»
+- O pacote da reunião passa a ter só o **top 5** do mês (`PACOTE_TOP` em `projecao.js`), em vez de todas as notas 100; sem o seletor «pular até». A faixa do 1º diz só «1º LUGAR» (tela e vídeo), e o fim diz «Parabéns ao top 5 do mês!».
+
 ## 16/11/2026 (5) — trilha sonora em clima de abertura de campeonato
 - `som.js` ganhou «orquestra» sintetizada: tímpanos (`timpano`, `rufar` que acelera), metais (`metal`), coro (`coro`) e prato. `bronze`/`prata`/`ouro`, `suspense` e `fanfarra` foram refeitos (subida de metais, pancada de tímpanos, acorde de Ré maior com coro e prato). Melodias originais, só o clima lembra estádio; não reproduz nenhum hino real. Compressor no fim da cadeia contra estouro. O vídeo usa os mesmos sons (sem a fanfarra extra, que passava dos 5 s).
 

@@ -10,7 +10,7 @@
   function atualizaReduz() { REDUZ = window.Movimento ? Movimento.reduz() : !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); return REDUZ; }
   atualizaReduz();
   var NIVEL = { 1: ['#FFD25A', '#FFF6C8', '#F0B020', '#FF9A1F'], 2: ['#E6EEF9', '#9FB6D6', '#FFFFFF', '#6CC4F2'], 3: ['#E8A060', '#FFD0A0', '#B8662A', '#FFE9CF'], 0: ['#FFD25A', '#FFF3B0', '#6CC4F2'] };
-  var FAIXA = { 1: ['🥇', 'CAMPEÃO · 1º LUGAR'], 2: ['🥈', '2º LUGAR'], 3: ['🥉', '3º LUGAR'] };
+  var FAIXA = { 1: ['🥇', '1º LUGAR'], 2: ['🥈', '2º LUGAR'], 3: ['🥉', '3º LUGAR'] };
 
   function div(cls, html) { var d = document.createElement('div'); d.className = cls; if (html != null) d.innerHTML = html; return d; }
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -232,7 +232,7 @@
 
     async function fim() {
       ocupado = true; fase = 'fim'; palco.setAttribute('data-nv', 'n');
-      var t = div('pk-fim', 'Parabéns a todos que chegaram ao 100! 🎉'); cena.appendChild(t);
+      var t = div('pk-fim', 'Parabéns ao top 5 do mês! 🎉'); cena.appendChild(t);
       anima(t, [{ opacity: 0, transform: 'translateY(-30px) scale(.8)' }, { opacity: 1, transform: 'none' }], 700, null, { opacity: '1' });
       flash('#FFF2B8', 0.5); relampagos(8, '#FFE08A'); if (window.Som) { Som.tocar('fanfarra'); Som.tocar('trovao'); } onda(t, NIVEL[1][0], 0);
       texto('R: ver de novo', N + ' cartinhas 100'); ocupado = false;
