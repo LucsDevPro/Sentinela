@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (9) — som mais limpo e com «sala»
+- Queixa: som «feio». Causa provável: serras empilhadas e metais agudos (A5/F#5) davam chiado, e tudo soava seco. Agora: cadeia de saída com **reverberação sintética** (~2,4 s) + filtro passa-baixa 9,5 kHz + compressor (`limitador` em `som.js`, vale na reunião e no vídeo); metais com corpo triangular, vibrato leve e filtro mais fechado; coro com 2 vozes e passa-baixa; acordes finais em voicing aberto (sem metal agudo) com **sinos** no brilho. Medido offline (`Som.renderizar`): energia de agudos caiu ~15× nos sons de revelação, picos ≤ 0,85. Teste confere volume, ausência de estouro e cauda de sala. Sem ouvir não dá para garantir o gosto: ajuste fino é por `mol.gain` (reverb), `lp.frequency` (brilho) e `GANHO`.
+
 ## 16/11/2026 (8) — foto no vídeo do top 5
 - O vídeo do top 5 não passava o `id` do agente à `Carta.png`, e é por ele que a foto (`AGENTES_FOTOS`) entra na carta; só o vídeo de 1 carta passava. `gerarTop` agora usa `id` de cada item (`projecao.js` envia `id:a.k`). Fotos novas: `assets/fotos/ID.png` + linha em `assets/fotos.js`; valem em PNG, vídeo de 1 carta e vídeo do top 5. Com «Nomes: ocultos» a foto continua saindo.
 

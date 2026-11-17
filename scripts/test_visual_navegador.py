@@ -305,7 +305,12 @@ with sync_playwright() as p:
       const A=mk(110.6,100,90,1,'Ana Lima'),B=mk(104,100,95,2,'Bia Souza'),C=mk(104,100,80,3,'Caio Dias'),D=mk(90,90,80,4,'Dora Reis');const L=[A,B,C,D];
       const r=[PROJECAO.criterio(L,0,false),PROJECAO.criterio(L,1,false),PROJECAO.criterio(L,2,true),PROJECAO.criterio(L,3,false)];Carta.bruta=real;return r}""")
     checar("desempate: nota bruta, média anterior, anônimo e sem empate", "nota bruta" in cr[0] and "110,6" in cr[0] and "nota bruta" in cr[1] and "média dos meses anteriores" in cr[2] and "outro agente" in cr[2] and cr[3] == "", str(cr))
-    checar("desempate: sem erros de script", not edp, str(edp)); de.close()
+    checar("desempate: sem erros de script", not edp, str(edp)); 
+    # som: renderiza cada som sem tocar e confere que tem volume, não estoura e tem «sala» (cauda de reverberação)
+    sm = dp.evaluate("""async()=>{const o={};for(const n of ['bronze','prata','ouro','fanfarra','suspense','trovao']){const b=await Som.renderizar(n,2700,7);const L=b.getChannelData(0);let pk=0,fim=L.length-1;for(let i=0;i<L.length;i++)pk=Math.max(pk,Math.abs(L[i]));while(fim>0&&Math.abs(L[fim])<0.002)fim--;o[n]=[+pk.toFixed(2),+(fim/44100).toFixed(2)]}return o}""")
+    checar("som: todos os sons têm volume e não estouram (pico entre 0,2 e 0,98)", all(0.2 <= v[0] <= 0.98 for v in sm.values()), str(sm))
+    checar("som: o ouro e a fanfarra têm cauda de sala (mais de 3 s)", sm["ouro"][1] > 3 and sm["fanfarra"][1] > 4.5, str(sm))
+    de.close()
     # layout do pacote: texto/banner/carta nunca passam por cima dos controles e cabem na cena, em várias resoluções
     # (computador do serviço costuma ter «reduzir movimento» ligado: aí as cartas perdiam a escala e ficavam gigantes)
     for (w, h) in [(1920, 1080), (1366, 768), (1024, 700), (390, 780)]:

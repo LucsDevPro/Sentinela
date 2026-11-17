@@ -7,8 +7,17 @@
   var GANHO = [0, 0.55, 0.2];
   try { var sv = localStorage.getItem(KEY); nivel = sv === '2' ? 2 : sv === '1' ? 1 : 0; } catch (e) {}
 
-  function limitador(c, saida) {   // compressor no fim da cadeia: o acorde cheio de metais e coro não estoura
-    var k = c.createDynamicsCompressor(); k.threshold.value = -16; k.knee.value = 12; k.ratio.value = 6; k.attack.value = 0.004; k.release.value = 0.25; k.connect(saida); return k;
+  /* cadeia de saída: som seco + «sala» (reverberação sintética de ~2,4 s, que dá o clima de estádio/orquestra) → filtro que tira o chiado agudo → compressor (não estoura). Devolve o nó de entrada. */
+  function reverb(c) {
+    var sr = c.sampleRate, n = Math.floor(sr * 2.4), ir = c.createBuffer(2, n, sr);
+    for (var ch = 0; ch < 2; ch++) { var d = ir.getChannelData(ch), lp = 0; for (var k = 0; k < n; k++) { var u = k / n; lp += ((Math.random() * 2 - 1) - lp) * (0.9 - 0.75 * u); d[k] = lp * Math.pow(1 - u, 2.4) * 3.2; } }   // ruído que escurece e some com o tempo
+    var cv = c.createConvolver(); cv.buffer = ir; return cv;
+  }
+  function limitador(c, saida) {
+    var ent = c.createGain(), seco = c.createGain(), mol = c.createGain(), rv = reverb(c), lp = c.createBiquadFilter(), k = c.createDynamicsCompressor();
+    seco.gain.value = 0.82; mol.gain.value = 0.42; lp.type = 'lowpass'; lp.frequency.value = 9500; lp.Q.value = 0.5;
+    k.threshold.value = -17; k.knee.value = 14; k.ratio.value = 5; k.attack.value = 0.005; k.release.value = 0.3;
+    ent.connect(seco); ent.connect(rv); rv.connect(mol); seco.connect(lp); mol.connect(lp); lp.connect(k); k.connect(saida); return ent;
   }
   function ac() {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return ctx; }
@@ -42,29 +51,33 @@
     env(g, t, 0.004, 1.1, pico || 0.9); o.connect(g); g.connect(mestre); o.start(t); o.stop(t + 1.2);
     sopro(t, 0.12, 'lowpass', 1400, 300, (pico || 0.9) * 0.5);
   }
-  function metal(t, f, dur, pico, abre) {   // trompa/trombone: serra desafinada, filtro que «abre» no ataque
-    [-7, 7].forEach(function (c) {
+  function metal(t, f, dur, pico, abre) {   // trompa/trombone: serras desafinadas + corpo triangular, filtro que «abre» no ataque e vibrato leve
+    var cut = Math.min(3800, f * (abre || 4.5));
+    [-6, 6].forEach(function (c) {
       var o = ctx.createOscillator(), g = ctx.createGain(), fl = ctx.createBiquadFilter(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = c;
-      fl.type = 'lowpass'; fl.Q.value = 1.2; fl.frequency.setValueAtTime(f * 1.5, t); fl.frequency.exponentialRampToValueAtTime(Math.min(7000, f * (abre || 6)), t + 0.16); fl.frequency.exponentialRampToValueAtTime(f * 2.2, t + dur);
-      env(g, t, 0.07, dur, pico); o.connect(fl); fl.connect(g); g.connect(mestre); o.start(t); o.stop(t + dur + 0.05);
+      fl.type = 'lowpass'; fl.Q.value = 0.7; fl.frequency.setValueAtTime(f * 1.3, t); fl.frequency.exponentialRampToValueAtTime(cut, t + 0.2); fl.frequency.exponentialRampToValueAtTime(f * 2, t + dur);
+      var l = ctx.createOscillator(), lg = ctx.createGain(); l.frequency.value = 5; lg.gain.setValueAtTime(0, t); lg.gain.linearRampToValueAtTime(f * 0.004, t + 0.45); l.connect(lg); lg.connect(o.frequency); l.start(t); l.stop(t + dur + 0.05);
+      env(g, t, 0.1, dur, pico * 0.7); o.connect(fl); fl.connect(g); g.connect(mestre); o.start(t); o.stop(t + dur + 0.05);
     });
+    tom('triangle', f, 0, t, dur, pico * 0.55, 0.08);
   }
-  function coro(t, freqs, dur, pico) {   // «aaah» de coro: serras desafinadas passando por dois formantes de vogal, com vibrato
+  function coro(t, freqs, dur, pico) {   // «aaah» de coro: poucas vozes, serra filtrada por dois formantes de vogal, vibrato lento
     freqs.forEach(function (f) {
-      [-9, 0, 9].forEach(function (c) {
-        var o = ctx.createOscillator(), g = ctx.createGain(), l = ctx.createOscillator(), lg = ctx.createGain(), a = ctx.createBiquadFilter(), b = ctx.createBiquadFilter();
-        o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = c; l.frequency.value = 5.2 + Math.random(); lg.gain.value = f * 0.008; l.connect(lg); lg.connect(o.frequency);
-        a.type = 'bandpass'; a.frequency.value = 800; a.Q.value = 2.2; b.type = 'bandpass'; b.frequency.value = 1250; b.Q.value = 3;
-        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(pico, t + Math.min(0.5, dur * 0.4)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-        o.connect(a); o.connect(b); a.connect(g); b.connect(g); g.connect(mestre); o.start(t); l.start(t); o.stop(t + dur + 0.05); l.stop(t + dur + 0.05);
+      [-8, 8].forEach(function (c) {
+        var o = ctx.createOscillator(), g = ctx.createGain(), l = ctx.createOscillator(), lg = ctx.createGain(), a = ctx.createBiquadFilter(), b = ctx.createBiquadFilter(), lp = ctx.createBiquadFilter();
+        o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = c; l.frequency.value = 4.8 + Math.random() * 0.8; lg.gain.value = f * 0.006; l.connect(lg); lg.connect(o.frequency);
+        a.type = 'bandpass'; a.frequency.value = 650; a.Q.value = 1.6; b.type = 'bandpass'; b.frequency.value = 1100; b.Q.value = 2; lp.type = 'lowpass'; lp.frequency.value = 2400;
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(pico * 1.4, t + Math.min(0.6, dur * 0.45)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(a); o.connect(b); a.connect(lp); b.connect(lp); lp.connect(g); g.connect(mestre); o.start(t); l.start(t); o.stop(t + dur + 0.05); l.stop(t + dur + 0.05);
       });
     });
   }
-  function prato(t, dur, pico) { sopro(t, dur, 'highpass', 5200, 9500, pico); sopro(t, dur * 0.6, 'bandpass', 7800, 6000, pico * 0.6); }
+  function sino(t, f, dur, pico) { tom('sine', f, 0, t, dur, pico, 0.004); tom('sine', f * 2.76, 0, t, dur * 0.5, pico * 0.35, 0.004); tom('sine', f * 5.4, 0, t, dur * 0.25, pico * 0.15, 0.004); }   // brilho agudo de sino, no lugar de metal estridente
+  function prato(t, dur, pico) { sopro(t, dur, 'highpass', 5200, 8500, pico * 0.7); sopro(t, dur * 0.6, 'bandpass', 6800, 5200, pico * 0.4); }
   function rufar(t, d, f, pico) {   // rufar de tímpanos que acelera e cresce até o instante t+d
     var x = 0, passo = 0.16; while (x < d - 0.02) { timpano(t + x, f, pico * (0.25 + 0.75 * x / d)); x += passo; passo = Math.max(0.045, passo * 0.9); }
   }
-  var F = { D2: 73.4, A2: 110, D3: 146.8, Bb3: 233.1, C4: 261.6, D4: 293.7, F4: 349.2, Fs4: 370, G4: 392, A4: 440, Bb4: 466.2, C5: 523.3, D5: 587.3, F5: 698.5, Fs5: 740, A5: 880, D6: 1174.7, E4: 329.6 };
+  var F = { A3: 220, D2: 73.4, A2: 110, D3: 146.8, Bb3: 233.1, C4: 261.6, D4: 293.7, F4: 349.2, Fs4: 370, G4: 392, A4: 440, Bb4: 466.2, C5: 523.3, D5: 587.3, F5: 698.5, Fs5: 740, A5: 880, D6: 1174.7, E4: 329.6 };
 
   var SONS = {
     rasgar: function (t) { sopro(t, 0.55, 'highpass', 900, 5200, 0.5); sopro(t + 0.05, 0.35, 'bandpass', 3000, 900, 0.35); tom('sine', 120, 45, t, 0.4, 0.5); },
@@ -79,18 +92,20 @@
     ding: function (t) { tom('sine', 880, 0, t, 0.5, 0.35); tom('sine', 1320, 0, t + 0.08, 0.6, 0.28); tom('triangle', 1760, 0, t + 0.16, 0.5, 0.12); },
     bronze: function (t) { timpano(t, F.D2, 0.9); metal(t, F.D4, 1.0, 0.16); metal(t, F.A4, 1.0, 0.14); metal(t + 0.12, F.D5, 0.9, 0.14); coro(t, [F.D3, F.A4], 1.1, 0.025); prato(t, 0.7, 0.12); },
     prata: function (t) { timpano(t, F.D2, 1); timpano(t + 0.2, F.D2, 0.8); [['D4', 0], ['A4', 0.12], ['D5', 0.24]].forEach(function (n) { metal(t + n[1], F[n[0]], 1.4, 0.16); }); metal(t + 0.36, F.Fs5, 1.2, 0.13); coro(t, [F.D3, F.A4, F.D5], 1.6, 0.03); prato(t, 1.2, 0.18); },
-    ouro: function (t) {   // subida de metais, pancada de tímpanos e acorde de ré maior com coro e prato
-      [['A4', 0], ['D5', 0.13], ['Fs5', 0.26], ['A5', 0.39]].forEach(function (n) { metal(t + n[1], F[n[0]], 0.5, 0.15); });
-      timpano(t, F.D2, 1); timpano(t + 0.26, F.D2, 0.8); timpano(t + 0.52, F.D2, 0.8);
-      var b = t + 0.62; timpano(b, F.D2, 1); [['D3', 0.2], ['D4', 0.18], ['A4', 0.18], ['Fs4', 0.18], ['D5', 0.2], ['Fs5', 0.15], ['A5', 0.1]].forEach(function (n) { metal(b, F[n[0]], 2.6, n[1] * 0.75, 5); });
-      coro(b, [F.D3, F.A4, F.Fs4, F.D5, F.A5], 2.8, 0.035); prato(b, 2.6, 0.32); tom('sine', 55, 30, b, 1.2, 0.8);
+    ouro: function (t) {   // subida de metais, pancadas de tímpanos e acorde de Ré maior (voicing aberto) com coro, sinos e prato
+      [['A3', 0], ['D4', 0.13], ['Fs4', 0.26], ['A4', 0.39]].forEach(function (n) { metal(t + n[1], F[n[0]], 0.55, 0.17); });
+      timpano(t, F.D2, 1); timpano(t + 0.26, F.D2, 0.8); timpano(t + 0.52, F.D2, 0.85);
+      var b = t + 0.62; timpano(b, F.D2, 1.1); [['D3', 0.22], ['A3', 0.2], ['D4', 0.2], ['Fs4', 0.19], ['A4', 0.19], ['D5', 0.14]].forEach(function (n) { metal(b, F[n[0]], 2.7, n[1], 4); });
+      coro(b, [F.D3, F.A3, F.Fs4, F.D5, F.A4], 2.9, 0.034); [F.D5, F.Fs5, F.A5].forEach(function (f, k) { sino(b + 0.05 + k * 0.09, f, 1.8, 0.13); });
+      prato(b, 2.6, 0.3); tom('sine', 55, 30, b, 1.3, 0.8);
     },
     fanfarra: function (t) {   // «tema» de campeonato: Ré menor → Si bemol → Dó → Ré maior, melodia de metais por cima e tímpanos marcando
-      var P = [[['D3', 'A4', 'F4'], 'A4'], [['Bb3', 'F4', 'D4'], 'Bb4'], [['C4', 'G4', 'E4'], 'C5']];
-      P.forEach(function (p, i) { var x = t + i * 0.8; timpano(x, F.D2, 0.8); coro(x, p[0].map(function (n) { return F[n]; }), 1.0, 0.028); metal(x, F[p[1]], 0.75, 0.14); metal(x, F[p[1]] / 2, 0.75, 0.1); });
-      var g = t + 2.4; timpano(g, F.D2, 1); timpano(g + 0.3, F.D2, 0.8);
-      [['D3', 0.2], ['D4', 0.18], ['A4', 0.18], ['Fs4', 0.18], ['D5', 0.22], ['Fs5', 0.15], ['A5', 0.12]].forEach(function (n) { metal(g, F[n[0]], 3, n[1] * 0.75, 5); });
-      coro(g, [F.D3, F.A4, F.Fs4, F.D5, F.A5, F.D6], 3.2, 0.04); prato(g, 3, 0.36); tom('sine', 55, 30, g, 1.4, 0.85);
+      var P = [[['D3', 'A3', 'F4'], 'A4'], [['Bb3', 'F4', 'D4'], 'Bb4'], [['C4', 'G4', 'E4'], 'C5']];
+      P.forEach(function (p, i) { var x = t + i * 0.8; timpano(x, F.D2, 0.8); coro(x, p[0].map(function (n) { return F[n]; }), 1.0, 0.028); metal(x, F[p[1]], 0.78, 0.15); metal(x, F[p[1]] / 2, 0.78, 0.11); });
+      var g = t + 2.4; timpano(g, F.D2, 1.1); timpano(g + 0.3, F.D2, 0.8);
+      [['D3', 0.22], ['A3', 0.2], ['D4', 0.2], ['Fs4', 0.19], ['A4', 0.19], ['D5', 0.15]].forEach(function (n) { metal(g, F[n[0]], 3.1, n[1], 4); });
+      coro(g, [F.D3, F.A3, F.Fs4, F.D5, F.A4], 3.3, 0.036); [F.D5, F.Fs5, F.A5, F.D6].forEach(function (f, k) { sino(g + 0.05 + k * 0.1, f, 2, 0.12); });
+      prato(g, 3, 0.33); tom('sine', 55, 30, g, 1.5, 0.85);
     },
     batida: function (t) { tom('sine', 72, 34, t, 0.32, 0.9); tom('sine', 60, 30, t + 0.16, 0.3, 0.6); },   // coração do suspense do 1º lugar
     trovao: function (t) {   // estalo seco do raio + trovoada grave que rola
@@ -106,6 +121,12 @@
       var C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
       var c = new C(), dest = c.createMediaStreamDestination(), g = c.createGain(); g.gain.value = 0.85; g.connect(limitador(c, dest));
       return { stream: dest.stream, iniciar: function () { try { if (c.resume) c.resume(); } catch (e) {} }, tocar: function (nome, t, ms) { if (SONS[nome]) com(c, g, function () { SONS[nome](c.currentTime + 0.05 + (t || 0), ms); }); }, fechar: function () { try { c.close(); } catch (e) {} } };
+    },
+    /* renderiza um som sem tocar (teste/medição): devolve uma AudioBuffer estéreo */
+    renderizar: function (nome, ms, seg) {
+      var O = window.OfflineAudioContext; if (!O || !SONS[nome]) return Promise.resolve(null);
+      var c = new O(2, 44100 * (seg || 4), 44100), g = c.createGain(); g.gain.value = 0.85; g.connect(limitador(c, c.destination));
+      com(c, g, function () { SONS[nome](0.02, ms); }); return c.startRendering();
     },
     ligado: function () { return nivel > 0; },
     nivel: function () { return nivel; },
