@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (8) — foto no vídeo do top 5
+- O vídeo do top 5 não passava o `id` do agente à `Carta.png`, e é por ele que a foto (`AGENTES_FOTOS`) entra na carta; só o vídeo de 1 carta passava. `gerarTop` agora usa `id` de cada item (`projecao.js` envia `id:a.k`). Fotos novas: `assets/fotos/ID.png` + linha em `assets/fotos.js`; valem em PNG, vídeo de 1 carta e vídeo do top 5. Com «Nomes: ocultos» a foto continua saindo.
+
 ## 16/11/2026 (7) — fechamento do mês, vídeo do top 5, desempate, legenda e volume
 - **Fechamento (pacote):** depois do 1º lugar abre a tela «Parabéns ao top 5»: pódio 2º·1º·3º com as cartas, números do mês (nota média de todos os agentes, quantos tiraram 100, média do top 5) e «Também tiraram 100» (nomes pequenos; com nomes ocultos só a contagem). Dados vêm de `slidesDoPacote` → `opts.fechamento`. É a tela da «foto» para o grupo.
 - **Vídeo do top 5** (`CartaVideo.gerarTop/enviarTop`, ≈15 s): do 5º ao 1º, cada um com a própria revelação (`DUR_TOP`: 2,3·2,3·2,8·3,0·4,6 s), clarão rápido entre as cartas e a mesma trilha sonora. `gravarCenas` generaliza o gravador (1 carta = 1 cena). Botão na tela de fechamento.

@@ -205,9 +205,10 @@
   var DUR_TOP = { 1: 4.6, 2: 3.0, 3: 2.8, 4: 2.3, 5: 2.3 };
   function gerarTop(lista, o) {
     o = o || {};
+    // cada item leva o id do agente: é por ele que a foto (AGENTES_FOTOS) entra na carta
     var ord = lista.slice().sort(function (p, q) { return q.lugar - p.lugar; });   // do último ao 1º
     return fontes().then(function () {
-      return Promise.all(ord.map(function (x) { return window.Carta.png(x.a, x.ms, Object.assign({}, o, { transparente: true })).then(imagemDe); }));
+      return Promise.all(ord.map(function (x) { return window.Carta.png(x.a, x.ms, Object.assign({}, o, { transparente: true, id: x.id != null ? x.id : x.a.k })).then(imagemDe); }));
     }).then(function (imgs) {
       var ini = 0, cenas = ord.map(function (x, i) {
         var inf = infoDe(x.a, x.ms, Object.assign({}, o, { lugar: x.lugar })), ce = { S: preparar(imgs[i], inf), dur: DUR_TOP[x.lugar] || 2.3, ini: ini }; ini += ce.dur; return ce;

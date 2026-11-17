@@ -348,7 +348,7 @@ with sync_playwright() as p:
             checar("vídeo: tem imagem e trilha de áudio (trovão e fanfarra)", "video" in trilhas and "audio" in trilhas, str(trilhas))
         except FileNotFoundError: pass
         # vídeo do top 5 inteiro (≈15 s)
-        r5 = vd.evaluate("""async()=>{const A=Object.values(AGENTES_DADOS.agentes).slice(0,5);const lista=A.map((a,i)=>({a:a,ms:a.meses.slice(-1),lugar:i+1}));const bl=await CartaVideo.gerarTop(lista,{});
+        r5 = vd.evaluate("""async()=>{const A=Object.values(AGENTES_DADOS.agentes).slice(0,5);const lista=A.map((a,i)=>({a:a,ms:a.meses.slice(-1),lugar:i+1,id:a.k}));const bl=await CartaVideo.gerarTop(lista,{});
           const b=new Uint8Array(await bl.arrayBuffer());let s='';for(let i=0;i<b.length;i+=32768)s+=String.fromCharCode.apply(null,b.subarray(i,i+32768));return {tipo:bl.type,tam:bl.size,b64:btoa(s)}}""")
         arq5 = os.path.join(tempfile.mkdtemp(), "t5." + ("mp4" if "mp4" in r5["tipo"] else "webm")); open(arq5, "wb").write(base64.b64decode(r5["b64"]))
         try:

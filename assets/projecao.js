@@ -173,7 +173,7 @@ function slidesDoPacote(){
     mk:function(){return Carta.html({nome:l.a.nome,equipe:l.a.equipe},l.ms,l.a.k,true);},
     prep:function(raiz){anonCarta(raiz,i,l.u);}};});
   var fazVideo=window.CartaVideo&&CartaVideo.suportado()?function(it){var l=c100.filter(function(x){return x.i+1===it.rank;})[0].l;return CartaVideo.enviar(l.a,l.ms,{lugar:it.rank,id:l.a.k,ocultarNomes:!mostrarNomes,ocultarFoto:!mostrarNomes});}:null;
-  var fazVideoTop=window.CartaVideo&&CartaVideo.suportado()&&CartaVideo.enviarTop?function(){return CartaVideo.enviarTop(c100.map(function(x){return {a:x.l.a,ms:x.l.ms,lugar:x.i+1};}),{ocultarNomes:!mostrarNomes,ocultarFoto:!mostrarNomes});}:null;
+  var fazVideoTop=window.CartaVideo&&CartaVideo.suportado()&&CartaVideo.enviarTop?function(){return CartaVideo.enviarTop(c100.map(function(x){return {a:x.l.a,ms:x.l.ms,lugar:x.i+1,id:x.l.a.k};}),{ocultarNomes:!mostrarNomes,ocultarFoto:!mostrarNomes});}:null;
   // números do mês para a tela de fechamento: média de todos os agentes, quantos tiraram 100 e quem mais tirou 100 (fora do top 5)
   var soma=0;L.forEach(function(l){soma+=l.u.pontos;});
   var tiraram=L.filter(function(l){return Math.round(l.u.pontos)>=100;}),fora=tiraram.filter(function(l){return L.indexOf(l)>=PACOTE_TOP;});
