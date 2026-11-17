@@ -246,6 +246,10 @@ with sync_playwright() as p:
     seq = [int(x.replace("º", "")) for x in ranks]
     checar("pacote: revelação vai do último até o 1º lugar, em ordem", seq == sorted(seq, reverse=True) and seq[-1] == 1 and seq[-3:] == [3, 2, 1], str(seq))
     checar("pacote: no fim mostra os parabéns e as cartas ficam à mostra", rk.locator(".pk-fim").count() == 1 and rk.locator(".pk-slot.aberta").count() == n100)
+    fz = rk.evaluate("""()=>({pod:[...document.querySelectorAll('.pk-pcol')].map(c=>c.className),chips:document.querySelectorAll('.pk-chip').length,txt:document.querySelector('.pk-final').innerText,leg:document.querySelector('.pk-leg').textContent,btn:!!document.querySelector('.pk-f-bt .pk-video')})""")
+    checar("fechamento: pódio com 2º, 1º e 3º, números do mês e botão do vídeo do top 5", len(fz["pod"]) == 3 and fz["pod"][1].endswith("r1") and fz["chips"] >= 3 and "Nota média do mês" in fz["txt"] and "Tiraram 100" in fz["txt"] and fz["btn"], str(fz)[:300])
+    checar("fechamento: mostra «Também tiraram 100» (quem ficou fora do top 5)", "Também tiraram 100" in fz["txt"])
+    checar("acessibilidade: a legenda em texto descreve o fechamento", fz["leg"].startswith("Fechamento de") and rk.evaluate("document.querySelector('.pk-leg').getAttribute('aria-live')") == "polite")
     checar("pacote: com «reduzir movimento» não há pacote voando nem erros", not erk, str(erk)); ctr.close()
 
     # ---- apresentação de cada mês: o seletor troca o mês do pacote e das cartinhas
@@ -272,8 +276,7 @@ with sync_playwright() as p:
     ctr2 = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); pz = ctr2.new_page(); epz = []; pz.on("pageerror", lambda x: epz.append(str(x)))
     pz.goto(U + "projecao.html#pacote"); pz.wait_for_timeout(600)
     checar("pacote: barra tem Som, Automático e Próxima (sem «pular», são só 5)", pz.locator(".pk-barra button[data-b=som]").count() == 1 and pz.locator(".pk-barra button[data-b=auto]").count() == 1 and pz.locator(".pk-barra select[data-b=pular]").count() == 0 and pz.locator(".pk-barra .pk-prox").count() == 1)
-    checar("pacote: som começa desligado e a tecla S alterna", "desligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "ligado" in pz.inner_text(".pk-barra [data-b=som]") and "desligado" not in pz.inner_text(".pk-barra [data-b=som]"))
-    pz.keyboard.press("s")
+    checar("pacote: som começa desligado e a tecla S alterna", "desligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "Som ligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "Som baixo" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "desligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True))
     pz.keyboard.press("PageDown"); pz.wait_for_timeout(150)
     checar("pacote: PageDown (controle remoto) abre o pacote", pz.locator(".pk-slot").count() == n100 and pz.evaluate("getComputedStyle(document.querySelector('.pk-pacote')).display") == "none")
     pz.click(".pk-barra .pk-prox"); pz.wait_for_timeout(200)
@@ -295,6 +298,14 @@ with sync_playwright() as p:
         if rank == "1º": break
         an.wait_for_timeout(1500)   # deixa a revelação terminar de vez (o Enter durante ela é ignorado)
     checar("pacote (com animação): chega ao 1º lugar sem travar e os raios caem no pódio", rank == "1º" and visto_raio and not ean, f"{rank} raio={visto_raio} {ean}"); ctx3.close()
+    # desempate: o texto explica o critério que decidiu (nota bruta → média anterior → posição oficial → alfabética)
+    de = nav.new_context(viewport={"width": 1280, "height": 800}); dp = de.new_page(); edp = []; dp.on("pageerror", lambda x: edp.append(str(x)))
+    dp.goto(U + "projecao.html#pacote"); dp.wait_for_timeout(700)
+    cr = dp.evaluate("""()=>{const mk=(n,p,h,pos,nome)=>({a:{nome:nome},u:{pontos:p,pos:pos,_b:n},h:h});const real=Carta.bruta;Carta.bruta=u=>u._b;
+      const A=mk(110.6,100,90,1,'Ana Lima'),B=mk(104,100,95,2,'Bia Souza'),C=mk(104,100,80,3,'Caio Dias'),D=mk(90,90,80,4,'Dora Reis');const L=[A,B,C,D];
+      const r=[PROJECAO.criterio(L,0,false),PROJECAO.criterio(L,1,false),PROJECAO.criterio(L,2,true),PROJECAO.criterio(L,3,false)];Carta.bruta=real;return r}""")
+    checar("desempate: nota bruta, média anterior, anônimo e sem empate", "nota bruta" in cr[0] and "110,6" in cr[0] and "nota bruta" in cr[1] and "média dos meses anteriores" in cr[2] and "outro agente" in cr[2] and cr[3] == "", str(cr))
+    checar("desempate: sem erros de script", not edp, str(edp)); de.close()
     # layout do pacote: texto/banner/carta nunca passam por cima dos controles e cabem na cena, em várias resoluções
     # (computador do serviço costuma ter «reduzir movimento» ligado: aí as cartas perdiam a escala e ficavam gigantes)
     for (w, h) in [(1920, 1080), (1366, 768), (1024, 700), (390, 780)]:
@@ -335,6 +346,15 @@ with sync_playwright() as p:
             checar("vídeo: dura cerca de 5 segundos", 4.4 <= dur <= 5.8, str(dur))
             trilhas = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", arq], capture_output=True, text=True, timeout=30).stdout.split()
             checar("vídeo: tem imagem e trilha de áudio (trovão e fanfarra)", "video" in trilhas and "audio" in trilhas, str(trilhas))
+        except FileNotFoundError: pass
+        # vídeo do top 5 inteiro (≈15 s)
+        r5 = vd.evaluate("""async()=>{const A=Object.values(AGENTES_DADOS.agentes).slice(0,5);const lista=A.map((a,i)=>({a:a,ms:a.meses.slice(-1),lugar:i+1}));const bl=await CartaVideo.gerarTop(lista,{});
+          const b=new Uint8Array(await bl.arrayBuffer());let s='';for(let i=0;i<b.length;i+=32768)s+=String.fromCharCode.apply(null,b.subarray(i,i+32768));return {tipo:bl.type,tam:bl.size,b64:btoa(s)}}""")
+        arq5 = os.path.join(tempfile.mkdtemp(), "t5." + ("mp4" if "mp4" in r5["tipo"] else "webm")); open(arq5, "wb").write(base64.b64decode(r5["b64"]))
+        try:
+            dur5 = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nw=1:nk=1", arq5], capture_output=True, text=True, timeout=30).stdout.strip() or 0)
+            tr5 = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "csv=p=0", arq5], capture_output=True, text=True, timeout=30).stdout.split()
+            checar("vídeo do top 5: dura cerca de 15 segundos, com imagem e áudio", 14 <= dur5 <= 16.5 and "video" in tr5 and "audio" in tr5, f"{dur5} {tr5}")
         except FileNotFoundError: pass
     checar("vídeo: sem erros de script", not evd, str(evd)); vd.close()
 

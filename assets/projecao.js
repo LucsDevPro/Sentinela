@@ -153,15 +153,34 @@ function anonCarta(raiz,i,u){
 /* ---- modo pacote (tecla P): só quem fez 100, revelado de trás pra frente até o 1º lugar (assets/pacote.js) ---- */
 var pacoteCtl=null;
 var PACOTE_TOP=5;   // quantas cartinhas entram no pacote da reunião
+/* Por que ele ficou nesta posição quando há empate? Compara com quem está colado (acima/abaixo) com a mesma nota exibida e diz qual critério decidiu,
+   na mesma ordem do ranking (listaCartas): nota bruta → média dos meses anteriores → posição oficial → ordem alfabética. */
+function criterioDesempate(L,i,anon){
+  var me=L[i],viz=[L[i-1],L[i+1]].filter(function(x){return x&&br(x.u.pontos,1)===br(me.u.pontos,1);});
+  if(!viz.length)return '';
+  var o=viz[0],nomeO=anon?'outro agente':o.a.nome.split(' ')[0],acima=L.indexOf(o)<i,pre=(acima?'Ficou atrás de ':'Ficou na frente de ')+nomeO+' com a mesma nota ('+br(me.u.pontos,1)+'). ';
+  var bm=Carta.bruta(me.u),bo=Carta.bruta(o.u);
+  if(bm!==bo)return pre+'Desempate pela nota bruta, sem o teto de 100: '+br(bm,1)+' contra '+br(bo,1)+'.';
+  if(me.h!==o.h)return pre+'Desempate pela média dos meses anteriores: '+(me.h<0?'sem histórico':br(me.h,1))+' contra '+(o.h<0?'sem histórico':br(o.h,1))+'.';
+  if((me.u.pos||0)!==(o.u.pos||0))return pre+'Desempate pela posição oficial do mês ('+(me.u.pos||'—')+'º contra '+(o.u.pos||'—')+'º).';
+  return pre+'Desempate por ordem alfabética.';
+}
 function slidesDoPacote(){
   if(!window.Carta||!window.Pacote||!mesCartas)return [];
   var L=listaCartas(mesCartas);if(!L.length)return [];
   var c100=L.slice(0,PACOTE_TOP).map(function(l,i){return {l:l,i:i};});   // só o top 5 do mês (decisão da coordenação: tela curta e foco em quem é destaque)
-  var itens=c100.map(function(x){var l=x.l,i=x.i;return {rank:i+1,rot:mostrarNomes?l.a.nome:('Agente '+(i+1)),eq:l.a.equipe,nota:br(l.u.pontos,1),
+  var itens=c100.map(function(x){var l=x.l,i=x.i;return {rank:i+1,rot:mostrarNomes?l.a.nome:('Agente '+(i+1)),eq:l.a.equipe,nota:br(l.u.pontos,1),emp:criterioDesempate(L,i,!mostrarNomes),
     mk:function(){return Carta.html({nome:l.a.nome,equipe:l.a.equipe},l.ms,l.a.k,true);},
     prep:function(raiz){anonCarta(raiz,i,l.u);}};});
   var fazVideo=window.CartaVideo&&CartaVideo.suportado()?function(it){var l=c100.filter(function(x){return x.i+1===it.rank;})[0].l;return CartaVideo.enviar(l.a,l.ms,{lugar:it.rank,id:l.a.k,ocultarNomes:!mostrarNomes,ocultarFoto:!mostrarNomes});}:null;
-  return [{id:'pacote',titulo:'Pacote de cartinhas',sub:mesCartas,manual:true,montar:function(el){pacoteCtl=Pacote.iniciar(el,itens,{mes:mesCartas,video:fazVideo});}}];
+  var fazVideoTop=window.CartaVideo&&CartaVideo.suportado()&&CartaVideo.enviarTop?function(){return CartaVideo.enviarTop(c100.map(function(x){return {a:x.l.a,ms:x.l.ms,lugar:x.i+1};}),{ocultarNomes:!mostrarNomes,ocultarFoto:!mostrarNomes});}:null;
+  // números do mês para a tela de fechamento: média de todos os agentes, quantos tiraram 100 e quem mais tirou 100 (fora do top 5)
+  var soma=0;L.forEach(function(l){soma+=l.u.pontos;});
+  var tiraram=L.filter(function(l){return Math.round(l.u.pontos)>=100;}),fora=tiraram.filter(function(l){return L.indexOf(l)>=PACOTE_TOP;});
+  var outros=!fora.length?'':mostrarNomes?fora.map(function(l){return l.a.nome;}).join(' · '):(fora.length+(fora.length===1?' agente':' agentes')+' além do top '+PACOTE_TOP);
+  var somaTop=0;c100.forEach(function(x){somaTop+=x.l.u.pontos;});
+  var fech={mes:mesCartas,media:br(soma/L.length,1),mediaTop:br(somaTop/c100.length,1),n100:tiraram.length,total:L.length,outros:outros};
+  return [{id:'pacote',titulo:'Pacote de cartinhas',sub:mesCartas,manual:true,montar:function(el){pacoteCtl=Pacote.iniciar(el,itens,{mes:mesCartas,video:fazVideo,videoTop:fazVideoTop,fechamento:fech});}}];
 }
 function slidesDasCartas(){
   var out=[];
@@ -249,7 +268,7 @@ document.addEventListener('keydown',function(e){
   else if(e.key==='f'||e.key==='F')tela();else if(e.key==='n'||e.key==='N')nomes();else if(e.key==='c'||e.key==='C')trocarModo(modo==='paineis'?'cartas':'paineis');
 });
 document.addEventListener('sentinela:tema',function(){if(window.aplicarTemaGraficos)window.aplicarTemaGraficos();desenhar();});
-window.PROJECAO={modo:function(){return modo;},trocarModo:trocarModo,ir:ir,pausa:pausa,total:slides.length,ids:slides.map(function(s){return s.id;}),atual:function(){return atual;},pausado:function(){return pausado;}};
+window.PROJECAO={criterio:criterioDesempate,modo:function(){return modo;},trocarModo:trocarModo,ir:ir,pausa:pausa,total:slides.length,ids:slides.map(function(s){return s.id;}),atual:function(){return atual;},pausado:function(){return pausado;}};
 if(window.aplicarTemaGraficos)window.aplicarTemaGraficos();
 if(location.hash==='#pacote')trocarModo('pacote');else if(location.hash==='#cartinhas')trocarModo('cartas');else ir(0);
 raf=requestAnimationFrame(tick);

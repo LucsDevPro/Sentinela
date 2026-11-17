@@ -90,3 +90,29 @@
 @keyframes pk-brilho-faixa{from{background-position:130% 0,0 0}to{background-position:-130% 0,0 0}}
 .pk-palco[data-nv=r1].destaque .pk-fundo{background:radial-gradient(circle at 36% 44%,rgba(255,210,90,.6),transparent 62%)}
 .pk-palco[data-nv=r1] .pk-grande{filter:drop-shadow(0 0 34px rgba(255,200,70,.75))}
+
+/* ---- legenda em texto (acessibilidade) ---- */
+.pk-leg{position:relative;flex:none;z-index:7;min-height:1.5em;padding:2px 16px 6px;text-align:center;color:#D5E1F5;font:500 clamp(12px,1vw,16px)/1.35 "IBM Plex Sans",system-ui,sans-serif}
+/* ---- desempate na ficha ---- */
+.pk-emp{margin-top:.5em;padding:.45em .7em;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#E6EEFB;font-size:.72em;line-height:1.3;max-width:28em}
+.pk-foco.estreito .pk-emp{margin-left:auto;margin-right:auto}
+/* ---- fechamento do mês: pódio + números (a tela da «foto») ---- */
+.pk-final{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;gap:.7em;padding:0 2% .5em;color:#F2F6FF;font-size:16px;pointer-events:auto}
+.pk-final .pk-fim{position:relative;left:auto;top:auto;translate:none;flex:none;font-size:2.2em;text-align:center;line-height:1.1}
+.pk-pod{flex:1 1 0;min-height:0;width:100%;display:flex;align-items:flex-end;justify-content:center;gap:2.5%}
+.pk-pcol{display:flex;flex-direction:column;align-items:center;flex:none}
+.pk-pcol .pk-grande{--e:inherit;width:calc(272px*var(--e));height:calc(392px*var(--e));flex:none}
+.pk-pcol.r1 .pk-grande{filter:drop-shadow(0 0 26px rgba(255,200,70,.75))}.pk-pcol.r2 .pk-grande{filter:drop-shadow(0 0 16px rgba(190,215,255,.5))}.pk-pcol.r3 .pk-grande{filter:drop-shadow(0 0 14px rgba(232,160,96,.5))}
+.pk-ped{width:100%;margin-top:6px;border-radius:10px 10px 4px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:.3em .4em;overflow:hidden;color:#1a1200;line-height:1.15}
+.pk-ped b{font:700 1.9em "Barlow Semi Condensed",system-ui,sans-serif}.pk-ped .pk-pn{font-weight:700;font-size:1.05em}.pk-ped .pk-pt{font-size:.8em;opacity:.85}
+.pk-pcol.r1 .pk-ped{height:var(--ped1);background:linear-gradient(#FFE08A,#E3A92A)}
+.pk-pcol.r2 .pk-ped{height:calc(var(--ped1)*.86);background:linear-gradient(#EAF1FC,#9DB4D6)}
+.pk-pcol.r3 .pk-ped{height:calc(var(--ped1)*.76);background:linear-gradient(#F1BE8E,#B8702F)}
+.pk-pcol .pk-ped b{line-height:1}
+.pk-nums{flex:none;display:flex;flex-wrap:wrap;justify-content:center;gap:.6em}
+.pk-chip{display:flex;flex-direction:column;align-items:center;min-width:9em;padding:.4em .9em;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2)}
+.pk-chip span{font-size:.8em;color:#B9CBE6}.pk-chip b{font:700 1.9em "Barlow Semi Condensed",system-ui,sans-serif;color:#FFD25A;line-height:1.05}.pk-chip small{font-size:.72em;color:#9DB2D0}
+.pk-outros{flex:none;max-width:min(96%,70em);max-height:4.6em;overflow:auto;text-align:center;font-size:.78em;line-height:1.35;color:#C9D8EF}
+.pk-outros[hidden]{display:none}.pk-outros b{color:#FFD25A}
+.pk-f-bt{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5em .9em}
+@media (max-width:700px){.pk-final .pk-fim{font-size:1.5em}.pk-chip{min-width:7em;padding:.3em .6em}.pk-ped b{font-size:1.4em}}

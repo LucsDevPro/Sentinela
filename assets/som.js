@@ -3,8 +3,9 @@
    Som.tocar('rasgar' | 'giro' | 'suspense' | 'ding' | 'bronze' | 'prata' | 'ouro' | 'fanfarra' | 'trovao' | 'batida', duracaoMs?) */
 (function () {
   'use strict';
-  var KEY = 'sentinela:som', ctx = null, mestre = null, on = false;
-  try { on = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  var KEY = 'sentinela:som', ctx = null, mestre = null, nivel = 0;   // nivel: 0 desligado · 1 normal · 2 baixo (sala pequena / quem prefere menos volume)
+  var GANHO = [0, 0.55, 0.2];
+  try { var sv = localStorage.getItem(KEY); nivel = sv === '2' ? 2 : sv === '1' ? 1 : 0; } catch (e) {}
 
   function limitador(c, saida) {   // compressor no fim da cadeia: o acorde cheio de metais e coro não estoura
     var k = c.createDynamicsCompressor(); k.threshold.value = -16; k.knee.value = 12; k.ratio.value = 6; k.attack.value = 0.004; k.release.value = 0.25; k.connect(saida); return k;
@@ -12,7 +13,7 @@
   function ac() {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return ctx; }
     var C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
-    ctx = new C(); mestre = ctx.createGain(); mestre.gain.value = 0.55; mestre.connect(limitador(ctx, ctx.destination)); return ctx;
+    ctx = new C(); mestre = ctx.createGain(); mestre.gain.value = GANHO[nivel] || 0.55; mestre.connect(limitador(ctx, ctx.destination)); return ctx;
   }
   function ruido(dur) {
     var n = Math.max(1, Math.floor(ctx.sampleRate * dur)), b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0);
@@ -106,12 +107,15 @@
       var c = new C(), dest = c.createMediaStreamDestination(), g = c.createGain(); g.gain.value = 0.85; g.connect(limitador(c, dest));
       return { stream: dest.stream, iniciar: function () { try { if (c.resume) c.resume(); } catch (e) {} }, tocar: function (nome, t, ms) { if (SONS[nome]) com(c, g, function () { SONS[nome](c.currentTime + 0.05 + (t || 0), ms); }); }, fechar: function () { try { c.close(); } catch (e) {} } };
     },
-    ligado: function () { return on; },
-    ligar: function (v) { on = !!v; try { localStorage.setItem(KEY, on ? '1' : '0'); } catch (e) {} if (on) { ac(); this.tocar('ding'); } return on; },
-    alternar: function () { return this.ligar(!on); },
-    preparar: function () { if (on) ac(); },   // chamado dentro de um gesto (clique/tecla): navegadores só liberam o áudio assim
+    ligado: function () { return nivel > 0; },
+    nivel: function () { return nivel; },
+    definir: function (n) { nivel = n === 2 ? 2 : n === 1 ? 1 : 0; try { localStorage.setItem(KEY, String(nivel)); } catch (e) {} if (nivel) { ac(); if (mestre) mestre.gain.value = GANHO[nivel]; this.tocar('ding'); } return nivel; },
+    ligar: function (v) { return this.definir(v ? (nivel || 1) : 0) > 0; },
+    alternar: function () { return this.ligar(nivel === 0); },
+    ciclar: function () { return this.definir((nivel + 1) % 3); },   // desligado → normal → baixo → desligado
+    preparar: function () { if (nivel) ac(); },   // chamado dentro de um gesto (clique/tecla): navegadores só liberam o áudio assim
     tocar: function (nome, ms) {
-      if (!on || !SONS[nome]) return;
+      if (!nivel || !SONS[nome]) return;
       try { if (!ac()) return; SONS[nome](ctx.currentTime + 0.02, ms); } catch (e) {}
     }
   };

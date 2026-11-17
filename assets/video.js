@@ -161,25 +161,36 @@
   }
 
   /* grava o quadro a quadro em tempo real (5 s) */
-  function gravar(S) {
+  /* grava uma ou mais «cenas» em sequência, quadro a quadro em tempo real. cenas = [{S, dur, ini}] (ini em segundos desde o começo do vídeo) */
+  function gravarCenas(cenas) {
     return new Promise(function (ok, no) {
       var mime = escolherMime(); if (!mime) return no(new Error('sem MediaRecorder'));
-      var c = document.createElement('canvas'); c.width = W; c.height = H; var ctx = c.getContext('2d'); quadro(ctx, 0, S);
+      var ult = cenas[cenas.length - 1], total = ult.ini + ult.dur;
+      var c = document.createElement('canvas'); c.width = W; c.height = H; var ctx = c.getContext('2d'); quadro(ctx, 0, cenas[0].S);
       var rec, partes = [], au = window.Som && Som.paraGravacao ? Som.paraGravacao() : null, fluxo = c.captureStream(FPS);
-      if (au) { au.stream.getAudioTracks().forEach(function (tr) { fluxo.addTrack(tr); }); au.iniciar(); sonsDoVideo(S).forEach(function (x) { au.tocar(x[0], x[1], x[2]); }); }
+      if (au) {
+        au.stream.getAudioTracks().forEach(function (tr) { fluxo.addTrack(tr); }); au.iniciar();
+        cenas.forEach(function (ce) { sonsDoVideo(ce.S).forEach(function (x) { if (x[1] < ce.dur - 0.25) au.tocar(x[0], x[1] + ce.ini, x[2]); }); });
+      }
       try { rec = new MediaRecorder(fluxo, { mimeType: mime, videoBitsPerSecond: 5000000 }); } catch (e) { return no(e); }
       rec.ondataavailable = function (e) { if (e.data && e.data.size) partes.push(e.data); };
       rec.onerror = function (e) { no(e.error || new Error('gravação')); };
       rec.onstop = function () { if (au) setTimeout(au.fechar, 300); var b = new Blob(partes, { type: mime.split(';')[0] }); b.size > 2000 ? ok(b) : no(new Error('vídeo vazio')); };
+      function desenha(t) {
+        var k = cenas.length - 1; while (k > 0 && t < cenas[k].ini) k--;
+        var ce = cenas[k], lt = Math.min(t - ce.ini, ce.dur); quadro(ctx, lt, ce.S);
+        if (k > 0 && lt < 0.16) { ctx.save(); ctx.globalAlpha = 0.7 * (1 - lt / 0.16); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H); ctx.restore(); }   // corte entre as cartas: clarão rápido
+      }
       var ini = performance.now(), id;
       rec.start(250);
       id = setInterval(function () {
         var t = (performance.now() - ini) / 1000;
-        if (t >= DUR) { clearInterval(id); quadro(ctx, DUR, S); setTimeout(function () { rec.stop(); }, 120); return; }
-        quadro(ctx, t, S);
+        if (t >= total) { clearInterval(id); desenha(total); setTimeout(function () { rec.stop(); }, 120); return; }
+        desenha(t);
       }, 1000 / FPS);
     });
   }
+  function gravar(S) { return gravarCenas([{ S: S, dur: DUR, ini: 0 }]); }
 
   function infoDe(a, ms, o) {
     var u = ms[ms.length - 1], anon = !!o.ocultarNomes;
@@ -188,6 +199,29 @@
   function gerar(a, ms, o) {
     o = o || {};
     return Promise.all([window.Carta.png(a, ms, Object.assign({}, o, { transparente: true })).then(imagemDe), fontes()]).then(function (r) { return gravar(preparar(r[0], infoDe(a, ms, o))); });
+  }
+
+  /* vídeo do TOP 5 inteiro (≈15 s): do 5º ao 1º, cada um com a própria revelação; o 1º ganha mais tempo. lista = [{a, ms, lugar}] */
+  var DUR_TOP = { 1: 4.6, 2: 3.0, 3: 2.8, 4: 2.3, 5: 2.3 };
+  function gerarTop(lista, o) {
+    o = o || {};
+    var ord = lista.slice().sort(function (p, q) { return q.lugar - p.lugar; });   // do último ao 1º
+    return fontes().then(function () {
+      return Promise.all(ord.map(function (x) { return window.Carta.png(x.a, x.ms, Object.assign({}, o, { transparente: true })).then(imagemDe); }));
+    }).then(function (imgs) {
+      var ini = 0, cenas = ord.map(function (x, i) {
+        var inf = infoDe(x.a, x.ms, Object.assign({}, o, { lugar: x.lugar })), ce = { S: preparar(imgs[i], inf), dur: DUR_TOP[x.lugar] || 2.3, ini: ini }; ini += ce.dur; return ce;
+      });
+      return gravarCenas(cenas);
+    });
+  }
+  function enviarTop(lista, o) {
+    o = o || {}; var mes = lista.length ? String(lista[0].ms[lista[0].ms.length - 1].mes) : '';
+    var titulo = 'Top ' + lista.length + ' do mês', texto = titulo + ' — ' + mes + ' (Sentinela, Prefeitura de Ponta Porã)';
+    return gerarTop(lista, o).then(function (bl) {
+      var ext = /mp4/.test(bl.type) ? 'mp4' : 'webm', arq = new File([bl], 'sentinela-top' + lista.length + '-' + mes.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-video.' + ext, { type: bl.type });
+      return painel(bl, arq, texto, titulo);
+    });
   }
 
   /* ---- janela de envio (parecida com a da imagem): ver, compartilhar, baixar, abrir o WhatsApp Web ---- */
@@ -220,5 +254,5 @@
       return painel(bl, arq, texto, titulo);
     });
   }
-  window.CartaVideo = { gerar: gerar, enviar: enviar, quadro: quadro, preparar: preparar, DUR: DUR, W: W, H: H, FPS: FPS, suportado: function () { return !!escolherMime(); } };
+  window.CartaVideo = { gerar: gerar, enviar: enviar, gerarTop: gerarTop, enviarTop: enviarTop, DUR_TOP: DUR_TOP, quadro: quadro, preparar: preparar, DUR: DUR, W: W, H: H, FPS: FPS, suportado: function () { return !!escolherMime(); } };
 })();

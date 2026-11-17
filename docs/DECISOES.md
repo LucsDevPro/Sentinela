@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 16/11/2026 (7) — fechamento do mês, vídeo do top 5, desempate, legenda e volume
+- **Fechamento (pacote):** depois do 1º lugar abre a tela «Parabéns ao top 5»: pódio 2º·1º·3º com as cartas, números do mês (nota média de todos os agentes, quantos tiraram 100, média do top 5) e «Também tiraram 100» (nomes pequenos; com nomes ocultos só a contagem). Dados vêm de `slidesDoPacote` → `opts.fechamento`. É a tela da «foto» para o grupo.
+- **Vídeo do top 5** (`CartaVideo.gerarTop/enviarTop`, ≈15 s): do 5º ao 1º, cada um com a própria revelação (`DUR_TOP`: 2,3·2,3·2,8·3,0·4,6 s), clarão rápido entre as cartas e a mesma trilha sonora. `gravarCenas` generaliza o gravador (1 carta = 1 cena). Botão na tela de fechamento.
+- **Desempate:** `criterioDesempate` (projecao.js) compara com o vizinho de mesma nota exibida e diz o que decidiu, na ordem do ranking: nota bruta → média dos meses anteriores → posição oficial → ordem alfabética. Aparece na ficha (⚖) e na legenda; some da ficha se a cena for baixa demais.
+- **Acessibilidade:** legenda em texto (`.pk-leg`, `aria-live`) descrevendo cada passo; som em 3 níveis (desligado → ligado → baixo; botão e tecla S; `Som.nivel`, guardado em `sentinela:som`).
+
 ## 16/11/2026 (6) — pacote só com o top 5, sem «Campeão»
 - O pacote da reunião passa a ter só o **top 5** do mês (`PACOTE_TOP` em `projecao.js`), em vez de todas as notas 100; sem o seletor «pular até». A faixa do 1º diz só «1º LUGAR» (tela e vídeo), e o fim diz «Parabéns ao top 5 do mês!».
 
