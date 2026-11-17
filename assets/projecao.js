@@ -179,7 +179,7 @@ function slidesDoPacote(){
   var tiraram=L.filter(function(l){return Math.round(l.u.pontos)>=100;}),fora=tiraram.filter(function(l){return L.indexOf(l)>=PACOTE_TOP;});
   var outros=!fora.length?'':mostrarNomes?fora.map(function(l){return l.a.nome;}).join(' · '):(fora.length+(fora.length===1?' agente':' agentes')+' além do top '+PACOTE_TOP);
   var somaTop=0;c100.forEach(function(x){somaTop+=x.l.u.pontos;});
-  var fech={mes:mesCartas,media:br(soma/L.length,1),mediaTop:br(somaTop/c100.length,1),n100:tiraram.length,total:L.length,outros:outros};
+  var fech={resumoUrl:'resumo.html?mes='+encodeURIComponent(mesCartas),mes:mesCartas,media:br(soma/L.length,1),mediaTop:br(somaTop/c100.length,1),n100:tiraram.length,total:L.length,outros:outros};
   return [{id:'pacote',titulo:'Pacote de cartinhas',sub:mesCartas,manual:true,montar:function(el){pacoteCtl=Pacote.iniciar(el,itens,{mes:mesCartas,video:fazVideo,videoTop:fazVideoTop,fechamento:fech});}}];
 }
 function slidesDasCartas(){

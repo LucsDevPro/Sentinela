@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resumo do mês — Sentinela</title>
+<script src="assets/tema.js"></script>
+<link rel="stylesheet" href="assets/fontes.css">
+<link rel="stylesheet" href="assets/resumo.css">
+</head>
+<body>
+<div class="tela-ctl">
+  <a class="volta" href="album.html">← Álbum</a>
+  <label>Mês <select id="fMes"></select></label>
+  <button type="button" id="bImprimir" class="bt">📄 Salvar como PDF / Imprimir</button>
+  <span class="dica">Na janela de impressão, escolha «Salvar como PDF». A folha já sai em A4, numa página só.</span>
+</div>
+<main class="folha" id="folha" aria-live="polite"><p class="vazio">Carregando…</p></main>
+<script src="assets/agentes_dados.js"></script>
+<script src="assets/fotos.js"></script>
+<script src="assets/carta.js"></script>
+<script src="assets/resumo.js"></script>
+</body>
+</html>

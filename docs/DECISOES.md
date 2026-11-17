@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 17/11/2026 — Resumo do mês em A4 (PDF para a ata)
+- Nova página `resumo.html` (+ `assets/resumo.js/.css`, só estrutura no .html): pódio, números do mês (média com variação sobre o mês anterior, quantos tiraram 100, média do top 5, melhor equipe), top 5, média por equipe, lista de quem tirou 100 e linhas para anotações. Mesma ordem do álbum/reunião (nota bruta → média anterior → posição oficial → nome); tudo vem de `AGENTES_DADOS`, nada calculado à parte. `?mes=Novembro/2026` escolhe o mês (padrão: o mais recente).
+- Sem biblioteca de PDF: a folha tem `@page A4` e o botão chama `window.print()` («Salvar como PDF»); sempre clara, cabe em 1 página (testado em modo de impressão). Mostra os nomes (é para a ata); o «Nomes: ocultos» não se aplica.
+- Entradas: botão «Resumo do mês» no álbum (mês do filtro) e «📄 Resumo do mês (PDF para a ata)» na tela de fechamento da reunião.
+
 ## 16/11/2026 (9) — som mais limpo e com «sala»
 - Queixa: som «feio». Causa provável: serras empilhadas e metais agudos (A5/F#5) davam chiado, e tudo soava seco. Agora: cadeia de saída com **reverberação sintética** (~2,4 s) + filtro passa-baixa 9,5 kHz + compressor (`limitador` em `som.js`, vale na reunião e no vídeo); metais com corpo triangular, vibrato leve e filtro mais fechado; coro com 2 vozes e passa-baixa; acordes finais em voicing aberto (sem metal agudo) com **sinos** no brilho. Medido offline (`Som.renderizar`): energia de agudos caiu ~15× nos sons de revelação, picos ≤ 0,85. Teste confere volume, ausência de estouro e cauda de sala. Sem ouvir não dá para garantir o gosto: ajuste fino é por `mol.gain` (reverb), `lp.frequency` (brilho) e `GANHO`.
 

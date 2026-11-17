@@ -1,0 +1,41 @@
+/* Resumo do mês (resumo.html): na tela é uma «folha» A4 centralizada; ao imprimir, vira A4 de verdade, sem os controles. Sempre claro (papel). */
+:root{--tx:#12233B;--mut:#4A5D7C;--bd:#C9D4E4;--soft:#F3F6FB;--pri:#F7B500;--ok:#0B7A44;--bad:#B3261E}
+*{box-sizing:border-box}
+html{background:#DDE5F0}
+body{margin:0;padding:0 0 30px;color:var(--tx);font:14px/1.4 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.tela-ctl{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 16px;background:#081A33;color:#E6EDF7}
+.tela-ctl a{color:#F7C94A}.tela-ctl label{display:flex;align-items:center;gap:6px}
+.tela-ctl select{font:inherit;padding:5px 8px;border-radius:8px;border:1px solid #3B5B8C;background:#fff;color:#12233B}
+.bt{font:700 14px "IBM Plex Sans",system-ui,sans-serif;background:var(--pri);color:#1a1200;border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+.dica{font-size:12px;color:#9DB2D0}
+.folha{width:210mm;min-height:297mm;margin:16px auto;padding:12mm 13mm;background:#fff;box-shadow:0 6px 30px rgba(8,26,51,.22);display:flex;flex-direction:column;gap:8px}
+.vazio{padding:40px;text-align:center;color:var(--mut)}
+h1,h2{font-family:"Barlow Semi Condensed",system-ui,sans-serif;margin:0;letter-spacing:.01em}
+h1{font-size:26px;line-height:1.05}h2{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:#7A5600;border-bottom:2px solid var(--pri);padding-bottom:2px;margin-bottom:6px}
+.cab{display:flex;align-items:center;gap:12px;border-bottom:3px solid #0B2A52;padding-bottom:8px}
+.cab .logo{height:46px}.cab p{margin:2px 0 0;color:var(--mut);font-size:12px}.cab>div{flex:1}
+.sit{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}.sit.ok{background:#E4F6EC;color:var(--ok)}.sit.parc{background:#FFF4D6;color:#8A6100}
+.pod{display:flex;align-items:flex-end;justify-content:center;gap:14px;padding:6px 0 2px}
+.pcol{flex:1;max-width:60mm;display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 6px;border-radius:12px;background:var(--soft);border:1px solid var(--bd)}
+.pcol.p1{background:linear-gradient(#FFF4CC,#FFE7A0);border-color:#E3A92A;padding-bottom:14px;padding-top:12px}.pcol.p2{background:linear-gradient(#F3F7FD,#DCE6F4)}.pcol.p3{background:linear-gradient(#FBEBDD,#F0CDAE)}
+.foto{width:20mm;height:20mm;border-radius:50%;overflow:hidden;background:#0B2A52;color:#F7C94A;display:flex;align-items:center;justify-content:center;font:700 22px "Barlow Semi Condensed",sans-serif;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.p1 .foto{width:25mm;height:25mm}.foto img{width:100%;height:100%;object-fit:cover}
+.pcol .n{font:700 17px "Barlow Semi Condensed",sans-serif;margin-top:4px}.pcol .nm{font-weight:700;font-size:13px;line-height:1.2}.pcol .eq{font-size:11px;color:var(--mut)}
+.pcol .nt{font:700 24px "Barlow Semi Condensed",sans-serif;margin-top:2px}.p1 .nt{font-size:30px}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.chip{display:flex;flex-direction:column;align-items:center;text-align:center;padding:7px 6px;border-radius:10px;background:var(--soft);border:1px solid var(--bd)}
+.chip span{font-size:11px;color:var(--mut)}.chip b{font:700 26px/1.05 "Barlow Semi Condensed",sans-serif;color:#0B2A52}.chip small{font-size:10.5px;color:var(--mut)}
+.chip small.up{color:var(--ok);font-weight:700}.chip small.dn{color:var(--bad);font-weight:700}
+.duas{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);border-bottom:1px solid var(--bd);padding:3px 4px}
+td{padding:3px 4px;border-bottom:1px solid #E6ECF5}.r{text-align:right;font-variant-numeric:tabular-nums}
+.cem ol{margin:0;padding:0 0 0 1.6em;columns:2;column-gap:16px;font-size:12px}.cem li{break-inside:avoid;padding:1px 0}.cem li i{font-style:normal;color:var(--mut);font-size:10.5px}
+.mut{color:var(--mut)}
+.obs{flex:1;min-height:30mm}.obs .linha{border-bottom:1px solid var(--bd);height:8mm}
+.rod{margin-top:auto;font-size:10px;color:var(--mut);border-top:1px solid var(--bd);padding-top:6px}
+@page{size:A4;margin:0}
+@media print{
+  html,body{background:#fff;padding:0;margin:0}.tela-ctl{display:none}
+  .folha{margin:0;width:210mm;height:296mm;min-height:0;box-shadow:none;padding:11mm 13mm;overflow:hidden;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media screen and (max-width:820px){.folha{width:auto;margin:10px;padding:14px}.nums{grid-template-columns:repeat(2,1fr)}.duas{grid-template-columns:1fr}.cem ol{columns:2}.pod{gap:6px}}

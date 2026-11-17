@@ -70,6 +70,7 @@ else {
   ['album', 'podio'].forEach(id => $(id).addEventListener('keydown', e => { if (e.target.closest && e.target.closest('button[data-acao]') && (e.key === 'Enter' || e.key === ' ')) e.stopPropagation(); }, true));
   $('bImprimir').onclick = () => window.print();
   // «Modo reunião»: abre a tela de projeção direto nas cartinhas do mês escolhido (o «Melhor do ano» abre no mês mais recente)
+  $('bResumo').onclick = () => { const m = $('fMes').value; location.href = 'resumo.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : ''); };   // «Melhor do ano»: abre o mês mais recente
   $('bReuniao').onclick = () => { const m = $('fMes').value; location.href = 'projecao.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : '') + '#cartinhas'; };
   const desenhar = () => {
     const mes = $('fMes').value, eq = $('fEq').value, niv = $('fNivel').value, bu = norm($('fBusca').value);

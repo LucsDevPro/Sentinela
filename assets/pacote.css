@@ -116,3 +116,4 @@
 .pk-outros[hidden]{display:none}.pk-outros b{color:#FFD25A}
 .pk-f-bt{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5em .9em}
 @media (max-width:700px){.pk-final .pk-fim{font-size:1.5em}.pk-chip{min-width:7em;padding:.3em .6em}.pk-ped b{font-size:1.4em}}
+a.pk-video{text-decoration:none;display:inline-block}

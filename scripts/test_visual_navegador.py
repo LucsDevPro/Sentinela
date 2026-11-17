@@ -13,7 +13,7 @@ def checar(nome, cond, det=""):
 trab = tempfile.mkdtemp()
 for sub in ("data", "scripts", "assets"):
     shutil.copytree(os.path.join(RAIZ, sub), os.path.join(trab, sub), ignore=shutil.ignore_patterns("__pycache__", "csv"))
-for f in ("agente.html", "contestacao.html", "validar.html", "projecao.html", "album.html"):
+for f in ("agente.html", "contestacao.html", "validar.html", "projecao.html", "album.html", "resumo.html"):
     shutil.copy(os.path.join(RAIZ, f), trab)
 os.makedirs(os.path.join(trab, "partes"))
 env = dict(os.environ, EVISITA_CPF="0", EVISITA_SENHA="t")
@@ -249,6 +249,7 @@ with sync_playwright() as p:
     fz = rk.evaluate("""()=>({pod:[...document.querySelectorAll('.pk-pcol')].map(c=>c.className),chips:document.querySelectorAll('.pk-chip').length,txt:document.querySelector('.pk-final').innerText,leg:document.querySelector('.pk-leg').textContent,btn:!!document.querySelector('.pk-f-bt .pk-video')})""")
     checar("fechamento: pódio com 2º, 1º e 3º, números do mês e botão do vídeo do top 5", len(fz["pod"]) == 3 and fz["pod"][1].endswith("r1") and fz["chips"] >= 3 and "Nota média do mês" in fz["txt"] and "Tiraram 100" in fz["txt"] and fz["btn"], str(fz)[:300])
     checar("fechamento: mostra «Também tiraram 100» (quem ficou fora do top 5)", "Também tiraram 100" in fz["txt"])
+    checar("fechamento: botão «Resumo do mês» leva ao PDF do mesmo mês", rk.locator(".pk-f-bt a.pk-video").count() == 1 and "resumo.html?mes=" in rk.get_attribute(".pk-f-bt a.pk-video", "href"))
     checar("acessibilidade: a legenda em texto descreve o fechamento", fz["leg"].startswith("Fechamento de") and rk.evaluate("document.querySelector('.pk-leg').getAttribute('aria-live')") == "polite")
     checar("pacote: com «reduzir movimento» não há pacote voando nem erros", not erk, str(erk)); ctr.close()
 
@@ -306,6 +307,17 @@ with sync_playwright() as p:
       const r=[PROJECAO.criterio(L,0,false),PROJECAO.criterio(L,1,false),PROJECAO.criterio(L,2,true),PROJECAO.criterio(L,3,false)];Carta.bruta=real;return r}""")
     checar("desempate: nota bruta, média anterior, anônimo e sem empate", "nota bruta" in cr[0] and "110,6" in cr[0] and "nota bruta" in cr[1] and "média dos meses anteriores" in cr[2] and "outro agente" in cr[2] and cr[3] == "", str(cr))
     checar("desempate: sem erros de script", not edp, str(edp)); 
+    # resumo do mês (A4): pódio, números, top 5, equipes, quem tirou 100; cabe numa folha ao imprimir
+    rp = nav.new_context(viewport={"width": 1280, "height": 900}).new_page(); erp = []; rp.on("pageerror", lambda x: erp.append(str(x)))
+    rp.goto(U + "resumo.html"); rp.wait_for_selector(".pcol", timeout=8000)
+    rs = rp.evaluate("""()=>({pod:document.querySelectorAll('.pcol').length,top:document.querySelectorAll('.duas table')[0].querySelectorAll('tbody tr').length,chips:document.querySelectorAll('.chip').length,cem:document.querySelectorAll('.cem li').length,
+      n100:parseInt(document.querySelectorAll('.chip b')[1].textContent),mes:document.querySelector('h1').textContent})""")
+    checar("resumo: pódio com 3, top 5 com 5 linhas, 4 números e a lista de quem tirou 100 bate com o contador", rs["pod"] == 3 and rs["top"] == 5 and rs["chips"] == 4 and rs["cem"] == rs["n100"] and "Resumo do mês" in rs["mes"], str(rs))
+    rp.emulate_media(media="print"); rp.wait_for_timeout(200)
+    ov = rp.evaluate("()=>{const f=document.getElementById('folha');return [f.scrollHeight,f.clientHeight,Math.round(f.getBoundingClientRect().width)]}")
+    checar("resumo: ao imprimir a folha é A4 e o conteúdo cabe sem cortar", ov[0] <= ov[1] + 1 and 780 <= ov[2] <= 800, str(ov))
+    rp.emulate_media(media="screen"); rp.select_option("#fMes", index=1); rp.wait_for_timeout(300)
+    checar("resumo: trocar o mês refaz a folha sem erro", "Resumo do mês" in rp.inner_text("h1") and not erp, str(erp)); rp.context.close()
     # som: renderiza cada som sem tocar e confere que tem volume, não estoura e tem «sala» (cauda de reverberação)
     sm = dp.evaluate("""async()=>{const o={};for(const n of ['bronze','prata','ouro','fanfarra','suspense','trovao']){const b=await Som.renderizar(n,2700,7);const L=b.getChannelData(0);let pk=0,fim=L.length-1;for(let i=0;i<L.length;i++)pk=Math.max(pk,Math.abs(L[i]));while(fim>0&&Math.abs(L[fim])<0.002)fim--;o[n]=[+pk.toFixed(2),+(fim/44100).toFixed(2)]}return o}""")
     checar("som: todos os sons têm volume e não estouram (pico entre 0,2 e 0,98)", all(0.2 <= v[0] <= 0.98 for v in sm.values()), str(sm))

@@ -261,6 +261,7 @@
         bv.addEventListener('click', function (e) { e.stopPropagation(); bv.disabled = true; st.textContent = 'Gerando o vídeo (≈15 s)…'; Promise.resolve(cfg.videoTop()).then(function (m) { st.textContent = m || ''; }, function () { st.textContent = 'Não consegui gerar o vídeo neste navegador.'; }).then(function () { bv.disabled = false; }); });
         bts.appendChild(bv); bts.appendChild(st);
       }
+      if (f.resumoUrl) { var rs = document.createElement('a'); rs.className = 'pk-video'; rs.href = f.resumoUrl; rs.target = '_blank'; rs.rel = 'noopener'; rs.textContent = '📄 Resumo do mês (PDF para a ata)'; rs.addEventListener('click', function (e) { e.stopPropagation(); }); bts.insertBefore(rs, bts.firstChild); }
       tela.appendChild(tit); tela.appendChild(pod); tela.appendChild(nums); tela.appendChild(outros); tela.appendChild(bts); cena.appendChild(tela);
       // tamanhos: a carta do pódio cabe no que sobrou (largura de 3 colunas e altura da área do pódio)
       var cw = tela.clientWidth, fz = Math.max(11, Math.min(cw / 62, cena.clientHeight / 30, 21)); tela.style.fontSize = fz.toFixed(1) + 'px';
