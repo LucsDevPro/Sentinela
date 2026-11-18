@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 18/11/2026 — detalhamento da cartinha no «Melhor do ano» (e hover robusto)
+- **Causa raiz:** a cartinha do ano (`Carta.anual`) é um registro sintético `{mes:'Média', pontos:média,…}` sem `detalhe/ganhos/perdas`. `detalheHtml` lia só o último item de `ms`, então o pop-up saía com uma linha («Pontos iniciais») e a frase errada «Sem meses anteriores». Nos meses isolados (Julho a Novembro) o pop-up já abria; foram testados o agente 465 e outros.
+- **Correção (`carta.js`, só leitura, sem mexer em pontuação/ranking):** `anual` guarda em `u.meses` os meses reais que compõem a média; novo `detalheAnualHtml` mostra cada mês (nota · posição), a média «(a + b + …) ÷ n» e, ao abrir um mês, os critérios dele (qtd, peso, pontos); mês sem detalhe diz isso, sem inventar; nada é somado entre meses. Texto de desempate do ano descreve o critério do ranking anual. `criterios(u)` virou função comum.
+- **Robustez:** cartinha sem dados mostra «Detalhamento indisponível» (e erro na montagem nunca deixa o hover mudo); se a cartinha sair da tela (troca de mês/agente) o pop-up antigo fecha (`MutationObserver`). Meses novos não exigem ajuste: tudo vem de `meses`.
+
 ## 17/11/2026 — Resumo do mês em A4 (PDF para a ata)
 - Nova página `resumo.html` (+ `assets/resumo.js/.css`, só estrutura no .html): pódio, números do mês (média com variação sobre o mês anterior, quantos tiraram 100, média do top 5, melhor equipe), top 5, média por equipe, lista de quem tirou 100 e linhas para anotações. Mesma ordem do álbum/reunião (nota bruta → média anterior → posição oficial → nome); tudo vem de `AGENTES_DADOS`, nada calculado à parte. `?mes=Novembro/2026` escolhe o mês (padrão: o mais recente).
 - Sem biblioteca de PDF: a folha tem `@page A4` e o botão chama `window.print()` («Salvar como PDF»); sempre clara, cabe em 1 página (testado em modo de impressão). Mostra os nomes (é para a ata); o «Nomes: ocultos» não se aplica.

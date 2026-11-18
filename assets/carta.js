@@ -400,6 +400,7 @@
       var dp = rec.length > 1 ? Math.sqrt(rec.reduce(function (t, n) { return t + Math.pow(n - mr, 2); }, 0) / rec.length) : 0;
       var evo = notas.length > 1 ? cl(50 + 5 * (notas[notas.length - 1] - notas[notas.length - 2])) : 50;
       var u = { mes: 'Média', pontos: media, trab: soma('trab'), esp: soma('esp'), turnos_sem: soma('turnos_sem'), con: cl(100 - 5 * dp), evo: evo, pos: 0, total: 0, n: ms.length };
+      u.meses = ms;   // os meses reais que compõem a média: o detalhamento do «Melhor do ano» sai deles (só leitura; a fórmula acima não muda)
       lista.push({ x: x, ms: [u], u: u, meses: ms });
     });
     lista.sort(function (p, q) { return q.u.pontos - p.u.pontos || q.u.n - p.u.n || p.x.a.nome.localeCompare(q.x.a.nome, 'pt-BR'); });
@@ -438,23 +439,49 @@
      e a média dos meses anteriores, que é o critério de desempate do ranking. */
   var fn = function (n) { return Number(n).toLocaleString('pt-BR', { maximumFractionDigits: 2 }); };
   var sg = function (n) { return (n > 0 ? '+' : n < 0 ? '−' : '') + f1(Math.abs(n)); };
-  function detalheHtml(reg) {
-    var a = reg.a, ms = reg.ms, u = ms[ms.length - 1], det = u.detalhe, linhas;
-    if (det && det.length) { // [critério, quantidade, peso, pontos]: ganhos (maiores primeiro) e depois perdas (maiores primeiro)
+  /* linhas da tabela de critérios de UM mês: [critério, qtd, peso, pontos] (detalhe) ou, nos meses sem ele, ganhos/perdas */
+  function criterios(u) {
+    var det = u.detalhe, linhas = '', soma = null;
+    if (det && det.length) { // ganhos (maiores primeiro) e depois perdas (maiores primeiro)
       var ord = det.slice().sort(function (x, y) { return (y[3] > 0) - (x[3] > 0) || Math.abs(y[3]) - Math.abs(x[3]); });
       linhas = ord.map(function (x) { return '<tr><td>' + esc(x[0]) + '</td><td class="n">' + (x[1] == null ? '' : fn(x[1])) + '</td><td class="n">' + (x[2] == null ? '' : fn(x[2])) + '</td><td class="n ' + (x[3] < 0 ? 'neg' : 'pos') + '">' + sg(x[3]) + '</td></tr>'; }).join('');
+      soma = det.reduce(function (t, x) { return t + x[3]; }, 0);
     } else {
       linhas = (u.ganhos || []).concat(u.perdas || []).map(function (x) { return '<tr><td>' + esc(x.c) + '</td><td class="n"></td><td class="n"></td><td class="n ' + (x.p < 0 ? 'neg' : 'pos') + '">' + sg(x.p) + '</td></tr>'; }).join('');
     }
-    var soma = det && det.length ? det.reduce(function (t, x) { return t + x[3]; }, 0) : null, nota = Math.round(u.pontos * 10) / 10;
+    return { linhas: linhas, soma: soma, tem: !!linhas };
+  }
+  var CAB_CRIT = '<table><thead><tr><th>Critério</th><th class="n">Qtd</th><th class="n">Peso</th><th class="n">Pontos</th></tr></thead><tbody>';
+  function semDetalhe(reg) {
+    return '<div class="c-pop-topo"><div><b class="nome">' + esc(reg.a.nome) + '</b><span>Detalhamento indisponível</span></div><button type="button" data-fechar aria-label="Fechar">×</button></div><p class="c-pop-desempate">Não há detalhamento registrado para esta cartinha.</p>';
+  }
+  /* «Melhor do ano»: a nota é a MÉDIA dos meses. Mostra cada mês (nota e posição) e, ao abrir o mês, os critérios que formaram aquela nota. Nada é somado entre meses. */
+  function detalheAnualHtml(reg, u) {
+    var meses = u.meses || [], id = reg.id;
+    var link = id != null && !/agente\.html$/.test(location.pathname) ? '<a class="c-pop-link" href="agente.html?id=' + encodeURIComponent(id) + '&mes=' + encodeURIComponent(ROTULO_ANO) + '">Ver evolução do agente →</a>' : '';
+    var lista = meses.map(function (m) {
+      var c = criterios(m), nota = f1(m.pontos), pos = posicao(m, id);
+      var corpo = c.tem ? CAB_CRIT + '<tr class="base"><td>Pontos iniciais</td><td></td><td></td><td class="n">100,0</td></tr>' + c.linhas + '</tbody></table>' : '<p class="c-pop-desempate">Sem detalhamento registrado para este mês.</p>';
+      return '<details class="c-mes"><summary><span>' + esc(m.mes) + '</span><span class="n">' + nota + (pos != null && m.total ? ' · ' + pos + 'º de ' + m.total : '') + '</span></summary>' + corpo + '</details>';
+    }).join('');
+    return '<div class="c-pop-topo"><div><b class="nome">' + esc(reg.a.nome) + '</b><span>' + esc(ROTULO_ANO) + ' · ' + u.pos + 'º de ' + u.total + '</span></div><button type="button" data-fechar aria-label="Fechar">×</button></div>' +
+      '<table><thead><tr><th>Mês</th><th class="n">Nota · posição</th></tr></thead></table><div class="c-meses">' + lista + '</div>' +
+      '<table><tfoot><tr class="final"><td>Média de ' + meses.length + (meses.length === 1 ? ' mês' : ' meses') + ' <small>(' + meses.map(function (m) { return f1(m.pontos); }).join(' + ') + ') ÷ ' + meses.length + '</small></td><td class="n">' + f1(u.pontos) + '</td></tr></tfoot></table>' +
+      '<p class="c-pop-desempate">Clique em um mês para ver os critérios dele. No ranking do ano, empate na média é decidido por quem tem mais meses e, depois, pela ordem alfabética.</p>' + link;
+  }
+  function detalheHtml(reg) {
+    var a = reg.a, ms = reg.ms, u = ms[ms.length - 1];
+    if (!u || u.pontos == null) return semDetalhe(reg);
+    if (u.meses && u.mes === 'Média') return detalheAnualHtml(reg, u);
+    var c = criterios(u); if (!c.tem) return semDetalhe(reg);
+    var linhas = c.linhas, det = u.detalhe, soma = c.soma, nota = Math.round(u.pontos * 10) / 10;
     var total = soma == null ? null : 100 + soma;
     var obs = total == null ? '' : total > 100.05 ? ' <small>(a nota é limitada a 100)</small>' : (total < -0.05 ? ' <small>(a nota mínima é 0)</small>' : (Math.abs(total - nota) > 0.15 ? ' <small>(com ajustes do período, ex.: presença mínima)</small>' : ''));
     var ant = ms.slice(0, -1).map(function (m) { return m.pontos; }).filter(function (v) { return v != null; });
     var mh = ant.length ? ant.reduce(function (t, v) { return t + v; }, 0) / ant.length : null;
     var link = reg.id != null && !/agente\.html$/.test(location.pathname) ? '<a class="c-pop-link" href="agente.html?id=' + encodeURIComponent(reg.id) + '&mes=' + encodeURIComponent(mesNoLink(u.mes)) + '">Ver evolução do agente →</a>' : '';
     return '<div class="c-pop-topo"><div><b class="nome">' + esc(a.nome) + '</b><span>' + esc(u.mes) + ' · ' + posicao(u, reg.id) + 'º de ' + u.total + '</span></div><button type="button" data-fechar aria-label="Fechar">×</button></div>' +
-      '<table><thead><tr><th>Critério</th><th class="n">Qtd</th><th class="n">Peso</th><th class="n">Pontos</th></tr></thead><tbody>' +
-      '<tr class="base"><td>Pontos iniciais</td><td></td><td></td><td class="n">100,0</td></tr>' + linhas + '</tbody>' +
+      CAB_CRIT + '<tr class="base"><td>Pontos iniciais</td><td></td><td></td><td class="n">100,0</td></tr>' + linhas + '</tbody>' +
       '<tfoot>' + (total == null ? '' : '<tr><td colspan="3">Total (100 + critérios)</td><td class="n">' + f1(total) + '</td></tr>') +
       '<tr class="final"><td colspan="3">Nota final' + obs + '</td><td class="n">' + f1(u.pontos) + '</td></tr></tfoot></table>' +
       '<p class="c-pop-desempate">' + (mh == null ? 'Sem meses anteriores: não há média para desempate.' : 'Média dos meses anteriores: <b>' + f1(mh) + '</b> (usada no desempate quando duas notas são iguais).') + '</p>' + link;
@@ -473,7 +500,8 @@
   function abrir(card, travar) {
     var reg = REG[card.getAttribute('data-cid')]; if (!reg || !medidas(reg.ms)) return;
     var el = elPop(); clearTimeout(timer); atual = card; fixo = !!travar;
-    el.innerHTML = detalheHtml(reg); el.hidden = false; el.classList.toggle('fixo', fixo);
+    try { el.innerHTML = detalheHtml(reg); } catch (err) { el.innerHTML = semDetalhe(reg); }
+    el.hidden = false; el.classList.toggle('fixo', fixo);
     var estreito = window.innerWidth < 720; el.classList.toggle('folha', estreito);
     if (estreito) { el.style.left = el.style.top = ''; return; }
     var r = card.getBoundingClientRect(), w = el.offsetWidth, h = el.offsetHeight, x = r.right + 10;
@@ -481,6 +509,8 @@
     if (x < 8) x = Math.max(8, (window.innerWidth - w) / 2);
     el.style.left = Math.round(x) + 'px'; el.style.top = Math.round(Math.max(8, Math.min(r.top, window.innerHeight - h - 8))) + 'px';
   }
+  // trocou de mês/agente (a cartinha foi refeita): o detalhamento antigo não pode ficar na tela
+  if (window.MutationObserver) new MutationObserver(function () { if (atual && !atual.isConnected) fechar(); }).observe(document.body, { childList: true, subtree: true });
   var cartaDe = function (e) { var t = e.target; return t && t.closest ? t.closest('.carta[data-cid]') : null; };
   document.addEventListener('mouseover', function (e) { if (fixo) return; var c = cartaDe(e); if (c) { clearTimeout(timer); if (c !== atual) abrir(c, false); } });
   document.addEventListener('mouseout', function (e) { if (fixo) return; if (cartaDe(e) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.c-pop'))) agendar(); });

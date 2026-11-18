@@ -1704,3 +1704,16 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
 
 .c-raio.forte .g { stroke-width: 24; opacity: .7; }
 .c-raio.forte .n { stroke-width: 8; }
+
+/* detalhamento do «Melhor do ano»: um bloco por mês, que abre com os critérios daquele mês */
+.c-meses { margin: 2px 0 4px; }
+.c-mes { border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.c-mes summary { display: flex; justify-content: space-between; gap: 10px; padding: 5px 2px; cursor: pointer; font-size: 0.85rem; list-style: none; }
+.c-mes summary::-webkit-details-marker { display: none; }
+.c-mes summary::before { content: '▸'; opacity: 0.7; margin-right: 6px; }
+.c-mes[open] summary::before { content: '▾'; }
+.c-mes summary span:first-of-type { flex: 1; }
+.c-mes summary .n { font-weight: 700; color: #F0C000; font-variant-numeric: tabular-nums; }
+.c-mes[open] { background: rgba(255, 255, 255, 0.04); }
+.c-mes table { margin: 2px 0 8px; }
+.c-pop tfoot td small { display: block; margin-top: 2px; }

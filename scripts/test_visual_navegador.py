@@ -307,6 +307,41 @@ with sync_playwright() as p:
       const r=[PROJECAO.criterio(L,0,false),PROJECAO.criterio(L,1,false),PROJECAO.criterio(L,2,true),PROJECAO.criterio(L,3,false)];Carta.bruta=real;return r}""")
     checar("desempate: nota bruta, média anterior, anônimo e sem empate", "nota bruta" in cr[0] and "110,6" in cr[0] and "nota bruta" in cr[1] and "média dos meses anteriores" in cr[2] and "outro agente" in cr[2] and cr[3] == "", str(cr))
     checar("desempate: sem erros de script", not edp, str(edp)); 
+    # detalhamento ao passar o mouse: todos os meses, «Melhor do ano» (média mês a mês), outros agentes, dados parciais e troca de mês
+    hp = nav.new_context(viewport={"width": 1400, "height": 900}).new_page(); ehp = []; hp.on("pageerror", lambda x: ehp.append(str(x)))
+    def pop_de(url):
+        hp.goto(U + url); hp.wait_for_selector(".carta[data-cid]", timeout=8000); hp.wait_for_timeout(400); hp.mouse.move(2, 2)
+        hp.locator(".carta[data-cid]").first.hover(force=True); hp.wait_for_timeout(450)
+        return hp.evaluate("(()=>{const p=document.querySelector('.c-pop');return p&&!p.hidden?{t:p.innerText,l:p.querySelectorAll('tbody tr').length,m:p.querySelectorAll('.c-mes').length}:null})()")
+    hp.goto(U + "album.html"); hp.wait_for_timeout(500)
+    ids = hp.evaluate("Object.keys(AGENTES_DADOS.agentes)"); ref = "465" if "465" in ids else ids[0]
+    mm = hp.evaluate("AGENTES_DADOS.agentes['%s'].meses.map(m=>m.mes)" % ref); ruim = []
+    for m in mm:
+        r = pop_de("agente.html?id=%s&mes=%s" % (ref, m.replace("/", "%2F")))
+        if not r or m not in r["t"] or r["l"] < 3: ruim.append(m)
+    checar("detalhamento: abre em todos os meses do agente de referência (não só no mais recente)", not ruim, str(ruim))
+    ra = pop_de("agente.html?id=%s&mes=Melhor%%20do%%20ano" % ref); n_m = len(mm)
+    checar("detalhamento: «Melhor do ano» lista cada mês (nota e posição), a média e os critérios de cada mês", ra and ra["m"] == n_m and "Melhor do ano" in ra["t"] and "Média de %d meses" % n_m in ra["t"] and "Sem meses anteriores" not in ra["t"], str(ra and (ra["m"], ra["t"][:200])))
+    hp.locator(".c-mes summary").nth(1).click(); hp.wait_for_timeout(200)
+    checar("detalhamento: abrir um mês do ano mostra os critérios daquele mês (pontos iniciais + critérios)", hp.evaluate("(()=>{const d=document.querySelectorAll('.c-mes')[1];return d.open&&d.querySelectorAll('tbody tr').length>=2&&/Pontos iniciais/.test(d.innerText)})()"))
+    ruim = []
+    for k in ids[:12]:
+        r = pop_de("agente.html?id=%s" % k)
+        if not r or r["l"] < 2: ruim.append(k)
+        r = pop_de("agente.html?id=%s&mes=Melhor%%20do%%20ano" % k)
+        if r is None and hp.evaluate("!document.querySelector('.carta[data-cid]')"): continue
+        if not r or not r["m"]: ruim.append(k + ":ano")
+    checar("detalhamento: funciona para outros agentes (mês atual e do ano)", not ruim, str(ruim))
+    sd = hp.evaluate("""()=>{const c=document.createElement('div');c.innerHTML=Carta.html({nome:'Sem Detalhe',equipe:'Equipe 9'},[{mes:'Outubro/2026',pontos:80,pos:5,total:9,trab:10,esp:12,turnos_sem:0,ev:[],cls:'x'}],'999');document.body.appendChild(c);
+      const k=c.querySelector('.carta[data-cid]');k.dispatchEvent(new MouseEvent('mouseover',{bubbles:true}));const p=document.querySelector('.c-pop');return p&&!p.hidden?p.innerText:null}""")
+    checar("detalhamento: cartinha sem dados detalhados mostra aviso, sem quebrar", sd is not None and "indisponível" in sd, str(sd))
+    hp.goto(U + "album.html?mes=Outubro%2F2026"); hp.wait_for_selector(".slot .carta[data-cid]", timeout=8000); hp.wait_for_timeout(700)
+    hp.locator(".slot .carta[data-cid]").nth(6).click(force=True) if False else hp.locator(".slot .carta[data-cid]").nth(6).hover(force=True); hp.wait_for_timeout(450)
+    ab = hp.evaluate("(()=>{const p=document.querySelector('.c-pop');return p&&!p.hidden&&p.innerText.includes('Outubro/2026')})()")
+    hp.select_option("#fMes", index=0); hp.wait_for_timeout(900); hp.mouse.move(3, 3); hp.wait_for_timeout(500)
+    fe = hp.evaluate("(()=>{const p=document.querySelector('.c-pop');return !p||p.hidden||!p.innerText.includes('Outubro/2026')})()")
+    checar("detalhamento: no álbum abre em mês antigo e, ao trocar de mês, o detalhe antigo não fica na tela", ab and fe, f"{ab} {fe}")
+    checar("detalhamento: sem erros de script", not ehp, str(ehp)); hp.context.close()
     # resumo do mês (A4): pódio, números, top 5, equipes, quem tirou 100; cabe numa folha ao imprimir
     rp = nav.new_context(viewport={"width": 1280, "height": 900}).new_page(); erp = []; rp.on("pageerror", lambda x: erp.append(str(x)))
     rp.goto(U + "resumo.html"); rp.wait_for_selector(".pcol", timeout=8000)
