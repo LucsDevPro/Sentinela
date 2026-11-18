@@ -27,10 +27,24 @@
     L.sort(function (x, y) { return y.b - x.b || y.h - x.h || x.p - y.p || x.n.localeCompare(y.n, 'pt-BR'); });
     var mp = {}; L.forEach(function (l, i) { mp[l.k] = i + 1; }); return (POSMES[mes] = mp);
   }
+  /* Posição pela NOTA exibida (empatados na mesma nota dividem o lugar): é a que alimenta a medida POS. Quem tem 100 não pode aparecer com POS baixo só porque
+     perdeu o desempate (a nota bruta) para outro 100. A posição mostrada no cartão e o ranking continuam sendo os de posicao(). */
+  var POSNOTA = {};
+  function posPorNota(u, id) {
+    if (id == null || !u || u.mes === 'Média') return u ? u.pos : null;
+    if (!POSNOTA[u.mes]) {
+      var ag = (window.AGENTES_DADOS && window.AGENTES_DADOS.agentes) || {}, N = {}, mp = {};
+      Object.keys(ag).forEach(function (k) { (ag[k].meses || []).forEach(function (m) { if (m.mes === u.mes && m.pontos != null) N[k] = r1(m.pontos); }); });
+      Object.keys(N).forEach(function (k) { mp[k] = 1 + Object.keys(N).filter(function (o) { return N[o] > N[k]; }).length; });
+      POSNOTA[u.mes] = mp;
+    }
+    return POSNOTA[u.mes][String(id)] || u.pos;
+  }
   function posicao(u, id) { // posição mostrada: só muda para quem está no teto de 100
     if (id == null || !u || u.pontos == null || u.pontos < 99.95) return u ? u.pos : null;
     return mapaPos(u.mes)[String(id)] || u.pos;
   }
+  var BANDA = 20;   // distância máxima entre a nota e cada medida do cartão
   function medidas(ms, id) {
     var u = ms[ms.length - 1]; if (!u || u.pontos == null) return null;
     var ant = ms.length > 1 ? ms[ms.length - 2] : null;
@@ -41,9 +55,12 @@
     var rec = notas.slice(-3), mrec = rec.reduce(function (t, v) { return t + v; }, 0) / rec.length;
     var dp = rec.length > 1 ? Math.sqrt(rec.reduce(function (t, v) { return t + Math.pow(v - mrec, 2); }, 0) / rec.length) : 0;
     var delta = ant && ant.pontos != null ? u.pontos - ant.pontos : null;
+    /* COERÊNCIA COM A NOTA: as seis medidas nunca ficam mais de BANDA pontos longe da nota do cartão (um 100 não tem medida 50; um 40 não tem medida 95).
+       Antes disso as definições já acompanham a nota: EVO parte da nota (não de 50) e POS usa o lugar pela nota (empate em 100 = mesmo lugar). */
+    var nr = cl(u.pontos), gb = function (v) { return Math.max(Math.max(0, nr - BANDA), Math.min(Math.min(99, nr + BANDA), v)); };
     var st = [['ASS', u.esp ? cl(u.trab / u.esp * 100) : 0], ['TUR', u.esp ? cl(100 - (u.turnos_sem || 0) / (u.esp * 2) * 100) : 0],
-      ['CON', u.con != null ? u.con : cl(100 - 5 * dp)], ['EVO', u.evo != null ? u.evo : delta == null ? 50 : cl(50 + 5 * delta)],
-      ['POS', u.total > 1 ? cl((u.total - posicao(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]];
+      ['CON', u.con != null ? u.con : cl(100 - 5 * dp)], ['EVO', u.evo != null ? u.evo : delta == null ? cl(u.pontos) : cl(u.pontos + 5 * delta)],
+      ['POS', u.total > 1 ? cl((u.total - posPorNota(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]].map(function (x) { return [x[0], gb(x[1])]; });
     // Escala única, pela nota ARREDONDADA (a que aparece no cartão): a cor do cartão e a borda seguem a mesma faixa.
     // LENDÁRIA (tempestade) = só o TOP 3 com nota 100 | demais 100 = ELITE (ouro + selo 100 + brilho) | 90-99 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
     // Top 3 do mês com 90-99 (quando há menos de 3 agentes com 100) ganha o cartão de ouro com borda holográfica ("DESTAQUE").
@@ -398,7 +415,7 @@
       var media = Math.round(notas.reduce(function (t, n) { return t + n; }, 0) / notas.length * 10) / 10;
       var rec = notas.slice(-3), mr = rec.reduce(function (t, n) { return t + n; }, 0) / rec.length;
       var dp = rec.length > 1 ? Math.sqrt(rec.reduce(function (t, n) { return t + Math.pow(n - mr, 2); }, 0) / rec.length) : 0;
-      var evo = notas.length > 1 ? cl(50 + 5 * (notas[notas.length - 1] - notas[notas.length - 2])) : 50;
+      var evo = notas.length > 1 ? cl(media + 5 * (notas[notas.length - 1] - notas[notas.length - 2])) : cl(media);
       var u = { mes: 'Média', pontos: media, trab: soma('trab'), esp: soma('esp'), turnos_sem: soma('turnos_sem'), con: cl(100 - 5 * dp), evo: evo, pos: 0, total: 0, n: ms.length };
       u.meses = ms;   // os meses reais que compõem a média: o detalhamento do «Melhor do ano» sai deles (só leitura; a fórmula acima não muda)
       lista.push({ x: x, ms: [u], u: u, meses: ms });

@@ -114,7 +114,7 @@ function carta(a, ms) {
     <div class="carta-info"><h2>Como ler o cartão</h2><p class="mut">Passe o mouse (ou clique) na cartinha para ver como chegou na nota.</p><table>${m.st.map(x => `<tr><td>${x[0]}</td><td>${Carta.NOMES[x[0]]}</td></tr>`).join('')}</table>
       <p class="mut">A nota grande é a nota do mês. As seis medidas vão de 0 a 99 e usam só dados do ranking:
       <b>ASS</b> dias trabalhados ÷ esperados · <b>TUR</b> turnos com lançamento · <b>CON</b> quanto menos a nota oscila entre os meses, maior ·
-      <b>EVO</b> 50 = igual ao mês anterior, sobe 5 por ponto ganho · <b>POS</b> lugar no ranking · <b>MED</b> média dos meses.
+      <b>EVO</b> parte da nota e sobe ou cai 5 por ponto de diferença para o mês anterior · <b>POS</b> lugar pela nota (empate = mesmo lugar) · <b>MED</b> média dos meses. Nenhuma medida fica mais de 20 pontos longe da nota do cartão.
       Nível: ouro ≥ 90, prata ≥ 75, bronze abaixo disso; <b>destaque</b> = top 3 com nota ≥ 90.</p>
       <div class="acoes"><button type="button" class="bt-img" id="bBaixar">${SV('download')} Baixar imagem</button><button type="button" class="bt-img zap" id="bZap">${SV('share')} Enviar pelo WhatsApp</button></div>
       <p class="mut" id="msgImg" role="status" aria-live="polite"></p>

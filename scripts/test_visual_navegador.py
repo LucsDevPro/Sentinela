@@ -342,6 +342,15 @@ with sync_playwright() as p:
     fe = hp.evaluate("(()=>{const p=document.querySelector('.c-pop');return !p||p.hidden||!p.innerText.includes('Outubro/2026')})()")
     checar("detalhamento: no álbum abre em mês antigo e, ao trocar de mês, o detalhe antigo não fica na tela", ab and fe, f"{ab} {fe}")
     checar("detalhamento: sem erros de script", not ehp, str(ehp)); hp.context.close()
+    # medidas do cartão compatíveis com a nota: nenhuma a mais de 20 pontos da nota (um 100 não pode ter medida 50)
+    hp = nav.new_context(viewport={"width": 1400, "height": 900}).new_page(); hp.goto(U + "agente.html?id=" + ref); hp.wait_for_function("window.Carta && window.AGENTES_DADOS", timeout=8000)
+    me = hp.evaluate("""()=>{let ruim=[],n=0,maxEvo100=0,min100=99;for(const [k,a] of Object.entries(AGENTES_DADOS.agentes)){const ms=a.meses.filter(m=>m.pontos!=null);
+      for(let i=0;i<ms.length;i++){const m=Carta.medidas(ms.slice(0,i+1),k),nr=Math.min(99,Math.round(ms[i].pontos));n++;
+        for(const [nm,v] of m.st){if(v<0||v>99||v<nr-20||v>nr+20)ruim.push([k,ms[i].mes,nm,v,nr]);if(Math.round(ms[i].pontos)>=100){min100=Math.min(min100,v)}}}}
+      const an=Carta.anual(Object.entries(AGENTES_DADOS.agentes).map(([k,x])=>({k,a:x})),2);for(const l of an){const m=Carta.medidas(l.ms,l.x.k),nr=Math.min(99,Math.round(l.u.pontos));for(const [nm,v] of m.st)if(v<nr-20||v>nr+20)ruim.push([l.x.k,'ano',nm,v,nr])}
+      return {n:n,ruim:ruim.slice(0,5),qtd:ruim.length,min100:min100}}""")
+    checar("medidas: em todos os agentes e meses (e no «Melhor do ano») ficam a até 20 pontos da nota", me["qtd"] == 0 and me["n"] > 50, str(me))
+    checar("medidas: quem tirou 100 não tem nenhuma medida abaixo de 79", me["min100"] >= 79, str(me["min100"])); hp.context.close()
     # resumo do mês (A4): pódio, números, top 5, equipes, quem tirou 100; cabe numa folha ao imprimir
     rp = nav.new_context(viewport={"width": 1280, "height": 900}).new_page(); erp = []; rp.on("pageerror", lambda x: erp.append(str(x)))
     rp.goto(U + "resumo.html"); rp.wait_for_selector(".pcol", timeout=8000)

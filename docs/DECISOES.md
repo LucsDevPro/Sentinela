@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 18/11/2026 (2) — medidas da cartinha coerentes com a nota
+- Problema: nota 100 com medida 50. Causas: EVO partia de 50 (não da nota); POS usava o desempate da bruta entre quem tem 100; ASS/TUR/CON cruas podiam ficar longe da nota.
+- Regra (`assets/carta.js`, `BANDA = 20`): cada medida fica entre nota−20 e nota+20 (limite 0–99). EVO parte da nota e varia 5 por ponto de diferença para o mês anterior (também no «Melhor do ano»). POS = lugar pela nota (empate = mesmo lugar, `posPorNota`).
+- Não muda: pontuação, nota, ranking, desempate (`posicao`). Só o que o cartão mostra nas medidas. Teste em `scripts/test_visual_navegador.py`.
+
 ## 18/11/2026 — detalhamento da cartinha no «Melhor do ano» (e hover robusto)
 - **Causa raiz:** a cartinha do ano (`Carta.anual`) é um registro sintético `{mes:'Média', pontos:média,…}` sem `detalhe/ganhos/perdas`. `detalheHtml` lia só o último item de `ms`, então o pop-up saía com uma linha («Pontos iniciais») e a frase errada «Sem meses anteriores». Nos meses isolados (Julho a Novembro) o pop-up já abria; foram testados o agente 465 e outros.
 - **Correção (`carta.js`, só leitura, sem mexer em pontuação/ranking):** `anual` guarda em `u.meses` os meses reais que compõem a média; novo `detalheAnualHtml` mostra cada mês (nota · posição), a média «(a + b + …) ÷ n» e, ao abrir um mês, os critérios dele (qtd, peso, pontos); mês sem detalhe diz isso, sem inventar; nada é somado entre meses. Texto de desempate do ano descreve o critério do ranking anual. `criterios(u)` virou função comum.
