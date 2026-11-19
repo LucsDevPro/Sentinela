@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 19/11/2026 (2) — cartinha ELITE sem o selo «100»
+- Removido o selo redondo «★ 100» ao lado da foto das cartinhas ELITE (carta.js, carta.css, teste ajustado para exigir que não exista). O cartão continua dourado, com o nome ELITE no rodapé.
+
 ## 19/11/2026 — nota SEM teto de 100 (realidade total)
 - Decisão da coordenação: cartinhas e ranking mostram a nota real (100 + critérios, ex.: 109,1), sem corte em 100. `NOTA_MAXIMA = None` em `coleta/pontos.py` (um número volta o teto); o piso 0 continua.
 - Meses congelados foram refeitos com `regenerar_mes.py todos` (só subiram as notas que estavam cortadas; nenhuma desceu; backups em `data/historico/backup_congelado/`). Gráficos usam `suggestedMax: 100` (eixo cresce), sparkline escala até a maior nota, textos de transparência/resumo/cartão não falam mais em «limitada a 100».
