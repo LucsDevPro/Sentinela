@@ -117,10 +117,12 @@
   function com(c, m, fn) { var pc = ctx, pm = mestre; ctx = c; mestre = m; try { fn(); } finally { ctx = pc; mestre = pm; } }
   window.Som = {
     /* trilha para o vídeo: um AudioContext à parte, ligado a um MediaStream que o gravador do vídeo junta à imagem. Funciona mesmo com o som da reunião desligado. */
+    /* ganho mais baixo (0.55): com 0.85 + vários trovões o vídeo saía estourado/embaçado */
     paraGravacao: function () {
       var C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
-      var c = new C(), dest = c.createMediaStreamDestination(), g = c.createGain(); g.gain.value = 0.85; g.connect(limitador(c, dest));
-      return { stream: dest.stream, iniciar: function () { try { if (c.resume) c.resume(); } catch (e) {} }, tocar: function (nome, t, ms) { if (SONS[nome]) com(c, g, function () { SONS[nome](c.currentTime + 0.05 + (t || 0), ms); }); }, fade: function (t, d) { var x = c.currentTime + 0.05 + t; g.gain.setValueAtTime(0.85, x); g.gain.linearRampToValueAtTime(0.0001, x + d); },   // some o som no fim do vídeo (sem corte seco/estalo)
+      var c = new C(), dest = c.createMediaStreamDestination(), g = c.createGain(); var GV = 0.55; g.gain.value = GV; g.connect(limitador(c, dest));
+      return { stream: dest.stream, iniciar: function () { try { if (c.resume) c.resume(); } catch (e) {} }, tocar: function (nome, t, ms) { if (SONS[nome]) com(c, g, function () { SONS[nome](c.currentTime + 0.02 + (t || 0), ms); }); },
+        fade: function (t, d) { var x = c.currentTime + 0.02 + t; g.gain.setValueAtTime(GV, x); g.gain.linearRampToValueAtTime(0.0001, x + d); },   // some o som no fim do vídeo
         fechar: function () { try { c.close(); } catch (e) {} } };
     },
     /* renderiza um som sem tocar (teste/medição): devolve uma AudioBuffer estéreo */

@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 18/11/2026 (4) — vídeo mais leve (patch do usuário + ajustes)
+- Aplicado o patch: menos raios/partículas, menos trovões e ganho do som 0,55 (era 0,85, estourava), progresso em % no botão, escala da carta pela largura real do PNG, canvas sem alfa, bitrate 4,5 Mbps.
+- Ajustes sobre o patch: mantido o fade-out do som no fim; escala `W*0,89/largura` (igual à antiga para 664 px; o teto 0,92 encolhia a carta); laço de quadros com `setTimeout` descontando o tempo de desenho (medido: `requestAnimationFrame` deu ~7 fps contra ~14 do antigo e ~17 do novo) e vigia que encerra a gravação se os timers atrasarem.
+- Medição (top 5, sem GPU): 13,9 → 17,4 quadros/s. Aba em segundo plano continua travando o vídeo: manter a aba aberta ao gerar.
+
 ## 18/11/2026 (3) — vídeo: som some em fade no fim
 - Auditoria do vídeo gravado (ffmpeg): o som era cortado seco no último quadro (pico ~0,37, estalo). `Som.paraGravacao().fade` + chamada em `gravarCenas` fazem fade de 0,3 s antes do fim. Imagem e som seguem sincronizados (~0,1 s).
 

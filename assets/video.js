@@ -6,11 +6,12 @@
 (function () {
   'use strict';
   var W = 720, H = 1280, FPS = 30, DUR = 5, T_REV = 1.15;
+  /* Menos raios no vídeo (som + desenho): no 1º bastam 6 bem espaçados; evita estouro e «travada» no top 5. */
   var TIER = {
-    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: '1º LUGAR', raios: 14, part: 150, ondas: 7 },
-    2: { a: '#DDE8F8', b: '#FFFFFF', c: '#8FA9CF', bg: ['#11213d', '#070f1f'], rot: '2º LUGAR', raios: 6, part: 64, ondas: 3 },
-    3: { a: '#E8A060', b: '#FFE2C4', c: '#B8662A', bg: ['#2a1608', '#120a04'], rot: '3º LUGAR', raios: 4, part: 46, ondas: 2 },
-    0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, raios: 0, part: 26, ondas: 1 }
+    1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: '1º LUGAR', raios: 6, part: 120, ondas: 5 },
+    2: { a: '#DDE8F8', b: '#FFFFFF', c: '#8FA9CF', bg: ['#11213d', '#070f1f'], rot: '2º LUGAR', raios: 3, part: 48, ondas: 3 },
+    3: { a: '#E8A060', b: '#FFE2C4', c: '#B8662A', bg: ['#2a1608', '#120a04'], rot: '3º LUGAR', raios: 2, part: 36, ondas: 2 },
+    0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, raios: 0, part: 22, ondas: 1 }
   };
   function mulberry(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -71,7 +72,9 @@
       var hb = ease((t - 0.3) / 0.8) * (0.8 + 0.2 * Math.sin(t * 5)), hg = ctx.createLinearGradient(0, 0, 0, 900); hg.addColorStop(0, rgba(T.b, 0.5 * hb)); hg.addColorStop(1, rgba(T.a, 0));
       ctx.fillStyle = hg; ctx.beginPath(); ctx.moveTo(250, 0); ctx.lineTo(470, 0); ctx.lineTo(760, 900); ctx.lineTo(-40, 900); ctx.closePath(); ctx.fill();
     }
-    var tr = t - T_REV, k = 0.9 * (W / 664) * 0.99;   // a imagem da cartinha (664 px de largura) ocupa quase toda a largura
+    var tr = t - T_REV;
+    /* Escala pela largura REAL do PNG (com ou sem ornamentos): evita a foto «sair da linha» quando a imagem não tem 664 px. */
+    var iw = (img.naturalWidth || img.width || 664), k = Math.min(1.5, (W * 0.89) / iw);
     // 1) pacote que gira e se aproxima, até virar a carta no clarão
     var p = ease(t / T_REV), ang = (1 - p) * -Math.PI * 3, cx = Math.cos(ang), sc = 0.55 + 0.45 * p, y = 640 - Math.sin(Math.PI * p) * 140;
     if (t < T_REV) {
@@ -151,44 +154,57 @@
   }
   function fontes() { return document.fonts ? Promise.all([document.fonts.load('700 60px "Barlow Semi Condensed"'), document.fonts.load('600 30px "IBM Plex Sans"')]).catch(function () {}) : Promise.resolve(); }
 
-  /* trilha sonora do vídeo (agendada na hora da gravação, sincronizada com os quadros): giro, suspense, batida da revelação, trovão a cada raio, fanfarra no 1º */
+  /* trilha do vídeo: menos sobreposição (som ruim vinha de vários trovões + fanfarra juntos). Só 1–2 trovões e ouro/prata/bronze na revelação. */
   function sonsDoVideo(S) {
-    var l = S.info.lugar, L = [['giro', 0.05, 1050]];
-    if (l <= 3) L.push(['suspense', 0.1, 1000]);
+    var l = S.info.lugar, L = [['giro', 0.05, 900]];
+    if (l <= 3) L.push(['suspense', 0.12, l === 1 ? 1100 : 800]);
     L.push([l === 1 ? 'ouro' : l === 2 ? 'prata' : l === 3 ? 'bronze' : 'ding', T_REV]);
-    S.raios.forEach(function (r) { L.push(['trovao', r.ts]); });
+    if (S.raios.length) L.push(['trovao', S.raios[0].ts]);
+    if (l === 1 && S.raios.length > 2) L.push(['trovao', S.raios[Math.min(2, S.raios.length - 1)].ts]);
     return L;
   }
 
-  /* grava o quadro a quadro em tempo real (5 s) */
-  /* grava uma ou mais «cenas» em sequência, quadro a quadro em tempo real. cenas = [{S, dur, ini}] (ini em segundos desde o começo do vídeo) */
-  function gravarCenas(cenas) {
+  /* grava cenas em sequência com requestAnimationFrame (menos travada que setInterval) e progresso opcional */
+  function gravarCenas(cenas, onProg) {
     return new Promise(function (ok, no) {
       var mime = escolherMime(); if (!mime) return no(new Error('sem MediaRecorder'));
       var ult = cenas[cenas.length - 1], total = ult.ini + ult.dur;
-      var c = document.createElement('canvas'); c.width = W; c.height = H; var ctx = c.getContext('2d'); quadro(ctx, 0, cenas[0].S);
+      var c = document.createElement('canvas'); c.width = W; c.height = H; var ctx = c.getContext('2d');
+      quadro(ctx, 0, cenas[0].S);
       var rec, partes = [], au = window.Som && Som.paraGravacao ? Som.paraGravacao() : null, fluxo = c.captureStream(FPS);
       if (au) {
         au.stream.getAudioTracks().forEach(function (tr) { fluxo.addTrack(tr); }); au.iniciar();
-        cenas.forEach(function (ce) { sonsDoVideo(ce.S).forEach(function (x) { if (x[1] < ce.dur - 0.25) au.tocar(x[0], x[1] + ce.ini, x[2]); }); });
-        if (au.fade) au.fade(total - 0.35, 0.3);   // o vídeo termina com o som em fade, não cortado
+        cenas.forEach(function (ce) { sonsDoVideo(ce.S).forEach(function (x) { if (x[1] < ce.dur - 0.2) au.tocar(x[0], x[1] + ce.ini, x[2]); }); });
+        if (au.fade) au.fade(total - 0.35, 0.3);   // termina com o som em fade, sem corte seco/estalo
       }
-      try { rec = new MediaRecorder(fluxo, { mimeType: mime, videoBitsPerSecond: 5000000 }); } catch (e) { return no(e); }
+      try { rec = new MediaRecorder(fluxo, { mimeType: mime, videoBitsPerSecond: 4500000 }); } catch (e) { return no(e); }
       rec.ondataavailable = function (e) { if (e.data && e.data.size) partes.push(e.data); };
-      rec.onerror = function (e) { no(e.error || new Error('gravação')); };
-      rec.onstop = function () { if (au) setTimeout(au.fechar, 300); var b = new Blob(partes, { type: mime.split(';')[0] }); b.size > 2000 ? ok(b) : no(new Error('vídeo vazio')); };
+      rec.onerror = function (e) { if (au) try { au.fechar(); } catch (z) {} no(e.error || new Error('gravação')); };
+      rec.onstop = function () { if (au) setTimeout(au.fechar, 250); var b = new Blob(partes, { type: mime.split(';')[0] }); b.size > 2000 ? ok(b) : no(new Error('vídeo vazio')); };
       function desenha(t) {
         var k = cenas.length - 1; while (k > 0 && t < cenas[k].ini) k--;
-        var ce = cenas[k], lt = Math.min(t - ce.ini, ce.dur); quadro(ctx, lt, ce.S);
-        if (k > 0 && lt < 0.16) { ctx.save(); ctx.globalAlpha = 0.7 * (1 - lt / 0.16); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H); ctx.restore(); }   // corte entre as cartas: clarão rápido
+        var ce = cenas[k], lt = Math.min(Math.max(0, t - ce.ini), ce.dur); quadro(ctx, lt, ce.S);
+        if (k > 0 && lt < 0.14) { ctx.save(); ctx.globalAlpha = 0.65 * (1 - lt / 0.14); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, W, H); ctx.restore(); }
       }
-      var ini = performance.now(), id;
-      rec.start(250);
-      id = setInterval(function () {
-        var t = (performance.now() - ini) / 1000;
-        if (t >= total) { clearInterval(id); desenha(total); setTimeout(function () { rec.stop(); }, 120); return; }
+      var ini = performance.now(), parado = false, ultimoProg = -1, vigia;
+      function fim() {
+        if (parado) return; parado = true; clearInterval(vigia); desenha(total);
+        if (onProg) onProg(1);
+        setTimeout(function () { try { rec.stop(); } catch (e) { no(e); } }, 100);
+      }
+      rec.start(200);
+      function tick() {
+        if (parado) return;
+        var agora = performance.now(), t = (agora - ini) / 1000;
+        if (t >= total) return fim();
         desenha(t);
-      }, 1000 / FPS);
+        if (onProg) { var p = Math.min(0.99, t / total); if (p - ultimoProg >= 0.04) { ultimoProg = p; onProg(p); } }
+        // próximo quadro descontando o tempo que este levou a desenhar (setTimeout, não rAF: medido, o rAF ficou ~2× mais lento que isso)
+        setTimeout(tick, Math.max(0, 1000 / FPS - (performance.now() - agora)));
+      }
+      tick();
+      // vigia: garante que a gravação termina mesmo se o navegador atrasar os timers (aba em segundo plano); nesse caso o vídeo sai travado, então convém manter a aba aberta
+      vigia = setInterval(function () { if ((performance.now() - ini) / 1000 >= total + 0.5) fim(); }, 500);
     });
   }
   function gravar(S) { return gravarCenas([{ S: S, dur: DUR, ini: 0 }]); }
@@ -199,22 +215,28 @@
   }
   function gerar(a, ms, o) {
     o = o || {};
-    return Promise.all([window.Carta.png(a, ms, Object.assign({}, o, { transparente: true })).then(imagemDe), fontes()]).then(function (r) { return gravar(preparar(r[0], infoDe(a, ms, o))); });
+    var onProg = o.onProgress;
+    return Promise.all([window.Carta.png(a, ms, Object.assign({}, o, { transparente: true })).then(imagemDe), fontes()]).then(function (r) {
+      return gravarCenas([{ S: preparar(r[0], infoDe(a, ms, o)), dur: DUR, ini: 0 }], onProg);
+    });
   }
 
-  /* vídeo do TOP 5 inteiro (≈15 s): do 5º ao 1º, cada um com a própria revelação; o 1º ganha mais tempo. lista = [{a, ms, lugar}] */
-  var DUR_TOP = { 1: 4.6, 2: 3.0, 3: 2.8, 4: 2.3, 5: 2.3 };
+  /* vídeo do TOP 5 (≈15 s): do 5º ao 1º. o.onProgress(0..1) atualiza a UI sem travar. */
+  var DUR_TOP = { 1: 4.2, 2: 2.8, 3: 2.6, 4: 2.2, 5: 2.2 };
   function gerarTop(lista, o) {
     o = o || {};
-    // cada item leva o id do agente: é por ele que a foto (AGENTES_FOTOS) entra na carta
-    var ord = lista.slice().sort(function (p, q) { return q.lugar - p.lugar; });   // do último ao 1º
+    var onProg = o.onProgress;
+    var ord = lista.slice().sort(function (p, q) { return q.lugar - p.lugar; });
     return fontes().then(function () {
-      return Promise.all(ord.map(function (x) { return window.Carta.png(x.a, x.ms, Object.assign({}, o, { transparente: true, id: x.id != null ? x.id : x.a.k })).then(imagemDe); }));
+      return Promise.all(ord.map(function (x) {
+        return window.Carta.png(x.a, x.ms, Object.assign({}, o, { transparente: true, id: x.id != null ? x.id : x.a.k })).then(imagemDe);
+      }));
     }).then(function (imgs) {
       var ini = 0, cenas = ord.map(function (x, i) {
-        var inf = infoDe(x.a, x.ms, Object.assign({}, o, { lugar: x.lugar })), ce = { S: preparar(imgs[i], inf), dur: DUR_TOP[x.lugar] || 2.3, ini: ini }; ini += ce.dur; return ce;
+        var inf = infoDe(x.a, x.ms, Object.assign({}, o, { lugar: x.lugar })), ce = { S: preparar(imgs[i], inf), dur: DUR_TOP[x.lugar] || 2.2, ini: ini };
+        ini += ce.dur; return ce;
       });
-      return gravarCenas(cenas);
+      return gravarCenas(cenas, onProg);
     });
   }
   function enviarTop(lista, o) {

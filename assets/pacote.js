@@ -155,7 +155,14 @@
       foco = div('pk-foco'); var gr = div('pk-grande'), linha = div('pk-linha');
       var info = div('pk-info', '<div class="pk-rank">' + rk + 'º</div><div class="pk-nome">' + esc(it.rot) + '</div><div class="pk-eq">' + esc(it.eq || '') + '</div><div class="pk-nota"><b>' + esc(it.nota) + '</b><span>nota do mês</span></div>' + (it.emp ? '<div class="pk-emp">⚖ ' + esc(it.emp) + '</div>' : '') + (cfg.video ? '<button type="button" class="pk-video">🎬 Vídeo de 5 s para o WhatsApp</button><div class="pk-vst" role="status" aria-live="polite"></div>' : ''));
       var bv = info.querySelector('.pk-video');
-      if (bv) bv.addEventListener('click', function (e) { e.stopPropagation(); var st = info.querySelector('.pk-vst'); bv.disabled = true; st.textContent = 'Gerando o vídeo (5 s)…'; Promise.resolve(cfg.video(it)).then(function (m) { st.textContent = m || ''; }, function () { st.textContent = 'Não consegui gerar o vídeo neste navegador.'; }).then(function () { bv.disabled = false; }); });
+      if (bv) bv.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var st = info.querySelector('.pk-vst');
+        bv.disabled = true;
+        st.textContent = 'Gerando o vídeo (5 s)… 0%';
+        var prog = function (p) { st.textContent = 'Gerando o vídeo… ' + Math.round((p || 0) * 100) + '%'; };
+        Promise.resolve(cfg.video(it, prog)).then(function (m) { st.textContent = m || 'Pronto.'; }, function () { st.textContent = 'Não consegui gerar o vídeo neste navegador.'; }).then(function () { bv.disabled = false; });
+      });
       if (top) { var fx = div('pk-faixa r' + top, '<i>' + FAIXA[top][0] + '</i>' + FAIXA[top][1]); foco.appendChild(fx); fx.style.opacity = '0'; foco._fx = fx; }
       linha.appendChild(gr); linha.appendChild(info); foco.appendChild(linha); cena.appendChild(foco);
       gr.style.opacity = '0'; info.style.opacity = '0';
@@ -258,7 +265,11 @@
       if (f.outros) outros.innerHTML = '<b>Também tiraram 100:</b> ' + esc(f.outros); else outros.hidden = true;
       if (cfg.videoTop) {
         var bv = document.createElement('button'); bv.type = 'button'; bv.className = 'pk-video'; bv.textContent = '🎬 Vídeo do top ' + N + ' (15 s) para o WhatsApp'; var st = div('pk-vst'); st.setAttribute('role', 'status'); st.setAttribute('aria-live', 'polite');
-        bv.addEventListener('click', function (e) { e.stopPropagation(); bv.disabled = true; st.textContent = 'Gerando o vídeo (≈15 s)…'; Promise.resolve(cfg.videoTop()).then(function (m) { st.textContent = m || ''; }, function () { st.textContent = 'Não consegui gerar o vídeo neste navegador.'; }).then(function () { bv.disabled = false; }); });
+        bv.addEventListener('click', function (e) {
+          e.stopPropagation(); bv.disabled = true; st.textContent = 'Gerando o vídeo (≈15 s)… 0%';
+          var prog = function (p) { st.textContent = 'Gerando o vídeo… ' + Math.round((p || 0) * 100) + '%'; };
+          Promise.resolve(cfg.videoTop(prog)).then(function (m) { st.textContent = m || 'Pronto.'; }, function () { st.textContent = 'Não consegui gerar o vídeo neste navegador.'; }).then(function () { bv.disabled = false; });
+        });
         bts.appendChild(bv); bts.appendChild(st);
       }
       if (f.resumoUrl) { var rs = document.createElement('a'); rs.className = 'pk-video'; rs.href = f.resumoUrl; rs.target = '_blank'; rs.rel = 'noopener'; rs.textContent = '📄 Resumo do mês (PDF para a ata)'; rs.addEventListener('click', function (e) { e.stopPropagation(); }); bts.insertBefore(rs, bts.firstChild); }
