@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 18/11/2026 (3) — vídeo: som some em fade no fim
+- Auditoria do vídeo gravado (ffmpeg): o som era cortado seco no último quadro (pico ~0,37, estalo). `Som.paraGravacao().fade` + chamada em `gravarCenas` fazem fade de 0,3 s antes do fim. Imagem e som seguem sincronizados (~0,1 s).
+
 ## 18/11/2026 (2) — medidas da cartinha coerentes com a nota
 - Problema: nota 100 com medida 50. Causas: EVO partia de 50 (não da nota); POS usava o desempate da bruta entre quem tem 100; ASS/TUR/CON cruas podiam ficar longe da nota.
 - Regra (`assets/carta.js`, `BANDA = 20`): cada medida fica entre nota−20 e nota+20 (limite 0–99). EVO parte da nota e varia 5 por ponto de diferença para o mês anterior (também no «Melhor do ano»). POS = lugar pela nota (empate = mesmo lugar, `posPorNota`).

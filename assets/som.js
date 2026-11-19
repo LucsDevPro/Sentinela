@@ -120,7 +120,8 @@
     paraGravacao: function () {
       var C = window.AudioContext || window.webkitAudioContext; if (!C) return null;
       var c = new C(), dest = c.createMediaStreamDestination(), g = c.createGain(); g.gain.value = 0.85; g.connect(limitador(c, dest));
-      return { stream: dest.stream, iniciar: function () { try { if (c.resume) c.resume(); } catch (e) {} }, tocar: function (nome, t, ms) { if (SONS[nome]) com(c, g, function () { SONS[nome](c.currentTime + 0.05 + (t || 0), ms); }); }, fechar: function () { try { c.close(); } catch (e) {} } };
+      return { stream: dest.stream, iniciar: function () { try { if (c.resume) c.resume(); } catch (e) {} }, tocar: function (nome, t, ms) { if (SONS[nome]) com(c, g, function () { SONS[nome](c.currentTime + 0.05 + (t || 0), ms); }); }, fade: function (t, d) { var x = c.currentTime + 0.05 + t; g.gain.setValueAtTime(0.85, x); g.gain.linearRampToValueAtTime(0.0001, x + d); },   // some o som no fim do vídeo (sem corte seco/estalo)
+        fechar: function () { try { c.close(); } catch (e) {} } };
     },
     /* renderiza um som sem tocar (teste/medição): devolve uma AudioBuffer estéreo */
     renderizar: function (nome, ms, seg) {

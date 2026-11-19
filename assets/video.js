@@ -171,6 +171,7 @@
       if (au) {
         au.stream.getAudioTracks().forEach(function (tr) { fluxo.addTrack(tr); }); au.iniciar();
         cenas.forEach(function (ce) { sonsDoVideo(ce.S).forEach(function (x) { if (x[1] < ce.dur - 0.25) au.tocar(x[0], x[1] + ce.ini, x[2]); }); });
+        if (au.fade) au.fade(total - 0.35, 0.3);   // o vídeo termina com o som em fade, não cortado
       }
       try { rec = new MediaRecorder(fluxo, { mimeType: mime, videoBitsPerSecond: 5000000 }); } catch (e) { return no(e); }
       rec.ondataavailable = function (e) { if (e.data && e.data.size) partes.push(e.data); };
