@@ -330,7 +330,6 @@
       var B = (parseFloat(cs.getPropertyValue('--bw')) || 5) * S, bc = [cs.getPropertyValue('--b1').trim(), cs.getPropertyValue('--b2').trim(), cs.getPropertyValue('--b3').trim()];
       var bg = gradCss(ctx, 135, X, Y, W, H, bc[0], bc[0]); bg.addColorStop(.25, bc[1]); bg.addColorStop(.5, bc[2]); bg.addColorStop(.75, bc[1]);
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore();
-      ctx.save(); ctx.beginPath(); pathCartao(ctx, X + B + 3 * S, Y + B + 3 * S, W - 2 * (B + 3 * S), H - 2 * (B + 3 * S), S, B + 3 * S, true); pathCartao(ctx, X + B + 4.5 * S, Y + B + 4.5 * S, W - 2 * (B + 4.5 * S), H - 2 * (B + 4.5 * S), S, B + 4.5 * S, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore(); // fio fino (igual ao CSS)
       // bisel do anel (igual ao CSS): luz em cima, sombra embaixo
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
