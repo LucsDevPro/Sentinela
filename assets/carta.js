@@ -324,8 +324,6 @@
       var lx = lr.x + (lr.w - lw) / 2, ly = lr.y + (lr.h - lh) / 2;
       ctx.save(); ctx.shadowColor = 'rgba(255,255,255,.55)'; ctx.shadowOffsetY = 1 * S; ctx.drawImage(of, lx, ly); ctx.restore();
       ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.28)'; ctx.shadowOffsetY = -1 * S; ctx.drawImage(of, lx, ly); ctx.restore();
-      // borda interna clara
-      ctx.save(); pathCartao(ctx, X + S, Y + S, W - 2 * S, H - 2 * S, S); ctx.lineWidth = 2 * S; ctx.strokeStyle = tier === 't-destaque' ? '#FF6BCB' : 'rgba(255,255,255,.35)'; ctx.stroke(); ctx.restore();
       // borda por faixa de nota (anel com degradê, igual ao CSS .c-borda)
       var B = (parseFloat(cs.getPropertyValue('--bw')) || 5) * S, bc = [cs.getPropertyValue('--b1').trim(), cs.getPropertyValue('--b2').trim(), cs.getPropertyValue('--b3').trim()];
       var bg = gradCss(ctx, 135, X, Y, W, H, bc[0], bc[0]); bg.addColorStop(.25, bc[1]); bg.addColorStop(.5, bc[2]); bg.addColorStop(.75, bc[1]);
