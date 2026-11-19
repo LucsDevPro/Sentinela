@@ -105,7 +105,7 @@ with sync_playwright() as p:
     checar("álbum abre em «Melhor do ano»", al.input_value("#fMes") == "Melhor do ano")
     fundo, texto = al.evaluate("[getComputedStyle(document.documentElement).backgroundColor, getComputedStyle(document.body).color]")
     canal = lambda c: [int(x) for x in re.findall(r"\d+", c)[:3]]
-    checar("álbum: tema claro por padrão (fundo claro, texto escuro)", sum(canal(fundo)) / 3 > 200 and sum(canal(texto)) / 3 < 90, f"{fundo} / {texto}")
+    checar("Sala de Troféus: nasce no tema escuro (fundo escuro, texto claro; o botão leva ao claro)", sum(canal(fundo)) / 3 < 60 and sum(canal(texto)) / 3 > 200, f"{fundo} / {texto}")
     al.select_option("#fMes", al.eval_on_selector_all("#fMes option", "o=>o.map(x=>x.value)")[1]); al.wait_for_timeout(1800)   # mês mais recente; espera a animação de entrada das cartas (nota conta de 0 ao valor e a carta cresce)
     mes = al.input_value("#fMes")
     do_mes = sorted([m for a in D.values() for m in a["meses"] if m["mes"] == mes and m["pontos"] is not None], key=lambda m: -m["pontos"])
@@ -116,11 +116,11 @@ with sync_playwright() as p:
     checar("cartinhas ordenadas da maior nota para a menor", notas == sorted(notas, reverse=True), str(notas[:8]))
     checar("primeira cartinha é o 1º lugar", al.inner_text(".slot .n").strip() == "1º")
     larg = lambda: al.evaluate("document.querySelector('#album .slot:nth-child(3) .carta').getBoundingClientRect().width")
-    # a largura medida NÃO serve para o hover: a carta também inclina em 3D (carta_fx.js) e a inclinação encolhe o retângulo. Confere a escala do CSS (--s = e*1.06).
+    # a largura medida NÃO serve para o hover: a carta também inclina em 3D (carta_fx.js) e a inclinação encolhe o retângulo. Confere a escala do CSS (--s = e*1.05).
     escala = lambda: al.evaluate("getComputedStyle(document.querySelector('#album .slot:nth-child(3) .c-conj')).getPropertyValue('--s').replace(/\\s/g,'')")
     pequena, repouso = larg(), escala()
     al.hover("#album .slot:nth-child(3)"); al.wait_for_timeout(450)
-    checar("passar o mouse destaca a cartinha (escala do hover ativa)", escala() != repouso and "1.06" in escala(), f"repouso {repouso} -> hover {escala()}")
+    checar("passar o mouse destaca a cartinha (escala do hover ativa)", escala() != repouso and "1.05" in escala(), f"repouso {repouso} -> hover {escala()}")
     al.mouse.move(0, 0); al.wait_for_timeout(1200)
     checar("ao tirar o mouse volta ao tamanho do álbum", abs(larg() - pequena) < 2)
     al.keyboard.press("Tab")

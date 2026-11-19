@@ -26,7 +26,7 @@ function mostrar(qual, gravarHash) {
   Object.entries(PAINEIS).forEach(([k, [aba, painel]]) => { $(aba).setAttribute('aria-selected', String(k === qual)); $(painel).hidden = k !== qual; });
   if (qual === 'calc') carregarCalc();
   if (gravarHash) history.replaceState(null, '', qual === 'calc' ? '#como-calcula' : location.pathname + location.search);
-  document.title = (qual === 'calc' ? 'Como é calculado' : 'Álbum de cartinhas') + ' — Sentinela';
+  document.title = (qual === 'calc' ? 'Como é calculado' : 'Sala de Troféus') + ' — Sentinela';
 }
 $('abaCartas').onclick = () => mostrar('cartas', true);
 $('abaCalc').onclick = () => mostrar('calc', true);

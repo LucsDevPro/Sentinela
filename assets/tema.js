@@ -5,8 +5,11 @@
   var raiz = document.documentElement;
   function ler() { try { return localStorage.getItem('sentinelaTema'); } catch (e) { return null; } }
   function gravar(t) { try { localStorage.setItem('sentinelaTema', t); } catch (e) {} }
-  var atual = ler() === 'dark' ? 'dark' : 'light';
-  if (atual === 'dark') raiz.setAttribute('data-theme', 'dark'); else raiz.removeAttribute('data-theme');
+  /* Página que nasce escura (ex.: a Sala de Troféus) declara <html data-tema-padrao="dark">: sem escolha guardada vale o escuro, e o botão leva ao claro (data-theme="light"). */
+  var padrao = raiz.getAttribute('data-tema-padrao') === 'dark' ? 'dark' : 'light', guardado = ler();
+  var atual = guardado === 'dark' || guardado === 'light' ? guardado : padrao;
+  function pintar() { if (atual === 'dark') raiz.setAttribute('data-theme', 'dark'); else if (padrao === 'dark') raiz.setAttribute('data-theme', 'light'); else raiz.removeAttribute('data-theme'); }
+  pintar();
 
   function cor(nome, padrao) {
     var v = getComputedStyle(raiz).getPropertyValue(nome).trim();
@@ -35,7 +38,7 @@
   };
   window.alternarTema = function () {
     atual = atual === 'dark' ? 'light' : 'dark';
-    if (atual === 'dark') raiz.setAttribute('data-theme', 'dark'); else raiz.removeAttribute('data-theme');
+    pintar();
     gravar(atual);
     rotular();
     window.aplicarTemaGraficos();

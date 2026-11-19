@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 19/11/2026 (3) — Sala de Troféus (patch tudo-main) aplicado com ajustes
+- Aplicado: álbum renomeado «Sala de Troféus» (vitrine escura com pedestais), cartinha em retângulo arredondado (`--radius: 18px`; PNG via `FORMA_R`/`roundRect`), foto maior, estatísticas em chips, posição «Nº · total».
+- Ficou de fora de propósito (o patch vinha de uma cópia antiga e desfazia trabalho recente): laço de gravação/fade do vídeo, ganho do som, eixos dos gráficos (`suggestedMax`) e o selo «100» (continua removido).
+- Ajustes: a página nasce escura com `<html data-tema-padrao="dark">` (em `tema.js`; o botão leva ao claro com `data-theme="light"`; as outras páginas seguem claras por padrão); chips em linha (em coluna o cartão passava de 392 px e cortava o rodapé); foto 108 px; testes atualizados ao novo formato.
+
 ## 19/11/2026 (2) — cartinha ELITE sem o selo «100»
 - Removido o selo redondo «★ 100» ao lado da foto das cartinhas ELITE (carta.js, carta.css, teste ajustado para exigir que não exista). O cartão continua dourado, com o nome ELITE no rodapé.
 

@@ -336,8 +336,11 @@ with sync_playwright() as p:
       const k=c.querySelector('.carta[data-cid]');k.dispatchEvent(new MouseEvent('mouseover',{bubbles:true}));const p=document.querySelector('.c-pop');return p&&!p.hidden?p.innerText:null}""")
     checar("detalhamento: cartinha sem dados detalhados mostra aviso, sem quebrar", sd is not None and "indisponível" in sd, str(sd))
     hp.goto(U + "album.html?mes=Outubro%2F2026"); hp.wait_for_selector(".slot .carta[data-cid]", timeout=8000); hp.wait_for_timeout(700)
-    hp.locator(".slot .carta[data-cid]").nth(6).click(force=True) if False else hp.locator(".slot .carta[data-cid]").nth(6).hover(force=True); hp.wait_for_timeout(450)
-    ab = hp.evaluate("(()=>{const p=document.querySelector('.c-pop');return p&&!p.hidden&&p.innerText.includes('Outubro/2026')})()")
+    ab = False
+    for _t in range(4):   # o cartão tem animação de entrada (3D/escala): o 1º hover pode cair antes dela assentar
+        hp.mouse.move(2, 2); hp.wait_for_timeout(250); hp.locator(".slot .carta[data-cid]").nth(6).hover(force=True); hp.wait_for_timeout(500)
+        ab = hp.evaluate("(()=>{const p=document.querySelector('.c-pop');return p&&!p.hidden&&p.innerText.includes('Outubro/2026')})()")
+        if ab: break
     hp.select_option("#fMes", index=0); hp.wait_for_timeout(900); hp.mouse.move(3, 3); hp.wait_for_timeout(500)
     fe = hp.evaluate("(()=>{const p=document.querySelector('.c-pop');return !p||p.hidden||!p.innerText.includes('Outubro/2026')})()")
     checar("detalhamento: no álbum abre em mês antigo e, ao trocar de mês, o detalhe antigo não fica na tela", ab and fe, f"{ab} {fe}")
@@ -458,7 +461,10 @@ with sync_playwright() as p:
         q.click("[data-tema-btn]"); q.wait_for_timeout(300)
         b2 = q.evaluate(fundo_js)
         q.evaluate("localStorage.removeItem('sentinelaTema')")
-        checar(f"{f.split('?')[0]}: claro por padrão e escuro no botão", b1 != b2 and b1 in ("rgb(238, 242, 248)", "rgb(237, 241, 247)"), f"{b1} {b2}")
+        if f.startswith("album.html"):   # Sala de Troféus: nasce escura (data-tema-padrao) e o botão leva ao claro
+            checar("album.html: escuro por padrão e claro no botão", b1 != b2 and b1 in ("rgb(18, 12, 8)", "rgb(12, 8, 6)") and b2 not in ("rgb(18, 12, 8)", "rgb(12, 8, 6)"), f"{b1} {b2}")
+        else:
+            checar(f"{f.split('?')[0]}: claro por padrão e escuro no botão", b1 != b2 and b1 in ("rgb(238, 242, 248)", "rgb(237, 241, 247)"), f"{b1} {b2}")
         sobra = q.evaluate("document.documentElement.scrollWidth > innerWidth + 1")
         checar(f"{f.split('?')[0]}: sem erro de script", not e, str(e))
         q.close()

@@ -6,13 +6,14 @@
   --c2: #C48E1E;
   --tx: #2A1F08;
   --ln: rgba(42, 31, 8, 0.26);
+  --radius: 18px;
   position: relative;
   width: 272px;
   min-height: 392px;
-  padding: 16px 18px 14px;
+  padding: 14px 16px 12px;
   color: var(--tx);
-  border-radius: 0;
-  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
+  border-radius: var(--radius);
+  clip-path: none; /* retângulo arredondado — estável no PNG/vídeo */
   background:
     linear-gradient(160deg, var(--c1) 0%, #E6C86A 38%, #D4A63A 68%, var(--c2) 100%);
   box-shadow:
@@ -134,87 +135,91 @@
    Moldura grossa, metálica, com brilho e glow nas faixas altas.
    PNG (carta.js) lê --b1/--b2/--b3/--bw. */
 
+/* Bordas por faixa: anel metálico mais limpo (menos “grossura” nas baixas) */
 .carta {
   --b1: #1A1A1A;
   --b2: #6A6A6A;
   --b3: #D8D8D8;
-  --bw: 5px;
+  --bw: 4px;
 }
 
 .carta.b-60 {
   --b1: #142420;
   --b2: #5A8A80;
   --b3: #C0E0D8;
-  --bw: 6px;
+  --bw: 5px;
 }
 
 .carta.b-70 {
   --b1: #3E1808;
   --b2: #D08040;
   --b3: #F8D0A8;
-  --bw: 6.5px;
+  --bw: 5.5px;
 }
 
 .carta.b-80 {
   --b1: #1E2C40;
   --b2: #90A8C0;
   --b3: #F4F8FC;
-  --bw: 7.5px;
+  --bw: 6px;
 }
 
-/* Ouro — moldura chrome dourada com glow suave */
+/* Ouro — anel duplo dourado (medalha / sala de troféus) */
 .carta.b-90 {
-  --b1: #5A3200;
-  --b2: #F0C030;
-  --b3: #FFF8D0;
-  --bw: 10px;
+  --b1: #6A3C00;
+  --b2: #F0C840;
+  --b3: #FFF6C8;
+  --bw: 8px;
   box-shadow:
-    0 0 22px rgba(240, 180, 40, 0.35),
-    0 16px 40px rgba(0, 0, 0, 0.34),
+    0 0 0 1.5px rgba(255, 244, 200, 0.55),
+    0 0 26px rgba(240, 190, 50, 0.42),
+    0 16px 40px rgba(0, 0, 0, 0.36),
     0 5px 14px rgba(0, 0, 0, 0.18),
     inset 0 1.5px 0 rgba(255, 255, 255, 0.55),
     inset 0 -1px 0 rgba(0, 0, 0, 0.08),
     inset 0 0 0 1px rgba(255, 255, 255, 0.22);
 }
 
-/* Destaque / Top 3 90-99 — borda holográfica Ultimate */
+/* Destaque / Top 3 90-99 — holo mais fino, glow controlado */
 .carta.b-top {
   --b1: #FFE8A6;
-  --b2: #FF63C7;
+  --b2: #FF4DB8;
   --b3: #7DEBFF;
-  --bw: 7px;
+  --bw: 6px;
   box-shadow:
-    0 0 28px rgba(255, 77, 184, 0.42),
-    0 0 48px rgba(64, 224, 255, 0.22),
+    0 0 0 1.5px rgba(255, 220, 245, 0.45),
+    0 0 24px rgba(255, 77, 184, 0.38),
+    0 0 40px rgba(64, 224, 255, 0.16),
     0 16px 40px rgba(0, 0, 0, 0.34),
     inset 0 1.5px 0 rgba(255, 255, 255, 0.4),
     inset 0 0 0 1.5px rgba(255, 255, 255, 0.25);
 }
 
-/* Lendária — moldura gelo/chrome Ultimate Prime */
+/* Lendária — anel ouro + filete claro */
 .carta.b-100 {
   --bw: 7px;
 }
 
-/* Anel da borda: recorte em polígono (cantos cortados, estilo escudo); a espessura vem de --bw */
+/* Anel da borda: retângulo arredondado (mask) — espessura em --bw */
 .carta > .c-borda {
   position: absolute;
   inset: 0;
   z-index: 3;
   pointer-events: none;
+  border-radius: var(--radius, 18px);
+  padding: var(--bw, 5px);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 28%, rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.38) 100%),
-    linear-gradient(
-    135deg,
-    var(--b1) 0%,
-    var(--b2) 18%,
-    var(--b3) 38%,
-    var(--b2) 55%,
-    var(--b1) 72%,
-    var(--b2) 88%,
-    var(--b3) 100%
-  );
-  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px, 20px 0px, calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), calc(0px + var(--bw) * 1.0000) calc(20px + var(--bw) * 0.4142), calc(0px + var(--bw) * 1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(30px + var(--bw) * 0.3730) calc(100% + var(--bw) * -1.0000), calc(100% - 30px + var(--bw) * -0.3730) calc(100% + var(--bw) * -1.0000), calc(100% + var(--bw) * -1.0000) calc(100% - 26px + var(--bw) * -0.4566), calc(100% + var(--bw) * -1.0000) calc(20px + var(--bw) * 0.4142), calc(100% - 20px + var(--bw) * -0.4142) calc(0px + var(--bw) * 1.0000), calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1.0000), 20px 0px, calc(20px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% - 20px + (var(--bw) + 3px) * -0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(100% + (var(--bw) + 3px) * -1.0000) calc(20px + (var(--bw) + 3px) * 0.4142), calc(100% + (var(--bw) + 3px) * -1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(100% - 30px + (var(--bw) + 3px) * -0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(30px + (var(--bw) + 3px) * 0.3730) calc(100% + (var(--bw) + 3px) * -1.0000), calc(0px + (var(--bw) + 3px) * 1.0000) calc(100% - 26px + (var(--bw) + 3px) * -0.4566), calc(0px + (var(--bw) + 3px) * 1.0000) calc(20px + (var(--bw) + 3px) * 0.4142), calc(20px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000), calc(20px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(20px + (var(--bw) + 4.5px) * 0.4142), calc(0px + (var(--bw) + 4.5px) * 1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(30px + (var(--bw) + 4.5px) * 0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% - 30px + (var(--bw) + 4.5px) * -0.3730) calc(100% + (var(--bw) + 4.5px) * -1.0000), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(100% - 26px + (var(--bw) + 4.5px) * -0.4566), calc(100% + (var(--bw) + 4.5px) * -1.0000) calc(20px + (var(--bw) + 4.5px) * 0.4142), calc(100% - 20px + (var(--bw) + 4.5px) * -0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(20px + (var(--bw) + 4.5px) * 0.4142) calc(0px + (var(--bw) + 4.5px) * 1.0000), calc(20px + (var(--bw) + 3px) * 0.4142) calc(0px + (var(--bw) + 3px) * 1.0000));
+    linear-gradient(135deg, var(--b1) 0%, var(--b2) 18%, var(--b3) 38%, var(--b2) 55%, var(--b1) 72%, var(--b2) 88%, var(--b3) 100%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  clip-path: none;
 }
 
 /* Filete interno extra nas cartas altas (anel secundário) */
@@ -282,24 +287,25 @@
   gap: 10px;
 }
 
+/* Nota hero */
 .c-ovr b {
   display: block;
-  font-size: 3.5rem;
-  line-height: 0.9;
+  font-size: 3.75rem;
+  line-height: 0.88;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .c-ovr b.tres {
-  font-size: 2.9rem;
-  padding-top: 0.4rem;
+  font-size: 3.05rem;
+  padding-top: 0.25rem;
 }
 
 .c-ovr span,
 .c-pos small {
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
   font-weight: 600;
   display: block;
   font-family: "IBM Plex Sans", sans-serif;
@@ -307,19 +313,23 @@
 }
 
 .c-pos {
-  margin-top: 6px;
+  margin-top: 4px;
   border-top: 1.5px solid var(--ln);
   padding-top: 5px;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.04em;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .c-pos small {
-  letter-spacing: 0;
-  font-size: 0.67rem;
+  letter-spacing: 0.04em;
+  font-size: 0.68rem;
   white-space: nowrap;
   opacity: 0.82;
+  order: -1;
 }
 
 .c-logo {
@@ -341,21 +351,23 @@
   mask: url(logo_carta.png) center / contain no-repeat;
 }
 
-/* Foto — moldura de joia */
+/* Foto maior — moldura de joia (anel = cor da faixa via border) */
 .c-foto {
   width: 104px;
   height: 104px;
-  margin: -3px auto 5px;
+  flex: none;
+  margin: 0 auto 6px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 2.65rem;
+  position: relative;
+  font-size: 2.6rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   background: rgba(255, 255, 255, 0.2);
-  border: 3px solid var(--ln);
+  border: 3.5px solid var(--ln);
   box-shadow:
-    0 5px 16px rgba(0, 0, 0, 0.16),
+    0 6px 18px rgba(0, 0, 0, 0.18),
     inset 0 1.5px 0 rgba(255, 255, 255, 0.35),
     inset 0 -1px 0 rgba(0, 0, 0, 0.06);
 }
@@ -417,42 +429,53 @@ body.sem-foto .c-foto img {
   line-height: 1.1;
 }
 
+/* Stats em chips */
 .c-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3px 16px;
-  padding: 0 4px;
+  gap: 4px 8px;
+  padding: 2px 2px 6px;
   border-bottom: 1.5px solid var(--ln);
-  padding-bottom: 7px;
 }
 
+.c-stats .c-chip,
 .c-stats div {
   display: flex;
+  flex-direction: row;   /* número e sigla lado a lado: 3 linhas cabem no cartão de 392 px (em coluna estourava e cortava o rodapé) */n-items: center;
+  justify-content: center;
   gap: 7px;
-  align-items: baseline;
-  font-size: 1.12rem;
+  padding: 3px 4px 3px;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--ln);
+  font-size: 1.05rem;
   font-weight: 700;
+  min-height: 0;
 }
 
 .c-stats b {
-  min-width: 1.7em;
-  text-align: right;
+  min-width: 0;
+  text-align: center;
   font-variant-numeric: tabular-nums;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .c-stats span {
   font-weight: 600;
-  letter-spacing: 0.09em;
-  font-size: 0.95rem;
-  opacity: 0.8;
+  letter-spacing: 0.1em;
+  font-size: 0.62rem;
+  line-height: 1;
+  opacity: 0.78;
+  text-transform: uppercase;
 }
 
 .c-rodape {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 7px;
-  padding: 0 3px; /* afasta o texto dos cantos cortados */
+  margin-top: 8px;
+  padding: 0 2px;
   white-space: nowrap;
   gap: 6px;
   font-family: "IBM Plex Sans", sans-serif;
@@ -483,42 +506,35 @@ body.sem-foto .c-foto img {
   --ln: rgba(255, 220, 140, 0.45);
   --logo: linear-gradient(170deg, #FFF6C8 0%, #F0C830 48%, #B8860B 100%);
   --b1: #8A6010;
-  --b2: #F0C830;
+  --b2: #F0C840;
   --b3: #FFF8E0;
   --bw: 7px;
   background:
     radial-gradient(ellipse 80% 45% at 50% 15%, rgba(255, 210, 100, 0.18) 0%, transparent 55%),
     linear-gradient(165deg, #122650 0%, #0A1838 40%, #050C1C 75%, #02050C 100%);
+  /* anel duplo + glow de troféu */
   box-shadow:
-    0 0 0 2px rgba(240, 200, 80, 0.65),
-    0 0 24px rgba(240, 190, 60, 0.45),
-    0 0 48px rgba(200, 150, 40, 0.2),
-    0 16px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 2px rgba(255, 244, 200, 0.7),
+    0 0 0 5px rgba(240, 200, 64, 0.22),
+    0 0 28px rgba(240, 190, 60, 0.5),
+    0 0 52px rgba(200, 150, 40, 0.22),
+    0 16px 40px rgba(0, 0, 0, 0.42),
     inset 0 1.5px 0 rgba(255, 240, 180, 0.35),
     inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Filete interno dourado */
+/* Filete interno dourado (retângulo arredondado) */
 .carta.b-100::before {
   content: "";
   position: absolute;
   inset: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius, 18px);
   background: transparent;
   box-shadow:
     inset 0 0 0 3px rgba(205, 165, 65, 0.62),
     inset 0 0 0 6px rgba(130, 95, 20, 0.20);
-  clip-path: polygon(
-    calc(20px + var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
-    calc(100% - 20px - var(--bw) * 0.4142) calc(0px + var(--bw) * 1),
-    calc(100% - var(--bw) * 1) calc(20px + var(--bw) * 0.4142),
-    calc(100% - var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
-    calc(100% - 30px - var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
-    calc(30px + var(--bw) * 0.3730) calc(100% - var(--bw) * 1),
-    calc(0px + var(--bw) * 1) calc(100% - 26px - var(--bw) * 0.4566),
-    calc(0px + var(--bw) * 1) calc(20px + var(--bw) * 0.4142)
-  );
+  clip-path: none;
   opacity: 1;
   pointer-events: none;
   -webkit-mask: none;
@@ -1418,7 +1434,7 @@ body.sem-foto .c-foto img {
 /* Compactação: o refinamento premium deixou o conteúdo com ~470 px, e o álbum e o PNG têm 392 px fixos, então o rodapé ficava cortado.
    Estatísticas, nome e foto voltam a caber no cartão com o rodapé inteiro dentro do escudo. */
 .carta .c-nome { padding: 6px 0; margin: 5px 0; }
-.carta .c-foto { width: 94px; height: 94px; margin-bottom: 4px; }
+.carta .c-foto { width: 108px; height: 108px; margin-bottom: 4px; }   /* foto maior (Sala de Troféus); o conjunto fecha em 392 px */
 .c-stats { gap: 5px; margin-top: 8px; padding-bottom: 6px; }
 .c-stats > div { padding: 4px 9px; line-height: 1.1; }
 .c-stats > div > span { font-size: 0.68rem; line-height: 1.1; }
@@ -1674,7 +1690,7 @@ dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:1
 
 /* revelação (carta_fx.js: CartaFX.revelar): capa do pacote que vira, flash e partículas */
 .c-pacote { position: absolute; inset: 0; z-index: 8; margin: 0; pointer-events: none; display: grid; place-items: center; text-align: center;
-  clip-path: polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 26px), calc(100% - 30px) 100%, 30px 100%, 0px calc(100% - 26px), 0px 20px);
+  border-radius: var(--radius, 18px); clip-path: none;
   background: linear-gradient(155deg, #16365F 0%, #0B2040 55%, #07142B 100%); color: #F7B500; font: 700 22px "Barlow Semi Condensed", system-ui, sans-serif; letter-spacing: .22em;
   box-shadow: inset 0 0 0 3px rgba(247,181,0,.55), inset 0 0 40px rgba(43,168,232,.25); }
 .c-pacote::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.25) 50%, transparent 65%); }

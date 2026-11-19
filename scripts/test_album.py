@@ -79,12 +79,12 @@ checar("o link do álbum inclui o mês filtrado (não só id/nome)",
 cj = ler("assets/carta.js")
 checar("carta.js: o link do popup inclui o mês da cartinha (&mes=u.mes)",
        "agente.html?id=" in cj and "'&mes=' + encodeURIComponent(mesNoLink(u.mes))" in cj)
-# Formato da borda: escudo de cantos cortados (clip-path) no CSS e o mesmo polígono no PNG
+# Formato da borda: retângulo arredondado (raio 18) no CSS e no PNG (desde 19/11/2026; antes era escudo de cantos cortados)
 cc = ler("assets/carta.css")
-checar("carta.css: o cartão e o anel da borda usam clip-path em polígono (cantos cortados)",
-       cc.count("clip-path: polygon(") >= 3 and "18px 18px 40px 40px" not in cc)
-checar("carta.js: o PNG desenha o mesmo polígono (FORMA), sem as elipses do canto arredondado",
-       "var FORMA = [[20, 0], [252, 0], [272, 20], [272, 366], [242, 392], [30, 392], [0, 366], [0, 20]]" in cj and "ctx.ellipse(x + w - a" not in cj)
+checar("carta.css: cartão e anel da borda são retângulo arredondado (--radius 18px, sem clip-path em polígono)",
+       "--radius: 18px" in cc and "border-radius: var(--radius)" in cc and "clip-path: polygon(" not in cc.split("/* ---- Janela")[0])
+checar("carta.js: o PNG desenha o mesmo retângulo arredondado (FORMA_R = 18)",
+       "var FORMA_R = 18;" in cj and "ctx.roundRect" in cj and "var FORMA = [[" not in cj)
 # Clique na cartinha abre a evolução do agente; "Melhor do ano" = média de todos os meses
 aj2 = ler("assets/album.js")
 checar("carta.js: clicar na cartinha abre a evolução do agente (link do álbum ou agente.html?id=&mes=)",
@@ -137,7 +137,7 @@ checar("Lendária: tipografia clara definida por variável real",
        prop_css(lendaria_css, "--tx") == "#ffffff")
 checar("Lendária: moldura com paleta dourada real",
        prop_css(lendaria_css, "--b1") == "#8a6010" and
-       prop_css(lendaria_css, "--b2") == "#f0c830" and
+       prop_css(lendaria_css, "--b2") == "#f0c840" and
        prop_css(lendaria_css, "--b3") == "#fff8e0" and
        prop_css(lendaria_css, "--bw") == "7px")
 checar("Lendária: filete interno dourado implementado por borda/sombra",
@@ -147,7 +147,7 @@ checar("Lendária: filete interno dourado implementado por borda/sombra",
 checar("Top 3 90–99: carta roxo/magenta e borda definida no seletor do tier",
        ".carta.t-destaque" in cc and
        "--c1: #2A0A3C" in cc and
-       "--b2: #FF63C7" in cc and
+       "--b2: #FF4DB8" in cc and
        ".carta.t-destaque .c-ovr b" in cc and
        "'t-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7']" in cj)
 checar("PNG do Top 3 usa brilho magenta, não o antigo verde ou dourado",
@@ -172,7 +172,7 @@ checar("raio premium: Destaque também recebe raios, arcos e clarão (markup) e 
 checar("raios, arcos e clarão são absolutos dentro do cartão (a regra `.carta > *` não pode pô-los no fluxo)",
        ".carta > .c-estrelas,\n.carta > .c-arcos,\n.carta > .c-flash { position: absolute; }" in cc)
 checar("rodapé do cartão do 1º mês cabe no escudo (texto curto «1º mês», não «sem mês anterior»)", "' 1º mês'" in cj and "sem mês anterior" not in cj and "replace('1º mês'" in ler("assets/album.js"))
-checar("compactação: o conteúdo do cartão cabe nos 392 px (estatísticas, nome e foto menores que no refinamento)", ".carta .c-foto { width: 94px; height: 94px;" in cc and ".c-stats > div { padding: 4px 9px;" in cc)
+checar("compactação: o conteúdo do cartão cabe nos 392 px (estatísticas, nome e foto menores que no refinamento)", ".carta .c-foto { width: 108px; height: 108px;" in cc and ".c-stats > div { padding: 4px 9px;" in cc)
 
 print()
 if falhas:
