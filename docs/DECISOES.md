@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 19/11/2026 (5) — suíte das cartinhas e testes que aceitam mudança de cor
+- Nova `scripts/test_cartinhas_navegador.py` (navegador): 8 tiers, cores/bordas/fontes/efeitos por invariantes (contraste, faixas, validade), movimento reduzido, HTML × PNG (principal e plano B) e vídeo/áudio/animações **só medidos**. Limites em `CONFIG`; guia em `docs/TESTES_CARTINHAS.md`.
+- `test_album.py` deixou de travar hex: valida «cor válida», três cores de moldura e espessura em px.
+- A suíte achou 2 defeitos no PNG plano B (canvas), corrigidos em `carta.js`: `arc` com raio negativo e fundo dourado no Destaque (o CSS pinta roxo em `.carta.b-top`).
+
 ## 19/11/2026 (4) — cartinha: borda arredondada de verdade e louros fora da moldura
 - O `.carta{border-radius:10px}` do bloco «ULTRA» sobrepunha o `--radius: 18px`: o anel/PNG (18) ficava diferente do recorte do cartão (10). Removido: um raio só.
 - Louros do ouro seguiam o escudo antigo (canto chanfrado) e entravam sobre a borda arredondada: o ramo agora contorna o retângulo a 11 px, com arco de raio 29 no canto (HTML e PNG usam a mesma lista de peças).

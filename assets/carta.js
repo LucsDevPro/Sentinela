@@ -244,6 +244,7 @@
       var logo = r[3], cr = card.getBoundingClientRect(), W = cr.width * S, H = cr.height * S;
       var cv = document.createElement('canvas'); cv.width = Math.round(W + 2 * M * S); cv.height = Math.round(H + 2 * M * S);
       var ctx = cv.getContext('2d'), cs = getComputedStyle(card), c1 = cs.getPropertyValue('--c1').trim(), c2 = cs.getPropertyValue('--c2').trim(), ln = cs.getPropertyValue('--ln').trim();
+      if (isTop) { c1 = '#2E0A48'; c2 = '#080214'; }   // Destaque: o CSS pinta o fundo roxo em .carta.b-top (as variáveis --c1/--c2 seguem douradas)
       var X = M * S, Y = M * S;
       ctx.fillStyle = '#EEF2F8'; ctx.fillRect(0, 0, cv.width, cv.height);
       ornCanvas(ctx, borda0, 'atras', X, Y, S);   // louros / cristais / aletas atrás do cartão
@@ -278,14 +279,14 @@
         ctx.save(); ctx.shadowColor = 'rgba(220,170,50,.7)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
         ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(232,196,96,.95)'; ctx.stroke(); ctx.restore();
       }
-      ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 - bw / 2, 0, 2 * Math.PI); ctx.fillStyle = fs.backgroundColor; ctx.fill();
+      ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, Math.max(0, fr.w / 2 - bw / 2), 0, 2 * Math.PI); ctx.fillStyle = fs.backgroundColor; ctx.fill();
       var ft = r[4];
       if (ft) { // foto recortada em círculo (object-fit: cover, ancorada em 50% 30%)
         var ds = fr.w - 2 * bw, k = Math.max(ds / ft.width, ds / ft.height), dw = ft.width * k, dh = ft.height * k;
-        ctx.save(); ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, ds / 2, 0, 2 * Math.PI); ctx.clip();
+        ctx.save(); ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, Math.max(0, ds / 2), 0, 2 * Math.PI); ctx.clip();
         ctx.drawImage(ft, fr.x + bw - (dw - ds) * .5, fr.y + bw - (dh - ds) * .3, dw, dh); ctx.restore();
       }
-      ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 - bw / 2, 0, 2 * Math.PI); ctx.lineWidth = bw; ctx.strokeStyle = ln; ctx.stroke();
+      ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, Math.max(0, fr.w / 2 - bw / 2), 0, 2 * Math.PI); ctx.lineWidth = bw; ctx.strokeStyle = ln; ctx.stroke();
       // linhas (bordas) do cartão
       [['.c-pos', 'top'], ['.c-nome', 'bottom'], ['.c-stats', 'bottom']].forEach(function (p) {
         var e = card.querySelector(p[0]), r0 = rel(e), w0 = parseFloat(getComputedStyle(e)['border' + (p[1] === 'top' ? 'Top' : 'Bottom') + 'Width']) * S;

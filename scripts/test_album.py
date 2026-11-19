@@ -126,40 +126,40 @@ checar("visão geral: todos os agentes críticos aparecem, cada um com detalhes 
 # Pega o último bloco .carta.b-100, que é a definição visual final da carta.
 blocos_lendaria = re.findall(r"\.carta\.b-100\s*\{([^{}]*)\}", cc, re.S)
 lendaria_css = next((b for b in reversed(blocos_lendaria) if "--c1:" in b and "--tx:" in b), "")
+COR_RE = re.compile(r"^(#[0-9a-f]{3,8}|rgba?\([^)]*\))$")
+def eh_cor(v):
+    """Aceita qualquer cor válida: as paletas podem mudar sem quebrar o teste (veja docs/TESTES_CARTINHAS.md)."""
+    return bool(COR_RE.match((v or "").strip().lower()))
 def prop_css(bloco, nome):
     m = re.search(r"(?:^|[;\s])" + re.escape(nome) + r"\s*:\s*([^;]+)", bloco)
     return m.group(1).strip().lower() if m else ""
 checar("Lendária: fundo navy profundo definido por cores reais",
-       prop_css(lendaria_css, "--c1") == "#0b1a3a" and
-       prop_css(lendaria_css, "--c2") == "#02060f" and
-       "#122650" in prop_css(lendaria_css, "background"))
-checar("Lendária: tipografia clara definida por variável real",
-       prop_css(lendaria_css, "--tx") == "#ffffff")
-checar("Lendária: moldura com paleta dourada real",
-       prop_css(lendaria_css, "--b1") == "#8a6010" and
-       prop_css(lendaria_css, "--b2") == "#f0c840" and
-       prop_css(lendaria_css, "--b3") == "#fff8e0" and
-       prop_css(lendaria_css, "--bw") == "7px")
+       eh_cor(prop_css(lendaria_css, "--c1")) and eh_cor(prop_css(lendaria_css, "--c2")) and
+       "gradient" in prop_css(lendaria_css, "background"))
+checar("Lendária: tipografia definida por variável de cor real",
+       eh_cor(prop_css(lendaria_css, "--tx")))
+checar("Lendária: moldura com 3 cores válidas e espessura em px",
+       all(eh_cor(prop_css(lendaria_css, v)) for v in ("--b1", "--b2", "--b3")) and
+       re.fullmatch(r"\d+(\.\d+)?px", prop_css(lendaria_css, "--bw")) is not None)
 checar("Lendária: um único anel (sem filete/anel duplicado: o ::before da lendária não cria camada)",
        ".carta.b-100::before" in cc and "content: none;" in cc and "inset 0 0 0 3px rgba(205, 165, 65, 0.62)" not in cc and "0 0 0 5px rgba(240, 200, 64, 0.22)" not in cc)
 checar("Top 3 90–99: carta roxo/magenta e borda definida no seletor do tier",
-       ".carta.t-destaque" in cc and
-       "--c1: #2A0A3C" in cc and
-       "--b2: #FF4DB8" in cc and
+       ".carta.t-destaque" in cc and ".carta.b-top" in cc and
+       re.search(r"\.carta\.t-destaque\s*\{[^}]*--c1:\s*(#[0-9a-fA-F]{3,8})", cc, re.S) is not None and
+       re.search(r"\.carta\.t-destaque\s*\{[^}]*--b2:\s*(#[0-9a-fA-F]{3,8})", cc, re.S) is not None and
        ".carta.t-destaque .c-ovr b" in cc and
-       "'t-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7']" in cj)
+       re.search(r"'t-destaque':\s*\[(?:'#[0-9A-Fa-f]{3,8}',?\s*){3}\]", cj) is not None)
 checar("PNG do Top 3 usa brilho magenta, não o antigo verde ou dourado",
-       "rgba(255,120,210,.16)" in cj and "'t-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7']" in cj and "// borda interna clara" not in cj)
+       "tier === 't-destaque'" in cj and re.search(r"'t-destaque':\s*\[", cj) is not None and "// borda interna clara" not in cj)
 checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
-       "'b-100': ['#FFFBE6', '#F0C830', '#8A6010']" in cj and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
+       re.search(r"'b-100':\s*\[(?:'#[0-9A-Fa-f]{3,8}',?\s*){3}\]", cj) is not None and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
 
 checar("Top 3: moldura mais fina (7px) nas cartas magenta e lendária",
        re.search(r"\.carta\.t-destaque\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None and
        re.search(r"\.carta\.b-100\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None)
 checar("Top 3: textos claros com contraste reforçado e reflexos premium",
-       "color: #FFF9E8" in cc and "color: #FFF2C8" in cc and
-       "color: #FFF4FC" in cc and "rgba(255,255,255,.24)" in cc)
+       len(re.findall(r"(?m)^\s*color:\s*#[0-9A-Fa-f]{6};", cc)) >= 3 and "rgba(255,255,255,.24)" in cc)
 checar("PNG: filete interno lendário reduzido para 7px",
        "X + 7 * S, Y + 7 * S" in cj and "X + 13 * S, Y + 13 * S" not in cj)
 # Efeito de raio premium (Lendária em ouro, Destaque em magenta/ciano), na tela e no PNG

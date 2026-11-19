@@ -41,6 +41,7 @@ python3 scripts/gerar_mapa.py            # atualiza docs/MAPA.md (--check só ve
 python3 scripts/regerar_paginas.py       # regera TODAS as páginas a partir dos dados (~20 s); --so-home só o index
 python3 scripts/resumo.py meses|deteccoes|ranking|cronograma|manifest   # consultas curtas: use em vez de ler JSON/xlsx
 python3 scripts/regenerar_mes.py "Setembro/2026"   # refaz um mês congelado (ou `todos`); veja docs/OPERACAO.md
+python3 scripts/test_cartinhas_navegador.py [--rapido|--top5]   # suíte das cartinhas no Chromium (tiers, cores, PNG×HTML, movimento, vídeo/áudio); ao mexer em cartinha/vídeo/som. Veja docs/TESTES_CARTINHAS.md
 python3 tools/comparar_saidas.py         # refatorou o gerador? exige saída idêntica à do HEAD (--autoteste prova que pega erro)
 ```
 Depois de gerar `_teste.html`, **apague** `_teste.html` e `partes/_teste*`.
