@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 19/11/2026 (4) — cartinha: borda arredondada de verdade e louros fora da moldura
+- O `.carta{border-radius:10px}` do bloco «ULTRA» sobrepunha o `--radius: 18px`: o anel/PNG (18) ficava diferente do recorte do cartão (10). Removido: um raio só.
+- Louros do ouro seguiam o escudo antigo (canto chanfrado) e entravam sobre a borda arredondada: o ramo agora contorna o retângulo a 11 px, com arco de raio 29 no canto (HTML e PNG usam a mesma lista de peças).
+- Badge do ranking (Sala) subiu para fora do canto (`.slot .n`), sem cobrir a nota.
+- Testes de `test_album.py` ajustados às correções de moldura única já feitas na `main` (sem filete/anel duplicado).
+
 ## 19/11/2026 (3) — Sala de Troféus (patch tudo-main) aplicado com ajustes
 - Aplicado: álbum renomeado «Sala de Troféus» (vitrine escura com pedestais), cartinha em retângulo arredondado (`--radius: 18px`; PNG via `FORMA_R`/`roundRect`), foto maior, estatísticas em chips, posição «Nº · total».
 - Ficou de fora de propósito (o patch vinha de uma cópia antiga e desfazia trabalho recente): laço de gravação/fade do vídeo, ganho do som, eixos dos gráficos (`suggestedMax`) e o selo «100» (continua removido).

@@ -1428,7 +1428,6 @@ body.sem-foto .c-foto img {
 
 /* SENTINELA ULTRA — acabamento colecionável refinado; preserva classes, tiers e dimensões. */
 .carta{
-  border-radius:10px;
   box-shadow:0 24px 54px rgba(0,0,0,.42),0 8px 18px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.68),inset 0 0 0 1px rgba(255,255,255,.2);
   transform-style:preserve-3d;
   isolation:isolate;

@@ -145,9 +145,9 @@
     if (borda === 'b-80') { // prata: uma aleta de cada lado, colada na lateral reta do escudo (x=0, y 202→356) e com as pontas em 45°
       var f = [[0, 200], [-12, 214], [-12, 344], [0, 358]]; atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
     }
-    if (borda === 'b-90') { // ouro: dois ramos de louro que ACOMPANHAM o contorno do escudo (a ~8 px de fora), da gema até a altura do ombro
-      /* haste = caminho paralelo à borda: fundo reto → canto chanfrado (30×26) → lateral reta. Folhas amostradas por distância ao longo dela. */
-      var haste = [[112, 400], [60, 400], [34, 400], [22, 394], [4, 376], [-8, 362], [-8, 300], [-8, 230], [-8, 176]], seg = [], tot = 0;
+    if (borda === 'b-90') { // ouro: dois ramos de louro que ACOMPANHAM o contorno do cartão arredondado (a ~11 px de fora; canto = arco de raio 29 centrado em (18,374)), da gema até a altura do ombro
+      /* haste = caminho paralelo à borda: fundo reto → canto em arco → lateral reta. Folhas amostradas por distância ao longo dela. */
+      var haste = [[112, 403], [60, 403], [30, 403], [18, 403], [7.0, 401.0], [-2.5, 394.5], [-9.1, 385.2], [-11, 374], [-11, 300], [-11, 230], [-11, 176]], seg = [], tot = 0;
       for (i = 1; i < haste.length; i++) { var sl = Math.hypot(haste[i][0] - haste[i - 1][0], haste[i][1] - haste[i - 1][1]); seg.push(sl); tot += sl; }
       n = 17;
       for (lado = 0; lado < 2; lado++) {

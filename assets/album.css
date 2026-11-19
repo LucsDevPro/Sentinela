@@ -135,7 +135,7 @@ select:focus,input[type=search]:focus{border-color:var(--pri);box-shadow:0 0 0 3
   pointer-events:none;z-index:0}
 .slot:hover,.slot:focus-visible{z-index:20;transform:translateY(-8px);filter:drop-shadow(0 0 18px rgba(240,200,64,.28)) drop-shadow(0 18px 28px rgba(0,0,0,.45))}
 .slot:hover .c-conj,.slot:focus-visible .c-conj{--s:calc(var(--e)*1.05)}
-.slot .n{position:absolute;left:-4px;top:-6px;z-index:3;min-width:34px;padding:2px 8px;border-radius:999px;background:#1A1208;color:#fff;font:700 .8rem "IBM Plex Sans",sans-serif;text-align:center;border:2px solid #F0C840;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.slot .n{position:absolute;left:-10px;top:-18px;z-index:3;min-width:34px;padding:2px 8px;border-radius:999px;background:#1A1208;color:#fff;font:700 .8rem "IBM Plex Sans",sans-serif;text-align:center;border:2px solid #F0C840;box-shadow:0 4px 12px rgba(0,0,0,.4)}
 .slot .n.m1{background:linear-gradient(135deg,#FFF3B0,#F0C840 55%,#C98A00);color:#3A2600;border-color:#FFF3B0;box-shadow:0 0 16px rgba(240,200,64,.75)}
 .slot .n.m2{background:linear-gradient(135deg,#F7FAFD,#B8C6D6 55%,#7F93A8);color:#1B2A3C;border-color:#fff}
 .slot .n.m3{background:linear-gradient(135deg,#FFD9B0,#D08A48 55%,#8A4E1C);color:#2B1204;border-color:#FFD9B0}

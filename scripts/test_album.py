@@ -140,10 +140,8 @@ checar("Lendária: moldura com paleta dourada real",
        prop_css(lendaria_css, "--b2") == "#f0c840" and
        prop_css(lendaria_css, "--b3") == "#fff8e0" and
        prop_css(lendaria_css, "--bw") == "7px")
-checar("Lendária: filete interno dourado implementado por borda/sombra",
-       ".carta.b-100::before" in cc and
-       "inset 0 0 0 3px rgba(205, 165, 65, 0.62)" in cc and
-       "inset 0 0 0 6px rgba(130, 95, 20, 0.20)" in cc)
+checar("Lendária: um único anel (sem filete/anel duplicado: o ::before da lendária não cria camada)",
+       ".carta.b-100::before" in cc and "content: none;" in cc and "inset 0 0 0 3px rgba(205, 165, 65, 0.62)" not in cc and "0 0 0 5px rgba(240, 200, 64, 0.22)" not in cc)
 checar("Top 3 90–99: carta roxo/magenta e borda definida no seletor do tier",
        ".carta.t-destaque" in cc and
        "--c1: #2A0A3C" in cc and
@@ -151,7 +149,7 @@ checar("Top 3 90–99: carta roxo/magenta e borda definida no seletor do tier",
        ".carta.t-destaque .c-ovr b" in cc and
        "'t-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7']" in cj)
 checar("PNG do Top 3 usa brilho magenta, não o antigo verde ou dourado",
-       "rgba(255,120,210,.16)" in cj and "tier === 't-destaque' ? '#FF6BCB'" in cj)
+       "rgba(255,120,210,.16)" in cj and "'t-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7']" in cj and "// borda interna clara" not in cj)
 checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
        "'b-100': ['#FFFBE6', '#F0C830', '#8A6010']" in cj and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
