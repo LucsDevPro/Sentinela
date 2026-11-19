@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 19/11/2026 — nota SEM teto de 100 (realidade total)
+- Decisão da coordenação: cartinhas e ranking mostram a nota real (100 + critérios, ex.: 109,1), sem corte em 100. `NOTA_MAXIMA = None` em `coleta/pontos.py` (um número volta o teto); o piso 0 continua.
+- Meses congelados foram refeitos com `regenerar_mes.py todos` (só subiram as notas que estavam cortadas; nenhuma desceu; backups em `data/historico/backup_congelado/`). Gráficos usam `suggestedMax: 100` (eixo cresce), sparkline escala até a maior nota, textos de transparência/resumo/cartão não falam mais em «limitada a 100».
+- Cartão: «LENDÁRIA» (top 3 com ≥100) e «ELITE» (≥100 fora do pódio) seguem as mesmas regras; as seis medidas (0–99) continuam dentro de ±20 da nota (teto 99). `bruta()` só recalcula para dados antigos que ainda tragam 100.
+
 ## 18/11/2026 (4) — vídeo mais leve (patch do usuário + ajustes)
 - Aplicado o patch: menos raios/partículas, menos trovões e ganho do som 0,55 (era 0,85, estourava), progresso em % no botão, escala da carta pela largura real do PNG, canvas sem alfa, bitrate 4,5 Mbps.
 - Ajustes sobre o patch: mantido o fade-out do som no fim; escala `W*0,89/largura` (igual à antiga para 664 px; o teto 0,92 encolhia a carta); laço de quadros com `setTimeout` descontando o tempo de desenho (medido: `requestAnimationFrame` deu ~7 fps contra ~14 do antigo e ~17 do novo) e vigia que encerra a gravação se os timers atrasarem.

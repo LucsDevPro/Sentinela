@@ -983,14 +983,15 @@ def _ler_ranking_rapido(path):
         wb.close()
 
 def _sparkline(valores, w=92, h=24):
-    """Mini-gráfico (SVG inline) da pontuação mês a mês, escala fixa 0–100 pra
+    """Mini-gráfico (SVG inline) da pontuação mês a mês, escala 0–100 (maior, se a nota passar de 100) pra
     os gráficos de agentes diferentes serem comparáveis. Meses sem registro
     ficam de fora da linha. Precisa de pelo menos 2 meses."""
     pts = [(i, v["pontos"]) for i, v in enumerate(valores) if v]
     if len(pts) < 2:
         return Markup("")
     n = max(len(valores) - 1, 1)
-    xy = [(2 + (w - 4) * i / n, 2 + (h - 4) * (1 - max(0.0, min(100.0, p)) / 100)) for i, p in pts]
+    topo = max(100.0, max(p for _, p in pts))   # sem teto de nota: a escala cresce se alguém passar de 100
+    xy = [(2 + (w - 4) * i / n, 2 + (h - 4) * (1 - max(0.0, min(topo, p)) / topo)) for i, p in pts]
     linha = " ".join(f"{x:.1f},{y:.1f}" for x, y in xy)
     ux, uy = xy[-1]
     return Markup(f'<svg class="spark" viewBox="0 0 {w} {h}" width="{w}" height="{h}" aria-hidden="true">'

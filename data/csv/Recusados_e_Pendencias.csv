@@ -1,48 +1,48 @@
 ﻿RESUMO DE PENDÊNCIA POR AGENTE (com Total Geral) — % Pendência = (Fechados + Recusados) / (Abertos+Fechados+Recusados);;;;;;;;
 Agente;Equipe;Imóveis Abertos;Imóveis Fechados;Imóveis Recusados;Total Geral;% Pendência;;
-Adriana de Jesus Saraiva;Equipe 1;1668;528;1;2197;24.08;;
-Adriano Ricardo Thiel;Equipe 1;1205;528;0;1733;30.47;;
-Ana Gabriela Silva Garcete;Equipe 1;1671;601;1;2273;26.48;;
-Carlos Alberto Albiero;Equipe 1;2043;282;8;2333;12.43;;
-Cris Milene Cardenas da Silva;Equipe 1;1560;885;0;2445;36.2;;
-Evelyn Santana Santos Oliveira;Equipe 1;1485;796;2;2283;34.95;;
-Gabriel Alan de Oliveira Martins;Equipe 1;1421;831;1;2253;36.93;;
-Raquel Ortiz dos Santos;Equipe 1;1550;899;2;2451;36.76;;
-Rozentina Matos de Oliveira;Equipe 1;1623;953;3;2579;37.07;;
-Wagner Tarlei Gomes;Equipe 1;1621;282;1;1904;14.86;;
-Bianca Afonso Narbaez;Equipe 2;1679;360;0;2039;17.66;;
-Brauher Luiz Alvarenga Gonzalez;Equipe 2;1801;965;5;2771;35.01;;
-Cicero Isrrael Sanabria;Equipe 2;1589;343;1;1933;17.8;;
-Fabiana de Figueredo Vieira;Equipe 2;1653;392;0;2045;19.17;;
+Adriana de Jesus Saraiva;Equipe 1;1869;596;1;2466;24.21;;
+Adriano Ricardo Thiel;Equipe 1;1344;588;0;1932;30.43;;
+Ana Gabriela Silva Garcete;Equipe 1;1833;678;1;2512;27.03;;
+Carlos Alberto Albiero;Equipe 1;2230;292;8;2530;11.86;;
+Cris Milene Cardenas da Silva;Equipe 1;1722;940;0;2662;35.31;;
+Evelyn Santana Santos Oliveira;Equipe 1;1601;870;2;2473;35.26;;
+Gabriel Alan de Oliveira Martins;Equipe 1;1537;898;1;2436;36.9;;
+Raquel Ortiz dos Santos;Equipe 1;1684;980;2;2666;36.83;;
+Rozentina Matos de Oliveira;Equipe 1;1904;1175;3;3082;38.22;;
+Wagner Tarlei Gomes;Equipe 1;1684;283;1;1968;14.43;;
+Bianca Afonso Narbaez;Equipe 2;1905;409;0;2314;17.68;;
+Brauher Luiz Alvarenga Gonzalez;Equipe 2;1939;1019;5;2963;34.56;;
+Cicero Isrrael Sanabria;Equipe 2;1647;350;1;1998;17.57;;
+Fabiana de Figueredo Vieira;Equipe 2;1842;425;0;2267;18.75;;
 Gilmar Bitencourt Luiz;Equipe 2;1618;374;0;1992;18.78;;
-Gisele Olimpia Torres;Equipe 2;1659;854;6;2519;34.14;;
-Mateus Falcao de Souza;Equipe 2;1595;528;1;2124;24.91;;
-Suely Aguiar Alves Luiz;Equipe 2;1671;245;0;1916;12.79;;
-Tania Maria Montania;Equipe 2;1613;224;0;1837;12.19;;
-Teonilda Florentino Vieira;Equipe 2;672;399;1;1072;37.31;;
-Wesley de Souza Leal;Equipe 2;1641;348;0;1989;17.5;;
-William Anderson Chamorro Tavares;Equipe 2;1639;671;0;2310;29.05;;
+Gisele Olimpia Torres;Equipe 2;1904;937;10;2851;33.22;;
+Mateus Falcao de Souza;Equipe 2;1719;545;1;2265;24.11;;
+Suely Aguiar Alves Luiz;Equipe 2;1904;265;0;2169;12.22;;
+Tania Maria Montania;Equipe 2;1876;246;0;2122;11.59;;
+Teonilda Florentino Vieira;Equipe 2;725;414;1;1140;36.4;;
+Wesley de Souza Leal;Equipe 2;1812;378;1;2191;17.3;;
+William Anderson Chamorro Tavares;Equipe 2;1833;743;0;2576;28.84;;
 Alana Amanda Fernandes Ovelar;Equipe 3;468;279;0;747;37.35;;
-Claine Luisa Figueiredo Torraca;Equipe 3;1603;1447;2;3052;47.48;;
-Emidio Rainer Vilhalba;Equipe 3;1634;872;27;2533;35.49;;
-Geancarlos Ferreira Barrios;Equipe 3;1252;590;1;1843;32.07;;
-Marco Antonio Ayala de Matos Freitas;Equipe 3;1243;1101;0;2344;46.97;;
-Miglidiane Maciel Ajala;Equipe 3;1225;216;0;1441;14.99;;
-Naime Cristina Freitas;Equipe 3;1518;1169;10;2697;43.72;;
-Patricia Lanjer de Souza Domingues;Equipe 3;96;99;0;195;50.77;;
-Rosalina Beniel Vargas;Equipe 3;1503;1405;19;2927;48.65;;
-Selba Ramona Afonso;Equipe 3;1704;723;0;2427;29.79;;
-Anderson Jose de Santana;Equipe 4;1614;649;2;2265;28.74;;
-Gisele Lopes Justiniano;Equipe 4;1641;894;1;2536;35.29;;
-Juliana Patricia Goncalves;Equipe 4;1203;614;0;1817;33.79;;
-Kariele Jackeline Rodrigues Silva;Equipe 4;1722;655;2;2379;27.62;;
-Kátia Cilene Silveira Machado;Equipe 4;1245;509;1;1755;29.06;;
-Rafael Ramos Recalde;Equipe 4;1734;455;1;2190;20.82;;
-Ramona dos Santos Oliveira;Equipe 4;1368;512;1;1881;27.27;;
-Rozana Reis da Silva;Equipe 4;1623;1024;0;2647;38.69;;
-Sara Eliane Talaveira de Oliveira;Equipe 4;1710;558;2;2270;24.67;;
-Silvina Regina de Souza Valiente;Equipe 4;1260;582;3;1845;31.71;;
-Walquiria Araujo Flores;Equipe 4;1653;879;4;2536;34.82;;
+Claine Luisa Figueiredo Torraca;Equipe 3;1762;1573;2;3337;47.2;;
+Emidio Rainer Vilhalba;Equipe 3;1741;953;29;2723;36.06;;
+Geancarlos Ferreira Barrios;Equipe 3;1441;647;2;2090;31.05;;
+Marco Antonio Ayala de Matos Freitas;Equipe 3;1347;1226;0;2573;47.65;;
+Miglidiane Maciel Ajala;Equipe 3;1317;219;0;1536;14.26;;
+Naime Cristina Freitas;Equipe 3;1603;1209;10;2822;43.2;;
+Patricia Lanjer de Souza Domingues;Equipe 3;249;127;0;376;33.78;;
+Rosalina Beniel Vargas;Equipe 3;1664;1546;22;3232;48.51;;
+Selba Ramona Afonso;Equipe 3;1958;833;1;2792;29.87;;
+Anderson Jose de Santana;Equipe 4;1784;696;2;2482;28.12;;
+Gisele Lopes Justiniano;Equipe 4;1826;1032;1;2859;36.13;;
+Juliana Patricia Goncalves;Equipe 4;1240;623;0;1863;33.44;;
+Kariele Jackeline Rodrigues Silva;Equipe 4;1873;728;2;2603;28.04;;
+Kátia Cilene Silveira Machado;Equipe 4;1323;541;1;1865;29.06;;
+Rafael Ramos Recalde;Equipe 4;1917;473;1;2391;19.82;;
+Ramona dos Santos Oliveira;Equipe 4;1521;586;1;2108;27.85;;
+Rozana Reis da Silva;Equipe 4;1657;1033;0;2690;38.4;;
+Sara Eliane Talaveira de Oliveira;Equipe 4;1821;590;2;2413;24.53;;
+Silvina Regina de Souza Valiente;Equipe 4;1443;680;3;2126;32.13;;
+Walquiria Araujo Flores;Equipe 4;1754;900;4;2658;34.01;;
 Alvaro Delgado Brandao;Equipe Bloqueio;51;64;0;115;55.65;;
 Anderson Salabarrieto;Equipe Bloqueio;54;51;5;110;50.91;;
 André Luiz Benites Rocha;Equipe Bloqueio;16;10;0;26;38.46;;
@@ -52,7 +52,7 @@ Josoé de Oliveira;Equipe Bloqueio;44;70;0;114;61.4;;
 Marcos Alcindo Insalbralde;Equipe Bloqueio;29;17;0;46;36.96;;
 Robson Pavão Montania;Equipe Bloqueio;82;77;0;159;48.43;;
 Silvio de Aquino;Equipe Bloqueio;78;35;0;113;30.97;;
-TOTAL GERAL;—;64186;27955;115;92256;30.43;;
+TOTAL GERAL;—;70331;30334;127;100792;30.22;;
 ;;;;;;;;
 ;;;;;;;;
 DETALHE — IMÓVEIS COM VISITA RECUSADA PELO MORADOR;;;;;;;;
@@ -94,11 +94,13 @@ Emidio Rainer Vilhalba;Equipe 3;16331177;425 - JARDIM ESTORIL;Q011;Avenida COSTA
 Emidio Rainer Vilhalba;Equipe 3;16331182;425 - JARDIM ESTORIL;Q011;Rua FRANCISCO FAUSTO MACENAS;640 - R;09/07/2026 15:47;09/07/2026 15:49
 Emidio Rainer Vilhalba;Equipe 3;17363261;426 - NOVA PONTA PORÃ;Q034;Rua LOURENÇO GOMES MONTEIRO;347 - R;09/09/2026 15:12;09/09/2026 15:13
 Emidio Rainer Vilhalba;Equipe 3;16366067;430 - VILA RENÔ;Q011;Avenida CAÇAPAVA;383 - R;10/07/2026 14:00;10/07/2026 14:00
+Emidio Rainer Vilhalba;Equipe 3;18373561;430 - VILA RENÔ;Q002;Rua MAGNOLIA;251 - R;10/11/2026 09:18;10/11/2026 09:18
 Emidio Rainer Vilhalba;Equipe 3;16389384;430 - VILA RENÔ;Q012;Rua INTENDENTE HELIODORO ALVES SALGUEIRO;1456 - R;13/07/2026 09:50;13/07/2026 09:50
 Emidio Rainer Vilhalba;Equipe 3;16389398;430 - VILA RENÔ;Q013;Rua CAMPO GRANDE;334 - R;13/07/2026 15:00;13/07/2026 15:00
 Emidio Rainer Vilhalba;Equipe 3;16457668;430 - VILA RENÔ;Q016;Avenida CAÇAPAVA;538 - R;15/07/2026 09:59;15/07/2026 10:00
 Emidio Rainer Vilhalba;Equipe 3;17477876;430 - VILA RENÔ;Q011;Avenida CAÇAPAVA;383 - R;16/09/2026 14:21;16/09/2026 14:21
 Emidio Rainer Vilhalba;Equipe 3;17477879;430 - VILA RENÔ;Q011;Rua INTENDENTE HELIODORO ALVES SALGUEIRO;1472 - R;16/09/2026 14:26;16/09/2026 14:27
+Emidio Rainer Vilhalba;Equipe 3;18505700;430 - VILA RENÔ;Q009;Rua HUMAITA;68 - R;16/11/2026 16:03;16/11/2026 16:05
 Emidio Rainer Vilhalba;Equipe 3;16959205;430 - VILA RENÔ;Q034;Rua INTENDENTE JOÃO DA SILVA BRANDÃO;1212 - R;17/08/2026 15:03;17/08/2026 15:05
 Emidio Rainer Vilhalba;Equipe 3;17512109;430 - VILA RENÔ;Q014;Rua RIACHUELO;232 - R;17/09/2026 15:38;17/09/2026 15:38
 Emidio Rainer Vilhalba;Equipe 3;17512116;430 - VILA RENÔ;Q015;Rua RIACHUELO;156 - R;17/09/2026 16:12;17/09/2026 16:12
@@ -113,11 +115,16 @@ Evelyn Santana Santos Oliveira;Equipe 1;17767858;405 - ALTOS DA GLÓRIA;Q021;Rua
 Evelyn Santana Santos Oliveira;Equipe 1;16311092;405 - ALTOS DA GLÓRIA;Q035;Rua ADALBERTO FROES;120 - 1 - TB;08/07/2026 09:34;08/07/2026 09:34
 Fabio Teodoro Alves Alexo;Equipe Bloqueio;16641917;427 - JAMIL SALDANHA DERZI;Q027;Rua MAMOEIRO;578 - 3 - R;28/07/2026 09:35;28/07/2026 09:37
 Gabriel Alan de Oliveira Martins;Equipe 1;17751010;435 - JARDIM PRIMOR;Q023;Rua RIO PRETO;206 - R;28/09/2026 09:35;28/09/2026 09:40
+Geancarlos Ferreira Barrios;Equipe 3;18478935;427 - JAMIL SALDANHA DERZI;Q011;Rua OVIDIO DERZI;802 - R;13/11/2026 10:00;13/11/2026 10:00
 Geancarlos Ferreira Barrios;Equipe 3;16118732;427 - JAMIL SALDANHA DERZI;Q052;Rua ESTEPHANIA SALDANHA DERZI;01 - TB;29/06/2026 09:54;29/06/2026 10:00
 Gisele Lopes Justiniano;Equipe 4;16603567;441 - PARQUE DOS IPES;Q037;Rua HEROTILDE SALDANHA MOREIRA;135 - R;24/07/2026 09:29;24/07/2026 09:29
 Gisele Olimpia Torres;Equipe 2;16759761;421 - JARDIM IPANEMA;Q020;Rua HUMAITA;359 - R;05/08/2026 15:52;05/08/2026 15:52
 Gisele Olimpia Torres;Equipe 2;16377966;421 - JARDIM IPANEMA;Q015;Rua INTENDENTE HELIODORO ALVES SALGUEIRO;1263 - R;10/07/2026 15:00;10/07/2026 15:01
 Gisele Olimpia Torres;Equipe 2;17392192;421 - JARDIM IPANEMA;Q015;Rua INTENDENTE HELIODORO ALVES SALGUEIRO;1263 - R;10/09/2026 14:17;10/09/2026 14:17
+Gisele Olimpia Torres;Equipe 2;18398939;421 - JARDIM IPANEMA;Q012;Rua INTENDENTE HELIODORO ALVES SALGUEIRO;936 - R;11/11/2026 09:59;11/11/2026 09:59
+Gisele Olimpia Torres;Equipe 2;18446085;421 - JARDIM IPANEMA;Q012;Rua BALTAZAR SALDANHA;2094 - R;12/11/2026 14:23;12/11/2026 14:23
+Gisele Olimpia Torres;Equipe 2;18446104;421 - JARDIM IPANEMA;Q013;Rua SAO BORJA;134 - R;12/11/2026 15:04;12/11/2026 15:04
+Gisele Olimpia Torres;Equipe 2;18508516;421 - JARDIM IPANEMA;Q015;Rua INTENDENTE HELIODORO ALVES SALGUEIRO;1263 - R;16/11/2026 14:59;16/11/2026 14:59
 Gisele Olimpia Torres;Equipe 2;17511777;421 - JARDIM IPANEMA;Q027;Rua TAMOYO;55 - R;17/09/2026 14:09;17/09/2026 14:09
 Gisele Olimpia Torres;Equipe 2;16643421;421 - JARDIM IPANEMA;Q032;Rua CARLOS AUGUSTO PISSINI SOBREIRO;106 - R;28/07/2026 09:11;28/07/2026 09:11
 Gisele Olimpia Torres;Equipe 2;16643442;421 - JARDIM IPANEMA;Q024;Rua ITURAMA;164 - R;28/07/2026 14:44;28/07/2026 14:44
@@ -146,6 +153,9 @@ Rosalina Beniel Vargas;Equipe 3;16873040;424 - SÃO JOÃO;Q049;Avenida ADJALMA S
 Rosalina Beniel Vargas;Equipe 3;16918959;449 - ÁREA C RESIDENCIAL PONTA PORÃ 1;Q026;Rua CIPRESTE;601 - R;14/08/2026 10:34;14/08/2026 10:35
 Rosalina Beniel Vargas;Equipe 3;16446530;424 - SÃO JOÃO;Q031;Rua DAS AROEIRAS;412 - R;15/07/2026 16:02;15/07/2026 16:02
 Rosalina Beniel Vargas;Equipe 3;17480938;424 - SÃO JOÃO;Q011;Rua EMILIO DIAS BRANDAO;348 - R;16/09/2026 16:26;16/09/2026 16:26
+Rosalina Beniel Vargas;Equipe 3;18508863;424 - SÃO JOÃO;Q011;Rua EMILIO DIAS BRANDAO;348 - R;16/11/2026 10:05;16/11/2026 10:07
+Rosalina Beniel Vargas;Equipe 3;18508888;424 - SÃO JOÃO;Q014;Rua DAS PEROBAS;40 - 2 - R;16/11/2026 14:49;16/11/2026 14:50
+Rosalina Beniel Vargas;Equipe 3;18508912;424 - SÃO JOÃO;Q016;Rua DAS PEROBAS;74 - R;16/11/2026 16:20;16/11/2026 16:21
 Rosalina Beniel Vargas;Equipe 3;16956603;424 - SÃO JOÃO;Q051;Rua DAS PEROBAS;560 - R;17/08/2026 08:58;17/08/2026 08:58
 Rosalina Beniel Vargas;Equipe 3;16956627;424 - SÃO JOÃO;Q051;Rua RAMON FRANCO;635 - R;17/08/2026 14:10;17/08/2026 14:10
 Rosalina Beniel Vargas;Equipe 3;17515113;424 - SÃO JOÃO;Q014;Rua RAMON FRANCO;728 - R;17/09/2026 14:05;17/09/2026 14:05
@@ -163,6 +173,7 @@ Rozentina Matos de Oliveira;Equipe 1;16603437;426 - NOVA PONTA PORÃ;Q018;Rua RA
 Rozentina Matos de Oliveira;Equipe 1;17711314;407 - MOOCA;Q028;Rua SÃO TOMAZ;775 - R;29/09/2026 14:53;29/09/2026 14:53
 Sara Eliane Talaveira de Oliveira;Equipe 4;17287089;438 - JARDIM PLANALTO;Q005;Rua DOS DEPUTADOS;344 - R;03/09/2026 08:55;03/09/2026 08:57
 Sara Eliane Talaveira de Oliveira;Equipe 4;17021528;435 - JARDIM PRIMOR;Q004;Rua JOAO PESSOA;560 - R;19/08/2026 16:13;19/08/2026 16:14
+Selba Ramona Afonso;Equipe 3;18386307;431 - PANAMBI;Q009;Rua CURITIBA;269 - 1 - R;10/11/2026 15:55;10/11/2026 15:56
 Silvina Regina de Souza Valiente;Equipe 4;17793247;434 - VILA AUREA;Q014;Rua NATAL;292 - 1 - R;06/10/2026 16:23;06/10/2026 16:23
 Silvina Regina de Souza Valiente;Equipe 4;16874934;434 - VILA AUREA;Q025;Rua PORTO ALEGRE;629 - 3 - R;12/08/2026 10:14;12/08/2026 10:15
 Silvina Regina de Souza Valiente;Equipe 4;17980856;434 - VILA AUREA;Q031;Rua FORTALEZA;89 - R;19/10/2026 10:11;19/10/2026 10:11
@@ -172,3 +183,4 @@ Walquiria Araujo Flores;Equipe 4;16275868;440 - JARDIM IBIRAPUERA;Q018;Rua OLDEM
 Walquiria Araujo Flores;Equipe 4;16275874;440 - JARDIM IBIRAPUERA;Q018;Rua CAROLINA NACHREINER PELUCH;335 - 4 - R;06/07/2026 15:25;06/07/2026 15:25
 Walquiria Araujo Flores;Equipe 4;16475357;440 - JARDIM IBIRAPUERA;Q011;Rua ORLANDO CAMARGO;254 - 4 - R;15/07/2026 09:02;15/07/2026 09:02
 Walquiria Araujo Flores;Equipe 4;17952788;440 - JARDIM IBIRAPUERA;Q029;Rua VAGNER CIRILO PIANTONI;20 - 4 - R;16/10/2026 14:15;16/10/2026 14:15
+Wesley de Souza Leal;Equipe 2;18355170;417 - CENTRO 3;Q003;Rua GENERAL ALBERTO D. C. M. LIMA;53 - R;09/11/2026 09:19;09/11/2026 09:19

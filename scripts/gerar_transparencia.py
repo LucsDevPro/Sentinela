@@ -59,7 +59,7 @@ def exemplo():
         ("Visitas duplicadas", dupl, C.PONTOS_PERDA_VISITA_DUPLICADA, -dupl * C.PONTOS_PERDA_VISITA_DUPLICADA),
     ]
     total = sum(i[3] for i in itens)
-    final = max(C.NOTA_MINIMA, min(C.NOTA_MAXIMA, total))
+    final = max(C.NOTA_MINIMA, total if C.NOTA_MAXIMA is None else min(C.NOTA_MAXIMA, total))
     return dict(esperados_base=esperados_base, folga=folga, esperados=esperados, trab=trab, itens=itens,
                 total=total, final=final, presenca=trab / esperados)
 
@@ -113,14 +113,14 @@ def corpo_html():
             linhas_ex.append([e(nome), n(qtd, 0), n(peso), f'<span class="{"pos" if pts > 0 else "neg"}">{sinal}{n(abs(pts))}</span>'])
     linhas_ex.append(["<b>Soma</b>", "", "", f"<b>{n(ex['total'])}</b>"])
     if ex["total"] != ex["final"]:
-        linhas_ex.append([f"Limite da nota (entre {C.NOTA_MINIMA} e {C.NOTA_MAXIMA})", "", "", f"<b>{n(ex['final'])}</b>"])
+        linhas_ex.append([f"Limite da nota ({'mínimo ' + str(C.NOTA_MINIMA) if C.NOTA_MAXIMA is None else 'entre ' + str(C.NOTA_MINIMA) + ' e ' + str(C.NOTA_MAXIMA)})", "", "", f"<b>{n(ex['final'])}</b>"])
     linhas_ex.append(["<b>Nota final</b>", "", "", f"<b>{n(ex['final'])}</b>"])
 
     corpo = f"""
 <p class="mut">Este texto é gerado automaticamente a partir das regras que o sistema usa de verdade. Se uma regra mudar, ele muda junto.</p>
 
 <h2>1. A ideia em uma frase</h2>
-<div class="destaque">Todo agente começa com <b>{C.PONTOS_INICIAIS} pontos</b>. Ganha pontos por dias bons, perde pontos por falhas, e a nota final fica sempre entre <b>{C.NOTA_MINIMA} e {C.NOTA_MAXIMA}</b>.
+<div class="destaque">Todo agente começa com <b>{C.PONTOS_INICIAIS} pontos</b>. Ganha pontos por dias bons, perde pontos por falhas, e a nota final {('nunca fica abaixo de <b>' + str(C.NOTA_MINIMA) + '</b> e <b>não tem teto</b>: quem soma mais de 100 mostra a nota real, sem corte') if C.NOTA_MAXIMA is None else ('fica sempre entre <b>' + str(C.NOTA_MINIMA) + ' e ' + str(C.NOTA_MAXIMA) + '</b>')}.
 Em todos os meses <b>não existe fator de normalização</b>: o mesmo peso vale para todos, e a conta é simplesmente quantidade × peso.</div>
 
 <h2>2. Dias esperados</h2>

@@ -47,7 +47,7 @@
       '<section><h2>Média por equipe</h2><table><thead><tr><th>Equipe</th><th class="r">Agentes</th><th class="r">Média</th><th class="r">Nota 100</th></tr></thead><tbody>' + eqLinhas.map(function (e) { return '<tr><td>' + esc(e.e) + '</td><td class="r">' + e.n + '</td><td class="r">' + br(e.m) + '</td><td class="r">' + e.c + '</td></tr>'; }).join('') + '</tbody></table></section></div>' +
       '<section class="cem"><h2>Tiraram 100 (' + tiraram.length + ')</h2>' + (tiraram.length ? '<ol>' + tiraram.map(function (l) { return '<li><span>' + esc(l.x.a.nome) + '</span> <i>' + esc((l.x.a.equipe || '').replace(/^Equipe\s*/i, 'Eq. ')) + '</i></li>'; }).join('') + '</ol>' : '<p class="mut">Ninguém chegou a 100 neste mês.</p>') + '</section>' +
       '<section class="obs"><h2>Anotações da reunião</h2><div class="linha"></div><div class="linha"></div><div class="linha"></div></section>' +
-      '<footer class="rod">Ordem: nota (limitada a 100); em empate, a nota bruta, depois a média dos meses anteriores, depois a posição oficial. Gerado em ' + new Date().toLocaleDateString('pt-BR') + ' a partir dos dados publicados no Sentinela.</footer>';
+      '<footer class="rod">Ordem: nota (sem teto de 100); em empate, a nota bruta, depois a média dos meses anteriores, depois a posição oficial. Gerado em ' + new Date().toLocaleDateString('pt-BR') + ' a partir dos dados publicados no Sentinela.</footer>';
     document.title = 'Resumo ' + mes + ' — Sentinela';
   }
 

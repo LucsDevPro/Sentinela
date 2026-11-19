@@ -6,11 +6,12 @@
   var f1 = function (n) { return Number(n).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }); };
   var SV = function (n) { return '<svg class="ico" aria-hidden="true"><use href="#i-' + n + '"/></svg>'; };
   var NOMES = { ASS: 'Assiduidade', TUR: 'Turnos cobertos', CON: 'Consistência', EVO: 'Evolução', POS: 'Posição', MED: 'Média dos meses' };
-  /* Nota "bruta": a nota oficial é limitada a 100, mas 100 + critérios pode passar (ex.: 110,6). Só vale para quem chegou ao teto; os demais usam a nota oficial.
+  /* Nota "bruta": até 18/11/2026 a nota oficial era limitada a 100 (meses congelados antes disso ainda trazem 100); aqui se recalcula 100 + critérios (ex.: 110,6) para quem está em 100. Sem teto, a nota oficial já é a real.
      Entre quem está no teto, o ranking do cartão e do álbum ordena pela bruta (depois a média dos meses anteriores, depois a posição oficial). */
   var r1 = function (n) { return Math.round(n * 10) / 10; };
   function bruta(u) {
     if (!u || u.pontos == null) return null;
+    if (u.pontos > 100.05) return u.pontos;   // sem teto (desde 19/11/2026): a nota oficial já é a real
     if (u.pontos < 99.95 || !u.detalhe || !u.detalhe.length) return u.pontos;
     return Math.max(100, r1(100 + u.detalhe.reduce(function (t, x) { return t + x[3]; }, 0)));
   }
@@ -493,7 +494,7 @@
     var c = criterios(u); if (!c.tem) return semDetalhe(reg);
     var linhas = c.linhas, det = u.detalhe, soma = c.soma, nota = Math.round(u.pontos * 10) / 10;
     var total = soma == null ? null : 100 + soma;
-    var obs = total == null ? '' : total > 100.05 ? ' <small>(a nota é limitada a 100)</small>' : (total < -0.05 ? ' <small>(a nota mínima é 0)</small>' : (Math.abs(total - nota) > 0.15 ? ' <small>(com ajustes do período, ex.: presença mínima)</small>' : ''));
+    var obs = total == null ? '' : (total < -0.05 ? ' <small>(a nota mínima é 0)</small>' : (Math.abs(total - nota) > 0.15 ? ' <small>(com ajustes do período, ex.: presença mínima)</small>' : ''));
     var ant = ms.slice(0, -1).map(function (m) { return m.pontos; }).filter(function (v) { return v != null; });
     var mh = ant.length ? ant.reduce(function (t, v) { return t + v; }, 0) / ant.length : null;
     var link = reg.id != null && !/agente\.html$/.test(location.pathname) ? '<a class="c-pop-link" href="agente.html?id=' + encodeURIComponent(reg.id) + '&mes=' + encodeURIComponent(mesNoLink(u.mes)) + '">Ver evolução do agente →</a>' : '';

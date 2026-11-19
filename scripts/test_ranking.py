@@ -57,13 +57,14 @@ def por_agente(principal):
     return {r["nome_agente"]: r for r in principal}
 
 
+check(C.NOTA_MAXIMA is None, "nota sem teto de 100 (decisão de 19/11/2026: mostrar a realidade total)")
 # --- Outubro: sem fator, peso efetivo = nominal -----------------------------
 princ, det = rodar(NOVO, [])
 check(all(d["fator_normalizacao"] == 1.0 and d["peso"] == d["peso_nominal"] for d in det),
       "Outubro: fator = 1,0 e peso efetivo = peso nominal em TODOS os critérios")
 for r in princ:
     soma = C.PONTOS_INICIAIS + sum(d["pontos"] for d in det if d["nome_agente"] == r["nome_agente"])
-    esperado = max(min(soma, C.NOTA_MAXIMA), C.NOTA_MINIMA)
+    esperado = max(soma if C.NOTA_MAXIMA is None else min(soma, C.NOTA_MAXIMA), C.NOTA_MINIMA)
     if abs(esperado - r["pontos"]) > 0.02:
         check(False, f"Outubro: pontos de {r['nome_agente']} = 100 + Σ(qtd × peso) ({esperado} ≠ {r['pontos']})")
         break

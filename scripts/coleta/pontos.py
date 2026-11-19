@@ -22,7 +22,7 @@ COLETAR_FECHADOS_RECUSADOS = True
 
 PONTOS_INICIAIS = 100
 NOTA_MINIMA = 0      # pontuação não cai abaixo disso (None = sem piso)
-NOTA_MAXIMA = 100    # pontuação não passa disso (None = sem teto)
+NOTA_MAXIMA = None   # SEM teto desde 19/11/2026: a nota mostra a realidade total (100 + critérios pode passar de 100). Um número (ex.: 100) volta o teto.
 # Teto do fator de normalização "por mês" (ver calcular_pontuacao) — evita
 # que quem trabalhou poucos dias no período (ex.: maioria de férias) tenha
 # qualquer deslize nesses poucos dias amplificado de forma extrema.

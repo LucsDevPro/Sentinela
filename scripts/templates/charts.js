@@ -66,7 +66,7 @@ new Chart(document.getElementById('chartTeam'), {
     type: 'bar',
     data: { labels: eqs, datasets: [serie('serie1', { label: 'Nota média do mês', data: valores, casas: 1 })] },
     options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 26 } },
-      scales: { y: { min: 0, max: 100 } },
+      scales: { y: { min: 0, suggestedMax: 100 } },
       plugins: { legend: { display: false }, valores: { ativo: true, posicao: 'ponta', tamanho: 13 } } }
   });
 })();

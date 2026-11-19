@@ -2,7 +2,7 @@
 
 Fonte única dos valores: `scripts/coleta/` (`pontos.py`, `parametros.py`, `deteccao.py`, `calculos.py`: ranking, ausências) e `scripts/generate_dashboard.py` (custos).
 
-## Pontuação (base 100, piso 0, teto 100)
+## Pontuação (base 100, piso 0, SEM teto desde 19/11/2026: a nota pode passar de 100 — `NOTA_MAXIMA = None`)
 Faixas: **≥ 90 Excelente · 75–89,9 Bom · 60–74,9 Atenção · < 60 Crítico**.
 
 | Critério | Pontos | Constante |

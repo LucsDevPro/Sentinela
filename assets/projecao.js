@@ -55,7 +55,7 @@ if(mesAtual){
   var eqNomes=Object.keys(porEq).sort();
   if(eqNomes.length) slide('equipes-mes','Nota média por equipe',mesAtual+' · mês completo, mesma nota das cartinhas',function(el){
     new Chart(canvasEm(el),{type:'bar',data:{labels:eqNomes,datasets:[{casas:1,data:eqNomes.map(function(e){return Math.round(porEq[e].s/porEq[e].c*10)/10;}),backgroundColor:eqNomes.map(function(e,i){return PAL[i%PAL.length];}),borderRadius:6}]},
-      options:opcoes({layout:{padding:{top:24}},plugins:{legend:{display:false}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:20}}},{min:0,max:100})}),plugins:[plugValores]});
+      options:opcoes({layout:{padding:{top:24}},plugins:{legend:{display:false}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:20}}},{min:0,suggestedMax:100})}),plugins:[plugValores]});
   });
 }
 if(listaMeses.length>1) slide('media','Média por mês','nota média de todos os agentes',function(el){

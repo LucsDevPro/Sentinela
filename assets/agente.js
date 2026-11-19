@@ -55,7 +55,7 @@ function porque(a, ult) {
     return `<tr><td><b>${esc(x.c)}</b><small>${esc(ajuda(x.c))}</small></td><td class="n mut">${aj ? '—' : fnum(x.q) + ' × ' + fnum(x.w)}</td><td class="n ${x.p < 0 ? 'neg' : x.p > 0 ? 'pos' : 'mut'}">${x.p === 0 ? '0,0' : sg(x.p)}</td><td class="n mut">${f1(Math.max(0, saldo))}</td></tr>`; };
   const corpoTab = desc.map(x => linha(x)).join('') + bon.map(x => linha(x)).join('') + neutros.map(x => linha(x)).join('') + ajuste.map(x => linha(x, true)).join('');
   const total = 100 + somaDesc + somaBon + somaAj, nota = Math.round(ult.pontos * 10) / 10;
-  const obs = total > 100.05 ? ' (a nota é limitada a 100)' : total < -0.05 ? ' (a nota mínima é 0)' : Math.abs(total - nota) > 0.15 ? ' (com ajustes do período)' : '';
+  const obs = total < -0.05 ? ' (a nota mínima é 0)' : Math.abs(total - nota) > 0.15 ? ' (com ajustes do período)' : '';
   const pct = ult.esp ? Math.round(ult.trab / ult.esp * 100) : null;
   const ev = ult.ev || {};
   // turnos sem lançamento (descontam), agrupados por dia
@@ -207,14 +207,14 @@ function desenhar() {
   const cor = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || '#888';
   if (msHist.length && window.Chart) {
     new Chart($('gMes'), { type: 'line', data: { labels: msHist.map(m => m.mes.replace('/20', '/')), datasets: [{ label: 'Nota', data: msHist.map(m => m.pontos), borderColor: cor('--serie'), backgroundColor: cor('--serie'), tension: .25 }] },
-      options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { display: false } } } });
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, suggestedMax: 100 } }, plugins: { legend: { display: false } } } });
     new Chart($('gDias'), { type: 'bar', data: { labels: msHist.map(m => m.mes.replace('/20', '/')), datasets: [
       { label: 'Trabalhados', data: msHist.map(m => m.trab), backgroundColor: cor('--serie') }, { label: 'Esperados', data: msHist.map(m => m.esp), backgroundColor: cor('--mut') }] },
       options: { responsive: true, maintainAspectRatio: false } });
   }
   if (sem.length && window.Chart) {
     new Chart($('gSem'), { type: 'bar', data: { labels: sem.map(s => `S${s.n}${s.parcial ? ' (parcial)' : ''}`), datasets: [{ label: 'Nota da semana', data: sem.map(s => s.pontos),
-      backgroundColor: sem.map(s => s.parcial ? cor('--mut') : cor('--info')) }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100 } }, plugins: { legend: { display: false } } } });
+      backgroundColor: sem.map(s => s.parcial ? cor('--mut') : cor('--info')) }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, suggestedMax: 100 } }, plugins: { legend: { display: false } } } });
   }
 }
 desenhar();

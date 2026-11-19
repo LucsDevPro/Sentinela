@@ -1,4 +1,4 @@
-﻿CRONOGRAMA — CHUVA/FOLGA/ATESTADO/REUNIÃO/FÉRIAS (87 registros) — EXCLUÍDOS DA ABA 'AUSÊNCIAS'. Edite em data/cronograma_ausencias.json (use cronograma_editor.html).;;;
+﻿CRONOGRAMA — CHUVA/FOLGA/ATESTADO/REUNIÃO/FÉRIAS (123 registros) — EXCLUÍDOS DA ABA 'AUSÊNCIAS'. Edite em data/cronograma_ausencias.json (use cronograma_editor.html).;;;
 Dia Início;Dia Fim;Motivo;Quem
 22/06/2026;06/07/2026;Férias (confirmada);Adriano Ricardo Thiel
 29/06/2026;30/06/2026;Ausência justificada;Kátia Cilene Silveira Machado
@@ -8,7 +8,10 @@ Dia Início;Dia Fim;Motivo;Quem
 01/07/2026;24/07/2026;Férias (confirmada);Kátia Cilene Silveira Machado
 02/07/2026;31/07/2026;Férias (confirmada);Geancarlos Ferreira Barrios
 02/07/2026;31/07/2026;Férias (confirmada);Miglidiane Maciel Ajala
+02/07/2026;03/07/2026;Chuva (confirmada);Equipe 4
 02/07/2026;31/07/2026;Férias (confirmada);Silvina Regina de Souza Valiente
+03/07/2026;03/07/2026;Chuva (confirmada);Equipe 2
+03/07/2026;03/07/2026;Chuva (confirmada);Equipe 3
 06/07/2026;20/07/2026;Férias (confirmada);Wagner Tarlei Gomes
 07/07/2026;07/07/2026;Ausência justificada;William Anderson Chamorro Tavares
 08/07/2026;08/07/2026;Ausência justificada;Anderson Jose de Santana
@@ -29,6 +32,7 @@ Dia Início;Dia Fim;Motivo;Quem
 20/07/2026;03/08/2026;Férias (confirmada);Rafael Ramos Recalde
 21/07/2026;27/07/2026;Ausência justificada;Tania Maria Montania
 22/07/2026;22/07/2026;Ausência justificada;Fabiana de Figueredo Vieira
+23/07/2026;23/07/2026;Chuva (confirmada);Equipe 3
 27/07/2026;28/07/2026;Ausência justificada;Kátia Cilene Silveira Machado
 28/07/2026;31/07/2026;Recuperação de Casas;Todos os agentes
 28/07/2026;28/07/2026;Ausência justificada;Brauher Luiz Alvarenga Gonzalez
@@ -36,12 +40,16 @@ Dia Início;Dia Fim;Motivo;Quem
 31/07/2026;31/07/2026;Ausência justificada;William Anderson Chamorro Tavares
 03/08/2026;06/08/2026;Levantamento de Índice;Todos os agentes
 03/08/2026;03/08/2026;Ausência justificada;Anderson Jose de Santana
+03/08/2026;03/08/2026;Chuva (confirmada);Equipe 2
 05/08/2026;05/08/2026;Ausência justificada;Brauher Luiz Alvarenga Gonzalez
 05/08/2026;05/08/2026;Ausência justificada;Naime Cristina Freitas
 07/08/2026;07/08/2026;Instalação de Ovitrampa;Todos os agentes
 07/08/2026;07/08/2026;Ausência justificada;Adriano Ricardo Thiel
+07/08/2026;10/08/2026;Chuva (confirmada);Equipe 2
 10/08/2026;24/08/2026;Férias (confirmada);Cicero Isrrael Sanabria
 10/08/2026;08/09/2026;Férias (confirmada);Ramona dos Santos Oliveira
+10/08/2026;10/08/2026;Chuva (confirmada);Equipe 3
+10/08/2026;10/08/2026;Chuva (confirmada);Equipe 4
 12/08/2026;12/08/2026;Ausência justificada;Marco Antonio Ayala de Matos Freitas
 13/08/2026;13/08/2026;Recolha de Ovitrampa;Todos os agentes
 14/08/2026;14/08/2026;Ausência justificada;Selba Ramona Afonso
@@ -68,6 +76,10 @@ Dia Início;Dia Fim;Motivo;Quem
 09/09/2026;10/09/2026;Ausência justificada;Kariele Jackeline Rodrigues Silva
 11/09/2026;11/09/2026;Ausência justificada;Adriano Ricardo Thiel
 11/09/2026;11/09/2026;Ausência justificada;Claine Luisa Figueiredo Torraca
+14/09/2026;14/09/2026;Chuva (confirmada);Equipe 1
+14/09/2026;14/09/2026;Chuva (confirmada);Equipe 2
+14/09/2026;14/09/2026;Chuva (confirmada);Equipe 3
+14/09/2026;14/09/2026;Chuva (confirmada);Equipe 4
 16/09/2026;16/09/2026;Ausência justificada;Anderson Jose de Santana
 17/09/2026;17/09/2026;Ausência justificada;Kátia Cilene Silveira Machado
 18/09/2026;18/09/2026;Ausência justificada;Adriano Ricardo Thiel
@@ -77,13 +89,37 @@ Dia Início;Dia Fim;Motivo;Quem
 21/09/2026;05/10/2026;Férias (confirmada);Gilmar Bitencourt Luiz
 21/09/2026;05/10/2026;Férias (confirmada);Selba Ramona Afonso
 21/09/2026;05/10/2026;Férias (confirmada);Rafael Ramos Recalde
+22/09/2026;22/09/2026;Chuva (confirmada);Equipe 2
+22/09/2026;22/09/2026;Chuva (confirmada);Equipe 3
+22/09/2026;22/09/2026;Chuva (confirmada);Equipe 4
 25/09/2026;25/09/2026;Ausência justificada;Tania Maria Montania
 28/09/2026;12/10/2026;Férias (confirmada);Adriano Ricardo Thiel
 29/09/2026;29/09/2026;Ausência justificada;Sara Eliane Talaveira de Oliveira
 01/10/2026;01/10/2026;Ausência justificada;Naime Cristina Freitas
 01/10/2026;01/10/2026;Ausência justificada;Tania Maria Montania
 05/10/2026;30/10/2026;Reunião/Treinamento;Patricia Lanjer de Souza Domingues
+05/10/2026;05/10/2026;Chuva (confirmada);Equipe 1
+05/10/2026;05/10/2026;Chuva (confirmada);Equipe 2
+05/10/2026;05/10/2026;Chuva (confirmada);Equipe 3
+05/10/2026;05/10/2026;Chuva (confirmada);Equipe 4
 07/10/2026;07/10/2026;Ausência justificada;Anderson Jose de Santana
 07/10/2026;07/10/2026;Ausência justificada;Bianca Afonso Narbaez
 08/10/2026;08/10/2026;Ausência justificada;Rozana Reis da Silva
+09/10/2026;09/10/2026;Chuva (confirmada);Equipe 1
+09/10/2026;09/10/2026;Chuva (confirmada);Equipe 2
+09/10/2026;09/10/2026;Chuva (confirmada);Equipe 3
+09/10/2026;14/10/2026;Chuva (confirmada);Equipe 4
+14/10/2026;14/10/2026;Chuva (confirmada);Equipe 2
+14/10/2026;14/10/2026;Chuva (confirmada);Equipe 3
 19/10/2026;02/11/2026;Férias (confirmada);Adriano Ricardo Thiel
+20/10/2026;20/10/2026;Chuva (confirmada);Equipe 1
+03/11/2026;11/11/2026;Férias (confirmada);Wagner Tarlei Gomes
+03/11/2026;17/11/2026;Férias (confirmada);Gilmar Bitencourt Luiz
+03/11/2026;03/11/2026;Chuva (confirmada);Equipe 1
+03/11/2026;03/11/2026;Chuva (confirmada);Equipe 2
+03/11/2026;04/11/2026;Chuva (confirmada);Equipe 3
+03/11/2026;03/11/2026;Chuva (confirmada);Equipe 4
+04/11/2026;09/11/2026;Levantamento de Índice;Todos os agentes
+10/11/2026;10/11/2026;Chuva (confirmada);Equipe 2
+16/11/2026;16/11/2026;Chuva (confirmada);Equipe 1
+16/11/2026;16/11/2026;Chuva (confirmada);Equipe 2

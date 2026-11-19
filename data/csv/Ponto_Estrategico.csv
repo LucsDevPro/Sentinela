@@ -1,4 +1,4 @@
-﻿PONTO ESTRATÉGICO — RESULTADOS POR SEMANA (18 linhas);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+﻿PONTO ESTRATÉGICO — RESULTADOS POR SEMANA (20 linhas);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 Semana;Período;Agente;Equipe;Classificação;Imóveis Abertos;Dias Trabalhados;Visitas/Dia;Média (min);Mediana (min);Rápidas;% Rápidas;Longas;Negativas;Dias c/ Meta;Visitas Duplicadas;Visitas em Sequência Suspeita;Visitas no Almoço (11h15-12h45);Fora do Expediente/Fim de Semana;Imóveis Fechados;Imóveis Recusados;Total Geral (Abertos+Fechados+Recusados);% Pendência;Média Horas Trabalhadas/Dia;Média Horas Trabalhadas/Semana;Média Horas Úteis/Dia;Custo Hora Útil (R$);Média Início Manhã;Média Fim Manhã;Média Início Tarde;Média Fim Tarde
 26;29/06 a 01/07;Antonio Cezar Marques;Ponto Estratégico;🟢 NORMAL;32;3;10.67;11.31;10.5;0;0.0;0;0;0;0;0;0;0;;;;;2.68;8.05;2.01;R$ 109,91;08:50;10:02;14:28;16:22
 27;07/07 a 10/07;Antonio Cezar Marques;Ponto Estratégico;🟢 NORMAL;32;4;8.0;9.88;8.5;1;3.12;0;0;0;0;2;0;0;;;;;2.08;8.3;1.32;R$ 167,88;08:32;09:15;13:51;15:33
@@ -18,6 +18,8 @@ Semana;Período;Agente;Equipe;Classificação;Imóveis Abertos;Dias Trabalhados;
 41;15/10 a 16/10;Antonio Cezar Marques;Ponto Estratégico;🟢 NORMAL;24;2;12.0;13.88;13.0;0;0.0;0;0;0;0;4;0;0;;;;;2.37;4.73;2.78;R$ 79,66;08:11;10:31;13:31;15:55
 42;19/10 a 22/10;Antonio Cezar Marques;Ponto Estratégico;🟢 NORMAL;32;3;10.67;13.38;12.5;0;0.0;1;0;0;0;0;0;0;;;;;4.28;12.85;2.38;R$ 92,96;08:33;10:09;14:19;15:46
 43;26/10 a 30/10;Antonio Cezar Marques;Ponto Estratégico;🟢 NORMAL;29;5;5.8;14.07;13.0;0;0.0;2;0;0;0;0;0;0;;;;;1.82;9.12;1.36;R$ 162,53;08:22;10:09;14:00;15:54
+44;06/11 a 06/11;Antonio Cezar Marques;Ponto Estratégico;🟢 NORMAL;7;1;7.0;9.86;10.0;0;0.0;0;0;0;0;0;0;0;;;;;1.5;1.5;1.15;R$ 192,21;08:37;10:07;;
+45;09/11 a 12/11;Antonio Cezar Marques;Ponto Estratégico;🟢 NORMAL;49;4;12.25;11.71;11.0;0;0.0;0;0;1;0;4;0;0;;;;;4.35;17.4;2.39;R$ 92,42;08:15;10:20;14:12;15:57
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 LEGENDA — CLASSIFICAÇÃO (baseada em % de Visitas Rápidas);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

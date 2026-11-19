@@ -37,7 +37,7 @@ Constantes: _MODULOS@50
 
 Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 
-## scripts/generate_dashboard.py (1566 linhas)
+## scripts/generate_dashboard.py (1567 linhas)
 
 - L56 `carregar_outras_atividades()` — Lê data/outras_atividades.json (equipes/atividades fora do e-Visita,
 - L108 `resolver_home_xlsx()`
@@ -87,25 +87,25 @@ Constantes: PASTA_HISTORICO@23, PASTA_BACKUP@24, CAMINHO_DETECCOES@25
 - L923 `build_team_cards(resumo, teams)`
 - L949 `_classe_por_pontos(p)`
 - L958 `_ler_ranking_rapido(path)` — Lê só a tabela principal da aba Ranking de uma planilha (modo
-- L985 `_sparkline(valores, w, h)` — Mini-gráfico (SVG inline) da pontuação mês a mês, escala fixa 0–100 pra
-- L1000 `build_media_mensal()`
-- L1043 `_worker_url()`
-- L1049 `_mes_contestavel(ctx)` — Mês ("Outubro/2026") ao qual a página se refere, se estiver ABERTO (contestaç…
-- L1078 `_ids_por_nome()`
-- L1085 `build_extratos(ranking_rows, detalhe_rows, sem_normaliz)` — Dados do "Extrato por agente" (folha de uma página com a conta da
-- L1110 `_periodo_label(periodos)`
-- L1120 `build_kpi_ranking(ranking)`
-- L1133 `build_chart_data(data)`
-- L1186 `build_context(data)`
-- L1282 `build_comparacao_semanal(nav, pagina_semana)` — Nota média de cada equipe, semana a semana, dentro do mês (só na página do MÊ…
-- L1338 `carregar_periodos()` — Monta a lista de opções do seletor de período no cabeçalho:
-- L1388 `carregar_nav_semanas()` — Barra "Semana 1 | Semana 2 | ... | Mês completo" do mês vigente.
-- L1449 `enxugar_html(html)` — Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
-- L1461 `periodo_em_andamento(semana_fim_html, hoje)` — Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= …
-- L1470 `_selo_periodo(ctx)` — 'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão …
-- L1484 `main()`
+- L985 `_sparkline(valores, w, h)` — Mini-gráfico (SVG inline) da pontuação mês a mês, escala 0–100 (maior, se a n…
+- L1001 `build_media_mensal()`
+- L1044 `_worker_url()`
+- L1050 `_mes_contestavel(ctx)` — Mês ("Outubro/2026") ao qual a página se refere, se estiver ABERTO (contestaç…
+- L1079 `_ids_por_nome()`
+- L1086 `build_extratos(ranking_rows, detalhe_rows, sem_normaliz)` — Dados do "Extrato por agente" (folha de uma página com a conta da
+- L1111 `_periodo_label(periodos)`
+- L1121 `build_kpi_ranking(ranking)`
+- L1134 `build_chart_data(data)`
+- L1187 `build_context(data)`
+- L1283 `build_comparacao_semanal(nav, pagina_semana)` — Nota média de cada equipe, semana a semana, dentro do mês (só na página do MÊ…
+- L1339 `carregar_periodos()` — Monta a lista de opções do seletor de período no cabeçalho:
+- L1389 `carregar_nav_semanas()` — Barra "Semana 1 | Semana 2 | ... | Mês completo" do mês vigente.
+- L1450 `enxugar_html(html)` — Reduz o tamanho da página sem mudar o que aparece: o HTML dos templates
+- L1462 `periodo_em_andamento(semana_fim_html, hoje)` — Sexta-feira em que o período termina SE ele ainda está em andamento (hoje <= …
+- L1471 `_selo_periodo(ctx)` — 'dd/mm' da sexta final quando a página é de um MÊS ainda em andamento; senão …
+- L1485 `main()`
 
-Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, PCT_RAPIDAS_OK_ATE@52, PCT_RAPIDAS_ATENCAO_ATE@53, SCRIPTS_DIR@94, CONFIG_HOME_PATH@104, ACUMULADO_XLSX@105, HOME_XLSX@122, XLSX_PATH@124, OUT_PATH@125, SALARIO_MENSAL@127, EVISITA_URL@128, DIA_ORDER@129, EQUIPE_BLOQUEIO@135, RESUMO_COLS@233, AREA_COLS@247, ALERT_COLS@254, AUSENCIA_COLS@261, PENDENCIA_COLS@265, PE_COLS@269, RESUMO_SEMANAL_COLS@278, RANKING_COLS@279, RANKING_DET_COLS@286, _NAO_PADRONIZAR_TEXTO@305, _DIAS_CURTOS@549, _PRESENCA_CACHE@663, TEAM_COLORS@921, LABEL_MES_RE@947, _BLOCOS_LITERAIS_RE@1445, _ESPACOS_RE@1447
+Constantes: ROOT@28, LAZY@29, DIAS_UTEIS_MES_REF@35, META_VISITAS_DIA_REF@36, TETO_VISITA_MIN@37, CUSTO_FAIXA_MEDIO@42, CUSTO_FAIXA_ALTO@43, HORAS_UTEIS_BAIXO@44, HORAS_UTEIS_ALTO@45, CUSTO_GRAFICO_MAX@46, OUTRAS_ATIVIDADES_PATH@47, PCT_RAPIDAS_OK_ATE@52, PCT_RAPIDAS_ATENCAO_ATE@53, SCRIPTS_DIR@94, CONFIG_HOME_PATH@104, ACUMULADO_XLSX@105, HOME_XLSX@122, XLSX_PATH@124, OUT_PATH@125, SALARIO_MENSAL@127, EVISITA_URL@128, DIA_ORDER@129, EQUIPE_BLOQUEIO@135, RESUMO_COLS@233, AREA_COLS@247, ALERT_COLS@254, AUSENCIA_COLS@261, PENDENCIA_COLS@265, PE_COLS@269, RESUMO_SEMANAL_COLS@278, RANKING_COLS@279, RANKING_DET_COLS@286, _NAO_PADRONIZAR_TEXTO@305, _DIAS_CURTOS@549, _PRESENCA_CACHE@663, TEAM_COLORS@921, LABEL_MES_RE@947, _BLOCOS_LITERAIS_RE@1446, _ESPACOS_RE@1448
 
 ## scripts/gerar_agentes.py (275 linhas)
 
