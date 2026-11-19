@@ -512,10 +512,8 @@ body.sem-foto .c-foto img {
   background:
     radial-gradient(ellipse 80% 45% at 50% 15%, rgba(255, 210, 100, 0.18) 0%, transparent 55%),
     linear-gradient(165deg, #122650 0%, #0A1838 40%, #050C1C 75%, #02050C 100%);
-  /* anel duplo + glow de troféu */
+  /* Um único anel é desenhado por .c-borda; aqui ficam apenas os brilhos externos. */
   box-shadow:
-    0 0 0 2px rgba(255, 244, 200, 0.7),
-    0 0 0 5px rgba(240, 200, 64, 0.22),
     0 0 28px rgba(240, 190, 60, 0.5),
     0 0 52px rgba(200, 150, 40, 0.22),
     0 16px 40px rgba(0, 0, 0, 0.42),
@@ -523,19 +521,9 @@ body.sem-foto .c-foto img {
     inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Mantém a textura metálica sem desenhar uma segunda moldura interna.
-   A moldura oficial é o anel único renderizado por .c-borda. */
+/* Não cria uma camada extra sobre a moldura única. */
 .carta.b-100::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    120deg,
-    rgba(255, 255, 255, 0.09) 0 10px,
-    transparent 10px 26px
-  );
-  pointer-events: none;
-  opacity: 0.75;
+  content: none;
 }
 
 .carta.b-100::after {
