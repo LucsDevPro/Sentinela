@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 20/11/2026 — Sala de Troféus: desempenho, fotos e acabamento
+- **Sob demanda:** só as 12 primeiras cartinhas da grade nascem prontas; as outras entram como esqueleto e viram cartão perto da tela (`Preguica` em `album.js`, margem de 900 px). Impressão e «Folha de recorte» abrem tudo antes. As animações já pausavam fora da tela (`.vivo`).
+- **Fotos:** `scripts/padronizar_foto.py` (480×480, rosto no terço de cima, fundo neutro) + `test_fotos.py` (na lista do `rodar_testes` e no CI; pula sem Pillow, agora em `requirements.txt` como opcional). A Sala avisa quantos ainda mostram só as iniciais.
+- **Visual:** tokens `--k-*` no topo de `carta.css`; nota em Barlow Semi Condensed 800 (novo `assets/fonts/…-800-normal.woff2`, OFL) com algarismos tabulares; estados vazio/erro/montando da Sala; «Folha de recorte» (A4 paisagem, 8 por folha de 63 mm, marcas de corte).
+- **Não feito (de propósito): cartão maior em escala única.** 272×392 e os ornamentos 332×444 aparecem em ~50 pontos de 8 arquivos (carta, álbum, pacote, projeção, vídeo, PNG). Fica para uma sessão própria, com a suíte como rede de segurança. A foto cresceu o que a altura fixa permite (112 px).
+
 ## 19/11/2026 (6) — patch «premium + impacto» das cartinhas, com ajustes
 - Aplicado no fim de `carta.css`: foto maior (112 px), tipografia mais justa, `--bw` por nível (4,5 → 9 px), metal com mais textura em Ouro/Destaque/Lendária, glitter só do Ouro para cima, sombras e clarões mais fortes no topo, flutuação/pulso e partículas (`carta_fx.js`: 48/40/22/14) e limiares de fonte do nome.
 - Ficou de fora de propósito: cartão 272×408, raio 20, nome em 2 linhas e escala da Sala 1,08. O cartão tem altura fixa de 392 px e ornamentos (332×444), PNG (`FORMA_R = 18`) e álbum dependem dela; a foto cresceu tirando folga do nome/estatísticas, sem estourar a altura (a suíte confere).

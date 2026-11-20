@@ -19,7 +19,13 @@ Requisitos: `pip install playwright pillow numpy` + chromium; `ffmpeg/ffprobe` p
 | `tema` | Sala nasce escura; botão leva ao claro |
 | `png` | exportação principal (html-to-image) **e** plano B (canvas, forçado bloqueando a lib) × cartão HTML: cor média por grade, brilho geral, ornamentos laterais |
 | `movimento` | com `prefers-reduced-motion: reduce` nenhuma animação infinita roda; no normal, as molduras premium animam |
+| `pagina` | **carregamento sob demanda** (só parte vira cartão no início; rolando, todas abrem), animações só nas cartas perto da tela, nota com algarismos tabulares e peso próprio, aviso «faltam fotos», estado vazio com «Limpar filtros», **folha de recorte** (63 mm, 8 marcas de corte) |
 | `audio` / `video` | **somente leitura**: cada som (pico ≤ 0 dBFS, não mudo), quadros de cada tier, vídeo de 5 s (duração, fps, áudio presente, fade no fim) |
+
+## Fotos e folha de recorte (rotina)
+- Foto nova: `python3 scripts/padronizar_foto.py ID foto.jpg [--rosto X Y]` (480×480, rosto no terço de cima, fundo neutro, sem EXIF) e já registra em `assets/fotos.js`. `scripts/test_fotos.py` confere o recorte, o registro e que toda foto publicada é quadrada.
+- «Folha de recorte» (botão da Sala): A4 paisagem, 8 cartinhas de 63 mm por folha com marcas de corte. Sem ornamentos nem sombras pesadas (o PDF perdia a moldura com elas).
+- Tokens do visual: bloco `:root{--k-…}` no topo de `assets/carta.css` (foto, espessuras por nível, fonte e peso da nota, auras). Trocar visual = mexer ali; a suíte segue valendo.
 
 ## Regra de ouro: trocar cor não pode quebrar teste
 Os testes checam **invariantes** (contraste, validade, HTML == PNG), nunca um hex fixo. Mudou a paleta de propósito? Normalmente nada a fazer.

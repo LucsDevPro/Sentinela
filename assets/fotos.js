@@ -1,5 +1,5 @@
 /* Fotos das cartinhas, por ID do agente (nunca por nome).
-   Para adicionar outra: salve a imagem quadrada em assets/fotos/ID.png (ou .jpg) (ex.: 400x400) e acrescente uma linha aqui. */
+   Para adicionar outra: python3 scripts/padronizar_foto.py ID foto.jpg  (recorta quadrado 480×480 com o rosto no terço de cima, fundo neutro, e acrescenta a linha aqui). */
 window.AGENTES_FOTOS = {
   "1936": "assets/fotos/1936.png"   // Geancarlos Ferreira Barrios
 };

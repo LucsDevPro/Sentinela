@@ -35,6 +35,7 @@
         <label class="tg"><input type="checkbox" id="apres"> <span>Modo apresentação (ocultar nomes)</span></label>
         <label class="tg"><input type="checkbox" id="semFoto"> <span>Ocultar fotos</span></label>
         <button type="button" class="bt-acao" id="bImprimir" title="Imprimir as cartinhas que estão na tela (respeita mês, equipe, nível e busca)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg> Imprimir cartinhas</button>
+        <button type="button" class="bt-acao" id="bRecorte" title="Folha para recorte: 8 cartinhas por A4 (paisagem), tamanho 63 × 91 mm, com marcas de corte"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v13a2 2 0 0 0 2 2h13M3 6h13a2 2 0 0 1 2 2v13"/></svg><span>Folha de recorte</span></button>
         <button type="button" class="bt-acao" id="bZip" title="Gera um .zip com a imagem de cada cartinha que está na tela, em uma pasta por equipe"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg> <span>Baixar todas (.zip)</span></button>
         <button type="button" class="bt-acao" id="bResumo" title="Página A4 com pódio, números do mês e quem tirou 100, para a ata (salvar como PDF)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/></svg> Resumo do mês</button> <button type="button" class="bt-acao" id="bReuniao" title="Passar as cartinhas uma a uma em tela cheia, com os nomes ocultáveis"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10H4zM8 20h8M12 15v5"/></svg> Modo reunião</button>
       </div>
@@ -45,9 +46,10 @@
     </details>
     <div class="niveis" id="niveis" role="group" aria-label="Atalhos por nível"></div>
     <p class="mut" id="resumo" aria-live="polite"></p>
+    <p class="aviso-fotos" id="avisoFotos" hidden></p>
     <p class="aviso-img" id="msgImg" role="status" aria-live="polite" hidden></p>
     <div class="podio" id="podio" hidden></div>
-    <div class="album" id="album"></div>
+    <div class="album" id="album" aria-busy="true"><div class="estado carregando" role="status"><span class="slot-esq-mini" aria-hidden="true"></span><b>Montando as cartinhas…</b></div></div>
   </section>
   <section class="painel" id="painelCalc" role="tabpanel" aria-labelledby="abaCalc" hidden></section>
 </main>

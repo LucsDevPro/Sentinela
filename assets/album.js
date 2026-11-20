@@ -1,5 +1,6 @@
 // Álbum de cartinhas (album.html): abas, filtros, pódio e grade. A aparência das cartas está em carta.css / carta_fx.js.
 
+const SV_FOTO = '<svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const $ = id => document.getElementById(id);
 const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
@@ -37,9 +38,16 @@ const NIVEIS = ['LENDÁRIA', 'DESTAQUE', 'ELITE', 'OURO', 'PRATA', 'BRONZE', 'A�
 const COR_NIVEL = { 'LENDÁRIA': '#8A5CF6', 'DESTAQUE': '#EC4899', 'ELITE': '#F2C230', 'OURO': '#E0A400', 'PRATA': '#9AA9BA', 'BRONZE': '#C47A3A', 'AÇO': '#64748B', 'FERRO': '#4B5563' };
 const MIN_MESES_ANO = 2;   // mínimo de cartinhas mensais para entrar no «Melhor do ano»
 const ANO = 'Melhor do ano';   // opção do filtro: ranking pela média de todas as cartinhas (todos os meses)
+// Estados da página (vazio / erro): mesma aparência da Sala, com uma saída clara
+const ICONES_ESTADO = { vazio: '<path d="M4 7h16v12H4z"/><path d="M9 7V5h6v2M9 12h6"/>', erro: '<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>' };
+const estado = (tipo, titulo, msg, botao) => `<div class="estado ${tipo}" role="${tipo === 'erro' ? 'alert' : 'status'}"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">${ICONES_ESTADO[tipo]}</svg><b>${esc(titulo)}</b><span>${esc(msg)}</span>${botao || ''}</div>`;
 const D = window.AGENTES_DADOS, ag = D && D.agentes ? Object.entries(D.agentes).map(([k, a]) => ({ k, a })) : [];
 const meses = [...new Set(ag.flatMap(x => (x.a.meses || []).map(m => m.mes)))].sort((p, q) => ordMes(p) - ordMes(q));
-if (!meses.length) { $('album').outerHTML = '<div class="card aviso">Ainda não há cartinhas. Volte depois da próxima atualização do site.</div>'; $('resumo').textContent = ''; }
+if (!meses.length) {
+  $('album').innerHTML = D ? estado('vazio', 'Ainda não há cartinhas', 'Volte depois da próxima atualização do site.')
+    : estado('erro', 'Não consegui carregar os dados', 'Recarregue a página. Se abrir o arquivo direto do computador, use o endereço do site.', '<button type="button" class="bt-estado" onclick="location.reload()">Recarregar</button>');
+  $('resumo').textContent = '';
+}
 else {
   $('fMes').innerHTML = `<option value="${ANO}">${ANO} (média de todos os meses)</option>` + meses.slice().reverse().map(m => `<option>${esc(m)}</option>`).join('');
   const q0 = new URLSearchParams(location.search).get('mes'); if (q0 && (q0 === ANO || meses.includes(q0))) $('fMes').value = q0;
@@ -68,10 +76,44 @@ else {
   ['album', 'podio'].forEach(id => $(id).addEventListener('click', compartilhar));
   // botões em cima do link: Enter/Espaço no botão não pode acionar o link também
   ['album', 'podio'].forEach(id => $(id).addEventListener('keydown', e => { if (e.target.closest && e.target.closest('button[data-acao]') && (e.key === 'Enter' || e.key === ' ')) e.stopPropagation(); }, true));
-  $('bImprimir').onclick = () => window.print();
+  // «Folha de recorte»: 8 cartinhas por A4 em paisagem (63 × 91 mm), sem ornamentos que invadem o vizinho e com marcas de corte nos cantos
+  $('bRecorte').onclick = () => {
+    Preguica.tudo(); document.body.classList.add('imp-recorte');
+    const fim = () => { document.body.classList.remove('imp-recorte'); window.removeEventListener('afterprint', fim); };
+    window.addEventListener('afterprint', fim); window.print();
+  };
+  $('bImprimir').onclick = () => { Preguica.tudo(); window.print(); };
   // «Modo reunião»: abre a tela de projeção direto nas cartinhas do mês escolhido (o «Melhor do ano» abre no mês mais recente)
   $('bResumo').onclick = () => { const m = $('fMes').value; location.href = 'resumo.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : ''); };   // «Melhor do ano»: abre o mês mais recente
   $('bReuniao').onclick = () => { const m = $('fMes').value; location.href = 'projecao.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : '') + '#cartinhas'; };
+  // ---- Preguiça: materializa as cartinhas adiadas quando chegam perto da tela ----
+  const ADIAR_APOS = 12, MARGEM = '900px 0px';
+  const Preguica = window.Preguica = (() => {
+    const fila = new Map(); let io = null;
+    const abrir = el => { const f = fila.get(el.dataset.k); if (!f) return; fila.delete(el.dataset.k); if (io) io.unobserve(el);
+      const esq = el.querySelector('.slot-esq'); if (esq) esq.remove(); el.insertAdjacentHTML('beforeend', f()); el.classList.remove('adiado'); };
+    return {
+      guardar: (k, f) => fila.set(k, f),
+      limpar: () => { fila.clear(); if (io) io.disconnect(); },
+      observar: raiz => {
+        const lista = raiz.querySelectorAll('.slot.adiado'); if (!lista.length) return;
+        if (!('IntersectionObserver' in window)) { lista.forEach(abrir); return; }
+        io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) abrir(e.target); }), { rootMargin: MARGEM });
+        lista.forEach(el => io.observe(el));
+      },
+      tudo: () => document.querySelectorAll('.slot.adiado').forEach(abrir),
+      pendentes: () => fila.size
+    };
+  })();
+  window.addEventListener('beforeprint', () => Preguica.tudo());
+  // «Faltam fotos»: conta quem ainda mostra só as iniciais (por ID) e diz como completar. Some na impressão e no modo apresentação.
+  const avisoFotos = lista => {
+    const el = $('avisoFotos'); if (!el) return;
+    const fotos = window.AGENTES_FOTOS || {}, tem = x => !!fotos[String(x.k)];
+    const falta = lista.filter(l => !tem(l.x)).length;
+    el.hidden = !falta;
+    el.innerHTML = falta ? `${SV_FOTO}<span><b>${falta} de ${lista.length}</b> cartinha(s) ainda mostram só as iniciais. Foto quadrada, rosto no terço de cima e fundo neutro: <code>python3 scripts/padronizar_foto.py ID foto.jpg</code>.</span>` : '';
+  };
   const desenhar = () => {
     const mes = $('fMes').value, eq = $('fEq').value, niv = $('fNivel').value, bu = norm($('fBusca').value);
     const lista = [], doAno = mes === ANO;
@@ -100,16 +142,24 @@ else {
     }).join('');
     const reduz = !!(window.CartaFX && CartaFX.reduz), antes = new Map();   // posições de antes, para as cartas deslizarem até o novo lugar
     if (!reduz && mesAnim === mes) document.querySelectorAll('#podio .slot[data-k], #album .slot[data-k]').forEach(el => antes.set(el.dataset.k, el.getBoundingClientRect()));
-    const slot = (l, cls) => {
+    // Carregamento sob demanda: só as primeiras ADIAR_APOS cartinhas da grade nascem prontas; as demais entram como esqueleto
+    // e viram cartão quando chegam perto da tela (IntersectionObserver). Impressão e testes pedem tudo com Preguica.tudo().
+    const slot = (l, cls, adiar) => {
       const qAg = (/^\d+$/.test(l.x.k) ? 'id=' + l.x.k : 'nome=' + encodeURIComponent(l.x.a.nome)) + '&mes=' + encodeURIComponent(mes);
-      return `<a class="slot ${cls || ''}" data-k="${esc(l.x.k)}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)} · ${esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>${doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)}${acoes(vis.indexOf(l))}</a>`;
+      const miolo = () => (doAno ? Carta.html(l.x.a, l.ms, l.x.k, true).replace('1º mês', l.u.n + (l.u.n > 1 ? ' meses' : ' mês')) : Carta.html(l.x.a, l.ms, l.x.k)) + acoes(vis.indexOf(l));
+      const abre = `<a class="slot ${cls || ''}${adiar ? ' adiado' : ''}" data-k="${esc(l.x.k)}" href="agente.html?${qAg}" title="Ver evolução de ${esc(l.x.a.nome)} · ${esc(mes)}"><span class="n${l.lugar <= 3 ? ' m' + l.lugar : ''}" aria-label="${l.lugar}º lugar">${l.lugar}º</span>`;
+      if (adiar) { Preguica.guardar(l.x.k, miolo); return abre + '<span class="slot-esq" role="img" aria-label="Carregando cartinha de ' + esc(l.x.a.nome) + '"></span></a>'; }
+      return abre + miolo() + '</a>';
     };
     // Pódio: só sem filtros (com filtro, o top 3 do mês pode nem estar na lista). No HTML a ordem é 1º, 2º, 3º; o CSS põe o 1º no meio.
     const pod = !eq && !bu && !niv && vis.length >= 3 ? vis.slice(0, 3) : [];
     $('podio').hidden = !pod.length;
     $('podio').innerHTML = pod.map((l, i) => slot(l, 'p' + (i + 1))).join('');
     [['p1', '650ms'], ['p2', '200ms'], ['p3', '0ms']].forEach(([c, t]) => $('podio').querySelectorAll('.slot.' + c + ' .carta').forEach(el => el.style.setProperty('--atraso', t)));
-    $('album').innerHTML = vis.slice(pod.length).map(l => slot(l)).join('');
+    Preguica.limpar();
+    $('album').innerHTML = vis.length ? vis.slice(pod.length).map((l, i) => slot(l, '', i >= ADIAR_APOS)).join('')
+      : estado('vazio', 'Nenhuma cartinha com esses filtros', 'Tente outra equipe, outro nível ou apague a busca.', '<button type="button" class="bt-estado" data-limpar>Limpar filtros</button>');
+    Preguica.observar($('album')); $('album').removeAttribute('aria-busy');
     if (antes.size) document.querySelectorAll('#podio .slot[data-k], #album .slot[data-k]').forEach(el => {
       const o = antes.get(el.dataset.k); if (!o || !el.animate) return;
       const c = el.querySelector('.carta'); if (c) { c.setAttribute('data-visto', '1'); const b = c.querySelector('.c-ovr b'); if (b) b.setAttribute('data-contou', '1'); }   // quem já estava na tela não entra de novo
@@ -123,9 +173,11 @@ else {
       if (!jaViu) setTimeout(() => { const p = $('podio'); if (p && !p.hidden) CartaFX.raios(p, 4, '#BFE0FF'); }, 900);
     }
     mesAnim = mes;
+    avisoFotos(lista);
     $('resumo').textContent = vis.length ? (doAno ? `${vis.length} cartinha(s) de ${lista.length}: média de todos os meses (só quem tem ${MIN_MESES_ANO} meses ou mais).` : `${vis.length} cartinha(s) de ${lista.length} em ${mes}.`) : 'Nenhuma cartinha com esses filtros.';
   };
   ['fMes', 'fEq', 'fNivel'].forEach(i => $(i).onchange = desenhar); $('fBusca').oninput = desenhar;
+  $('album').addEventListener('click', e => { if (e.target.closest && e.target.closest('[data-limpar]')) $('bLimpar').click(); });
   $('bLimpar').onclick = () => { $('fEq').value = ''; $('fNivel').value = ''; $('fBusca').value = ''; desenhar(); };
 
   // ---- Baixar todas: um .zip com a imagem de cada cartinha que está na tela, numa pasta por equipe, na ordem do ranking ----

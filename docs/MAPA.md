@@ -183,6 +183,14 @@ Constantes: CAMINHO_DETECCOES@22, LIMITE_FERIAS_DIAS@23, ACAO_DEFINIR@24, ACAO_C
 
 Constantes: CAMINHO@7, EMBUTIDOS@8
 
+## scripts/padronizar_foto.py (76 linhas)
+
+- L19 `recortar(im, rosto)` — Quadrado centrado no rosto, o maior possível dentro da imagem.
+- L37 `main()`
+- L55 `inserir_no_fotos_js(id_, rel)`
+
+Constantes: RAIZ@13, LADO@14, FUNDO@15, ROSTO_PADRAO@16
+
 ## scripts/publicar_sugestoes.py (155 linhas)
 
 - L23 `_d(txt)`

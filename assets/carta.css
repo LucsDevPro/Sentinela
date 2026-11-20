@@ -1,3 +1,23 @@
+/* =========================================================
+   TOKENS DA CARTINHA — o visual mora aqui. Trocar espessura, foto, fonte da nota ou aura é mexer nestas linhas;
+   as regras abaixo só usam var(--k-…). (Cores de cada tier seguem em --c1/--c2/--b1…b3 dentro de cada .carta.t-… / .b-…)
+   Tamanho do cartão (272×392), raio (18, igual ao PNG: FORMA_R) e ornamentos (332×444) NÃO são tokens: dependem de carta.js.
+   ========================================================= */
+:root {
+  --k-foto: 112px;                 /* lado da foto (medalha) */
+  --k-foto-borda: 4px;
+  --k-foto-borda-topo: 4.5px;      /* Ouro, Destaque e Lendária */
+  --k-fonte-nota: "Barlow Semi Condensed", "IBM Plex Sans", sans-serif;
+  --k-peso-nota: 800;              /* só a nota usa o 800 (assets/fonts) */
+  --k-tracking-nota: -0.035em;
+  --k-tracking-nome: 0.055em;
+  --k-bw-base: 4.5px; --k-bw-60: 5px; --k-bw-70: 5.5px; --k-bw-80: 6.5px; --k-bw-90: 9px; --k-bw-top: 7.5px; --k-bw-100: 8px;   /* espessura da moldura por nível */
+  --k-aura-ouro: 0 0 28px rgba(240, 190, 50, 0.48);
+  --k-aura-destaque: 0 0 26px rgba(255, 70, 180, 0.5), 0 0 48px rgba(64, 224, 255, 0.22);
+  --k-aura-lendaria: 0 0 32px rgba(240, 190, 60, 0.6), 0 0 60px rgba(200, 150, 40, 0.28);
+  --k-queda: 0 18px 42px rgba(0, 0, 0, 0.38);   /* sombra projetada */
+}
+
 /* Cartão do agente — visual luxuoso unificado (todas as faixas).
    Estilo carta colecionável premium. Usado em agente.html e album.html */
 
@@ -1719,15 +1739,15 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
 
 /* Foto maior (medalha) */
 /* foto 112 (era 104/108): o espaço vem do nome e das estatísticas, porque o cartão tem altura fixa de 392 px */
-.carta .c-foto { width: 112px; height: 112px; margin: 0 auto 2px; border-width: 4px; }
+.carta .c-foto { width: var(--k-foto); height: var(--k-foto); margin: 0 auto 2px; border-width: var(--k-foto-borda); }
 .carta .c-nome { padding-bottom: 3px; margin-bottom: 4px; }
 .carta .c-stats { gap: 4px 7px; padding: 1px 1px 3px; }
 .carta .c-rodape { margin-top: 5px; }
-.carta.b-90 .c-foto, .carta.b-top .c-foto, .carta.b-100 .c-foto { border-width: 4.5px; }
+.carta.b-90 .c-foto, .carta.b-top .c-foto, .carta.b-100 .c-foto { border-width: var(--k-foto-borda-topo); }
 
 /* Tipografia: nota maior e mais justa, rótulos mais leves */
-.carta .c-ovr b { letter-spacing: -0.04em; line-height: 0.86; }
-.carta .c-nome { letter-spacing: 0.055em; line-height: 1.15; }
+.carta .c-ovr b { font-family: var(--k-fonte-nota); font-weight: var(--k-peso-nota); letter-spacing: var(--k-tracking-nota); line-height: 0.86; font-variant-numeric: tabular-nums lining-nums; font-feature-settings: "tnum" 1, "lnum" 1; }
+.carta .c-nome { letter-spacing: var(--k-tracking-nome); line-height: 1.15; }
 .carta .c-pos { letter-spacing: 0.03em; }
 .carta .c-stats span { letter-spacing: 0.08em; }
 .carta .c-rodape { letter-spacing: 0.02em; }
@@ -1736,13 +1756,13 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
 .carta:not(.b-90):not(.b-top):not(.b-100) > .c-glitter { display: none !important; }
 
 /* Bordas metálicas mais «joia» e pesadas conforme o nível */
-.carta { --bw: 4.5px; }
-.carta.b-60 { --bw: 5px; }
-.carta.b-70 { --bw: 5.5px; }
-.carta.b-80 { --bw: 6.5px; }
-.carta.b-90 { --bw: 9px; }
-.carta.b-top { --bw: 7.5px; }
-.carta.b-100 { --bw: 8px; }
+.carta { --bw: var(--k-bw-base); }
+.carta.b-60 { --bw: var(--k-bw-60); }
+.carta.b-70 { --bw: var(--k-bw-70); }
+.carta.b-80 { --bw: var(--k-bw-80); }
+.carta.b-90 { --bw: var(--k-bw-90); }
+.carta.b-top { --bw: var(--k-bw-top); }
+.carta.b-100 { --bw: var(--k-bw-100); }
 .carta.b-90 > .c-borda, .carta.b-top > .c-borda, .carta.b-100 > .c-borda {
   background:
     repeating-linear-gradient(135deg, rgba(255,255,255,.28) 0 1.2px, rgba(255,255,255,0) 1.2px 5.5px),
@@ -1752,15 +1772,15 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
 
 /* Hierarquia de impacto: OURO limpo, DESTAQUE holográfico, LENDÁRIA com aura de medalha */
 .carta.b-90 {
-  box-shadow: 0 0 0 1.5px rgba(255,244,200,.55), 0 0 28px rgba(240,190,50,.48), 0 18px 42px rgba(0,0,0,.38),
+  box-shadow: 0 0 0 1.5px rgba(255,244,200,.55), var(--k-aura-ouro), var(--k-queda),
     inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 0 0 1px rgba(255,255,255,.22);
 }
 .carta.b-top, .carta.t-destaque {
-  box-shadow: 0 0 0 2px rgba(255,120,210,.55), 0 0 26px rgba(255,70,180,.5), 0 0 48px rgba(64,224,255,.22),
-    0 18px 42px rgba(0,0,0,.4), inset 0 1.5px 0 rgba(255,220,240,.35);
+  box-shadow: 0 0 0 2px rgba(255,120,210,.55), var(--k-aura-destaque),
+    var(--k-queda), inset 0 1.5px 0 rgba(255,220,240,.35);
 }
 .carta.b-100 {
-  box-shadow: 0 0 0 2px rgba(255,236,160,.65), 0 0 32px rgba(240,190,60,.6), 0 0 60px rgba(200,150,40,.28),
+  box-shadow: 0 0 0 2px rgba(255,236,160,.65), var(--k-aura-lendaria),
     0 20px 48px rgba(0,0,0,.48), inset 0 2px 0 rgba(255,245,200,.4), inset 0 0 0 1px rgba(255,255,255,.1);
 }
 .carta.b-100 .c-foto {
@@ -1789,3 +1809,7 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
   .carta.b-top:hover { animation: c-flutua 4.8s ease-in-out infinite, c-pulse-halo 1.5s ease-in-out infinite; }
   .carta.b-90:hover > .c-brilho::before, .carta.b-top:hover > .c-brilho::before, .carta.b-100:hover > .c-brilho::before { animation: c-varre-1 .85s ease-out 1; }
 }
+
+/* Foto padronizada: sempre quadrada, rosto no terço de cima, fundo neutro onde a imagem não cobre (mesma regra no PNG: object-fit cover) */
+.carta .c-foto.tem-foto { background: #E2E8F0; }
+.carta .c-foto img { object-fit: cover; object-position: 50% 28%; image-rendering: auto; }

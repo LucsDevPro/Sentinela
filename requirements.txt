@@ -9,3 +9,6 @@ selenium==4.25.0
 requests==2.32.3
 beautifulsoup4==4.12.3
 urllib3==2.2.3
+
+# --- Fotos das cartinhas (opcional: só scripts/padronizar_foto.py e test_fotos.py; o teste pula sem ela) ---
+pillow>=10

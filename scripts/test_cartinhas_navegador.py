@@ -3,6 +3,7 @@
   1. estrutura e medidas de cada tier        4. HTML × PNG (exportação principal e plano B em canvas)
   2. cores, bordas, tipografia, efeitos      5. movimento reduzido
   3. tema claro/escuro da Sala               6. áudio, vídeo e animações (SÓ MEDE: não altera nada)
+  7. página: carregamento sob demanda, estados (vazio), aviso de fotos, fonte da nota, folha de recorte (8 por A4)
 Filosofia: os testes aceitam trocar cores, espessuras e fontes. Eles checam INVARIANTES (contraste mínimo, valores
 válidos, HTML == PNG, mesmas faixas nos dois caminhos), e todos os limites ficam em CONFIG, logo abaixo.
 Como acrescentar teste: docs/TESTES_CARTINHAS.md.
@@ -18,6 +19,8 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ───────────────────────── CONFIG: ajuste aqui quando o visual mudar de propósito ─────────────────────────
 CONFIG = {
+    "ADIAR_MIN": 12,               # a Sala adia o desenho das cartinhas depois da 12ª (ADIAR_APOS em album.js): precisa haver mais que isso para o teste fazer sentido
+    "NOTA_PESO_MIN": 700,          # a nota tem peso próprio (hoje 800): nunca mais fraca que negrito
     "BANDA_MEDIDAS": 20,           # cada medida (ASS…MED) fica a até N pontos da nota (igual a BANDA em carta.js)
     "CONTRASTE_NOTA": 3.0,         # texto grande (a nota) sobre o fundo do cartão (WCAG: 3 para texto grande)
     "CONTRASTE_TEXTO": 4.5,        # nome, rodapé e chips sobre o fundo do cartão
@@ -271,6 +274,47 @@ with sync_playwright() as p:
             mov = pg.evaluate("window.Movimento ? Movimento.reduz() : null")
             checar(f"Movimento.reduz() reflete a preferência do sistema ({'reduzido' if reduzido else 'normal'})", mov == reduzido, str(mov))
             pg.context.close()
+
+    # ═════════════ 7. PÁGINA: desempenho, estados, fotos, impressão ═════════════
+    if quer("pagina") or quer("desempenho") or quer("estados") or quer("recorte"):
+        print("\n== 7. página da Sala ==")
+        pg = pagina(w=1300, h=1000)
+        n_slots = pg.evaluate("document.querySelectorAll('.slot').length")
+        n_cartas = pg.evaluate("document.querySelectorAll('.slot .carta').length")
+        n_adiados = pg.evaluate("document.querySelectorAll('.slot.adiado').length")
+        checar("carregamento sob demanda: no início só parte das cartinhas vira cartão", n_slots > CONFIG["ADIAR_MIN"] and 0 < n_adiados < n_slots and n_cartas + n_adiados == n_slots, f"slots={n_slots} cartas={n_cartas} adiados={n_adiados}")
+        checar("esqueleto no lugar de cada cartinha adiada (com texto para leitor de tela)", pg.evaluate("[...document.querySelectorAll('.slot.adiado')].every(e => e.querySelector('.slot-esq[aria-label]'))"))
+        for _ in range(40):   # rolagem em passos, como a pessoa faz (um salto direto ao fim pula o meio, que só abre quando chegamos perto)
+            pg.mouse.wheel(0, 700); pg.wait_for_timeout(120)
+        pg.wait_for_timeout(1200)
+        checar("rolando até o fim, todas viram cartão (nada fica preso no esqueleto)", pg.evaluate("document.querySelectorAll('.slot.adiado').length") == 0)
+        checar("depois de rolar, nenhum esqueleto sobra e a contagem de cartões bate com a de slots", pg.evaluate("document.querySelectorAll('.slot .carta').length") == n_slots)
+        pg.evaluate("window.scrollTo(0, 0)"); pg.wait_for_timeout(300)
+        # animações: só as cartas que estão perto da tela ficam .vivo
+        vivos = pg.evaluate("document.querySelectorAll('.carta.vivo').length")
+        checar("animações pausam fora da tela (menos cartas .vivo do que cartas)", 0 < vivos < n_slots, f"vivo={vivos} de {n_slots}")
+        # fonte da nota: algarismos tabulares e peso próprio
+        f = pg.evaluate("(() => { const b = document.querySelector('.carta .c-ovr b'); const c = getComputedStyle(b); return [c.fontVariantNumeric, c.fontWeight, c.fontFamily]; })()")
+        checar("nota com algarismos tabulares", "tabular-nums" in f[0], f[0])
+        checar("nota com peso próprio (≥ 700) e família do sistema", int(f[1]) >= CONFIG["NOTA_PESO_MIN"] and any(x in f[2] for x in CONFIG["FAMILIAS"]) or "Barlow" in f[2], str(f))
+        # aviso de fotos
+        av = pg.evaluate("(() => { const e = document.getElementById('avisoFotos'); return [e.hidden, e.textContent]; })()")
+        checar("aviso «faltam fotos» aparece e diz como completar", av[0] is False and "padronizar_foto" in av[1], str(av))
+        # estado vazio com saída
+        pg.fill("#fBusca", "zzzz-nao-existe"); pg.wait_for_timeout(400)
+        checar("estado vazio: mensagem e botão «Limpar filtros»", pg.locator(".estado.vazio [data-limpar]").count() == 1)
+        pg.click(".estado.vazio [data-limpar]"); pg.wait_for_timeout(500)
+        checar("«Limpar filtros» do estado vazio traz as cartinhas de volta", pg.evaluate("document.querySelectorAll('.slot').length") == n_slots)
+        # folha de recorte: 8 por A4, na CSS de impressão
+        pg.evaluate("Preguica.tudo(); document.body.classList.add('imp-recorte')"); pg.emulate_media(media="print"); pg.wait_for_timeout(500)
+        g = pg.evaluate("""(() => { const s = [...document.querySelectorAll('#album .slot, #podio:not([hidden]) .slot')]; const r = s[0].getBoundingClientRect(); const mm = 96 / 25.4;
+          const mk = getComputedStyle(s[1], '::before').backgroundImage;
+          const topos = [...new Set(s.slice(0, 12).map(e => Math.round(e.getBoundingClientRect().top)))];
+          return { larg: r.width / mm, alt: r.height / mm, marcas: (mk.match(/linear-gradient/g) || []).length, linhas: topos.length }; })()""")
+        checar("folha de recorte: cartinha de 63 mm de largura", abs(g["larg"] - 63) < 1.5, str(g))
+        checar("folha de recorte: 8 marcas de corte por cartinha", g["marcas"] == 8, str(g))
+        pg.emulate_media(media="screen")
+        pg.context.close()
 
     # ═════════════ 6. ÁUDIO, VÍDEO E ANIMAÇÕES (só mede) ═════════════
     if quer("audio") or quer("video") or quer("animac"):
