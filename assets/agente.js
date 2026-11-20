@@ -112,10 +112,10 @@ function carta(a, ms) {
   const m = Carta.medidas(ms);
   return `<div class="carta-wrap">${c}
     <div class="carta-info"><h2>Como ler o cartão</h2><p class="mut">Passe o mouse (ou clique) na cartinha para ver como chegou na nota.</p><table>${m.st.map(x => `<tr><td>${x[0]}</td><td>${Carta.NOMES[x[0]]}</td></tr>`).join('')}</table>
-      <p class="mut">A nota grande é a nota do mês. As seis medidas vão de 0 a 99 e usam só dados do ranking:
+      <p class="mut">A nota grande é a nota do mês. A nota não tem teto de 100 (mostra a realidade). As seis medidas vão de 0 a 99 e usam só dados do ranking:
       <b>ASS</b> dias trabalhados ÷ esperados · <b>TUR</b> turnos com lançamento · <b>CON</b> quanto menos a nota oscila entre os meses, maior ·
       <b>EVO</b> parte da nota e sobe ou cai 5 por ponto de diferença para o mês anterior · <b>POS</b> lugar pela nota (empate = mesmo lugar) · <b>MED</b> média dos meses. Nenhuma medida fica mais de 20 pontos longe da nota do cartão.
-      Nível: ouro ≥ 90, prata ≥ 75, bronze abaixo disso; <b>destaque</b> = top 3 com nota ≥ 90.</p>
+      Nível pela nota: ouro ≥ 90, prata ≥ 80, bronze ≥ 70, aço ≥ 60, ferro abaixo disso. Quem passa de 100 e fica fora do pódio é <b>elite</b>; o top 3 do mês é <b>destaque</b> (nota 90–99) ou <b>lendária</b> (nota 100 ou mais).</p>
       <div class="acoes"><button type="button" class="bt-img" id="bBaixar">${SV('download')} Baixar imagem</button><button type="button" class="bt-img zap" id="bZap">${SV('share')} Enviar pelo WhatsApp</button></div>
       <p class="mut" id="msgImg" role="status" aria-live="polite"></p>
       <p><a href="album.html">Ver o álbum com todas as cartinhas →</a></p></div></div>`;

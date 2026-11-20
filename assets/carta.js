@@ -63,8 +63,8 @@
       ['CON', u.con != null ? u.con : cl(100 - 5 * dp)], ['EVO', u.evo != null ? u.evo : delta == null ? cl(u.pontos) : cl(u.pontos + 5 * delta)],
       ['POS', u.total > 1 ? cl((u.total - posPorNota(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]].map(function (x) { return [x[0], gb(x[1])]; });
     // Escala única, pela nota ARREDONDADA (a que aparece no cartão): a cor do cartão e a borda seguem a mesma faixa.
-    // LENDÁRIA (tempestade) = só o TOP 3 com nota 100 | demais 100 = ELITE (ouro + selo 100 + brilho) | 90-99 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
-    // Top 3 do mês com 90-99 (quando há menos de 3 agentes com 100) ganha o cartão de ouro com borda holográfica ("DESTAQUE").
+    // LENDÁRIA (tempestade) = só o TOP 3 com nota ≥ 100 | demais ≥ 100 = ELITE (ouro + brilho) | 90-99 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
+    // Top 3 do mês com 90-99 (quando há menos de 3 agentes com 100 ou mais) ganha o cartão roxo com borda holográfica ("DESTAQUE").
     // A posição vem de posicao() (para quem está no teto, ordenada pela nota bruta).
     var r = Math.round(u.pontos), pos3 = posicao(u, id) <= 3, lend = r >= 100 && pos3, top3 = r >= 90 && r < 100 && pos3;
     var elite = r >= 100 && !pos3;   // tirou 100 mas ficou fora do pódio: não pode parecer um 90 qualquer
