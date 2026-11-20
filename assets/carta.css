@@ -1710,3 +1710,82 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
 .c-mes[open] { background: rgba(255, 255, 255, 0.04); }
 .c-mes table { margin: 2px 0 8px; }
 .c-pop tfoot td small { display: block; margin-top: 2px; }
+
+/* =========================================================
+   PATCH PREMIUM + IMPACTO (19/11/2026) — medalha, tipografia, metal e efeitos do topo.
+   Fica no fim para vencer as regras acima. NÃO muda o tamanho do cartão (272×392), o raio (18, igual ao PNG)
+   nem a escala da Sala: ornamentos, PNG e álbum dependem dessas medidas.
+   ========================================================= */
+
+/* Foto maior (medalha) */
+/* foto 112 (era 104/108): o espaço vem do nome e das estatísticas, porque o cartão tem altura fixa de 392 px */
+.carta .c-foto { width: 112px; height: 112px; margin: 0 auto 2px; border-width: 4px; }
+.carta .c-nome { padding-bottom: 3px; margin-bottom: 4px; }
+.carta .c-stats { gap: 4px 7px; padding: 1px 1px 3px; }
+.carta .c-rodape { margin-top: 5px; }
+.carta.b-90 .c-foto, .carta.b-top .c-foto, .carta.b-100 .c-foto { border-width: 4.5px; }
+
+/* Tipografia: nota maior e mais justa, rótulos mais leves */
+.carta .c-ovr b { letter-spacing: -0.04em; line-height: 0.86; }
+.carta .c-nome { letter-spacing: 0.055em; line-height: 1.15; }
+.carta .c-pos { letter-spacing: 0.03em; }
+.carta .c-stats span { letter-spacing: 0.08em; }
+.carta .c-rodape { letter-spacing: 0.02em; }
+
+/* Glitter só no topo (Ouro+): faixas médias ficam só com o metal */
+.carta:not(.b-90):not(.b-top):not(.b-100) > .c-glitter { display: none !important; }
+
+/* Bordas metálicas mais «joia» e pesadas conforme o nível */
+.carta { --bw: 4.5px; }
+.carta.b-60 { --bw: 5px; }
+.carta.b-70 { --bw: 5.5px; }
+.carta.b-80 { --bw: 6.5px; }
+.carta.b-90 { --bw: 9px; }
+.carta.b-top { --bw: 7.5px; }
+.carta.b-100 { --bw: 8px; }
+.carta.b-90 > .c-borda, .carta.b-top > .c-borda, .carta.b-100 > .c-borda {
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.28) 0 1.2px, rgba(255,255,255,0) 1.2px 5.5px),
+    linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 30%, rgba(0,0,0,0) 60%, rgba(0,0,0,.42) 100%),
+    linear-gradient(135deg, var(--b1) 0%, var(--b2) 18%, var(--b3) 38%, var(--b2) 55%, var(--b1) 72%, var(--b2) 88%, var(--b3) 100%);
+}
+
+/* Hierarquia de impacto: OURO limpo, DESTAQUE holográfico, LENDÁRIA com aura de medalha */
+.carta.b-90 {
+  box-shadow: 0 0 0 1.5px rgba(255,244,200,.55), 0 0 28px rgba(240,190,50,.48), 0 18px 42px rgba(0,0,0,.38),
+    inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 0 0 1px rgba(255,255,255,.22);
+}
+.carta.b-top, .carta.t-destaque {
+  box-shadow: 0 0 0 2px rgba(255,120,210,.55), 0 0 26px rgba(255,70,180,.5), 0 0 48px rgba(64,224,255,.22),
+    0 18px 42px rgba(0,0,0,.4), inset 0 1.5px 0 rgba(255,220,240,.35);
+}
+.carta.b-100 {
+  box-shadow: 0 0 0 2px rgba(255,236,160,.65), 0 0 32px rgba(240,190,60,.6), 0 0 60px rgba(200,150,40,.28),
+    0 20px 48px rgba(0,0,0,.48), inset 0 2px 0 rgba(255,245,200,.4), inset 0 0 0 1px rgba(255,255,255,.1);
+}
+.carta.b-100 .c-foto {
+  border-color: rgba(220,175,50,.85);
+  box-shadow: 0 0 0 3px rgba(255,230,140,.65), 0 0 0 7px rgba(255,255,255,.55), 0 6px 20px rgba(80,55,10,.25), inset 0 2px 0 rgba(255,255,255,.9);
+}
+.carta.b-top .c-foto, .carta.t-destaque .c-foto {
+  border-color: rgba(255,180,230,.9);
+  box-shadow: 0 0 0 3px rgba(255,100,200,.45), 0 0 0 7px rgba(255,255,255,.35), 0 0 28px rgba(200,80,255,.45), inset 0 1.5px 0 rgba(255,255,255,.7);
+}
+
+/* Efeitos mais fortes só no topo */
+.carta.b-100 .c-estrelas, .carta.b-100 .c-arcos, .carta.b-top .c-estrelas, .carta.b-top .c-arcos { opacity: .88; }
+.carta.b-100 .c-estrelas .ry { filter: drop-shadow(0 0 6px rgba(255,210,80,1)); }
+.carta.b-top .c-estrelas .ry { filter: drop-shadow(0 0 6px rgba(64,224,255,1)); }
+.carta.b-100 .c-flash { background: radial-gradient(ellipse 90% 65% at 50% 28%, rgba(255,245,190,1) 0%, rgba(255,200,70,.55) 42%, transparent 78%); }
+.carta.b-top .c-flash { background: radial-gradient(ellipse 90% 65% at 50% 28%, rgba(255,200,245,.95) 0%, rgba(100,220,255,.5) 42%, transparent 78%); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .carta.vivo.b-top, .carta.vivo.b-100 { animation: c-flutua 4.8s ease-in-out infinite; animation-delay: calc(var(--atraso, 0ms) + 800ms); }
+  .carta.vivo.b-100 > .c-borda { animation-duration: 4.2s; }
+  .carta.vivo.b-top > .c-borda { animation-duration: 4.8s; }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .carta.b-100:hover { animation: c-flutua 4.8s ease-in-out infinite, c-pulse-ouro 1.6s ease-in-out infinite; }
+  .carta.b-top:hover { animation: c-flutua 4.8s ease-in-out infinite, c-pulse-halo 1.5s ease-in-out infinite; }
+  .carta.b-90:hover > .c-brilho::before, .carta.b-top:hover > .c-brilho::before, .carta.b-100:hover > .c-brilho::before { animation: c-varre-1 .85s ease-out 1; }
+}

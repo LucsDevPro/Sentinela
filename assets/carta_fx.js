@@ -117,7 +117,7 @@
         if (capa.parentNode) capa.parentNode.removeChild(capa);
         conj.classList.remove('c-oculta');
         carta.animate([{ transform: persp + 'rotateY(-90deg)', filter: 'brightness(2.4)' }, { transform: persp + 'rotateY(0)', filter: 'brightness(1.6)', offset: .6 }, { transform: persp + 'rotateY(0)', filter: 'brightness(1)' }], { duration: 520, easing: 'cubic-bezier(.2,.9,.3,1)' });
-        particulas(pai, borda, borda === 'b-100' || borda === 'b-top' ? 34 : 18);
+        particulas(pai, borda, borda === 'b-100' ? 48 : borda === 'b-top' ? 40 : borda === 'b-90' ? 22 : 14);
       };
     };
   }

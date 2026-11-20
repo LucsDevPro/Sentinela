@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 19/11/2026 (6) — patch «premium + impacto» das cartinhas, com ajustes
+- Aplicado no fim de `carta.css`: foto maior (112 px), tipografia mais justa, `--bw` por nível (4,5 → 9 px), metal com mais textura em Ouro/Destaque/Lendária, glitter só do Ouro para cima, sombras e clarões mais fortes no topo, flutuação/pulso e partículas (`carta_fx.js`: 48/40/22/14) e limiares de fonte do nome.
+- Ficou de fora de propósito: cartão 272×408, raio 20, nome em 2 linhas e escala da Sala 1,08. O cartão tem altura fixa de 392 px e ornamentos (332×444), PNG (`FORMA_R = 18`) e álbum dependem dela; a foto cresceu tirando folga do nome/estatísticas, sem estourar a altura (a suíte confere).
+- Texto «Como ler o cartão» da página individual agora traz os níveis reais (prata ≥ 80, bronze ≥ 70, aço ≥ 60, ferro; elite/destaque/lendária; sem teto de 100).
+
 ## 19/11/2026 (5) — suíte das cartinhas e testes que aceitam mudança de cor
 - Nova `scripts/test_cartinhas_navegador.py` (navegador): 8 tiers, cores/bordas/fontes/efeitos por invariantes (contraste, faixas, validade), movimento reduzido, HTML × PNG (principal e plano B) e vídeo/áudio/animações **só medidos**. Limites em `CONFIG`; guia em `docs/TESTES_CARTINHAS.md`.
 - `test_album.py` deixou de travar hex: valida «cor válida», três cores de moldura e espessura em px.

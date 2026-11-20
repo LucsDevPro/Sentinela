@@ -120,7 +120,7 @@
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
       '<div class="c-pos"><small>' + pos + 'º · ' + u.total + '</small><span>' + esc(eq) + '</span></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
-      '<div class="c-nome nome"' + (curto.length > 20 ? ' style="font-size:1.05rem"' : curto.length > 15 ? ' style="font-size:1.12rem"' : '') + '>' + esc(curto) + '</div>' +
+      '<div class="c-nome nome"' + (curto.length > 22 ? ' style="font-size:1.05rem"' : curto.length > 17 ? ' style="font-size:1.14rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div class="c-chip" style="--v:' + x[1] + '%"><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
       '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + ornSVG(m.borda, 'frente') + '</div>';
   }
