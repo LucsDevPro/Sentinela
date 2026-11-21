@@ -197,7 +197,7 @@
   /* Raios no PNG: o instante do golpe (tudo aceso), com a paleta de cada nível. A espessura de cada galho vem de r[1]. */
   var PRAIO = {
     'b-100': { a: .95, halo: 'rgba(255,196,60,.55)', haloSh: '#FFC43C', miolo: '#D79A12', mioloSh: '#FFC846', fil: '#FFFBE8', fais: '#FFD25A', arco: 'rgba(255,190,50,.7)', arcoSh: '#FFBE32', arcoFil: '#FFF6D0' },
-    'b-top': { a: .95, halo: 'rgba(255,70,190,.5)', haloSh: '#FF46BE', miolo: '#FF63CE', mioloSh: '#40E0FF', fil: '#E9FBFF', fais: '#8FEFFF', arco: 'rgba(64,224,255,.75)', arcoSh: '#40E0FF', arcoFil: '#FFFFFF' }
+    'b-top': { a: .95, halo: 'rgba(255,70,190,.5)', haloSh: '#FF46BE', miolo: '#FF63CE', mioloSh: '#B94BFF', fil: '#FFF0FA', fais: '#FF8EDB', arco: 'rgba(220,100,255,.75)', arcoSh: '#D66BFF', arcoFil: '#FFFFFF' }
   };
   function raiosPNG(ctx, X, Y, W, H, S, P) {
     ctx.save(); ctx.globalAlpha = P.a; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -339,6 +339,9 @@
       // bisel do anel (igual ao CSS): luz em cima, sombra embaixo
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
+      // Contorno externo biselado: segunda linha fina, também presente no CSS por outline-offset: 3px.
+      ctx.save(); ctx.beginPath(); pathCartao(ctx, X - 3 * S, Y - 3 * S, W + 6 * S, H + 6 * S, S, 0, true);
+      ctx.strokeStyle = bc[1]; ctx.lineWidth = 1.25 * S; ctx.shadowColor = bc[1]; ctx.shadowBlur = 3 * S; ctx.stroke(); ctx.restore();
       if (is100 || isTop) arcosPNG(ctx, X, Y, W, H, S, PRAIO[is100 ? 'b-100' : 'b-top']);   // faíscas correndo pela borda (por cima do anel)
       ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0, 'frente', X, Y, S);   // coroa e gema por cima do cartão
       return new Promise(function (ok, erro) { try { cv.toBlob(function (bl) { bl ? ok(bl) : erro(new Error('falha ao gerar a imagem')); }, 'image/png'); } catch (e) { erro(e); } });
