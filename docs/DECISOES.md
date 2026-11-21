@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 20/11/2026 (3) — ELITE ganha o rosa do Destaque
+- Quem passa de 100 fora do pódio (ELITE) usa a paleta rosa/roxa do Destaque (`t-destaque`), mas mantém a moldura `b-90` com **louros dourados**, sem os relâmpagos (esses ficam só no pódio). Assim Elite e Ouro deixam de parecer o mesmo cartão dourado.
+- PNG plano B: o número em degradê (Destaque/Elite) saía invisível (cor transparente no CSS); agora usa a paleta do tier. Cores dos níveis nos filtros da Sala: Lendária dourada, Elite rosa.
+
 ## 20/11/2026 (2) — Destaque ilegível e contraste medido nos pixels
 - Bug: `carta.js` dava ao Destaque a classe de tier vazia, então o fundo roxo (`.b-top`) ficava com texto escuro `#2A1F08` (contraste 1,2: nome, chips e rodapé sumiam). Agora o tier é `t-destaque` (que já tinha `--tx` branco, logo e paleta do PNG). Só aparece quando o pódio tem nota 90–99.
 - A suíte das cartinhas media contraste contra a média de `--c1/--c2` e por isso não viu. Agora mede a cor do texto contra a cor mediana dos pixels atrás dele (nome, rodapé, chips) e o `TIERS` do teste usa as classes reais.

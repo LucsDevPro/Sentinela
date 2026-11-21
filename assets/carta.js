@@ -68,7 +68,7 @@
     // A posição vem de posicao() (para quem está no teto, ordenada pela nota bruta).
     var r = Math.round(u.pontos), pos3 = posicao(u, id) <= 3, lend = r >= 100 && pos3, top3 = r >= 90 && r < 100 && pos3;
     var elite = r >= 100 && !pos3;   // tirou 100 mas ficou fora do pódio: não pode parecer um 90 qualquer
-    var tier = lend ? ['', 'LENDÁRIA'] : top3 ? ['t-destaque', 'DESTAQUE'] : elite ? ['', 'ELITE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
+    var tier = lend ? ['', 'LENDÁRIA'] : top3 ? ['t-destaque', 'DESTAQUE'] : elite ? ['t-destaque', 'ELITE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
     var borda = lend ? 'b-100' : top3 ? 'b-top' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
     return { u: u, delta: delta, st: st, tier: tier, borda: borda, elite: elite };
   }
@@ -244,7 +244,7 @@
       var logo = r[3], cr = card.getBoundingClientRect(), W = cr.width * S, H = cr.height * S;
       var cv = document.createElement('canvas'); cv.width = Math.round(W + 2 * M * S); cv.height = Math.round(H + 2 * M * S);
       var ctx = cv.getContext('2d'), cs = getComputedStyle(card), c1 = cs.getPropertyValue('--c1').trim(), c2 = cs.getPropertyValue('--c2').trim(), ln = cs.getPropertyValue('--ln').trim();
-      if (isTop) { c1 = '#2E0A48'; c2 = '#080214'; }   // Destaque: o CSS pinta o fundo roxo em .carta.b-top (as variáveis --c1/--c2 seguem douradas)
+      if (isTop || tier === 't-destaque') { c1 = '#2E0A48'; c2 = '#080214'; }   // Destaque e Elite (mesmo roxo)   // Destaque: o CSS pinta o fundo roxo em .carta.b-top (as variáveis --c1/--c2 seguem douradas)
       var X = M * S, Y = M * S;
       ctx.fillStyle = '#EEF2F8'; ctx.fillRect(0, 0, cv.width, cv.height);
       ornCanvas(ctx, borda0, 'atras', X, Y, S);   // louros / cristais / aletas atrás do cartão
@@ -308,6 +308,10 @@
         if (is100 && pe.matches('.c-ovr b')) { // número com folha de ouro
           var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFF8D0'); og.addColorStop(.48, '#E8B820'); og.addColorStop(1, '#A07010');
           ctx.fillStyle = og; ctx.shadowColor = 'rgba(220,160,30,.6)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
+        }
+        else if (pe.matches('.c-ovr b') && /rgba\(\s*0,\s*0,\s*0,\s*0\)|transparent/.test(ps.color)) { // número em degradê no CSS (Destaque e Elite): a cor do texto é transparente, então pinta com a paleta do tier
+          var pn = LOGO[tier] || LOGO[''], gn = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); gn.addColorStop(0, pn[0]); gn.addColorStop(.48, pn[1]); gn.addColorStop(1, pn[2]);
+          ctx.fillStyle = gn;
         }
         var ls = ps.letterSpacing === 'normal' ? 0 : parseFloat(ps.letterSpacing) * S;
         texto(ctx, t, X + (b.left - cr.left) * S, Y + (b.top - cr.top + b.height / 2) * S, ls); ctx.globalAlpha = 1; ctx.shadowColor = 'rgba(0,0,0,0)'; ctx.shadowOffsetY = 0; ctx.shadowBlur = 0;
