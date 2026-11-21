@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 21/11/2026 (1) — patch premium aplicado só em parte
+- Aplicado: pódio com mais hierarquia (1º `--e:1.08`, 2º/3º `.9`, só acima de 640px; coroa maior; hover mais alto).
+- Não aplicado, de propósito: Destaque vinho-rosé (ficaria igual à Elite, que o usuário pediu diferenciada; `t-destaque` e o plano B do PNG ficariam fora de sincronia); `*:has(> .carta)` com `filter !important` (custo de desempenho, quebra lazy/impressão); bisel novo de `.c-borda` (o PNG desenha a borda à parte); selo do 2º em rosa (o 2º pode ser Lendária). Cores de Ferro/Aço/Bronze/Prata/Ouro/Elite/Lendária do patch já estavam no código.
+
 ## 20/11/2026 (6) — Lendária âmbar-preto + champanhe; página toda na mesma paleta
 - A **Lendária** deixa o azul-marinho: fundo âmbar-preto (#2B1B0E→#030201), moldura cobre/champanhe (`--b1 #8A4E24`, `--b2 #F2C277`, `--b3 #FFF4DE`), para ficar na família quente de Elite (vinho+rosé) e Ouro. Ajustados `ORN_PAL`/`LOGO` de `b-100`, o gradiente da nota no plano B e `COR_NIVEL` (Lendária, Ouro).
 - Acentos da Sala de Troféus (`album.css`) passam do amarelo #F0C840 ao champanhe #E9C27A (tema claro `--pri #A8741F`).

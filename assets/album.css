@@ -298,3 +298,14 @@ body.modo-apresentacao .aviso-fotos{display:none}
   html:has(body.imp-recorte),body.imp-recorte{background:#fff!important;background-image:none!important}
   body.imp-recorte .carta>.c-brilho,body.imp-recorte .carta>.c-glitter,body.imp-recorte .c-estrelas,body.imp-recorte .c-arcos,body.imp-recorte .c-flash{display:none!important}
 }
+
+/* ===== Patch premium 21/11: pódio com mais hierarquia (só acima de 640px; no celular valem as regras de baixo) ===== */
+@media (min-width:641px){
+  .podio .slot.p1{--e:1.08;transform:translateY(-14px)}
+  .podio .slot.p2,.podio .slot.p3{--e:.9;transform:translateY(10px)}
+  .podio .slot.p1::before{font-size:2.35rem;top:-42px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.45)) drop-shadow(0 0 12px rgba(233,194,122,.5))}
+}
+@media (min-width:641px) and (hover:hover) and (prefers-reduced-motion:no-preference){
+  .podio .slot.p1:hover{transform:translateY(-20px)}
+  .podio .slot.p2:hover,.podio .slot.p3:hover{transform:translateY(2px)}
+}
