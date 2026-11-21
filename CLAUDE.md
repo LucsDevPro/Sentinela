@@ -17,7 +17,7 @@ Editores .html ─▶ Worker Cloudflare ─▶ repository_dispatch ─▶ script
 ## Onde mexer
 | Quero alterar… | Onde |
 |---|---|
-| Pontuação e pesos | `coleta/pontos.py` (constantes) + `coleta/calculos.py` → `calcular_pontuacao` |
+| Pontuação e pesos | **valores dos pesos: `data/pesos_pontuacao.json`** (vence o padrão de `pontos.py`); regra/lógica: `coleta/pontos.py` + `coleta/calculos.py` → `calcular_pontuacao` |
 | Turno sem lançamento / Evento | `coleta/ausencias_ranking.py` → `_preparar_ausencias`; constantes em `pontos.py` |
 | Ranking e dias esperados | `coleta/ausencias_ranking.py` → `_preparar_ranking` |
 | Detecção de férias/chuva | `coleta/deteccao.py`; `CONFIRMAR_*_AUTOMATICAMENTE` em `pontos.py` |

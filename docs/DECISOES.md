@@ -1,5 +1,12 @@
 # Registro de decisões (mais recente primeiro)
 
+## 21/11/2026 (4) — pesos da pontuação num arquivo editável (etapa 1 de 3)
+- Novo `data/pesos_pontuacao.json`: os 18 pesos (`PONTOS_PERDA_*`, `PONTOS_GANHO_*`) com rótulo, valor, grupo e descrição. É a **fonte oficial**: ao importar `coleta/pontos.py`, `carregar_pesos()` lê o JSON e ele vence o padrão de fábrica do código. Só o campo `valor` deve ser editado.
+- Validação rígida (nome desconhecido, texto, negativo ou > 50 = erro explícito, nunca cálculo com peso errado em silêncio); também roda em `validar_json.py` antes da coleta.
+- Testes (`test_*.py`) usam os valores de fábrica do código, então editar o JSON em produção não quebra teste que fixa o peso original. `SENTINELA_PESOS=<arquivo>` troca o arquivo (simulações); `SENTINELA_PESOS=padrao` força o padrão do código.
+- Verificado: com os valores de hoje as 264 notas (Setembro, Outubro e Novembro; método novo e antigo) saem **idênticas** às de antes. Teste novo `scripts/test_pesos.py`.
+- Próximas etapas: (2) página que simula o efeito no ranking sem gravar; (3) gravar pelo Worker e recalcular todos os meses.
+
 ## 21/11/2026 (3) — almoço não conta como "fora do expediente"
 - Fora do expediente (−0,5/visita) = **fim de semana, antes das 07h ou a partir das 17h**. Visita entre 11h e 13h em dia útil não perde ponto (já era 0 em `PONTOS_PERDA_VISITA_ALMOCO`, mas o cálculo ainda a tratava como fora do expediente). Mudou `dentro_expediente` em `calculos.py`; `_carregar_df_semana` recalcula `dentro/fora_expediente` das semanas já em cache (sem recoletar). Turnos de presença continuam manhã 07–11h / tarde 13–17h.
 - Textos corrigidos: `assets/agente.js`, `docs/REGRAS.md`, tabela da transparência, título da aba Excel. Meses já congelados só mudam com `regenerar-mes.yml`.

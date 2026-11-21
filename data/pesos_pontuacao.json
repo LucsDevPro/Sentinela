@@ -1,0 +1,113 @@
+{
+  "_aviso": "Pesos da pontuação. Edite só o campo 'valor'. Mudar aqui muda a nota de TODOS os meses ao regenerar. Nomes = constantes de scripts/coleta/pontos.py.",
+  "pesos": {
+    "PONTOS_PERDA_INICIO_MANHA_ATRASADO": {
+      "rotulo": "Início da manhã atrasado",
+      "valor": 0.3,
+      "grupo": "perdas",
+      "descricao": "Por dia em que a primeira visita da manhã foi depois das 08h30."
+    },
+    "PONTOS_PERDA_FIM_MANHA_ANTECIPADO": {
+      "rotulo": "Fim da manhã antecipado",
+      "valor": 0.3,
+      "grupo": "perdas",
+      "descricao": "Por dia em que a última visita da manhã foi antes das 10h00."
+    },
+    "PONTOS_PERDA_INICIO_TARDE_ATRASADO": {
+      "rotulo": "Início da tarde atrasado",
+      "valor": 0.3,
+      "grupo": "perdas",
+      "descricao": "Por dia em que a primeira visita da tarde foi depois das 14h30."
+    },
+    "PONTOS_PERDA_FIM_TARDE_ANTECIPADO": {
+      "rotulo": "Fim da tarde antecipado",
+      "valor": 0.3,
+      "grupo": "perdas",
+      "descricao": "Por dia em que a última visita da tarde foi antes das 16h00."
+    },
+    "PONTOS_PERDA_TURNO_SEM_LANCAMENTO": {
+      "rotulo": "Turno sem lançamento",
+      "valor": 1.5,
+      "grupo": "perdas",
+      "descricao": "Por turno sem nenhuma visita registrada (que não seja chuva, reunião ou férias)."
+    },
+    "PONTOS_PERDA_DIA_INTEIRO_SEM_LANCAMENTO": {
+      "rotulo": "Dia inteiro sem lançamento (extra)",
+      "valor": 1,
+      "grupo": "perdas",
+      "descricao": "Além dos dois turnos, perde isto a mais no dia em que manhã e tarde ficaram sem lançamento (método de Outubro/2026 em diante)."
+    },
+    "PONTOS_PERDA_VISITA_RAPIDA": {
+      "rotulo": "Visita rápida",
+      "valor": 0.2,
+      "grupo": "perdas",
+      "descricao": "Por visita com menos de 3 minutos."
+    },
+    "PONTOS_PERDA_VISITA_LONGA": {
+      "rotulo": "Visita longa",
+      "valor": 0,
+      "grupo": "perdas",
+      "descricao": "Por visita acima do limite de duração. Desligada (0) por padrão."
+    },
+    "PONTOS_PERDA_VISITA_DUPLICADA": {
+      "rotulo": "Visita duplicada",
+      "valor": 0.3,
+      "grupo": "perdas",
+      "descricao": "Por visita em que o mesmo imóvel foi lançado mais de uma vez."
+    },
+    "PONTOS_PERDA_SEQUENCIA_SUSPEITA": {
+      "rotulo": "Sequência suspeita",
+      "valor": 1,
+      "grupo": "perdas",
+      "descricao": "Por visita lançada em lote (menos de 50 segundos da anterior)."
+    },
+    "PONTOS_PERDA_VISITA_NEGATIVA": {
+      "rotulo": "Duração negativa",
+      "valor": 0,
+      "grupo": "perdas",
+      "descricao": "Por visita com duração negativa. Desligada (0): costuma ser erro do sistema, não do agente."
+    },
+    "PONTOS_PERDA_FORA_EXPEDIENTE": {
+      "rotulo": "Fora do expediente",
+      "valor": 0.5,
+      "grupo": "perdas",
+      "descricao": "Por visita em fim de semana, antes das 07h ou depois das 17h. O almoço não conta."
+    },
+    "PONTOS_PERDA_VISITA_ALMOCO": {
+      "rotulo": "Visita no almoço",
+      "valor": 0,
+      "grupo": "perdas",
+      "descricao": "Por visita no horário de almoço. Desligada (0): só aparece como informação."
+    },
+    "PONTOS_PERDA_DIA_SEM_META": {
+      "rotulo": "Dia sem bater a meta",
+      "valor": 0.5,
+      "grupo": "perdas",
+      "descricao": "Por dia trabalhado com menos visitas que a meta diária da equipe."
+    },
+    "PONTOS_GANHO_DIA_COM_META": {
+      "rotulo": "Dia com meta batida",
+      "valor": 1,
+      "grupo": "ganhos",
+      "descricao": "Por dia trabalhado com a meta diária de visitas batida."
+    },
+    "PONTOS_GANHO_SEM_VISITA_RAPIDA": {
+      "rotulo": "Bônus: nenhuma visita rápida",
+      "valor": 5,
+      "grupo": "ganhos",
+      "descricao": "Bônus único se o agente não teve nenhuma visita rápida no período."
+    },
+    "PONTOS_GANHO_SEM_AUSENCIA": {
+      "rotulo": "Bônus: nenhum turno sem lançamento",
+      "valor": 5,
+      "grupo": "ganhos",
+      "descricao": "Bônus único se o agente não teve nenhum turno sem lançamento no período."
+    },
+    "PONTOS_GANHO_PONTUALIDADE_PERFEITA": {
+      "rotulo": "Bônus: pontualidade perfeita",
+      "valor": 3,
+      "grupo": "ganhos",
+      "descricao": "Bônus único se não houve nenhum atraso de início nem fim antecipado no período."
+    }
+  }
+}

@@ -17,7 +17,7 @@ import time
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TESTES = ["deteccao", "desempate", "ranking", "ciclos", "atestado", "ausencia", "decisao", "regras", "semanal",
-          "coleta", "sessao8", "sessao9", "sessao10", "turno_evento", "regenerar_mes", "resumo", "cache_leitura", "album", "versionar", "areas_agrupadas", "fotos"]
+          "coleta", "sessao8", "sessao9", "sessao10", "turno_evento", "regenerar_mes", "resumo", "cache_leitura", "album", "versionar", "areas_agrupadas", "fotos", "pesos"]
 LIMITE_S = 280
 
 

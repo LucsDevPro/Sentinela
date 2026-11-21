@@ -27,6 +27,7 @@ ARQUIVOS_CRITICOS = [
     "data/agentes_sem_abono.json",
     "data/meses_arquivados.json",
     "data/metas_equipes.json",
+    "data/pesos_pontuacao.json",
 ]
 
 
@@ -69,6 +70,17 @@ def validar_sem_abono(dados):
     return erros
 
 
+def validar_pesos(caminho):
+    """data/pesos_pontuacao.json: mesma checagem que o cálculo faz ao carregar (nome conhecido, número 0–50)."""
+    sys.path.insert(0, "scripts")
+    from coleta.pontos import carregar_pesos
+    try:
+        carregar_pesos(caminho)
+    except ValueError as e:
+        return [str(e)]
+    return []
+
+
 def validar(arquivos=ARQUIVOS_CRITICOS):
     erros = []
     for caminho in arquivos:
@@ -77,6 +89,8 @@ def validar(arquivos=ARQUIVOS_CRITICOS):
                 dados = json.load(f)
             if caminho.endswith("ajustes_ranking.json"):
                 erros.extend(validar_ajustes(dados))
+            elif caminho.endswith("pesos_pontuacao.json"):
+                erros.extend(validar_pesos(caminho))
             elif caminho.endswith("agentes_sem_abono.json"):
                 erros.extend(validar_sem_abono(dados))
         except FileNotFoundError:

@@ -155,3 +155,48 @@ PONTOS_GANHO_PONTUALIDADE_PERFEITA = 3     # bônus único: ZERO violações de 
 NOTA_FAIXA_EXCELENTE = 90   # >= 90        -> 🟢 EXCELENTE
 NOTA_FAIXA_BOM        = 75  # 75 a 89,9    -> 🟡 BOM
 NOTA_FAIXA_ATENCAO    = 60  # 60 a 74,9    -> 🟠 ATENÇÃO
+
+
+# --- PESOS EDITÁVEIS (data/pesos_pontuacao.json) -------------------------------------------
+# Os valores PONTOS_PERDA_* / PONTOS_GANHO_* acima são o padrão de fábrica. Se existir
+# data/pesos_pontuacao.json, o valor de lá VENCE (é a fonte oficial: o editor de pesos grava nele).
+# SENTINELA_PESOS=<caminho> troca o arquivo (simulações e testes). Arquivo quebrado ou valor
+# inválido = erro explícito: melhor parar do que calcular nota com peso errado em silêncio.
+import json as _json
+import os as _os
+import sys as _sys
+
+PESOS_ARQUIVO_PADRAO = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "..", "data", "pesos_pontuacao.json")
+PESOS_LIMITE_MAX = 50   # trava de sanidade: nenhum peso por ocorrência passa disso
+
+
+def carregar_pesos(caminho=None):
+    """Lê o JSON de pesos e devolve {NOME: valor}. Sem arquivo: {} (vale o padrão do código)."""
+    if caminho is None:
+        caminho = _os.environ.get("SENTINELA_PESOS") or PESOS_ARQUIVO_PADRAO
+        # Testes (test_*.py) usam os valores de fábrica do código: editar o JSON na produção nunca
+        # quebra um teste que fixa o peso original. Quem define SENTINELA_PESOS manda sempre.
+        if not _os.environ.get("SENTINELA_PESOS") and _os.path.basename(_sys.argv[0] or "").startswith("test_"):
+            return {}
+    if caminho == "padrao":   # SENTINELA_PESOS=padrao: valores de fábrica do código
+        return {}
+    if not _os.path.exists(caminho):
+        return {}
+    try:
+        with open(caminho, encoding="utf-8") as f:
+            bruto = _json.load(f)["pesos"]
+    except (ValueError, KeyError, TypeError) as e:
+        raise ValueError(f"{caminho}: arquivo de pesos inválido ({e})") from e
+    pesos = {}
+    for nome, item in bruto.items():
+        valor = item.get("valor") if isinstance(item, dict) else item
+        if not nome.startswith(("PONTOS_PERDA_", "PONTOS_GANHO_")) or nome not in globals():
+            raise ValueError(f"{caminho}: peso desconhecido '{nome}'")
+        if isinstance(valor, bool) or not isinstance(valor, (int, float)) or not (0 <= valor <= PESOS_LIMITE_MAX):
+            raise ValueError(f"{caminho}: valor inválido em '{nome}': {valor!r} (use número entre 0 e {PESOS_LIMITE_MAX}; perdas e ganhos são sempre positivos)")
+        pesos[nome] = valor
+    return pesos
+
+
+PESOS_CARREGADOS = carregar_pesos()
+globals().update(PESOS_CARREGADOS)

@@ -155,6 +155,7 @@ jobs:
           python scripts/test_album.py
           python scripts/test_areas_agrupadas.py
           python scripts/test_fotos.py   # pula sozinho se faltar Pillow
+          python scripts/test_pesos.py
           node worker/test_worker.mjs
 
       # Só coleta dados novos quando disparado por agendamento ou manualmente
