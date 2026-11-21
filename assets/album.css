@@ -298,3 +298,30 @@ body.modo-apresentacao .aviso-fotos{display:none}
   html:has(body.imp-recorte),body.imp-recorte{background:#fff!important;background-image:none!important}
   body.imp-recorte .carta>.c-brilho,body.imp-recorte .carta>.c-glitter,body.imp-recorte .c-estrelas,body.imp-recorte .c-arcos,body.imp-recorte .c-flash{display:none!important}
 }
+
+
+/* PÓDIO PREMIUM — medalhas reais no contorno das três primeiras cartinhas */
+.podio .slot.p1 .carta {
+  --b1: #8A5A00; --b2: #F2C14E; --b3: #FFF2B8; --bw: 9px;
+  outline: 1.5px solid #FFE7A0;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 2px rgba(255,231,160,.38), 0 0 34px rgba(242,193,78,.58),
+    0 22px 48px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.58);
+}
+.podio .slot.p2 .carta {
+  --b1: #586779; --b2: #B9C7D8; --b3: #F5F8FC; --bw: 8px;
+  outline: 1.25px solid #E7EEF7;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 1px rgba(231,238,247,.34), 0 0 25px rgba(185,199,216,.36),
+    0 18px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.podio .slot.p3 .carta {
+  --b1: #7A3F20; --b2: #C9824B; --b3: #F4D0A8; --bw: 8px;
+  outline: 1.25px solid #F4D0A8;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 1px rgba(244,208,168,.34), 0 0 25px rgba(201,130,75,.34),
+    0 18px 40px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.48);
+}
+.podio .slot.p1 .n { transform: scale(1.12); box-shadow: 0 0 0 2px rgba(255,231,160,.35), 0 0 20px rgba(242,193,78,.72); }
+.podio .slot.p2 .n { box-shadow: 0 0 0 2px rgba(231,238,247,.24), 0 0 16px rgba(185,199,216,.48); }
+.podio .slot.p3 .n { box-shadow: 0 0 0 2px rgba(244,208,168,.24), 0 0 16px rgba(201,130,75,.48); }
