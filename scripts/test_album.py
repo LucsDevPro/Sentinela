@@ -172,6 +172,16 @@ checar("raios, arcos e clarão são absolutos dentro do cartão (a regra `.carta
 checar("rodapé do cartão do 1º mês cabe no escudo (texto curto «1º mês», não «sem mês anterior»)", "' 1º mês'" in cj and "sem mês anterior" not in cj and "replace('1º mês'" in ler("assets/album.js"))
 checar("compactação: o conteúdo do cartão cabe nos 392 px (estatísticas, nome e foto menores que no refinamento)", ".carta .c-foto { width: 108px; height: 108px;" in cc and ".c-stats > div { padding: 4px 9px;" in cc)
 
+
+checar("moldura premium: duplo contorno biselado também desenhado no PNG",
+       "outline-offset: 3px" in cc and "pathCartao(ctx, X - 3 * S, Y - 3 * S, W + 6 * S, H + 6 * S" in cj)
+checar("Top 3 do pódio: primeiro dourado, segundo platina e terceiro bronze",
+       all(x in ler("assets/album.css") for x in (".podio .slot.p1 .carta", ".podio .slot.p2 .carta", ".podio .slot.p3 .carta")) and
+       all(x in ler("assets/album.css") for x in ("--b2: #F2C14E", "--b2: #B9C7D8", "--b2: #C9824B")))
+checar("Destaque 90–99: paleta magenta/rosa/violeta sem mistura ciano",
+       "--b1: #9B2BC7" in cc and "--b2: #FF5BC8" in cc and "--b3: #FFE5F6" in cc and
+       "'b-top': { a: .95" in cj and "mioloSh: '#B94BFF'" in cj and "arcoSh: '#D66BFF'" in cj)
+
 print()
 if falhas:
     print(f"❌ {len(falhas)} falha(s): {falhas}")
