@@ -35,7 +35,7 @@ window.addEventListener('hashchange', () => mostrar(location.hash === '#como-cal
 mostrar(location.hash === '#como-calcula' ? 'calc' : 'cartas', false);
 
 const NIVEIS = ['LENDÁRIA', 'DESTAQUE', 'ELITE', 'OURO', 'PRATA', 'BRONZE', 'AÇO', 'FERRO'];
-const COR_NIVEL = { 'LENDÁRIA': '#F2C230', 'DESTAQUE': '#EC4899', 'ELITE': '#EFA48C', 'OURO': '#E6C877', 'PRATA': '#9AA9BA', 'BRONZE': '#C47A3A', 'AÇO': '#2F8FA0', 'FERRO': '#4A4F57' };
+const COR_NIVEL = { 'LENDÁRIA': '#F2B661', 'DESTAQUE': '#EC4899', 'ELITE': '#EFA48C', 'OURO': '#E8D27A', 'PRATA': '#9AA9BA', 'BRONZE': '#C47A3A', 'AÇO': '#2F8FA0', 'FERRO': '#4A4F57' };
 const MIN_MESES_ANO = 2;   // mínimo de cartinhas mensais para entrar no «Melhor do ano»
 const ANO = 'Melhor do ano';   // opção do filtro: ranking pela média de todas as cartinhas (todos os meses)
 // Estados da página (vazio / erro): mesma aparência da Sala, com uma saída clara

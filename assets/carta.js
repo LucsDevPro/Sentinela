@@ -126,7 +126,7 @@
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF6C8', '#E8B820', '#A07010'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#BFE8EC', '#4F9BA8', '#1F5666'], 't-ferro': ['#9AA0AA', '#5C626C', '#2A2E35'], 't-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 't-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7'] };
+  var LOGO = { 'b-100': ['#FFF1D6', '#F2C277', '#A8662E'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#BFE8EC', '#4F9BA8', '#1F5666'], 't-ferro': ['#9AA0AA', '#5C626C', '#2A2E35'], 't-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 't-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -138,7 +138,7 @@
   /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
      As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-top': ['#FFE5F6', '#FF5BC8', '#6B2BD9'], 'b-100': ['#FFFBE6', '#F0C830', '#8A6010'] };
+  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-top': ['#FFE5F6', '#FF5BC8', '#6B2BD9'], 'b-100': ['#FFF4DE', '#F2C277', '#8A4E24'] };
   function ornPecas(borda) {
     var palOrig = ORN_PAL[borda], borda0El = borda === 'b-elite'; if (borda0El) borda = 'b-90';   // Elite: mesma geometria do Ouro, paleta rosé
     var atras = [], frente = [], n, i, lado, t;
@@ -309,7 +309,7 @@
         ctx.font = ps.fontWeight + ' ' + (parseFloat(ps.fontSize) * S) + 'px ' + ps.fontFamily;
         ctx.fillStyle = ps.color; ctx.globalAlpha = parseFloat(ps.opacity); ctx.shadowColor = 'rgba(0,0,0,0)';
         if (is100 && pe.matches('.c-ovr b')) { // número com folha de ouro
-          var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFF8D0'); og.addColorStop(.48, '#E8B820'); og.addColorStop(1, '#A07010');
+          var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFF4DE'); og.addColorStop(.48, '#F2C277'); og.addColorStop(1, '#A8662E');
           ctx.fillStyle = og; ctx.shadowColor = 'rgba(220,160,30,.6)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
         }
         else if (pe.matches('.c-ovr b') && /rgba\(\s*0,\s*0,\s*0,\s*0\)|transparent/.test(ps.color)) { // número em degradê no CSS (Destaque e Elite): a cor do texto é transparente, então pinta com a paleta do tier

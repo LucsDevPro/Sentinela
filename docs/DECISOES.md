@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 20/11/2026 (6) — Lendária âmbar-preto + champanhe; página toda na mesma paleta
+- A **Lendária** deixa o azul-marinho: fundo âmbar-preto (#2B1B0E→#030201), moldura cobre/champanhe (`--b1 #8A4E24`, `--b2 #F2C277`, `--b3 #FFF4DE`), para ficar na família quente de Elite (vinho+rosé) e Ouro. Ajustados `ORN_PAL`/`LOGO` de `b-100`, o gradiente da nota no plano B e `COR_NIVEL` (Lendária, Ouro).
+- Acentos da Sala de Troféus (`album.css`) passam do amarelo #F0C840 ao champanhe #E9C27A (tema claro `--pri #A8741F`).
+
 ## 20/11/2026 (5) — Elite sem louros
 - Os louros laterais da Elite (borda que saía do cartão) foram removidos em `ornPecas` (`b-elite`); ficam a coroa e a gema. O Ouro mantém os louros.
 
