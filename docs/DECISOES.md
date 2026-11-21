@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 20/11/2026 (5) — Elite sem louros
+- Os louros laterais da Elite (borda que saía do cartão) foram removidos em `ornPecas` (`b-elite`); ficam a coroa e a gema. O Ouro mantém os louros.
+
 ## 20/11/2026 (4) — família de metais: Lendária, Elite e Ouro; Prata, Aço e Ferro
 - **Elite** deixa de usar o roxo do Destaque (`t-destaque`) e ganha tier próprio `t-elite`: vinho + **ouro rosé** (louros e coroa rosé, borda `b-90`). Liga com o ouro da Lendária (azul-noite + amarelo) e do Ouro (champanhe claro) sem se confundir com nenhum, e não compete com o roxo/rosa neon do Destaque.
 - **Aço** = azul-petróleo saturado (era cinza-esverdeado claro); **Ferro** = grafite escuro e fosco, texto claro, sem brilho (era cinza claro). Prata segue platina clara: a queda Prata → Aço → Ferro agora é visível.

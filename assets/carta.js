@@ -140,7 +140,7 @@
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
   var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-top': ['#FFE5F6', '#FF5BC8', '#6B2BD9'], 'b-100': ['#FFFBE6', '#F0C830', '#8A6010'] };
   function ornPecas(borda) {
-    var palOrig = ORN_PAL[borda]; if (borda === 'b-elite') borda = 'b-90';   // Elite: mesma geometria do Ouro, paleta rosé
+    var palOrig = ORN_PAL[borda], borda0El = borda === 'b-elite'; if (borda0El) borda = 'b-90';   // Elite: mesma geometria do Ouro, paleta rosé
     var atras = [], frente = [], n, i, lado, t;
     function espelha(pts) { return pts.map(function (q) { return [272 - q[0], q[1]]; }); }
     if (borda === 'b-80') { // prata: uma aleta de cada lado, colada na lateral reta do escudo (x=0, y 202→356) e com as pontas em 45°
@@ -167,6 +167,7 @@
       frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true });
     }
     if (ORN_PAL[borda]) frente.push({ t: 'poly', pts: [[116, 383], [156, 383], [147, 396], [136, 411], [125, 396]], gema: true }); // gema embaixo
+    if (borda0El) atras = [];   // Elite: sem os louros laterais (a borda que saía do cartão); ficam coroa e gema
     return { atras: atras, frente: frente, pal: palOrig };
   }
   function ornSVG(borda, camada) {
