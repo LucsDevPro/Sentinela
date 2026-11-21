@@ -41,7 +41,7 @@ CONFIG = {
 }
 # Os 8 tiers. «caso» = (nota, posição no mês de 20 agentes). Se um tier novo surgir, acrescente aqui.
 TIERS = [
-    ("LENDÁRIA", "b-100", 105, 1), ("DESTAQUE", "t-destaque b-top", 96, 2), ("ELITE", "t-destaque b-90 n100", 104, 8), ("OURO", "b-90", 93, 9),
+    ("LENDÁRIA", "b-100", 105, 1), ("DESTAQUE", "t-destaque b-top", 96, 2), ("ELITE", "t-elite b-90 n100", 104, 8), ("OURO", "b-90", 93, 9),
     ("PRATA", "t-prata b-80", 85, 10), ("BRONZE", "t-bronze b-70", 75, 11), ("AÇO", "t-aco b-60", 65, 12), ("FERRO", "t-ferro b-0", 40, 19),
 ]
 PREMIUM = {"b-100", "b-top", "b-90"}   # tiers com brilho e animação própria

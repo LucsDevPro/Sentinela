@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 20/11/2026 (4) — família de metais: Lendária, Elite e Ouro; Prata, Aço e Ferro
+- **Elite** deixa de usar o roxo do Destaque (`t-destaque`) e ganha tier próprio `t-elite`: vinho + **ouro rosé** (louros e coroa rosé, borda `b-90`). Liga com o ouro da Lendária (azul-noite + amarelo) e do Ouro (champanhe claro) sem se confundir com nenhum, e não compete com o roxo/rosa neon do Destaque.
+- **Aço** = azul-petróleo saturado (era cinza-esverdeado claro); **Ferro** = grafite escuro e fosco, texto claro, sem brilho (era cinza claro). Prata segue platina clara: a queda Prata → Aço → Ferro agora é visível.
+- Paletas em `carta.css` (fim do arquivo), `LOGO`/`ORN_PAL` e fundo do PNG plano B em `carta.js`, cores dos filtros em `album.js` (`COR_NIVEL`). Contraste conferido pela suíte (medido nos pixels).
+
 ## 20/11/2026 (3) — ELITE ganha o rosa do Destaque
 - Quem passa de 100 fora do pódio (ELITE) usa a paleta rosa/roxa do Destaque (`t-destaque`), mas mantém a moldura `b-90` com **louros dourados**, sem os relâmpagos (esses ficam só no pódio). Assim Elite e Ouro deixam de parecer o mesmo cartão dourado.
 - PNG plano B: o número em degradê (Destaque/Elite) saía invisível (cor transparente no CSS); agora usa a paleta do tier. Cores dos níveis nos filtros da Sala: Lendária dourada, Elite rosa.
