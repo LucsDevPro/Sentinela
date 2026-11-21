@@ -126,7 +126,7 @@
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF1D6', '#F2C277', '#A8662E'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#BFE8EC', '#4F9BA8', '#1F5666'], 't-ferro': ['#9AA0AA', '#5C626C', '#2A2E35'], 't-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 't-destaque': ['#FFE0F0', '#FF6BCB', '#9B2BC7'] };
+  var LOGO = { 'b-100': ['#FFF1D6', '#F2C277', '#A8662E'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#BFE8EC', '#4F9BA8', '#1F5666'], 't-ferro': ['#9AA0AA', '#5C626C', '#2A2E35'], 't-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 't-destaque': ['#F4E4FF', '#BC82FF', '#5B2BC4'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -138,7 +138,7 @@
   /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
      As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-top': ['#FFE5F6', '#FF5BC8', '#6B2BD9'], 'b-100': ['#FFF4DE', '#F2C277', '#8A4E24'] };
+  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-top': ['#F4E4FF', '#C27CFF', '#5B2BC4'], 'b-100': ['#FFF4DE', '#F2C277', '#8A4E24'] };
   function ornPecas(borda) {
     var palOrig = ORN_PAL[borda], borda0El = borda === 'b-elite'; if (borda0El) borda = 'b-90';   // Elite: mesma geometria do Ouro, paleta rosé
     var atras = [], frente = [], n, i, lado, t;
@@ -196,8 +196,8 @@
   }
   /* Raios no PNG: o instante do golpe (tudo aceso), com a paleta de cada nível. A espessura de cada galho vem de r[1]. */
   var PRAIO = {
-    'b-100': { a: .95, halo: 'rgba(255,196,60,.55)', haloSh: '#FFC43C', miolo: '#D79A12', mioloSh: '#FFC846', fil: '#FFFBE8', fais: '#FFD25A', arco: 'rgba(255,190,50,.7)', arcoSh: '#FFBE32', arcoFil: '#FFF6D0' },
-    'b-top': { a: .95, halo: 'rgba(255,70,190,.5)', haloSh: '#FF46BE', miolo: '#FF63CE', mioloSh: '#40E0FF', fil: '#E9FBFF', fais: '#8FEFFF', arco: 'rgba(64,224,255,.75)', arcoSh: '#40E0FF', arcoFil: '#FFFFFF' }
+    'b-100': { a: .95, halo: 'rgba(242,194,119,.55)', haloSh: '#F2C277', miolo: '#D9A04F', mioloSh: '#F2C277', fil: '#FFF6E4', fais: '#F6D9A0', arco: 'rgba(242,194,119,.7)', arcoSh: '#F2C277', arcoFil: '#FFF4DE' },
+    'b-top': { a: .95, halo: 'rgba(170,90,255,.5)', haloSh: '#AA5AFF', miolo: '#D08CFF', mioloSh: '#BE78FF', fil: '#F6ECFF', fais: '#E2BEFF', arco: 'rgba(210,150,255,.75)', arcoSh: '#D296FF', arcoFil: '#FFFFFF' }
   };
   function raiosPNG(ctx, X, Y, W, H, S, P) {
     ctx.save(); ctx.globalAlpha = P.a; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -246,7 +246,7 @@
       var logo = r[3], cr = card.getBoundingClientRect(), W = cr.width * S, H = cr.height * S;
       var cv = document.createElement('canvas'); cv.width = Math.round(W + 2 * M * S); cv.height = Math.round(H + 2 * M * S);
       var ctx = cv.getContext('2d'), cs = getComputedStyle(card), c1 = cs.getPropertyValue('--c1').trim(), c2 = cs.getPropertyValue('--c2').trim(), ln = cs.getPropertyValue('--ln').trim();
-      if (isTop || tier === 't-destaque') { c1 = '#2E0A48'; c2 = '#080214'; }   // Destaque: o CSS pinta o roxo em .b-top / .t-destaque
+      if (isTop || tier === 't-destaque') { c1 = '#2A1446'; c2 = '#080414'; }   // Destaque: o CSS pinta o roxo em .b-top / .t-destaque
       if (tier === 't-elite') { c1 = '#4A1226'; c2 = '#12030A'; }   // Elite: vinho   // Destaque: o CSS pinta o fundo roxo em .carta.b-top (as variáveis --c1/--c2 seguem douradas)
       var X = M * S, Y = M * S;
       ctx.fillStyle = '#EEF2F8'; ctx.fillRect(0, 0, cv.width, cv.height);
@@ -279,8 +279,8 @@
       // foto (círculo)
       var f = card.querySelector('.c-foto'), fr = rel(f), fs = getComputedStyle(f), bw = parseFloat(fs.borderTopWidth) * S;
       if (is100) { // anel dourado externo + brilho (box-shadow do CSS)
-        ctx.save(); ctx.shadowColor = 'rgba(220,170,50,.7)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
-        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(232,196,96,.95)'; ctx.stroke(); ctx.restore();
+        ctx.save(); ctx.shadowColor = 'rgba(242,194,119,.7)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
+        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(242,194,119,.95)'; ctx.stroke(); ctx.restore();
       }
       ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, Math.max(0, fr.w / 2 - bw / 2), 0, 2 * Math.PI); ctx.fillStyle = fs.backgroundColor; ctx.fill();
       var ft = r[4];

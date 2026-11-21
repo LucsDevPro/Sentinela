@@ -1,5 +1,14 @@
 # Registro de decisões (mais recente primeiro)
 
+## 21/11/2026 (2) — escada de design das cartinhas (6 ajustes)
+- **Destaque** vira ameixa fria (`#2A1446→#080414`), borda violeta-magenta (`--b2 #D070FF`), raios lilás sem ciano; assim não se confunde com a Elite (vinho+rosé) nem com a Lendária (âmbar). Sincronizados `ORN_PAL`, `LOGO`, `PRAIO`, plano B do PNG, `carta_fx.js` (partículas) e `COR_NIVEL` do álbum.
+- **Prata** mais fria e clara (platina), única de aparência "metal nobre" entre Ferro, Aço e Prata.
+- **Lendária** com uma cor só: nota, raios, faíscas, anel da foto e coroa em champanhe (`#F2C277`).
+- **Bordas finas nos níveis baixos**: `--k-bw-base/60/70/80` = 3.5/3.5/4/5 px (altas seguem 7.5–9 px).
+- **Anel da foto** na cor de cada nível (antes branco neutro).
+- **Brilho com função**: Ferro/Aço/Bronze/Prata sem varredura; Ouro só faíscas (varredura no hover); Elite só varredura; Destaque só raios; Lendária raios + faíscas.
+- Tudo num bloco no fim de `carta.css` ("ESCADA DE DESIGN"). Pacote/vídeo (`pacote.*`, `video.js`) mantêm a paleta própria.
+
 ## 21/11/2026 (1) — patch premium aplicado só em parte
 - Aplicado: pódio com mais hierarquia (1º `--e:1.08`, 2º/3º `.9`, só acima de 640px; coroa maior; hover mais alto).
 - Não aplicado, de propósito: Destaque vinho-rosé (ficaria igual à Elite, que o usuário pediu diferenciada; `t-destaque` e o plano B do PNG ficariam fora de sincronia); `*:has(> .carta)` com `filter !important` (custo de desempenho, quebra lazy/impressão); bisel novo de `.c-borda` (o PNG desenha a borda à parte); selo do 2º em rosa (o 2º pode ser Lendária). Cores de Ferro/Aço/Bronze/Prata/Ouro/Elite/Lendária do patch já estavam no código.

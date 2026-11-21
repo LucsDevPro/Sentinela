@@ -11,7 +11,7 @@
   --k-peso-nota: 800;              /* só a nota usa o 800 (assets/fonts) */
   --k-tracking-nota: -0.035em;
   --k-tracking-nome: 0.055em;
-  --k-bw-base: 4.5px; --k-bw-60: 5px; --k-bw-70: 5.5px; --k-bw-80: 6.5px; --k-bw-90: 9px; --k-bw-top: 7.5px; --k-bw-100: 8px;   /* espessura da moldura por nível */
+  --k-bw-base: 3.5px; --k-bw-60: 3.5px; --k-bw-70: 4px; --k-bw-80: 5px; --k-bw-90: 9px; --k-bw-top: 7.5px; --k-bw-100: 8px;   /* espessura da moldura por nível */
   --k-aura-ouro: 0 0 28px rgba(240, 190, 50, 0.48);
   --k-aura-destaque: 0 0 26px rgba(255, 70, 180, 0.5), 0 0 48px rgba(64, 224, 255, 0.22);
   --k-aura-lendaria: 0 0 32px rgba(240, 190, 60, 0.6), 0 0 60px rgba(200, 150, 40, 0.28);
@@ -1876,3 +1876,97 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
     0 24px 54px rgba(0, 0, 0, 0.5), inset 0 1.5px 0 rgba(255, 236, 200, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 .carta.b-100 .c-foto { border-color: rgba(242, 194, 119, 0.85); }
+
+
+/* =====================================================================
+   ESCADA DE DESIGN (21/11/2026) — 6 ajustes, sempre no fim do arquivo (vence os blocos acima)
+   1 Destaque ameixa · 2 Prata platina fria · 3 cor única por nível · 4 borda fina nos baixos
+   5 anel da foto na cor do nível · 6 brilho só onde significa algo
+   O PNG (carta.js) lê --c1/--c2/--b*/--bw e o anel da foto daqui; o que é fixo no JS está em carta.js (PRAIO, ORN_PAL, LOGO).
+   ===================================================================== */
+
+/* (1) DESTAQUE — ameixa fria e escura, borda violeta-magenta (sem tons quentes: Elite = vinho+rosé, Lendária = âmbar) */
+.carta.t-destaque, .carta.b-top {
+  --c1: #2A1446; --c2: #080414; --tx: #FFFFFF; --ln: rgba(226, 190, 255, 0.42);
+  --logo: linear-gradient(170deg, #F4E4FF 0%, #BC82FF 48%, #5B2BC4 100%);
+  --b1: #5B22B4; --b2: #D070FF; --b3: #F6E6FF; --bw: var(--k-bw-top);
+  --rel-glow: 0 0 38px rgba(190, 110, 255, 0.45), 0 0 70px rgba(110, 60, 220, 0.18);
+  background:
+    radial-gradient(ellipse 78% 46% at 50% 12%, rgba(190, 120, 255, 0.26) 0%, transparent 55%),
+    linear-gradient(165deg, #2A1446 0%, #170A2E 42%, #080414 100%);
+  box-shadow:
+    0 0 0 1.5px rgba(208, 112, 255, 0.6),
+    0 0 40px rgba(180, 100, 255, 0.36),
+    0 0 72px rgba(100, 60, 220, 0.16),
+    0 22px 52px rgba(0, 0, 0, 0.46),
+    inset 0 1.5px 0 rgba(236, 206, 255, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.carta.t-destaque::before { background: repeating-linear-gradient(120deg, rgba(190, 120, 255, 0.10) 0 10px, transparent 10px 26px); }
+.carta.t-destaque::after {
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(255, 255, 255, .22), transparent 42%),
+    linear-gradient(118deg, transparent 24%, rgba(255, 255, 255, .12) 39%, transparent 49%),
+    radial-gradient(ellipse at 85% 82%, rgba(170, 110, 255, .14), transparent 38%);
+}
+.carta.t-destaque .c-ovr b, .carta.b-top .c-ovr b {
+  background: linear-gradient(180deg, #FFFFFF 0%, #EBD2FF 45%, #BC82FF 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(190, 110, 255, 0.5));
+}
+.carta.b-top .c-estrelas .rg { stroke: rgba(170, 90, 255, 0.5); filter: blur(3px); }
+.carta.b-top .c-estrelas .ry { stroke: #D08CFF; filter: drop-shadow(0 0 4px rgba(190, 120, 255, 0.95)); }
+.carta.b-top .c-estrelas .rw { stroke: #F6ECFF; }
+.carta.b-top .c-estrelas circle { fill: #E2BEFF; }
+.carta.b-top .c-arcos .ag { stroke: rgba(210, 150, 255, 0.75); stroke-width: 3.4; filter: blur(1.4px); }
+.carta.b-top .c-arcos .aw { stroke: #FFFFFF; stroke-width: 1.1; }
+.carta.b-top .c-flash { background: radial-gradient(ellipse 85% 60% at 50% 30%, rgba(240, 218, 255, 0.9), rgba(180, 110, 255, 0.4) 45%, transparent 78%); }
+.c-conj.b-top .c-orna-atras { filter: drop-shadow(0 0 5px rgba(190, 110, 255, 0.6)); }
+@keyframes c-golpe-orna-rosa {
+  0%, 14%, 100% { filter: drop-shadow(0 0 6px rgba(190, 110, 255, 0.7)); }
+  2%, 6% { filter: drop-shadow(0 0 20px rgba(226, 190, 255, 1)) drop-shadow(0 0 7px #FFFFFF); }
+}
+*:has(> .carta.b-top) { filter: drop-shadow(0 0 12px rgba(180, 100, 255, 0.5)) drop-shadow(0 0 20px rgba(100, 60, 220, 0.3)); }
+@media (hover: hover) { .slot:hover:has(.carta.b-top) { filter: drop-shadow(0 0 14px rgba(190, 110, 255, 0.5)) drop-shadow(0 0 22px rgba(120, 70, 230, 0.3)); } }
+
+/* (2) PRATA — platina fria e clara, para ser o único "metal nobre" entre Ferro, Aço e Prata */
+.carta.t-prata {
+  --c1: #FBFDFF; --c2: #7F95AE; --tx: #10202E; --ln: rgba(16, 32, 46, 0.26);
+  --logo: linear-gradient(170deg, #D6E4F2 0%, #8EA6C2 50%, #3A4E66 100%);
+  --b1: #1E2D3E; --b2: #A9BCD0; --b3: #F4F9FF;
+  background: linear-gradient(165deg, #FFFFFF 0%, #EAF2FA 26%, #BCCCDD 58%, #8197B0 100%);
+}
+
+/* (3) LENDÁRIA — uma cor só: champanhe na borda, nota, raios, anel da foto e coroa */
+.carta.b-100 .c-ovr b {
+  background: linear-gradient(180deg, #FFF8EA 0%, #F8DCA8 42%, #E3A95C 74%, #FFF1D6 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .85)) drop-shadow(0 0 10px rgba(242, 194, 119, .4));
+}
+.carta.b-100 .c-estrelas .rg { stroke: rgba(200, 140, 70, 0.34); }
+.carta.b-100 .c-estrelas .ry { stroke: #D9A04F; filter: drop-shadow(0 0 3px rgba(242, 194, 119, 0.5)); }
+.carta.b-100 .c-estrelas .rw { stroke: #FFF6E4; }
+.carta.b-100 .c-estrelas circle { fill: #F2C277; }
+.carta.b-100 .c-arcos .ag { stroke: rgba(242, 194, 119, 0.45); }
+.carta.b-100 .c-arcos .aw { stroke: #C98E4A; }
+.carta.b-100 .c-flash { background: radial-gradient(ellipse 85% 60% at 50% 30%, rgba(255, 244, 222, 0.95), rgba(242, 194, 119, 0.45) 45%, transparent 78%); }
+.c-conj.b-100 .c-orna-atras { filter: drop-shadow(0 0 5px rgba(242, 194, 119, 0.6)); }
+*:has(> .carta.b-100) { filter: drop-shadow(0 0 12px rgba(242, 194, 119, 0.5)) drop-shadow(0 0 22px rgba(200, 140, 60, 0.3)); }
+
+/* (5) Anel da foto na cor do nível (antes: branco neutro igual para todos) */
+.carta.t-ferro .c-foto { border-color: #7A808B; box-shadow: 0 0 0 3px rgba(154, 160, 170, .35), 0 0 0 6px rgba(255, 255, 255, .16), 0 4px 12px rgba(0, 0, 0, .35), inset 0 1.5px 0 rgba(255, 255, 255, .25); }
+.carta.t-aco .c-foto { border-color: #3F8E9C; box-shadow: 0 0 0 3px rgba(82, 160, 172, .45), 0 0 0 6px rgba(255, 255, 255, .3), 0 4px 12px rgba(6, 40, 50, .3), inset 0 1.5px 0 rgba(255, 255, 255, .5); }
+.carta.t-bronze .c-foto { border-color: #B86A34; box-shadow: 0 0 0 3px rgba(200, 120, 64, .45), 0 0 0 6px rgba(255, 255, 255, .3), 0 4px 12px rgba(70, 30, 8, .3), inset 0 1.5px 0 rgba(255, 255, 255, .5); }
+.carta.t-prata .c-foto { border-color: #8EA2B8; box-shadow: 0 0 0 3px rgba(152, 172, 192, .5), 0 0 0 6px rgba(255, 255, 255, .45), 0 4px 12px rgba(20, 36, 52, .28), inset 0 1.5px 0 rgba(255, 255, 255, .7); }
+.carta.b-90:not(.t-elite) .c-foto { border-color: #C99A24; box-shadow: 0 0 0 3px rgba(212, 166, 42, .5), 0 0 0 6px rgba(255, 255, 255, .4), 0 4px 14px rgba(90, 60, 0, .3), inset 0 1.5px 0 rgba(255, 255, 255, .7); }
+.carta.t-destaque .c-foto, .carta.b-top .c-foto { border-color: rgba(226, 190, 255, .85); box-shadow: 0 0 0 3px rgba(190, 110, 255, .45), 0 0 0 7px rgba(255, 255, 255, .26), 0 0 26px rgba(180, 100, 255, .45), inset 0 1.5px 0 rgba(255, 255, 255, .6); }
+.carta.b-100 .c-foto { border-color: rgba(242, 194, 119, .9); box-shadow: 0 0 0 3px rgba(242, 194, 119, .5), 0 0 0 7px rgba(255, 244, 222, .3), 0 0 26px rgba(242, 194, 119, .4), inset 0 1.5px 0 rgba(255, 244, 222, .6); }
+
+/* (6) Brilho só onde significa algo: cada nível alto tem UM efeito próprio
+   Ferro/Aço/Bronze/Prata: nenhum (só o reflexo do mouse) · Ouro: faíscas, varredura só no hover
+   Elite: varredura contínua, sem faíscas · Destaque: raios · Lendária: raios + faíscas */
+.carta.t-prata > .c-brilho::before, .carta.t-bronze > .c-brilho::before, .carta.t-aco > .c-brilho::before { animation: none !important; opacity: 0; }
+.carta.vivo.b-90:not(.t-elite):not(:hover) > .c-brilho::before { animation: none; opacity: 0; }
+.carta.t-elite > .c-glitter { display: none !important; }
+.carta.vivo.b-top:not(:hover) > .c-brilho::before, .carta.vivo.b-100:not(:hover) > .c-brilho::before { animation: none; opacity: 0; }
+.carta.b-top > .c-glitter { display: none !important; }

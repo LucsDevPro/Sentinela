@@ -66,7 +66,7 @@
   }
 
   /* ---- partículas (WAAPI: nada fica no DOM depois) ---- */
-  var COR = { 'b-100': ['#FFD25A', '#FFF6C8', '#F0B020'], 'b-top': ['#FF63CE', '#40E0FF', '#FFFFFF'], 'b-90': ['#FFD25A', '#FFF3B0'] };
+  var COR = { 'b-100': ['#F2C277', '#FFF4DE', '#C98E4A'], 'b-top': ['#D08CFF', '#F6ECFF', '#FFFFFF'], 'b-90': ['#FFD25A', '#FFF3B0'] };
   function particulas(ancora, borda, n) {
     var cores = COR[borda]; if (!cores || reduz() || !ancora.animate) return;
     var wrap = document.createElement('div'); wrap.className = 'c-particulas';
