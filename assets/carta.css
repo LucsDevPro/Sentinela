@@ -1876,3 +1876,31 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
     0 24px 54px rgba(0, 0, 0, 0.5), inset 0 1.5px 0 rgba(255, 236, 200, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 .carta.b-100 .c-foto { border-color: rgba(242, 194, 119, 0.85); }
+
+
+/* SENTINELA PREMIUM 2026 — moldura biselada e paleta coerente */
+.carta {
+  outline: 1px solid var(--b2, #B8A078);
+  outline-offset: 3px;
+}
+.carta > .c-borda {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.62) 0%, rgba(255,255,255,.08) 20%, transparent 42%, rgba(0,0,0,.22) 100%),
+    linear-gradient(135deg, var(--b3) 0%, var(--b2) 24%, var(--b1) 48%, var(--b2) 72%, var(--b3) 100%);
+}
+.carta.b-top,
+.carta.t-destaque {
+  --b1: #9B2BC7;
+  --b2: #FF5BC8;
+  --b3: #FFE5F6;
+  --bw: 7px;
+  outline-color: #FF8EDB;
+}
+.carta.b-top {
+  box-shadow:
+    0 0 0 1px rgba(255,229,246,.72),
+    0 0 24px rgba(255,91,200,.38),
+    0 0 44px rgba(155,43,199,.2),
+    0 18px 42px rgba(0,0,0,.38),
+    inset 0 1px 0 rgba(255,255,255,.42);
+}
