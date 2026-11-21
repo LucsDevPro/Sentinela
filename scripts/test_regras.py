@@ -66,6 +66,13 @@ for arq in ("data/deteccoes_pendentes.json", "data/cronograma_ausencias.json"):
     check("Atestado" not in txt and "atestado" not in txt.lower().replace("ausência justificada", ""),
           f"{arq}: nenhuma menção a atestado")
 
+# --- Fora do expediente: só fim de semana, antes das 7h e a partir das 17h (almoço não conta) ---
+_v = df_total[df_total["dt_chegada"].notna()]
+_esp = _v["fim_de_semana"] | (_v["hora_chegada"] < 7) | (_v["hora_chegada"] >= 17)
+check((_v["fora_expediente"] == _esp).all(), "Fora do expediente = fim de semana, antes das 7h ou a partir das 17h")
+_alm = _v[(~_v["fim_de_semana"]) & (_v["hora_chegada"].isin([11, 12]))]
+check(not _alm["fora_expediente"].any(), "Visita entre 11h e 13h em dia útil não é fora do expediente")
+
 # --- Dia em andamento ----------------------------------------------------------
 dias_dados = sorted(set(df_total["dia"]))
 ultimo = dias_dados[-1]

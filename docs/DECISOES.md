@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 21/11/2026 (3) — almoço não conta como "fora do expediente"
+- Fora do expediente (−0,5/visita) = **fim de semana, antes das 07h ou a partir das 17h**. Visita entre 11h e 13h em dia útil não perde ponto (já era 0 em `PONTOS_PERDA_VISITA_ALMOCO`, mas o cálculo ainda a tratava como fora do expediente). Mudou `dentro_expediente` em `calculos.py`; `_carregar_df_semana` recalcula `dentro/fora_expediente` das semanas já em cache (sem recoletar). Turnos de presença continuam manhã 07–11h / tarde 13–17h.
+- Textos corrigidos: `assets/agente.js`, `docs/REGRAS.md`, tabela da transparência, título da aba Excel. Meses já congelados só mudam com `regenerar-mes.yml`.
+- Teste novo em `scripts/test_regras.py`.
+
 ## 21/11/2026 (2) — escada de design das cartinhas (6 ajustes)
 - **Destaque** vira ameixa fria (`#2A1446→#080414`), borda violeta-magenta (`--b2 #D070FF`), raios lilás sem ciano; assim não se confunde com a Elite (vinho+rosé) nem com a Lendária (âmbar). Sincronizados `ORN_PAL`, `LOGO`, `PRAIO`, plano B do PNG, `carta_fx.js` (partículas) e `COR_NIVEL` do álbum.
 - **Prata** mais fria e clara (platina), única de aparência "metal nobre" entre Ferro, Aço e Prata.

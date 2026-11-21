@@ -14,6 +14,8 @@ from .parametros import (
     AGENTES_PONTO_ESTRATEGICO,
     AGENTES_POR_EQUIPE,
     CAMINHO_CACHE_NOMES_AGENTES,
+    HORA_EXPEDIENTE_MANHA_INICIO,
+    HORA_EXPEDIENTE_TARDE_FIM,
     MAX_WORKERS,
     PASTA_SEMANAS,
     PRIMEIRA_SEMANA_CICLO_EXPLICITO,
@@ -117,6 +119,12 @@ def _carregar_df_semana(caminho_xlsx):
     # recoletar nada do e-Visita.
     if "duracao_min" in df.columns:
         df["acima_teto_media"] = df["duracao_min"] > TETO_DURACAO_MEDIA_MIN
+    # Idem para o expediente (decisão 21/11/2026: o almoço deixou de contar como "fora do
+    # expediente"): recalcula a partir de dt_chegada, para semanas coletadas com a regra antiga.
+    if "dt_chegada" in df.columns and "fim_de_semana" in df.columns:
+        hora = df["dt_chegada"].dt.hour
+        df["dentro_expediente"] = (~df["fim_de_semana"]) & (hora >= HORA_EXPEDIENTE_MANHA_INICIO) & (hora < HORA_EXPEDIENTE_TARDE_FIM)
+        df["fora_expediente"] = df["dt_chegada"].notna() & ~df["dentro_expediente"]
     return df
 
 

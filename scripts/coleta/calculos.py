@@ -12,10 +12,8 @@ from .parametros import (
     DIAS_UTEIS_MES,
     HORA_ALMOCO_FIM_MIN,
     HORA_ALMOCO_INICIO_MIN,
-    HORA_EXPEDIENTE_MANHA_FIM,
     HORA_EXPEDIENTE_MANHA_INICIO,
     HORA_EXPEDIENTE_TARDE_FIM,
-    HORA_EXPEDIENTE_TARDE_INICIO,
     LIMIAR_SEQUENCIA_SUSPEITA_SEG,
     PCT_RAPIDAS_ATENCAO_ATE,
     PCT_RAPIDAS_OK_ATE,
@@ -155,14 +153,15 @@ def calcular_tempos(visitas, nome, id_agente, equipe, semana_html_id=None):
     )
     df["visita_horario_almoco"] = df["turno"] == "Almoço"
 
-    # Dia da semana e horário oficial de expediente (7h-11h e 13h-17h, dias
-    # úteis). Qualquer visita fora disso — inclusive sábado/domingo — é
-    # marcada como "fora do expediente".
+    # Dia da semana e horário oficial de expediente (dias úteis, das 7h às 17h).
+    # "Fora do expediente" = sábado/domingo, antes das 7h ou a partir das 17h.
+    # A pausa do almoço NÃO conta como fora do expediente (decisão 21/11/2026):
+    # visita entre 11h e 13h não perde ponto — só aparece como informação
+    # (aba de almoço, PONTOS_PERDA_VISITA_ALMOCO = 0).
     df["dia_semana_num"] = df["dt_chegada"].dt.weekday  # 0=Segunda ... 6=Domingo
     df["fim_de_semana"] = df["dia_semana_num"] >= 5
     df["dentro_expediente"] = (~df["fim_de_semana"]) & (
-        ((df["hora_chegada"] >= HORA_EXPEDIENTE_MANHA_INICIO) & (df["hora_chegada"] < HORA_EXPEDIENTE_MANHA_FIM))
-        | ((df["hora_chegada"] >= HORA_EXPEDIENTE_TARDE_INICIO) & (df["hora_chegada"] < HORA_EXPEDIENTE_TARDE_FIM))
+        (df["hora_chegada"] >= HORA_EXPEDIENTE_MANHA_INICIO) & (df["hora_chegada"] < HORA_EXPEDIENTE_TARDE_FIM)
     )
     df["fora_expediente"] = df["dt_chegada"].notna() & ~df["dentro_expediente"]
 

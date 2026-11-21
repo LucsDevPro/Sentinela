@@ -19,7 +19,7 @@ Faixas: **≥ 90 Excelente · 75–89,9 Bom · 60–74,9 Atenção · < 60 Crít
 | Dia que bateu a meta | +1 | `PONTOS_GANHO_DIA_COM_META` |
 | Bônus únicos: sem visita rápida (+5), sem turno sem lançamento (+5), pontualidade perfeita (+3) | | `PONTOS_GANHO_*` |
 Desligados (0): visita longa (> 30 min), duração negativa, visita no almoço. Meta diária padrão: 20 visitas (`META_VISITAS_DIA`; por equipe em `data/metas_equipes.json`).
-Expediente: manhã 07–11h, tarde 13–17h (`HORA_EXPEDIENTE_*`).
+Fora do expediente (−0,5): fim de semana, antes das 07h ou a partir das 17h; o almoço (11–13h) não conta. Turnos de presença seguem manhã 07–11h / tarde 13–17h (`HORA_EXPEDIENTE_*`).
 
 ## Ausência: Turno sem Lançamento × Possível Evento (desde 02/11/2026)
 1. **Padrão:** turno sem nenhuma visita = **Turno sem Lançamento** → desconta.

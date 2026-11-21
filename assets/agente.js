@@ -34,7 +34,7 @@ const AJUDA = [
   [/^Visita rápida/, 'Visita com menos de 3 minutos de duração.'],
   [/^Visita duplicada/, 'Mesmo imóvel lançado mais de uma vez.'],
   [/sequência suspeita/, 'Visitas lançadas com menos de 50 segundos de diferença uma da outra (lista abaixo).'],
-  [/^Visita fora do expediente/, 'Visita lançada fora do expediente (manhã 07–11h, tarde 13–17h) ou em fim de semana.'],
+  [/^Visita fora do expediente/, 'Visita lançada em fim de semana, antes das 07h ou depois das 17h. O horário de almoço não perde ponto.'],
   [/^Dia sem bater a meta/, 'Dia trabalhado com menos visitas que a meta diária da equipe.'],
   [/^Dia com meta/, 'Dia trabalhado com a meta diária batida.'],
   [/^Bônus não concedido/, 'O bônus só vale com presença mínima no período.'],

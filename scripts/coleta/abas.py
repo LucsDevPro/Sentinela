@@ -222,20 +222,18 @@ def _motivo_fora_expediente(row):
         return f"Fim de semana ({NOMES_DIA_SEMANA.get(row['dia_semana_num'], '')})"
     minutos = row["minutos_chegada"]
     hora = row["hora_chegada"]
-    if HORA_ALMOCO_INICIO_MIN <= minutos < HORA_ALMOCO_FIM_MIN:
-        return f"Horário de almoço ({_fmt_hora_min(HORA_ALMOCO_INICIO_MIN)}-{_fmt_hora_min(HORA_ALMOCO_FIM_MIN)})"
     if hora < HORA_EXPEDIENTE_MANHA_INICIO:
         return f"Antes do expediente (antes das {HORA_EXPEDIENTE_MANHA_INICIO}h)"
     if hora >= HORA_EXPEDIENTE_TARDE_FIM:
         return f"Depois do expediente (após as {HORA_EXPEDIENTE_TARDE_FIM}h)"
-    return "Fora do expediente (próximo ao horário de almoço, dentro da tolerância de 15min)"
+    return "Fora do expediente"
 
 
 def _preparar_fora_expediente(df_total):
     """
     Monta a lista de visitas registradas fora do horário oficial de serviço
-    (7h-11h e 13h-17h, dias úteis) — inclui fins de semana, antes/depois do
-    expediente e horário de almoço (com motivo especificado por linha).
+    (dias úteis, 7h às 17h) — fins de semana, antes das 7h e depois das 17h
+    (com motivo por linha). O horário de almoço não entra aqui.
     """
     if df_total.empty:
         return []

@@ -83,7 +83,7 @@ def corpo_html():
         (f"Visita rápida (menos de {C.TEMPO_MIN_VISITA_MIN} min)", C.PONTOS_PERDA_VISITA_RAPIDA, "por visita"),
         ("Visita duplicada", C.PONTOS_PERDA_VISITA_DUPLICADA, "por visita"),
         ("Visita em sequência suspeita (lançamento em lote)", C.PONTOS_PERDA_SEQUENCIA_SUSPEITA, "por visita"),
-        ("Visita fora do expediente ou em fim de semana", C.PONTOS_PERDA_FORA_EXPEDIENTE, "por visita"),
+        ("Visita em fim de semana, antes das 7h ou depois das 17h (o almoço não conta)", C.PONTOS_PERDA_FORA_EXPEDIENTE, "por visita"),
         ("Visita no horário de almoço", C.PONTOS_PERDA_VISITA_ALMOCO, "por visita"),
         (f"Dia trabalhado sem bater a meta diária de visitas ({_txt_meta()})", C.PONTOS_PERDA_DIA_SEM_META, "por dia"),
     ]

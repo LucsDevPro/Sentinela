@@ -301,7 +301,7 @@ Constantes: RAIZ@18, REF@19
 - L76 `get_tables(path, sheet_name)`
 - L81 `get_table(path, sheet_name, index)`
 
-## scripts/coleta/abas.py (295 linhas)
+## scripts/coleta/abas.py (293 linhas)
 
 - L17 `_formatar_campos_resumo(resumo_dict)` — Formata os campos calculados de um dicionário 'resumo' (vindo de
 - L42 `_preparar_resumo(res)`
@@ -311,8 +311,8 @@ Constantes: RAIZ@18, REF@19
 - L152 `_preparar_negativas(df_total)` — Monta a lista de visitas com duração NEGATIVA (data de saída registrada
 - L186 `_preparar_acima_teto_media(df_total)` — Monta a lista de visitas com duração acima de TETO_DURACAO_MEDIA_MIN
 - L220 `_motivo_fora_expediente(row)`
-- L234 `_preparar_fora_expediente(df_total)` — Monta a lista de visitas registradas fora do horário oficial de serviço
-- L270 `_preparar_almoco(df_total)` — Lista apenas as visitas registradas no horário de almoço (11h15-12h45, com to…
+- L232 `_preparar_fora_expediente(df_total)` — Monta a lista de visitas registradas fora do horário oficial de serviço
+- L268 `_preparar_almoco(df_total)` — Lista apenas as visitas registradas no horário de almoço (11h15-12h45, com to…
 
 ## scripts/coleta/ausencias_ranking.py (674 linhas)
 
@@ -341,33 +341,33 @@ Constantes: _CACHE_PRIMEIRA_VISITA@47, HOJE_OVERRIDE@101, CAMINHO_AJUSTES_RANKIN
 
 Constantes: NOMES_DIA_SEMANA@27, _PREPOSICOES_NOME@39
 
-## scripts/coleta/cache_semanas.py (326 linhas)
+## scripts/coleta/cache_semanas.py (334 linhas)
 
-- L53 `_caminho_semana(html_id, sufixo, pasta_semanas)`
-- L69 `_ler_aba_visitas(caminho_xlsx)`
-- L87 `_salvar_df_semana(df, caminho_xlsx)`
-- L95 `_carregar_df_semana(caminho_xlsx)` — Recarrega uma planilha de semana cacheada, corrigindo os tipos que o
-- L123 `_mesclar_com_cache_anterior(html_id, df_tratamento, pendencia_por_ag)` — Evita que uma recoleta PIOR apague dados bons que já estavam no cache.
-- L179 `salvar_cache_semana(html_id, df_tratamento, pendencia_por_ag)` — Grava em disco tudo que foi coletado para UMA semana: a planilha de
-- L202 `coletar_uma_semana(session, html_id, id_ano, id_ciclo)` — Coleta TODOS os agentes (tratamento + Ponto Estratégico, quando
-- L309 `_salvar_agentes_nomes(resultados, caminho)` — Atualiza (MERGE — nunca apaga o que já tinha) o mapa ID -> Nome de
+- L55 `_caminho_semana(html_id, sufixo, pasta_semanas)`
+- L71 `_ler_aba_visitas(caminho_xlsx)`
+- L89 `_salvar_df_semana(df, caminho_xlsx)`
+- L97 `_carregar_df_semana(caminho_xlsx)` — Recarrega uma planilha de semana cacheada, corrigindo os tipos que o
+- L131 `_mesclar_com_cache_anterior(html_id, df_tratamento, pendencia_por_ag)` — Evita que uma recoleta PIOR apague dados bons que já estavam no cache.
+- L187 `salvar_cache_semana(html_id, df_tratamento, pendencia_por_ag)` — Grava em disco tudo que foi coletado para UMA semana: a planilha de
+- L210 `coletar_uma_semana(session, html_id, id_ano, id_ciclo)` — Coleta TODOS os agentes (tratamento + Ponto Estratégico, quando
+- L317 `_salvar_agentes_nomes(resultados, caminho)` — Atualiza (MERGE — nunca apaga o que já tinha) o mapa ID -> Nome de
 
-Constantes: _COLS_BOOL_SEMANA@43, _COLS_DATETIME_SEMANA@50, _CACHE_LEITURA@64, _CACHE_LEITURA_MAX@65, _LOCK_CACHE@66
+Constantes: _COLS_BOOL_SEMANA@45, _COLS_DATETIME_SEMANA@52, _CACHE_LEITURA@66, _CACHE_LEITURA_MAX@67, _LOCK_CACHE@68
 
-## scripts/coleta/calculos.py (626 linhas)
+## scripts/coleta/calculos.py (625 linhas)
 
-- L69 `calcular_tempos(visitas, nome, id_agente, equipe, semana)` — `semana_html_id`: quando a coleta já é feita semana a semana (o caso
-- L172 `_media_horario(series_dt)` — Calcula o horário médio (datetime.time) de uma série de timestamps.
-- L189 `_maior_sequencia_consecutiva(pares_suspeitos)` — Recebe a lista de pares (visita[i] vs visita[i-1]) marcados como suspeitos
-- L202 `_fmt_hhmm_tupla(t)` — Formata tupla (hora, minuto) como 'HHhMM' (ex.: (8, 30) -> '08h30').
-- L207 `_avaliar_pontualidade_diaria(df)` — Para cada dia trabalhado, verifica se o início/fim de cada turno
-- L248 `_classificar_pontuacao(pontos)`
-- L258 `br_num(v)` — Número em texto pt-BR sem zeros inúteis (3 → '3', 2.5 → '2,5').
-- L263 `calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes, norma)` — Calcula a pontuação final de um agente a partir de PONTOS_INICIAIS,
-- L446 `_horas_trabalhadas_diarias(df)` — Para cada dia trabalhado, calcula:
-- L497 `resumo_agente(df)`
-- L579 `resumo_por_area(df, fechados_por_area, recusados_por_are)`
-- L615 `_classificar(pct_rapidas)` — Classificação baseada no % DE VISITAS RÁPIDAS (< TEMPO_MIN_VISITA_MIN):
+- L67 `calcular_tempos(visitas, nome, id_agente, equipe, semana)` — `semana_html_id`: quando a coleta já é feita semana a semana (o caso
+- L171 `_media_horario(series_dt)` — Calcula o horário médio (datetime.time) de uma série de timestamps.
+- L188 `_maior_sequencia_consecutiva(pares_suspeitos)` — Recebe a lista de pares (visita[i] vs visita[i-1]) marcados como suspeitos
+- L201 `_fmt_hhmm_tupla(t)` — Formata tupla (hora, minuto) como 'HHhMM' (ex.: (8, 30) -> '08h30').
+- L206 `_avaliar_pontualidade_diaria(df)` — Para cada dia trabalhado, verifica se o início/fim de cada turno
+- L247 `_classificar_pontuacao(pontos)`
+- L257 `br_num(v)` — Número em texto pt-BR sem zeros inúteis (3 → '3', 2.5 → '2,5').
+- L262 `calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes, norma)` — Calcula a pontuação final de um agente a partir de PONTOS_INICIAIS,
+- L445 `_horas_trabalhadas_diarias(df)` — Para cada dia trabalhado, calcula:
+- L496 `resumo_agente(df)`
+- L578 `resumo_por_area(df, fechados_por_area, recusados_por_are)`
+- L614 `_classificar(pct_rapidas)` — Classificação baseada no % DE VISITAS RÁPIDAS (< TEMPO_MIN_VISITA_MIN):
 
 ## scripts/coleta/colunas.py (206 linhas)
 
@@ -451,12 +451,12 @@ Constantes: COLETAR_FECHADOS_RECUSADOS@15, PONTOS_INICIAIS@23, NOTA_MINIMA@24, N
 - L26 `processar(equipe, id_ag, session_base, cfg)`
 - L105 `processar_ponto_estrategico(id_ag, session_base, cfg_pe)` — Coleta as visitas de Ponto Estratégico de um agente (URL/id_atividade
 
-## scripts/coleta/saida_excel.py (341 linhas)
+## scripts/coleta/saida_excel.py (340 linhas)
 
 - L65 `_slugify_nome_arquivo(nome)` — Converte o título de uma aba (com espaços/acentos) num nome de arquivo seguro.
 - L72 `exportar_todas_abas_csv(wb, pasta_saida)` — Exporta CADA aba do workbook como um arquivo .csv separado (com os
 - L98 `salvar_excel_consolidado(resultados, df_total, pasta_saida, seman)`
-- L327 `_preparar_ponto_estrategico(semanas_todos_agentes)`
+- L326 `_preparar_ponto_estrategico(semanas_todos_agentes)`
 
 ## scripts/coleta/sessao.py (416 linhas)
 

@@ -178,8 +178,7 @@ def salvar_excel_consolidado(resultados, df_total, pasta_saida, semanas_ponto_es
     ultima_linha_dados_fe = linha_final_fe - 1
     _estilizar(ws_fe, 2, cor_cab="8C1F1F",
                titulo=f"VISITAS FORA DO EXPEDIENTE / FIM DE SEMANA ({len(regs_fe)} registros) — "
-                      f"HORÁRIO OFICIAL: {HORA_EXPEDIENTE_MANHA_INICIO}h-{HORA_EXPEDIENTE_MANHA_FIM}h "
-                      f"E {HORA_EXPEDIENTE_TARDE_INICIO}h-{HORA_EXPEDIENTE_TARDE_FIM}h, DIAS ÚTEIS",
+                      f"HORÁRIO OFICIAL: {HORA_EXPEDIENTE_MANHA_INICIO}h ÀS {HORA_EXPEDIENTE_TARDE_FIM}h, DIAS ÚTEIS (ALMOÇO NÃO CONTA)",
                ultima_linha_dados=ultima_linha_dados_fe)
 
     ws_al = wb.create_sheet("Visitas no Almoço")
