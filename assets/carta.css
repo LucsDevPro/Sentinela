@@ -1813,3 +1813,7 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
 /* Foto padronizada: sempre quadrada, rosto no terço de cima, fundo neutro onde a imagem não cobre (mesma regra no PNG: object-fit cover) */
 .carta .c-foto.tem-foto { background: #E2E8F0; }
 .carta .c-foto img { object-fit: cover; object-position: 50% 28%; image-rendering: auto; }
+
+/* Rodapé legível: o fundo do Bronze escurece até #6A3010 embaixo (texto escuro sumia, contraste 3,5) e o do Ouro/Elite ficava no limite (4,47) */
+.carta.t-bronze .c-rodape { color: #FFF4E6; text-shadow: 0 1px 0 rgba(60, 24, 4, 0.55); }
+.carta.b-90 .c-rodape { color: #1A1203; }

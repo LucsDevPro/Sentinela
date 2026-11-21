@@ -41,7 +41,7 @@ CONFIG = {
 }
 # Os 8 tiers. «caso» = (nota, posição no mês de 20 agentes). Se um tier novo surgir, acrescente aqui.
 TIERS = [
-    ("LENDÁRIA", "b-100", 105, 1), ("DESTAQUE", "b-top", 96, 2), ("ELITE", "b-90 n100", 104, 8), ("OURO", "b-90", 93, 9),
+    ("LENDÁRIA", "b-100", 105, 1), ("DESTAQUE", "t-destaque b-top", 96, 2), ("ELITE", "b-90 n100", 104, 8), ("OURO", "b-90", 93, 9),
     ("PRATA", "t-prata b-80", 85, 10), ("BRONZE", "t-bronze b-70", 75, 11), ("AÇO", "t-aco b-60", 65, 12), ("FERRO", "t-ferro b-0", 40, 19),
 ]
 PREMIUM = {"b-100", "b-top", "b-90"}   # tiers com brilho e animação própria
@@ -181,8 +181,19 @@ with sync_playwright() as p:
             if fundo:
                 ct = {k: contraste(rgb_de(r[k]), fundo) for k in ("nota", "nome", "rod", "chip") if r[k] and rgb_de(r[k])}
                 checar(f"{nome}: contraste da nota ≥ {CONFIG['CONTRASTE_NOTA']}", ct.get("nota", 0) >= CONFIG["CONTRASTE_NOTA"], f"{ct.get('nota', 0):.2f}")
-                ruim = {k: round(v, 2) for k, v in ct.items() if k != "nota" and v < CONFIG["CONTRASTE_TEXTO"]}
-                checar(f"{nome}: contraste de nome, rodapé e chips ≥ {CONFIG['CONTRASTE_TEXTO']}", not ruim, str(ruim))
+                # (nome, rodapé e chips: medidos nos pixels logo abaixo; --c1/--c2 não representam fundos em degradê)
+                # contraste REAL: cor do texto × cor mediana dos pixels atrás dele (pega fundos que não vêm de --c1/--c2, como o roxo do Destaque)
+                ruim_px = {}
+                for k, sel in (("nome", ".c-nome"), ("rod", ".c-rodape"), ("chip", ".c-stats b")):
+                    if not (r[k] and rgb_de(r[k])): continue
+                    try:
+                        im = Image.open(io.BytesIO(pg.locator(f".t-host {sel}").first.screenshot(omit_background=False))).convert("RGB")
+                    except Exception:
+                        continue
+                    med = [float(np.median(np.asarray(im)[:, :, i])) for i in range(3)]
+                    cr = contraste(rgb_de(r[k]), med)
+                    if cr < CONFIG["CONTRASTE_TEXTO"]: ruim_px[k] = round(cr, 2)
+                checar(f"{nome}: contraste medido nos pixels (nome, rodapé, chips) ≥ {CONFIG['CONTRASTE_TEXTO']}", not ruim_px, str(ruim_px))
                 var_b = contraste(rgb_de(r["b1"]), rgb_de(r["b3"]))
                 checar(f"{nome}: a borda tem relevo (b1 × b3 com razão ≥ {CONFIG['CONTRASTE_BORDA_RELEVO']})", var_b >= CONFIG["CONTRASTE_BORDA_RELEVO"], f"{var_b:.2f}")
             checar(f"{nome}: espessura da borda (--bw) entre {CONFIG['BORDA_PX'][0]} e {CONFIG['BORDA_PX'][1]} px", CONFIG["BORDA_PX"][0] <= (r["bw"] or 0) <= CONFIG["BORDA_PX"][1], str(r["bw"]))

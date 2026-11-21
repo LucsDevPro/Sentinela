@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 20/11/2026 (2) — Destaque ilegível e contraste medido nos pixels
+- Bug: `carta.js` dava ao Destaque a classe de tier vazia, então o fundo roxo (`.b-top`) ficava com texto escuro `#2A1F08` (contraste 1,2: nome, chips e rodapé sumiam). Agora o tier é `t-destaque` (que já tinha `--tx` branco, logo e paleta do PNG). Só aparece quando o pódio tem nota 90–99.
+- A suíte das cartinhas media contraste contra a média de `--c1/--c2` e por isso não viu. Agora mede a cor do texto contra a cor mediana dos pixels atrás dele (nome, rodapé, chips) e o `TIERS` do teste usa as classes reais.
+- Rodapé do Bronze (3,5) e do Ouro/Elite (4,47) corrigidos.
+
 ## 20/11/2026 — Sala de Troféus: desempenho, fotos e acabamento
 - **Sob demanda:** só as 12 primeiras cartinhas da grade nascem prontas; as outras entram como esqueleto e viram cartão perto da tela (`Preguica` em `album.js`, margem de 900 px). Impressão e «Folha de recorte» abrem tudo antes. As animações já pausavam fora da tela (`.vivo`).
 - **Fotos:** `scripts/padronizar_foto.py` (480×480, rosto no terço de cima, fundo neutro) + `test_fotos.py` (na lista do `rodar_testes` e no CI; pula sem Pillow, agora em `requirements.txt` como opcional). A Sala avisa quantos ainda mostram só as iniciais.
