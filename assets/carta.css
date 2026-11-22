@@ -1970,3 +1970,66 @@ dialog.c-envio video{width:100%;max-height:56vh;border-radius:10px;background:#0
 .carta.t-elite > .c-glitter { display: none !important; }
 .carta.vivo.b-top:not(:hover) > .c-brilho::before, .carta.vivo.b-100:not(:hover) > .c-brilho::before { animation: none; opacity: 0; }
 .carta.b-top > .c-glitter { display: none !important; }
+
+/* =====================================================================
+   TEXTURA DOS METAIS E PROFUNDIDADE DA CARTA (21/11/2026)
+   Só acrescenta: não muda cores, pesos nem estrutura. Fica no fim para vencer
+   as regras anteriores de mesma especificidade.
+   ===================================================================== */
+
+/* Profundidade — aresta de 1px: luz em cima/esquerda, sombra embaixo/direita.
+   Desenhada dentro do anel (.c-borda), que já é recortado com o canto da carta. */
+.carta > .c-borda::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.62) 0 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.34) 0 1px, transparent 1px),
+    linear-gradient(270deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px),
+    radial-gradient(circle at 20px 3px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0) 11px),
+    radial-gradient(circle at calc(100% - 20px) 3px, rgba(255, 255, 255, 0.95) 0, rgba(255, 255, 255, 0) 11px),
+    radial-gradient(circle at 3px 20px, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 0) 10px),
+    radial-gradient(circle at calc(100% - 3px) 20px, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 0) 10px),
+    radial-gradient(circle at 30px calc(100% - 3px), rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 10px),
+    radial-gradient(circle at calc(100% - 30px) calc(100% - 3px), rgba(255, 255, 255, 0.55) 0, rgba(255, 255, 255, 0) 10px);
+}
+
+/* Profundidade — segunda sombra, curta e escura (contato), somada à sombra longa de cada nível */
+.carta.t-prata {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.38), 0 3px 6px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(200, 220, 240, 0.55), 0 18px 42px rgba(30, 50, 80, 0.28),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85), inset 0 -1px 0 rgba(40, 60, 90, 0.12);
+}
+.carta.t-bronze, .carta.t-aco {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.22),
+    0 22px 50px rgba(0, 0, 0, 0.4), 0 8px 18px rgba(0, 0, 0, 0.22),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.55), inset 0 -1.5px 0 rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+.carta.t-ferro {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.45), 0 3px 6px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(150, 156, 166, 0.35), 0 14px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Textura — Prata, Aço e Bronze: metal escovado mais fino, quase na vertical da luz */
+.carta.t-prata::before, .carta.t-aco::before, .carta.t-bronze::before {
+  background:
+    repeating-linear-gradient(104deg, rgba(255, 255, 255, 0.16) 0 0.6px, transparent 0.6px 2.6px),
+    repeating-linear-gradient(104deg, rgba(0, 0, 0, 0.07) 0 0.5px, transparent 0.5px 4.1px),
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(255, 255, 255, 0.16), transparent 55%);
+  opacity: 0.9;
+  mix-blend-mode: soft-light;
+}
+/* Bronze/Aço: o escovado precisa de um pouco mais de contraste para aparecer sobre cor saturada */
+.carta.t-aco::before { opacity: 1; }
+/* Bronze: rodapé está no limite do contraste (4,5); escovado um pouco mais leve */
+.carta.t-bronze::before { opacity: 0.7; }
+
+/* Textura — Ouro: folha de ouro (grão fino cruzado + faixa suave de reflexo) */
+.carta.b-90:not(.t-elite)::before {
+  background:
+    repeating-linear-gradient(118deg, rgba(255, 250, 220, 0.15) 0 0.8px, transparent 0.8px 3.4px),
+    repeating-linear-gradient(28deg, rgba(120, 70, 0, 0.07) 0 0.6px, transparent 0.6px 3px),
+    linear-gradient(105deg, transparent 30%, rgba(255, 255, 235, 0.16) 46%, transparent 62%),
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(255, 255, 255, 0.16), transparent 55%);
+  opacity: 0.95;
+  mix-blend-mode: soft-light;
+}

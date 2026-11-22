@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 21/11/2026 (7) — textura dos metais e profundidade das cartinhas
+- Bloco "TEXTURA DOS METAIS E PROFUNDIDADE" no fim de `assets/carta.css` (só acrescenta; cores e pesos intactos).
+- Profundidade: aresta de 1px (luz em cima/esquerda, sombra embaixo/direita) no `.c-borda::before` + sombra de contato curta somada à sombra longa de Prata, Bronze, Aço e Ferro.
+- Textura: escovado fino em Prata/Aço/Bronze; folha de ouro no Ouro. Bronze com opacidade .7 porque o rodapé estava em 4,49 de contraste (mínimo 4,5). Lendária/Destaque/Elite mantêm as texturas próprias.
+
 ## 21/11/2026 (6) — pesos gravados pelo site e todos os meses recalculados (etapa 3 de 3)
 - Nova ação `pesos_aplicar` (Worker → `repository_dispatch` → `aplicar_decisao.py`): PIN da coordenação + motivo (3–80 letras, sem dado de saúde). Grava só o `valor` em `data/pesos_pontuacao.json` e registra em `data/pesos_historico.json` (quem, quando, motivo, antes→depois e um **snapshot** completo; guarda as 100 versões mais recentes). Restaurar = reenviar o snapshot de uma versão (botão no histórico de `pesos.html`).
 - Validação em duas camadas: Worker (nome no padrão `PONTOS_PERDA_/GANHO_*`, número 0–50) e `aplicar_decisao.py` (nome existente no arquivo; um valor inválido derruba o conjunto inteiro, nada é gravado).
