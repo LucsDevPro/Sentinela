@@ -32,6 +32,28 @@
         <tbody></tbody></table></div>
     </section>
   </div>
+  <section class="painel aplicar" aria-labelledby="tAplicar">
+    <h2 id="tAplicar">Aplicar de verdade</h2>
+    <p class="mut">Grava os pesos acima em <code>data/pesos_pontuacao.json</code> e recalcula <b>todos os meses</b> (o site atualiza em alguns minutos). Exige o PIN da coordenação.</p>
+    <div id="semWorker" class="aviso" hidden>O serviço de lançamentos ainda não foi configurado (<code>data/config_worker.json</code>): por enquanto use «Copiar pesos (JSON)».</div>
+    <div id="entrada" class="linha" hidden>
+      <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN da coordenação" aria-label="PIN da coordenação">
+      <button class="bt" id="btnEntrar" type="button">Entrar</button>
+      <span class="erro" id="erroPin" role="alert" hidden></span>
+    </div>
+    <div id="app" hidden>
+      <p class="mut">Entrou como <b id="quem"></b>. <button class="link" id="btnSair" type="button">Sair</button></p>
+      <label class="motivo">Motivo da mudança (aparece no histórico público)
+        <input id="motivo" maxlength="80" placeholder="Ex.: equilibrar o bônus de meta" autocomplete="off"></label>
+      <div class="linha"><button class="bt" id="bAplicar" type="button" disabled>Aplicar pesos e recalcular todos os meses</button>
+        <span class="mut" id="infoAplicar">Mude algum peso para habilitar.</span></div>
+    </div>
+  </section>
+  <section class="painel hist" aria-labelledby="tHist">
+    <h2 id="tHist">Histórico de mudanças</h2>
+    <p class="mut" id="histVazio">Nenhuma mudança de pesos registrada ainda.</p>
+    <ol id="hist" class="hist-lista"></ol>
+  </section>
   <p class="rodape" id="rodape"></p>
 </main>
 <script src="assets/simulador_pesos.js"></script>

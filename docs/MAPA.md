@@ -3,19 +3,20 @@
 Formato: `L<linha> função(args) — resumo`. Constantes ficam no fim de cada arquivo (`NOME@linha`).
 Use `grep -n "def nome" arquivo` ou `sed -n 'A,Bp'` pra ler só o trecho.
 
-## scripts/aplicar_decisao.py (283 linhas)
+## scripts/aplicar_decisao.py (332 linhas)
 
-- L53 `_ler(caminho, padrao)`
-- L60 `_gravar(caminho, dados)`
-- L66 `_datas(dec)`
-- L77 `_entrada_cronograma(dec, nomes)` — Valida e monta a entrada do cronograma. Devolve (entrada, erro).
-- L97 `_motivo_ajuste(txt)` — Limpa e valida o motivo do ajuste. Devolve (motivo, erro).
-- L110 `_mes_arquivado_da_data(d, arquivados)`
-- L118 `_aplicar_ajuste(dec, nomes, caminho_ajustes, quem, remov)`
-- L154 `_aplicar_parada(dec, nomes, caminho_cron, quem, remover)`
-- L197 `aplicar(dec, caminho_cron, caminho_nomes, caminh)`
+- L56 `_ler(caminho, padrao)`
+- L63 `_gravar(caminho, dados)`
+- L69 `_datas(dec)`
+- L80 `_entrada_cronograma(dec, nomes)` — Valida e monta a entrada do cronograma. Devolve (entrada, erro).
+- L100 `_motivo_ajuste(txt)` — Limpa e valida o motivo do ajuste. Devolve (motivo, erro).
+- L113 `_mes_arquivado_da_data(d, arquivados)`
+- L121 `_aplicar_ajuste(dec, nomes, caminho_ajustes, quem, remov)`
+- L157 `_aplicar_parada(dec, nomes, caminho_cron, quem, remover)`
+- L206 `_aplicar_pesos(dec, quem, caminho_pesos, caminho_hist)` — Grava os pesos novos e registra no histórico (com um 'snapshot' para poder vo…
+- L244 `aplicar(dec, caminho_cron, caminho_nomes, caminh)`
 
-Constantes: CAMINHO_CRONOGRAMA@32, CAMINHO_NOMES@33, CAMINHO_DETECCOES@34, TIPOS_CRONOGRAMA@36, TURNOS@42, LIMITE_DIAS_CRONOGRAMA@43, CAMINHO_AJUSTES@44, LIMITE_AJUSTE_PONTOS@45, PARADAS@46, LIMITE_DIAS_PARADA@48, _PROIBIDO_NO_MOTIVO@50
+Constantes: CAMINHO_CRONOGRAMA@35, CAMINHO_NOMES@36, CAMINHO_DETECCOES@37, TIPOS_CRONOGRAMA@39, TURNOS@45, LIMITE_DIAS_CRONOGRAMA@46, CAMINHO_AJUSTES@47, LIMITE_AJUSTE_PONTOS@48, PARADAS@49, LIMITE_DIAS_PARADA@51, _PROIBIDO_NO_MOTIVO@53, CAMINHO_PESOS@200, CAMINHO_PESOS_HIST@201, PESOS_LIMITE_MAX@202, PESOS_HISTORICO_MAX@203
 
 ## scripts/coletar_evisita.py (73 linhas)
 
@@ -285,12 +286,12 @@ Constantes: OFFSETS_VALIDADOS@42, ANCORA_DATA@49, ANCORA_HTML_ID@50, MESES_PT@52
 
 Constantes: SEMANAS_A_FRENTE_AVISO@29
 
-## scripts/validar_json.py (110 linhas)
+## scripts/validar_json.py (111 linhas)
 
-- L34 `validar_ajustes(dados)` — data/ajustes_ranking.json: lista de {"id_agente", "data" (dd/mm/aaaa),
-- L54 `validar_sem_abono(dados)` — data/agentes_sem_abono.json: {"2951": {"desde": "dd/mm/aaaa" (opcional), "mot…
-- L73 `validar_pesos(caminho)` — data/pesos_pontuacao.json: mesma checagem que o cálculo faz ao carregar (nome…
-- L84 `validar(arquivos)`
+- L35 `validar_ajustes(dados)` — data/ajustes_ranking.json: lista de {"id_agente", "data" (dd/mm/aaaa),
+- L55 `validar_sem_abono(dados)` — data/agentes_sem_abono.json: {"2951": {"desde": "dd/mm/aaaa" (opcional), "mot…
+- L74 `validar_pesos(caminho)` — data/pesos_pontuacao.json: mesma checagem que o cálculo faz ao carregar (nome…
+- L85 `validar(arquivos)`
 
 Constantes: ARQUIVOS_CRITICOS@20
 

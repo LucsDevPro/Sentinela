@@ -133,6 +133,29 @@ chk("ajuste vai ao GitHub com os campos certos", r.status === 200 && JSON.parse(
 r = await call(env, "/acao", { method: "POST", body: aj({ pontos: 99 }) });
 chk("ajuste fora do limite não chega ao GitHub", r.status === 400);
 chamadasGH = [];
+
+// ---- pesos da pontuação
+const pw = (extra) => ({ pin: "1234", acao: "pesos_aplicar", pesos: { PONTOS_PERDA_FORA_EXPEDIENTE: 1, PONTOS_GANHO_DIA_COM_META: 2.5 }, motivo: "Equilíbrio de outubro", ...extra });
+chk("pesos: válido", validar(pw()) === null);
+chk("pesos: sem pesos", validar(pw({ pesos: {} })) !== null);
+chk("pesos: não é objeto", validar(pw({ pesos: [1, 2] })) !== null);
+chk("pesos: nome estranho", validar(pw({ pesos: { META_VISITAS: 3 } })) !== null);
+chk("pesos: nome com injeção", validar(pw({ pesos: { "PONTOS_PERDA_X'; DROP": 1 } })) !== null);
+chk("pesos: valor negativo", validar(pw({ pesos: { PONTOS_PERDA_FORA_EXPEDIENTE: -1 } })) !== null);
+chk("pesos: acima do limite", validar(pw({ pesos: { PONTOS_PERDA_FORA_EXPEDIENTE: 51 } })) !== null);
+chk("pesos: texto no lugar de número", validar(pw({ pesos: { PONTOS_PERDA_FORA_EXPEDIENTE: "2" } })) !== null);
+chk("pesos: motivo curto", validar(pw({ motivo: "ab" })) !== null);
+chk("pesos: motivo com dado de saúde", validar(pw({ motivo: "por causa de atestado" })) !== null);
+chk("pesos: não exige agente", validar(pw({ id_agente: undefined })) === null);
+env = mkEnv(); chamadasGH = [];
+r = await call(env, "/acao", { method: "POST", body: pw() });
+const decPw = chamadasGH.length ? JSON.parse(chamadasGH.at(-1).opts.body).client_payload.decisao : {};
+chk("pesos: vai ao GitHub com pesos, motivo e quem", r.status === 200 && decPw.acao === "pesos_aplicar" && decPw.pesos.PONTOS_GANHO_DIA_COM_META === 2.5 && decPw.quem === "Maria" && decPw.motivo === "Equilíbrio de outubro");
+chamadasGH = [];
+r = await call(env, "/acao", { method: "POST", body: pw({ pin: "0000" }) });
+chk("pesos: PIN errado não chega ao GitHub", r.status === 401 && chamadasGH.length === 0);
+r = await call(env, "/acao", { method: "POST", body: pw({ pesos: { PONTOS_PERDA_FORA_EXPEDIENTE: 99 } }) });
+chk("pesos: valor inválido não chega ao GitHub", r.status === 400 && chamadasGH.length === 0);
 r = await call(env, "/acao", { method: "POST", body: pa({ alvo: "todos" }) });
 chk("parada coletiva despachada sem agente", r.status === 200 && JSON.parse(chamadasGH.at(-1).opts.body).client_payload.decisao.alvo === "todos");
 

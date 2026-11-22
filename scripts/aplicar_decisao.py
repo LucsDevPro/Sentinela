@@ -16,6 +16,9 @@ Ações:
   parada            equipe parada: alvo "equipe"|"todos", equipe, motivo, inicio, fim, turno (opcional)
   parada_remover    desfaz uma parada (mesmos campos)
   fechar_mes        arquiva o mês (mes = "Outubro/2026"); reabrir_mes exige confirmacao = nome do mês
+  pesos_aplicar     novos pesos da pontuação: pesos = {NOME: valor} (só os que mudam), motivo (3–80 letras).
+                    Grava data/pesos_pontuacao.json e o histórico data/pesos_historico.json; o workflow
+                    depois regenera TODOS os meses (regenerar-mes.yml). Restaurar uma versão = enviar o snapshot dela.
 
 Repositório PÚBLICO: o atestado é sempre gravado como "Ausência justificada"
 (nunca "Atestado", CID ou diagnóstico).
@@ -194,8 +197,52 @@ def _aplicar_parada(dec, nomes, caminho_cron, quem, remover):
     return True, f"✅ Parada lançada: {motivo}, {quem_alvo}, {quando} (por {quem})."
 
 
+CAMINHO_PESOS = "data/pesos_pontuacao.json"
+CAMINHO_PESOS_HIST = "data/pesos_historico.json"
+PESOS_LIMITE_MAX = 50          # igual a coleta/pontos.py: PESOS_LIMITE_MAX (test_pesos.py confere)
+PESOS_HISTORICO_MAX = 100      # versões guardadas (as mais recentes)
+
+
+def _aplicar_pesos(dec, quem, caminho_pesos=CAMINHO_PESOS, caminho_hist=CAMINHO_PESOS_HIST):
+    """Grava os pesos novos e registra no histórico (com um 'snapshot' para poder voltar a esta versão)."""
+    novos = dec.get("pesos")
+    if not isinstance(novos, dict) or not novos:
+        return False, "❌ Nenhum peso enviado."
+    motivo = re.sub(r"\s+", " ", re.sub(r"[\x00-\x1f<>]", " ", str(dec.get("motivo") or ""))).strip()
+    if not (3 <= len(motivo) <= 80):
+        return False, "❌ Escreva o motivo da mudança (3 a 80 letras)."
+    if _PROIBIDO_NO_MOTIVO.search(motivo):
+        return False, "❌ O motivo é público: não escreva dados de saúde nem atestado."
+    arquivo = _ler(caminho_pesos, None)
+    if not isinstance(arquivo, dict) or not isinstance(arquivo.get("pesos"), dict):
+        return False, "❌ data/pesos_pontuacao.json ausente ou ilegível."
+    pesos = arquivo["pesos"]
+    mudancas = []
+    for nome, valor in novos.items():
+        if nome not in pesos:
+            return False, f"❌ Peso desconhecido: {str(nome)[:60]}."
+        if isinstance(valor, bool) or not isinstance(valor, (int, float)) or not (0 <= valor <= PESOS_LIMITE_MAX) or valor != valor:
+            return False, f"❌ Valor inválido em «{pesos[nome].get('rotulo', nome)}»: use um número entre 0 e {PESOS_LIMITE_MAX}."
+        valor = round(float(valor), 4)
+        valor = int(valor) if valor == int(valor) else valor
+        antes = pesos[nome]["valor"]
+        if valor != antes:
+            mudancas.append({"nome": nome, "rotulo": pesos[nome].get("rotulo", nome), "antes": antes, "depois": valor})
+    if not mudancas:
+        return True, "ℹ️ Os pesos enviados já eram os atuais: nada mudou."
+    for m in mudancas:
+        pesos[m["nome"]]["valor"] = m["depois"]
+    _gravar(caminho_pesos, arquivo)
+    hist = _ler(caminho_hist, [])
+    hist.append({"quando": datetime.now().strftime("%d/%m/%Y %H:%M"), "quem": quem, "motivo": motivo,
+                 "mudancas": mudancas, "snapshot": {n: p["valor"] for n, p in pesos.items()}})
+    _gravar(caminho_hist, hist[-PESOS_HISTORICO_MAX:])
+    resumo = "; ".join(f"{m['rotulo']} {m['antes']}→{m['depois']}" for m in mudancas)
+    return True, f"✅ Pesos atualizados por {quem}: {resumo}. Motivo: {motivo}. Todos os meses serão recalculados."
+
+
 def aplicar(dec, caminho_cron=CAMINHO_CRONOGRAMA, caminho_nomes=CAMINHO_NOMES, caminho_det=CAMINHO_DETECCOES,
-            caminho_ajustes=CAMINHO_AJUSTES):
+            caminho_ajustes=CAMINHO_AJUSTES, caminho_pesos=CAMINHO_PESOS, caminho_pesos_hist=CAMINHO_PESOS_HIST):
     nomes = _ler(caminho_nomes, {})
     quem0 = str(dec.get("quem") or "coordenação")[:60]
     acao0 = dec.get("acao")
@@ -203,6 +250,8 @@ def aplicar(dec, caminho_cron=CAMINHO_CRONOGRAMA, caminho_nomes=CAMINHO_NOMES, c
         return _aplicar_parada(dec, nomes, caminho_cron, quem0, acao0 == "parada_remover")
     if acao0 in ("ajuste", "ajuste_remover"):
         return _aplicar_ajuste(dec, nomes, caminho_ajustes, quem0, acao0 == "ajuste_remover")
+    if acao0 == "pesos_aplicar":
+        return _aplicar_pesos(dec, quem0, caminho_pesos, caminho_pesos_hist)
     if acao0 in ("fechar_mes", "reabrir_mes"):
         import fechar_mes as fm
         mes = str(dec.get("mes", ""))[:30]

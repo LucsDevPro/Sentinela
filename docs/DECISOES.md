@@ -1,5 +1,12 @@
 # Registro de decisões (mais recente primeiro)
 
+## 21/11/2026 (6) — pesos gravados pelo site e todos os meses recalculados (etapa 3 de 3)
+- Nova ação `pesos_aplicar` (Worker → `repository_dispatch` → `aplicar_decisao.py`): PIN da coordenação + motivo (3–80 letras, sem dado de saúde). Grava só o `valor` em `data/pesos_pontuacao.json` e registra em `data/pesos_historico.json` (quem, quando, motivo, antes→depois e um **snapshot** completo; guarda as 100 versões mais recentes). Restaurar = reenviar o snapshot de uma versão (botão no histórico de `pesos.html`).
+- Validação em duas camadas: Worker (nome no padrão `PONTOS_PERDA_/GANHO_*`, número 0–50) e `aplicar_decisao.py` (nome existente no arquivo; um valor inválido derruba o conjunto inteiro, nada é gravado).
+- `aplicar-decisao.yml`: para `pesos_aplicar` não roda a atualização leve; dispara `regenerar-mes.yml` com `mes=todos` (refaz os meses congelados, o acumulado e o mês vigente a partir do cache; ao fim aciona o update-dashboard com `rodar_coleta=false`).
+- Validado numa cópia do repositório com pesos trocados: os 4 meses congelados e o mês vigente (Novembro) mudaram de nota; ~2 min de recálculo.
+- Testes: `test_pesos.py` (ação, histórico, restauração, recusas) e `worker/test_worker.mjs` (14 casos).
+
 ## 21/11/2026 (5) — simulador de pesos (etapa 2 de 3)
 - Nova página `pesos.html` (botão «Simular pesos» no álbum): o usuário muda o peso de cada regra e vê, por mês, nota e posição de cada agente antes/depois. **Só simula, não grava.** «Copiar pesos (JSON)» gera o texto para colar em `data/pesos_pontuacao.json`.
 - Conta: nota simulada = nota bruta + Σ inclinação × (peso novo − peso atual), com piso/teto. A nota é linear em cada peso, então a conta é exata. `calcular_pontuacao` ganhou o parâmetro `pesos` (substitui o peso só naquela chamada).

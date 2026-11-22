@@ -19,8 +19,11 @@
 // de decisões ficam SÓ aqui (KV), nunca no repositório.
 
 const ACOES = new Set(["ferias_confirmar", "ferias_nao", "ferias_ajustar", "lancar", "remover", "falta", "falta_remover",
-  "ajuste", "ajuste_remover", "parada", "parada_remover", "fechar_mes", "reabrir_mes", "contestacao_responder"]);
-const ACOES_SEM_AGENTE = new Set(["parada", "parada_remover", "fechar_mes", "reabrir_mes"]);
+  "ajuste", "ajuste_remover", "parada", "parada_remover", "fechar_mes", "reabrir_mes", "contestacao_responder", "pesos_aplicar"]);
+const ACOES_SEM_AGENTE = new Set(["parada", "parada_remover", "fechar_mes", "reabrir_mes", "pesos_aplicar"]);
+const LIMITE_PESO = 50;          // igual a PESOS_LIMITE_MAX do cálculo (scripts/coleta/pontos.py)
+const MAX_PESOS = 30;
+const RE_NOME_PESO = /^PONTOS_(PERDA|GANHO)_[A-Z_]{3,60}$/;
 const LIMITE_AJUSTE = 20;
 const LIMITE_PARADA = 30;
 const PARADAS = new Set(["Chuva", "Reunião/Treinamento", "Levantamento de Índice", "Instalação de Ovitrampa",
@@ -77,6 +80,22 @@ function validarNova(corpo) {
     if (!RE_MES.test(String(corpo.mes || ""))) return "Mês inválido.";
     if (acao === "reabrir_mes" && String(corpo.confirmacao || "").trim().toLowerCase() !== String(corpo.mes).toLowerCase())
       return "Para reabrir, digite o nome do mês exatamente.";
+    return null;
+  }
+  if (acao === "pesos_aplicar") {          // a lista de nomes válidos é conferida de novo no GitHub (aplicar_decisao.py)
+    const p = corpo.pesos;
+    if (!p || typeof p !== "object" || Array.isArray(p)) return "Envie os pesos.";
+    const nomes = Object.keys(p);
+    if (nomes.length < 1 || nomes.length > MAX_PESOS) return "Quantidade de pesos inválida.";
+    for (const n of nomes) {
+      if (!RE_NOME_PESO.test(n)) return "Peso desconhecido.";
+      const v = p[n];
+      if (typeof v !== "number" || !Number.isFinite(v) || v < 0 || v > LIMITE_PESO) return `Cada peso deve ser um número entre 0 e ${LIMITE_PESO}.`;
+    }
+    const m = limparMotivo(corpo.motivo);
+    if (m.length < 3) return "Escreva o motivo da mudança (pelo menos 3 letras).";
+    if (m.length > 80) return "Motivo muito longo (máximo 80 letras).";
+    if (PROIBIDO_MOTIVO.test(m)) return "O motivo aparece publicamente: não escreva dados de saúde nem atestado.";
     return null;
   }
   if (acao === "ajuste" || acao === "ajuste_remover") {
@@ -175,6 +194,7 @@ function resumo(c) {
   if (c.acao === "parada" || c.acao === "parada_remover")
     return `${c.acao}: ${c.motivo}, ${c.alvo === "equipe" ? c.equipe : "todas as equipes"}, ${c.inicio} a ${c.fim}${c.turno ? " (" + c.turno + ")" : ""}`;
   if (c.acao === "fechar_mes" || c.acao === "reabrir_mes") return `${c.acao}: ${c.mes}`;
+  if (c.acao === "pesos_aplicar") return `pesos_aplicar: ${Object.keys(c.pesos || {}).length} peso(s) — ${limparMotivo(c.motivo)}`;
   if (c.acao === "contestacao_responder") return `contestação ${c.codigo}: ${c.decisao}`;
   const t = c.tipo ? ` — ${c.tipo}${c.turno ? " (" + c.turno + ")" : ""}` : "";
   return `${c.acao}${t}: agente ${c.id_agente}, ${c.inicio} a ${c.fim}`;
@@ -396,6 +416,8 @@ export default {
         else if (corpo.acao === "parada" || corpo.acao === "parada_remover")
           decisao = { acao: corpo.acao, quem: au.nome, alvo: corpo.alvo, ...(corpo.alvo === "equipe" ? { equipe: corpo.equipe } : {}),
             motivo: corpo.motivo, inicio: corpo.inicio, fim: corpo.fim, ...(corpo.turno ? { turno: corpo.turno } : {}) };
+        else if (corpo.acao === "pesos_aplicar")
+          decisao = { acao: corpo.acao, quem: au.nome, pesos: corpo.pesos, motivo: limparMotivo(corpo.motivo) };
         else if (corpo.acao === "fechar_mes" || corpo.acao === "reabrir_mes")
           decisao = { acao: corpo.acao, quem: au.nome, mes: corpo.mes, ...(corpo.confirmacao ? { confirmacao: corpo.confirmacao } : {}) };
         const r = await fetch(`https://api.github.com/repos/${env.GH_REPO}/dispatches`, {

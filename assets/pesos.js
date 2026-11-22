@@ -33,7 +33,7 @@
     $('pesos').innerHTML = html;
     $('pesos').addEventListener('input', function (e) {
       var el = e.target; if (!el.dataset.k) return;
-      novos[el.dataset.k] = lerInput(el); marcar(el.dataset.k); desenharRank();
+      novos[el.dataset.k] = lerInput(el); marcar(el.dataset.k); desenharRank(); estadoAplicar();
     });
   }
   function marcar(k) {
@@ -88,7 +88,7 @@
     $('gerado').textContent = 'dados de ' + D.gerado_em;
     $('rodape').textContent = 'A nota "atual" é recalculada com os pesos oficiais de hoje; meses fechados só mudam de verdade quando forem regenerados.';
     desenharPesos(); desenharRank();
-    $('bZerar').onclick = function () { Object.keys(atuais).forEach(function (k) { novos[k] = atuais[k]; document.getElementById('p_' + k).value = String(atuais[k]).replace('.', ','); marcar(k); }); desenharRank(); };
+    $('bZerar').onclick = function () { Object.keys(atuais).forEach(function (k) { novos[k] = atuais[k]; document.getElementById('p_' + k).value = String(atuais[k]).replace('.', ','); marcar(k); }); desenharRank(); estadoAplicar(); };
     $('bCopiar').onclick = function () {
       var t = jsonPesos(), b = $('bCopiar');
       (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = 'Copiado!'; }, function () { window.prompt('Copie o JSON dos pesos:', t); });
@@ -96,4 +96,82 @@
     };
   }
   iniciar();
+
+  /* ---------- aplicar de verdade (Worker) e histórico ---------- */
+  var WORKER = '', pin = '';
+  try { pin = sessionStorage.getItem('pinSentinela') || ''; } catch (e) {}
+  function toast(msg, erro) {
+    var t = document.createElement('div'); t.className = 'toast' + (erro ? ' erro' : ''); t.setAttribute('role', 'status'); t.textContent = msg;
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 6000);
+  }
+  function mudancas() {
+    var o = {};
+    Object.keys(novos).forEach(function (k) { if (valido(novos[k]) && novos[k] !== atuais[k]) o[k] = novos[k]; });
+    return o;
+  }
+  function invalidos() { return Object.keys(novos).filter(function (k) { return !valido(novos[k]); }).length; }
+  function estadoAplicar() {
+    var b = $('bAplicar'); if (!b) return;
+    var n = Object.keys(mudancas()).length, ruim = invalidos();
+    b.disabled = !(n > 0 && !ruim);
+    $('infoAplicar').textContent = ruim ? 'Corrija os campos em vermelho.' : n ? n + ' peso(s) mudado(s).' : 'Mude algum peso para habilitar.';
+  }
+  async function api(caminho, corpo) {
+    var r = await fetch(WORKER + caminho, { method: corpo ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json', 'X-PIN': pin },
+      body: corpo ? JSON.stringify(Object.assign({}, corpo, { pin: pin })) : undefined });
+    var j = await r.json().catch(function () { return {}; });
+    if (!r.ok) throw new Error(j.erro || 'Erro ' + r.status);
+    return j;
+  }
+  async function enviarPesos(pesos, motivo, confirmacao) {
+    if (!window.confirm(confirmacao)) return false;
+    try { await api('/acao', { acao: 'pesos_aplicar', pesos: pesos, motivo: motivo }); toast('Enviado! Os meses são recalculados e o site atualiza em alguns minutos.'); return true; }
+    catch (e) { toast(e.message, true); return false; }
+  }
+  async function entrar(p) {
+    pin = p; var j = await api('/log');
+    try { sessionStorage.setItem('pinSentinela', pin); } catch (e) {}
+    $('quem').textContent = j.quem; $('entrada').hidden = true; $('app').hidden = false; estadoAplicar();
+  }
+  async function iniciarWorker() {
+    if (!$('entrada')) return;
+    try { var cfg = await (await fetch('data/config_worker.json?' + Date.now())).json(); WORKER = (cfg.url || '').replace(/\/$/, ''); } catch (e) { WORKER = ''; }
+    if (!WORKER) { $('semWorker').hidden = false; return; }
+    if (pin) { try { await entrar(pin); return; } catch (e) { pin = ''; } }
+    $('entrada').hidden = false;
+  }
+  $('btnEntrar').onclick = async function () {
+    $('erroPin').hidden = true;
+    try { await entrar($('pin').value.trim()); } catch (e) { $('erroPin').textContent = e.message; $('erroPin').hidden = false; }
+  };
+  $('pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('btnEntrar').click(); });
+  $('btnSair').onclick = function () { try { sessionStorage.removeItem('pinSentinela'); } catch (e) {} location.reload(); };
+  $('bAplicar').onclick = async function () {
+    var m = mudancas(), motivo = $('motivo').value.trim();
+    if (motivo.length < 3) { toast('Escreva o motivo da mudança (pelo menos 3 letras).', true); $('motivo').focus(); return; }
+    var lista = Object.keys(m).map(function (k) { return '• ' + D.pesos[k].rotulo + ': ' + atuais[k] + ' → ' + m[k]; }).join('\n');
+    $('bAplicar').disabled = true;
+    var ok = await enviarPesos(m, motivo, 'Aplicar estes pesos?\n\n' + lista + '\n\nA nota de TODOS os meses será recalculada.');
+    if (!ok) estadoAplicar();
+  };
+  function fmtV(v) { return String(v).replace('.', ','); }
+  async function carregarHistorico() {
+    var h = [];
+    try { h = await (await fetch('data/pesos_historico.json?' + Date.now())).json(); } catch (e) { h = []; }
+    if (!Array.isArray(h) || !h.length) return;
+    $('histVazio').hidden = true;
+    $('hist').innerHTML = h.slice().reverse().map(function (v, i) {
+      var idx = h.length - 1 - i;
+      return '<li><div class="cab"><span><b>' + esc(v.quando) + '</b> · ' + esc(v.quem) + ' — ' + esc(v.motivo) + '</span>' +
+        '<button class="bt sec" type="button" data-restaurar="' + idx + '">Restaurar estes valores</button></div><ul>' +
+        v.mudancas.map(function (m) { return '<li>' + esc(m.rotulo) + ': ' + fmtV(m.antes) + ' → <b>' + fmtV(m.depois) + '</b></li>'; }).join('') + '</ul></li>';
+    }).join('');
+    $('hist').onclick = async function (e) {
+      var b = e.target.closest('[data-restaurar]'); if (!b) return;
+      if (!WORKER || !pin) { toast('Entre com o PIN da coordenação (painel «Aplicar de verdade») para restaurar.', true); return; }
+      var v = h[Number(b.dataset.restaurar)];
+      await enviarPesos(v.snapshot, 'Restaurar versão de ' + v.quando, 'Restaurar os pesos da versão de ' + v.quando + ' (' + v.quem + ')?\n\nA nota de TODOS os meses será recalculada.');
+    };
+  }
+  carregarHistorico(); iniciarWorker(); estadoAplicar();
 })();

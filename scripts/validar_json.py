@@ -28,6 +28,7 @@ ARQUIVOS_CRITICOS = [
     "data/meses_arquivados.json",
     "data/metas_equipes.json",
     "data/pesos_pontuacao.json",
+    "data/pesos_historico.json",
 ]
 
 

@@ -57,7 +57,7 @@ jobs:
             if [ "$codigo" -ne 0 ]; then resultado=recusada; break; fi
             python3 scripts/validar_json.py
             if git diff --quiet -- data/; then resultado=semmudanca; break; fi
-            git add data/cronograma_ausencias.json data/deteccoes_pendentes.json data/ajustes_ranking.json data/meses_arquivados.json data/historico
+            git add data/cronograma_ausencias.json data/deteccoes_pendentes.json data/ajustes_ranking.json data/pesos_pontuacao.json data/pesos_historico.json data/meses_arquivados.json data/historico
             git commit -m "Decisão da coordenação (execução ${{ github.run_id }}) [skip ci]"
             if git push origin "HEAD:$BRANCH"; then resultado=ok; break; fi
             echo "Push rejeitado (outro commit chegou primeiro) — reaplicando, tentativa $i..."
@@ -67,10 +67,19 @@ jobs:
           { echo "### Decisão: $resultado"; cat msg.txt; } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Atualizar o dashboard
-        if: steps.aplicar.outputs.resultado == 'ok'
+        if: steps.aplicar.outputs.resultado == 'ok' && github.event.client_payload.decisao.acao != 'pesos_aplicar'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run update-dashboard.yml --ref "${{ github.ref_name }}" -f rodar_coleta=false
+
+      # Pesos novos mudam a nota de TODOS os meses: refaz os meses congelados (e o acumulado) a partir do cache de
+      # semanas. Esse workflow, ao terminar, aciona sozinho o update-dashboard (rodar_coleta=false) que gera as páginas.
+      # O mês vigente também é refeito por ele; se algo falhar, a próxima coleta agendada refaz o vigente.
+      - name: Recalcular todos os meses (pesos novos)
+        if: steps.aplicar.outputs.resultado == 'ok' && github.event.client_payload.decisao.acao == 'pesos_aplicar'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run regenerar-mes.yml --ref "${{ github.ref_name }}" -f mes=todos -f aplicar=true
 
       # Registra o resultado no histórico privado do Worker (se estiver configurado).
       - name: Informar o resultado ao Worker
