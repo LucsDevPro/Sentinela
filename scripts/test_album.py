@@ -161,9 +161,9 @@ checar("PNG: filete interno lendário reduzido para 7px",
 # Efeito de raio premium (Lendária em ouro, Destaque em magenta/ciano), na tela e no PNG
 checar("raio premium: disparos em rajada, clarão, faíscas e halo das peças pulsando (só com movimento permitido)",
        "@keyframes c-golpe" in cc and ".c-flash" in cc and "@keyframes c-golpe-orna-ouro" in cc and "@keyframes c-faisca-pisca" in cc and ".carta.b-100 .c-estrelas .rg" in cc and "prefers-reduced-motion: no-preference" in cc)
-checar("raio premium: só a Lendária recebe raios, arcos e clarão (markup); o PNG desenha com a paleta dourada e a intensidade cai do TOP 1 ao TOP 3",
-       "m.borda !== 'b-100' ? ''" in cj and 'class=\\"c-flash\\"' in cj and "function raiosPNG" in cj and "function arcosPNG" in cj and "var RAIO_A = { 1: 1, 2: .82, 3: .64 }" in cj and "PRAIO['b-top']" not in cj
-       and ".carta.b-100.top1 .c-estrelas" in cc and ".carta.b-100.top3 .c-estrelas" in cc)
+checar("raio premium: a Lendária recebe raios, arcos e clarão e a Elite só raios suaves no tom ametista (markup); o PNG desenha com a paleta dourada e a intensidade cai do TOP 1 ao TOP 3",
+       "m.borda === 'b-100' ? raiosSvg + arcosSvg : m.elite ? raiosSvg : ''" in cj and 'class=\\"c-flash\\"' in cj and "function raiosPNG" in cj and "function arcosPNG" in cj and "var RAIO_A = { 1: 1, 2: .82, 3: .64 }" in cj and "PRAIO['b-top']" not in cj
+       and ".carta.t-elite .c-estrelas" in cc and ".carta.b-100.top1 .c-estrelas" in cc and ".carta.b-100.top3 .c-estrelas" in cc)
 checar("raios, arcos e clarão são absolutos dentro do cartão (a regra `.carta > *` não pode pô-los no fluxo)",
        ".carta > .c-estrelas,\n.carta > .c-arcos,\n.carta > .c-flash { position: absolute; }" in cc)
 checar("rodapé do cartão do 1º mês cabe no escudo (texto curto «1º mês», não «sem mês anterior»)", "' 1º mês'" in cj and "sem mês anterior" not in cj and "replace('1º mês'" in ler("assets/album.js"))

@@ -1940,3 +1940,17 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
 .carta.b-100.top2 .c-estrelas, .carta.b-100.top2 .c-arcos { opacity: 0.78; }
 .carta.b-100.top3 .c-estrelas, .carta.b-100.top3 .c-arcos { opacity: 0.6; }
 .carta.b-100.top3 .c-flash { filter: opacity(0.7); }
+
+/* ---- Elite: raios no tom ametista, com pouco efeito (só raios, sem arcos nem clarão; mais fracos e espaçados que os da Lendária) ---- */
+.carta.t-elite .c-estrelas { opacity: 0.55; }
+.carta.t-elite .c-estrelas .rg { stroke: rgba(168, 85, 247, 0.3); filter: blur(3px); }
+.carta.t-elite .c-estrelas .ry { stroke: #C084FC; filter: drop-shadow(0 0 3px rgba(168, 85, 247, 0.6)); }
+.carta.t-elite .c-estrelas .rw { stroke: #F3E8FF; }
+.carta.t-elite .c-estrelas circle { fill: #E9D5FF; }
+@media (prefers-reduced-motion: no-preference) {
+  .carta.t-elite .c-estrelas .rai { animation: c-golpe 9s linear infinite; }
+  .carta.t-elite .c-estrelas .rai:nth-child(3n) { animation-delay: 1.2s; }
+  .carta.t-elite .c-estrelas .rai:nth-child(4n) { animation-delay: 2.9s; }
+  .carta.t-elite .c-estrelas .rai:nth-child(5n) { animation-delay: 5.1s; }
+  .carta.t-elite .c-estrelas .rai:nth-child(7n) { animation-delay: 6.8s; }
+}

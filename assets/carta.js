@@ -115,7 +115,9 @@
     var ini = (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
     var tend = delta == null ? SV('minus') + ' 1º mês' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
-    var extra100 = m.borda !== 'b-100' ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
+    var raiosSvg = '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg>';
+    var arcosSvg = '<svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
+    var extra100 = m.borda === 'b-100' ? raiosSvg + arcosSvg : m.elite ? raiosSvg : '';   // Elite: só raios, bem suaves (CSS .carta.t-elite); Lendária: raios + arcos + clarão
     var topCls = m.top ? ' top' + m.top : '';
     return '<div class="c-conj ' + m.borda + (m.elite ? ' n100' : '') + topCls + '">' + ornSVG(m.elite ? 'b-elite' : m.borda, 'atras', m.top) + '<div class="carta ' + tier[0] + ' ' + m.borda + (m.elite ? ' n100' : '') + topCls + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
@@ -195,6 +197,8 @@
   var PRAIO = {
     'b-100': { a: .95, halo: 'rgba(255,212,71,.5)', haloSh: '#FFD447', miolo: '#FFE27A', mioloSh: '#FFD447', fil: '#FFFBEA', fais: '#FFF0A6', arco: 'rgba(255,224,120,.75)', arcoSh: '#FFD447', arcoFil: '#FFFBEA' }
   };
+  /* Elite: raios no tom da carta (ametista), pouco efeito */
+  PRAIO['elite'] = { a: .4, halo: 'rgba(168,85,247,.35)', haloSh: '#A855F7', miolo: '#D8B4FE', mioloSh: '#A855F7', fil: '#F3E8FF', fais: '#E9D5FF' };
   var RAIO_A = { 1: 1, 2: .82, 3: .64 };   // hierarquia dos raios: TOP 1 mais intenso, TOP 3 mais contido
   function raiosPNG(ctx, X, Y, W, H, S, P) {
     ctx.save(); ctx.globalAlpha = P.a; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -250,6 +254,7 @@
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
       var fr100 = is100 ? (function () { var b = card.querySelector('.c-foto').getBoundingClientRect(); return { cx: X + (b.left - cr.left + b.width / 2) * S, cy: Y + (b.top - cr.top + b.height / 2) * S }; })() : null;
+      if (tier === 't-elite') raiosPNG(ctx, X, Y, W, H, S, PRAIO['elite']);   // raios suaves da Elite (igual ao CSS)
       if (is100) {
         // clarão branco-quente atrás da foto (radial-gradient do ::after do CSS)
         var cx0 = X + W * .5, cy0 = Y + H * .28, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .58, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);

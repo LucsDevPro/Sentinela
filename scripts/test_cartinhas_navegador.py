@@ -215,8 +215,8 @@ with sync_playwright() as p:
             cls = pg.evaluate(JS_MONTA, [P, pos, "x"])
             r = pg.evaluate("""() => { const h = document.querySelector('.t-host'); return { coroa: !!h.querySelector('.c-orna-coroa'), raios: !!h.querySelector('.c-estrelas'), rod: h.querySelector('.c-rodape').textContent }; }""")
             top = pos <= 3
-            checar(f"{esperado} na posição {pos}: {'coroa TOP ' + str(pos) if top else 'sem coroa'}; raios {'só na Lendária' if esperado == 'LENDÁRIA' else 'ausentes'}",
-                   (f"top{pos}" in cls.split()) == top and r["coroa"] == top and r["raios"] == (esperado == "LENDÁRIA") and esperado in r["rod"] and "DESTAQUE" not in r["rod"], f"{cls} {r}")
+            checar(f"{esperado} na posição {pos}: {'coroa TOP ' + str(pos) if top else 'sem coroa'}; raios {'da Lendária' if esperado == 'LENDÁRIA' else 'suaves da Elite' if esperado == 'ELITE' else 'ausentes'}",
+                   (f"top{pos}" in cls.split()) == top and r["coroa"] == top and r["raios"] == (esperado in ("LENDÁRIA", "ELITE")) and esperado in r["rod"] and "DESTAQUE" not in r["rod"], f"{cls} {r}")
         # paletas do PNG em canvas cobrem os mesmos tiers do CSS (sem exigir valores)
         cj = open(os.path.join(RAIZ, "assets/carta.js"), encoding="utf-8").read()
         cc = open(os.path.join(RAIZ, "assets/carta.css"), encoding="utf-8").read()

@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 22/11/2026 (3) — Elite com raios suaves
+- Pedido do usuário: a Elite ganha raios no tom da carta (ametista), com pouco efeito. Só os raios (sem arcos nem clarão), opacidade .55, ciclo de 9 s (Lendária: 5,6 s). Estático com `prefers-reduced-motion`. PNG plano B desenha os mesmos raios (`PRAIO['elite']`). Os raios continuam exclusivos de Lendária e Elite.
+
 ## 22/11/2026 (2) — repaginada das cartinhas: 7 níveis, tema central e insígnias TOP
 - Níveis: FERRO #6B6560 · AÇO #64748B · BRONZE #B87545 · PRATA #C6CCD4 · OURO #E6B93D · ELITE #9333EA (ametista) · LENDÁRIA #FFD447. O nível DESTAQUE (TOP 3 com 90–99) deixou de existir: vira carta OURO com a insígnia da posição. Pontuação e ranking não mudaram, só o rótulo.
 - Tema central: no fim de `assets/carta.css`, bloco 1 (variáveis por nível) + bloco 2 (regras genéricas que as usam). Para trocar uma cor, mexa só ali. Regras de `.b-top`/`.t-destaque` foram removidas.
