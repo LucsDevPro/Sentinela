@@ -103,7 +103,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "17/11/2026 16:50"
+    "detectado_em": "22/11/2026 15:18"
   },
   {
     "tipo": "possiveis_ferias",
@@ -265,6 +265,22 @@
   },
   {
     "tipo": "possiveis_ferias",
+    "id_agente": 3035,
+    "nome_agente": "Teonilda Florentino Vieira",
+    "equipe": "Equipe 2",
+    "inicio": "11/11/2026",
+    "fim": "19/11/2026",
+    "duracao": 7,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "status": "falta",
+    "motivo": "Falta (agente sem abono automático)",
+    "confirmado_automaticamente": true,
+    "categoria_coletiva": null,
+    "detectado_em": "22/11/2026 15:18"
+  },
+  {
+    "tipo": "possiveis_ferias",
     "id_agente": 2951,
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
@@ -331,8 +347,8 @@
     "nome_agente": "Alana Amanda Fernandes Ovelar",
     "equipe": "Equipe 3",
     "inicio": "19/10/2026",
-    "fim": "16/11/2026",
-    "duracao": 20,
+    "fim": "17/11/2026",
+    "duracao": 21,
     "status": "falta",
     "motivo": "Falta (sem abono — decisão da coordenação)",
     "confirmado_automaticamente": true,
@@ -340,6 +356,21 @@
     "detectado_em": "29/10/2026 01:15",
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada."
+  },
+  {
+    "tipo": "possiveis_ferias",
+    "id_agente": 2951,
+    "nome_agente": "Alana Amanda Fernandes Ovelar",
+    "equipe": "Equipe 3",
+    "inicio": "18/11/2026",
+    "fim": "19/11/2026",
+    "duracao": 2,
+    "excesso_30_dias": true,
+    "status": "falta",
+    "motivo": "Falta (passou de 30 dias de férias)",
+    "confirmado_automaticamente": true,
+    "categoria_coletiva": null,
+    "detectado_em": "22/11/2026 15:18"
   },
   {
     "tipo": "possiveis_ferias",
@@ -421,7 +452,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "17/11/2026 16:50"
+    "detectado_em": "22/11/2026 15:18"
   },
   {
     "tipo": "possiveis_ferias",
@@ -467,11 +498,13 @@
     "inicio": "03/11/2026",
     "fim": "11/11/2026",
     "duracao": 7,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "pendente",
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "17/11/2026 16:50"
+    "detectado_em": "22/11/2026 15:18"
   },
   {
     "tipo": "possiveis_ferias",
@@ -541,6 +574,22 @@
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
     "detectado_em": "01/11/2026 21:09"
+  },
+  {
+    "tipo": "possiveis_ferias",
+    "id_agente": 161,
+    "nome_agente": "Rozana Reis da Silva",
+    "equipe": "Equipe 4",
+    "inicio": "10/11/2026",
+    "fim": "19/11/2026",
+    "duracao": 8,
+    "revisao_classificacao_necessaria": true,
+    "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
+    "status": "pendente",
+    "motivo": null,
+    "confirmado_automaticamente": false,
+    "categoria_coletiva": null,
+    "detectado_em": "22/11/2026 15:18"
   },
   {
     "tipo": "paralisacao_coletiva",
