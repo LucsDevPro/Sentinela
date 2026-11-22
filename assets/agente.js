@@ -118,7 +118,7 @@ function carta(a, ms) {
       Nível pela nota: ouro ≥ 90, prata ≥ 80, bronze ≥ 70, aço ≥ 60, ferro abaixo disso. Quem passa de 100 e fica fora do pódio é <b>elite</b>; o top 3 do mês é <b>destaque</b> (nota 90–99) ou <b>lendária</b> (nota 100 ou mais).</p>
       <div class="acoes"><button type="button" class="bt-img" id="bBaixar">${SV('download')} Baixar imagem</button><button type="button" class="bt-img zap" id="bZap">${SV('share')} Enviar pelo WhatsApp</button></div>
       <p class="mut" id="msgImg" role="status" aria-live="polite"></p>
-      <p><a href="album.html">Ver o álbum com todas as cartinhas →</a></p></div></div>`;
+      <p><a href="album.html">Ver o Hall da Glória com todas as cartinhas →</a></p></div></div>`;
 }
 function qd(trab, esp) {
   const t = Math.max(0, Math.round(trab || 0)), e = Math.max(Math.round(esp || 0), t);
@@ -171,7 +171,7 @@ function desenhar() {
   const linkRecente = (anoL || idxRef < todosMeses.length - 1)
     ? ` · <a href="agente.html?${qsAgente}">ver mês mais recente</a>`
     : '';
-  const linkAlbum = ` · <a href="album.html?mes=${encodeURIComponent(rotMes || '')}">álbum</a>`;
+  const linkAlbum = ` · <a href="album.html?mes=${encodeURIComponent(rotMes || '')}">Hall da Glória</a>`;
   let html = `<h1><svg class="ico" aria-hidden="true"><use href="#i-trend"/></svg> <span class="nome">${esc(a.nome)}</span></h1><div class="mut">${esc(a.equipe)} · atualizado em ${esc(D.gerado_em)}${linkAlbum}${linkRecente}</div>`;
   html += carta(a, ms);
   if (ult) html += `<div class="card"><div class="kpis">

@@ -207,7 +207,7 @@ def gerar():
 <title>Como o ranking é calculado</title>
 <meta http-equiv="refresh" content="0; url=album.html#como-calcula">
 <script>location.replace("album.html#como-calcula");</script></head>
-<body><p>O "Como é calculado" agora fica dentro do álbum. <a href="album.html#como-calcula">Abrir</a>.</p></body></html>
+<body><p>O "Como é calculado" agora fica dentro do Hall da Glória. <a href="album.html#como-calcula">Abrir</a>.</p></body></html>
 """
 
 

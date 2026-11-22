@@ -105,7 +105,7 @@ with sync_playwright() as p:
     checar("álbum abre em «Melhor do ano»", al.input_value("#fMes") == "Melhor do ano")
     fundo, texto = al.evaluate("[getComputedStyle(document.documentElement).backgroundColor, getComputedStyle(document.body).color]")
     canal = lambda c: [int(x) for x in re.findall(r"\d+", c)[:3]]
-    checar("Sala de Troféus: nasce no tema escuro (fundo escuro, texto claro; o botão leva ao claro)", sum(canal(fundo)) / 3 < 60 and sum(canal(texto)) / 3 > 200, f"{fundo} / {texto}")
+    checar("Hall da Glória: nasce no tema escuro (fundo escuro, texto claro; o botão leva ao claro)", sum(canal(fundo)) / 3 < 60 and sum(canal(texto)) / 3 > 200, f"{fundo} / {texto}")
     al.select_option("#fMes", al.eval_on_selector_all("#fMes option", "o=>o.map(x=>x.value)")[1]); al.wait_for_timeout(1800)   # mês mais recente; espera a animação de entrada das cartas (nota conta de 0 ao valor e a carta cresce)
     mes = al.input_value("#fMes")
     do_mes = sorted([m for a in D.values() for m in a["meses"] if m["mes"] == mes and m["pontos"] is not None], key=lambda m: -m["pontos"])

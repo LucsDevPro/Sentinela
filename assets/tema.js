@@ -5,7 +5,7 @@
   var raiz = document.documentElement;
   function ler() { try { return localStorage.getItem('sentinelaTema'); } catch (e) { return null; } }
   function gravar(t) { try { localStorage.setItem('sentinelaTema', t); } catch (e) {} }
-  /* Página que nasce escura (ex.: a Sala de Troféus) declara <html data-tema-padrao="dark">: sem escolha guardada vale o escuro, e o botão leva ao claro (data-theme="light"). */
+  /* Página que nasce escura (ex.: o Hall da Glória) declara <html data-tema-padrao="dark">: sem escolha guardada vale o escuro, e o botão leva ao claro (data-theme="light"). */
   var padrao = raiz.getAttribute('data-tema-padrao') === 'dark' ? 'dark' : 'light', guardado = ler();
   var atual = guardado === 'dark' || guardado === 'light' ? guardado : padrao;
   function pintar() { if (atual === 'dark') raiz.setAttribute('data-theme', 'dark'); else if (padrao === 'dark') raiz.setAttribute('data-theme', 'light'); else raiz.removeAttribute('data-theme'); }

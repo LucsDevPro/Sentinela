@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 22/11/2026 (4) — «Sala de Troféus» / «Álbum» passam a se chamar «Hall da Glória»
+- Texto visível renomeado: título e cabeçalho da página, botão do cabeçalho de todas as páginas (inclusive a inicial), links na página do agente e botões «← Hall da Glória» (Resumo e Pesos). O arquivo continua `album.html` e o código/ids continuam `album` (links e favoritos antigos seguem funcionando).
+
 ## 22/11/2026 (3) — Elite com raios suaves
 - Pedido do usuário: a Elite ganha raios no tom da carta (ametista), com pouco efeito. Só os raios (sem arcos nem clarão), opacidade .55, ciclo de 9 s (Lendária: 5,6 s). Estático com `prefers-reduced-motion`. PNG plano B desenha os mesmos raios (`PRAIO['elite']`). Os raios continuam exclusivos de Lendária e Elite.
 

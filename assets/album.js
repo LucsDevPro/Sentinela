@@ -1,4 +1,4 @@
-// Álbum de cartinhas (album.html): abas, filtros, pódio e grade. A aparência das cartas está em carta.css / carta_fx.js.
+// Hall da Glória, antigo álbum de cartinhas (album.html): abas, filtros, pódio e grade. A aparência das cartas está em carta.css / carta_fx.js.
 
 const SV_FOTO = '<svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const $ = id => document.getElementById(id);
@@ -27,7 +27,7 @@ function mostrar(qual, gravarHash) {
   Object.entries(PAINEIS).forEach(([k, [aba, painel]]) => { $(aba).setAttribute('aria-selected', String(k === qual)); $(painel).hidden = k !== qual; });
   if (qual === 'calc') carregarCalc();
   if (gravarHash) history.replaceState(null, '', qual === 'calc' ? '#como-calcula' : location.pathname + location.search);
-  document.title = (qual === 'calc' ? 'Como é calculado' : 'Sala de Troféus') + ' — Sentinela';
+  document.title = (qual === 'calc' ? 'Como é calculado' : 'Hall da Glória') + ' — Sentinela';
 }
 $('abaCartas').onclick = () => mostrar('cartas', true);
 $('abaCalc').onclick = () => mostrar('calc', true);

@@ -461,7 +461,7 @@ with sync_playwright() as p:
         q.click("[data-tema-btn]"); q.wait_for_timeout(300)
         b2 = q.evaluate(fundo_js)
         q.evaluate("localStorage.removeItem('sentinelaTema')")
-        if f.startswith("album.html"):   # Sala de Troféus: nasce escura (data-tema-padrao) e o botão leva ao claro
+        if f.startswith("album.html"):   # Hall da Glória: nasce escura (data-tema-padrao) e o botão leva ao claro
             checar("album.html: escuro por padrão e claro no botão", b1 != b2 and b1 in ("rgb(18, 12, 8)", "rgb(12, 8, 6)") and b2 not in ("rgb(18, 12, 8)", "rgb(12, 8, 6)"), f"{b1} {b2}")
         else:
             checar(f"{f.split('?')[0]}: claro por padrão e escuro no botão", b1 != b2 and b1 in ("rgb(238, 242, 248)", "rgb(237, 241, 247)"), f"{b1} {b2}")

@@ -63,7 +63,7 @@ header h1 span { color: #2BA8E8; font-weight: 600; }
 .header-actions .period-select { box-sizing: border-box; height: var(--hbtn-h); flex: 0 1 210px; width: 210px; min-width: 130px; padding: 0 10px; border-radius: 6px; }
 /* Os 4 botões de texto dividem a largura em partes iguais e encolhem junto com a tela; quando o texto não cabe mais, vira só o ícone
    (ver @container acoes mais abaixo). Nunca quebra de linha. */
-.hnav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; flex: 0 1 690px; min-width: 0; }   /* 690 px = 4 botões de ~165 px: cabe "Álbum de cartinhas" inteiro */
+.hnav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; flex: 0 1 690px; min-width: 0; }   /* 690 px = 4 botões de ~165 px: cabe "Hall da Glória" inteiro */
 .hnav .hbtn { min-width: 0; padding: 0 8px; }
 .hnav .hbtn > span:not(.btn-ico) { overflow: hidden; text-overflow: ellipsis; }
 .htools { display: flex; gap: 8px; }

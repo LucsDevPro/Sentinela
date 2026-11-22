@@ -228,7 +228,7 @@ with sync_playwright() as p:
 
     # ═════════════ 3. TEMA DA SALA (escuro por padrão; botão leva ao claro) ═════════════
     if quer("tema"):
-        print("\n== 3. tema da Sala de Troféus ==")
+        print("\n== 3. tema da Hall da Glória ==")
         pg = pagina()
         t0 = pg.evaluate("document.documentElement.getAttribute('data-theme')")
         checar("Sala nasce escura (data-tema-padrao=dark)", t0 == "dark", str(t0))
