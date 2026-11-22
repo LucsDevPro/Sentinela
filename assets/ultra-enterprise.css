@@ -53,7 +53,7 @@ body:has(.album) .mut { max-width:1050px; }
 .slot:hover { transform:translateY(-5px); }
 .slot .c-conj { transform:translateZ(0); }
 .carta { border-radius:8px!important; }
-.carta.b-90,.carta.b-top,.carta.b-100 { filter:saturate(1.08) contrast(1.025); }
+.carta.b-90,.carta.b-100 { filter:saturate(1.08) contrast(1.025); }
 .carta.b-100 { --b1:#6c5520; --b2:#e8d49a; --b3:#fff8dc; }
 .podio { min-height:520px; align-items:flex-end; border:1px solid rgba(216,173,85,.22)!important; }
 .podio .slot.p1 { transform:translateY(-12px); }

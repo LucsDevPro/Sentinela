@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""SUÍTE DAS CARTINHAS (navegador). Cobre os 8 tiers e confere, sem travar valores de cor:
+"""SUÍTE DAS CARTINHAS (navegador). Cobre os 7 tiers e confere, sem travar valores de cor:
   1. estrutura e medidas de cada tier        4. HTML × PNG (exportação principal e plano B em canvas)
   2. cores, bordas, tipografia, efeitos      5. movimento reduzido
   3. tema claro/escuro da Sala               6. áudio, vídeo e animações (SÓ MEDE: não altera nada)
@@ -39,13 +39,13 @@ CONFIG = {
     "VIDEO_AUDIO_DB_MIN": -45.0,   # o áudio do vídeo não pode ser praticamente mudo (pico, dBFS)
     "VIDEO_FADE_RATIO": 0.6,       # no último 0,15 s o pico precisa cair abaixo de N × o pico geral (fade no fim)
 }
-# Os 8 tiers. «caso» = (nota, posição no mês de 20 agentes). Se um tier novo surgir, acrescente aqui.
+# Os 7 tiers (o antigo DESTAQUE virou OURO + insígnia TOP, 22/11/2026). «caso» = (nota, posição no mês de 20 agentes). Se um tier novo surgir, acrescente aqui.
 TIERS = [
-    ("LENDÁRIA", "b-100", 105, 1), ("DESTAQUE", "t-destaque b-top", 96, 2), ("ELITE", "t-elite b-90 n100", 104, 8), ("OURO", "b-90", 93, 9),
+    ("LENDÁRIA", "b-100", 105, 1), ("ELITE", "t-elite b-90 n100", 104, 8), ("OURO", "b-90", 93, 9),
     ("PRATA", "t-prata b-80", 85, 10), ("BRONZE", "t-bronze b-70", 75, 11), ("AÇO", "t-aco b-60", 65, 12), ("FERRO", "t-ferro b-0", 40, 19),
 ]
-PREMIUM = {"b-100", "b-top", "b-90"}   # tiers com brilho e animação própria
-ORNAMENTOS = {"b-100", "b-top", "b-90", "b-80"}   # tiers com peças de moldura (louros, coroa, aletas) = chaves de ORN_PAL em carta.js
+PREMIUM = {"b-100", "b-90"}   # tiers com brilho e animação própria
+ORNAMENTOS = {"b-100", "b-90", "b-80"}   # tiers com peças de moldura (louros, coroa, aletas) = chaves de ORN_PAL em carta.js
 # ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 FALHAS, PULADOS = [], []
@@ -208,12 +208,19 @@ with sync_playwright() as p:
             checar(f"{nome}: efeitos {'premium (brilho + sombra + moldura)' if premium else 'sem brilho premium'}",
                    (r["brilho"] and r["sombra"] and (r["louros"] or r["coroa"])) if premium else True, f"brilho={r['brilho']} sombra={r['sombra']} louros={r['louros']} coroa={r['coroa']}")
             checar(f"{nome}: peças de moldura {'presentes' if orn else 'ausentes'} (ORN_PAL)", (r["louros"] or r["coroa"]) == orn, f"louros={r['louros']} coroa={r['coroa']}")
-            if "b-100" in marcas or "b-top" in marcas:
+            if "b-100" in marcas:
                 checar(f"{nome}: raios/arcos (c-estrelas) presentes", r["raios"])
+        # insígnia TOP 1/2/3: independe do nível (qualquer nível pode ter coroa) e raios só na Lendária
+        for P, pos, esperado in ((105, 1, "LENDÁRIA"), (105, 3, "LENDÁRIA"), (93, 2, "OURO"), (85, 3, "PRATA"), (40, 1, "FERRO"), (62, 2, "AÇO"), (104, 8, "ELITE"), (93, 9, "OURO")):
+            cls = pg.evaluate(JS_MONTA, [P, pos, "x"])
+            r = pg.evaluate("""() => { const h = document.querySelector('.t-host'); return { coroa: !!h.querySelector('.c-orna-coroa'), raios: !!h.querySelector('.c-estrelas'), rod: h.querySelector('.c-rodape').textContent }; }""")
+            top = pos <= 3
+            checar(f"{esperado} na posição {pos}: {'coroa TOP ' + str(pos) if top else 'sem coroa'}; raios {'só na Lendária' if esperado == 'LENDÁRIA' else 'ausentes'}",
+                   (f"top{pos}" in cls.split()) == top and r["coroa"] == top and r["raios"] == (esperado == "LENDÁRIA") and esperado in r["rod"] and "DESTAQUE" not in r["rod"], f"{cls} {r}")
         # paletas do PNG em canvas cobrem os mesmos tiers do CSS (sem exigir valores)
         cj = open(os.path.join(RAIZ, "assets/carta.js"), encoding="utf-8").read()
         cc = open(os.path.join(RAIZ, "assets/carta.css"), encoding="utf-8").read()
-        for chave in ("b-100", "b-top", "b-90", "b-80"):
+        for chave in ("b-100", "b-90", "b-80"):
             checar(f"paleta das peças de moldura ({chave}) existe em ORN_PAL e no CSS", re.search(r"'%s':\s*\[" % chave, cj) is not None and (".carta.%s" % chave) in cc)
         for t in ("t-prata", "t-bronze", "t-aco", "t-ferro"):
             checar(f"tier {t} tem regra no CSS", (".carta.%s" % t) in cc)
@@ -280,7 +287,7 @@ with sync_playwright() as p:
                 premium = any(m in PREMIUM for m in marcas.split())
                 if reduzido:
                     checar(f"{nome}: com movimento reduzido nenhuma animação infinita roda", n == 0, f"{n} rodando")
-                elif premium and ("b-100" in marcas or "b-top" in marcas):
+                elif premium and "b-100" in marcas:
                     checar(f"{nome}: com movimento normal a moldura anima (≥ 1 animação infinita)", n >= 1, f"{n}")
             mov = pg.evaluate("window.Movimento ? Movimento.reduz() : null")
             checar(f"Movimento.reduz() reflete a preferência do sistema ({'reduzido' if reduzido else 'normal'})", mov == reduzido, str(mov))

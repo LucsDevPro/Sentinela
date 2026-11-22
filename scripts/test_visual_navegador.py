@@ -158,7 +158,7 @@ with sync_playwright() as p:
       const cem=c.filter(x=>x.querySelector('.c-ovr b').textContent.trim()==='100'), el=cem.filter(x=>!x.classList.contains('b-100'));
       return {cem:cem.length, el:el.length, ok:el.every(x=>x.classList.contains('n100')&&!x.querySelector('.c-selo100')&&/ELITE/.test(x.querySelector('.c-rodape').textContent)),
               semSelo:c.filter(x=>!x.classList.contains('n100')).every(x=>!x.querySelector('.c-selo100'))}}""")
-    checar("álbum: quem tirou 100 fora do pódio é ELITE com selo 100 (e só eles)", el["el"] >= 1 and el["ok"] and el["semSelo"], str(el))
+    checar("álbum: quem tirou 100 fora do pódio é ELITE com selo 100 (e só eles)", (el["el"] >= 1 or el["cem"] == 0) and el["ok"] and el["semSelo"], str(el))   # sem nenhum 100 no mês escolhido (depende dos dados), só valem as demais condições
     bits = al.evaluate("fetch('assets/html-to-image.js').then(r=>r.ok)")
     checar("álbum: biblioteca do PNG fiel está no site", bits)
     al.emulate_media(media="print"); al.wait_for_timeout(200)

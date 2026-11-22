@@ -66,7 +66,7 @@
   }
 
   /* ---- partículas (WAAPI: nada fica no DOM depois) ---- */
-  var COR = { 'b-100': ['#F2C277', '#FFF4DE', '#C98E4A'], 'b-top': ['#D08CFF', '#F6ECFF', '#FFFFFF'], 'b-90': ['#FFD25A', '#FFF3B0'] };
+  var COR = { 'b-100': ['#FFD447', '#FFFBEA', '#D6A638'], 'b-90': ['#F2C94C', '#F8DE85'] };
   function particulas(ancora, borda, n) {
     var cores = COR[borda]; if (!cores || reduz() || !ancora.animate) return;
     var wrap = document.createElement('div'); wrap.className = 'c-particulas';
@@ -117,7 +117,7 @@
         if (capa.parentNode) capa.parentNode.removeChild(capa);
         conj.classList.remove('c-oculta');
         carta.animate([{ transform: persp + 'rotateY(-90deg)', filter: 'brightness(2.4)' }, { transform: persp + 'rotateY(0)', filter: 'brightness(1.6)', offset: .6 }, { transform: persp + 'rotateY(0)', filter: 'brightness(1)' }], { duration: 520, easing: 'cubic-bezier(.2,.9,.3,1)' });
-        particulas(pai, borda, borda === 'b-100' ? 48 : borda === 'b-top' ? 40 : borda === 'b-90' ? 22 : 14);
+        particulas(pai, borda, borda === 'b-100' ? 48 : borda === 'b-90' ? 22 : 14);
       };
     };
   }
@@ -139,7 +139,7 @@
     if (!r.width || !r.height) return;
     var px = Math.max(0, Math.min(1, (ultimo.clientX - r.left) / r.width));
     var py = Math.max(0, Math.min(1, (ultimo.clientY - r.top) / r.height));
-    var max = (ativa.classList.contains('b-100') || ativa.classList.contains('b-top')) ? 17 : (ativa.classList.contains('b-90') ? 15 : MAX);
+    var max = ativa.classList.contains('b-100') ? 17 : (ativa.classList.contains('b-90') ? 15 : MAX);
     var s = ativa.style;
     s.setProperty('--mx', (px * 100).toFixed(1) + '%');
     s.setProperty('--my', (py * 100).toFixed(1) + '%');

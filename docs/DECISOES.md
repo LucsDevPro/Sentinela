@@ -1,5 +1,13 @@
 # Registro de decisões (mais recente primeiro)
 
+## 22/11/2026 (2) — repaginada das cartinhas: 7 níveis, tema central e insígnias TOP
+- Níveis: FERRO #6B6560 · AÇO #64748B · BRONZE #B87545 · PRATA #C6CCD4 · OURO #E6B93D · ELITE #9333EA (ametista) · LENDÁRIA #FFD447. O nível DESTAQUE (TOP 3 com 90–99) deixou de existir: vira carta OURO com a insígnia da posição. Pontuação e ranking não mudaram, só o rótulo.
+- Tema central: no fim de `assets/carta.css`, bloco 1 (variáveis por nível) + bloco 2 (regras genéricas que as usam). Para trocar uma cor, mexa só ali. Regras de `.b-top`/`.t-destaque` foram removidas.
+- Moldura cresce com o nível (3,5/3,5/4/5/7/7/8 px); filete interno (`<i class="c-filete">`) a partir da Prata; Lendária com filete duplo. Reflexo por categoria (Ferro fosco, sem reflexo).
+- Insígnia TOP 1/2/3 (classes `top1/top2/top3`): coroa dourada, prateada ou bronze em qualquer nível. Raios só na Lendária, em dourado/branco quente, com intensidade TOP 1 > TOP 2 > TOP 3 (`.carta.b-100.topN`, `RAIO_A`).
+- Lendária: corpo escuro dourado com moldura #FFD447 (corpo dourado esconderia os raios dourados e se confundiria com o Ouro).
+- Corrigido junto: coroa em nível sem paleta de moldura (Ferro/Aço/Bronze no TOP 3) quebrava o desenho; agora há teste (`posição`) na suíte das cartinhas.
+
 ## 22/11/2026 (1) — asas em lâminas no lugar dos louros
 - Os louros do Ouro (feios no visual) e a aleta da Prata viraram lâminas angulosas laterais (`laminas()` em `assets/carta.js`, só polígonos: vale para tela e PNG). Ouro 3 por lado, Prata 2. Cores seguem `ORN_PAL`. Elite, Destaque e Lendária seguem sem asas.
 

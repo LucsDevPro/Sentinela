@@ -63,14 +63,14 @@
       ['CON', u.con != null ? u.con : cl(100 - 5 * dp)], ['EVO', u.evo != null ? u.evo : delta == null ? cl(u.pontos) : cl(u.pontos + 5 * delta)],
       ['POS', u.total > 1 ? cl((u.total - posPorNota(u, id)) / (u.total - 1) * 100) : 99], ['MED', cl(media)]].map(function (x) { return [x[0], gb(x[1])]; });
     // Escala única, pela nota ARREDONDADA (a que aparece no cartão): a cor do cartão e a borda seguem a mesma faixa.
-    // LENDÁRIA (tempestade) = só o TOP 3 com nota ≥ 100 | demais ≥ 100 = ELITE (ouro + brilho) | 90-99 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
-    // Top 3 do mês com 90-99 (quando há menos de 3 agentes com 100 ou mais) ganha o cartão roxo com borda holográfica ("DESTAQUE").
-    // A posição vem de posicao() (para quem está no teto, ordenada pela nota bruta).
-    var r = Math.round(u.pontos), pos3 = posicao(u, id) <= 3, lend = r >= 100 && pos3, top3 = r >= 90 && r < 100 && pos3;
+    // Sete níveis: LENDÁRIA = só o TOP 3 com nota ≥ 100 (raios dourados) | demais ≥ 100 = ELITE (ametista) | 90-99 = OURO | 80-89 PRATA | 70-79 BRONZE | 60-69 AÇO | abaixo de 60 FERRO.
+    // A posição (TOP 1/2/3) é independente do nível: vira uma insígnia (coroa de campeão/vice/3º) em qualquer carta. O antigo nível DESTAQUE
+    // (TOP 3 com 90-99) agora é uma carta OURO com a insígnia da posição. A posição vem de posicao() (no teto, ordenada pela nota bruta).
+    var r = Math.round(u.pontos), posRank = posicao(u, id), pos3 = posRank <= 3, lend = r >= 100 && pos3;
     var elite = r >= 100 && !pos3;   // tirou 100 mas ficou fora do pódio: não pode parecer um 90 qualquer
-    var tier = lend ? ['', 'LENDÁRIA'] : top3 ? ['t-destaque', 'DESTAQUE'] : elite ? ['t-elite', 'ELITE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
-    var borda = lend ? 'b-100' : top3 ? 'b-top' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
-    return { u: u, delta: delta, st: st, tier: tier, borda: borda, elite: elite };
+    var tier = lend ? ['', 'LENDÁRIA'] : elite ? ['t-elite', 'ELITE'] : r >= 90 ? ['', 'OURO'] : r >= 80 ? ['t-prata', 'PRATA'] : r >= 70 ? ['t-bronze', 'BRONZE'] : r >= 60 ? ['t-aco', 'AÇO'] : ['t-ferro', 'FERRO'];
+    var borda = lend ? 'b-100' : r >= 90 ? 'b-90' : r >= 80 ? 'b-80' : r >= 70 ? 'b-70' : r >= 60 ? 'b-60' : 'b-0';
+    return { u: u, delta: delta, st: st, tier: tier, borda: borda, elite: elite, top: pos3 ? posRank : 0 };
   }
   /* Cartinha 100: estrelas [x, y, raio] no espaço 272x392 do cartão (usadas no HTML e no PNG) */
   var ESTRELA = 'M0-1Q.15-.15 1 0Q.15.15 0 1Q-.15.15-1 0Q-.15-.15 0-1Z';
@@ -115,18 +115,19 @@
     var ini = (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
     var tend = delta == null ? SV('minus') + ' 1º mês' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
-    var extra100 = (m.borda !== 'b-100' && m.borda !== 'b-top') ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
-    return '<div class="c-conj ' + m.borda + (m.elite ? ' n100' : '') + '">' + ornSVG(m.elite ? 'b-elite' : m.borda, 'atras') + '<div class="carta ' + tier[0] + ' ' + m.borda + (m.elite ? ' n100' : '') + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
+    var extra100 = m.borda !== 'b-100' ? '' : '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
+    var topCls = m.top ? ' top' + m.top : '';
+    return '<div class="c-conj ' + m.borda + (m.elite ? ' n100' : '') + topCls + '">' + ornSVG(m.elite ? 'b-elite' : m.borda, 'atras', m.top) + '<div class="carta ' + tier[0] + ' ' + m.borda + (m.elite ? ' n100' : '') + topCls + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
       '<div class="c-pos"><small>' + pos + 'º · ' + u.total + '</small><span>' + esc(eq) + '</span></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
       '<div class="c-nome nome"' + (curto.length > 22 ? ' style="font-size:1.05rem"' : curto.length > 17 ? ' style="font-size:1.14rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div class="c-chip" style="--v:' + x[1] + '%"><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
-      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-top' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + ornSVG(m.elite ? 'b-elite' : m.borda, 'frente') + '</div>';
+      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + (m.borda === 'b-80' || m.borda === 'b-90' || m.borda === 'b-100' ? '<i class="c-filete" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + ornSVG(m.elite ? 'b-elite' : m.borda, 'frente', m.top) + '</div>';
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF1D6', '#F2C277', '#A8662E'], '': ['#D4B040', '#9A7218', '#5C4208'], 't-prata': ['#C0CEDC', '#7A8FA8', '#3A4E66'], 't-bronze': ['#D08A48', '#9A521C', '#5C2E0A'], 't-aco': ['#BFE8EC', '#4F9BA8', '#1F5666'], 't-ferro': ['#9AA0AA', '#5C626C', '#2A2E35'], 't-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 't-destaque': ['#F4E4FF', '#BC82FF', '#5B2BC4'] };
+  var LOGO = { 'b-100': ['#FFF0A6', '#FFD447', '#B8861F'], '': ['#F8DE85', '#B88A25', '#6E4C0E'], 't-prata': ['#F2F4F7', '#929BA8', '#4A5260'], 't-bronze': ['#DDA477', '#8C512F', '#4A2410'], 't-aco': ['#B8C4D6', '#64748B', '#2B3544'], 't-ferro': ['#B5AEA8', '#6B6560', '#2E2A27'], 't-elite': ['#F0DDFF', '#B77CF5', '#6B21A8'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -138,8 +139,10 @@
   /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
      As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F4F8FF', '#9AA8BD', '#59667A'], 'b-90': ['#FFF3B0', '#F2B81C', '#8A5A00'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-top': ['#F4E4FF', '#C27CFF', '#5B2BC4'], 'b-100': ['#FFF4DE', '#F2C277', '#8A4E24'] };
-  function ornPecas(borda) {
+  var ORN_PAL = { 'b-80': ['#F2F4F7', '#C6CCD4', '#929BA8'], 'b-90': ['#F8DE85', '#E6B93D', '#B88A25'], 'b-elite': ['#D8B4FE', '#9333EA', '#7E22CE'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
+  /* Insígnia do TOP 3: [brilho, preenchimento, contorno]. Independe do nível da carta. */
+  var COROA = { 1: ['rgba(255,240,166,.9)', '#FFD447', '#7A5300'], 2: ['rgba(235,240,247,.9)', '#D5DBE3', '#5A6472'], 3: ['rgba(240,190,140,.85)', '#CD8B52', '#5E3515'] };
+  function ornPecas(borda, posTop) {
     var palOrig = ORN_PAL[borda], borda0El = borda === 'b-elite'; if (borda0El) borda = 'b-90';   // Elite: mesma geometria do Ouro, paleta rosé
     var atras = [], frente = [], n, i, lado, t;
     function espelha(pts) { return pts.map(function (q) { return [272 - q[0], q[1]]; }); }
@@ -157,31 +160,31 @@
     if (borda === 'b-80') laminas(2);
     if (borda === 'b-90') laminas(3);
     /* Top 3: sem asas nem cristais laterais (poluíam o visual). Só coroa + gema. */
-    if (borda === 'b-90' || borda === 'b-top' || borda === 'b-100') { // coroa grande saindo pelo alto
-      frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true });
+    if (posTop) { // insígnia do TOP 3 (qualquer nível): coroa saindo pelo alto — campeão (dourada), vice (prateada) e 3º (bronze)
+      frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true, cor: posTop });
     }
     if (ORN_PAL[borda]) frente.push({ t: 'poly', pts: [[116, 383], [156, 383], [147, 396], [136, 411], [125, 396]], gema: true }); // gema embaixo
     if (borda0El) atras = [];   // Elite: sem os louros laterais (a borda que saía do cartão); ficam coroa e gema
-    return { atras: atras, frente: frente, pal: palOrig };
+    return { atras: atras, frente: frente, pal: palOrig, top: posTop };
   }
-  function ornSVG(borda, camada) {
-    var o = ornPecas(borda), pecas = o[camada]; if (!pecas.length) return '';
-    var pal = o.pal, id = 'og-' + borda + '-' + camada, f2 = function (v) { return (Math.round(v * 10) / 10); };
+  function ornSVG(borda, camada, posTop) {
+    var o = ornPecas(borda, posTop), pecas = o[camada]; if (!pecas.length) return '';
+    var pal = o.pal || ORN_PAL['b-80'], id = 'og-' + borda + '-' + camada, f2 = function (v) { return (Math.round(v * 10) / 10); };
     var corpo = pecas.map(function (q) {
-      var fill = q.coroa ? '#FFD54A' : 'url(#' + id + ')', st = q.coroa ? '#6B4200' : pal[2], sw = q.coroa ? 1.4 : 0.9;
+      var fill = q.coroa ? COROA[q.cor][1] : 'url(#' + id + ')', st = q.coroa ? COROA[q.cor][2] : pal[2], sw = q.coroa ? 1.4 : 0.9;
       if (q.t === 'leaf') return '<ellipse cx="' + f2(q.cx) + '" cy="' + f2(q.cy) + '" rx="' + f2(q.rx) + '" ry="' + f2(q.ry) + '" transform="rotate(' + f2(q.rot * 180 / Math.PI) + ' ' + f2(q.cx) + ' ' + f2(q.cy) + ')" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '"/>';
       return '<polygon points="' + q.pts.map(function (z) { return f2(z[0]) + ',' + f2(z[1]); }).join(' ') + '" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '" stroke-linejoin="round"' + (q.coroa ? ' class="c-orna-coroa"' : '') + '/>';
     }).join('');
     return '<svg class="c-orna c-orna-' + camada + '" viewBox="-30 -26 332 444" aria-hidden="true"><defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + pal[0] + '"/><stop offset=".5" stop-color="' + pal[1] + '"/><stop offset="1" stop-color="' + pal[2] + '"/></linearGradient></defs>' + corpo + '</svg>';
   }
-  function ornCanvas(ctx, borda, camada, X, Y, S) {
-    var o = ornPecas(borda), pecas = o[camada], pal = o.pal; if (!pecas.length) return;
+  function ornCanvas(ctx, borda, camada, X, Y, S, posTop) {
+    var o = ornPecas(borda, posTop), pecas = o[camada], pal = o.pal || ORN_PAL['b-80']; if (!pecas.length) return;
     pecas.forEach(function (q) {
       var yMin = 1e9, yMax = -1e9;
       (q.t === 'leaf' ? [[0, q.cy - q.rx], [0, q.cy + q.rx]] : q.pts).forEach(function (z) { yMin = Math.min(yMin, z[1]); yMax = Math.max(yMax, z[1]); });
       var g = ctx.createLinearGradient(0, Y + yMin * S, 0, Y + yMax * S); g.addColorStop(0, pal[0]); g.addColorStop(.5, pal[1]); g.addColorStop(1, pal[2]);
-      ctx.save(); ctx.fillStyle = q.coroa ? '#FFD54A' : g; ctx.strokeStyle = q.coroa ? '#6B4200' : pal[2]; ctx.lineWidth = (q.coroa ? 1.4 : 0.9) * S; ctx.lineJoin = 'round';
-      if (q.coroa || q.gema) { ctx.shadowColor = q.coroa ? 'rgba(255,236,160,.9)' : pal[1]; ctx.shadowBlur = 6 * S; }
+      ctx.save(); ctx.fillStyle = q.coroa ? COROA[q.cor][1] : g; ctx.strokeStyle = q.coroa ? COROA[q.cor][2] : pal[2]; ctx.lineWidth = (q.coroa ? 1.4 : 0.9) * S; ctx.lineJoin = 'round';
+      if (q.coroa || q.gema) { ctx.shadowColor = q.coroa ? COROA[q.cor][0] : pal[1]; ctx.shadowBlur = 6 * S; }
       ctx.beginPath();
       if (q.t === 'leaf') ctx.ellipse(X + q.cx * S, Y + q.cy * S, q.rx * S, q.ry * S, q.rot, 0, 2 * Math.PI);
       else { q.pts.forEach(function (z, k) { if (k) ctx.lineTo(X + z[0] * S, Y + z[1] * S); else ctx.moveTo(X + z[0] * S, Y + z[1] * S); }); ctx.closePath(); }
@@ -190,9 +193,9 @@
   }
   /* Raios no PNG: o instante do golpe (tudo aceso), com a paleta de cada nível. A espessura de cada galho vem de r[1]. */
   var PRAIO = {
-    'b-100': { a: .95, halo: 'rgba(242,194,119,.55)', haloSh: '#F2C277', miolo: '#D9A04F', mioloSh: '#F2C277', fil: '#FFF6E4', fais: '#F6D9A0', arco: 'rgba(242,194,119,.7)', arcoSh: '#F2C277', arcoFil: '#FFF4DE' },
-    'b-top': { a: .95, halo: 'rgba(170,90,255,.5)', haloSh: '#AA5AFF', miolo: '#D08CFF', mioloSh: '#BE78FF', fil: '#F6ECFF', fais: '#E2BEFF', arco: 'rgba(210,150,255,.75)', arcoSh: '#D296FF', arcoFil: '#FFFFFF' }
+    'b-100': { a: .95, halo: 'rgba(255,212,71,.5)', haloSh: '#FFD447', miolo: '#FFE27A', mioloSh: '#FFD447', fil: '#FFFBEA', fais: '#FFF0A6', arco: 'rgba(255,224,120,.75)', arcoSh: '#FFD447', arcoFil: '#FFFBEA' }
   };
+  var RAIO_A = { 1: 1, 2: .82, 3: .64 };   // hierarquia dos raios: TOP 1 mais intenso, TOP 3 mais contido
   function raiosPNG(ctx, X, Y, W, H, S, P) {
     ctx.save(); ctx.globalAlpha = P.a; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     RAIOS.forEach(function (r) {
@@ -233,34 +236,31 @@
     if (!html0) return Promise.reject(new Error('sem nota'));
     host.style.cssText = 'position:fixed;left:-9999px;top:0;width:272px;pointer-events:none'; host.innerHTML = html0; document.body.appendChild(host);
     var card = host.querySelector('.carta'), tier = (card.className.match(/t-\w+/) || [''])[0];
-    var borda0 = (card.className.match(/b-(?:\d+|top)/) || [''])[0], oculta = !!opcoes.ocultarNomes, is100 = card.classList.contains('b-100'), isTop = card.classList.contains('b-top');
+    var borda0 = (card.className.match(/b-(?:\d+|top)/) || [''])[0], oculta = !!opcoes.ocultarNomes, is100 = card.classList.contains('b-100'), posTop = (card.className.match(/\btop([123])\b/) || [0, 0])[1] | 0;
     if (opcoes.ocultarFoto) { var im0 = card.querySelector('.c-foto img'); if (im0) im0.remove(); } // sem foto: ficam as iniciais
     var imgFoto = card.querySelector('.c-foto img'), pronto = Promise.all([document.fonts ? document.fonts.ready : 0, document.fonts ? document.fonts.load('700 20px "Barlow Semi Condensed"') : 0, document.fonts ? document.fonts.load('600 14px "IBM Plex Sans"') : 0, carregar('assets/logo_carta.png'), imgFoto && !opcoes.ocultarFoto ? carregar(imgFoto.getAttribute('src')).catch(function () { return null; }) : null]);
     return pronto.then(function (r) {
       var logo = r[3], cr = card.getBoundingClientRect(), W = cr.width * S, H = cr.height * S;
       var cv = document.createElement('canvas'); cv.width = Math.round(W + 2 * M * S); cv.height = Math.round(H + 2 * M * S);
       var ctx = cv.getContext('2d'), cs = getComputedStyle(card), c1 = cs.getPropertyValue('--c1').trim(), c2 = cs.getPropertyValue('--c2').trim(), ln = cs.getPropertyValue('--ln').trim();
-      if (isTop || tier === 't-destaque') { c1 = '#2A1446'; c2 = '#080414'; }   // Destaque: o CSS pinta o roxo em .b-top / .t-destaque
-      if (tier === 't-elite') { c1 = '#4A1226'; c2 = '#12030A'; }   // Elite: vinho   // Destaque: o CSS pinta o fundo roxo em .carta.b-top (as variáveis --c1/--c2 seguem douradas)
       var X = M * S, Y = M * S;
       ctx.fillStyle = '#EEF2F8'; ctx.fillRect(0, 0, cv.width, cv.height);
-      ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0, 'atras', X, Y, S);   // louros / cristais / aletas atrás do cartão
+      ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0, 'atras', X, Y, S, posTop);   // louros / cristais / aletas atrás do cartão
       ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.30)'; ctx.shadowBlur = 28 * S; ctx.shadowOffsetY = 10 * S; pathCartao(ctx, X, Y, W, H, S); ctx.fillStyle = c2; ctx.fill(); ctx.restore();
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
       var fr100 = is100 ? (function () { var b = card.querySelector('.c-foto').getBoundingClientRect(); return { cx: X + (b.left - cr.left + b.width / 2) * S, cy: Y + (b.top - cr.top + b.height / 2) * S }; })() : null;
-      if (isTop) raiosPNG(ctx, X, Y, W, H, S, PRAIO['b-top']);   // Destaque: raios magenta e ciano
       if (is100) {
         // clarão branco-quente atrás da foto (radial-gradient do ::after do CSS)
         var cx0 = X + W * .5, cy0 = Y + H * .28, R0 = Math.max(Math.hypot(cx0 - X, cy0 - Y), Math.hypot(X + W - cx0, cy0 - Y), Math.hypot(cx0 - X, Y + H - cy0), Math.hypot(X + W - cx0, Y + H - cy0)) * .58, g0 = ctx.createRadialGradient(cx0, cy0, 0, cx0, cy0, R0);
         g0.addColorStop(0, 'rgba(255,255,255,.75)'); g0.addColorStop(.6, 'rgba(255,250,230,.2)'); g0.addColorStop(1, 'rgba(255,250,230,0)'); ctx.fillStyle = g0; ctx.fillRect(X, Y, W, H);
-        raiosPNG(ctx, X, Y, W, H, S, PRAIO['b-100']);   // raios dourados no instante do golpe (igual ao CSS)
+        raiosPNG(ctx, X, Y, W, H, S, Object.assign({}, PRAIO['b-100'], { a: PRAIO['b-100'].a * (RAIO_A[posTop] || 1) }));   // raios dourados no instante do golpe (igual ao CSS)
         // filete interno dourado mais fino (alinhado ao CSS: 7px para dentro)
         ctx.save(); pathCartao(ctx, X + 7 * S, Y + 7 * S, W - 14 * S, H - 14 * S, S, 7 * S); ctx.lineWidth = 1.5 * S; ctx.strokeStyle = 'rgba(255,240,180,.85)'; ctx.shadowColor = 'rgba(220,170,50,.8)'; ctx.shadowBlur = 8 * S; ctx.stroke(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
       } else {
         // listras
         ctx.save(); ctx.translate(X + W / 2, Y + H / 2); ctx.rotate((115 - 90) * Math.PI / 180);
-        ctx.fillStyle = tier === 't-destaque' ? 'rgba(255,120,210,.16)' : tier === 't-elite' ? 'rgba(255,190,160,.15)' : 'rgba(255,255,255,.14)';
+        ctx.fillStyle = tier === 't-elite' ? 'rgba(216,180,254,.16)' : 'rgba(255,255,255,.14)';
         for (var k = -Math.ceil(W + H); k < W + H; k += 34 * S) ctx.fillRect(k, -(W + H), 14 * S, 2 * (W + H));
         ctx.restore();
         // brilho
@@ -273,8 +273,8 @@
       // foto (círculo)
       var f = card.querySelector('.c-foto'), fr = rel(f), fs = getComputedStyle(f), bw = parseFloat(fs.borderTopWidth) * S;
       if (is100) { // anel dourado externo + brilho (box-shadow do CSS)
-        ctx.save(); ctx.shadowColor = 'rgba(242,194,119,.7)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
-        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(242,194,119,.95)'; ctx.stroke(); ctx.restore();
+        ctx.save(); ctx.shadowColor = 'rgba(255,212,71,.7)'; ctx.shadowBlur = 24 * S; ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, fr.w / 2 + 2.5 * S, 0, 2 * Math.PI);
+        ctx.lineWidth = 5 * S; ctx.strokeStyle = 'rgba(255,212,71,.95)'; ctx.stroke(); ctx.restore();
       }
       ctx.beginPath(); ctx.arc(fr.x + fr.w / 2, fr.y + fr.h / 2, Math.max(0, fr.w / 2 - bw / 2), 0, 2 * Math.PI); ctx.fillStyle = fs.backgroundColor; ctx.fill();
       var ft = r[4];
@@ -303,7 +303,7 @@
         ctx.font = ps.fontWeight + ' ' + (parseFloat(ps.fontSize) * S) + 'px ' + ps.fontFamily;
         ctx.fillStyle = ps.color; ctx.globalAlpha = parseFloat(ps.opacity); ctx.shadowColor = 'rgba(0,0,0,0)';
         if (is100 && pe.matches('.c-ovr b')) { // número com folha de ouro
-          var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFF4DE'); og.addColorStop(.48, '#F2C277'); og.addColorStop(1, '#A8662E');
+          var og = ctx.createLinearGradient(0, Y + (b.top - cr.top) * S, 0, Y + (b.bottom - cr.top) * S); og.addColorStop(0, '#FFF0A6'); og.addColorStop(.48, '#FFD447'); og.addColorStop(1, '#B8861F');
           ctx.fillStyle = og; ctx.shadowColor = 'rgba(220,160,30,.6)'; ctx.shadowBlur = 6 * S; ctx.shadowOffsetY = 0;
         }
         else if (pe.matches('.c-ovr b') && /rgba\(\s*0,\s*0,\s*0,\s*0\)|transparent/.test(ps.color)) { // número em degradê no CSS (Destaque e Elite): a cor do texto é transparente, então pinta com a paleta do tier
@@ -333,8 +333,8 @@
       // bisel do anel (igual ao CSS): luz em cima, sombra embaixo
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
-      if (is100 || isTop) arcosPNG(ctx, X, Y, W, H, S, PRAIO[is100 ? 'b-100' : 'b-top']);   // faíscas correndo pela borda (por cima do anel)
-      ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0, 'frente', X, Y, S);   // coroa e gema por cima do cartão
+      if (is100) arcosPNG(ctx, X, Y, W, H, S, Object.assign({}, PRAIO['b-100'], { a: PRAIO['b-100'].a * (RAIO_A[posTop] || 1) }));   // faíscas correndo pela borda (por cima do anel)
+      ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0, 'frente', X, Y, S, posTop);   // coroa e gema por cima do cartão
       return new Promise(function (ok, erro) { try { cv.toBlob(function (bl) { bl ? ok(bl) : erro(new Error('falha ao gerar a imagem')); }, 'image/png'); } catch (e) { erro(e); } });
     }).then(function (bl) { host.remove(); return bl; }, function (e) { host.remove(); throw e; });
   }

@@ -102,8 +102,8 @@ checar("gerar_agentes.py: grava os totais de visitas por mês (panorama)", "def 
 checar("cabeçalho das páginas secundárias tem a mesma largura do conteúdo (álbum 1240, demais 860)",
        "header.topo .marca{max-width:1240px" in ler("assets/album.css") and "header.topo .marca{max-width:860px" in ler("assets/agente.css") and "header.topo .marca{max-width:860px" in ler("assets/comparar.css"))
 checar("moldura premium: peças fora do contorno (conjunto .c-conj, camadas atrás e na frente) na tela e no PNG",
-       ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "'atras', X, Y, S)" in cj and "'frente', X, Y, S)" in cj and "ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0" in cj)
-checar("moldura premium: asas em lâminas no Ouro e na Prata, coroa e gema nos níveis altos", all(x in cj for x in ("function laminas", "laminas(3)", "laminas(2)", "b-top' || borda === 'b-100", "coroa: true", "gema: true")))
+       ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "'atras', X, Y, S, posTop)" in cj and "'frente', X, Y, S, posTop)" in cj and "ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0" in cj)
+checar("moldura premium: asas em lâminas no Ouro e na Prata, coroa e gema nos níveis altos", all(x in cj for x in ("function laminas", "laminas(3)", "laminas(2)", "if (posTop)", "coroa: true", "gema: true")))
 checar("álbum: o conjunto (e não só o cartão) ocupa a vaga, para as peças acompanharem escala e inclinação", ".slot .c-conj" in ler("assets/album.css") and "c-conj" in ler("assets/carta_fx.js"))
 # Dashboard: evento do LIRAa, alertas em uma linha, Ausências em painéis, gráfico só mensal, críticos com detalhes
 import json as _json
@@ -124,7 +124,7 @@ checar("visão geral: todos os agentes críticos aparecem, cada um com detalhes 
        '<details class="critico-item">' in vg and "Mostrando os 5 piores" not in vg and "criticos=records(crit_sorted, RESUMO_COLS)" in ler("scripts/generate_dashboard.py"))
 # Lendária: validar propriedades visuais reais do CSS, nunca comentários ou nomes de seção.
 # Pega o último bloco .carta.b-100, que é a definição visual final da carta.
-blocos_lendaria = re.findall(r"\.carta\.b-100\s*\{([^{}]*)\}", cc, re.S)
+blocos_lendaria = re.findall(r"\.c-conj \.carta\.b-100\s*\{([^{}]*)\}", cc, re.S)
 lendaria_css = next((b for b in reversed(blocos_lendaria) if "--c1:" in b and "--tx:" in b), "")
 COR_RE = re.compile(r"^(#[0-9a-f]{3,8}|rgba?\([^)]*\))$")
 def eh_cor(v):
@@ -133,9 +133,9 @@ def eh_cor(v):
 def prop_css(bloco, nome):
     m = re.search(r"(?:^|[;\s])" + re.escape(nome) + r"\s*:\s*([^;]+)", bloco)
     return m.group(1).strip().lower() if m else ""
-checar("Lendária: fundo navy profundo definido por cores reais",
+checar("Lendária: fundo escuro dourado definido por cores reais",
        eh_cor(prop_css(lendaria_css, "--c1")) and eh_cor(prop_css(lendaria_css, "--c2")) and
-       "gradient" in prop_css(lendaria_css, "background"))
+       "gradient" in prop_css(lendaria_css, "--bgm"))
 checar("Lendária: tipografia definida por variável de cor real",
        eh_cor(prop_css(lendaria_css, "--tx")))
 checar("Lendária: moldura com 3 cores válidas e espessura em px",
@@ -143,30 +143,27 @@ checar("Lendária: moldura com 3 cores válidas e espessura em px",
        re.fullmatch(r"\d+(\.\d+)?px", prop_css(lendaria_css, "--bw")) is not None)
 checar("Lendária: um único anel (sem filete/anel duplicado: o ::before da lendária não cria camada)",
        ".carta.b-100::before" in cc and "content: none;" in cc and "inset 0 0 0 3px rgba(205, 165, 65, 0.62)" not in cc and "0 0 0 5px rgba(240, 200, 64, 0.22)" not in cc)
-checar("Top 3 90–99: carta roxo/magenta e borda definida no seletor do tier",
-       ".carta.t-destaque" in cc and ".carta.b-top" in cc and
-       re.search(r"\.carta\.t-destaque\s*\{[^}]*--c1:\s*(#[0-9a-fA-F]{3,8})", cc, re.S) is not None and
-       re.search(r"\.carta\.t-destaque\s*\{[^}]*--b2:\s*(#[0-9a-fA-F]{3,8})", cc, re.S) is not None and
-       ".carta.t-destaque .c-ovr b" in cc and
-       re.search(r"'t-destaque':\s*\[(?:'#[0-9A-Fa-f]{3,8}',?\s*){3}\]", cj) is not None)
-checar("PNG do Top 3 usa brilho magenta, não o antigo verde ou dourado",
-       "tier === 't-destaque'" in cj and re.search(r"'t-destaque':\s*\[", cj) is not None and "// borda interna clara" not in cj)
+checar("Insígnia TOP 1/2/3: coroa por posição (dourada, prateada, bronze) em qualquer nível; o antigo DESTAQUE não existe mais",
+       "var COROA = {" in cj and "top: pos3 ? posRank : 0" in cj and "' top' + m.top" in cj and "t-destaque" not in cj and "'DESTAQUE'" not in cj and "b-top" not in cj)
+checar("Todos os níveis seguem as cores do prompt (variáveis em .c-conj .carta.<nível>)",
+       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--b2:\s*#" % n, cc) for n in (r"t-ferro", r"t-aco", r"t-bronze", r"t-prata", r"b-90:not\(\.t-elite\)", r"t-elite", r"b-100")))
 checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
        re.search(r"'b-100':\s*\[(?:'#[0-9A-Fa-f]{3,8}',?\s*){3}\]", cj) is not None and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
 
-checar("Top 3: moldura mais fina (7px) nas cartas magenta e lendária",
-       re.search(r"\.carta\.t-destaque\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None and
-       re.search(r"\.carta\.b-100\s*\{[^}]*--bw:\s*7px", cc, re.S) is not None)
-checar("Top 3: textos claros com contraste reforçado e reflexos premium",
-       len(re.findall(r"(?m)^\s*color:\s*#[0-9A-Fa-f]{6};", cc)) >= 3 and "rgba(255,255,255,.24)" in cc)
+checar("Moldura cresce com o nível (Ferro/Aço 3,5px < Bronze 4px < Prata 5px < Elite/Ouro 7px < Lendária 8px) e filete interno a partir da Prata",
+       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--bw:\s*%s" % (n, w), cc, re.S) for n, w in ((r"t-ferro", "3.5px"), (r"t-aco", "3.5px"), (r"t-bronze", "4px"), (r"t-prata", "5px"), (r"t-elite", "7px"), (r"b-90:not\(\.t-elite\)", "7px"), (r"b-100", "8px")))
+       and "c-filete" in cj and "m.borda === 'b-80'" in cj and ".carta > .c-filete" in cc)
+checar("Textos legíveis por nível: cor do texto, número e rodapé vêm de variáveis do tema (--tx, --num, --tx-rod)",
+       all(v in cc for v in ("color: var(--tx)", "-webkit-text-fill-color: var(--num)", "color: var(--tx-rod)")) and len(re.findall(r"--tx-rod:\s*#[0-9A-Fa-f]{6}", cc)) >= 7)
 checar("PNG: filete interno lendário reduzido para 7px",
        "X + 7 * S, Y + 7 * S" in cj and "X + 13 * S, Y + 13 * S" not in cj)
 # Efeito de raio premium (Lendária em ouro, Destaque em magenta/ciano), na tela e no PNG
 checar("raio premium: disparos em rajada, clarão, faíscas e halo das peças pulsando (só com movimento permitido)",
-       "@keyframes c-golpe" in cc and ".c-flash" in cc and "@keyframes c-golpe-orna-ouro" in cc and "@keyframes c-faisca-pisca" in cc and ".carta.b-top .c-estrelas .rg" in cc and "prefers-reduced-motion: no-preference" in cc)
-checar("raio premium: Destaque também recebe raios, arcos e clarão (markup) e o PNG desenha os dois níveis com a própria paleta",
-       "m.borda !== 'b-100' && m.borda !== 'b-top'" in cj and 'class=\\"c-flash\\"' in cj and "function raiosPNG" in cj and "function arcosPNG" in cj and "PRAIO['b-top']" in cj)
+       "@keyframes c-golpe" in cc and ".c-flash" in cc and "@keyframes c-golpe-orna-ouro" in cc and "@keyframes c-faisca-pisca" in cc and ".carta.b-100 .c-estrelas .rg" in cc and "prefers-reduced-motion: no-preference" in cc)
+checar("raio premium: só a Lendária recebe raios, arcos e clarão (markup); o PNG desenha com a paleta dourada e a intensidade cai do TOP 1 ao TOP 3",
+       "m.borda !== 'b-100' ? ''" in cj and 'class=\\"c-flash\\"' in cj and "function raiosPNG" in cj and "function arcosPNG" in cj and "var RAIO_A = { 1: 1, 2: .82, 3: .64 }" in cj and "PRAIO['b-top']" not in cj
+       and ".carta.b-100.top1 .c-estrelas" in cc and ".carta.b-100.top3 .c-estrelas" in cc)
 checar("raios, arcos e clarão são absolutos dentro do cartão (a regra `.carta > *` não pode pô-los no fluxo)",
        ".carta > .c-estrelas,\n.carta > .c-arcos,\n.carta > .c-flash { position: absolute; }" in cc)
 checar("rodapé do cartão do 1º mês cabe no escudo (texto curto «1º mês», não «sem mês anterior»)", "' 1º mês'" in cj and "sem mês anterior" not in cj and "replace('1º mês'" in ler("assets/album.js"))
