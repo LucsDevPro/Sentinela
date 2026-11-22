@@ -103,7 +103,7 @@ checar("cabeçalho das páginas secundárias tem a mesma largura do conteúdo (�
        "header.topo .marca{max-width:1240px" in ler("assets/album.css") and "header.topo .marca{max-width:860px" in ler("assets/agente.css") and "header.topo .marca{max-width:860px" in ler("assets/comparar.css"))
 checar("moldura premium: peças fora do contorno (conjunto .c-conj, camadas atrás e na frente) na tela e no PNG",
        ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "'atras', X, Y, S)" in cj and "'frente', X, Y, S)" in cj and "ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0" in cj)
-checar("moldura premium: louros no Ouro, cristais e asas na Destaque/Lendária, aletas na Prata, coroa e gema", all(x in cj for x in ("lado = 0; lado < 2", "b-top' || borda === 'b-100", "borda === 'b-80'", "coroa: true", "gema: true")))
+checar("moldura premium: asas em lâminas no Ouro e na Prata, coroa e gema nos níveis altos", all(x in cj for x in ("function laminas", "laminas(3)", "laminas(2)", "b-top' || borda === 'b-100", "coroa: true", "gema: true")))
 checar("álbum: o conjunto (e não só o cartão) ocupa a vaga, para as peças acompanharem escala e inclinação", ".slot .c-conj" in ler("assets/album.css") and "c-conj" in ler("assets/carta_fx.js"))
 # Dashboard: evento do LIRAa, alertas em uma linha, Ausências em painéis, gráfico só mensal, críticos com detalhes
 import json as _json

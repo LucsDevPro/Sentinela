@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 22/11/2026 (1) — asas em lâminas no lugar dos louros
+- Os louros do Ouro (feios no visual) e a aleta da Prata viraram lâminas angulosas laterais (`laminas()` em `assets/carta.js`, só polígonos: vale para tela e PNG). Ouro 3 por lado, Prata 2. Cores seguem `ORN_PAL`. Elite, Destaque e Lendária seguem sem asas.
+
 ## 21/11/2026 (7) — textura dos metais e profundidade das cartinhas
 - Bloco "TEXTURA DOS METAIS E PROFUNDIDADE" no fim de `assets/carta.css` (só acrescenta; cores e pesos intactos).
 - Profundidade: aresta de 1px (luz em cima/esquerda, sombra embaixo/direita) no `.c-borda::before` + sombra de contato curta somada à sombra longa de Prata, Bronze, Aço e Ferro.

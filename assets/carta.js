@@ -143,25 +143,19 @@
     var palOrig = ORN_PAL[borda], borda0El = borda === 'b-elite'; if (borda0El) borda = 'b-90';   // Elite: mesma geometria do Ouro, paleta rosé
     var atras = [], frente = [], n, i, lado, t;
     function espelha(pts) { return pts.map(function (q) { return [272 - q[0], q[1]]; }); }
-    if (borda === 'b-80') { // prata: uma aleta de cada lado, colada na lateral reta do escudo (x=0, y 202→356) e com as pontas em 45°
-      var f = [[0, 200], [-12, 214], [-12, 344], [0, 358]]; atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
-    }
-    if (borda === 'b-90') { // ouro: dois ramos de louro que ACOMPANHAM o contorno do cartão arredondado (a ~11 px de fora; canto = arco de raio 29 centrado em (18,374)), da gema até a altura do ombro
-      /* haste = caminho paralelo à borda: fundo reto → canto em arco → lateral reta. Folhas amostradas por distância ao longo dela. */
-      var haste = [[112, 403], [60, 403], [30, 403], [18, 403], [7.0, 401.0], [-2.5, 394.5], [-9.1, 385.2], [-11, 374], [-11, 300], [-11, 230], [-11, 176]], seg = [], tot = 0;
-      for (i = 1; i < haste.length; i++) { var sl = Math.hypot(haste[i][0] - haste[i - 1][0], haste[i][1] - haste[i - 1][1]); seg.push(sl); tot += sl; }
-      n = 17;
-      for (lado = 0; lado < 2; lado++) {
-        for (i = 0; i < n; i++) {
-          var d = tot * (0.03 + 0.94 * i / (n - 1)), k = 0; while (k < seg.length - 1 && d > seg[k]) { d -= seg[k]; k++; }
-          var u = seg[k] ? d / seg[k] : 0, ax = haste[k][0], ay = haste[k][1], bx = haste[k + 1][0], by = haste[k + 1][1];
-          var x = ax + (bx - ax) * u, y = ay + (by - ay) * u, ang = Math.atan2(by - ay, bx - ax), dir = i % 2 ? 1 : -1;
-          var cx = x + Math.cos(ang + dir * Math.PI / 2) * 3.2, cy = y + Math.sin(ang + dir * Math.PI / 2) * 3.2;
-          if (lado) cx = 272 - cx;
-          atras.push({ t: 'leaf', cx: cx, cy: cy, rx: 14 - i * 0.3, ry: 5.2, rot: lado ? Math.PI - (ang + dir * 0.7) : ang + dir * 0.7 });
-        }
+    /* Asas em lâminas angulosas (substituem a aleta da Prata e os louros do Ouro): cada lado tem lâminas verticais
+       de ponta chanfrada, coladas na lateral reta do cartão (x=0) e mais baixas conforme se afastam. Só polígonos, então
+       o SVG da tela e o canvas do PNG usam a mesma lista. Prata: 2 lâminas; Ouro: 3. */
+    function laminas(qtd) {
+      var j, x0, topo, base, f;
+      for (j = 0; j < qtd; j++) {
+        x0 = -j * 9.5; topo = 176 + j * 30; base = 352 - j * 6;
+        f = [[x0, base], [x0 - 8, base - 10], [x0 - 8, topo + 16], [x0, topo]];
+        atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
       }
     }
+    if (borda === 'b-80') laminas(2);
+    if (borda === 'b-90') laminas(3);
     /* Top 3: sem asas nem cristais laterais (poluíam o visual). Só coroa + gema. */
     if (borda === 'b-90' || borda === 'b-top' || borda === 'b-100') { // coroa grande saindo pelo alto
       frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true });
