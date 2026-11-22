@@ -156,6 +156,7 @@ jobs:
           python scripts/test_areas_agrupadas.py
           python scripts/test_fotos.py   # pula sozinho se faltar Pillow
           python scripts/test_pesos.py
+          python scripts/test_simulador_pesos.py   # ~90 s: simulador == cálculo real
           node worker/test_worker.mjs
 
       # Só coleta dados novos quando disparado por agendamento ou manualmente
@@ -217,6 +218,11 @@ jobs:
 
       - name: Gerar dados da página do agente (assets/agentes_dados.js)
         run: python scripts/gerar_agentes.py
+
+      # Dados da página pesos.html (simulador de pesos). ~1,5 min; se falhar, o resto do site é publicado igual.
+      - name: Gerar dados do simulador de pesos (assets/simulador_pesos.js)
+        continue-on-error: true
+        run: python scripts/gerar_simulador_pesos.py
 
       - name: Gerar páginas do histórico (uma por mês arquivado)
         run: |

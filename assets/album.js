@@ -84,6 +84,7 @@ else {
   };
   $('bImprimir').onclick = () => { Preguica.tudo(); window.print(); };
   // «Modo reunião»: abre a tela de projeção direto nas cartinhas do mês escolhido (o «Melhor do ano» abre no mês mais recente)
+  $('bPesos').onclick = () => { const m = $('fMes').value; location.href = 'pesos.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : ''); };
   $('bResumo').onclick = () => { const m = $('fMes').value; location.href = 'resumo.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : ''); };   // «Melhor do ano»: abre o mês mais recente
   $('bReuniao').onclick = () => { const m = $('fMes').value; location.href = 'projecao.html' + (m && m !== ANO ? '?mes=' + encodeURIComponent(m) : '') + '#cartinhas'; };
   // ---- Preguiça: materializa as cartinhas adiadas quando chegam perto da tela ----

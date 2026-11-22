@@ -130,6 +130,16 @@ Constantes: ROOT@12, EQUIPE_BLOQUEIO@16, LABEL_MES_RE@17, _MESES_NUM@133
 - L14 `gerar(caminho_nomes, saida)`
 - L67 `gerar_ferias(caminho_nomes, saida)`
 
+## scripts/gerar_simulador_pesos.py (105 linhas)
+
+- L31 `meses()` — [(semana_inicio, semana_fim, rótulo)] em ordem cronológica: arquivados + ofic…
+- L40 `calcular(filtro)`
+- L54 `_calcular(filtro)`
+- L78 `montar(meses_calculados)`
+- L89 `main(argv)`
+
+Constantes: RAIZ@27, DESTINO_PADRAO@28, ARQUIVOS_PROTEGIDOS@37
+
 ## scripts/gerar_transparencia.py (219 linhas)
 
 - L24 `n(v, casas)` — Número em pt-BR (vírgula decimal), sem zeros inúteis.
@@ -315,7 +325,7 @@ Constantes: RAIZ@18, REF@19
 - L232 `_preparar_fora_expediente(df_total)` — Monta a lista de visitas registradas fora do horário oficial de serviço
 - L268 `_preparar_almoco(df_total)` — Lista apenas as visitas registradas no horário de almoço (11h15-12h45, com to…
 
-## scripts/coleta/ausencias_ranking.py (674 linhas)
+## scripts/coleta/ausencias_ranking.py (706 linhas)
 
 - L50 `_primeira_visita_historica(pasta)` — {id_agente: date da PRIMEIRA visita em TODO o cache de semanas}.
 - L103 `_hoje_local()`
@@ -326,10 +336,11 @@ Constantes: RAIZ@18, REF@19
 - L424 `_carregar_ajustes_ranking(caminho)` — Ajustes MANUAIS de pontuação, lançados pelo gestor em
 - L468 `_ler_notas_ranking(caminho)` — {nome_agente: pontuação final} da tabela principal da aba Ranking de uma plan…
 - L492 `_media_historica_por_agente(data_min, manifest, pasta)` — {nome_agente: média das notas dos meses anteriores ao período que começa em `…
-- L519 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
-- L656 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
+- L527 `_inclinacoes_pesos(res, qtd_ausencias, alvo_dias_mes, args_)` — Nota BRUTA (sem piso/teto) e inclinação de cada peso. Piso e teto são desliga…
+- L548 `_preparar_ranking(resultados, regs_ausencias, data_max, li)` — Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
+- L688 `_preparar_recusados_detalhe(resultados)` — Lista individual de todos os imóveis com visita recusada pelo morador.
 
-Constantes: _CACHE_PRIMEIRA_VISITA@47, HOJE_OVERRIDE@101, CAMINHO_AJUSTES_RANKING@422, CAMINHO_MANIFEST_HISTORICO@463, PASTA_HISTORICO@464, _RE_LABEL_MES@465
+Constantes: _CACHE_PRIMEIRA_VISITA@47, HOJE_OVERRIDE@101, CAMINHO_AJUSTES_RANKING@422, CAMINHO_MANIFEST_HISTORICO@463, PASTA_HISTORICO@464, _RE_LABEL_MES@465, COLETOR_SIMULACAO@523, SIM_PASSO@524
 
 ## scripts/coleta/auxiliares.py (128 linhas)
 
@@ -355,7 +366,7 @@ Constantes: NOMES_DIA_SEMANA@27, _PREPOSICOES_NOME@39
 
 Constantes: _COLS_BOOL_SEMANA@45, _COLS_DATETIME_SEMANA@52, _CACHE_LEITURA@66, _CACHE_LEITURA_MAX@67, _LOCK_CACHE@68
 
-## scripts/coleta/calculos.py (625 linhas)
+## scripts/coleta/calculos.py (630 linhas)
 
 - L67 `calcular_tempos(visitas, nome, id_agente, equipe, semana)` — `semana_html_id`: quando a coleta já é feita semana a semana (o caso
 - L171 `_media_horario(series_dt)` — Calcula o horário médio (datetime.time) de uma série de timestamps.
@@ -365,10 +376,10 @@ Constantes: _COLS_BOOL_SEMANA@45, _COLS_DATETIME_SEMANA@52, _CACHE_LEITURA@66, _
 - L247 `_classificar_pontuacao(pontos)`
 - L257 `br_num(v)` — Número em texto pt-BR sem zeros inúteis (3 → '3', 2.5 → '2,5').
 - L262 `calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes, norma)` — Calcula a pontuação final de um agente a partir de PONTOS_INICIAIS,
-- L445 `_horas_trabalhadas_diarias(df)` — Para cada dia trabalhado, calcula:
-- L496 `resumo_agente(df)`
-- L578 `resumo_por_area(df, fechados_por_area, recusados_por_are)`
-- L614 `_classificar(pct_rapidas)` — Classificação baseada no % DE VISITAS RÁPIDAS (< TEMPO_MIN_VISITA_MIN):
+- L450 `_horas_trabalhadas_diarias(df)` — Para cada dia trabalhado, calcula:
+- L501 `resumo_agente(df)`
+- L583 `resumo_por_area(df, fechados_por_area, recusados_por_are)`
+- L619 `_classificar(pct_rapidas)` — Classificação baseada no % DE VISITAS RÁPIDAS (< TEMPO_MIN_VISITA_MIN):
 
 ## scripts/coleta/colunas.py (206 linhas)
 

@@ -1,0 +1,50 @@
+/* Simulador de pesos (pesos.html). Claro por padrão; escuro pelo botão de tema (tema.js). */
+:root{--bg:#F6F1E8;--card:#FFFFFF;--tx:#241A10;--mut:#6B5A45;--bd:#DCCFBA;--soft:#F1E9DA;--pri:#A8741F;--pri-tx:#FFFFFF;
+  --ok:#0B7A44;--ok-bg:#E4F6EC;--bad:#B3261E;--bad-bg:#FBE7E5;--mud:#8A6100;--mud-bg:#FFF2D2;color-scheme:light}
+:root[data-theme="dark"]{--bg:#17110B;--card:#241A10;--tx:#F4ECDD;--mut:#BCA98F;--bd:rgba(232,196,120,.24);--soft:#2E2215;--pri:#E9C27A;--pri-tx:#241A10;
+  --ok:#5CE59A;--ok-bg:#12301F;--bad:#FF8478;--bad-bg:#3A1D22;--mud:#FFC93D;--mud-bg:#3A2D12;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2{font-family:"Barlow Semi Condensed",system-ui,sans-serif;margin:0}
+.topo{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--bd)}
+.topo h1{font-size:22px;flex:1;min-width:200px}.topo h1 small{font:500 13px "IBM Plex Sans",sans-serif;color:var(--mut);margin-left:6px}
+.volta{color:var(--pri);font-weight:700;text-decoration:none}
+.mes{display:flex;align-items:center;gap:6px;font-weight:600}
+select,input{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:6px 8px}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.bt{font:700 13px "IBM Plex Sans",system-ui,sans-serif;background:var(--pri);color:var(--pri-tx);border:0;border-radius:999px;padding:8px 14px;cursor:pointer}
+.bt.sec{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+main{max-width:1280px;margin:0 auto;padding:14px 16px 40px}
+.aviso{margin:0 0 12px;padding:10px 14px;border-radius:10px;background:var(--mud-bg);color:var(--tx);border:1px solid var(--bd)}
+.aviso.erro{background:var(--bad-bg)}
+code{font:12px ui-monospace,Consolas,monospace;background:var(--soft);padding:1px 5px;border-radius:5px}
+.grade{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:14px;align-items:start}
+@media(max-width:900px){.grade{grid-template-columns:1fr}}
+.painel{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 14px}
+.painel-cab{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.painel h2{font-size:18px}.acoes{display:flex;gap:6px;flex-wrap:wrap}
+.gerado{font-size:12px;color:var(--mut)}
+.grupo{margin:10px 0 4px;font:700 12px "IBM Plex Sans",sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+.peso{display:grid;grid-template-columns:1fr 96px;gap:2px 10px;align-items:center;padding:8px 0;border-top:1px solid var(--bd)}
+.peso label{font-weight:700}.peso .desc{grid-column:1;font-size:12px;color:var(--mut)}
+.peso input{width:96px;text-align:right}
+.peso .ref{grid-column:2;font-size:11px;color:var(--mut);text-align:right}
+.peso.mudou input{border-color:var(--pri);box-shadow:0 0 0 2px color-mix(in srgb,var(--pri) 30%,transparent)}
+.peso.invalido input{border-color:var(--bad);background:var(--bad-bg)}
+.resumo{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.kpi{flex:1;min-width:120px;background:var(--soft);border-radius:10px;padding:8px 10px}
+.kpi b{display:block;font:700 20px "Barlow Semi Condensed",sans-serif}.kpi span{font-size:11px;color:var(--mut)}
+.tabela-rolagem{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:6px 8px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);position:sticky;top:0;background:var(--card)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.pos{display:inline-flex;align-items:center;gap:4px;font-weight:700}
+.sobe{color:var(--ok)}.desce{color:var(--bad)}.igual{color:var(--mut)}
+.delta{font-weight:700}.delta.sobe{color:var(--ok)}.delta.desce{color:var(--bad)}
+tr.mudou td{background:color-mix(in srgb,var(--pri) 8%,transparent)}
+.rodape{margin-top:14px;font-size:12px;color:var(--mut)}
+@media print{.topo .bt,.acoes{display:none}}
+.grade>*{min-width:0}
+@media(min-width:901px){.grade>.painel:first-child{position:sticky;top:62px;max-height:calc(100vh - 76px);overflow-y:auto}}
+@media(max-width:600px){.peso{grid-template-columns:1fr 84px}.peso input{width:84px}main{padding:10px 12px 30px}}

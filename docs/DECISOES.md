@@ -1,5 +1,13 @@
 # Registro de decisões (mais recente primeiro)
 
+## 21/11/2026 (5) — simulador de pesos (etapa 2 de 3)
+- Nova página `pesos.html` (botão «Simular pesos» no álbum): o usuário muda o peso de cada regra e vê, por mês, nota e posição de cada agente antes/depois. **Só simula, não grava.** «Copiar pesos (JSON)» gera o texto para colar em `data/pesos_pontuacao.json`.
+- Conta: nota simulada = nota bruta + Σ inclinação × (peso novo − peso atual), com piso/teto. A nota é linear em cada peso, então a conta é exata. `calcular_pontuacao` ganhou o parâmetro `pesos` (substitui o peso só naquela chamada).
+- Dados: `scripts/gerar_simulador_pesos.py` (~90 s) refaz o ranking de cada mês pelo mesmo caminho do histórico (`consolidar_semanas`, em pasta temporária) com `ausencias_ranking.COLETOR_SIMULACAO` ligado; grava `assets/simulador_pesos.js`. Não altera `data/` (guarda e restaura `deteccoes_pendentes.json` e `agentes_nomes.json`). Passo no workflow com `continue-on-error`.
+- `scripts/test_simulador_pesos.py` (~90 s, só no CI): simulado == cálculo real com pesos trocados (diferença 0,000 em 49 agentes de Outubro). Fora do `rodar_testes.py` por ser lento.
+- Limite conhecido: quem tem nota bruta negativa antes da presença mínima pode divergir centésimos (caso raro, não ocorre nos dados).
+- Próxima etapa (3): gravar pelo Worker + recalcular todos os meses.
+
 ## 21/11/2026 (4) — pesos da pontuação num arquivo editável (etapa 1 de 3)
 - Novo `data/pesos_pontuacao.json`: os 18 pesos (`PONTOS_PERDA_*`, `PONTOS_GANHO_*`) com rótulo, valor, grupo e descrição. É a **fonte oficial**: ao importar `coleta/pontos.py`, `carregar_pesos()` lê o JSON e ele vence o padrão de fábrica do código. Só o campo `valor` deve ser editado.
 - Validação rígida (nome desconhecido, texto, negativo ou > 50 = erro explícito, nunca cálculo com peso errado em silêncio); também roda em `validar_json.py` antes da coleta.

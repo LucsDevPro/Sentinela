@@ -260,7 +260,7 @@ def br_num(v):
 
 
 def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES, normalizar_periodo=True, ajustes=(),
-                       dias_inteiros_sem_lancamento=0, aplicar_presenca_minima=False):
+                       dias_inteiros_sem_lancamento=0, aplicar_presenca_minima=False, pesos=None):
     """
     Calcula a pontuação final de um agente a partir de PONTOS_INICIAIS,
     aplicando todos os critérios de perda/ganho configurados. Retorna
@@ -315,6 +315,11 @@ def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES, normali
     não é justo nem realista (a amostra é pequena demais pra extrapolar
     com confiança). Com o teto em 2x, o mesmo caso vira só 3,6 pontos.
     """
+    # `pesos`: dicionário {NOME_DO_PESO: valor} que SUBSTITUI o peso configurado só nesta chamada
+    # (usado pelo simulador de pesos; sem ele vale o peso oficial de data/pesos_pontuacao.json).
+    def _W(nome):
+        return pesos[nome] if pesos and nome in pesos else globals()[nome]
+
     r = res["resumo"]
     df = res["df"]
     pontos = float(PONTOS_INICIAIS)
@@ -352,26 +357,26 @@ def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES, normali
 
     pont_diaria = _avaliar_pontualidade_diaria(df)
     aplicar(f"Início manhã após {_fmt_hhmm_tupla(HORA_LIMITE_INICIO_MANHA)}",
-            pont_diaria["inicio_manha_atrasado"], PONTOS_PERDA_INICIO_MANHA_ATRASADO, -1)
+            pont_diaria["inicio_manha_atrasado"], _W("PONTOS_PERDA_INICIO_MANHA_ATRASADO"), -1)
     aplicar(f"Fim manhã antes de {_fmt_hhmm_tupla(HORA_LIMITE_FIM_MANHA)}",
-            pont_diaria["fim_manha_antecipado"], PONTOS_PERDA_FIM_MANHA_ANTECIPADO, -1)
+            pont_diaria["fim_manha_antecipado"], _W("PONTOS_PERDA_FIM_MANHA_ANTECIPADO"), -1)
     aplicar(f"Início tarde após {_fmt_hhmm_tupla(HORA_LIMITE_INICIO_TARDE)}",
-            pont_diaria["inicio_tarde_atrasado"], PONTOS_PERDA_INICIO_TARDE_ATRASADO, -1)
+            pont_diaria["inicio_tarde_atrasado"], _W("PONTOS_PERDA_INICIO_TARDE_ATRASADO"), -1)
     aplicar(f"Fim tarde antes de {_fmt_hhmm_tupla(HORA_LIMITE_FIM_TARDE)}",
-            pont_diaria["fim_tarde_antecipado"], PONTOS_PERDA_FIM_TARDE_ANTECIPADO, -1)
+            pont_diaria["fim_tarde_antecipado"], _W("PONTOS_PERDA_FIM_TARDE_ANTECIPADO"), -1)
 
     aplicar("Turno sem lançamento (não é chuva/reunião/férias)",
-            qtd_ausencias, PONTOS_PERDA_TURNO_SEM_LANCAMENTO, -1)
+            qtd_ausencias, _W("PONTOS_PERDA_TURNO_SEM_LANCAMENTO"), -1)
     if not normalizar_periodo:
         aplicar("Dia inteiro sem lançamento (2 turnos)", dias_inteiros_sem_lancamento,
-                PONTOS_PERDA_DIA_INTEIRO_SEM_LANCAMENTO, -1, normalizar=False)
-    aplicar("Visita rápida", r["visitas_rapidas"], PONTOS_PERDA_VISITA_RAPIDA, -1)
-    aplicar("Visita longa", r["visitas_longas"], PONTOS_PERDA_VISITA_LONGA, -1)
-    aplicar("Visita duplicada", r["visitas_duplicadas"], PONTOS_PERDA_VISITA_DUPLICADA, -1)
-    aplicar("Visita em sequência suspeita", r["visitas_seq_suspeita"], PONTOS_PERDA_SEQUENCIA_SUSPEITA, -1)
-    aplicar("Visita com duração negativa", r["visitas_negativas"], PONTOS_PERDA_VISITA_NEGATIVA, -1)
-    aplicar("Visita fora do expediente/fim de semana", r["visitas_fora_expediente"], PONTOS_PERDA_FORA_EXPEDIENTE, -1)
-    aplicar("Visita no horário de almoço", r["visitas_horario_almoco"], PONTOS_PERDA_VISITA_ALMOCO, -1)
+                _W("PONTOS_PERDA_DIA_INTEIRO_SEM_LANCAMENTO"), -1, normalizar=False)
+    aplicar("Visita rápida", r["visitas_rapidas"], _W("PONTOS_PERDA_VISITA_RAPIDA"), -1)
+    aplicar("Visita longa", r["visitas_longas"], _W("PONTOS_PERDA_VISITA_LONGA"), -1)
+    aplicar("Visita duplicada", r["visitas_duplicadas"], _W("PONTOS_PERDA_VISITA_DUPLICADA"), -1)
+    aplicar("Visita em sequência suspeita", r["visitas_seq_suspeita"], _W("PONTOS_PERDA_SEQUENCIA_SUSPEITA"), -1)
+    aplicar("Visita com duração negativa", r["visitas_negativas"], _W("PONTOS_PERDA_VISITA_NEGATIVA"), -1)
+    aplicar("Visita fora do expediente/fim de semana", r["visitas_fora_expediente"], _W("PONTOS_PERDA_FORA_EXPEDIENTE"), -1)
+    aplicar("Visita no horário de almoço", r["visitas_horario_almoco"], _W("PONTOS_PERDA_VISITA_ALMOCO"), -1)
 
     # "Dia com/sem meta batida" é contagem LITERAL (1 dia = 1 ponto,
     # conforme pedido) — sem o fator_normalizacao. Diferente dos outros
@@ -382,9 +387,9 @@ def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES, normali
     # pontos pra um agente que só trabalhou 13 dias no mês por causa de
     # férias — 11 dias bem trabalhados tem que valer 11 pontos, não 18,6).
     dias_sem_meta = max(r["dias_trabalhados"] - r["dias_atingiu_meta"], 0)
-    aplicar("Dia sem bater a meta diária", dias_sem_meta, PONTOS_PERDA_DIA_SEM_META, -1, normalizar=False)
+    aplicar("Dia sem bater a meta diária", dias_sem_meta, _W("PONTOS_PERDA_DIA_SEM_META"), -1, normalizar=False)
 
-    aplicar("Dia com meta diária batida", r["dias_atingiu_meta"], PONTOS_GANHO_DIA_COM_META, +1, normalizar=False)
+    aplicar("Dia com meta diária batida", r["dias_atingiu_meta"], _W("PONTOS_GANHO_DIA_COM_META"), +1, normalizar=False)
 
     bonus_rapida = r["visitas_rapidas"] == 0 and r["total_visitas"] > 0
     bonus_ausencia = qtd_ausencias == 0 and r["dias_trabalhados"] > 0
@@ -397,11 +402,11 @@ def calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes=DIAS_UTEIS_MES, normali
                           and r["dias_trabalhados"] >= BONUS_MIN_FRACAO_DIAS_ESPERADOS * alvo_dias_mes)
     if bonus_elegivel:
         if bonus_rapida:
-            aplicar("Bônus: nenhuma visita rápida no período", 1, PONTOS_GANHO_SEM_VISITA_RAPIDA, +1, normalizar=False)
+            aplicar("Bônus: nenhuma visita rápida no período", 1, _W("PONTOS_GANHO_SEM_VISITA_RAPIDA"), +1, normalizar=False)
         if bonus_ausencia:
-            aplicar("Bônus: nenhum turno sem lançamento no período", 1, PONTOS_GANHO_SEM_AUSENCIA, +1, normalizar=False)
+            aplicar("Bônus: nenhum turno sem lançamento no período", 1, _W("PONTOS_GANHO_SEM_AUSENCIA"), +1, normalizar=False)
         if bonus_pontual:
-            aplicar("Bônus: pontualidade perfeita no período", 1, PONTOS_GANHO_PONTUALIDADE_PERFEITA, +1, normalizar=False)
+            aplicar("Bônus: pontualidade perfeita no período", 1, _W("PONTOS_GANHO_PONTUALIDADE_PERFEITA"), +1, normalizar=False)
     elif bonus_rapida or bonus_ausencia or bonus_pontual:
         # Linha informativa (0 ponto) pra ficar claro por que o bônus não veio.
         detalhes.append({

@@ -516,6 +516,35 @@ def _media_historica_por_agente(data_min, manifest=CAMINHO_MANIFEST_HISTORICO, p
         return {}
 
 
+# Simulador de pesos (scripts/gerar_simulador_pesos.py): quando é uma lista, _preparar_ranking acrescenta nela, por
+# agente, a nota e a INCLINAÇÃO de cada peso. A nota é linear em cada peso (nota = base + soma de peso × contagem,
+# e a presença mínima só multiplica por um fator), então nota nova = nota + soma(inclinação × (peso novo − peso atual)).
+# Fica None no uso normal: nenhum custo extra no ranking.
+COLETOR_SIMULACAO = None
+SIM_PASSO = 10   # passo usado para medir a inclinação (grande, para o arredondamento de 2 casas não pesar)
+
+
+def _inclinacoes_pesos(res, qtd_ausencias, alvo_dias_mes, args_pontuacao, pontos):
+    """Nota BRUTA (sem piso/teto) e inclinação de cada peso. Piso e teto são desligados só aqui dentro
+    para a medida não bater no limite (quem está perto de 0 distorceria a inclinação)."""
+    from . import calculos as _Cl
+    from . import pontos as _P
+    nomes = [n for n in dir(_P) if n.startswith(("PONTOS_PERDA_", "PONTOS_GANHO_"))]
+    minimo, maximo = _Cl.NOTA_MINIMA, _Cl.NOTA_MAXIMA
+    _Cl.NOTA_MINIMA = _Cl.NOTA_MAXIMA = None
+    try:
+        bruta = calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes, **args_pontuacao)[0]
+        inc = {}
+        for nome in nomes:
+            atual = getattr(_P, nome)
+            p2 = calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes, pesos={nome: atual + SIM_PASSO}, **args_pontuacao)[0]
+            inc[nome] = round((p2 - bruta) / SIM_PASSO, 6)
+    finally:
+        _Cl.NOTA_MINIMA, _Cl.NOTA_MAXIMA = minimo, maximo
+    return {"id": res["id_agente"], "nome": res["nome_agente"], "equipe": res["equipe"], "pontos": pontos, "bruta": bruta,
+            "minimo": minimo, "maximo": maximo, "inc": inc}
+
+
 def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronograma=None, data_min=None, ajustes=None):
     """
     Calcula a pontuação de cada agente (calcular_pontuacao) e monta:
@@ -605,14 +634,17 @@ def _preparar_ranking(resultados, regs_ausencias, data_max=None, lista_cronogram
         ajustes_agente = [(a["motivo"], a["pontos"]) for a in ajustes_todos
                           if a["id_agente"] == res["id_agente"] and data_min is not None and data_max is not None
                           and data_min <= a["data"] <= data_max]
-        pontos, classif, fill, detalhes = calcular_pontuacao(
-            res, qtd_ausencias, alvo_dias_mes, normalizar_periodo=not sem_normalizacao,
+        args_pontuacao = dict(
+            normalizar_periodo=not sem_normalizacao,
             ajustes=ajustes_agente,
             aplicar_presenca_minima=(sem_normalizacao and res["equipe"].lower()
                                      not in {e.lower() for e in EQUIPES_SEM_DETECCAO_AUTOMATICA}),
             dias_inteiros_sem_lancamento=(
                 0 if res["equipe"].lower() in {e.lower() for e in EQUIPES_SEM_DETECCAO_AUTOMATICA}
                 else dias_inteiros_por_agente.get(res["id_agente"], 0)))
+        pontos, classif, fill, detalhes = calcular_pontuacao(res, qtd_ausencias, alvo_dias_mes, **args_pontuacao)
+        if COLETOR_SIMULACAO is not None:
+            COLETOR_SIMULACAO.append(_inclinacoes_pesos(res, qtd_ausencias, alvo_dias_mes, args_pontuacao, pontos))
         principal.append({
             "nome_agente": res["nome_agente"],
             "equipe": res["equipe"],

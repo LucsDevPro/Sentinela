@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de pesos — Sentinela</title>
+<script src="assets/tema.js"></script>
+<link rel="stylesheet" href="assets/fontes.css">
+<link rel="stylesheet" href="assets/pesos.css">
+</head>
+<body>
+<header class="topo">
+  <a class="volta" href="album.html">← Álbum</a>
+  <h1>Simulador de pesos <small>da pontuação</small></h1>
+  <label class="mes">Mês <select id="fMes" aria-label="Mês simulado"></select></label>
+  <button class="bt sec" data-tema-btn type="button"><span class="tema-txt">Tema escuro</span></button>
+</header>
+<main>
+  <p class="aviso" id="aviso" role="note"><b>Só simulação: nada é gravado.</b> Mude os números à esquerda e veja à direita como ficam a nota e a posição de cada agente. Os pesos oficiais ficam em <code>data/pesos_pontuacao.json</code>.</p>
+  <div class="grade">
+    <section class="painel" aria-labelledby="tPesos">
+      <div class="painel-cab"><h2 id="tPesos">Pesos</h2>
+        <span class="acoes"><button class="bt sec" id="bZerar" type="button">Voltar aos atuais</button>
+        <button class="bt" id="bCopiar" type="button">Copiar pesos (JSON)</button></span></div>
+      <div id="pesos" class="pesos"></div>
+    </section>
+    <section class="painel" aria-labelledby="tRank">
+      <div class="painel-cab"><h2 id="tRank">Ranking simulado</h2><span class="gerado" id="gerado"></span></div>
+      <div id="resumo" class="resumo" aria-live="polite"></div>
+      <div class="tabela-rolagem"><table id="rank">
+        <thead><tr><th>Pos.</th><th>Agente</th><th>Equipe</th><th class="n">Nota atual</th><th class="n">Nota simulada</th><th class="n">Variação</th></tr></thead>
+        <tbody></tbody></table></div>
+    </section>
+  </div>
+  <p class="rodape" id="rodape"></p>
+</main>
+<script src="assets/simulador_pesos.js"></script>
+<script src="assets/pesos.js"></script>
+</body>
+</html>
