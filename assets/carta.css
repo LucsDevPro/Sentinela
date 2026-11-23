@@ -1851,16 +1851,17 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
   --sweep: rgba(255, 255, 255, 0.75); --spot: rgba(255, 255, 255, 0.7); --holo: linear-gradient(115deg, transparent 20%, rgba(150, 190, 230, 0.2) 38%, rgba(255, 255, 255, 0.3) 50%, rgba(170, 200, 235, 0.2) 62%, transparent 76%);
 }
 .c-conj .carta.b-90:not(.t-elite) {
-  --c1: #F3DC9A; --c2: #A87B22; --tx: #2A1C04; --num: #241703; --ln: rgba(42, 28, 4, 0.3);
-  --bgm: linear-gradient(160deg, #F3DC9A 0%, #D9AE4A 45%, #A87B22 100%);
-  --b1: #7E5A14; --b2: #D9AE4A; --b3: #F3DC9A; --bw: 7px; --filete: rgba(255, 244, 190, 0.85); --filete-glow: 0 0 4px rgba(255, 236, 160, 0.6);
-  --sombra: 0 1px 1px rgba(0, 0, 0, 0.35), 0 3px 6px rgba(0, 0, 0, 0.2), 0 0 0 1.5px rgba(243, 220, 154, 0.5), 0 0 22px rgba(217, 174, 74, 0.35), 0 18px 40px rgba(0, 0, 0, 0.38), inset 0 1.5px 0 rgba(255, 255, 255, 0.5);
-  --chip: rgba(255, 255, 255, 0.22); --chip-ln: rgba(90, 60, 0, 0.25); --tx-sh: none; --tx-rod: #1A1203;
-  --foto-b: #A87B22; --foto-sh: 0 0 0 3px rgba(217, 174, 74, 0.55), 0 0 0 6px rgba(255, 244, 200, 0.45), 0 4px 14px rgba(90, 60, 0, 0.3), inset 0 1.5px 0 rgba(255, 255, 255, 0.7);
-  --logo: linear-gradient(170deg, #F3DC9A 0%, #A87B22 50%, #6E4C0E 100%);
-  --tex: repeating-linear-gradient(118deg, rgba(255, 250, 220, 0.15) 0 0.8px, transparent 0.8px 3.4px), repeating-linear-gradient(28deg, rgba(120, 70, 0, 0.07) 0 0.6px, transparent 0.6px 3px), linear-gradient(105deg, transparent 30%, rgba(255, 255, 235, 0.16) 46%, transparent 62%);
-  --tex-op: 0.95; --glare: 1;
-  --sweep: rgba(255, 244, 190, 0.7); --spot: rgba(255, 244, 200, 0.65); --holo: linear-gradient(115deg, transparent 20%, rgba(255, 210, 90, 0.24) 38%, rgba(255, 245, 190, 0.28) 50%, rgba(240, 180, 50, 0.22) 62%, transparent 76%);
+  /* Ouro premium: folha de ouro com faixa de reflexo, moldura bisotada com filete duplo, aro de foto duplo e número gravado */
+  --c1: #F3DC9A; --c2: #A87B22; --tx: #2A1C04; --num: #241703; --ln: rgba(42, 28, 4, 0.34);
+  --bgm: radial-gradient(ellipse 85% 42% at 50% 8%, rgba(255, 250, 215, 0.5) 0%, transparent 62%), linear-gradient(118deg, transparent 30%, rgba(255, 250, 215, 0.3) 44%, transparent 58%), linear-gradient(160deg, #F6E3A4 0%, #E0B64F 42%, #B8892A 78%, #8F661A 100%);
+  --b1: #6B4A0E; --b2: #E2B84F; --b3: #FFF0B8; --bw: 7px; --filete: rgba(255, 246, 205, 0.9); --filete-glow: 0 0 5px rgba(255, 236, 160, 0.7);
+  --sombra: 0 1px 1px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.22), 0 0 0 1.5px rgba(246, 227, 164, 0.6), 0 0 26px rgba(224, 182, 79, 0.45), 0 20px 42px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.6), inset 0 -2px 0 rgba(120, 80, 10, 0.25);
+  --chip: rgba(255, 255, 255, 0.24); --chip-ln: rgba(90, 60, 0, 0.3); --tx-sh: 0 1px 0 rgba(255, 244, 190, 0.55); --tx-rod: #1A1203;
+  --foto-b: #8F661A; --foto-sh: 0 0 0 3px rgba(224, 182, 79, 0.65), 0 0 0 5px rgba(120, 80, 10, 0.4), 0 0 0 8px rgba(255, 244, 200, 0.55), 0 5px 14px rgba(90, 60, 0, 0.35), inset 0 1.5px 0 rgba(255, 255, 255, 0.75);
+  --logo: linear-gradient(170deg, #F6E3A4 0%, #A87B22 50%, #5E410B 100%);
+  --tex: repeating-linear-gradient(118deg, rgba(255, 250, 220, 0.2) 0 0.8px, transparent 0.8px 3.2px), repeating-linear-gradient(28deg, rgba(120, 70, 0, 0.1) 0 0.6px, transparent 0.6px 2.8px), radial-gradient(circle at 22% 18%, rgba(255, 255, 235, 0.22), transparent 30%), radial-gradient(circle at 80% 70%, rgba(255, 255, 235, 0.14), transparent 28%);
+  --tex-op: 1; --glare: 1;
+  --sweep: rgba(255, 248, 205, 0.8); --spot: rgba(255, 248, 210, 0.7); --holo: linear-gradient(115deg, transparent 18%, rgba(255, 210, 90, 0.3) 36%, rgba(255, 248, 205, 0.36) 50%, rgba(240, 180, 50, 0.28) 64%, transparent 78%);
 }
 .c-conj .carta.t-elite {
   /* Elite premium: corpo ametista profundo, moldura champanhe (herda o prestígio do dourado), filete luminoso, cristal facetado */
@@ -1914,7 +1915,7 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
   position: absolute; inset: calc(var(--bw, 5px) + 3px); z-index: 3; pointer-events: none;
   border: 1px solid var(--filete, transparent); border-radius: calc(var(--radius, 18px) - var(--bw, 5px) - 2px); box-shadow: var(--filete-glow, none);
 }
-.carta.b-100 > .c-filete::after {
+.carta.b-90 > .c-filete::after, .carta.b-100 > .c-filete::after {
   content: ""; position: absolute; inset: 3px; border: 0.6px solid rgba(255, 240, 166, 0.5); border-radius: calc(var(--radius, 18px) - var(--bw, 5px) - 5px);
 }
 

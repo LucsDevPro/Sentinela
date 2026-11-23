@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 22/11/2026 (6) — Ouro premium
+- Ouro: folha de ouro com faixa de reflexo diagonal e brilho no topo, moldura mais escura nas bordas (bisel), filete duplo (agora também em Ouro e Elite), aro de foto duplo, número gravado, lâminas laterais com contorno escuro (antes sumiam no corpo dourado). Continua abaixo da Elite (corpo claro, 7px) e distinto da Lendária (corpo preto).
+
 ## 22/11/2026 (5) — paleta harmonizada (opção A «Joalheria») e Elite premium
 - Bronze cobre mais fechado (#C98B5E→#6E3C1F, texto claro para manter o contraste), Aço ardósia (#6A7C93→#2F3B4D), Ouro champanhe (#F3DC9A→#A87B22). Prata, Ferro e Lendária mantidos.
 - Elite: corpo ametista profundo (#6D28D9→#1E0A45), moldura champanhe de 8px com filete luminoso, textura de cristal facetado, lâminas laterais champanhe (como o Ouro), gema champanhe e raios suaves violeta. Ideia: a Elite herda o dourado de prestígio e fica um degrau acima do Ouro (100 pontos não é fácil).
