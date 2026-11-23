@@ -103,7 +103,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "22/11/2026 15:18"
+    "detectado_em": "23/11/2026 19:14"
   },
   {
     "tipo": "possiveis_ferias",
@@ -253,15 +253,15 @@
     "nome_agente": "Teonilda Florentino Vieira",
     "equipe": "Equipe 2",
     "inicio": "28/10/2026",
-    "fim": "09/11/2026",
-    "duracao": 8,
+    "fim": "19/11/2026",
+    "duracao": 16,
     "revisao_classificacao_necessaria": true,
     "nota_revisao_classificacao": "Esse período se sobrepõe com a ausência de outro agente da mesma equipe. Pode ser coincidência de duas férias individuais, ou pode ser uma paralisação coletiva que a detecção de chuva não pegou (por não ter sido a equipe INTEIRA parada no mesmo dia). Já está confirmado como Férias e excluído da pontuação normalmente — essa marcação é só pra revisar o motivo com calma, não bloqueia nada.",
     "status": "falta",
     "motivo": "Falta (agente sem abono automático)",
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "08/11/2026 04:59"
+    "detectado_em": "22/11/2026 15:18"
   },
   {
     "tipo": "possiveis_ferias",
@@ -277,7 +277,7 @@
     "motivo": "Falta (agente sem abono automático)",
     "confirmado_automaticamente": true,
     "categoria_coletiva": null,
-    "detectado_em": "22/11/2026 15:18"
+    "detectado_em": "23/11/2026 19:14"
   },
   {
     "tipo": "possiveis_ferias",
@@ -452,7 +452,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "22/11/2026 15:18"
+    "detectado_em": "23/11/2026 19:14"
   },
   {
     "tipo": "possiveis_ferias",
@@ -504,7 +504,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "22/11/2026 15:18"
+    "detectado_em": "23/11/2026 19:14"
   },
   {
     "tipo": "possiveis_ferias",
@@ -589,7 +589,7 @@
     "motivo": null,
     "confirmado_automaticamente": false,
     "categoria_coletiva": null,
-    "detectado_em": "22/11/2026 15:18"
+    "detectado_em": "23/11/2026 19:14"
   },
   {
     "tipo": "paralisacao_coletiva",
