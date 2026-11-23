@@ -1867,10 +1867,10 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
   /* Platina (90–99): ciano cromado. Corpo ciano profundo (texto branco legível), moldura ciano com branco gelo, brilho ciano nas bordas, reflexos cromados */
   --c1: #0A8BA2; --c2: #03303A; --tx: #FFFFFF; --num: #E8FFFF; --ln: rgba(185, 255, 255, 0.4);
   --bgm: radial-gradient(ellipse 85% 42% at 50% 8%, rgba(185, 255, 255, 0.38) 0%, transparent 62%), linear-gradient(118deg, transparent 30%, rgba(232, 255, 255, 0.22) 44%, transparent 58%), linear-gradient(160deg, #0A8BA2 0%, #087D91 34%, #04505F 70%, #03303A 100%);
-  --b1: #087D91; --b2: #00D9E8; --b3: #E8FFFF; --bw: 7px; --filete: rgba(232, 255, 255, 0.95); --filete-glow: 0 0 7px rgba(0, 217, 232, 0.85);
-  --sombra: 0 1px 1px rgba(0, 0, 0, 0.45), 0 3px 6px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(0, 217, 232, 0.5), 0 0 30px rgba(0, 217, 232, 0.5), 0 0 64px rgba(0, 175, 203, 0.26), 0 22px 44px rgba(0, 0, 0, 0.45), inset 0 2px 0 rgba(232, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 60, 75, 0.3);
+  --b1: #B8892E; --b2: #F0D78C; --b3: #FFF3C4; --bw: 8px; --filete: rgba(255, 236, 170, 0.95); --filete-glow: 0 0 8px rgba(240, 215, 140, 0.8);
+  --sombra: 0 1px 1px rgba(0, 0, 0, 0.45), 0 3px 6px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(240, 215, 140, 0.55), 0 0 30px rgba(0, 217, 232, 0.5), 0 0 64px rgba(0, 175, 203, 0.26), 0 22px 44px rgba(0, 0, 0, 0.45), inset 0 2px 0 rgba(232, 255, 255, 0.5), inset 0 -2px 0 rgba(0, 60, 75, 0.3);
   --chip: rgba(2, 36, 46, 0.5); --chip-ln: rgba(185, 255, 255, 0.3); --tx-sh: 0 1px 3px rgba(0, 40, 50, 0.65); --tx-rod: #FFFFFF;
-  --foto-b: #B9FFFF; --foto-sh: 0 0 0 3px rgba(0, 217, 232, 0.55), 0 0 0 6px rgba(232, 255, 255, 0.3), 0 0 24px rgba(0, 217, 232, 0.55), inset 0 1.5px 0 rgba(255, 255, 255, 0.65);
+  --foto-b: #F0D78C; --foto-sh: 0 0 0 3px rgba(240, 215, 140, 0.5), 0 0 0 6px rgba(255, 255, 255, 0.25), 0 0 24px rgba(0, 217, 232, 0.55), inset 0 1.5px 0 rgba(255, 255, 255, 0.65);
   --logo: linear-gradient(170deg, #E8FFFF 0%, #00AFCB 50%, #087D91 100%);
   --tex: repeating-linear-gradient(104deg, rgba(232, 255, 255, 0.15) 0 0.7px, transparent 0.7px 2.8px), repeating-linear-gradient(104deg, rgba(0, 60, 75, 0.12) 0 0.5px, transparent 0.5px 4.2px), radial-gradient(circle at 24% 16%, rgba(232, 255, 255, 0.2), transparent 30%);
   --tex-op: 1; --glare: 1;

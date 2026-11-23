@@ -141,7 +141,7 @@
   /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
      As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F2F4F7', '#C6CCD4', '#929BA8'], 'b-90': ['#FFF0B8', '#E0B64F', '#7E5A14'], 'b-platina': ['#E8FFFF', '#00D9E8', '#087D91'], 'b-elite': ['#FFF3C4', '#F0D78C', '#B8892E'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
+  var ORN_PAL = { 'b-80': ['#F2F4F7', '#C6CCD4', '#929BA8'], 'b-90': ['#FFF0B8', '#E0B64F', '#7E5A14'], 'b-platina': ['#FFF3C4', '#F0D78C', '#B8892E'], 'b-elite': ['#FFF3C4', '#F0D78C', '#B8892E'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
   /* Insígnia do TOP 3: [brilho, preenchimento, contorno]. Independe do nível da carta. */
   var COROA = { 1: ['rgba(255,240,166,.9)', '#FFD447', '#7A5300'], 2: ['rgba(235,240,247,.9)', '#D5DBE3', '#5A6472'], 3: ['rgba(240,190,140,.85)', '#CD8B52', '#5E3515'] };
   /* chave da paleta das peças: Platina e Elite usam a geometria do b-90 com paleta própria */

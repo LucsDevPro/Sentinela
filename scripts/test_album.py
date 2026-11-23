@@ -152,7 +152,7 @@ checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
 
 
 checar("Moldura cresce com o nível (Ferro/Aço 3,5px < Bronze 4px < Prata 5px < Ouro 7px < Elite/Lendária 8px) e filete interno a partir da Prata",
-       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--bw:\s*%s" % (n, w), cc, re.S) for n, w in ((r"t-platina", "7px"), (r"t-ferro", "3.5px"), (r"t-aco", "3.5px"), (r"t-bronze", "4px"), (r"t-prata", "5px"), (r"t-elite", "8px"), (r"t-ouro", "7px"), (r"b-100", "8px")))
+       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--bw:\s*%s" % (n, w), cc, re.S) for n, w in ((r"t-platina", "8px"), (r"t-ferro", "3.5px"), (r"t-aco", "3.5px"), (r"t-bronze", "4px"), (r"t-prata", "5px"), (r"t-elite", "8px"), (r"t-ouro", "7px"), (r"b-100", "8px")))
        and "c-filete" in cj and "m.borda === 'b-80'" in cj and ".carta > .c-filete" in cc)
 checar("Textos legíveis por nível: cor do texto, número e rodapé vêm de variáveis do tema (--tx, --num, --tx-rod)",
        all(v in cc for v in ("color: var(--tx)", "-webkit-text-fill-color: var(--num)", "color: var(--tx-rod)")) and len(re.findall(r"--tx-rod:\s*#[0-9A-Fa-f]{6}", cc)) >= 7)
