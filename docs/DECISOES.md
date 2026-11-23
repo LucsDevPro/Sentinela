@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 22/11/2026 (7) — Nível Platina e nova escada de notas
+- Novo nível **Platina** (ciano cromado, `t-platina`), acima do Ouro e sem raios (os raios são só da Lendária/Elite).
+- Faixas: Elite/Lendária ≥100 · Platina 90–99 · Ouro 80–89 · Prata 70–79 · Bronze 60–69 · Aço 30–59 · Ferro <30. Moldura: `b-90` vale de 80 a 99.
+- Motivo: pedido do usuário; o Ferro passa a ser só para notas muito baixas. Código: `Carta.medidas()` (assets/carta.js); testes em test_album e test_cartinhas_navegador.
+
 ## 22/11/2026 (6) — Ouro premium
 - Ouro: folha de ouro com faixa de reflexo diagonal e brilho no topo, moldura mais escura nas bordas (bisel), filete duplo (agora também em Ouro e Elite), aro de foto duplo, número gravado, lâminas laterais com contorno escuro (antes sumiam no corpo dourado). Continua abaixo da Elite (corpo claro, 7px) e distinto da Lendária (corpo preto).
 

@@ -11,7 +11,7 @@ python3 scripts/test_cartinhas_navegador.py png        # só grupos cujo nome co
 ```
 Requisitos: `pip install playwright pillow numpy` + chromium; `ffmpeg/ffprobe` para o vídeo (sem eles, o teste é PULADO, não falha).
 
-## O que cobre (todos os 7 tiers: LENDÁRIA, ELITE, OURO, PRATA, BRONZE, AÇO, FERRO)
+## O que cobre (todos os 8 tiers: LENDÁRIA, ELITE, PLATINA, OURO, PRATA, BRONZE, AÇO, FERRO)
 | Grupo | Verifica |
 |---|---|
 | `tiers` | classes, regra de CSS do tier, medidas coerentes com a nota (faixa de 20 pts, nota sem teto de 100) |

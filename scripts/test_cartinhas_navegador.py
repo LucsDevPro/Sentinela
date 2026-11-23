@@ -39,10 +39,10 @@ CONFIG = {
     "VIDEO_AUDIO_DB_MIN": -45.0,   # o áudio do vídeo não pode ser praticamente mudo (pico, dBFS)
     "VIDEO_FADE_RATIO": 0.6,       # no último 0,15 s o pico precisa cair abaixo de N × o pico geral (fade no fim)
 }
-# Os 7 tiers (o antigo DESTAQUE virou OURO + insígnia TOP, 22/11/2026). «caso» = (nota, posição no mês de 20 agentes). Se um tier novo surgir, acrescente aqui.
+# Os 8 tiers (Platina 90–99 entrou em 22/11/2026; Ferro < 30) (o antigo DESTAQUE virou OURO + insígnia TOP, 22/11/2026). «caso» = (nota, posição no mês de 20 agentes). Se um tier novo surgir, acrescente aqui.
 TIERS = [
-    ("LENDÁRIA", "b-100", 105, 1), ("ELITE", "t-elite b-90 n100", 104, 8), ("OURO", "b-90", 93, 9),
-    ("PRATA", "t-prata b-80", 85, 10), ("BRONZE", "t-bronze b-70", 75, 11), ("AÇO", "t-aco b-60", 65, 12), ("FERRO", "t-ferro b-0", 40, 19),
+    ("LENDÁRIA", "b-100", 105, 1), ("ELITE", "t-elite b-90 n100", 104, 8), ("PLATINA", "t-platina b-90", 94, 9),
+    ("OURO", "t-ouro b-90", 85, 10), ("PRATA", "t-prata b-80", 75, 11), ("BRONZE", "t-bronze b-70", 65, 12), ("AÇO", "t-aco b-60", 45, 13), ("FERRO", "t-ferro b-0", 20, 19),
 ]
 PREMIUM = {"b-100", "b-90"}   # tiers com brilho e animação própria
 ORNAMENTOS = {"b-100", "b-90", "b-80"}   # tiers com peças de moldura (louros, coroa, aletas) = chaves de ORN_PAL em carta.js
@@ -211,7 +211,7 @@ with sync_playwright() as p:
             if "b-100" in marcas:
                 checar(f"{nome}: raios/arcos (c-estrelas) presentes", r["raios"])
         # insígnia TOP 1/2/3: independe do nível (qualquer nível pode ter coroa) e raios só na Lendária
-        for P, pos, esperado in ((105, 1, "LENDÁRIA"), (105, 3, "LENDÁRIA"), (93, 2, "OURO"), (85, 3, "PRATA"), (40, 1, "FERRO"), (62, 2, "AÇO"), (104, 8, "ELITE"), (93, 9, "OURO")):
+        for P, pos, esperado in ((105, 1, "LENDÁRIA"), (105, 3, "LENDÁRIA"), (94, 2, "PLATINA"), (85, 2, "OURO"), (75, 3, "PRATA"), (65, 3, "BRONZE"), (20, 1, "FERRO"), (45, 2, "AÇO"), (104, 8, "ELITE"), (94, 9, "PLATINA"), (85, 9, "OURO")):
             cls = pg.evaluate(JS_MONTA, [P, pos, "x"])
             r = pg.evaluate("""() => { const h = document.querySelector('.t-host'); return { coroa: !!h.querySelector('.c-orna-coroa'), raios: !!h.querySelector('.c-estrelas'), rod: h.querySelector('.c-rodape').textContent }; }""")
             top = pos <= 3
@@ -222,7 +222,7 @@ with sync_playwright() as p:
         cc = open(os.path.join(RAIZ, "assets/carta.css"), encoding="utf-8").read()
         for chave in ("b-100", "b-90", "b-80"):
             checar(f"paleta das peças de moldura ({chave}) existe em ORN_PAL e no CSS", re.search(r"'%s':\s*\[" % chave, cj) is not None and (".carta.%s" % chave) in cc)
-        for t in ("t-prata", "t-bronze", "t-aco", "t-ferro"):
+        for t in ("t-platina", "t-ouro", "t-prata", "t-bronze", "t-aco", "t-ferro"):
             checar(f"tier {t} tem regra no CSS", (".carta.%s" % t) in cc)
         pg.context.close()
 

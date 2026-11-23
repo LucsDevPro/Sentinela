@@ -102,7 +102,7 @@ checar("gerar_agentes.py: grava os totais de visitas por mês (panorama)", "def 
 checar("cabeçalho das páginas secundárias tem a mesma largura do conteúdo (álbum 1240, demais 860)",
        "header.topo .marca{max-width:1240px" in ler("assets/album.css") and "header.topo .marca{max-width:860px" in ler("assets/agente.css") and "header.topo .marca{max-width:860px" in ler("assets/comparar.css"))
 checar("moldura premium: peças fora do contorno (conjunto .c-conj, camadas atrás e na frente) na tela e no PNG",
-       ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "'atras', X, Y, S, posTop)" in cj and "'frente', X, Y, S, posTop)" in cj and "ornCanvas(ctx, tier === 't-elite' ? 'b-elite' : borda0" in cj)
+       ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "'atras', X, Y, S, posTop)" in cj and "'frente', X, Y, S, posTop)" in cj and "ornCanvas(ctx, ornChave(tier, borda0)" in cj)
 checar("moldura premium: asas em lâminas no Ouro e na Prata, coroa e gema nos níveis altos", all(x in cj for x in ("function laminas", "laminas(3)", "laminas(2)", "if (posTop)", "coroa: true", "gema: true")))
 checar("álbum: o conjunto (e não só o cartão) ocupa a vaga, para as peças acompanharem escala e inclinação", ".slot .c-conj" in ler("assets/album.css") and "c-conj" in ler("assets/carta_fx.js"))
 # Dashboard: evento do LIRAa, alertas em uma linha, Ausências em painéis, gráfico só mensal, críticos com detalhes
@@ -146,13 +146,13 @@ checar("Lendária: um único anel (sem filete/anel duplicado: o ::before da lend
 checar("Insígnia TOP 1/2/3: coroa por posição (dourada, prateada, bronze) em qualquer nível; o antigo DESTAQUE não existe mais",
        "var COROA = {" in cj and "top: pos3 ? posRank : 0" in cj and "' top' + m.top" in cj and "t-destaque" not in cj and "'DESTAQUE'" not in cj and "b-top" not in cj)
 checar("Todos os níveis seguem as cores do prompt (variáveis em .c-conj .carta.<nível>)",
-       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--b2:\s*#" % n, cc) for n in (r"t-ferro", r"t-aco", r"t-bronze", r"t-prata", r"b-90:not\(\.t-elite\)", r"t-elite", r"b-100")))
+       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--b2:\s*#" % n, cc) for n in (r"t-ferro", r"t-aco", r"t-bronze", r"t-prata", r"t-ouro", r"t-platina", r"t-elite", r"b-100")))
 checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
        re.search(r"'b-100':\s*\[(?:'#[0-9A-Fa-f]{3,8}',?\s*){3}\]", cj) is not None and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
 
 checar("Moldura cresce com o nível (Ferro/Aço 3,5px < Bronze 4px < Prata 5px < Ouro 7px < Elite/Lendária 8px) e filete interno a partir da Prata",
-       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--bw:\s*%s" % (n, w), cc, re.S) for n, w in ((r"t-ferro", "3.5px"), (r"t-aco", "3.5px"), (r"t-bronze", "4px"), (r"t-prata", "5px"), (r"t-elite", "8px"), (r"b-90:not\(\.t-elite\)", "7px"), (r"b-100", "8px")))
+       all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--bw:\s*%s" % (n, w), cc, re.S) for n, w in ((r"t-platina", "7px"), (r"t-ferro", "3.5px"), (r"t-aco", "3.5px"), (r"t-bronze", "4px"), (r"t-prata", "5px"), (r"t-elite", "8px"), (r"t-ouro", "7px"), (r"b-100", "8px")))
        and "c-filete" in cj and "m.borda === 'b-80'" in cj and ".carta > .c-filete" in cc)
 checar("Textos legíveis por nível: cor do texto, número e rodapé vêm de variáveis do tema (--tx, --num, --tx-rod)",
        all(v in cc for v in ("color: var(--tx)", "-webkit-text-fill-color: var(--num)", "color: var(--tx-rod)")) and len(re.findall(r"--tx-rod:\s*#[0-9A-Fa-f]{6}", cc)) >= 7)

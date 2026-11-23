@@ -39,11 +39,12 @@ with sync_playwright() as p:
     ass = round(ult["trab"] / ult["esp"] * 100) if ult["esp"] else 0
     checar("ASS = dias trabalhados ÷ esperados", vals[0] == min(99, ass), f"{vals[0]} x {ass}")
     cls = pg.get_attribute(".carta", "class")
-    esperado = "" if ult["pontos"] >= 90 else "t-prata" if ult["pontos"] >= 75 else "t-bronze"
-    checar("nível do cartão segue a nota", (esperado in cls) if esperado else not re.search(r"t-(prata|bronze)", cls), cls)
+    pr = round(ult["pontos"])
+    esperado = "t-platina" if pr >= 90 else "t-ouro" if pr >= 80 else "t-prata" if pr >= 70 else "t-bronze" if pr >= 60 else "t-aco" if pr >= 30 else "t-ferro"
+    checar("nível do cartão segue a nota", esperado in cls.split() or pr >= 100, cls)
     # mesma regra de assets/carta.js: top 3 com 100 = b-100 (LENDÁRIA); top 3 com 90-99 = OURO com a insígnia da posição (sem nível DESTAQUE); demais 90+ = b-90 (OURO, inclusive quem tem 100 fora do top 3)
     r0 = round(ult["pontos"]); top3 = ult["pos"] <= 3
-    b_esp = "b-100" if r0 >= 100 and top3 else "b-90" if r0 >= 90 else "b-80" if r0 >= 80 else "b-70" if r0 >= 70 else "b-60" if r0 >= 60 else "b-0"
+    b_esp = "b-100" if r0 >= 100 and top3 else "b-90" if r0 >= 80 else "b-80" if r0 >= 70 else "b-70" if r0 >= 60 else "b-60" if r0 >= 30 else "b-0"
     checar("borda do cartão segue a faixa da nota (b-100 só no top 3)", b_esp in cls.split(), f"esperado {b_esp}, veio: {cls}")
     checar("tem texto alternativo", "Cartão de" in pg.get_attribute(".carta", "aria-label"))
     n_li = pg.locator(".tl > li").count()

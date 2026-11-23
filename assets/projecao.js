@@ -104,7 +104,7 @@ if(mesesPano.length){
       var w=duas(el),eqs=Object.keys(p.equipes||{});
       new Chart(canvasEm(w),{type:'bar',data:{labels:eqs,datasets:[{casas:0,data:eqs.map(function(e){return p.equipes[e].visitas;}),backgroundColor:eqs.map(function(e,i){return PAL[i%PAL.length];}),borderRadius:6}]},
         options:opcoes({plugins:{legend:{display:false},title:{display:true,text:'Visitas por equipe',color:cor('--text'),font:{size:20}}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:18}}},{beginAtZero:true,ticks:{color:cor('--text2'),font:{size:16},callback:function(v){return br(v);}}})}),plugins:[plugInt()]});
-      var N=[['OURO 90+',90,1000,'#F7B500'],['PRATA 80-89',80,90,'#9DB2D0'],['BRONZE 70-79',70,80,'#C98A4B'],['AÇO 60-69',60,70,'#6F8F8A'],['FERRO <60',-1,60,'#8A8F98']];
+      var N=[['PLATINA 90+',90,1000,'#00D9E8'],['OURO 80-89',80,90,'#E0B64F'],['PRATA 70-79',70,80,'#B9C2CE'],['BRONZE 60-69',60,70,'#B87545'],['AÇO 30-59',30,60,'#64748B'],['FERRO <30',-1,30,'#6B6560']];
       var nv=notasDo(m).map(Math.round);
       new Chart(canvasEm(w),{type:'bar',data:{labels:N.map(function(x){return x[0];}),datasets:[{casas:0,data:N.map(function(x){return nv.filter(function(v){return v>=x[1]&&v<x[2];}).length;}),backgroundColor:N.map(function(x){return x[3];}),borderRadius:6}]},
         options:opcoes({plugins:{legend:{display:false},title:{display:true,text:'Agentes por nível',color:cor('--text'),font:{size:20}}},scales:eixos({grid:{display:false},ticks:{color:cor('--text'),font:{size:15}}},{beginAtZero:true,ticks:{precision:0,color:cor('--text2'),font:{size:16}}})}),plugins:[plugInt()]});

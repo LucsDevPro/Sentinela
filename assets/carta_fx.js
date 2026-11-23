@@ -66,7 +66,7 @@
   }
 
   /* ---- partículas (WAAPI: nada fica no DOM depois) ---- */
-  var COR = { 'b-100': ['#FFD447', '#FFFBEA', '#D6A638'], 'b-90': ['#F2C94C', '#F8DE85'] };
+  var COR = { 'b-100': ['#FFD447', '#FFFBEA', '#D6A638'], 'b-90': ['#F2C94C', '#F8DE85'], 'b-platina': ['#00D9E8', '#E8FFFF', '#B9FFFF'], 'b-elite': ['#C084FC', '#F3E8FF', '#F0D78C'] };
   function particulas(ancora, borda, n) {
     var cores = COR[borda]; if (!cores || reduz() || !ancora.animate) return;
     var wrap = document.createElement('div'); wrap.className = 'c-particulas';
@@ -106,7 +106,8 @@
   /* ---- revelação (modo reunião): a carta chega num pacote que treme, vira e solta um clarão ---- */
   function revelar(carta) {
     if (reduz() || !carta || !carta.animate) return;
-    var conj = carta.closest('.c-conj') || carta, pai = conj.parentNode, borda = (carta.className.match(/b-(?:\d+|top)/) || [''])[0];
+    var conj = carta.closest('.c-conj') || carta, pai = conj.parentNode, borda = (carta.className.match(/b-\d+/) || [''])[0];
+    if (borda === 'b-90') borda = carta.classList.contains('t-platina') ? 'b-platina' : carta.classList.contains('t-elite') ? 'b-elite' : borda;
     var capa = document.createElement('div'); capa.className = 'c-pacote'; capa.innerHTML = '<div>SENTINELA<small>CARTINHA</small></div>';
     conj.classList.add('c-oculta'); conj.appendChild(capa);   // a capa mora dentro do conjunto: herda a escala e cobre só a carta
     var persp = 'perspective(900px) ';
@@ -117,7 +118,7 @@
         if (capa.parentNode) capa.parentNode.removeChild(capa);
         conj.classList.remove('c-oculta');
         carta.animate([{ transform: persp + 'rotateY(-90deg)', filter: 'brightness(2.4)' }, { transform: persp + 'rotateY(0)', filter: 'brightness(1.6)', offset: .6 }, { transform: persp + 'rotateY(0)', filter: 'brightness(1)' }], { duration: 520, easing: 'cubic-bezier(.2,.9,.3,1)' });
-        particulas(pai, borda, borda === 'b-100' ? 48 : borda === 'b-90' ? 22 : 14);
+        particulas(pai, borda, borda === 'b-100' ? 48 : /^b-(90|platina|elite)$/.test(borda) ? 22 : 14);
       };
     };
   }
