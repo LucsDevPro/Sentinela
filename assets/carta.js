@@ -129,7 +129,7 @@
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF0A6', '#FFD447', '#B8861F'], '': ['#F8DE85', '#B88A25', '#6E4C0E'], 't-prata': ['#F2F4F7', '#929BA8', '#4A5260'], 't-bronze': ['#DDA477', '#8C512F', '#4A2410'], 't-aco': ['#B8C4D6', '#64748B', '#2B3544'], 't-ferro': ['#B5AEA8', '#6B6560', '#2E2A27'], 't-elite': ['#F0DDFF', '#B77CF5', '#6B21A8'] };
+  var LOGO = { 'b-100': ['#FFF0A6', '#FFD447', '#B8861F'], '': ['#F3DC9A', '#A87B22', '#6E4C0E'], 't-prata': ['#F2F4F7', '#929BA8', '#4A5260'], 't-bronze': ['#C98B5E', '#6E3C1F', '#3E200E'], 't-aco': ['#C9D6E6', '#566880', '#2B3544'], 't-ferro': ['#B5AEA8', '#6B6560', '#2E2A27'], 't-elite': ['#FFF3C4', '#E0B85A', '#8A6516'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -141,7 +141,7 @@
   /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
      As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F2F4F7', '#C6CCD4', '#929BA8'], 'b-90': ['#F8DE85', '#E6B93D', '#B88A25'], 'b-elite': ['#D8B4FE', '#9333EA', '#7E22CE'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
+  var ORN_PAL = { 'b-80': ['#F2F4F7', '#C6CCD4', '#929BA8'], 'b-90': ['#F3DC9A', '#D9AE4A', '#A87B22'], 'b-elite': ['#FFF3C4', '#F0D78C', '#B8892E'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
   /* Insígnia do TOP 3: [brilho, preenchimento, contorno]. Independe do nível da carta. */
   var COROA = { 1: ['rgba(255,240,166,.9)', '#FFD447', '#7A5300'], 2: ['rgba(235,240,247,.9)', '#D5DBE3', '#5A6472'], 3: ['rgba(240,190,140,.85)', '#CD8B52', '#5E3515'] };
   function ornPecas(borda, posTop) {
@@ -166,7 +166,7 @@
       frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true, cor: posTop });
     }
     if (ORN_PAL[borda]) frente.push({ t: 'poly', pts: [[116, 383], [156, 383], [147, 396], [136, 411], [125, 396]], gema: true }); // gema embaixo
-    if (borda0El) atras = [];   // Elite: sem os louros laterais (a borda que saía do cartão); ficam coroa e gema
+    // Elite: leva as mesmas lâminas do Ouro (borda já virou 'b-90' acima), agora em champanhe
     return { atras: atras, frente: frente, pal: palOrig, top: posTop };
   }
   function ornSVG(borda, camada, posTop) {

@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 22/11/2026 (5) — paleta harmonizada (opção A «Joalheria») e Elite premium
+- Bronze cobre mais fechado (#C98B5E→#6E3C1F, texto claro para manter o contraste), Aço ardósia (#6A7C93→#2F3B4D), Ouro champanhe (#F3DC9A→#A87B22). Prata, Ferro e Lendária mantidos.
+- Elite: corpo ametista profundo (#6D28D9→#1E0A45), moldura champanhe de 8px com filete luminoso, textura de cristal facetado, lâminas laterais champanhe (como o Ouro), gema champanhe e raios suaves violeta. Ideia: a Elite herda o dourado de prestígio e fica um degrau acima do Ouro (100 pontos não é fácil).
+
 ## 22/11/2026 (4) — «Sala de Troféus» / «Álbum» passam a se chamar «Hall da Glória»
 - Texto visível renomeado: título e cabeçalho da página, botão do cabeçalho de todas as páginas (inclusive a inicial), links na página do agente e botões «← Hall da Glória» (Resumo e Pesos). O arquivo continua `album.html` e o código/ids continuam `album` (links e favoritos antigos seguem funcionando).
 
