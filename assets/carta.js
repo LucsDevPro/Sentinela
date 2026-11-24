@@ -256,14 +256,6 @@
       ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.30)'; ctx.shadowBlur = 28 * S; ctx.shadowOffsetY = 10 * S; pathCartao(ctx, X, Y, W, H, S); ctx.fillStyle = c2; ctx.fill(); ctx.restore();
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
-      /* Lendária, Elite e Platina (assets/carta_pizarro.css): painel escuro na cor da raridade + faixa dourada a partir de 55% da altura */
-      var PAINEL = is100 ? ['#2A1C08', '#160E04', '#080502'] : posTop && tier === 't-elite' ? ['#4C1D95', '#2E0F5C', '#160630'] : posTop && tier === 't-platina' ? ['#087D91', '#04505F', '#022E38'] : null;
-      if (PAINEL) {
-        var gp = gradCss(ctx, 160, X, Y, W, H, PAINEL[0], PAINEL[2]); gp.addColorStop(.45, PAINEL[1]); ctx.fillStyle = gp; ctx.fillRect(X, Y, W, H);
-        var gf = ctx.createLinearGradient(0, Y, 0, Y + H);
-        [[.545, 'rgba(255,224,150,0)'], [.55, 'rgba(255,224,150,.85)'], [.565, 'rgba(255,224,150,.85)'], [.57, '#B8861F'], [.585, '#B8861F'], [.61, '#FFE070'], [.68, '#FFE070'], [.78, '#F0C040'], [.9, '#C99A24'], [1, '#6A4810']].forEach(function (q) { gf.addColorStop(q[0], q[1]); });
-        ctx.fillStyle = gf; ctx.fillRect(X, Y, W, H);
-      }
       var fr100 = is100 ? (function () { var b = card.querySelector('.c-foto').getBoundingClientRect(); return { cx: X + (b.left - cr.left + b.width / 2) * S, cy: Y + (b.top - cr.top + b.height / 2) * S }; })() : null;
       if (tier === 't-elite') raiosPNG(ctx, X, Y, W, H, S, PRAIO['elite']);   // raios suaves da Elite (igual ao CSS)
       if (is100) {

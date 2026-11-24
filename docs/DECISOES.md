@@ -1,5 +1,8 @@
 # Registro de decisões (mais recente primeiro)
 
+## 24/11/2026 (4) — Faixa dourada removida
+- A faixa «Icon gold» (carta_pizarro.css) foi retirada de todas as cartas, inclusive do pódio, a pedido do usuário; o arquivo foi apagado e o plano B do PNG voltou ao corpo simples. Vale o que está em (3) só como histórico.
+
 ## 24/11/2026 (3) — Faixa dourada estilo «Icon gold» (carta_pizarro.css, adaptado)
 - Lendária, Elite e Platina (as duas últimas só no pódio, ajuste de 24/11) ganham painel superior escuro (cor da raridade) + faixa dourada metálica a partir de 55% da altura, com texto escuro (nome, medidas, rodapé) e foto com moldura entalhada. Arquivo `assets/carta_pizarro.css`, carregado entre `carta_raridade.css` e `carta_forma.css`.
 - Do arquivo do programador NÃO entrou a silhueta em escudo (a nossa é a «Brasão» de carta_forma.css, que também vale no PNG) nem o glow. A faixa começa em 55% (no original 44%, que cortava a foto).

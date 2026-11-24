@@ -86,8 +86,8 @@ checar("carta.css: cartão e anel da borda são retângulo arredondado (--radius
 checar("formato Brasão (24/11/2026): o PNG desenha o mesmo polígono do CSS (FORMA_TOPO/FORMA_BASE iguais ao gerador) e carta_forma.css está em dia",
        "var FORMA_TOPO = 30, FORMA_BASE = 26;" in cj and "function formaPts" in cj and "ctx.roundRect" not in cj and "TOPO = 30 " in ler("scripts/gerar_forma_carta.py") and "BASE = 26 " in ler("scripts/gerar_forma_carta.py")
        and __import__("subprocess").run([sys.executable, os.path.join(RAIZ, "scripts/gerar_forma_carta.py"), "--check"], capture_output=True).returncode == 0)
-checar("formato Brasão: as 3 páginas com cartas carregam carta_raridade.css, carta_pizarro.css e carta_forma.css nessa ordem",
-       all("carta_raridade.css\"><link rel=\"stylesheet\" href=\"assets/carta_pizarro.css\"><link rel=\"stylesheet\" href=\"assets/carta_forma.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html")))
+checar("formato Brasão: as 3 páginas com cartas carregam carta_raridade.css e carta_forma.css nessa ordem",
+       all("carta_raridade.css\"><link rel=\"stylesheet\" href=\"assets/carta_forma.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html")))
 # Clique na cartinha abre a evolução do agente; "Melhor do ano" = média de todos os meses
 aj2 = ler("assets/album.js")
 checar("carta.js: clicar na cartinha abre a evolução do agente (link do álbum ou agente.html?id=&mes=)",
