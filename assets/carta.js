@@ -257,7 +257,7 @@
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
       /* Lendária, Elite e Platina (assets/carta_pizarro.css): painel escuro na cor da raridade + faixa dourada a partir de 55% da altura */
-      var PAINEL = is100 ? ['#2A1C08', '#160E04', '#080502'] : tier === 't-elite' ? ['#4C1D95', '#2E0F5C', '#160630'] : tier === 't-platina' ? ['#087D91', '#04505F', '#022E38'] : null;
+      var PAINEL = is100 ? ['#2A1C08', '#160E04', '#080502'] : posTop && tier === 't-elite' ? ['#4C1D95', '#2E0F5C', '#160630'] : posTop && tier === 't-platina' ? ['#087D91', '#04505F', '#022E38'] : null;
       if (PAINEL) {
         var gp = gradCss(ctx, 160, X, Y, W, H, PAINEL[0], PAINEL[2]); gp.addColorStop(.45, PAINEL[1]); ctx.fillStyle = gp; ctx.fillRect(X, Y, W, H);
         var gf = ctx.createLinearGradient(0, Y, 0, Y + H);

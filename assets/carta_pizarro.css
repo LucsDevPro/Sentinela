@@ -2,6 +2,7 @@
    carta_pizarro.css — adaptado do carta_pizarro.css v2 do programador (24/11/2026).
    Carregar DEPOIS de carta_raridade.css e ANTES de carta_forma.css.
 
+   Só no PÓDIO (TOP 1/2/3), por pedido do usuário (24/11/2026): a Lendária é sempre pódio; Elite e Platina só quando estão entre os 3 primeiros.
    Traz o visual do card FUT «Icon gold» (referência Pizarro.png) para os níveis de topo
    (Lendária, Elite, Platina): painel superior ESCURO na cor da raridade + FAIXA INFERIOR DOURADA metálica
    atrás do nome, das medidas e do rodapé, com texto escuro sobre o ouro.
@@ -12,7 +13,7 @@
    ===================================================================== */
 
 /* ---------- 1. FUNDO: painel escuro (raridade) + faixa dourada ---------- */
-.c-conj .carta.b-100, .c-conj .carta.t-elite, .c-conj .carta.t-platina {
+.c-conj .carta.b-100, .c-conj .carta.t-elite:is(.top1, .top2, .top3), .c-conj .carta.t-platina:is(.top1, .top2, .top3) {
   --faixa:
     repeating-linear-gradient(90deg, rgba(255, 255, 255, .09) 0 1px, transparent 1px 4px) 0 55% / 100% 45%,
     linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .24) 45%, transparent 60%) 0 55% / 100% 45%,
@@ -23,29 +24,29 @@
 .c-conj .carta.b-100 {
   --bgm: var(--faixa), radial-gradient(ellipse 80% 40% at 50% 20%, rgba(255, 212, 71, .34) 0%, transparent 60%), linear-gradient(160deg, #2A1C08 0%, #160E04 45%, #080502 100%);
 }
-.c-conj .carta.t-elite {
+.c-conj .carta.t-elite:is(.top1, .top2, .top3) {
   --bgm: var(--faixa), radial-gradient(ellipse 75% 40% at 50% 14%, rgba(196, 160, 255, .4) 0%, transparent 58%), linear-gradient(160deg, #4C1D95 0%, #2E0F5C 45%, #160630 100%);
 }
-.c-conj .carta.t-platina {
+.c-conj .carta.t-platina:is(.top1, .top2, .top3) {
   --bgm: var(--faixa), radial-gradient(ellipse 85% 40% at 50% 8%, rgba(185, 255, 255, .42) 0%, transparent 62%), linear-gradient(160deg, #087D91 0%, #04505F 50%, #022E38 100%);
 }
 
 /* ---------- 2. FOTO: moldura entalhada (filete claro + sombra interna), sem halo difuso ---------- */
-.c-conj .carta.b-100 .c-foto, .c-conj .carta.t-elite .c-foto, .c-conj .carta.t-platina .c-foto {
+.c-conj .carta.b-100 .c-foto, .c-conj .carta.t-elite:is(.top1, .top2, .top3) .c-foto, .c-conj .carta.t-platina:is(.top1, .top2, .top3) .c-foto {
   border-color: var(--b2);
   box-shadow: 0 0 0 2px var(--filete, rgba(255, 240, 166, .95)), inset 0 0 0 1px rgba(0, 0, 0, .45), inset 0 1.5px 0 rgba(255, 255, 255, .55), inset 0 -1.5px 0 rgba(0, 0, 0, .25), 0 4px 10px rgba(0, 0, 0, .45);
 }
 
 /* ---------- 3. TEXTO ESCURO sobre a faixa dourada (nome, medidas, rodapé); nota e posição continuam claras no painel escuro ---------- */
-.c-conj .carta.carta.b-100 .c-nome, .c-conj .carta.carta.t-elite .c-nome, .c-conj .carta.carta.t-platina .c-nome {
+.c-conj .carta.carta.b-100 .c-nome, .c-conj .carta.carta.t-elite:is(.top1, .top2, .top3) .c-nome, .c-conj .carta.carta.t-platina:is(.top1, .top2, .top3) .c-nome {
   color: #2A1C04; text-shadow: 0 1px 0 rgba(255, 243, 196, .55); border-bottom-color: rgba(42, 28, 4, .32);
 }
-.c-conj .carta.carta.b-100 .c-stats b, .c-conj .carta.carta.t-elite .c-stats b, .c-conj .carta.carta.t-platina .c-stats b {
+.c-conj .carta.carta.b-100 .c-stats b, .c-conj .carta.carta.t-elite:is(.top1, .top2, .top3) .c-stats b, .c-conj .carta.carta.t-platina:is(.top1, .top2, .top3) .c-stats b {
   color: #241703; text-shadow: 0 1px 0 rgba(255, 243, 196, .5);
 }
-.c-conj .carta.carta.b-100 .c-stats span, .c-conj .carta.carta.t-elite .c-stats span, .c-conj .carta.carta.t-platina .c-stats span {
+.c-conj .carta.carta.b-100 .c-stats span, .c-conj .carta.carta.t-elite:is(.top1, .top2, .top3) .c-stats span, .c-conj .carta.carta.t-platina:is(.top1, .top2, .top3) .c-stats span {
   color: #5A4012; opacity: 1; text-shadow: none;
 }
-.c-conj .carta.carta.b-100 .c-rodape, .c-conj .carta.carta.t-elite .c-rodape, .c-conj .carta.carta.t-platina .c-rodape {
+.c-conj .carta.carta.b-100 .c-rodape, .c-conj .carta.carta.t-elite:is(.top1, .top2, .top3) .c-rodape, .c-conj .carta.carta.t-platina:is(.top1, .top2, .top3) .c-rodape {
   color: #1A1203; text-shadow: 0 1px 0 rgba(255, 243, 196, .5); border-top: 1px solid rgba(120, 80, 10, .35); background: none; box-shadow: none;
 }
