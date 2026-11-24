@@ -161,13 +161,11 @@
         atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
       }
     }
-    if (borda === 'b-80') laminas(2);
-    if (borda === 'b-90') laminas(3);
+    /* Formato «Brasão» (24/11/2026): sem asas laterais nem gema; só a coroa do TOP 3. As lâminas ficam definidas, mas não são usadas. */
     /* Top 3: sem asas nem cristais laterais (poluíam o visual). Só coroa + gema. */
     if (posTop) { // insígnia do TOP 3 (qualquer nível): coroa saindo pelo alto — campeão (dourada), vice (prateada) e 3º (bronze)
       frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true, cor: posTop });
     }
-    if (ORN_PAL[borda]) frente.push({ t: 'poly', pts: [[116, 383], [156, 383], [147, 396], [136, 411], [125, 396]], gema: true }); // gema embaixo
     // Elite: leva as mesmas lâminas do Ouro (borda já virou 'b-90' acima), agora em champanhe
     return { atras: atras, frente: frente, pal: palOrig, top: posTop };
   }
@@ -220,17 +218,20 @@
       ctx.strokeStyle = P.arcoFil; ctx.lineWidth = 1.1; ctx.stroke(pa); });
     ctx.restore();
   }
-  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // retângulo arredondado (raio FORMA_R); d = recuo do anel
+  /* Silhueta «Brasão»: ombros cortados + base em V suave. Mesma geometria de scripts/gerar_forma_carta.py (TOPO/BASE), que gera o CSS. */
+  var FORMA_TOPO = 30, FORMA_BASE = 26;
+  function formaPts(d) { // polígono no espaço 272x392, recuado d px para dentro (convexo, sentido horário)
+    var P = [[FORMA_TOPO, 0], [272 - FORMA_TOPO, 0], [272, FORMA_TOPO], [272, 392 - FORMA_BASE], [136, 392], [0, 392 - FORMA_BASE], [0, FORMA_TOPO]], n = P.length, R = [], i, O = [];
+    if (!d) return P;
+    for (i = 0; i < n; i++) { var a = P[i], b = P[(i + 1) % n], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy); R.push([a[0] - dy / l * d, a[1] + dx / l * d, dx, dy]); }
+    for (i = 0; i < n; i++) { var p = R[(i + n - 1) % n], q = R[i], den = p[2] * q[3] - p[3] * q[2], t = ((q[0] - p[0]) * q[3] - (q[1] - p[1]) * q[2]) / den; O.push([p[0] + p[2] * t, p[1] + p[3] * t]); }
+    return O;
+  }
+  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // contorno do cartão; d = recuo (px do canvas): a chamada passa o retângulo já recuado e d, que o devolve ao tamanho cheio
     d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d;
-    var r = Math.max(2, (FORMA_R * S) - d * 0.35);
     if (!continuar) ctx.beginPath();
-    if (typeof ctx.roundRect === 'function') { ctx.roundRect(x, y, w, h, r); }
-    else {
-      ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
-    }
+    formaPts(d / S).forEach(function (q, i) { var px = x + q[0] * w / 272, py = y + q[1] * h / 392; if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py); });
+    ctx.closePath();
   }
   function texto(ctx, txt, x, y, ls) { // letra a letra, para respeitar o espaçamento entre letras em qualquer navegador
     if (!ls) { ctx.fillText(txt, x, y); return; }

@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 24/11/2026 (2) — Formato «Brasão» das cartinhas (sem asas)
+- O retângulo arredondado saiu: silhueta com ombros cortados (30 px) e base em V suave (26 px). Gerada por `scripts/gerar_forma_carta.py` → `assets/carta_forma.css` (carregar depois de `carta_raridade.css`); o PNG em canvas usa a mesma geometria (`formaPts`, `FORMA_TOPO/FORMA_BASE` em carta.js; test_album confere que o CSS está em dia).
+- Sem asas laterais e sem gema (pedido do usuário); a coroa do TOP 3 continua. Foto 100 px (era 112) para o rodapé não ser cortado pelo V.
+- Brilho externo saiu do box-shadow (cortado pelo recorte) e virou drop-shadow no `.c-conj`. O bezel interno da carta_raridade.css foi desligado (era rectangular).
+- Reverte a decisão de 19/11 (retângulo arredondado, antes era escudo de cantos cortados); testes de raio trocados por checagem do polígono.
+
 ## 24/11/2026 — Visual por raridade (assets/carta_raridade.css, do programador)
 - Novo override carregado depois de `carta.css` (album, agente, projecao): cor-assinatura `--raridade` por nível pinta moldura, aura, anel da foto, holo e raios; moldura bisotada estilo FIFA; holo rotativo na foto (some no PNG/impressão).
 - Substitui a moldura champagne da Platina/Elite (22/11 (7)) pela cor do próprio nível; `ORN_PAL` de Elite/Platina acompanha (asas/coroa).

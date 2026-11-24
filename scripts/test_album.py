@@ -83,8 +83,11 @@ checar("carta.js: o link do popup inclui o mês da cartinha (&mes=u.mes)",
 cc = ler("assets/carta.css")
 checar("carta.css: cartão e anel da borda são retângulo arredondado (--radius 18px, sem clip-path em polígono)",
        "--radius: 18px" in cc and "border-radius: var(--radius)" in cc and "clip-path: polygon(" not in cc.split("/* ---- Janela")[0])
-checar("carta.js: o PNG desenha o mesmo retângulo arredondado (FORMA_R = 18)",
-       "var FORMA_R = 18;" in cj and "ctx.roundRect" in cj and "var FORMA = [[" not in cj)
+checar("formato Brasão (24/11/2026): o PNG desenha o mesmo polígono do CSS (FORMA_TOPO/FORMA_BASE iguais ao gerador) e carta_forma.css está em dia",
+       "var FORMA_TOPO = 30, FORMA_BASE = 26;" in cj and "function formaPts" in cj and "ctx.roundRect" not in cj and "TOPO = 30 " in ler("scripts/gerar_forma_carta.py") and "BASE = 26 " in ler("scripts/gerar_forma_carta.py")
+       and __import__("subprocess").run([sys.executable, os.path.join(RAIZ, "scripts/gerar_forma_carta.py"), "--check"], capture_output=True).returncode == 0)
+checar("formato Brasão: as 3 páginas com cartas carregam carta_forma.css depois de carta_raridade.css",
+       all("carta_raridade.css\"><link rel=\"stylesheet\" href=\"assets/carta_forma.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html")))
 # Clique na cartinha abre a evolução do agente; "Melhor do ano" = média de todos os meses
 aj2 = ler("assets/album.js")
 checar("carta.js: clicar na cartinha abre a evolução do agente (link do álbum ou agente.html?id=&mes=)",
@@ -103,7 +106,7 @@ checar("cabeçalho das páginas secundárias tem a mesma largura do conteúdo (�
        "header.topo .marca{max-width:1240px" in ler("assets/album.css") and "header.topo .marca{max-width:860px" in ler("assets/agente.css") and "header.topo .marca{max-width:860px" in ler("assets/comparar.css"))
 checar("moldura premium: peças fora do contorno (conjunto .c-conj, camadas atrás e na frente) na tela e no PNG",
        ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "'atras', X, Y, S, posTop)" in cj and "'frente', X, Y, S, posTop)" in cj and "ornCanvas(ctx, ornChave(tier, borda0)" in cj)
-checar("moldura premium: asas em lâminas no Ouro e na Prata, coroa e gema nos níveis altos", all(x in cj for x in ("function laminas", "laminas(3)", "laminas(2)", "if (posTop)", "coroa: true", "gema: true")))
+checar("moldura premium: sem asas nem gema no formato Brasão; a coroa do TOP 3 continua", all(x in cj for x in ("if (posTop)", "coroa: true")) and "laminas(3);" not in cj and "gema: true" not in cj)
 checar("álbum: o conjunto (e não só o cartão) ocupa a vaga, para as peças acompanharem escala e inclinação", ".slot .c-conj" in ler("assets/album.css") and "c-conj" in ler("assets/carta_fx.js"))
 # Dashboard: evento do LIRAa, alertas em uma linha, Ausências em painéis, gráfico só mensal, críticos com detalhes
 import json as _json

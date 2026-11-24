@@ -45,7 +45,7 @@ TIERS = [
     ("OURO", "t-ouro b-90", 85, 10), ("PRATA", "t-prata b-80", 75, 11), ("BRONZE", "t-bronze b-70", 65, 12), ("AÇO", "t-aco b-60", 45, 13), ("FERRO", "t-ferro b-0", 20, 19),
 ]
 PREMIUM = {"b-100", "b-90"}   # tiers com brilho e animação própria
-ORNAMENTOS = {"b-100", "b-90", "b-80"}   # tiers com peças de moldura (louros, coroa, aletas) = chaves de ORN_PAL em carta.js
+ORNAMENTOS = set()   # formato Brasão (24/11/2026): sem asas/gema; a coroa só aparece no TOP 3 (testada na seção «insígnia TOP»)
 # ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 FALHAS, PULADOS = [], []
@@ -157,7 +157,7 @@ with sync_playwright() as p:
     if quer("cores") or quer("bordas") or quer("tipografia") or quer("efeitos"):
         print("\n== 2. cores, bordas, tipografia e efeitos ==")
         pg = pagina()
-        raio_png = re.search(r"var FORMA_R = (\d+);", open(os.path.join(RAIZ, "assets/carta.js"), encoding="utf-8").read())
+        raio_png = None
         for nome, marcas, P, pos in TIERS:
             pg.evaluate(JS_MONTA, [P, pos, "x"])
             r = pg.evaluate("""() => { const c = document.querySelector('.t-host .carta'), cs = getComputedStyle(c);
@@ -168,7 +168,7 @@ with sync_playwright() as p:
               const el = s => c.querySelector(s), cor = s => el(s) ? getComputedStyle(el(s)).color : null, fs = s => el(s) ? parseFloat(getComputedStyle(el(s)).fontSize) : null;
               const fam = s => el(s) ? getComputedStyle(el(s)).fontFamily : '';
               const brilho = !!c.querySelector('.c-brilho'), raios = !!c.querySelector('.c-estrelas'), conj = c.closest('.c-conj') || c.parentElement;
-              return { c1: norm(v('--c1')), c2: norm(v('--c2')), b1: norm(v('--b1')), b2: norm(v('--b2')), b3: norm(v('--b3')), bw: parseFloat(v('--bw')), raio: parseFloat(getComputedStyle(c).borderTopLeftRadius),
+              return { c1: norm(v('--c1')), c2: norm(v('--c2')), b1: norm(v('--b1')), b2: norm(v('--b2')), b3: norm(v('--b3')), bw: parseFloat(v('--bw')), forma: getComputedStyle(c).clipPath, anel: getComputedStyle(c.querySelector('.c-borda')).clipPath,
                 nota: grad('.c-ovr b'), nome: cor('.c-nome'), rod: cor('.c-rodape'), chip: cor('.c-stats b'),
                 fNota: fs('.c-ovr b'), fNome: fs('.c-nome'), fRod: fs('.c-rodape'), fChip: fs('.c-stats b'), fChipSig: fs('.c-stats span'),
                 famNota: fam('.c-ovr b'), famNome: fam('.c-nome'), famRod: fam('.c-rodape'),
@@ -197,17 +197,15 @@ with sync_playwright() as p:
                 var_b = contraste(rgb_de(r["b1"]), rgb_de(r["b3"]))
                 checar(f"{nome}: a borda tem relevo (b1 × b3 com razão ≥ {CONFIG['CONTRASTE_BORDA_RELEVO']})", var_b >= CONFIG["CONTRASTE_BORDA_RELEVO"], f"{var_b:.2f}")
             checar(f"{nome}: espessura da borda (--bw) entre {CONFIG['BORDA_PX'][0]} e {CONFIG['BORDA_PX'][1]} px", CONFIG["BORDA_PX"][0] <= (r["bw"] or 0) <= CONFIG["BORDA_PX"][1], str(r["bw"]))
-            checar(f"{nome}: raio do cartão entre {CONFIG['RAIO_PX'][0]} e {CONFIG['RAIO_PX'][1]} px", CONFIG["RAIO_PX"][0] <= r["raio"] <= CONFIG["RAIO_PX"][1], str(r["raio"]))
-            if raio_png:
-                checar(f"{nome}: raio do HTML igual ao raio desenhado no PNG (FORMA_R)", abs(r["raio"] - int(raio_png.group(1))) <= 1, f"css={r['raio']} png={raio_png.group(1)}")
+            checar(f"{nome}: formato Brasão — cartão recortado em polígono e anel em path evenodd (carta_forma.css)", r["forma"].startswith("polygon(") and r["anel"].startswith("path("), f"{r['forma'][:30]} | {r['anel'][:30]}")
             menores = {k: r[k] for k in ("fNome", "fRod", "fChip", "fChipSig") if r[k] is not None and r[k] < CONFIG["FONTE_MIN_PX"]}
             checar(f"{nome}: nenhum texto menor que {CONFIG['FONTE_MIN_PX']} px", not menores, str(menores))
             checar(f"{nome}: tipografia usa {' ou '.join(CONFIG['FAMILIAS'])} e as fontes estão carregadas",
                    r["fontesOk"] and all(any(f in r[k] for f in CONFIG["FAMILIAS"]) for k in ("famNota", "famNome", "famRod")), f"{r['famNota']} | {r['famNome']}")
             premium = any(m in PREMIUM for m in marcas.split()); orn = any(m in ORNAMENTOS for m in marcas.split())
             checar(f"{nome}: efeitos {'premium (brilho + sombra + moldura)' if premium else 'sem brilho premium'}",
-                   (r["brilho"] and r["sombra"] and (r["louros"] or r["coroa"])) if premium else True, f"brilho={r['brilho']} sombra={r['sombra']} louros={r['louros']} coroa={r['coroa']}")
-            checar(f"{nome}: peças de moldura {'presentes' if orn else 'ausentes'} (ORN_PAL)", (r["louros"] or r["coroa"]) == orn, f"louros={r['louros']} coroa={r['coroa']}")
+                   (r["brilho"] and r["sombra"]) if premium else True, f"brilho={r['brilho']} sombra={r['sombra']} louros={r['louros']} coroa={r['coroa']}")
+            checar(f"{nome}: peças de moldura {'presentes' if orn else 'ausentes'} (ORN_PAL)", r["louros"] == orn, f"louros={r['louros']} coroa={r['coroa']}")
             if "b-100" in marcas:
                 checar(f"{nome}: raios/arcos (c-estrelas) presentes", r["raios"])
         # insígnia TOP 1/2/3: independe do nível (qualquer nível pode ter coroa) e raios só na Lendária
