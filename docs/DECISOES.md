@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 24/11/2026 (3) — Faixa dourada estilo «Icon gold» (carta_pizarro.css, adaptado)
+- Lendária, Elite e Platina ganham painel superior escuro (cor da raridade) + faixa dourada metálica a partir de 55% da altura, com texto escuro (nome, medidas, rodapé) e foto com moldura entalhada. Arquivo `assets/carta_pizarro.css`, carregado entre `carta_raridade.css` e `carta_forma.css`.
+- Do arquivo do programador NÃO entrou a silhueta em escudo (a nossa é a «Brasão» de carta_forma.css, que também vale no PNG) nem o glow. A faixa começa em 55% (no original 44%, que cortava a foto).
+- O plano B do PNG (canvas) desenha o mesmo painel + faixa (`PAINEL` em carta.js); sem isso o teste «brilho geral parecido» falhava.
+
 ## 24/11/2026 (2) — Formato «Brasão» das cartinhas (sem asas)
 - O retângulo arredondado saiu: silhueta com ombros cortados (30 px) e base em V suave (26 px). Gerada por `scripts/gerar_forma_carta.py` → `assets/carta_forma.css` (carregar depois de `carta_raridade.css`); o PNG em canvas usa a mesma geometria (`formaPts`, `FORMA_TOPO/FORMA_BASE` em carta.js; test_album confere que o CSS está em dia).
 - Sem asas laterais e sem gema (pedido do usuário); a coroa do TOP 3 continua. Foto 100 px (era 112) para o rodapé não ser cortado pelo V.
