@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 24/11/2026 — Visual por raridade (assets/carta_raridade.css, do programador)
+- Novo override carregado depois de `carta.css` (album, agente, projecao): cor-assinatura `--raridade` por nível pinta moldura, aura, anel da foto, holo e raios; moldura bisotada estilo FIFA; holo rotativo na foto (some no PNG/impressão).
+- Substitui a moldura champagne da Platina/Elite (22/11 (7)) pela cor do próprio nível; `ORN_PAL` de Elite/Platina acompanha (asas/coroa).
+- Ajuste meu: holo da foto usa `border-radius: inherit` (foto é quadrado arredondado). Testes inalterados passam.
+
 ## 22/11/2026 (7) — Nível Platina e nova escada de notas
 - Novo nível **Platina** (ciano cromado, `t-platina`), acima do Ouro e sem raios (os raios são só da Lendária/Elite).
 - Faixas: Elite/Lendária ≥100 · Platina 90–99 · Ouro 80–89 · Prata 70–79 · Bronze 60–69 · Aço 30–59 · Ferro <30. Moldura: `b-90` vale de 80 a 99.
