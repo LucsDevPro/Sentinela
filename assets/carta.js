@@ -129,7 +129,7 @@
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
-  var LOGO = { 'b-100': ['#FFF0A6', '#FFD447', '#B8861F'], 't-ouro': ['#F6E3A4', '#A87B22', '#5E410B'], 't-platina': ['#E8FFFF', '#00D9E8', '#087D91'], 't-prata': ['#F2F4F7', '#929BA8', '#4A5260'], 't-bronze': ['#C98B5E', '#6E3C1F', '#3E200E'], 't-aco': ['#C9D6E6', '#566880', '#2B3544'], 't-ferro': ['#B5AEA8', '#6B6560', '#2E2A27'], 't-elite': ['#FFF3C4', '#E0B85A', '#8A6516'] };
+  var LOGO = { 'b-100': ['#FFF0A6', '#FFD447', '#B8861F'], 't-ouro': ['#FFF4C8', '#D4A63A', '#6A4A10'], 't-platina': ['#F0F8FF', '#A0C0D8', '#3A5A72'], 't-prata': ['#F4F8FC', '#8FA6BC', '#3A4E62'], 't-bronze': ['#E8C49A', '#B87545', '#5C3018'], 't-aco': ['#C5D4E4', '#5A6E86', '#1E2A38'], 't-ferro': ['#A8A29E', '#6B6560', '#2A2724'], 't-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'] };
   var ICONES = { 'arrow-up': 'M12 19V5M6 11l6-6 6 6', 'arrow-down': 'M12 5v14M6 13l6 6 6-6', 'minus': 'M5 12h14' };
   function carregar(src) { return new Promise(function (ok, erro) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = erro; i.src = src; }); }
   function gradCss(ctx, ang, x, y, w, h, c1, c2) {
@@ -141,7 +141,7 @@
   /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
      As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
      .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F2F4F7', '#C6CCD4', '#929BA8'], 'b-90': ['#FFF0B8', '#E0B64F', '#7E5A14'], 'b-platina': ['#E8FFFF', '#00C8D8', '#087D91'], 'b-elite': ['#E9D5FF', '#A855F7', '#5B21B6'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
+  var ORN_PAL = { 'b-80': ['#F4F8FC', '#A0B4C8', '#6B7E94'], 'b-90': ['#FFF4C8', '#E0B84A', '#6A4A10'], 'b-platina': ['#F0F8FF', '#A0C0D8', '#3A5A72'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
   /* Insígnia do TOP 3: [brilho, preenchimento, contorno]. Independe do nível da carta. */
   var COROA = { 1: ['rgba(255,240,166,.9)', '#FFD447', '#7A5300'], 2: ['rgba(235,240,247,.9)', '#D5DBE3', '#5A6472'], 3: ['rgba(240,190,140,.85)', '#CD8B52', '#5E3515'] };
   /* chave da paleta das peças: Platina e Elite usam a geometria do b-90 com paleta própria */
@@ -198,7 +198,7 @@
     'b-100': { a: .95, halo: 'rgba(255,212,71,.5)', haloSh: '#FFD447', miolo: '#FFE27A', mioloSh: '#FFD447', fil: '#FFFBEA', fais: '#FFF0A6', arco: 'rgba(255,224,120,.75)', arcoSh: '#FFD447', arcoFil: '#FFFBEA' }
   };
   /* Elite: raios no tom da carta (ametista), pouco efeito */
-  PRAIO['elite'] = { a: .4, halo: 'rgba(168,85,247,.35)', haloSh: '#A855F7', miolo: '#D8B4FE', mioloSh: '#A855F7', fil: '#F3E8FF', fais: '#E9D5FF' };
+  PRAIO['elite'] = { a: .4, halo: 'rgba(239,140,120,.35)', haloSh: '#EFA48C', miolo: '#FFD4C4', mioloSh: '#EFA48C', fil: '#FFF3EC', fais: '#FFE8DC' };
   var RAIO_A = { 1: 1, 2: .82, 3: .64 };   // hierarquia dos raios: TOP 1 mais intenso, TOP 3 mais contido
   function raiosPNG(ctx, X, Y, W, H, S, P) {
     ctx.save(); ctx.globalAlpha = P.a; ctx.translate(X, Y); ctx.scale(W / 272, H / 392); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -218,19 +218,15 @@
       ctx.strokeStyle = P.arcoFil; ctx.lineWidth = 1.1; ctx.stroke(pa); });
     ctx.restore();
   }
-  /* Silhueta «Brasão»: ombros cortados + base em V suave. Mesma geometria de scripts/gerar_forma_carta.py (TOPO/BASE), que gera o CSS. */
-  var FORMA_TOPO = 30, FORMA_BASE = 26;
-  function formaPts(d) { // polígono no espaço 272x392, recuado d px para dentro (convexo, sentido horário)
-    var P = [[FORMA_TOPO, 0], [272 - FORMA_TOPO, 0], [272, FORMA_TOPO], [272, 392 - FORMA_BASE], [136, 392], [0, 392 - FORMA_BASE], [0, FORMA_TOPO]], n = P.length, R = [], i, O = [];
-    if (!d) return P;
-    for (i = 0; i < n; i++) { var a = P[i], b = P[(i + 1) % n], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy); R.push([a[0] - dy / l * d, a[1] + dx / l * d, dx, dy]); }
-    for (i = 0; i < n; i++) { var p = R[(i + n - 1) % n], q = R[i], den = p[2] * q[3] - p[3] * q[2], t = ((q[0] - p[0]) * q[3] - (q[1] - p[1]) * q[2]) / den; O.push([p[0] + p[2] * t, p[1] + p[3] * t]); }
-    return O;
-  }
-  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // contorno do cartão; d = recuo (px do canvas): a chamada passa o retângulo já recuado e d, que o devolve ao tamanho cheio
+  /* Retângulo arredondado (raio 18), igual ao CSS. d = recuo do anel (px do canvas): a chamada passa o retângulo já recuado e d, que o devolve ao tamanho cheio. */
+  function pathCartao(ctx, x, y, w, h, S, d, continuar) {
     d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d;
+    var r = Math.max(0, FORMA_R * (w / 272) - d);
     if (!continuar) ctx.beginPath();
-    formaPts(d / S).forEach(function (q, i) { var px = x + q[0] * w / 272, py = y + q[1] * h / 392; if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py); });
+    ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
     ctx.closePath();
   }
   function texto(ctx, txt, x, y, ls) { // letra a letra, para respeitar o espaçamento entre letras em qualquer navegador
@@ -337,7 +333,6 @@
       // borda por faixa de nota (anel com degradê, igual ao CSS .c-borda)
       var B = (parseFloat(cs.getPropertyValue('--bw')) || 5) * S, bc = [cs.getPropertyValue('--b1').trim(), cs.getPropertyValue('--b2').trim(), cs.getPropertyValue('--b3').trim()];
       var bg = gradCss(ctx, 135, X, Y, W, H, bc[0], bc[0]); bg.addColorStop(.25, bc[1]); bg.addColorStop(.5, bc[2]); bg.addColorStop(.75, bc[1]);
-      if (is100) { bg = gradCss(ctx, 135, X, Y, W, H, '#FFE27A', '#FFE27A'); [[.14, '#FFF6D0'], [.3, '#8FE3FF'], [.46, '#E9B6FF'], [.62, '#FFD447'], [.78, '#FFF6D0'], [.9, '#FFB3D9']].forEach(function (q) { bg.addColorStop(q[0], q[1]); }); }   // Lendária: moldura prismática (igual ao CSS)
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bg; ctx.fill('evenodd'); ctx.restore();
       // bisel do anel (igual ao CSS): luz em cima, sombra embaixo
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');

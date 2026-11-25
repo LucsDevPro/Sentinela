@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 25/11/2026 — PATCH_CARTAS: retângulo arredondado + escada de cores nova
+- Volta o **retângulo arredondado** (raio 18) e a **foto redonda**; o Brasão (24/11 (2)) deixa de valer — `carta_forma.css` e `gerar_forma_carta.py` ficam só para reverter fácil. `assets/carta_remodel.css` entra por último nas 3 páginas com cartas e anula forma/glow do Brasão.
+- Cores: Ferro grafite · Aço azulado · Bronze cobre · Prata clara · Ouro champanhe · **Platina prata-gelo (sem ciano)** · **Elite vinho + ouro rosé (sem roxo)** · **Lendária âmbar + ouro puro** (a moldura prismática de 24/11 (5) saiu). JS: `COR_NIVEL` (álbum), `LOGO`, `ORN_PAL`, `PRAIO['elite']`, cores do glitter (`carta_fx.js`) e `pathCartao` (PNG de reserva) conforme o patch.
+- O `carta_remodel.css` do patch não veio anexado: foi escrito a partir da descrição (tabela de cores e regras). Contraste medido nos pixels segue ≥ 4.5 (chips da Platina escurecidos).
+- Testes: forma agora verifica `clip-path: none` + raio 18; test_album confere o PNG em retângulo e a ordem dos 3 CSS.
+
 ## 24/11/2026 (6) — Testes de navegador enxugados
 - Removidos `test_sessao8_navegador.py` e `test_sessao9_navegador.py`: já falhavam (dependiam do mês 327–330 como «mês aberto», que virou arquivado, e esperavam elementos que dependem dos dados), não estavam em `rodar_testes.py` nem no CI, e o que eles cobriam já está em `test_sessao8.py`, `test_sessao9.py` (no CI) e `test_visual_navegador.py`.
 - Ficam: toda a lista de `rodar_testes.py` (Python, no CI) e três suítes de navegador que passam e cobrem a interface: `test_visual_navegador.py` (páginas e fluxos), `test_sessao10_navegador.py` (álbum/agente/resumo) e `test_cartinhas_navegador.py` (cartinhas, PNG, contraste).

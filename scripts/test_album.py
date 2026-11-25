@@ -83,11 +83,11 @@ checar("carta.js: o link do popup inclui o mês da cartinha (&mes=u.mes)",
 cc = ler("assets/carta.css")
 checar("carta.css: cartão e anel da borda são retângulo arredondado (--radius 18px, sem clip-path em polígono)",
        "--radius: 18px" in cc and "border-radius: var(--radius)" in cc and "clip-path: polygon(" not in cc.split("/* ---- Janela")[0])
-checar("formato Brasão (24/11/2026): o PNG desenha o mesmo polígono do CSS (FORMA_TOPO/FORMA_BASE iguais ao gerador) e carta_forma.css está em dia",
-       "var FORMA_TOPO = 30, FORMA_BASE = 26;" in cj and "function formaPts" in cj and "ctx.roundRect" not in cj and "TOPO = 30 " in ler("scripts/gerar_forma_carta.py") and "BASE = 26 " in ler("scripts/gerar_forma_carta.py")
-       and __import__("subprocess").run([sys.executable, os.path.join(RAIZ, "scripts/gerar_forma_carta.py"), "--check"], capture_output=True).returncode == 0)
-checar("formato Brasão: as 3 páginas com cartas carregam carta_raridade.css e carta_forma.css nessa ordem",
-       all("carta_raridade.css\"><link rel=\"stylesheet\" href=\"assets/carta_forma.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html")))
+checar("patch cartas (24/11/2026): o PNG desenha o retângulo arredondado de raio 18 (pathCartao), sem o polígono do Brasão",
+       "var FORMA_R = 18;" in cj and "function formaPts" not in cj and "quadraticCurveTo" in cj and "FORMA_TOPO" not in cj)
+checar("carta_forma.css (Brasão, anulado pelo remodel) continua gerado em dia", __import__("subprocess").run([sys.executable, os.path.join(RAIZ, "scripts/gerar_forma_carta.py"), "--check"], capture_output=True).returncode == 0)
+checar("as 3 páginas com cartas carregam carta_raridade.css, carta_forma.css e carta_remodel.css (por último) nessa ordem",
+       all("carta_raridade.css\"><link rel=\"stylesheet\" href=\"assets/carta_forma.css\"><link rel=\"stylesheet\" href=\"assets/carta_remodel.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html")))
 # Clique na cartinha abre a evolução do agente; "Melhor do ano" = média de todos os meses
 aj2 = ler("assets/album.js")
 checar("carta.js: clicar na cartinha abre a evolução do agente (link do álbum ou agente.html?id=&mes=)",

@@ -168,7 +168,7 @@ with sync_playwright() as p:
               const el = s => c.querySelector(s), cor = s => el(s) ? getComputedStyle(el(s)).color : null, fs = s => el(s) ? parseFloat(getComputedStyle(el(s)).fontSize) : null;
               const fam = s => el(s) ? getComputedStyle(el(s)).fontFamily : '';
               const brilho = !!c.querySelector('.c-brilho'), raios = !!c.querySelector('.c-estrelas'), conj = c.closest('.c-conj') || c.parentElement;
-              return { c1: norm(v('--c1')), c2: norm(v('--c2')), b1: norm(v('--b1')), b2: norm(v('--b2')), b3: norm(v('--b3')), bw: parseFloat(v('--bw')), forma: getComputedStyle(c).clipPath, anel: getComputedStyle(c.querySelector('.c-borda')).clipPath,
+              return { c1: norm(v('--c1')), c2: norm(v('--c2')), b1: norm(v('--b1')), b2: norm(v('--b2')), b3: norm(v('--b3')), bw: parseFloat(v('--bw')), raio: parseFloat(getComputedStyle(c).borderTopLeftRadius), forma: getComputedStyle(c).clipPath, anel: getComputedStyle(c.querySelector('.c-borda')).clipPath,
                 nota: grad('.c-ovr b'), nome: cor('.c-nome'), rod: cor('.c-rodape'), chip: cor('.c-stats b'),
                 fNota: fs('.c-ovr b'), fNome: fs('.c-nome'), fRod: fs('.c-rodape'), fChip: fs('.c-stats b'), fChipSig: fs('.c-stats span'),
                 famNota: fam('.c-ovr b'), famNome: fam('.c-nome'), famRod: fam('.c-rodape'),
@@ -197,7 +197,7 @@ with sync_playwright() as p:
                 var_b = contraste(rgb_de(r["b1"]), rgb_de(r["b3"]))
                 checar(f"{nome}: a borda tem relevo (b1 × b3 com razão ≥ {CONFIG['CONTRASTE_BORDA_RELEVO']})", var_b >= CONFIG["CONTRASTE_BORDA_RELEVO"], f"{var_b:.2f}")
             checar(f"{nome}: espessura da borda (--bw) entre {CONFIG['BORDA_PX'][0]} e {CONFIG['BORDA_PX'][1]} px", CONFIG["BORDA_PX"][0] <= (r["bw"] or 0) <= CONFIG["BORDA_PX"][1], str(r["bw"]))
-            checar(f"{nome}: formato Brasão — cartão recortado em polígono e anel em path evenodd (carta_forma.css)", r["forma"].startswith("polygon(") and r["anel"].startswith("path("), f"{r['forma'][:30]} | {r['anel'][:30]}")
+            checar(f"{nome}: retângulo arredondado (carta_remodel.css) — sem recorte em polígono, raio 18", r["forma"] == "none" and r["anel"] == "none" and abs(r["raio"] - 18) < 0.5, f"{r['forma'][:20]} | {r['anel'][:20]} | {r['raio']}")
             menores = {k: r[k] for k in ("fNome", "fRod", "fChip", "fChipSig") if r[k] is not None and r[k] < CONFIG["FONTE_MIN_PX"]}
             checar(f"{nome}: nenhum texto menor que {CONFIG['FONTE_MIN_PX']} px", not menores, str(menores))
             checar(f"{nome}: tipografia usa {' ou '.join(CONFIG['FAMILIAS'])} e as fontes estão carregadas",

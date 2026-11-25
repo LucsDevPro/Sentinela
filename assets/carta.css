@@ -1970,10 +1970,3 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
   .carta.t-elite .c-estrelas .rai:nth-child(7n) { animation-delay: 6.8s; }
 }
 
-/* ---- Lendária: moldura PRISMÁTICA (24/11/2026) — traço próprio para não parecer parente do Ouro (corpo escuro + raios + aro de ouro com reflexos de folha holográfica) ---- */
-.c-conj .carta.b-100 > .c-borda {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 16%, rgba(0, 0, 0, 0) 64%, rgba(0, 0, 0, 0.45) 100%),
-    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0 1.5px, rgba(255, 255, 255, 0) 1.5px 6px),
-    linear-gradient(135deg, #FFE27A 0%, #FFF6D0 14%, #8FE3FF 30%, #E9B6FF 46%, #FFD447 62%, #FFF6D0 78%, #FFB3D9 90%, #FFE27A 100%) 0 0 / 100% 100%, #FFD447;
-}
