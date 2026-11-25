@@ -213,6 +213,11 @@ else {
       mostra(`Pronto: ${arquivos.length} imagens no .zip (pastas por equipe)${falhas.length ? '. Não consegui gerar: ' + falhas.join(', ') : ''}.`);
     } catch (e) { mostra('Não consegui montar o .zip. Tente de novo.'); } finally { btn.disabled = !visAtual.length; }
   };
+  // «Mais ações»: fecha ao escolher uma ação, ao clicar fora ou com Esc
+  { const mais = $('maisAcoes');
+    mais.addEventListener('click', e => { if (e.target.closest('.bt-acao')) setTimeout(() => { mais.open = false; }, 0); });
+    document.addEventListener('click', e => { if (mais.open && !mais.contains(e.target)) mais.open = false; });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && mais.open) { mais.open = false; mais.querySelector('summary').focus(); } }); }
   $('niveis').onclick = e => { const b = e.target.closest('.nv'); if (!b) return; $('fNivel').value = b.dataset.nivel; desenhar(); };
   desenhar();
 }

@@ -1,5 +1,11 @@
 # Registro de decisões (mais recente primeiro)
 
+## 24/11/2026 (5) — Hall da Glória: menu «Mais ações», só pílulas de nível, troféu, Lendária prismática
+- Controles: ficam à vista Mês, Equipe e Buscar; imprimir, folha de recorte, .zip, resumo, modo reunião, simular pesos e os dois interruptores (apresentação, ocultar fotos) moraram em `<details id="maisAcoes">`. Os ids não mudaram; fecha ao escolher, ao clicar fora e com Esc. Testes abrem o menu antes de clicar.
+- Nível: a lista `#fNivel` virou `<input type="hidden">`; as pílulas (`#niveis`) são o único controle (o `?nivel=` do endereço continua valendo).
+- Ícone do título e do botão «Hall da Glória» do cabeçalho: troféu (era cartas/🃏).
+- Lendária: moldura prismática (ouro com reflexos ciano/lilás/rosa) em `carta.css` e no plano B do PNG, para não parecer parente do Ouro.
+
 ## 24/11/2026 (4) — Faixa dourada removida
 - A faixa «Icon gold» (carta_pizarro.css) foi retirada de todas as cartas, inclusive do pódio, a pedido do usuário; o arquivo foi apagado e o plano B do PNG voltou ao corpo simples. Vale o que está em (3) só como histórico.
 

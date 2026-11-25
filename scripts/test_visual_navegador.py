@@ -165,7 +165,7 @@ with sync_playwright() as p:
     checar("álbum (impressão): filtros e botões somem, cartinhas ficam", al.evaluate("getComputedStyle(document.querySelector('.controles')).display") == "none" and al.locator("#album .slot").count() > 3)
     checar("álbum (impressão): botões de compartilhar escondidos", al.evaluate("getComputedStyle(document.querySelector('.acoes')).display") == "none")
     al.emulate_media(media="screen")
-    al.click("#bReuniao"); al.wait_for_timeout(1500)
+    al.click("#maisAcoes > summary"); al.click("#bReuniao"); al.wait_for_timeout(1500)
     checar("álbum: «Modo reunião» abre a projeção nas cartinhas", al.url.endswith("#cartinhas") and al.evaluate("PROJECAO.modo()") == "cartas", al.url)
     checar("álbum: sem erros de script", not ea, str(ea))
     # ---- projeção em modo cartinhas
@@ -193,7 +193,7 @@ with sync_playwright() as p:
     n = zp.evaluate("(document.getElementById('bZip').textContent.match(/\\((\\d+)\\)/)||[0,0])[1]")
     checar("álbum: botão do .zip mostra a quantidade filtrada", int(n) >= 1, str(n))
     try:
-        with zp.expect_download(timeout=90000) as dl: zp.click("#bZip")
+        with zp.expect_download(timeout=90000) as dl: zp.click("#maisAcoes > summary"); zp.click("#bZip")
         import zipfile
         caminho = dl.value.path(); z = zipfile.ZipFile(caminho)
         nomes = z.namelist()

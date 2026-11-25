@@ -10,12 +10,12 @@
 <link rel="stylesheet" href="assets/album.css">
 </head>
 <body>
-<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="11" height="15" rx="2"/><path d="M7 3h10a2 2 0 0 1 2 2v13"/><path d="M6.500 12h4M6.500 16h4"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H5z"/><path d="M12 4h7v14h-4"/></symbol></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol><symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol><symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-1.04 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98 1.04 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0z"/></symbol><symbol id="i-cards" viewBox="0 0 24 24"><rect x="3" y="6" width="11" height="15" rx="2"/><path d="M7 3h10a2 2 0 0 1 2 2v13"/><path d="M6.500 12h4M6.500 16h4"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H5z"/><path d="M12 4h7v14h-4"/></symbol></svg>
 <header class="topo"><div class="marca"><img src="assets/logo_ponta_pora.png" alt="Prefeitura Municipal de Ponta Porã"><b>SENTINELA <i>hall da glória</i></b><button type="button" class="tema-btn" data-tema-btn title="Mudar para o tema escuro"><svg class="ico ico-lua" aria-hidden="true"><use href="#i-moon"/></svg><svg class="ico ico-sol" aria-hidden="true"><use href="#i-sun"/></svg> <span class="tema-txt">Tema escuro</span></button><a href="index.html">← Dashboard</a></div></header>
 <main>
   <div class="hero">
     <p class="hero-tag">Coleção oficial · Sentinela</p>
-    <h1><svg class="ico" aria-hidden="true"><use href="#i-cards"/></svg> Hall da Glória</h1>
+    <h1><svg class="ico" aria-hidden="true"><use href="#i-trophy"/></svg> Hall da Glória</h1>
     <p class="sub">As cartinhas dos agentes em destaque — pódio no centro, vitrines ao redor, da maior nota para a menor.</p>
   </div>
   <div class="abas" role="tablist" aria-label="Seções do Hall da Glória">
@@ -27,18 +27,22 @@
       <div class="barra">
         <label>Mês<select id="fMes"></select></label>
         <label>Equipe<select id="fEq"><option value="">Todas</option></select></label>
-        <label>Nível<select id="fNivel"><option value="">Todos</option><option>LENDÁRIA</option><option>ELITE</option><option>PLATINA</option><option>OURO</option><option>PRATA</option><option>BRONZE</option><option>AÇO</option><option>FERRO</option></select></label>
+        <input type="hidden" id="fNivel" value="">
         <label>Buscar<input type="search" id="fBusca" placeholder="parte do nome" autocomplete="off"></label>
-        <button type="button" class="bt-limpar" id="bLimpar" hidden>Limpar filtros</button>
-      </div>
-      <div class="opcoes">
+        <details class="mais" id="maisAcoes">
+          <summary><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01" stroke-width="3"/></svg> Mais ações</summary>
+          <div class="menu">
         <label class="tg"><input type="checkbox" id="apres"> <span>Modo apresentação (ocultar nomes)</span></label>
         <label class="tg"><input type="checkbox" id="semFoto"> <span>Ocultar fotos</span></label>
         <button type="button" class="bt-acao" id="bImprimir" title="Imprimir as cartinhas que estão na tela (respeita mês, equipe, nível e busca)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg> Imprimir cartinhas</button>
         <button type="button" class="bt-acao" id="bRecorte" title="Folha para recorte: 8 cartinhas por A4 (paisagem), tamanho 63 × 91 mm, com marcas de corte"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v13a2 2 0 0 0 2 2h13M3 6h13a2 2 0 0 1 2 2v13"/></svg><span>Folha de recorte</span></button>
         <button type="button" class="bt-acao" id="bZip" title="Gera um .zip com a imagem de cada cartinha que está na tela, em uma pasta por equipe"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg> <span>Baixar todas (.zip)</span></button>
-        <button type="button" class="bt-acao" id="bResumo" title="Página A4 com pódio, números do mês e quem tirou 100, para a ata (salvar como PDF)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/></svg> Resumo do mês</button> <button type="button" class="bt-acao" id="bReuniao" title="Passar as cartinhas uma a uma em tela cheia, com os nomes ocultáveis"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10H4zM8 20h8M12 15v5"/></svg> Modo reunião</button>
+        <button type="button" class="bt-acao" id="bResumo" title="Página A4 com pódio, números do mês e quem tirou 100, para a ata (salvar como PDF)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/></svg> Resumo do mês</button>
+        <button type="button" class="bt-acao" id="bReuniao" title="Passar as cartinhas uma a uma em tela cheia, com os nomes ocultáveis"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10H4zM8 20h8M12 15v5"/></svg> Modo reunião</button>
         <button type="button" class="bt-acao" id="bPesos" title="Simulador: mude o peso de cada regra e veja como ficam notas e posições (só simula, não grava)"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Simular pesos</span></button>
+          </div>
+        </details>
+        <button type="button" class="bt-limpar" id="bLimpar" hidden>Limpar filtros</button>
       </div>
     </div>
     <details class="ajuda">

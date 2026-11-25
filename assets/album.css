@@ -309,3 +309,17 @@ body.modo-apresentacao .aviso-fotos{display:none}
   .podio .slot.p1:hover{transform:translateY(-20px)}
   .podio .slot.p2:hover,.podio .slot.p3:hover{transform:translateY(2px)}
 }
+
+/* ---- «Mais ações» (24/11/2026): os botões e interruptores saíram da tela principal e moram num menu ---- */
+.mais{position:relative;min-width:0}
+.mais>summary{list-style:none;display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:8px 16px;border:1.5px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font:600 .95rem "IBM Plex Sans",system-ui,sans-serif;cursor:pointer;user-select:none}
+.mais>summary::-webkit-details-marker{display:none}
+.mais>summary:hover,.mais[open]>summary,.mais>summary:focus-visible{border-color:var(--pri);outline:none}
+.mais>summary .ico{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-linecap:round}
+.mais .menu{position:absolute;right:0;top:calc(100% + 8px);z-index:30;display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:260px;padding:10px;border:1px solid var(--bd);border-radius:12px;background:var(--card);box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.mais .menu .bt-acao{margin-left:0;justify-content:flex-start;width:100%}
+.mais .menu .tg{padding:6px 4px}
+.mais .menu .tg+.bt-acao{margin-top:6px;border-top:1px solid var(--bd);padding-top:12px;border-radius:0 0 8px 8px}
+@media (max-width:640px){.mais{grid-column:1 / -1}.mais .menu{left:0;right:0;min-width:0}}
+@media print{.mais{display:none!important}}
+.mais .menu .tg{flex-direction:row;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:.88rem;font-weight:400;color:var(--mut)}
