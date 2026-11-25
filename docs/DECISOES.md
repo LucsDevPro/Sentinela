@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 25/11/2026 (3) — Um só CSS de cartinha
+- `carta_raridade.css`, `carta_forma.css` (Brasão), `carta_remodel.css` e `scripts/gerar_forma_carta.py` foram fundidos/removidos: tudo está em `assets/carta.css`, na mesma ordem em que os 4 carregavam (imagem antes×depois comparada com animações congeladas: diferença = ruído). Álbum, agente e projeção carregam só `assets/carta.css`.
+- Forma: apenas o retângulo arredondado (raio 18). Do Brasão ficou só «sem asas/gema» (`.c-orna-atras { display: none }`) e a aura em box-shadow (`.c-conj.c-conj:has(> .carta.carta) { filter: none }` mantido porque também anula os antigos `.c-conj.b-100 { filter }`).
+- Ainda duplicado (próximo passo possível): paletas no JS (`ORN_PAL`, `LOGO`, `PRAIO`, plano B do PNG) repetem cores dos temas do CSS; o fim do carta.css tem regras antigas sobrepostas pelos temas novos que dá para podar com a suíte de cartinhas como rede de segurança. Para reverter a escada de cores, os trechos «PATCH_CARTAS» e «RARIDADE» do fim do arquivo.
+
 ## 25/11/2026 (2) — Carta embaçada em repouso
 - Causa: `perspective()` no `transform` da `.carta[data-fx]` (e das peças `.c-orna`) deixa a matriz 3D mesmo sem inclinar; o Chrome desenha a carta como textura e a reduz por interpolação (álbum usa escala .72). Nitidez medida (variância do laplaciano) em repouso: ~1.400 → ~3.900 sem perspectiva.
 - Correção: em repouso só `scale()`; o 3D vale em `.inclinando` e na volta (`.volta3d`, 0,52 s, adicionada em `soltar()` de carta_fx.js). Bloco «NITIDEZ EM REPOUSO» no fim de carta.css. Durante a inclinação (hover) a carta continua em 3D e fica um pouco mais suave, por natureza.

@@ -85,9 +85,9 @@ checar("carta.css: cartão e anel da borda são retângulo arredondado (--radius
        "--radius: 18px" in cc and "border-radius: var(--radius)" in cc and "clip-path: polygon(" not in cc.split("/* ---- Janela")[0])
 checar("patch cartas (24/11/2026): o PNG desenha o retângulo arredondado de raio 18 (pathCartao), sem o polígono do Brasão",
        "var FORMA_R = 18;" in cj and "function formaPts" not in cj and "quadraticCurveTo" in cj and "FORMA_TOPO" not in cj)
-checar("carta_forma.css (Brasão, anulado pelo remodel) continua gerado em dia", __import__("subprocess").run([sys.executable, os.path.join(RAIZ, "scripts/gerar_forma_carta.py"), "--check"], capture_output=True).returncode == 0)
-checar("as 3 páginas com cartas carregam carta_raridade.css, carta_forma.css e carta_remodel.css (por último) nessa ordem",
-       all("carta_raridade.css\"><link rel=\"stylesheet\" href=\"assets/carta_forma.css\"><link rel=\"stylesheet\" href=\"assets/carta_remodel.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html")))
+checar("um só CSS de cartinha: as 3 páginas com cartas carregam só assets/carta.css e os arquivos antigos (raridade/forma/remodel) não existem mais",
+       all("carta_raridade" not in ler(f) and "carta_forma" not in ler(f) and "carta_remodel" not in ler(f) and "assets/carta.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html"))
+       and not any(os.path.exists(os.path.join(RAIZ, "assets", n)) for n in ("carta_raridade.css", "carta_forma.css", "carta_remodel.css")) and not os.path.exists(os.path.join(RAIZ, "scripts/gerar_forma_carta.py")))
 # Clique na cartinha abre a evolução do agente; "Melhor do ano" = média de todos os meses
 aj2 = ler("assets/album.js")
 checar("carta.js: clicar na cartinha abre a evolução do agente (link do álbum ou agente.html?id=&mes=)",
