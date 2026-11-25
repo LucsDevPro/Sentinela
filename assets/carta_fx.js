@@ -153,6 +153,7 @@
   function soltar(c) {
     if (!c) return;
     c.classList.remove('inclinando');
+    c.classList.add('volta3d'); clearTimeout(c._v3); c._v3 = setTimeout(function () { c.classList.remove('volta3d'); }, 520);   // mantém a transformação 3D só até a carta assentar (ver carta.css, «NITIDEZ EM REPOUSO»)
     c.style.removeProperty('--rx'); c.style.removeProperty('--ry'); c.style.removeProperty('--brilho');
     var w = c.parentElement; if (w && w.classList.contains('c-conj')) { w.style.removeProperty('--rx'); w.style.removeProperty('--ry'); }
   }

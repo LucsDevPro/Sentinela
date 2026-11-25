@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 25/11/2026 (2) — Carta embaçada em repouso
+- Causa: `perspective()` no `transform` da `.carta[data-fx]` (e das peças `.c-orna`) deixa a matriz 3D mesmo sem inclinar; o Chrome desenha a carta como textura e a reduz por interpolação (álbum usa escala .72). Nitidez medida (variância do laplaciano) em repouso: ~1.400 → ~3.900 sem perspectiva.
+- Correção: em repouso só `scale()`; o 3D vale em `.inclinando` e na volta (`.volta3d`, 0,52 s, adicionada em `soltar()` de carta_fx.js). Bloco «NITIDEZ EM REPOUSO» no fim de carta.css. Durante a inclinação (hover) a carta continua em 3D e fica um pouco mais suave, por natureza.
+
 ## 25/11/2026 — PATCH_CARTAS: retângulo arredondado + escada de cores nova
 - Volta o **retângulo arredondado** (raio 18) e a **foto redonda**; o Brasão (24/11 (2)) deixa de valer — `carta_forma.css` e `gerar_forma_carta.py` ficam só para reverter fácil. `assets/carta_remodel.css` entra por último nas 3 páginas com cartas e anula forma/glow do Brasão.
 - Cores: Ferro grafite · Aço azulado · Bronze cobre · Prata clara · Ouro champanhe · **Platina prata-gelo (sem ciano)** · **Elite vinho + ouro rosé (sem roxo)** · **Lendária âmbar + ouro puro** (a moldura prismática de 24/11 (5) saiu). JS: `COR_NIVEL` (álbum), `LOGO`, `ORN_PAL`, `PRAIO['elite']`, cores do glitter (`carta_fx.js`) e `pathCartao` (PNG de reserva) conforme o patch.

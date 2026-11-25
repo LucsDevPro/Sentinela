@@ -1970,3 +1970,11 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
   .carta.t-elite .c-estrelas .rai:nth-child(7n) { animation-delay: 6.8s; }
 }
 
+
+/* ---- NITIDEZ EM REPOUSO (25/11/2026) ----
+   perspective() deixa a transformação 3D (matriz com m34 ≠ 0) mesmo sem inclinar: o Chrome então desenha a carta como textura e a
+   reduz/amplia por interpolação — o resultado fica «embaçado» (nitidez medida ~3x menor) e só melhora quando o ponteiro passa.
+   Em repouso a carta usa só scale() (2D, redesenhada nítida); o 3D vale apenas enquanto inclina (.inclinando) e na volta (.volta3d, ~0,5 s). */
+.carta[data-fx] { transform: scale(var(--s, 1)); }
+.carta[data-fx].inclinando, .carta[data-fx].volta3d { transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--s, 1)); }
+.c-conj:not(:has(> .carta.inclinando, > .carta.volta3d)) > .c-orna { transform: scale(var(--s, 1)); }
