@@ -118,7 +118,7 @@ if(!slides.length) slide('vazio','Sem dados ainda','',function(el){el.insertAdja
 
 /* ---- palco ---- */
 var palco=document.getElementById('palco'),dots=document.getElementById('dots'),barra=document.getElementById('barra');
-var atual=-1,pausado=false,seg=15,t0=0,raf=null;
+var atual=-1,pausado=false,seg=20,t0=0,raf=null;   // FEIRA: 20 s padrão (projetor)
 var slidesPaineis=slides.slice();   // as telas de gráficos de sempre; o modo «cartinhas» troca o conteúdo de `slides`
 function montarDots(){dots.innerHTML='';slides.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Tela '+(i+1)+': '+s.titulo);b.onclick=function(){ir(i);};dots.appendChild(b);});}
 montarDots();
@@ -188,7 +188,7 @@ function slidesDasCartas(){
   var L=listaCartas(mesCartas),N=L.length,lim=qtdCartas>0?Math.min(qtdCartas,N):N;
   if(!N)return out;
   out.push({id:'cartas-intro',titulo:'Cartinhas de '+mesCartas,sub:'',montar:function(el){
-    el.insertAdjacentHTML('beforeend','<div class="cards">'+cartao(br(N),'cartinhas no mês')+cartao(lim<N?('Top '+lim):'Todas','que vão passar, da maior nota para a menor')+'</div><p class="nota">Setas ← → mudam de cartinha · N mostra ou oculta nomes e fotos · barra de espaço pausa.</p>');}});
+    el.insertAdjacentHTML('beforeend','<div class="cards">'+cartao(br(N),'cartinhas no mês')+cartao(lim<N?('Top '+lim):'Todas','que vão passar, da maior nota para a menor')+'</div><p class="nota feira-dica">Setas ← → mudam de cartinha · N nomes · Espaço pausa · F tela cheia · P pacote do Top 5</p>');}});
   L.slice(0,lim).forEach(function(l,i){
     out.push({id:'carta-'+(i+1),titulo:'Cartinhas de '+mesCartas,sub:(i+1)+'º de '+N,montar:function(el){
       var u=l.u,rot=mostrarNomes?l.a.nome:('Agente '+(i+1));
@@ -197,7 +197,13 @@ function slidesDasCartas(){
         '<div class="cp-nota"><b>'+br(u.pontos,1)+'</b><span>nota do mês</span></div>'+listaPts('O que mais deu pontos',u.ganhos,'pos')+listaPts('O que mais tirou pontos',u.perdas,'neg')+'</div></div>');
       var carta=el.querySelector('.carta');anonCarta(el,i,u);
       ajustarCarta(el);
-      if(window.CartaFX&&carta)CartaFX.revelar(carta);   // o pacote vira e a cartinha aparece
+      el.dataset.rank=String(i+1);   // FEIRA: hierarquia visual no CSS
+      if(window.CartaFX&&carta){
+        CartaFX.revelar(carta);
+        if(i<3&&CartaFX.raios){   // FEIRA: raios no Top 3 após a virada
+          setTimeout(function(){var slot=el.querySelector('.cslot');if(slot)CartaFX.raios(slot,i===0?5:3,i===0?'#FFD447':'#9FD4FF');},720);
+        }
+      }
     }});
   });
   return out;
@@ -211,6 +217,7 @@ function ajustarCarta(el){
 }
 function trocarModo(m){
   modo=m;slides.length=0;
+  if(m==='pacote'&&window.Movimento)Movimento.definir(true);   // FEIRA: animações no projetor
   (m==='cartas'?slidesDasCartas():m==='pacote'?slidesDoPacote():[]).forEach(function(x){slides.push(x);});
   if(!slides.length){modo='paineis';slidesPaineis.forEach(function(x){slides.push(x);});}
   document.getElementById('bModo').querySelector('span').textContent=modo!=='paineis'?'Painéis':'Cartinhas';

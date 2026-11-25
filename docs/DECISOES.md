@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 25/11/2026 (5) — Patch FEIRA (projetor/reunião)
+- `assets/feira.css` novo (hierarquia visual na reunião e no pacote); tempo padrão 20 s; `data-rank` nos slides; raios no Top 3 das cartinhas.
+- Pacote: pausa por posição (1º 9 s, 2º 7,5 s, 3º 6,5 s, 4º/5º 3,5 s); legenda com o mês; vídeo Top 5 mais longo (1º 5 s) e tier 4–5 com mais presença.
+- Ao entrar no pacote as animações ficam LIGADAS à força (`Movimento.definir(true)`), mesmo com «reduzir movimento» no sistema; a tecla M desliga. Por isso os testes de movimento reduzido em `test_visual_navegador.py` apertam M antes e o antigo aviso «animações desligadas» deixou de aparecer.
+
 ## 25/11/2026 (4) — Poda do código morto das cartinhas
 - Sobrou só a coroa do TOP 3 como peça fora do contorno: `coroaSVG`/`coroaCanvas` (`COROA_PTS`) em `carta.js`, uma lista de pontos para tela e PNG.
 - Removidos: `ornSVG`/`ornCanvas`/`ORN_PAL`, camada `.c-orna-atras`, `<i class="c-filete">` e keyframes sem uso (`c-pulse-halo`, `c-metal`, `c-golpe-orna-ouro`). Visual idêntico.

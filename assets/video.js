@@ -11,7 +11,7 @@
     1: { a: '#FFD25A', b: '#FFF3B0', c: '#F0B020', bg: ['#2b1c00', '#120b00'], rot: '1º LUGAR', raios: 6, part: 120, ondas: 5 },
     2: { a: '#DDE8F8', b: '#FFFFFF', c: '#8FA9CF', bg: ['#11213d', '#070f1f'], rot: '2º LUGAR', raios: 3, part: 48, ondas: 3 },
     3: { a: '#E8A060', b: '#FFE2C4', c: '#B8662A', bg: ['#2a1608', '#120a04'], rot: '3º LUGAR', raios: 2, part: 36, ondas: 2 },
-    0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, raios: 0, part: 22, ondas: 1 }
+    0: { a: '#FFD25A', b: '#FFF3B0', c: '#2BA8E8', bg: ['#0f2547', '#060f20'], rot: null, raios: 1, part: 32, ondas: 2 }   // FEIRA: 4º/5º
   };
   function mulberry(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -222,7 +222,7 @@
   }
 
   /* vídeo do TOP 5 (≈15 s): do 5º ao 1º. o.onProgress(0..1) atualiza a UI sem travar. */
-  var DUR_TOP = { 1: 4.2, 2: 2.8, 3: 2.6, 4: 2.2, 5: 2.2 };
+  var DUR_TOP = { 1: 5.0, 2: 3.2, 3: 3.0, 4: 2.4, 5: 2.4 };   // FEIRA
   function gerarTop(lista, o) {
     o = o || {};
     var onProg = o.onProgress;

@@ -142,7 +142,7 @@
       await Promise.all(voos); pacote.style.display = 'none';
       anima(raios, [{ opacity: 0.8 }, { opacity: 0 }], 700, null, { opacity: '0' });
       fase = 'pronto'; ocupado = false; atual = -1; agendar(1500);
-      texto('Enter / clique: revelar a próxima · R: recomeçar', 'Revelando de trás pra frente: ' + N + ' cartinhas'); legenda('Pacote aberto. Vamos revelar do ' + N + 'º ao 1º lugar.');
+      texto('Enter / clique: revelar a próxima · R: recomeçar', 'Revelando de trás pra frente: ' + N + ' cartinhas'); legenda('Pacote aberto · ' + (cfg.mes || '') + ' · do ' + N + 'º ao 1º lugar. Cada revelação sobe um degrau de efeito.');   // FEIRA
     }
 
     // ---- 2) revelar uma: ela sai da fileira, gira até o centro, vira e aparece com efeitos proporcionais à posição ----
@@ -225,7 +225,8 @@
       fase = atual >= N - 1 ? 'ultima' : 'revelada'; ocupado = false;
       legenda(rk + 'º lugar revelado: ' + it.rot + ', ' + (it.eq || 'sem equipe') + ', nota ' + it.nota + '. ' + (it.emp || ''));
       texto(atual >= N - 1 ? 'Enter / clique: guardar e encerrar' : 'Enter / clique: próxima cartinha · R: recomeçar', 'Revelando ' + (atual + 1) + ' de ' + N);
-      agendar(top ? 7000 : 3200);
+      var hold = rk === 1 ? 9000 : rk === 2 ? 7500 : rk === 3 ? 6500 : 3500;   // FEIRA: hold por posição
+      agendar(hold);
     }
 
     // ---- 3) guardar: a carta grande volta para o lugar na fileira e vira de frente (fica à mostra) ----

@@ -239,6 +239,7 @@ with sync_playwright() as p:
     checar("pacote: sem erros de script (versão com animação)", not epk, str(epk)); pk.close()
     ctr = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); rk = ctr.new_page(); erk = []; rk.on("pageerror", lambda x: erk.append(str(x)))
     rk.goto(U + "projecao.html#pacote"); rk.wait_for_timeout(600); ranks = []
+    rk.keyboard.press("m"); rk.wait_for_timeout(200)   # patch feira: o pacote liga as animações sozinho; «M» volta ao movimento reduzido
     for i in range(n100 + 2):
         rk.keyboard.press("Enter"); rk.wait_for_timeout(120)
         r = rk.evaluate("document.querySelector('.pk-rank')?.textContent||''")
@@ -276,6 +277,7 @@ with sync_playwright() as p:
     # ---- pacote: som, automático, pular até o Nº, controle remoto (PageDown) e vídeo de 5 s
     ctr2 = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); pz = ctr2.new_page(); epz = []; pz.on("pageerror", lambda x: epz.append(str(x)))
     pz.goto(U + "projecao.html#pacote"); pz.wait_for_timeout(600)
+    pz.keyboard.press("m"); pz.wait_for_timeout(200)   # patch feira: o pacote liga as animações sozinho; «M» volta ao movimento reduzido
     checar("pacote: barra tem Som, Automático e Próxima (sem «pular», são só 5)", pz.locator(".pk-barra button[data-b=som]").count() == 1 and pz.locator(".pk-barra button[data-b=auto]").count() == 1 and pz.locator(".pk-barra select[data-b=pular]").count() == 0 and pz.locator(".pk-barra .pk-prox").count() == 1)
     checar("pacote: som começa desligado e a tecla S alterna", "desligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "Som ligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "Som baixo" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True) and "desligado" in pz.inner_text(".pk-barra [data-b=som]") and (pz.keyboard.press("s") or True))
     pz.keyboard.press("PageDown"); pz.wait_for_timeout(150)
@@ -375,6 +377,7 @@ with sync_playwright() as p:
     for (w, h) in [(1920, 1080), (1366, 768), (1024, 700), (390, 780)]:
         cl = nav.new_context(reduced_motion="reduce", viewport={"width": w, "height": h}); lp = cl.new_page(); elp = []; lp.on("pageerror", lambda x: elp.append(str(x)))
         lp.goto(U + "projecao.html#pacote"); lp.wait_for_timeout(600)
+        lp.keyboard.press("m"); lp.wait_for_timeout(200)   # patch feira: pacote liga animações sozinho; «M» volta ao reduzido
         for _ in range(10):
             lp.keyboard.press("Enter"); lp.wait_for_timeout(350)
             if lp.evaluate("(document.querySelector('.pk-rank')||{}).textContent") == "1º": break
@@ -383,16 +386,14 @@ with sync_playwright() as p:
           for(const s of ['.pk-grande','.pk-info','.pk-faixa','.pk-video']){const e=r(q(s));if(e&&(e.top<cab.bottom-1||e.bottom>cena.bottom+1||e.left<cena.left-1||e.right>cena.right+1))o.push(s)}
           const g=r(q('.pk-grande .carta')),m=r(q('.pk-slot .carta'));const e=parseFloat(getComputedStyle(q('.pk-grande')).getPropertyValue('--e')),f=parseFloat(getComputedStyle(q('.pk-fileira')).getPropertyValue('--e'));if(Math.abs(g.width-272*e)>272*e*0.08||Math.abs(m.width-272*f)>272*f*0.15)o.push('escala:'+Math.round(g.width)+'/'+Math.round(m.width));return o}""")
         checar(f"pacote: no 1º lugar nada passa por cima dos controles nem sai da cena ({w}x{h})", not est and not elp, f"{est} {elp}"); cl.close()
-    # animações: com «reduzir movimento» aparece o aviso; um clique em «Ativar animações» liga e fica guardado neste navegador
+    # animações (patch feira): no pacote elas nascem LIGADAS mesmo com «reduzir movimento» no sistema (PCs de repartição); a tecla M desliga e a escolha fica guardada
     ca = nav.new_context(reduced_motion="reduce", viewport={"width": 1280, "height": 800}); ap = ca.new_page(); eap = []; ap.on("pageerror", lambda x: eap.append(str(x)))
     ap.goto(U + "projecao.html#pacote"); ap.wait_for_timeout(600)
-    checar("animações: com «reduzir movimento» o aviso aparece e o botão diz «desligadas»", ap.locator(".pk-aviso").is_visible() and "desligadas" in ap.inner_text(".pk-barra [data-b=anim]"))
-    ap.click(".pk-aviso button"); ap.wait_for_timeout(200)
-    checar("animações: «Ativar animações» liga, esconde o aviso e liga os efeitos contínuos", not ap.locator(".pk-aviso").is_visible() and "ligadas" in ap.inner_text(".pk-barra [data-b=anim]") and ap.evaluate("document.querySelector('.pk-palco').classList.contains('mov')"))
+    checar("animações: no pacote nascem ligadas, sem aviso, mesmo com «reduzir movimento»", not ap.locator(".pk-aviso").is_visible() and "ligadas" in ap.inner_text(".pk-barra [data-b=anim]") and ap.evaluate("document.querySelector('.pk-palco').classList.contains('mov')"))
     ap.reload(); ap.wait_for_timeout(700)
-    checar("animações: a escolha fica guardada (depois de recarregar continua ligada)", "ligadas" in ap.inner_text(".pk-barra [data-b=anim]") and not ap.locator(".pk-aviso").is_visible())
+    checar("animações: depois de recarregar continuam ligadas", "ligadas" in ap.inner_text(".pk-barra [data-b=anim]") and not ap.locator(".pk-aviso").is_visible())
     ap.keyboard.press("Enter"); ap.wait_for_timeout(500)
-    checar("animações: ligadas à força, o pacote realmente anima (não pula direto)", ap.evaluate("getComputedStyle(document.querySelector('.pk-pacote')).display") != "none" and ap.evaluate("document.getAnimations().length") > 0, str(ap.evaluate("document.getAnimations().length")))
+    checar("animações: ligadas, o pacote realmente anima (não pula direto)", ap.evaluate("getComputedStyle(document.querySelector('.pk-pacote')).display") != "none" and ap.evaluate("document.getAnimations().length") > 0, str(ap.evaluate("document.getAnimations().length")))
     ap.keyboard.press("m"); ap.wait_for_timeout(200)
     checar("animações: a tecla M desliga de novo", "desligadas" in ap.inner_text(".pk-barra [data-b=anim]") and not ap.evaluate("document.querySelector('.pk-palco').classList.contains('mov')"))
     checar("animações: sem erros de script", not eap, str(eap)); ca.close()
