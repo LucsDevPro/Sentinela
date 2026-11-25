@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 24/11/2026 (6) — Testes de navegador enxugados
+- Removidos `test_sessao8_navegador.py` e `test_sessao9_navegador.py`: já falhavam (dependiam do mês 327–330 como «mês aberto», que virou arquivado, e esperavam elementos que dependem dos dados), não estavam em `rodar_testes.py` nem no CI, e o que eles cobriam já está em `test_sessao8.py`, `test_sessao9.py` (no CI) e `test_visual_navegador.py`.
+- Ficam: toda a lista de `rodar_testes.py` (Python, no CI) e três suítes de navegador que passam e cobrem a interface: `test_visual_navegador.py` (páginas e fluxos), `test_sessao10_navegador.py` (álbum/agente/resumo) e `test_cartinhas_navegador.py` (cartinhas, PNG, contraste).
+
 ## 24/11/2026 (5) — Hall da Glória: menu «Mais ações», só pílulas de nível, troféu, Lendária prismática
 - Controles: ficam à vista Mês, Equipe e Buscar; imprimir, folha de recorte, .zip, resumo, modo reunião, simular pesos e os dois interruptores (apresentação, ocultar fotos) moraram em `<details id="maisAcoes">`. Os ids não mudaram; fecha ao escolher, ao clicar fora e com Esc. Testes abrem o menu antes de clicar.
 - Nível: a lista `#fNivel` virou `<input type="hidden">`; as pílulas (`#niveis`) são o único controle (o `?nivel=` do endereço continua valendo).
