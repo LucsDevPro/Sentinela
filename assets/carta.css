@@ -243,10 +243,7 @@
 .c-orna { position: absolute; left: -30px; top: -26px; width: 332px; height: 444px; pointer-events: none; overflow: visible;
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--s, 1));
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
-.c-orna-atras { z-index: 0; }
 .c-orna-frente { z-index: 3; filter: drop-shadow(0 0 4px rgba(255, 236, 160, 0.7)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.4)); }
-.c-conj.b-100 .c-orna-atras { filter: drop-shadow(0 0 5px rgba(240, 190, 60, 0.6)); }
-.c-conj.b-90 .c-orna-atras { filter: drop-shadow(0 0 5px rgba(255, 205, 80, 0.55)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35)); }
 
 /* Textura de metal trabalhado na moldura dos níveis altos */
 .carta.b-90 > .c-borda,
@@ -833,10 +830,6 @@ body.sem-foto .c-foto img {
   6% { opacity: 0.45; }
 }
 @keyframes c-faisca-pisca { 0%, 100% { opacity: 0.1; } 45% { opacity: 1; } }
-@keyframes c-golpe-orna-ouro {
-  0%, 14%, 100% { filter: drop-shadow(0 0 6px rgba(220, 170, 50, 0.75)); }
-  2%, 6% { filter: drop-shadow(0 0 20px rgba(255, 214, 80, 1)) drop-shadow(0 0 7px #FFFFFF); }
-}
 @keyframes c-golpe-orna-rosa {
   0%, 14%, 100% { filter: drop-shadow(0 0 6px rgba(255, 100, 180, 0.7)); }
   2%, 6% { filter: drop-shadow(0 0 20px rgba(64, 224, 255, 1)) drop-shadow(0 0 7px #FFFFFF); }
@@ -855,7 +848,6 @@ body.sem-foto .c-foto img {
   .carta.b-100 .c-estrelas circle { animation: c-faisca-pisca 2.2s ease-in-out infinite; }
   .carta.b-100 .c-estrelas circle:nth-of-type(3n) { animation-delay: 0.7s; }
   .carta.b-100 .c-estrelas circle:nth-of-type(4n) { animation-delay: 1.5s; }
-  .c-conj.b-100 .c-orna-atras { animation: c-golpe-orna-ouro 5.6s linear infinite; }
   /* no hover a tempestade acelera */
   .carta.b-100:hover .c-estrelas .rai { animation-duration: 2.4s; }
   .carta.b-100:hover .c-flash { animation-duration: 2.4s; }
@@ -1018,10 +1010,6 @@ body.sem-foto .c-foto img {
 @keyframes c-pulse-ouro {
   0%, 100% { filter: brightness(1); }
   50% { filter: brightness(1.06); }
-}
-@keyframes c-pulse-halo {
-  0%, 100% { filter: brightness(1) saturate(1); }
-  50% { filter: brightness(1.05) saturate(1.12); }
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -1478,7 +1466,6 @@ dialog.c-envio img{width:100%;max-height:52vh;object-fit:contain;border-radius:1
 .c-conj.b-100::before { background: radial-gradient(closest-side, rgba(255,200,70,.75), rgba(255,170,40,.25) 60%, transparent 80%); }
 .c-conj.b-90::before { background: radial-gradient(closest-side, rgba(255,205,80,.5), transparent 76%); --aura: .4; }
 @keyframes c-aura { from { transform: scale(.94); opacity: calc(var(--aura, .55) * .75); } to { transform: scale(1.06); opacity: var(--aura, .55); } }
-@keyframes c-metal { 0% { background-position: 170% 0; } 60%, 100% { background-position: -70% 0; } }
 @media (prefers-reduced-motion: no-preference) {
   .c-conj:has(.carta.vivo).b-100::before,
 .c-conj:has(.carta.vivo).b-90::before { animation: c-aura 3.4s ease-in-out infinite alternate; }
@@ -1712,7 +1699,6 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
 .carta.b-100 .c-arcos .ag { stroke: rgba(242, 194, 119, 0.45); }
 .carta.b-100 .c-arcos .aw { stroke: #C98E4A; }
 .carta.b-100 .c-flash { background: radial-gradient(ellipse 85% 60% at 50% 30%, rgba(255, 244, 222, 0.95), rgba(242, 194, 119, 0.45) 45%, transparent 78%); }
-.c-conj.b-100 .c-orna-atras { filter: drop-shadow(0 0 5px rgba(242, 194, 119, 0.6)); }
 *:has(> .carta.b-100) { filter: drop-shadow(0 0 12px rgba(242, 194, 119, 0.5)) drop-shadow(0 0 22px rgba(200, 140, 60, 0.3)); }
 
 /* (5) Anel da foto na cor do nível (antes: branco neutro igual para todos) */
@@ -1924,13 +1910,6 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
 }
 
 /* Filete interno (a partir da Prata): uma linha fina recuada da moldura; na Lendária, uma segunda linha mais fina por dentro */
-.carta > .c-filete {
-  position: absolute; inset: calc(var(--bw, 5px) + 3px); z-index: 3; pointer-events: none;
-  border: 1px solid var(--filete, transparent); border-radius: calc(var(--radius, 18px) - var(--bw, 5px) - 2px); box-shadow: var(--filete-glow, none);
-}
-.carta.b-90 > .c-filete::after, .carta.b-100 > .c-filete::after {
-  content: ""; position: absolute; inset: 3px; border: 0.6px solid rgba(255, 240, 166, 0.5); border-radius: calc(var(--radius, 18px) - var(--bw, 5px) - 5px);
-}
 
 /* Reflexo ao passar o mouse nos metais que ficavam parados (Prata, Bronze, Aço); o Ferro segue fosco */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -2115,7 +2094,7 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
    Moldura metálica bisotada (mask-ring) na raridade + filete interno
    fino (bezel) no ::before + brilho diagonal lento no ::after + glow.
    O ::before substitui os brilhos pontuais de canto; o bezel FIFA passa
-   a valer para TODOS os níveis. O .c-filete antigo é desligado para
+   a valer para TODOS os níveis. O .c-filete antigo (removido do JS) foi tirado para
    evitar linha dupla.                                                    */
 
 .c-conj .carta > .c-borda {
@@ -2165,7 +2144,6 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
 .c-conj .carta.t-ferro > .c-borda { box-shadow: none; }
 
 /* O bezel FIFA (.c-borda::before) substitui o filete antigo — evita linha dupla */
-.c-conj .carta > .c-filete { display: none; }
 
 /* ---------- 4. RAIOS — efeito melhorado, tingido pela raridade ----------
    (a) Burst SVG existente (Lendária/Elite): tinta por raridade + rotação
@@ -2220,8 +2198,7 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
 .c-captura .c-foto::before { display: none !important; }
 @media print { .c-foto::before { display: none !important; } }
 
-/* ---------- Sem asas laterais nem gema (24/11/2026); a coroa do TOP 3 continua. O bezel interno do CSS acima fica desligado. ---------- */
-.c-conj .c-orna-atras { display: none; }
+/* ---------- O bezel interno do CSS acima fica desligado (era retangular). Sem asas nem gema desde 24/11/2026; só a coroa do TOP 3. ---------- */
 .c-conj .carta > .c-borda::before { display: none; }
 
 /* ---------- PATCH_CARTAS (25/11/2026): retângulo arredondado, foto redonda e escada de cores nova ---------- */

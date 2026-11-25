@@ -104,9 +104,9 @@ checar("projecao.js: tem o panorama geral, o mês a mês e o panorama de cada m�
 checar("gerar_agentes.py: grava os totais de visitas por mês (panorama)", "def ler_panorama" in ga and '"panorama": panorama' in ga)
 checar("cabeçalho das páginas secundárias tem a mesma largura do conteúdo (álbum 1240, demais 860)",
        "header.topo .marca{max-width:1240px" in ler("assets/album.css") and "header.topo .marca{max-width:860px" in ler("assets/agente.css") and "header.topo .marca{max-width:860px" in ler("assets/comparar.css"))
-checar("moldura premium: peças fora do contorno (conjunto .c-conj, camadas atrás e na frente) na tela e no PNG",
-       ".c-conj" in cc and ".c-orna-atras" in cc and ".c-orna-frente" in cc and "function ornSVG" in cj and "function ornCanvas" in cj and "'atras', X, Y, S, posTop)" in cj and "'frente', X, Y, S, posTop)" in cj and "ornCanvas(ctx, ornChave(tier, borda0)" in cj)
-checar("moldura premium: sem asas nem gema no formato Brasão; a coroa do TOP 3 continua", all(x in cj for x in ("if (posTop)", "coroa: true")) and "laminas(3);" not in cj and "gema: true" not in cj)
+checar("moldura premium: só a coroa do TOP 3 fica fora do contorno (conjunto .c-conj), na tela e no PNG; sem asas, gema nem peças laterais",
+       ".c-conj" in cc and ".c-orna-frente" in cc and "function coroaSVG" in cj and "function coroaCanvas" in cj and "coroaCanvas(ctx, X, Y, S, posTop)" in cj
+       and all(x not in cj for x in ("ornSVG", "ornCanvas", "ORN_PAL", "laminas(", "gema: true", "c-filete")) and ".c-orna-atras" not in cc)
 checar("álbum: o conjunto (e não só o cartão) ocupa a vaga, para as peças acompanharem escala e inclinação", ".slot .c-conj" in ler("assets/album.css") and "c-conj" in ler("assets/carta_fx.js"))
 # Dashboard: evento do LIRAa, alertas em uma linha, Ausências em painéis, gráfico só mensal, críticos com detalhes
 import json as _json
@@ -154,16 +154,16 @@ checar("PNG e peças da moldura da Lendária seguem o ouro (sem o azul antigo)",
        re.search(r"'b-100':\s*\[(?:'#[0-9A-Fa-f]{3,8}',?\s*){3}\]", cj) is not None and "rgba(61,155,255" not in cj and "rgba(89,184,255" not in cj and "'#8FD8FF'" not in cj)
 
 
-checar("Moldura cresce com o nível (Ferro/Aço 3,5px < Bronze 4px < Prata 5px < Ouro 7px < Elite/Lendária 8px) e filete interno a partir da Prata",
+checar("Moldura cresce com o nível (Ferro/Aço 3,5px < Bronze 4px < Prata 5px < Ouro 7px < Elite/Lendária 8px)",
        all(re.search(r"\.c-conj \.carta\.%s\s*\{[^}]*--bw:\s*%s" % (n, w), cc, re.S) for n, w in ((r"t-platina", "8px"), (r"t-ferro", "3.5px"), (r"t-aco", "3.5px"), (r"t-bronze", "4px"), (r"t-prata", "5px"), (r"t-elite", "8px"), (r"t-ouro", "7px"), (r"b-100", "8px")))
-       and "c-filete" in cj and "m.borda === 'b-80'" in cj and ".carta > .c-filete" in cc)
+      )
 checar("Textos legíveis por nível: cor do texto, número e rodapé vêm de variáveis do tema (--tx, --num, --tx-rod)",
        all(v in cc for v in ("color: var(--tx)", "-webkit-text-fill-color: var(--num)", "color: var(--tx-rod)")) and len(re.findall(r"--tx-rod:\s*#[0-9A-Fa-f]{6}", cc)) >= 7)
 checar("PNG: filete interno lendário reduzido para 7px",
        "X + 7 * S, Y + 7 * S" in cj and "X + 13 * S, Y + 13 * S" not in cj)
 # Efeito de raio premium (Lendária em ouro, Destaque em magenta/ciano), na tela e no PNG
-checar("raio premium: disparos em rajada, clarão, faíscas e halo das peças pulsando (só com movimento permitido)",
-       "@keyframes c-golpe" in cc and ".c-flash" in cc and "@keyframes c-golpe-orna-ouro" in cc and "@keyframes c-faisca-pisca" in cc and ".carta.b-100 .c-estrelas .rg" in cc and "prefers-reduced-motion: no-preference" in cc)
+checar("raio premium: disparos em rajada, clarão, faíscas (só com movimento permitido)",
+       "@keyframes c-golpe" in cc and ".c-flash" in cc and "@keyframes c-faisca-pisca" in cc and ".carta.b-100 .c-estrelas .rg" in cc and "prefers-reduced-motion: no-preference" in cc)
 checar("raio premium: a Lendária recebe raios, arcos e clarão e a Elite só raios suaves no tom ametista (markup); o PNG desenha com a paleta dourada e a intensidade cai do TOP 1 ao TOP 3",
        "m.borda === 'b-100' ? raiosSvg + arcosSvg : m.elite ? raiosSvg : ''" in cj and 'class=\\"c-flash\\"' in cj and "function raiosPNG" in cj and "function arcosPNG" in cj and "var RAIO_A = { 1: 1, 2: .82, 3: .64 }" in cj and "PRAIO['b-top']" not in cj
        and ".carta.t-elite .c-estrelas" in cc and ".carta.b-100.top1 .c-estrelas" in cc and ".carta.b-100.top3 .c-estrelas" in cc)

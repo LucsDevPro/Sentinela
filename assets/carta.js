@@ -119,13 +119,13 @@
     var arcosSvg = '<svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
     var extra100 = m.borda === 'b-100' ? raiosSvg + arcosSvg : m.elite ? raiosSvg : '';   // Elite: só raios, bem suaves (CSS .carta.t-elite); Lendária: raios + arcos + clarão
     var topCls = m.top ? ' top' + m.top : '';
-    return '<div class="c-conj ' + m.borda + (m.elite ? ' n100' : '') + topCls + '">' + ornSVG(ornChave(m.elite ? 't-elite' : tier[0], m.borda), 'atras', m.top) + '<div class="carta ' + tier[0] + ' ' + m.borda + (m.elite ? ' n100' : '') + topCls + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
+    return '<div class="c-conj ' + m.borda + (m.elite ? ' n100' : '') + topCls + '">' + '<div class="carta ' + tier[0] + ' ' + m.borda + (m.elite ? ' n100' : '') + topCls + '"' + (cid ? ' data-cid="' + cid + '"' : '') + ' role="img" aria-label="Cartão de ' + esc(a.nome) + ': nota ' + f1(u.pontos) + ', nível ' + tier[1] + '">' +
       '<div class="c-topo"><div class="c-ovr"><b' + (Math.round(u.pontos) >= 100 ? ' class="tres"' : '') + '>' + Math.round(u.pontos) + '</b><span>NOTA</span></div>' +
       '<div class="c-pos"><small>' + pos + 'º · ' + u.total + '</small><span>' + esc(eq) + '</span></div><div class="c-logo" aria-hidden="true"><i></i></div></div>' +
       (foto ? '<div class="c-foto tem-foto"><span class="nome">' + esc(ini) + '</span><img src="' + esc(foto) + '" alt=""></div>' : '<div class="c-foto"><span class="nome">' + esc(ini) + '</span></div>') +
       '<div class="c-nome nome"' + (curto.length > 22 ? ' style="font-size:1.05rem"' : curto.length > 17 ? ' style="font-size:1.14rem"' : '') + '>' + esc(curto) + '</div>' +
       '<div class="c-stats">' + st.map(function (x) { return '<div class="c-chip" style="--v:' + x[1] + '%"><b>' + x[1] + '</b><span>' + x[0] + '</span></div>'; }).join('') + '</div>' +
-      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + (m.borda === 'b-80' || m.borda === 'b-90' || m.borda === 'b-100' ? '<i class="c-filete" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + ornSVG(ornChave(m.elite ? 't-elite' : tier[0], m.borda), 'frente', m.top) + '</div>';
+      '<div class="c-rodape"><span>' + esc(u.mes) + ' · ' + tier[1] + '</span><span>' + tend + '</span></div>' + extra100 + '<i class="c-brilho" aria-hidden="true"></i>' + (m.borda === 'b-90' || m.borda === 'b-100' ? '<i class="c-glitter" aria-hidden="true"></i>' : '') + '<i class="c-borda" aria-hidden="true"></i></div>' + coroaSVG(m.top) + '</div>';
   }
 
   /* ---- Imagem do cartão (PNG) para baixar ou mandar pelo WhatsApp ---- */
@@ -138,60 +138,22 @@
   }
   /* Retângulo arredondado 272×392 (raio 18) — alinhado ao CSS; mais estável no PNG/vídeo que o escudo. */
   var FORMA_R = 18;
-  /* ---------- Moldura premium (louros, aletas, cristais, coroa e gema) ----------
-     As peças ficam FORA do contorno da cartinha (no espaço 272x392 do cartão, com 20-26 px de folga), por isso vão num conjunto
-     .c-conj: uma camada atrás do cartão e outra na frente. A mesma lista de peças alimenta o SVG da tela e o canvas do PNG. */
-  var ORN_PAL = { 'b-80': ['#F4F8FC', '#A0B4C8', '#6B7E94'], 'b-90': ['#FFF4C8', '#E0B84A', '#6A4A10'], 'b-platina': ['#F0F8FF', '#A0C0D8', '#3A5A72'], 'b-elite': ['#FFE8DC', '#EFA48C', '#8A3A4A'], 'b-100': ['#FFF0A6', '#FFD447', '#D6A638'] };
-  /* Insígnia do TOP 3: [brilho, preenchimento, contorno]. Independe do nível da carta. */
+  /* ---------- Insígnia do TOP 3 (coroa) ----------
+     Única peça que passa do contorno do cartão (asas, aletas, cristais e gema saíram em 24/11/2026). Fica no .c-conj, por cima do cartão.
+     A mesma lista de pontos alimenta o SVG da tela e o canvas do PNG. COROA = [brilho, preenchimento, contorno]; independe do nível. */
   var COROA = { 1: ['rgba(255,240,166,.9)', '#FFD447', '#7A5300'], 2: ['rgba(235,240,247,.9)', '#D5DBE3', '#5A6472'], 3: ['rgba(240,190,140,.85)', '#CD8B52', '#5E3515'] };
-  /* chave da paleta das peças: Platina e Elite usam a geometria do b-90 com paleta própria */
-  function ornChave(tier, borda) { return tier === 't-elite' ? 'b-elite' : tier === 't-platina' ? 'b-platina' : borda; }
-  function ornPecas(borda, posTop) {
-    var palOrig = ORN_PAL[borda], borda0El = borda === 'b-elite' || borda === 'b-platina'; if (borda0El) borda = 'b-90';   // Elite: mesma geometria do Ouro, paleta rosé
-    var atras = [], frente = [], n, i, lado, t;
-    function espelha(pts) { return pts.map(function (q) { return [272 - q[0], q[1]]; }); }
-    /* Asas em lâminas angulosas (substituem a aleta da Prata e os louros do Ouro): cada lado tem lâminas verticais
-       de ponta chanfrada, coladas na lateral reta do cartão (x=0) e mais baixas conforme se afastam. Só polígonos, então
-       o SVG da tela e o canvas do PNG usam a mesma lista. Prata: 2 lâminas; Ouro: 3. */
-    function laminas(qtd) {
-      var j, x0, topo, base, f;
-      for (j = 0; j < qtd; j++) {
-        x0 = -j * 9.5; topo = 176 + j * 30; base = 352 - j * 6;
-        f = [[x0, base], [x0 - 8, base - 10], [x0 - 8, topo + 16], [x0, topo]];
-        atras.push({ t: 'poly', pts: f }, { t: 'poly', pts: espelha(f) });
-      }
-    }
-    /* Formato «Brasão» (24/11/2026): sem asas laterais nem gema; só a coroa do TOP 3. As lâminas ficam definidas, mas não são usadas. */
-    /* Top 3: sem asas nem cristais laterais (poluíam o visual). Só coroa + gema. */
-    if (posTop) { // insígnia do TOP 3 (qualquer nível): coroa saindo pelo alto — campeão (dourada), vice (prateada) e 3º (bronze)
-      frente.push({ t: 'poly', pts: [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]], coroa: true, cor: posTop });
-    }
-    // Elite: leva as mesmas lâminas do Ouro (borda já virou 'b-90' acima), agora em champanhe
-    return { atras: atras, frente: frente, pal: palOrig, top: posTop };
+  var COROA_PTS = [[104, 9], [108, -11], [122, -1], [136, -22], [150, -1], [164, -11], [168, 9]];
+  function coroaSVG(posTop) {
+    if (!posTop) return '';
+    var c = COROA[posTop], f2 = function (v) { return Math.round(v * 10) / 10; };
+    return '<svg class="c-orna c-orna-frente" viewBox="-30 -26 332 444" aria-hidden="true"><polygon points="' + COROA_PTS.map(function (z) { return f2(z[0]) + ',' + f2(z[1]); }).join(' ') + '" fill="' + c[1] + '" stroke="' + c[2] + '" stroke-width="1.4" stroke-linejoin="round"/></svg>';
   }
-  function ornSVG(borda, camada, posTop) {
-    var o = ornPecas(borda, posTop), pecas = o[camada]; if (!pecas.length) return '';
-    var pal = o.pal || ORN_PAL['b-80'], id = 'og-' + borda + '-' + camada, f2 = function (v) { return (Math.round(v * 10) / 10); };
-    var corpo = pecas.map(function (q) {
-      var fill = q.coroa ? COROA[q.cor][1] : 'url(#' + id + ')', st = q.coroa ? COROA[q.cor][2] : pal[2], sw = q.coroa ? 1.4 : 0.9;
-      if (q.t === 'leaf') return '<ellipse cx="' + f2(q.cx) + '" cy="' + f2(q.cy) + '" rx="' + f2(q.rx) + '" ry="' + f2(q.ry) + '" transform="rotate(' + f2(q.rot * 180 / Math.PI) + ' ' + f2(q.cx) + ' ' + f2(q.cy) + ')" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '"/>';
-      return '<polygon points="' + q.pts.map(function (z) { return f2(z[0]) + ',' + f2(z[1]); }).join(' ') + '" fill="' + fill + '" stroke="' + st + '" stroke-width="' + sw + '" stroke-linejoin="round"' + (q.coroa ? ' class="c-orna-coroa"' : '') + '/>';
-    }).join('');
-    return '<svg class="c-orna c-orna-' + camada + '" viewBox="-30 -26 332 444" aria-hidden="true"><defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + pal[0] + '"/><stop offset=".5" stop-color="' + pal[1] + '"/><stop offset="1" stop-color="' + pal[2] + '"/></linearGradient></defs>' + corpo + '</svg>';
-  }
-  function ornCanvas(ctx, borda, camada, X, Y, S, posTop) {
-    var o = ornPecas(borda, posTop), pecas = o[camada], pal = o.pal || ORN_PAL['b-80']; if (!pecas.length) return;
-    pecas.forEach(function (q) {
-      var yMin = 1e9, yMax = -1e9;
-      (q.t === 'leaf' ? [[0, q.cy - q.rx], [0, q.cy + q.rx]] : q.pts).forEach(function (z) { yMin = Math.min(yMin, z[1]); yMax = Math.max(yMax, z[1]); });
-      var g = ctx.createLinearGradient(0, Y + yMin * S, 0, Y + yMax * S); g.addColorStop(0, pal[0]); g.addColorStop(.5, pal[1]); g.addColorStop(1, pal[2]);
-      ctx.save(); ctx.fillStyle = q.coroa ? COROA[q.cor][1] : g; ctx.strokeStyle = q.coroa ? COROA[q.cor][2] : pal[2]; ctx.lineWidth = (q.coroa ? 1.4 : 0.9) * S; ctx.lineJoin = 'round';
-      if (q.coroa || q.gema) { ctx.shadowColor = q.coroa ? COROA[q.cor][0] : pal[1]; ctx.shadowBlur = 6 * S; }
-      ctx.beginPath();
-      if (q.t === 'leaf') ctx.ellipse(X + q.cx * S, Y + q.cy * S, q.rx * S, q.ry * S, q.rot, 0, 2 * Math.PI);
-      else { q.pts.forEach(function (z, k) { if (k) ctx.lineTo(X + z[0] * S, Y + z[1] * S); else ctx.moveTo(X + z[0] * S, Y + z[1] * S); }); ctx.closePath(); }
-      ctx.fill(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
-    });
+  function coroaCanvas(ctx, X, Y, S, posTop) {
+    if (!posTop) return;
+    var c = COROA[posTop];
+    ctx.save(); ctx.fillStyle = c[1]; ctx.strokeStyle = c[2]; ctx.lineWidth = 1.4 * S; ctx.lineJoin = 'round'; ctx.shadowColor = c[0]; ctx.shadowBlur = 6 * S;
+    ctx.beginPath(); COROA_PTS.forEach(function (z, k) { if (k) ctx.lineTo(X + z[0] * S, Y + z[1] * S); else ctx.moveTo(X + z[0] * S, Y + z[1] * S); }); ctx.closePath();
+    ctx.fill(); ctx.shadowBlur = 0; ctx.stroke(); ctx.restore();
   }
   /* Raios no PNG: o instante do golpe (tudo aceso), com a paleta de cada nível. A espessura de cada galho vem de r[1]. */
   var PRAIO = {
@@ -248,7 +210,6 @@
       var ctx = cv.getContext('2d'), cs = getComputedStyle(card), c1 = cs.getPropertyValue('--c1').trim(), c2 = cs.getPropertyValue('--c2').trim(), ln = cs.getPropertyValue('--ln').trim();
       var X = M * S, Y = M * S;
       ctx.fillStyle = '#EEF2F8'; ctx.fillRect(0, 0, cv.width, cv.height);
-      ornCanvas(ctx, ornChave(tier, borda0), 'atras', X, Y, S, posTop);   // louros / cristais / aletas atrás do cartão
       ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.30)'; ctx.shadowBlur = 28 * S; ctx.shadowOffsetY = 10 * S; pathCartao(ctx, X, Y, W, H, S); ctx.fillStyle = c2; ctx.fill(); ctx.restore();
       pathCartao(ctx, X, Y, W, H, S); ctx.save(); ctx.clip();
       ctx.fillStyle = gradCss(ctx, 155, X, Y, W, H, c1, c2); ctx.fillRect(X, Y, W, H);
@@ -338,7 +299,7 @@
       var bv = ctx.createLinearGradient(0, Y, 0, Y + H); bv.addColorStop(0, 'rgba(255,255,255,.5)'); bv.addColorStop(.28, 'rgba(255,255,255,0)'); bv.addColorStop(.62, 'rgba(0,0,0,0)'); bv.addColorStop(1, 'rgba(0,0,0,.38)');
       ctx.save(); ctx.beginPath(); pathCartao(ctx, X, Y, W, H, S, 0, true); pathCartao(ctx, X + B, Y + B, W - 2 * B, H - 2 * B, S, B, true); ctx.fillStyle = bv; ctx.fill('evenodd'); ctx.restore();
       if (is100) arcosPNG(ctx, X, Y, W, H, S, Object.assign({}, PRAIO['b-100'], { a: PRAIO['b-100'].a * (RAIO_A[posTop] || 1) }));   // faíscas correndo pela borda (por cima do anel)
-      ornCanvas(ctx, ornChave(tier, borda0), 'frente', X, Y, S, posTop);   // coroa e gema por cima do cartão
+      coroaCanvas(ctx, X, Y, S, posTop);   // coroa do TOP 3 por cima do cartão
       return new Promise(function (ok, erro) { try { cv.toBlob(function (bl) { bl ? ok(bl) : erro(new Error('falha ao gerar a imagem')); }, 'image/png'); } catch (e) { erro(e); } });
     }).then(function (bl) { host.remove(); return bl; }, function (e) { host.remove(); throw e; });
   }

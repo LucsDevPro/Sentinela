@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 25/11/2026 (4) — Poda do código morto das cartinhas
+- Sobrou só a coroa do TOP 3 como peça fora do contorno: `coroaSVG`/`coroaCanvas` (`COROA_PTS`) em `carta.js`, uma lista de pontos para tela e PNG.
+- Removidos: `ornSVG`/`ornCanvas`/`ORN_PAL`, camada `.c-orna-atras`, `<i class="c-filete">` e keyframes sem uso (`c-pulse-halo`, `c-metal`, `c-golpe-orna-ouro`). Visual idêntico.
+- Testes ajustados (`test_album.py`, `test_cartinhas_navegador.py`) para o sistema só-coroa.
+
 ## 25/11/2026 (3) — Um só CSS de cartinha
 - `carta_raridade.css`, `carta_forma.css` (Brasão), `carta_remodel.css` e `scripts/gerar_forma_carta.py` foram fundidos/removidos: tudo está em `assets/carta.css`, na mesma ordem em que os 4 carregavam (imagem antes×depois comparada com animações congeladas: diferença = ruído). Álbum, agente e projeção carregam só `assets/carta.css`.
 - Forma: apenas o retângulo arredondado (raio 18). Do Brasão ficou só «sem asas/gema» (`.c-orna-atras { display: none }`) e a aura em box-shadow (`.c-conj.c-conj:has(> .carta.carta) { filter: none }` mantido porque também anula os antigos `.c-conj.b-100 { filter }`).

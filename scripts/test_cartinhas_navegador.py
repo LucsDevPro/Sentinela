@@ -172,7 +172,7 @@ with sync_playwright() as p:
                 nota: grad('.c-ovr b'), nome: cor('.c-nome'), rod: cor('.c-rodape'), chip: cor('.c-stats b'),
                 fNota: fs('.c-ovr b'), fNome: fs('.c-nome'), fRod: fs('.c-rodape'), fChip: fs('.c-stats b'), fChipSig: fs('.c-stats span'),
                 famNota: fam('.c-ovr b'), famNome: fam('.c-nome'), famRod: fam('.c-rodape'),
-                brilho, raios, louros: !!conj.querySelector('.c-orna-atras'), coroa: !!conj.querySelector('.c-orna-frente'),
+                brilho, raios, louros: false, coroa: !!conj.querySelector('.c-orna-frente'),
                 sombra: cs.boxShadow !== 'none' || cs.filter !== 'none' || getComputedStyle(conj).filter !== 'none',
                 fontesOk: document.fonts.check('700 20px "Barlow Semi Condensed"') && document.fonts.check('600 14px "IBM Plex Sans"') }; }""")
             c1, c2 = rgb_de(r["c1"]), rgb_de(r["c2"])
@@ -205,13 +205,12 @@ with sync_playwright() as p:
             premium = any(m in PREMIUM for m in marcas.split()); orn = any(m in ORNAMENTOS for m in marcas.split())
             checar(f"{nome}: efeitos {'premium (brilho + sombra + moldura)' if premium else 'sem brilho premium'}",
                    (r["brilho"] and r["sombra"]) if premium else True, f"brilho={r['brilho']} sombra={r['sombra']} louros={r['louros']} coroa={r['coroa']}")
-            checar(f"{nome}: peças de moldura {'presentes' if orn else 'ausentes'} (ORN_PAL)", r["louros"] == orn, f"louros={r['louros']} coroa={r['coroa']}")
             if "b-100" in marcas:
                 checar(f"{nome}: raios/arcos (c-estrelas) presentes", r["raios"])
         # insígnia TOP 1/2/3: independe do nível (qualquer nível pode ter coroa) e raios só na Lendária
         for P, pos, esperado in ((105, 1, "LENDÁRIA"), (105, 3, "LENDÁRIA"), (94, 2, "PLATINA"), (85, 2, "OURO"), (75, 3, "PRATA"), (65, 3, "BRONZE"), (20, 1, "FERRO"), (45, 2, "AÇO"), (104, 8, "ELITE"), (94, 9, "PLATINA"), (85, 9, "OURO")):
             cls = pg.evaluate(JS_MONTA, [P, pos, "x"])
-            r = pg.evaluate("""() => { const h = document.querySelector('.t-host'); return { coroa: !!h.querySelector('.c-orna-coroa'), raios: !!h.querySelector('.c-estrelas'), rod: h.querySelector('.c-rodape').textContent }; }""")
+            r = pg.evaluate("""() => { const h = document.querySelector('.t-host'); return { coroa: !!h.querySelector('.c-orna-frente'), raios: !!h.querySelector('.c-estrelas'), rod: h.querySelector('.c-rodape').textContent }; }""")
             top = pos <= 3
             checar(f"{esperado} na posição {pos}: {'coroa TOP ' + str(pos) if top else 'sem coroa'}; raios {'da Lendária' if esperado == 'LENDÁRIA' else 'suaves da Elite' if esperado == 'ELITE' else 'ausentes'}",
                    (f"top{pos}" in cls.split()) == top and r["coroa"] == top and r["raios"] == (esperado in ("LENDÁRIA", "ELITE")) and esperado in r["rod"] and "DESTAQUE" not in r["rod"], f"{cls} {r}")
@@ -219,7 +218,7 @@ with sync_playwright() as p:
         cj = open(os.path.join(RAIZ, "assets/carta.js"), encoding="utf-8").read()
         cc = open(os.path.join(RAIZ, "assets/carta.css"), encoding="utf-8").read()
         for chave in ("b-100", "b-90", "b-80"):
-            checar(f"paleta das peças de moldura ({chave}) existe em ORN_PAL e no CSS", re.search(r"'%s':\s*\[" % chave, cj) is not None and (".carta.%s" % chave) in cc)
+            checar(f"borda {chave} tem regra no CSS", (".carta.%s" % chave) in cc)
         for t in ("t-platina", "t-ouro", "t-prata", "t-bronze", "t-aco", "t-ferro"):
             checar(f"tier {t} tem regra no CSS", (".carta.%s" % t) in cc)
         pg.context.close()
