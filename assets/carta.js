@@ -134,8 +134,8 @@
     var a = ang * Math.PI / 180, dx = Math.sin(a), dy = -Math.cos(a), L = Math.abs(w * dx) + Math.abs(h * dy), cx = x + w / 2, cy = y + h / 2;
     var g = ctx.createLinearGradient(cx - dx * L / 2, cy - dy * L / 2, cx + dx * L / 2, cy + dy * L / 2); g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
   }
-  /* Silhueta «Brasão» 272×392: ombros cortados + base em V suave. Mesma geometria do trecho FORMA «BRASÃO» de carta.css (TOPO/BASE). */
-  var FORMA_TOPO = 30, FORMA_BASE = 26;
+  /* Silhueta FUT 272×392: ressalto central no topo, ombros curvos, base arredondada. Mesma definição de scripts/gerar_forma_carta.py (SEGS), que gera a seção FORMA de carta.css. */
+  var FORMA_SEGS = [['M', 0, 26], ['C', 0, 18, 5, 11, 13, 11], ['L', 58, 11], ['C', 84, 11, 84, 0, 112, 0], ['L', 160, 0], ['C', 188, 0, 188, 11, 214, 11], ['L', 259, 11], ['C', 267, 11, 272, 18, 272, 26], ['L', 272, 356], ['C', 272, 378, 256, 392, 232, 392], ['L', 40, 392], ['C', 16, 392, 0, 378, 0, 356], ['L', 0, 26]], FORMA_PASSOS = 10, FORMA_BASE_PTS = null;
   /* ---------- Insígnia do TOP 3 (coroa) ----------
      Única peça que passa do contorno do cartão (asas, aletas, cristais e gema saíram em 24/11/2026). Fica no .c-conj, por cima do cartão.
      A mesma lista de pontos alimenta o SVG da tela e o canvas do PNG. COROA = [brilho, preenchimento, contorno]; independe do nível. */
@@ -178,11 +178,23 @@
       ctx.strokeStyle = P.arcoFil; ctx.lineWidth = 1.1; ctx.stroke(pa); });
     ctx.restore();
   }
-  function formaPts(d) { // polígono no espaço 272x392, recuado d px para dentro (convexo, sentido horário)
-    var P = [[FORMA_TOPO, 0], [272 - FORMA_TOPO, 0], [272, FORMA_TOPO], [272, 392 - FORMA_BASE], [136, 392], [0, 392 - FORMA_BASE], [0, FORMA_TOPO]], n = P.length, R = [], i, O = [];
-    if (!d) return P;
-    for (i = 0; i < n; i++) { var a = P[i], b = P[(i + 1) % n], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy); R.push([a[0] - dy / l * d, a[1] + dx / l * d, dx, dy]); }
-    for (i = 0; i < n; i++) { var p = R[(i + n - 1) % n], q = R[i], den = p[2] * q[3] - p[3] * q[2], t = ((q[0] - p[0]) * q[3] - (q[1] - p[1]) * q[2]) / den; O.push([p[0] + p[2] * t, p[1] + p[3] * t]); }
+  function formaPts(d) { // contorno amostrado no espaço 272x392, recuado d px para dentro (sentido horário)
+    if (!FORMA_BASE_PTS) {
+      var P = [], cur, i, S, t, u;
+      FORMA_SEGS.forEach(function (g) {
+        if (g[0] === 'C') { for (i = 1; i <= FORMA_PASSOS; i++) { t = i / FORMA_PASSOS; u = 1 - t; P.push([u * u * u * cur[0] + 3 * u * u * t * g[1] + 3 * u * t * t * g[3] + t * t * t * g[5], u * u * u * cur[1] + 3 * u * u * t * g[2] + 3 * u * t * t * g[4] + t * t * t * g[6]]); } cur = [g[5], g[6]]; }
+        else { cur = [g[1], g[2]]; P.push(cur); }
+      });
+      if (P[0][0] === P[P.length - 1][0] && P[0][1] === P[P.length - 1][1]) P.pop();
+      FORMA_BASE_PTS = P;
+    }
+    var Q = FORMA_BASE_PTS, n = Q.length, O = [], k;
+    if (!d) return Q;
+    function nor(p, q) { var dx = q[0] - p[0], dy = q[1] - p[1], l = Math.sqrt(dx * dx + dy * dy) || 1; return [-dy / l, dx / l]; }
+    for (k = 0; k < n; k++) {
+      var a = Q[(k + n - 1) % n], b = Q[k], c = Q[(k + 1) % n], n1 = nor(a, b), n2 = nor(b, c), mx = n1[0] + n2[0], my = n1[1] + n2[1], ml = Math.sqrt(mx * mx + my * my) || 1;
+      mx /= ml; my /= ml; var cs = Math.max(0.5, mx * n1[0] + my * n1[1]); O.push([b[0] + mx * d / cs, b[1] + my * d / cs]);
+    }
     return O;
   }
   function pathCartao(ctx, x, y, w, h, S, d, continuar) { // contorno do cartão; d = recuo (px do canvas): a chamada passa o retângulo já recuado e d, que o devolve ao tamanho cheio

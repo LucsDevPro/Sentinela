@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 25/11/2026 (8) — Silhueta FUT (referência do cliente) no lugar do Brasão
+- Cartinha com ressalto central no topo, ombros curvos, cantos e base arredondados. Definição única em `scripts/gerar_forma_carta.py` (`SEGS`), que reescreve a seção «FORMA FUT» de `assets/carta.css` (`--check` verifica); `carta.js` tem a mesma lista (`FORMA_SEGS`, `formaPts`) para o PNG em canvas. Mudou a forma → edite os dois, rode o gerador e `test_album`.
+- Foto volta a 112 px (sem V na base).
+
 ## 25/11/2026 (7) — Cartinhas: Brasão de volta + raios estáticos caindo das nuvens
 - Formato Brasão (ombros 30 px, V de 26 px na base) volta ao fim de `assets/carta.css` (seção «FORMA BRASÃO»; foto 100 px, brilho externo por drop-shadow no `.c-conj`) e em `carta.js` (`formaPts`/`pathCartao`, PNG plano B). Geometria igual nos dois lados; `test_album` confere.
 - Raios (Elite e Lendária) não giram mais: descem de nuvens no topo da carta (`.c-nuvens`), terminam acima das estatísticas (contraste dos chips ≥ 4.5). Só cada descarga pisca. Holo da foto também parou de girar.
