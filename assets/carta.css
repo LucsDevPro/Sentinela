@@ -2159,10 +2159,18 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
 .c-conj .carta .c-arcos .ag { stroke: rgba(var(--raridade-rgb), .5); }
 .c-conj .carta .c-arcos .aw { stroke: var(--raridade-raio); }
 
-@media (prefers-reduced-motion: no-preference) {
-  .c-conj .carta .c-estrelas { animation: c-raio-gira 26s linear infinite; transform-origin: 50% 32%; }
-}
-@keyframes c-raio-gira { to { transform: rotate(360deg); } }
+/* (a) Raios ESTÁTICOS: descem das nuvens do topo (sem girar). Só cada descarga pisca, como um relâmpago. */
+.c-nuvens { position: absolute; left: -6%; right: -6%; top: -3%; height: 27%; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 22% 62% at 10% 38%, rgba(var(--raridade-rgb), .8), transparent 74%),
+    radial-gradient(ellipse 26% 78% at 30% 30%, rgba(var(--raridade-rgb), .9), transparent 72%),
+    radial-gradient(ellipse 28% 90% at 52% 24%, rgba(var(--raridade-rgb), 1), transparent 72%),
+    radial-gradient(ellipse 26% 80% at 74% 32%, rgba(var(--raridade-rgb), .9), transparent 72%),
+    radial-gradient(ellipse 22% 64% at 94% 38%, rgba(var(--raridade-rgb), .8), transparent 72%),
+    linear-gradient(180deg, rgba(10, 8, 18, .95) 0%, rgba(10, 8, 18, .6) 40%, transparent 100%);
+  -webkit-mask: linear-gradient(180deg, #000 55%, transparent);
+          mask: linear-gradient(180deg, #000 55%, transparent);
+  filter: blur(2.5px); }
 
 /* (b) Holo rotativo sobre a foto (cone cônico tingido pela raridade) */
 .c-conj .carta .c-foto::before {
@@ -2188,9 +2196,6 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .c-conj .carta .c-foto::before { animation: c-raio-gira 16s linear infinite; }
-}
 /* Ferro: fosco, sem holo */
 .c-conj .carta.t-ferro .c-foto::before { display: none; }
 
@@ -2199,7 +2204,7 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
 @media print { .c-foto::before { display: none !important; } }
 
 /* ---------- O bezel interno do CSS acima fica desligado (era retangular). Sem asas nem gema desde 24/11/2026; só a coroa do TOP 3. ---------- */
-.c-conj .carta > .c-borda::before { display: none; }
+.c-conj .carta.carta > .c-borda::before { display: none; }
 
 /* ---------- PATCH_CARTAS (25/11/2026): retângulo arredondado, foto redonda e escada de cores nova ---------- */
 
@@ -2259,3 +2264,35 @@ borda violeta-magenta (sem tons quentes: Elite = vinho+rosé {
   --bgm: radial-gradient(ellipse 80% 40% at 50% 18%, rgba(255, 212, 71, 0.36) 0%, transparent 60%), linear-gradient(160deg, #5A3A0A 0%, #3A2208 40%, #1E1004 75%, #0E0802 100%);
   --b1: #8A6618; --b2: #FFD447; --b3: #FFF0A6; --filete: rgba(255, 240, 166, 0.95); --foto-b: #FFD447;
 }
+
+/* ===== FORMA «BRASÃO» (ombros cortados + base em V): TOPO 30 / BASE 26 px, mesma geometria de FORMA_TOPO/FORMA_BASE e formaPts em carta.js (PNG em canvas). Espessura dos anéis = --bw de cada nível. ===== */
+
+/* Recorte do cartão: o brilho externo sai do box-shadow (que o recorte cortaria) e vai para um drop-shadow no conjunto .c-conj */
+.c-conj .carta.carta { clip-path: polygon(30px 0px, calc(100% - 30px) 0px, calc(100% - 0px) 30px, calc(100% - 0px) calc(100% - 26px), 136px calc(100% - 0px), 0px calc(100% - 26px), 0px 30px); border-radius: 0; box-shadow: none; }
+
+/* Anel da moldura: contorno externo + contorno recuado (evenodd). O mesmo recorte vale para o brilho diagonal (::after). */
+.c-conj .carta.carta > .c-borda { padding: 0 !important; border-radius: 0; box-shadow: none !important; -webkit-mask: none !important; mask: none !important; }
+.c-conj .carta.carta > .c-borda::before { display: none; }
+
+.c-conj .carta.t-ferro > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M31.45 3.5 L240.55 3.5 L268.5 31.45 L268.5 363.11 L136 388.44 L3.5 363.11 L3.5 31.45 Z"); }
+.c-conj .carta.t-aco > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M31.45 3.5 L240.55 3.5 L268.5 31.45 L268.5 363.11 L136 388.44 L3.5 363.11 L3.5 31.45 Z"); }
+.c-conj .carta.t-bronze > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M31.66 4 L240.34 4 L268 31.66 L268 362.69 L136 387.93 L4 362.69 L4 31.66 Z"); }
+.c-conj .carta.t-prata > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M32.07 5 L239.93 5 L267 32.07 L267 361.87 L136 386.91 L5 361.87 L5 32.07 Z"); }
+.c-conj .carta.t-ouro > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M32.9 7 L239.1 7 L265 32.9 L265 360.21 L136 384.87 L7 360.21 L7 32.9 Z"); }
+.c-conj .carta.t-platina > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M33.31 8 L238.69 8 L264 33.31 L264 359.38 L136 383.86 L8 359.38 L8 33.31 Z"); }
+.c-conj .carta.t-elite > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M33.31 8 L238.69 8 L264 33.31 L264 359.38 L136 383.86 L8 359.38 L8 33.31 Z"); }
+.c-conj .carta.b-100 > .c-borda { clip-path: path(evenodd, "M30 0 L242 0 L272 30 L272 366 L136 392 L0 366 L0 30 Z M33.31 8 L238.69 8 L264 33.31 L264 359.38 L136 383.86 L8 359.38 L8 33.31 Z"); }
+
+/* Foto 12 px menor: sobe o rodapé para fora do V da base */
+.c-conj .carta.carta { --k-foto: 100px; }
+
+
+/* Brilho externo por nível (cor = --raridade de carta_raridade.css) */
+.c-conj.c-conj:has(> .carta.t-ferro) { filter: drop-shadow(0 0 10px rgba(107,114,128, 0)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }
+.c-conj.c-conj:has(> .carta.t-aco) { filter: drop-shadow(0 0 10px rgba(46,125,140, .28)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }
+.c-conj.c-conj:has(> .carta.t-bronze) { filter: drop-shadow(0 0 10px rgba(201,139,94, .28)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }
+.c-conj.c-conj:has(> .carta.t-prata) { filter: drop-shadow(0 0 10px rgba(198,204,212, .28)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }
+.c-conj.c-conj:has(> .carta.t-ouro) { filter: drop-shadow(0 0 16px rgba(224,182,79, .42)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }
+.c-conj.c-conj:has(> .carta.t-platina) { filter: drop-shadow(0 0 16px rgba(0,217,232, .42)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }
+.c-conj.c-conj:has(> .carta.t-elite) { filter: drop-shadow(0 0 16px rgba(168,85,247, .42)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }
+.c-conj.c-conj:has(> .carta.b-100) { filter: drop-shadow(0 0 16px rgba(255,212,71, .55)) drop-shadow(0 14px 16px rgba(0, 0, 0, .38)); }

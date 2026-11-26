@@ -83,8 +83,11 @@ checar("carta.js: o link do popup inclui o mês da cartinha (&mes=u.mes)",
 cc = ler("assets/carta.css")
 checar("carta.css: cartão e anel da borda são retângulo arredondado (--radius 18px, sem clip-path em polígono)",
        "--radius: 18px" in cc and "border-radius: var(--radius)" in cc and "clip-path: polygon(" not in cc.split("/* ---- Janela")[0])
-checar("patch cartas (24/11/2026): o PNG desenha o retângulo arredondado de raio 18 (pathCartao), sem o polígono do Brasão",
-       "var FORMA_R = 18;" in cj and "function formaPts" not in cj and "quadraticCurveTo" in cj and "FORMA_TOPO" not in cj)
+checar("formato Brasão: CSS (recorte 30px/26px, V na base) e PNG (formaPts, FORMA_TOPO 30 / FORMA_BASE 26) têm a mesma geometria",
+       "FORMA «BRASÃO»" in cc and "polygon(30px 0px, calc(100% - 30px) 0px" in cc and "136px calc(100% - 0px)" in cc and "calc(100% - 26px)" in cc
+       and "var FORMA_TOPO = 30, FORMA_BASE = 26;" in cj and "function formaPts" in cj and "FORMA_R" not in cj)
+checar("raios das cartas: estáticos (sem girar), caem das nuvens do topo (.c-nuvens) e não há mais @keyframes c-raio-gira",
+       "c-raio-gira" not in cc and ".c-nuvens" in cc and 'class="c-nuvens"' in cj)
 checar("um só CSS de cartinha: as 3 páginas com cartas carregam só assets/carta.css e os arquivos antigos (raridade/forma/remodel) não existem mais",
        all("carta_raridade" not in ler(f) and "carta_forma" not in ler(f) and "carta_remodel" not in ler(f) and "assets/carta.css" in ler(f) for f in ("album.html", "agente.html", "projecao.html"))
        and not any(os.path.exists(os.path.join(RAIZ, "assets", n)) for n in ("carta_raridade.css", "carta_forma.css", "carta_remodel.css")) and not os.path.exists(os.path.join(RAIZ, "scripts/gerar_forma_carta.py")))

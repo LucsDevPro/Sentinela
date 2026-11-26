@@ -197,7 +197,7 @@ with sync_playwright() as p:
                 var_b = contraste(rgb_de(r["b1"]), rgb_de(r["b3"]))
                 checar(f"{nome}: a borda tem relevo (b1 × b3 com razão ≥ {CONFIG['CONTRASTE_BORDA_RELEVO']})", var_b >= CONFIG["CONTRASTE_BORDA_RELEVO"], f"{var_b:.2f}")
             checar(f"{nome}: espessura da borda (--bw) entre {CONFIG['BORDA_PX'][0]} e {CONFIG['BORDA_PX'][1]} px", CONFIG["BORDA_PX"][0] <= (r["bw"] or 0) <= CONFIG["BORDA_PX"][1], str(r["bw"]))
-            checar(f"{nome}: retângulo arredondado (carta.css) — sem recorte em polígono, raio 18", r["forma"] == "none" and r["anel"] == "none" and abs(r["raio"] - 18) < 0.5, f"{r['forma'][:20]} | {r['anel'][:20]} | {r['raio']}")
+            checar(f"{nome}: formato Brasão (carta.css) — cartão recortado em polígono e anel em path evenodd", r["forma"].startswith("polygon") and r["anel"].startswith("path"), f"{r['forma'][:30]} | {r['anel'][:20]}")
             menores = {k: r[k] for k in ("fNome", "fRod", "fChip", "fChipSig") if r[k] is not None and r[k] < CONFIG["FONTE_MIN_PX"]}
             checar(f"{nome}: nenhum texto menor que {CONFIG['FONTE_MIN_PX']} px", not menores, str(menores))
             checar(f"{nome}: tipografia usa {' ou '.join(CONFIG['FAMILIAS'])} e as fontes estão carregadas",

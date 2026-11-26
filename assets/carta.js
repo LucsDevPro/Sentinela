@@ -96,12 +96,10 @@
         raio(m[0], m[1], m[0] + Math.cos(u) * L, m[1] + Math.sin(u) * L, L * .35, w * .55, prof - 1);
       });
     }
-    var CX = 136, CY = 158, R0 = 63;
-    // [ângulo (0 = leste, sentido horário), raio final]: troncos saindo da foto, evitando a região dos textos
-    [[188, 124], [160, 116], [212, 104], [352, 124], [18, 116], [328, 104], [262, 100], [296, 104], [238, 96]].forEach(function (a) {
-      var t = a[0] * Math.PI / 180; raio(CX + Math.cos(t) * R0, CY + Math.sin(t) * R0, CX + Math.cos(t) * a[1], CY + Math.sin(t) * a[1], 20, 1, 2);
+    // descargas que CAEM das nuvens do topo da carta (y≈10, dentro da nuvem) e descem até a altura da foto/estatísticas; [x1, y1, x2, y2]
+    [[32, 10, 20, 196], [76, 10, 96, 150], [136, 6, 150, 126], [196, 10, 182, 156], [240, 10, 254, 190], [108, 10, 58, 232], [166, 10, 214, 238]].forEach(function (t) {
+      raio(t[0], t[1], t[2], t[3], 18, 1, 2);
     });
-    raio(19, 22, 26, 206, 16, .8, 1); raio(253, 122, 249, 262, 16, .8, 1); // descargas rente às laterais
     function zig(x1, y1, x2, y2, amp) { var n = Math.round(Math.hypot(x2 - x1, y2 - y1) / 7), p = []; for (var i = 0; i <= n; i++) { var t = i / n, o = i === 0 || i === n ? 0 : (i % 2 ? 1 : -1) * amp * (.5 + q() * .8); p.push(x1 === x2 ? [x1 + o, y1 + (y2 - y1) * t] : [x1 + (x2 - x1) * t, y1 + o]); } return d(p); }
     ARCOS.push(zig(60, 5.5, 132, 5.5, 3.2), zig(266.5, 140, 266.5, 232, 3.2), zig(88, 386.5, 204, 386.5, 3.2), zig(5.5, 248, 5.5, 338, 3.2), zig(5.5, 80, 5.5, 130, 3.2));
     for (var i = 0; i < 36; i++) FAISCAS.push([16 + q() * 240, 16 + q() * 360, .5 + q() * .9, .35 + q() * .55]);
@@ -115,7 +113,7 @@
     var ini = (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
     var eq = String(a.equipe).replace(/^Equipe\s*/i, 'EQ ');
     var tend = delta == null ? SV('minus') + ' 1º mês' : delta > 0.05 ? SV('arrow-up') + ' +' + f1(delta) + ' pts' : delta < -0.05 ? SV('arrow-down') + ' ' + f1(delta) + ' pts' : SV('minus') + ' estável';
-    var raiosSvg = '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg>';
+    var raiosSvg = '<svg class="c-estrelas" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + RAIOS.map(function (r) { return '<g class="rai"><path class="rg" stroke-width="' + (8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="ry" stroke-width="' + (2.8 * r[1]).toFixed(2) + '" d="' + r[0] + '"/><path class="rw" stroke-width="' + Math.max(.6, 1.2 * r[1]).toFixed(2) + '" d="' + r[0] + '"/></g>'; }).join('') + FAISCAS.map(function (f) { return '<circle cx="' + f[0].toFixed(1) + '" cy="' + f[1].toFixed(1) + '" r="' + f[2].toFixed(2) + '" fill="#CDEBFF" fill-opacity="' + f[3].toFixed(2) + '"/>'; }).join('') + '</svg><i class="c-nuvens" aria-hidden="true"></i>';
     var arcosSvg = '<svg class="c-arcos" viewBox="0 0 272 392" preserveAspectRatio="none" aria-hidden="true">' + ARCOS.map(function (d) { return '<path class="ag" d="' + d + '"/><path class="aw" d="' + d + '"/>'; }).join('') + '</svg><i class=\"c-flash\" aria-hidden=\"true\"></i>';
     var extra100 = m.borda === 'b-100' ? raiosSvg + arcosSvg : m.elite ? raiosSvg : '';   // Elite: só raios, bem suaves (CSS .carta.t-elite); Lendária: raios + arcos + clarão
     var topCls = m.top ? ' top' + m.top : '';
@@ -136,8 +134,8 @@
     var a = ang * Math.PI / 180, dx = Math.sin(a), dy = -Math.cos(a), L = Math.abs(w * dx) + Math.abs(h * dy), cx = x + w / 2, cy = y + h / 2;
     var g = ctx.createLinearGradient(cx - dx * L / 2, cy - dy * L / 2, cx + dx * L / 2, cy + dy * L / 2); g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
   }
-  /* Retângulo arredondado 272×392 (raio 18) — alinhado ao CSS; mais estável no PNG/vídeo que o escudo. */
-  var FORMA_R = 18;
+  /* Silhueta «Brasão» 272×392: ombros cortados + base em V suave. Mesma geometria do trecho FORMA «BRASÃO» de carta.css (TOPO/BASE). */
+  var FORMA_TOPO = 30, FORMA_BASE = 26;
   /* ---------- Insígnia do TOP 3 (coroa) ----------
      Única peça que passa do contorno do cartão (asas, aletas, cristais e gema saíram em 24/11/2026). Fica no .c-conj, por cima do cartão.
      A mesma lista de pontos alimenta o SVG da tela e o canvas do PNG. COROA = [brilho, preenchimento, contorno]; independe do nível. */
@@ -180,15 +178,17 @@
       ctx.strokeStyle = P.arcoFil; ctx.lineWidth = 1.1; ctx.stroke(pa); });
     ctx.restore();
   }
-  /* Retângulo arredondado (raio 18), igual ao CSS. d = recuo do anel (px do canvas): a chamada passa o retângulo já recuado e d, que o devolve ao tamanho cheio. */
-  function pathCartao(ctx, x, y, w, h, S, d, continuar) {
+  function formaPts(d) { // polígono no espaço 272x392, recuado d px para dentro (convexo, sentido horário)
+    var P = [[FORMA_TOPO, 0], [272 - FORMA_TOPO, 0], [272, FORMA_TOPO], [272, 392 - FORMA_BASE], [136, 392], [0, 392 - FORMA_BASE], [0, FORMA_TOPO]], n = P.length, R = [], i, O = [];
+    if (!d) return P;
+    for (i = 0; i < n; i++) { var a = P[i], b = P[(i + 1) % n], dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy); R.push([a[0] - dy / l * d, a[1] + dx / l * d, dx, dy]); }
+    for (i = 0; i < n; i++) { var p = R[(i + n - 1) % n], q = R[i], den = p[2] * q[3] - p[3] * q[2], t = ((q[0] - p[0]) * q[3] - (q[1] - p[1]) * q[2]) / den; O.push([p[0] + p[2] * t, p[1] + p[3] * t]); }
+    return O;
+  }
+  function pathCartao(ctx, x, y, w, h, S, d, continuar) { // contorno do cartão; d = recuo (px do canvas): a chamada passa o retângulo já recuado e d, que o devolve ao tamanho cheio
     d = d || 0; x -= d; y -= d; w += 2 * d; h += 2 * d;
-    var r = Math.max(0, FORMA_R * (w / 272) - d);
     if (!continuar) ctx.beginPath();
-    ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y);
+    formaPts(d / S).forEach(function (q, i) { var px = x + q[0] * w / 272, py = y + q[1] * h / 392; if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py); });
     ctx.closePath();
   }
   function texto(ctx, txt, x, y, ls) { // letra a letra, para respeitar o espaçamento entre letras em qualquer navegador
