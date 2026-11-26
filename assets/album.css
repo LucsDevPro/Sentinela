@@ -323,3 +323,15 @@ body.modo-apresentacao .aviso-fotos{display:none}
 @media (max-width:640px){.mais{grid-column:1 / -1}.mais .menu{left:0;right:0;min-width:0}}
 @media print{.mais{display:none!important}}
 .mais .menu .tg{flex-direction:row;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:.88rem;font-weight:400;color:var(--mut)}
+
+/* ===== SENTINELA FUT ALBUM PATCH — refinamento da vitrine ===== */
+.album{grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:44px 30px;padding:32px 22px 38px;background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 22%),var(--shelf)}
+.slot{filter:drop-shadow(0 16px 24px rgba(0,0,0,.44));transition:transform .25s ease,filter .25s ease}
+.slot:hover,.slot:focus-visible{filter:drop-shadow(0 0 22px rgba(233,194,122,.2)) drop-shadow(0 18px 28px rgba(0,0,0,.46))}
+.slot .n{backdrop-filter:blur(8px);border-radius:6px;letter-spacing:.04em}
+.podio{gap:16px 46px;padding:72px 26px 42px;background:radial-gradient(ellipse 65% 45% at 50% 100%,rgba(233,194,122,.24),transparent 70%),linear-gradient(180deg,var(--card),var(--soft))}
+.podio .slot.p1{filter:drop-shadow(0 0 26px rgba(240,190,50,.38)) drop-shadow(0 18px 28px rgba(0,0,0,.48))}
+.podio .slot.p2,.podio .slot.p3{filter:drop-shadow(0 12px 20px rgba(0,0,0,.4))}
+@media(max-width:700px){.album{gap:28px 14px;padding:24px 12px}}
+@media(max-width:480px){.album{gap:18px 8px}}
+@media(prefers-reduced-motion:reduce){.slot,.podio .slot{transition:none!important}}
