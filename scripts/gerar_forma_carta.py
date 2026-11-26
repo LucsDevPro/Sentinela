@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Gera a seção «FORMA» (silhueta FUT da cartinha) no fim de assets/carta.css.
 
-Silhueta 272x392: topo com ressalto central e «ombros» curvos, cantos arredondados, base arredondada (referência: cartas FUT).
+Silhueta 272x392 TRAÇADA da imagem de referência do cliente (cartas FUT): cume central, ombros inclinados até y≈46, laterais retas e base afunilada em arco. SEGS é o perfil simétrico (poligonal) extraído do contorno.
 A MESMA definição (SEGS) e a mesma amostragem existem em assets/carta.js (FORMA_SEGS / formaPts) para o PNG em canvas;
 test_album confere os marcadores. Uso: python3 scripts/gerar_forma_carta.py  (reescreve a seção em carta.css) · --check só verifica."""
 import re, sys, os, math
 
 W, H = 272, 392
 # (tipo, pontos...) : 'M' início, 'L' reta, 'C' cúbica (2 controles + destino). Sentido horário (y para baixo).
-SEGS = [("M", 0, 26), ("C", 0, 18, 5, 11, 13, 11), ("L", 58, 11), ("C", 84, 11, 84, 0, 112, 0), ("L", 160, 0), ("C", 188, 0, 188, 11, 214, 11), ("L", 259, 11), ("C", 267, 11, 272, 18, 272, 26), ("L", 272, 356), ("C", 272, 378, 256, 392, 232, 392), ("L", 40, 392), ("C", 16, 392, 0, 378, 0, 356), ("L", 0, 26)]
+SEGS = [("M", 179.9, 0.0), ("L", 186.1, 1.2), ("L", 202.7, 7.1), ("L", 244.9, 28.5), ("L", 253.4, 32.1), ("L", 268.9, 36.8), ("L", 271.2, 38.0), ("L", 272.0, 39.2), ("L", 271.7, 340.9), ("L", 269.9, 348.0), ("L", 266.5, 354.0), ("L", 260.5, 359.9), ("L", 252.1, 364.7), ("L", 248.6, 365.9), ("L", 235.9, 368.2), ("L", 190.7, 374.2), ("L", 171.7, 377.7), ("L", 150.9, 383.7), ("L", 140.4, 388.4), ("L", 136.0, 392.0), ("L", 131.6, 388.4), ("L", 121.1, 383.7), ("L", 100.3, 377.7), ("L", 81.3, 374.2), ("L", 36.1, 368.2), ("L", 23.4, 365.9), ("L", 19.9, 364.7), ("L", 11.5, 359.9), ("L", 5.5, 354.0), ("L", 2.1, 348.0), ("L", 0.3, 340.9), ("L", 0.0, 39.2), ("L", 0.8, 38.0), ("L", 3.1, 36.8), ("L", 18.6, 32.1), ("L", 27.1, 28.5), ("L", 69.3, 7.1), ("L", 85.9, 1.2), ("L", 92.1, 0.0), ("L", 179.9, 0.0)]
 PASSOS = 10  # amostras por curva
 BW = {"t-ferro": 3.5, "t-aco": 3.5, "t-bronze": 4, "t-prata": 5, "t-ouro": 7, "t-platina": 8, "t-elite": 8, "b-100": 8}
 CORES = {"t-ferro": "107,114,128", "t-aco": "46,125,140", "t-bronze": "201,139,94", "t-prata": "198,204,212", "t-ouro": "224,182,79", "t-platina": "0,217,232", "t-elite": "168,85,247", "b-100": "255,212,71"}

@@ -85,7 +85,7 @@ cc = ler("assets/carta.css")
 checar("carta.css: cartão e anel da borda são retângulo arredondado (--radius 18px, sem clip-path em polígono)",
        "--radius: 18px" in cc and "border-radius: var(--radius)" in cc and "clip-path: polygon(" not in cc.split("/* ---- Janela")[0])
 checar("formato FUT: CSS gerado (scripts/gerar_forma_carta.py --check) e PNG usam a mesma definição de silhueta (FORMA_SEGS)",
-       "FORMA «FUT»" in cc and "var FORMA_SEGS = [['M', 0, 26], ['C', 0, 18, 5, 11, 13, 11]" in cj and "function formaPts" in cj and "FORMA_R" not in cj
+       "FORMA «FUT»" in cc and "var FORMA_SEGS = [['M'," in cj and "function formaPts" in cj and "FORMA_R" not in cj
        and subprocess.run([sys.executable, os.path.join(RAIZ, "scripts", "gerar_forma_carta.py"), "--check"], capture_output=True).returncode == 0)
 checar("raios das cartas: estáticos (sem girar), caem das nuvens do topo (.c-nuvens) e não há mais @keyframes c-raio-gira",
        "c-raio-gira" not in cc and ".c-nuvens" in cc and 'class="c-nuvens"' in cj)

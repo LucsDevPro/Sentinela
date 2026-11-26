@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 26/11/2026 (1) — Silhueta traçada da imagem de referência do cliente
+- A forma anterior (ressalto com curvas) ficou muito diferente do contorno enviado. Agora `SEGS` em `scripts/gerar_forma_carta.py` é o perfil simétrico TRAÇADO da imagem (topo plano de ~88 px, ombros inclinados até y≈39, laterais retas, base afunilada em arco). `carta.js` (`FORMA_SEGS`) tem a mesma lista.
+- Layout reencaixado para o escudo (bloco «LAYOUT NA SILHUETA FUT» em carta.css): cabeçalho 26 px mais baixo, foto 104 px subindo entre nota e logo, rodapé termina antes do afunilamento (y≈341).
+
 ## 25/11/2026 (8) — Silhueta FUT (referência do cliente) no lugar do Brasão
 - Cartinha com ressalto central no topo, ombros curvos, cantos e base arredondados. Definição única em `scripts/gerar_forma_carta.py` (`SEGS`), que reescreve a seção «FORMA FUT» de `assets/carta.css` (`--check` verifica); `carta.js` tem a mesma lista (`FORMA_SEGS`, `formaPts`) para o PNG em canvas. Mudou a forma → edite os dois, rode o gerador e `test_album`.
 - Foto volta a 112 px (sem V na base).
