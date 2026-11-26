@@ -63,66 +63,95 @@ body.modo-cartas .slide[data-rank="1"] .cslot {
   color: var(--mut);
 }
 
-/* ---- 2. Pacote: TV / projetor ---- */
-.pk-palco {
-  min-height: min(92vh, 900px);
-  box-shadow:
-    inset 0 0 0 1px rgba(247, 181, 0, .35),
-    0 20px 60px rgba(0, 0, 0, .5);
+/* ---- 2. Pacote: acabamento premium (projetor / TV) ----
+   Só pele: a estrutura (classes .pk-*) é a do pacote.js. Paleta: marinho profundo + ouro velho, com filetes finos no lugar de faixas grossas. */
+.pk-palco{
+  --ouro:#E6C16B; --ouro-2:#B98A2B; --fio:rgba(230,193,107,.30); --tinta:#EEF3FC; --mudo:#A9BAD6;
+  min-height:min(92vh,900px); border-radius:22px;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 38%,rgba(40,86,150,.55) 0%,transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 120%,rgba(230,193,107,.10) 0%,transparent 60%),
+    linear-gradient(180deg,#0B1D3A 0%,#071328 55%,#040B19 100%);
+  box-shadow:inset 0 0 0 1px var(--fio),inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 120px rgba(0,0,0,.45),0 28px 70px rgba(2,8,20,.55);
 }
-.pk-rank {
-  font-size: clamp(2.8em, 7vw, 5.2em);
-}
-.pk-nome {
-  font-size: clamp(1.5em, 3.5vw, 2.6em);
-}
-.pk-nota b {
-  font-size: clamp(2.4em, 5vw, 4em);
-}
-.pk-faixa {
-  font-size: clamp(22px, 3.5vw, 48px);
-}
-.pk-dica,
-.pk-cont {
-  font-size: clamp(14px, 1.4vw, 20px);
-}
+/* grão finíssimo: tira o aspecto «chapado» do degradê */
+.pk-palco::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.pk-palco[data-nv=r1]{--cor:#FFD66B}.pk-palco[data-nv=r2]{--cor:#C9DAF2}.pk-palco[data-nv=r3]{--cor:#EDAA72}
 
-/* 1º: clímax visual (escassez de dourado) */
-.pk-palco[data-nv="r1"].destaque .pk-grande {
-  filter:
-    drop-shadow(0 0 42px rgba(255, 200, 70, .9))
-    drop-shadow(0 0 80px rgba(255, 180, 40, .4));
-}
-.pk-palco[data-nv="r2"].destaque .pk-grande {
-  filter: drop-shadow(0 0 28px rgba(190, 215, 255, .55));
-}
-.pk-palco[data-nv="r3"].destaque .pk-grande {
-  filter: drop-shadow(0 0 22px rgba(232, 160, 96, .5));
-}
+/* barra superior: vidro escuro, texto pequeno em caixa-alta espaçada */
+.pk-cabeca{padding:12px 22px;border-bottom:1px solid var(--fio);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0));backdrop-filter:blur(6px)}
+.pk-dica{font:600 clamp(10px,.82vw,13px)/1.4 "IBM Plex Sans",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mudo)}
+.pk-cont{font:700 clamp(11px,.95vw,15px)/1 "IBM Plex Sans",system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ouro);text-shadow:0 0 14px rgba(230,193,107,.35)}
+.pk-barra button,.pk-barra select{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.16);color:var(--tinta);font-weight:600;letter-spacing:.02em;transition:border-color .2s,background .2s,transform .2s}
+.pk-barra button:hover,.pk-barra select:hover{border-color:var(--ouro);background:rgba(230,193,107,.10)}
+.pk-barra button.on{border-color:var(--ouro);color:var(--ouro);background:rgba(230,193,107,.10)}
+.pk-barra .pk-prox{background:linear-gradient(180deg,#F4D58A 0%,#D9A93C 100%);border-color:#F4D58A;color:#201500;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 6px 18px rgba(217,169,60,.30)}
+.pk-barra .pk-prox:hover{transform:translateY(-1px);background:linear-gradient(180deg,#FBE3A0 0%,#E4B64A 100%)}
 
-/* progressão legível: “faltam N” mais visível */
-.pk-cont {
-  font-weight: 700;
-  color: #FFD25A;
-}
+/* legenda e aviso: discretos */
+.pk-leg{padding:14px 22px 8px;color:var(--mudo);letter-spacing:.02em}
+.pk-aviso{background:rgba(230,193,107,.08);border-color:var(--fio);color:#F3E2B3;border-radius:10px}
 
-/* pódio final: entrada em cascata já no JS; reforço de base */
-.pk-final .pk-fim {
-  letter-spacing: .06em;
-  text-shadow: 0 0 28px rgba(247, 181, 0, .75);
-}
-.pk-pcol.r1 .pk-ped {
-  box-shadow: 0 0 24px rgba(255, 200, 70, .45);
-}
+/* o pacote fechado: folha metalizada, filete interno e selo central */
+.pk-pacote{filter:drop-shadow(0 30px 34px rgba(0,0,0,.6)) drop-shadow(0 0 46px rgba(230,193,107,.16))}
+.pk-arte{background:
+    radial-gradient(ellipse 90% 55% at 30% 8%,rgba(120,175,255,.42),transparent 60%),
+    linear-gradient(155deg,#1E4E90 0%,#102F63 34%,#081C40 64%,#17376F 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),inset 0 0 40px rgba(0,0,0,.35);border-radius:6px}
+.pk-arte::before{background:
+    repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 1px,transparent 1px 8px),
+    linear-gradient(180deg,rgba(230,193,107,.22),transparent 16%,transparent 84%,rgba(230,193,107,.22))}
+/* moldura dupla de ouro dentro do pacote */
+.pk-arte::after{content:"";position:absolute;inset:11% 7.5%;border:1px solid rgba(230,193,107,.55);border-radius:4px;box-shadow:0 0 0 4px rgba(230,193,107,.07),inset 0 0 0 4px rgba(230,193,107,.0);pointer-events:none}
+.pk-crimpe{height:7%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.30) 0 1px,rgba(0,0,0,.28) 1px 4px)}
+.pk-logo{font-weight:700;letter-spacing:.14em;color:transparent;background:linear-gradient(180deg,#FFF1BD 0%,#E8BE55 48%,#A87818 100%);-webkit-background-clip:text;background-clip:text;text-shadow:none;filter:drop-shadow(0 2px 0 rgba(60,36,0,.55)) drop-shadow(0 0 14px rgba(230,193,107,.35))}
+.pk-sub{letter-spacing:.5em;color:#A9D6F2;font-weight:600;margin-right:-.5em}
+.pk-mes{letter-spacing:.2em;text-transform:uppercase;font-size:.72em;opacity:.8;margin-top:.9em}
+.pk-num{margin-top:1.4em;padding:.55em 1.5em;border:1px solid rgba(230,193,107,.75);border-radius:999px;background:radial-gradient(circle,rgba(230,193,107,.16),rgba(0,0,0,.22))}
+.pk-num b{background:linear-gradient(180deg,#FFF1BD,#E0AE3E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pk-num span{letter-spacing:.3em;font-size:.62em;color:#E9D9A8}
 
-/* ---- 3. Camadas de revelação (info entra depois da carta) ----
-   O JS já anima opacity; aqui só garantimos que a faixa não roube foco cedo. */
-.pk-foco .pk-faixa {
-  order: -1;
-}
-.pk-foco .pk-linha {
-  order: 1;
-}
+/* ficha do revelado: filete dourado à esquerda, número metálico, tipografia contida */
+.pk-info{position:relative;padding-left:1.7em;color:var(--tinta)}
+.pk-info::before{content:"";position:absolute;left:0;top:.4em;bottom:.4em;width:2px;border-radius:2px;background:linear-gradient(180deg,transparent,var(--cor) 25%,var(--cor) 75%,transparent);opacity:.85}
+.pk-rank{font-size:clamp(2.8em,7vw,5.2em);font-weight:700;letter-spacing:-.01em;color:transparent;
+  background:linear-gradient(180deg,#fff 0%,var(--cor) 45%,color-mix(in srgb,var(--cor) 55%,#000) 100%);-webkit-background-clip:text;background-clip:text;text-shadow:none;filter:drop-shadow(0 4px 18px color-mix(in srgb,var(--cor) 45%,transparent))}
+.pk-nome{font-size:clamp(1.5em,3.5vw,2.6em);font-weight:600;letter-spacing:.01em}
+.pk-eq{font-size:.8em;letter-spacing:.24em;text-transform:uppercase;color:var(--mudo);opacity:1;margin-top:.5em}
+.pk-nota{margin-top:.9em;padding-top:.7em;border-top:1px solid rgba(255,255,255,.12)}
+.pk-nota b{font-size:clamp(2.4em,5vw,4em);font-weight:700;color:#fff;text-shadow:0 0 30px color-mix(in srgb,var(--cor) 40%,transparent)}
+.pk-nota span{font-size:.72em;letter-spacing:.2em;text-transform:uppercase;color:var(--mudo);opacity:1}
+.pk-emp{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:8px}
+.pk-video{background:linear-gradient(180deg,#F4D58A,#D9A93C);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 22px rgba(217,169,60,.28);font-weight:700;letter-spacing:.02em}
+
+/* faixa de colocação: filetes finos em vez de tarja grossa */
+.pk-faixa{font-size:clamp(20px,3vw,42px);letter-spacing:.2em;padding:.3em 1.2em;border-block:1px solid transparent;border-image:linear-gradient(90deg,transparent,var(--cor),transparent) 1;background:linear-gradient(90deg,transparent,rgba(0,0,0,.5),transparent)}
+.pk-faixa.r1{font-size:clamp(22px,3.4vw,50px)}
+
+/* fileira de cartinhas na parte de baixo */
+.pk-slot.aberta{filter:drop-shadow(0 0 6px rgba(230,193,107,.45))}
+.pk-fileira{gap:10px 10px}
+
+/* brilho do 1º/2º/3º atrás da carta grande: mais suave e mais largo */
+.pk-palco[data-nv="r1"].destaque .pk-grande{filter:drop-shadow(0 0 40px rgba(255,205,80,.8)) drop-shadow(0 0 90px rgba(255,180,40,.35))}
+.pk-palco[data-nv="r2"].destaque .pk-grande{filter:drop-shadow(0 0 30px rgba(190,215,255,.55))}
+.pk-palco[data-nv="r3"].destaque .pk-grande{filter:drop-shadow(0 0 24px rgba(232,160,96,.5))}
+
+/* pódio final: títulos metálicos, pedestais lapidados, números em vidro */
+.pk-final .pk-fim{letter-spacing:.08em;font-size:clamp(1.6em,2.2vw,2.2em);color:transparent;background:linear-gradient(180deg,#FFF1BD,#E0AE3E 60%,#A87818);-webkit-background-clip:text;background-clip:text;text-shadow:none;filter:drop-shadow(0 2px 14px rgba(230,193,107,.4))}
+.pk-ped{border-radius:6px 6px 2px 2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -14px 24px rgba(0,0,0,.18),0 10px 24px rgba(0,0,0,.4);position:relative}
+.pk-ped::after{content:"";position:absolute;left:8%;right:8%;top:6px;height:1px;background:rgba(255,255,255,.45)}
+.pk-pcol.r1 .pk-ped{background:linear-gradient(180deg,#FBE7A4 0%,#E3B13F 55%,#B98A2B 100%)}
+.pk-pcol.r2 .pk-ped{background:linear-gradient(180deg,#F3F7FD 0%,#B7C8E2 55%,#8499BC 100%)}
+.pk-pcol.r3 .pk-ped{background:linear-gradient(180deg,#F5CBA0 0%,#CC8444 55%,#9A5A24 100%)}
+.pk-pcol.r1 .pk-ped{box-shadow:inset 0 1px 0 rgba(255,255,255,.65),inset 0 -14px 24px rgba(0,0,0,.18),0 0 34px rgba(230,193,107,.35),0 10px 24px rgba(0,0,0,.4)}
+.pk-chip{border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid var(--fio);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.pk-chip span{letter-spacing:.06em;font-size:.78em;color:var(--mudo)}
+.pk-chip b{background:linear-gradient(180deg,#FFF1BD,#E0AE3E);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pk-outros{color:#B9C9E4}
+
+@media (prefers-reduced-motion:reduce){.pk-barra .pk-prox:hover{transform:none}}
 
 /* ---- 4. Header da projeção: controles legíveis à distância ---- */
 header .bt {

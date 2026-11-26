@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 25/11/2026 (6) — Pacote com acabamento premium
+- Só pele, em `assets/feira.css` (seção 2): marinho profundo + ouro velho, grão fino, filetes dourados no lugar de tarjas, pacote com moldura dupla e texto metálico, ficha do revelado com filete lateral e número metálico, pódio com pedestais lapidados e chips em vidro.
+- Estrutura (`pacote.js`) intocada. Cuidado: não usar `text-transform:uppercase` em textos que os testes leem (`.pk-fim`, `.pk-chip span`).
+
 ## 25/11/2026 (5) — Patch FEIRA (projetor/reunião)
 - `assets/feira.css` novo (hierarquia visual na reunião e no pacote); tempo padrão 20 s; `data-rank` nos slides; raios no Top 3 das cartinhas.
 - Pacote: pausa por posição (1º 9 s, 2º 7,5 s, 3º 6,5 s, 4º/5º 3,5 s); legenda com o mês; vídeo Top 5 mais longo (1º 5 s) e tier 4–5 com mais presença.
