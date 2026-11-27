@@ -18,6 +18,7 @@
       </select>
       <button type="button" class="print-btn" id="areasAbrirTodas">Abrir todas</button>
       <button type="button" class="print-btn" id="areasFecharTodas">Recolher todas</button>
+      <button type="button" class="print-btn xls-btn" id="areasExportar" title="Baixar o relatório por área em planilha do Excel (.xls): uma aba com o resumo de cada área (quantos agentes trabalharam) e outra com os agentes de cada área. Respeita os filtros."><svg class="ico" aria-hidden="true"><use href="#i-xls"/></svg> Exportar planilha</button>
     </div>
     <div class="areas-lista" id="listaAreas">
       {% for g in areas_grupos %}

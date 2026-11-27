@@ -1,5 +1,9 @@
 # Registro de decisões (mais recente primeiro)
 
+## 27/11/2026 (1) — Planilha da «Análise por Área»
+- Botão «Exportar planilha» na seção (id `areasExportar`, lógica em `bootstrap.js`): aba «Resumo por Área» (uma linha por área: agentes que trabalharam, abertos, tempo médio, quarteirões, rápidas, % rápidas, fechados, recusados, % pendência, alerta e nomes dos agentes) + aba «Agentes por Área» (área × agente). Respeita os filtros de área e agente.
+- `assets/xls.js` ganhou `exportarAbas(abas, arquivo)` (dados prontos); `exportarPlanilha` passou a usá-la.
+
 ## 26/11/2026 (2) — «Exportar planilha» (.xls) ao lado de todo Imprimir de tabela
 - `assets/xls.js` (fonte única): `exportarPlanilha(tabelas, nome)` gera Planilha XML 2003 (.xls abre direto no Excel/LibreOffice), uma aba por tabela, cabeçalho em destaque e congelado, números como número («1.234,5» → 1234.5; «007», horas e «85%» ficam texto). Sem biblioteca externa.
 - Exporta só as linhas VISÍVEIS: respeita filtros de equipe/agente/semana. Nome do arquivo = título da seção + data.

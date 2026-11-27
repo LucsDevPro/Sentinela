@@ -116,6 +116,23 @@ function abrirAreas(abrir) {
   ligar('sortAreaBy', 'change', ordenarAreas);
   ligar('areasAbrirTodas', 'click', () => abrirAreas(true));
   ligar('areasFecharTodas', 'click', () => abrirAreas(false));
+  // Relatório por área em planilha: aba 1 = uma linha por área (quantos agentes trabalharam + estatísticas); aba 2 = agente × área. Só as áreas visíveis (filtros).
+  ligar('areasExportar', 'click', () => {
+    const num = t => { const v = t.replace('%', '').trim(); return v === '' || v === '—' ? '' : (/^-?[\d.]+(,\d+)?$/.test(v) ? parseFloat(v.replace(/\./g, '').replace(',', '.')) : v); };
+    const resumo = [['Área', 'Agentes que trabalharam', 'Imóveis abertos', 'Tempo médio (min)', 'Quarteirões', 'Visitas rápidas', '% rápidas', 'Imóveis fechados', 'Imóveis recusados', '% pendência', 'Alerta', 'Agentes']];
+    const detalhe = [['Área', 'Agente', 'Equipe', 'Imóveis abertos', 'Tempo médio (min)', 'Mediana', 'Quarteirões', 'Rápidas', '% rápidas', 'Fechados', 'Recusados', '% pendência', 'Alerta']];
+    document.querySelectorAll('#listaAreas .area-item').forEach(item => {
+      if (item.style.display === 'none') return;
+      const st = {}; item.querySelectorAll('.cd-item').forEach(c => { st[c.querySelector('.cd-l').textContent.trim()] = c.querySelector('.cd-v').textContent.trim(); });
+      const linhas = Array.from(item.querySelectorAll('tbody tr')).filter(tr => tr.style.display !== 'none');
+      const area = item.dataset.area;
+      resumo.push([area, linhas.length, num(st['imóveis abertos'] || ''), num(st['tempo médio (min)'] || ''), num(st['quarteirões'] || ''), num(st['visitas rápidas'] || ''), num(st['% rápidas'] || ''),
+                   num(st['imóveis fechados'] || ''), num(st['imóveis recusados'] || ''), num(st['% pendência'] || ''), (item.querySelector('summary .badge') || {textContent: ''}).textContent.replace(/\s+/g, ' ').trim(),
+                   linhas.map(tr => tr.cells[0].textContent.trim()).join('; ')]);
+      linhas.forEach(tr => { const c = Array.from(tr.cells).map(td => td.textContent.replace(/\s+/g, ' ').trim()); detalhe.push([area, c[0], c[1], num(c[2]), num(c[3]), num(c[4]), num(c[5]), num(c[6]), num(c[7]), num(c[8]), num(c[9]), num(c[10]), c[11]]); });
+    });
+    exportarAbas([{ nome: 'Resumo por Área', linhas: resumo }, { nome: 'Agentes por Área', linhas: detalhe }], 'Analise por Area');
+  });
 })();
 
 /* ===== Ordenação estilo Excel (clique no cabeçalho) ===== */

@@ -40,14 +40,14 @@
     });
     return out;
   }
-  /** tabelas: lista de <table>; arquivo: nome base do .xls; titulos: opcional, nomes das abas */
-  g.exportarPlanilha = function (tabelas, arquivo, titulos) {
+  /** abas: [{nome, linhas:[[cabeçalho...],[linha...]]}]; arquivo: nome base do .xls (sem data) */
+  g.exportarAbas = function (abasDef, arquivo) {
     var usados = {}, abas = [];
-    [].forEach.call(tabelas, function (tab, i) {
-      var ls = linhas(tab); if (!ls.length) return;
-      var nome = nomeAba((titulos && titulos[i]) || titulo(tab), usados, i + 1);
+    abasDef.forEach(function (ab, i) {
+      var ls = ab.linhas; if (!ls || !ls.length) return;
+      var nome = nomeAba(ab.nome, usados, i + 1);
       var cab = '<Row ss:StyleID="h">' + ls[0].map(function (t) { return '<Cell><Data ss:Type="String">' + esc(t) + '</Data></Cell>'; }).join('') + '</Row>';
-      var corpo = ls.slice(1).map(function (r) { return '<Row>' + r.map(celula).join('') + '</Row>'; }).join('');
+      var corpo = ls.slice(1).map(function (r) { return '<Row>' + r.map(function (v) { return typeof v === 'number' ? '<Cell><Data ss:Type="Number">' + v + '</Data></Cell>' : celula(String(v)); }).join('') + '</Row>'; }).join('');
       abas.push('<Worksheet ss:Name="' + esc(nome) + '"><Table>' + cab + corpo + '</Table><WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel"><FreezePanes/><FrozenNoSplit/><SplitHorizontal>1</SplitHorizontal><TopRowBottomPane>1</TopRowBottomPane></WorksheetOptions></Worksheet>');
     });
     if (!abas.length) { alert('Não há linhas para exportar.'); return; }
@@ -56,8 +56,14 @@
       '<Styles><Style ss:ID="h"><Font ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1F3A5F" ss:Pattern="Solid"/><Alignment ss:Vertical="Center" ss:WrapText="1"/></Style></Styles>' + abas.join('') + '</Workbook>';
     var d = new Date(), pad = function (n) { return (n < 10 ? '0' : '') + n; };
     var nome = (arquivo || 'planilha').replace(/\s*\(\d+\)\s*$/, '').replace(/[^\w\-À-ÿ ]+/g, '').trim().replace(/\s+/g, '_') + '_' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '.xls';
-    var blob = new Blob(['﻿' + xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    var blob = new Blob(['\ufeff' + xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nome; document.body.appendChild(a); a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  };
+  /** tabelas: lista de <table>; arquivo: nome base do .xls; titulos: opcional, nomes das abas */
+  g.exportarPlanilha = function (tabelas, arquivo, titulos) {
+    var defs = [];
+    [].forEach.call(tabelas, function (tab, i) { defs.push({ nome: (titulos && titulos[i]) || titulo(tab), linhas: linhas(tab) }); });
+    g.exportarAbas(defs, arquivo);
   };
 })(window);

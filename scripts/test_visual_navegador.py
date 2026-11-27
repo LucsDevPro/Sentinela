@@ -490,6 +490,17 @@ with sync_playwright() as p:
         with px.expect_download() as d2: px.evaluate("document.querySelector('#agentes .xls-btn').click()")
         d2.value.save_as(arq); n2 = len(_md.parseString(open(arq, encoding="utf-8-sig").read().encode("utf-8")).getElementsByTagName("Row"))
         checar("planilha: com filtro aplicado, só as linhas visíveis são exportadas", n2 == vis + 1 and vis < nlinhas_tab, f"{n2} x {vis} de {nlinhas_tab}")
+    # Análise por Área: planilha com resumo (quantos agentes trabalharam em cada área) + agentes por área, respeitando o filtro de área
+    with px.expect_download() as da: px.evaluate("document.getElementById('areasExportar').click()")
+    da.value.save_as(arq); dom = _md.parseString(open(arq, encoding="utf-8-sig").read().encode("utf-8")); abas = dom.getElementsByTagName("Worksheet")
+    n_areas = px.evaluate("document.querySelectorAll('#listaAreas .area-item').length"); r0 = abas[0].getElementsByTagName("Row")
+    cab = [c.getElementsByTagName("Data")[0].firstChild.data for c in r0[0].getElementsByTagName("Cell")]
+    soma = sum(int(float(r.getElementsByTagName("Data")[1].firstChild.data)) for r in list(r0)[1:]); n_det = len(abas[1].getElementsByTagName("Row")) - 1
+    checar("planilha por área: aba «Resumo por Área» (1 linha por área, com «Agentes que trabalharam») + aba «Agentes por Área»", len(abas) == 2 and len(r0) == n_areas + 1 and cab[:2] == ["Área", "Agentes que trabalharam"] and soma == n_det, f"{len(r0)-1}/{n_areas} áreas; soma {soma} x {n_det}")
+    px.evaluate("(() => { const f = document.getElementById('filterAreaArea'); f.selectedIndex = 2; f.dispatchEvent(new Event('change', {bubbles: true})); })()"); px.wait_for_timeout(300)
+    with px.expect_download() as db_: px.evaluate("document.getElementById('areasExportar').click()")
+    db_.value.save_as(arq); n_f = len(_md.parseString(open(arq, encoding="utf-8-sig").read().encode("utf-8")).getElementsByTagName("Worksheet")[0].getElementsByTagName("Row")) - 1
+    checar("planilha por área: com o filtro de área só a área escolhida sai", n_f == 1, str(n_f))
     pr = cx.new_page(); pr.goto(U + "resumo.html"); pr.wait_for_timeout(1500)
     checar("resumo.html: botão «Exportar planilha» baixa um .xls com abas", pr.evaluate("typeof exportarPlanilha") == "function" and pr.evaluate("!!document.getElementById('bXls')"))
     checar("planilha: sem erros de script", not ex, str(ex))
