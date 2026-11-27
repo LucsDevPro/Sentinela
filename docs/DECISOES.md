@@ -1,5 +1,10 @@
 # Registro de decisões (mais recente primeiro)
 
+## 26/11/2026 (2) — «Exportar planilha» (.xls) ao lado de todo Imprimir de tabela
+- `assets/xls.js` (fonte única): `exportarPlanilha(tabelas, nome)` gera Planilha XML 2003 (.xls abre direto no Excel/LibreOffice), uma aba por tabela, cabeçalho em destaque e congelado, números como número («1.234,5» → 1234.5; «007», horas e «85%» ficam texto). Sem biblioteca externa.
+- Exporta só as linhas VISÍVEIS: respeita filtros de equipe/agente/semana. Nome do arquivo = título da seção + data.
+- O gerador embute `xls.js` no bootstrap das páginas (index, acumulado, historico/*); `bootstrap.js` cria o botão ao lado do Imprimir (`.xls-btn`, ícone `i-xls` em `icones.py`). `resumo.html` carrega `xls.js` por <script> e tem botão próprio.
+
 ## 26/11/2026 (1) — Silhueta traçada da imagem de referência do cliente
 - A forma anterior (ressalto com curvas) ficou muito diferente do contorno enviado. Agora `SEGS` em `scripts/gerar_forma_carta.py` é o perfil simétrico TRAÇADO da imagem (topo plano de ~88 px, ombros inclinados até y≈39, laterais retas, base afunilada em arco). `carta.js` (`FORMA_SEGS`) tem a mesma lista.
 - Layout reencaixado para o escudo (bloco «LAYOUT NA SILHUETA FUT» em carta.css): cabeçalho 26 px mais baixo, foto 104 px subindo entre nota e logo, rodapé termina antes do afunilamento (y≈341).

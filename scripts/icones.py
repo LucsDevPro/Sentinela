@@ -11,6 +11,7 @@ import re
 
 ICONES = {
     "print": '<path d="M7 9V3h10v6"/><rect x="4" y="9" width="16" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
+    "xls": '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8.5 13l3 4M11.5 13l-3 4"/>',
     "book": '<path d="M5 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H5z"/><path d="M12 4h7v14h-4"/>',
     "calendar": '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
     "trend": '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',

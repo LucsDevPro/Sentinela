@@ -56,6 +56,7 @@
   var q = new URLSearchParams(location.search).get('mes'); if (q && meses.indexOf(q) >= 0) $('fMes').value = q;
   $('fMes').onchange = function () { history.replaceState(null, '', '?mes=' + encodeURIComponent($('fMes').value)); desenhar($('fMes').value); };
   $('bImprimir').onclick = function () { window.print(); };
+  $('bXls').onclick = function () { exportarPlanilha($('folha').querySelectorAll('table'), 'Resumo do mes ' + $('fMes').value); };   // assets/xls.js: uma aba por tabela da folha
   desenhar($('fMes').value);
   window.RESUMO = { lista: lista, desenhar: desenhar };
 })();

@@ -1277,7 +1277,7 @@ def build_context(data):
         pendencias_bloqueio=records(data["pendencias_bloqueio"], PENDENCIA_COLS) if not data["pendencias_bloqueio"].empty else [],
         chart_data=build_chart_data(data),
         css=(SCRIPTS_DIR / "style.css").read_text(encoding="utf-8"),
-        bootstrap_js=(SCRIPTS_DIR / "bootstrap.js").read_text(encoding="utf-8"),
+        bootstrap_js=(ROOT / "assets" / "xls.js").read_text(encoding="utf-8") + "\n" + (SCRIPTS_DIR / "bootstrap.js").read_text(encoding="utf-8"),  # xls.js = exportarPlanilha (botão «Exportar planilha»)
     )
 
 def build_comparacao_semanal(nav, pagina_semana):

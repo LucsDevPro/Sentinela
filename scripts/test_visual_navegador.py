@@ -470,6 +470,30 @@ with sync_playwright() as p:
         checar(f"{f.split('?')[0]}: sem erro de script", not e, str(e))
         q.close()
     checar("página inicial sem erros de script", not erros, str(erros))
+    # ---- exportar planilha (.xls): botão ao lado do Imprimir, uma aba por tabela, números como número, respeita filtro
+    import xml.dom.minidom as _md
+    cx = nav.new_context(viewport={"width": 1400, "height": 900}, accept_downloads=True); px = cx.new_page(); ex = []; px.on("pageerror", lambda e: ex.append(str(e)))
+    px.goto(U + "index.html"); px.wait_for_timeout(1200)
+    nx, npr = px.evaluate("[document.querySelectorAll('.xls-btn').length, document.querySelectorAll('.table-section .print-btn:not(.xls-btn)').length]")
+    checar("planilha: todo Imprimir de tabela tem o seu «Exportar planilha» ao lado", nx >= 8 and nx == px.evaluate("document.querySelectorAll('.print-btn + .xls-btn').length") and nx <= npr, f"{nx} xls / {npr} imprimir")
+    with px.expect_download() as dl: px.evaluate("document.querySelector('#agentes .xls-btn').click()")
+    arq = os.path.join(trab, "t.xls"); dl.value.save_as(arq)
+    xml = open(arq, encoding="utf-8-sig").read(); dom = _md.parseString(xml.encode("utf-8"))
+    linhas = dom.getElementsByTagName("Row"); celulas = [c.getElementsByTagName("Data")[0].getAttribute("ss:Type") for c in linhas[1].getElementsByTagName("Cell")]
+    nlinhas_tab = px.evaluate("[...document.querySelector('#agentes .xls-btn').closest('.table-section').querySelector('table').tBodies[0].rows].filter(r => getComputedStyle(r).display !== 'none').length")
+    checar("planilha: arquivo .xls válido, nome com título e data, 1 cabeçalho + 1 linha por agente", dl.value.suggested_filename.startswith("Resumo_Completo_por_Agente_") and dl.value.suggested_filename.endswith(".xls") and len(linhas) == nlinhas_tab + 1, f"{dl.value.suggested_filename} {len(linhas)} x {nlinhas_tab}")
+    checar("planilha: números saem como número e texto como texto", "Number" in celulas and "String" in celulas, str(celulas[:6]))
+    sel = px.evaluate("(() => { const f = document.querySelector('#agentes .xls-btn').closest('.table-section').querySelector('.filters select'); return f ? (f.id || 'x') : '' })()")
+    if sel:   # filtro de equipe da própria seção (ou o genérico): a planilha leva só o que está visível
+        px.evaluate("(() => { const f = document.querySelector('#agentes .xls-btn').closest('.table-section').querySelector('.filters select'); f.selectedIndex = 1; f.dispatchEvent(new Event('change', {bubbles: true})); })()"); px.wait_for_timeout(400)
+        vis = px.evaluate("[...document.querySelector('#agentes .xls-btn').closest('.table-section').querySelector('table').tBodies[0].rows].filter(r => getComputedStyle(r).display !== 'none').length")
+        with px.expect_download() as d2: px.evaluate("document.querySelector('#agentes .xls-btn').click()")
+        d2.value.save_as(arq); n2 = len(_md.parseString(open(arq, encoding="utf-8-sig").read().encode("utf-8")).getElementsByTagName("Row"))
+        checar("planilha: com filtro aplicado, só as linhas visíveis são exportadas", n2 == vis + 1 and vis < nlinhas_tab, f"{n2} x {vis} de {nlinhas_tab}")
+    pr = cx.new_page(); pr.goto(U + "resumo.html"); pr.wait_for_timeout(1500)
+    checar("resumo.html: botão «Exportar planilha» baixa um .xls com abas", pr.evaluate("typeof exportarPlanilha") == "function" and pr.evaluate("!!document.getElementById('bXls')"))
+    checar("planilha: sem erros de script", not ex, str(ex))
+    cx.close()
     nav.close()
 
 print("\n" + ("TUDO CERTO" if not FALHAS else f"{len(FALHAS)} FALHA(S): {FALHAS}"))

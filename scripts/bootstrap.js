@@ -384,6 +384,16 @@ function buildGenericFilters(section) {
     btn.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-print"/></svg> Imprimir';
     btn.addEventListener('click', () => printSection(section));
     filterBar.appendChild(btn);
+    const bx = document.createElement('button');   // ao lado do Imprimir: baixa a(s) tabela(s) da seção em .xls (só linhas visíveis; ver assets/xls.js)
+    bx.type = 'button';
+    bx.className = 'print-btn xls-btn';
+    bx.title = 'Baixar esta tabela como planilha do Excel (.xls); respeita os filtros aplicados';
+    bx.innerHTML = '<svg class="ico" aria-hidden="true"><use href="#i-xls"/></svg> Exportar planilha';
+    bx.addEventListener('click', () => {
+      const h = section.querySelector('h3, h2');
+      exportarPlanilha(section.querySelectorAll('table'), h ? h.textContent.replace(/^[^\wÀ-ÿ]+/, '') : 'tabela');
+    });
+    filterBar.appendChild(bx);
   }
 
   if (!hasOwnFilters && filterBar) {
